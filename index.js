@@ -14,7 +14,7 @@ bot.on("ready", () => {
 })
 
 bot.on("guildMemberAdd", member => {
-    const welcomeChannel = member.guild.channels.cache.find(channel => channel.id === '822189403060830279')
+    const welcomeChannel = bot.channels.cache.get("822189403060830279")
     const embed = new Discord.MessageEmbed()
     embed.setColor('#fccc95')
     embed.setTitle(`A new member appeared!`)
