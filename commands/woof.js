@@ -4,6 +4,7 @@ const neko = new gif;
 module.exports = {
     name: 'woof',
     description: ' command for dogs',
+    aliases: ['dog'],
     async execute(message, args) {
         var user = message.mentions.users.first();
         const woof = await neko.sfw.woof();
