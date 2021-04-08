@@ -14,7 +14,7 @@ bot.on("ready", () => {
 })
 
 bot.on("guildMemberAdd", member => {
-    const welcomeChannel = member.guild.channels.cache.find(channel => channel.id === '828696767062474802')
+    const welcomeChannel = member.guild.channels.cache.find(channel => channel.id === '822189403060830279')
     const embed = new Discord.MessageEmbed()
     embed.setColor('#fccc95')
     embed.setTitle(`A new member appeared!`)
@@ -27,7 +27,7 @@ bot.on("guildMemberAdd", member => {
 })
 
 bot.on("guildMemberRemove", member => {
-    const goodbyeChannel = member.guild.channels.cache.find(channel => channel.id === '828696767062474802')
+    const goodbyeChannel = member.guild.channels.cache.find(channel => channel.id === '822189403060830279')
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
     Embed.setTitle(`A member continued their journey somewhere else...`)
