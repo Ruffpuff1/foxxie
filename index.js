@@ -24,6 +24,7 @@ bot.on("guildMemberAdd", member => {
     embed.setTimestamp()
     embed.setFooter('Give them a warn welcome in general! | Joined ');
     welcomeChannel.send(embed)
+    message.channel.send('Give them a warm welcome please <@&829752715826823268>!')
 })
 
 bot.on("guildMemberRemove", member => {
