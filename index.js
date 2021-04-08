@@ -28,7 +28,7 @@ bot.on("guildMemberAdd", member => {
 })
 
 bot.on("guildMemberRemove", member => {
-    const goodbyeChannel = client.channels.cache.get("822189403060830279")
+    const goodbyeChannel = bot.channels.cache.get("822189403060830279")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
     Embed.setTitle(`A member continued their journey somewhere else...`)
