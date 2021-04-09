@@ -50,7 +50,7 @@ ${messageDelete.content}
 The Author:
 ${messageDelete.author.tag} `)
     Embed.setTimestamp()
-    Embed.setFooter('Lol why are you reading this');
+    Embed.setFooter('why are you reading this lmao');
     logChannel.send(Embed)
    });
    
