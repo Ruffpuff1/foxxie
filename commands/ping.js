@@ -7,7 +7,7 @@ module.exports = {
     execute(message) {
       let Embed = new Discord.MessageEmbed()
       Embed.setTitle(`Fokushi's Ping`)
-      Embed.setDescription(`\`:ping_pong: Latency is ${Date.now() - message.createdTimestamp} ms\``)
+      Embed.setDescription(`\`🏓 Latency is ${Date.now() - message.createdTimestamp} ms\``)
       Embed.setTimestamp()
       Embed.setFooter(`Discord is shitty, so the ping may be high due to that. Sorry.`)
       Embed.setThumbnail(message.guild.iconURL())

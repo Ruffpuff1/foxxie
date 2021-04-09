@@ -16,7 +16,7 @@ permissions: 'MANAGE_MESSAGES',
         message.channel.send(` Mhm, i’ve put on a ${amount} second slowmode for ya. <:hehe:819914268375252992>.`);
         let logChannel = message.guild.channels.cache.get("822454708894695444")
         let embed = new Discord.MessageEmbed()
-embed.setColor('#f59dcc')
+embed.setColor('#ffb3e6')
 embed.setTitle(`Slowmode.`)
 embed.setDescription(`**${message.author.tag}** set a slowmode for ${message.channel}.`)
 embed.addFields(

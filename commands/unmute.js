@@ -15,5 +15,16 @@ module.exports = {
   if(!member.roles.cache.has(role.id)) return message.reply(`they arent even muted mate`);
   member.roles.remove(role.id)
   .then(m => message.channel.send(`**${member.user.tag}** has been unmuted by ${message.author.tag}.`));
+  let logChannel = message.guild.channels.cache.get("822454708894695444")
+    let Embed = new Discord.MessageEmbed()
+      Embed.setTitle('unmute Member')
+      Embed.setDescription(`${member} has now been unmuted`)
+      Embed.addField('Moderator', message.member, true)
+      Embed.addField('Member', member, true)
+      Embed.setFooter(message.member.displayName,  message.author.displayAvatarURL({ dynamic: true }))
+      Embed.setTimestamp()
+      Embed.setColor(message.guild.me.displayColor);
+      logChannel.send(Embed)
+
 }
 }
