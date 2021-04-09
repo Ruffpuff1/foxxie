@@ -40,7 +40,18 @@ bot.on("guildMemberRemove", member => {
 })
 bot.on("messageDelete", (messageDelete) => {
     const logChannel = bot.channels.cache.get("828563803532296252")
-    logChannel.send(`The message : "${messageDelete.content}" from ${messageDelete.author.tag} was deleted.`)
+    const Embed = new Discord.MessageEmbed()
+    Embed.setColor('#fccc95')
+    Embed.setTitle(`Message Deleted.`)
+    Embed.setDescription(`A message was deleted.
+The Message:
+${messageDelete.content}
+
+The Author:
+${messageDelete.author.tag} `)
+    Embed.setTimestamp()
+    Embed.setFooter('Lol why are you reading this');
+    logChannel.send(Embed)
    });
    
 
