@@ -20,7 +20,7 @@ module.exports = {
     if (member.roles.highest.position >= message.member.roles.highest.position)
       return message.channel.send('I don’t think you should mess with that person mate. They are higher or the same as you y’know?');
     if (!args[1])
-      return message.channel.send('Mm, give me an amount. it has to end with either s for seconds, m for minutes, h for hours, and d for days. the max is 14 days');
+      return message.channel.send('Mmm, give me an amount. it has to end with either s for seconds, m for minutes, h for hours, and d for days. the max is 14 days');
     let time = ms(args[1]);
     if (!time || time > 1209600000) // Cap at 14 days, larger than 24.8 days causes integer overflow
       return message.channel.send('Please give me an actual amount, yeah?');
