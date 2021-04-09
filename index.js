@@ -12,7 +12,7 @@ bot.commands = new Discord.Collection();
 bot.on("ready", () => {
     console.log(`${bot.user.tag} is online.`)
 })
-ibot.on("guildMemberAdd", (member) => {
+bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== "822187156214513734") return
     const welcomeChannel = bot.channels.cache.get("822189403060830279")
     const embed = new Discord.MessageEmbed()
