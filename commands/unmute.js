@@ -4,9 +4,9 @@ module.exports = {
     name: 'unmute',
     description: 'Unmutes the user specifiied',
     aliases: ["free", "letoff", "unstfu"],
+    permissions: 'MANAGE_MESSAGES',
 
     async execute(message, args, bot){
-  if(!message.member.hasPermission("MANAGE_MESSAGES")) return;
   if(!message.guild.me.hasPermission("MANAGE_ROLES")) return message.reply(`i dont ave any perms`);
   const member = message.mentions.members.first();
   if(!member) return message.reply(`gimme a user to unmute`);
