@@ -45,9 +45,11 @@ bot.on("messageDelete", (messageDelete) => {
     Embed.setTitle(`Message Deleted.`)
     Embed.setDescription(`A message was deleted.
 The Message:
+
 ${messageDelete.content}
 
 The Author:
+
 ${messageDelete.author.tag} `)
     Embed.setTimestamp()
     Embed.setFooter('why are you reading this lmao');
@@ -61,9 +63,11 @@ ${messageDelete.author.tag} `)
     Embed.setTitle(`Message Edited.`)
     Embed.setDescription(`A message was Edited.
 The Message:
+
 ${messageUpdate.content}
 
 The Author:
+
 ${messageUpdate.author.tag} `)
     Embed.setTimestamp()
     Embed.setFooter('why are you reading this lmao');
