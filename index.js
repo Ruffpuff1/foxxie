@@ -12,9 +12,8 @@ bot.commands = new Discord.Collection();
 bot.on("ready", () => {
     console.log(`${bot.user.tag} is online.`)
 })
-
+if (message.guild.id !== "822187156214513734") return
 bot.on("guildMemberAdd", member => {
-    if (message.guild.id !== "822187156214513734") return
     const welcomeChannel = bot.channels.cache.get("822189403060830279")
     const embed = new Discord.MessageEmbed()
     embed.setColor('#fccc95')
@@ -27,9 +26,8 @@ bot.on("guildMemberAdd", member => {
     welcomeChannel.send('A new member joined! Give them a warm welcome please <@&829752715826823268>!')
     welcomeChannel.send(embed)
 })
-
+if (message.guild.id !== "822187156214513734") return
 bot.on("guildMemberRemove", member => {
-    if (message.guild.id !== "822187156214513734") return
     const goodbyeChannel = bot.channels.cache.get("822189403060830279")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
@@ -40,8 +38,8 @@ bot.on("guildMemberRemove", member => {
     Embed.setFooter('We will mourn them in general. | Left ');
     goodbyeChannel.send(Embed)
 })
+if (message.guild.id !== "822187156214513734") return
 bot.on("messageDelete", (messageDelete) => {
-    if (message.guild.id !== "822187156214513734") return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
@@ -59,9 +57,8 @@ ${messageDelete.author.tag} `)
     Embed.setFooter('why are you reading this lmao');
     logChannel.send(Embed)
    });
-   
+   if (message.guild.id !== "822187156214513734") return
    bot.on("messageUpdate", (messageUpdate) => {
-    if (message.guild.id !== "822187156214513734") return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
