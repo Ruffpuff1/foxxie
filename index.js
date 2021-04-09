@@ -99,11 +99,11 @@ The Author:
     
     What was updated:
     
-    ${oldMember.content}
+    ${oldMember.nickname}
     
     Whats new:
     
-    ${newMember.content}`)
+    ${newMember.nickname}`)
 
     Embed.setTimestamp()
     Embed.setFooter('test');
