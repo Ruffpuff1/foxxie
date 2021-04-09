@@ -89,13 +89,22 @@ The Author:
     Embed.setFooter('why are you reading this lmao');
     logChannel.send(Embed)
    });
-   bot.on("guildMemberUpdate", (guildMemberUpdate) => {
-    if (guildMemberUpdate.guild.id !== "822187156214513734") return
+    bot.on("guildMemberUpdate", (oldMember, newMember) => {
+        if (oldMember.guild.id !== "822187156214513734") return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
-    Embed.setTitle(`test.`)
-    Embed.setDescription(`test`)
+    Embed.setTitle(`User Updated.`)
+    Embed.setDescription(`Updated member.
+    
+    What was updated:
+    
+    ${oldMember.content}
+    
+    Whats new:
+    
+    ${newMember.content}`)
+
     Embed.setTimestamp()
     Embed.setFooter('test');
     logChannel.send(Embed)
