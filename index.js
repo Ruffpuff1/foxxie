@@ -75,7 +75,7 @@ The After Message:
 
 The Author:
 
-**${messageUpdate.author.tag}**
+**${oldMessage.author.tag}**
 
 To check the new message, you can look at the channel the message was edited in: ${messageUpdate.channel}`)
     Embed.setTimestamp()
