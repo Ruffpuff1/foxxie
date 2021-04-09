@@ -47,7 +47,7 @@ bot.on("messageDelete", (messageDelete) => {
 
 The Message:
 
-${messageDelete.content}
+**${messageDelete.content}**
 
 The Author:
 
@@ -66,11 +66,11 @@ ${messageDelete.author.tag} `)
 
 The Before Message:
 
-${messageUpdate.content}
+**${messageUpdate.content}**
 
 The Author:
 
-${messageUpdate.author.tag}
+**${messageUpdate.author.tag}**
 
 To check the new message, you can look at the channel the message was edited in: ${messageUpdate.channel}`)
     Embed.setTimestamp()
