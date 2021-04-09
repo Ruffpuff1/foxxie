@@ -89,26 +89,6 @@ The Author:
     Embed.setFooter('why are you reading this lmao');
     logChannel.send(Embed)
    });
-    bot.on("userUpdate", (userUpate) => {
-        if (oldMember.guild.id !== config.seasideRes) return
-    const logChannel = bot.channels.cache.get("828563803532296252")
-    const Embed = new Discord.MessageEmbed()
-    Embed.setColor('#fccc95')
-    Embed.setTitle(`User Updated.`)
-    Embed.setDescription(`Updated member.
-    
-    What was updated:
-    
-    ${userUpdate.nickname}
-    
-    Whats new:
-    
-    ${userUpdate.nickname}`)
-
-    Embed.setTimestamp()
-    Embed.setFooter('test');
-    logChannel.send(Embed)
-   });
 
 /**
  * Import all commands
