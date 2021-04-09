@@ -13,7 +13,7 @@ bot.on("ready", () => {
     console.log(`${bot.user.tag} is online.`)
 })
 bot.on("guildMemberAdd", (member) => {
-    if (member.guild.id !== "822187156214513734") return
+    if (member.guild.id !== config.seasideRes) return
     const welcomeChannel = bot.channels.cache.get("822189403060830279")
     const embed = new Discord.MessageEmbed()
     embed.setColor('#fccc95')
@@ -27,7 +27,7 @@ bot.on("guildMemberAdd", (member) => {
     welcomeChannel.send(embed)
 })
 bot.on("guildMemberRemove", (member) => {
-    if (member.guild.id !== "822187156214513734") return
+    if (member.guild.id !== config.seasideRes) return
     const goodbyeChannel = bot.channels.cache.get("822189403060830279")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
@@ -39,7 +39,7 @@ bot.on("guildMemberRemove", (member) => {
     goodbyeChannel.send(Embed)
 })
 bot.on("messageDelete", (messageDelete) => {
-    if (messageDelete.guild.id !== "822187156214513734") return
+    if (messageDelete.guild.id !== config.seasideRes) return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
@@ -62,7 +62,7 @@ The Author:
     logChannel.send(Embed)
    });
    bot.on("messageUpdate", (oldMessage, newMessage) => {
-    if (oldMessage.guild.id !== "822187156214513734") return
+    if (oldMessage.guild.id !== config.seasideRes) return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
@@ -90,7 +90,7 @@ The Author:
     logChannel.send(Embed)
    });
     bot.on("userUpdate", (userUpate) => {
-        if (oldMember.guild.id !== "822187156214513734") return
+        if (oldMember.guild.id !== config.seasideRes) return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#fccc95')
