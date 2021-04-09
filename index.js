@@ -38,6 +38,11 @@ bot.on("guildMemberRemove", member => {
     Embed.setFooter('We will mourn them in general. | Left ');
     goodbyeChannel.send(Embed)
 })
+bot.on("messageDelete", (messageDelete) => {
+    const messageDelete = bot.channels.cache.get("828563803532296252")
+    messageDelete.channel.send(`The message : "${messageDelete.content}" by ${messageDelete.author.tag} was deleted.`)
+   });
+   
 
 /**
  * Import all commands
