@@ -40,7 +40,7 @@ bot.on("guildMemberRemove", member => {
 })
 bot.on("messageDelete", (messageDelete) => {
     const logChannel = bot.channels.cache.get("828563803532296252")
-    messageDelete.logChannel.send(`The message : "${messageDelete.content}" from ${messageDelete.author.tag} was deleted.`)
+    logChannel.send(`The message : "${messageDelete.content}" from ${messageDelete.author.tag} was deleted.`)
    });
    
 
