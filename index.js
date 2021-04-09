@@ -44,6 +44,7 @@ bot.on("messageDelete", (messageDelete) => {
     Embed.setColor('#fccc95')
     Embed.setTitle(`Message Deleted.`)
     Embed.setDescription(`A message was deleted.
+
 The Message:
 
 ${messageDelete.content}
@@ -62,13 +63,16 @@ ${messageDelete.author.tag} `)
     Embed.setColor('#fccc95')
     Embed.setTitle(`Message Edited.`)
     Embed.setDescription(`A message was Edited.
-The Message:
+
+The Before Message:
 
 ${messageUpdate.content}
 
 The Author:
 
-${messageUpdate.author.tag} `)
+${messageUpdate.author.tag}
+
+To check the new message, you can look at the channel the message was edited in: ${messageUpdate.channel}`)
     Embed.setTimestamp()
     Embed.setFooter('why are you reading this lmao');
     logChannel.send(Embed)
