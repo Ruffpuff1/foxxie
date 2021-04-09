@@ -9,7 +9,7 @@ module.exports = {
         console.log(url)
         let embed = new Discord.MessageEmbed();
         embed.setColor('2cdbe2')
-        embed.setDescription(`**${message.member.displayName}** is smirking.`)
+        embed.setDescription(`**${message.member}** is smirking.`)
         embed.setImage(url)
         message.channel.send(embed)
     }

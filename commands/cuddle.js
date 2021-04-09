@@ -11,7 +11,7 @@ module.exports = {
         console.log(url)
         let embed = new Discord.MessageEmbed();
         embed.setColor('RANDOM')
-        embed.setDescription(`**${message.member.displayName}** is cuddling **${message.member.displayName}**`)
+        embed.setDescription(`**${user}** was cuddled by **${message.member}**`)
         embed.setImage(cuddle.url)
         message.channel.send(embed)
     }

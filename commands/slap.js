@@ -11,7 +11,7 @@ module.exports = {
         console.log(url)
         let embed = new Discord.MessageEmbed();
         embed.setColor('2cdbe2')
-        embed.setDescription(`**${user.username}** was slapped by **${message.member.displayName}**`)
+        embed.setDescription(`**${user}** was slapped by **${message.member}**`)
         embed.setImage(slap.url)
         message.channel.send(embed)
     }

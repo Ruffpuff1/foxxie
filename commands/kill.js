@@ -9,7 +9,7 @@ module.exports = {
         console.log(url)
         let embed = new Discord.MessageEmbed();
         embed.setColor('110000')
-        embed.setDescription(`**${user.username}** was killed by **${message.member.displayName}**`)
+        embed.setDescription(`**${user}** was killed by **${message.member}**`)
         embed.setImage(url)
         message.channel.send(embed)
     },

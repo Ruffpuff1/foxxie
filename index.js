@@ -23,8 +23,8 @@ bot.on("guildMemberAdd", member => {
     embed.setThumbnail(`https://images-ext-2.discordapp.net/external/5u_By7TVoV9u2SM7ujLOyVDELf-koOmg0AOvLYJq4_s/%3Fsize%3D4096/https/cdn.discordapp.com/icons/822187156214513734/098cbdf8e61a55d18e973afb4e2e292b.png`);
     embed.setTimestamp()
     embed.setFooter('Give them a warn welcome in general! | Joined ');
+    welcomeChannel.send('A new member joined! Give them a warm welcome please <@&829752715826823268>!')
     welcomeChannel.send(embed)
-    welcomeChannel.send('Give them a warm welcome please <@&829752715826823268>!')
 })
 
 bot.on("guildMemberRemove", member => {

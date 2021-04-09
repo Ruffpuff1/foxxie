@@ -9,7 +9,7 @@ module.exports = {
         console.log(url)
         let embed = new Discord.MessageEmbed();
         embed.setColor('2cdbe2')
-        embed.setDescription(`**${message.member.displayName}** is mad at **${user.username}**`)
+        embed.setDescription(`**${message.member}** is made at ${user}`)
         embed.setImage(url)
         message.channel.send(embed)
     }
