@@ -48,7 +48,7 @@ bot.on("messageDelete", (messageDelete) => {
 
 The Message:
 
-**${messageDelete.content}**
+***${messageDelete.content}***
 
 The Author:
 
@@ -67,11 +67,11 @@ ${messageDelete.author.tag} `)
 
 The Before Message:
 
-**${oldMessage.content}**
+***${oldMessage.content}***
 
 The After Message:
 
-**${newMessage.content}
+***${newMessage.content}***
 
 The Author:
 
