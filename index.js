@@ -48,7 +48,7 @@ bot.on("messageDelete", (messageDelete) => {
 
 The Message:
 
-***${messageDelete.content}***
+**${messageDelete.content}**
 
 The Author:
 
@@ -57,7 +57,7 @@ ${messageDelete.author.tag} `)
     Embed.setFooter('why are you reading this lmao');
     logChannel.send(Embed)
    });
-   bot.on("messageUpdate", (messageUpdate, oldMessage, newMessage) => {
+   bot.on("messageUpdate", (messageUpdate) => {
     if (messageUpdate.guild.id !== "822187156214513734") return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
@@ -67,11 +67,7 @@ ${messageDelete.author.tag} `)
 
 The Before Message:
 
-***${oldMessage.content}***
-
-The After Message:
-
-***${newMessage.content}***
+**${messageUpdate.content}**
 
 The Author:
 
