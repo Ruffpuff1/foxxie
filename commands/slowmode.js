@@ -14,5 +14,21 @@ permissions: 'MANAGE_MESSAGES',
         if(amount > 21600 || amount < 0) return message.reply(`uhm, well i would love to do that for you, you musnt be that stupid to give me that number right? I need a number under 6h and over -1.`);
         message.channel.setRateLimitPerUser(amount);
         message.channel.send(` Mhm, i’ve put on a ${amount} second slowmode for ya. <:hehe:819914268375252992>.`);
+        let logChannel = message.guild.channels.cache.get("822454708894695444")
+        let embed = new Discord.MessageEmbed()
+embed.setColor('#f59dcc')
+embed.setTitle(`Slowmode.`)
+embed.setDescription(`**${message.author.tag}** set a slowmode for ${message.channel}.`)
+embed.addFields(
+    { name: 'Amoount', value: `${amount}` },  { name: 'Moderator', value: `${message.author} (ID: ${message.author.id})` },
+
+    { name: 'Location', value: `${message.channel}` }, 
+
+
+)
+
+embed.setTimestamp()
+embed.setFooter('Why are you reading this?', message.author.displayAvatarURL({ format: "png", dynamic: true, size: 4096}));
+logChannel.send(embed)
     }
 }

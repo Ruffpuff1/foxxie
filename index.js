@@ -89,7 +89,7 @@ The Author:
     Embed.setFooter('why are you reading this lmao');
     logChannel.send(Embed)
    });
-    bot.on("guildMemberUpdate", (oldMember, newMember) => {
+    bot.on("userUpdate", (userUpate) => {
         if (oldMember.guild.id !== "822187156214513734") return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
@@ -99,11 +99,11 @@ The Author:
     
     What was updated:
     
-    ${oldMember.nickname}
+    ${userUpdate.nickname}
     
     Whats new:
     
-    ${newMember.nickname}`)
+    ${userUpdate.nickname}`)
 
     Embed.setTimestamp()
     Embed.setFooter('test');
