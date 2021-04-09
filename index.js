@@ -54,6 +54,22 @@ ${messageDelete.author.tag} `)
     logChannel.send(Embed)
    });
    
+   bot.on("messageUpdate", (messageUpdate) => {
+    const logChannel = bot.channels.cache.get("828563803532296252")
+    const Embed = new Discord.MessageEmbed()
+    Embed.setColor('#fccc95')
+    Embed.setTitle(`Message Edited.`)
+    Embed.setDescription(`A message was Edited.
+The Message:
+${messageUpdate.content}
+
+The Author:
+${messageUpdate.author.tag} `)
+    Embed.setTimestamp()
+    Embed.setFooter('why are you reading this lmao');
+    logChannel.send(Embed)
+   });
+   
 
 /**
  * Import all commands
