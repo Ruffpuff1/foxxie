@@ -56,7 +56,7 @@ ${messageDelete.channel}
 
 The Author:
 
-${messageDelete.author.tag} `)
+**${messageDelete.author.tag}** `)
     Embed.setTimestamp()
     Embed.setFooter('why are you reading this lmao');
     logChannel.send(Embed)
@@ -76,6 +76,10 @@ The Before Message:
 The After Message:
 
 ***${newMessage.content}***
+
+The Location:
+
+${oldMessage.channel}
 
 The Author:
 
