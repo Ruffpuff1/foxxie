@@ -20,7 +20,7 @@ embed.setColor('#f59dcc')
 embed.setTitle(`Slowmode.`)
 embed.setDescription(`**${message.author.tag}** set a slowmode for ${message.channel}.`)
 embed.addFields(
-    { name: 'Amoount', value: `${amount}` },  { name: 'Moderator', value: `${message.author} (ID: ${message.author.id})` },
+    { name: 'Amount', value: `${amount}` },  { name: 'Moderator', value: `${message.author} (ID: ${message.author.id})` },
 
     { name: 'Location', value: `${message.channel}` }, 
 
