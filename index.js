@@ -50,6 +50,10 @@ The Message:
 
 ***${messageDelete.content}***
 
+Location:
+
+${messageDelete.channel}
+
 The Author:
 
 ${messageDelete.author.tag} `)
