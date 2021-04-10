@@ -92,9 +92,10 @@ The Author:
 
 bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.fox) return
-    var role = member.guild.roles.find('830398532024139836');
-  member.addRole(role);
-})
+    var role = member.guild.roles.cache.find(role => role.name == "test")
+    member.roles.add(role);
+});
+
 
 
 /**
