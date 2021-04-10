@@ -28,11 +28,7 @@ message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m =
 
 :calendar: **Created at:** ${moment(message.member.user.createdAt).format('MMMM Do YYYY')} **(${moment([moment(message.member.user.createdAt).format('YYYY'), moment(message.member.user.createdAt).format('M') - 1, moment(message.member.user.createdAt).format('D')]).toNow(true)} ago)**
 
-:arrow_double_up: **Highest role**: ${message.member.roles.highest.name
-    .sort((a, b) => b.position - a.position)
-    .map(r => r)
-    .join(", ")
-    .replace(", @everyone", " ")}
+:arrow_double_up: **Highest role**: ${message.member.roles.highest.name}
 `)
           
             embed.setColor('RANDOM')
