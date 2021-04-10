@@ -13,7 +13,6 @@ module.exports = {
         if (!text) return;
         let Embed = new Discord.MessageEmbed()
         Embed.setDescription(`${text}`)
-        Embed.setFooter(message.member.displayName,  message.author.displayAvatarURL({ dynamic: true }))
         Embed.setTimestamp()
         Embed.setColor(`#2f008c`);
         message.channel.send(Embed)
