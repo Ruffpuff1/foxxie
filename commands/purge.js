@@ -19,6 +19,9 @@ module.exports = {
             message.channel.send(`Alright, mate. I cleared **${amount}** for you, since you’re probably too lazy to do it yourself.`)
             .then(msg => {
                 msg.delete({ timeout: 3000 })
+                let reason = args.slice(2).join(' ');
+                if (!reason) reason = '`None Provided`';
+                if (reason.length > 1024) reason = reason.slice(0, 1021) + '...';
               })
               .catch(console.error);
             let logChannel = message.guild.channels.cache.get("822454708894695444")
@@ -28,6 +31,7 @@ module.exports = {
       Embed.addField('Amount',  `${amount}`)
       Embed.addField('Moderator', message.member, true)
       Embed.addField('Location',  `${message.channel}`)
+      Embed.addField('Reason', reason)
       Embed.setTimestamp()
       Embed.setColor(message.guild.me.displayColor);
 	  Embed.setFooter('Why are you reading this?', message.author.displayAvatarURL({ format: "png", dynamic: true, size: 4096}));
