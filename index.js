@@ -14,7 +14,7 @@ bot.on("ready", () => {
 })
 bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.seasideRes) return
-    const welcomeChannel = bot.channels.cache.get("822189403060830279")
+    const welcomeChannel = bot.channels.cache.get("826195767571382303")
     const embed = new Discord.MessageEmbed()
     embed.setColor('#ff8940')
     embed.setTitle(`A new member appeared!`)
@@ -28,7 +28,7 @@ bot.on("guildMemberAdd", (member) => {
 })
 bot.on("guildMemberRemove", (member) => {
     if (member.guild.id !== config.seasideRes) return
-    const goodbyeChannel = bot.channels.cache.get("822189403060830279")
+    const goodbyeChannel = bot.channels.cache.get("826195767571382303")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#990670')
     Embed.setTitle(`A member continued their journey somewhere else...`)
@@ -119,8 +119,12 @@ bot.on("guildMemberRemove", (member) => {
 
 bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.fox) return
-    var role = member.guild.roles.cache.find(role => role.name == "test")
-    member.roles.add(role);v
+    var role = member.guild.roles.cache.find(role => role.name == "┏━━━༻Shop༺━━━┓")
+    var role = member.guild.roles.cache.find(role => role.name == "┏━━━༻Other༺━━━┓")
+    var role = member.guild.roles.cache.find(role => role.name == "┏━━━༻Levels༺━━━┓")
+    var role = member.guild.roles.cache.find(role => role.name == "┏━━━༻Self roles༺━━━┓")
+
+    member.roles.add(role);
 });
 
 
