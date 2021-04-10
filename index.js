@@ -92,7 +92,7 @@ The Author:
 
    bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.fox) return
-    const welcomeChannel = bot.channels.cache.get("822414098439864360")
+    const welcomeChannel = bot.channels.cache.get("822189403060830279")
     const embed = new Discord.MessageEmbed()
     embed.setColor('#ff8940')
     embed.setTitle(`A new member appeared!`)
@@ -106,7 +106,7 @@ The Author:
 })
 bot.on("guildMemberRemove", (member) => {
     if (member.guild.id !== config.fox) return
-    const goodbyeChannel = bot.channels.cache.get("822414098439864360")
+    const goodbyeChannel = bot.channels.cache.get("822189403060830279")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#990670')
     Embed.setTitle(`A member continued their journey somewhere else...`)
@@ -117,33 +117,6 @@ bot.on("guildMemberRemove", (member) => {
     goodbyeChannel.send(Embed)
 })
 
-bot.on("guildMemberAdd", (member) => {
-    if (member.guild.id !== config.fox) return
-    var shoprole = member.guild.roles.cache.find(role => role.name == "┏━━━༻Shop༺━━━┓")
-
-    member.roles.add(shoprole);
-});
-
-bot.on("guildMemberAdd", (member) => {
-    if (member.guild.id !== config.fox) return
-    var otherrole = member.guild.roles.cache.find(role => role.name == "┏━━━༻Other༺━━━┓")
-
-    member.roles.add(otherrole);
-});
-
-bot.on("guildMemberAdd", (member) => {
-    if (member.guild.id !== config.fox) return
-    var lvlrole = member.guild.roles.cache.find(role => role.name == "┏━━━༻Levels༺━━━┓")
-
-    member.roles.add(lvlrole);
-});
-
-bot.on("guildMemberAdd", (member) => {
-    if (member.guild.id !== config.fox) return
-    var selfrole = member.guild.roles.cache.find(role => role.name == "┏━━━༻Self roles༺━━━┓")
-
-    member.roles.add(selfrole);
-});
 
 
 
