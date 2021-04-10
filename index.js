@@ -119,10 +119,32 @@ bot.on("guildMemberRemove", (member) => {
 
 bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.fox) return
-    var role = member.guild.roles.cache.find(role => role.name == "┏━━━༻Shop༺━━━┓", "┏━━━༻Other༺━━━┓", "┏━━━༻Levels༺━━━┓", "┏━━━༻Self roles༺━━━┓")
+    var shoprole = member.guild.roles.cache.find(role => role.name == "┏━━━༻Shop༺━━━┓")
 
-    member.roles.add(role);
+    member.roles.add(shoprole);
 });
+
+bot.on("guildMemberAdd", (member) => {
+    if (member.guild.id !== config.fox) return
+    var otherrole = member.guild.roles.cache.find(role => role.name == "┏━━━༻Other༺━━━┓")
+
+    member.roles.add(otherrole);
+});
+
+bot.on("guildMemberAdd", (member) => {
+    if (member.guild.id !== config.fox) return
+    var lvlrole = member.guild.roles.cache.find(role => role.name == "┏━━━༻Levels༺━━━┓")
+
+    member.roles.add(lvlrole);
+});
+
+bot.on("guildMemberAdd", (member) => {
+    if (member.guild.id !== config.fox) return
+    var selfrole = member.guild.roles.cache.find(role => role.name == "┏━━━༻Self roles༺━━━┓")
+
+    member.roles.add(selfrole);
+});
+
 
 
 
