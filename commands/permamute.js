@@ -19,6 +19,18 @@ if(member.id === message.author.id) return message.reply(`imagine being that des
 if(!time){
     await member.roles.add(role.id).catch(err => console.log(err))
     .then(m => message.channel.send(`**${message.author.username}** has muted **${member.user.username}** indefinitely. They will not be able to talk on the server anymore.`));
+    let logChannel = message.guild.channels.cache.get("822454708894695444")
+    let Embed = new Discord.MessageEmbed()
+      Embed.setTitle('Permamuted Member')
+      Embed.setDescription(`${member} has now been permamuted.`)
+      Embed.addField('Moderator', message.member, true)
+      Embed.addField('Member', member, true)
+      Embed.addField('Reason', reason)
+      Embed.setFooter(message.member.displayName,  message.author.displayAvatarURL({ dynamic: true }))
+      Embed.setTimestamp()
+      Embed.setColor(`#ff7ad9`);
+      logChannel.send(Embed)
+
 } else {
     await members.role.add(role.id).catch(err => console.log(err))
     .then(m => message.channel.send(`${member.user.tag} is now muted luv.`));

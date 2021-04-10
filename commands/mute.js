@@ -49,7 +49,7 @@ module.exports = {
       Embed.addField('Reason', reason)
       Embed.setFooter(message.member.displayName,  message.author.displayAvatarURL({ dynamic: true }))
       Embed.setTimestamp()
-      Embed.setColor(message.guild.me.displayColor);
+      Embed.setColor(`#fc86db`);
       logChannel.send(Embed)
 
     // Unmute member

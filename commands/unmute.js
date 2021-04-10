@@ -23,7 +23,7 @@ module.exports = {
       Embed.addField('Member', member, true)
       Embed.setFooter(message.member.displayName,  message.author.displayAvatarURL({ dynamic: true }))
       Embed.setTimestamp()
-      Embed.setColor(message.guild.me.displayColor);
+      Embed.setColor(`#ff9cde`);
       logChannel.send(Embed)
 
 }

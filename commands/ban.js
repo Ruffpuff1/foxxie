@@ -33,7 +33,7 @@ module.exports = {
             message.channel.send(`:white_check_mark: ${message.author.username}} has banished ${message.member.username} from the server. They will never be able to return. Adios!`)
             let logChannel = message.guild.channels.cache.get("822454708894695444")
             let embed = new Discord.MessageEmbed()
-    embed.setColor('#f59dcc')
+    embed.setColor('#ff00b7')
 	embed.setTitle(`Member banned.`)
 	embed.setDescription(`**${member.user}** was banned from the server.`)
 	embed.addFields(
