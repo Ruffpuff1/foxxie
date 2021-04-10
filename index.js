@@ -89,8 +89,9 @@ The Author:
     Embed.setFooter('why are you reading this lmao');
     logChannel.send(Embed)
    });
-   
-   if(member.id !== config.fokushi) return message.channel.reply('heya! im fokushi, or foxu for short. my prefix is \`hk\`.')
+
+   let member = message.mentions.members.first();
+   if(member.id === config.fokushi) return message.channel.reply('heya! im fokushi, or foxu for short. my prefix is \`hk\`.')
 
 
 /**
