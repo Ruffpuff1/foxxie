@@ -52,7 +52,7 @@ message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m =
     
     :calendar: **Joined at:** ${moment(men.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(men.joinedAt).format('YYYY'), moment(men.joinedAt).format('M') - 1, moment(men.joinedAt).format('D')]).toNow(true)} ago)** 
 
-    :calendar: **Created at:** ${moment(men.createdAt).format('MMMM Do YYYY')} **(${moment([moment(men.createdAt).format('YYYY'), moment(men.createdAt).format('M') - 1, moment(men.createdAt).format('D')]).toNow(true)} ago)**
+    :calendar: **Created at:** ${moment(men.createdAt).format('MMMM Do YYYY')} **(${moment([moment(men.user.createdAt).format('YYYY'), moment(men.user.createdAt).format('M') - 1, moment(men.user.createdAt).format('D')]).toNow(true)} ago)**
     
     :arrow_double_up: **Highest role**: ${men.roles.highest.name}
 
