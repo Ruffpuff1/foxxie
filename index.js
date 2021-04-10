@@ -1,5 +1,4 @@
 const config = require("./config.json");
-const PREFIX ='hk';
 const moment = require("moment")
 const Discord = require("discord.js");
 const fs = require("fs");
@@ -133,9 +132,9 @@ for (const file of commandFiles) {
 
 
 bot.on("message", msg => {
-    if (!msg.content.startsWith(PREFIX) || msg.author.bot) return;
+    if (!msg.content.startsWith(config.prefix) || msg.author.bot) return;
 
-    const args = msg.content.slice(PREFIX.length).trim().split(/ +/);
+    const args = msg.content.slice(config.prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
     const command =
