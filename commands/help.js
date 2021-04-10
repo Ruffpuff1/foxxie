@@ -5,7 +5,7 @@ module.exports = {
     description: "Helps you with the commands and shows you the list as well.",
     execute(message, args, bot) {
         let embed = new Discord.MessageEmbed();
-        embed.setColor('#70ffde')
+        embed.setColor('#ff1251')
         embed.setDescription(`The commands of Fokushi.
 
 **Developer Only** (2)
@@ -31,7 +31,7 @@ module.exports = {
         const name = args[0].toLowerCase();
 const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 if (!command) return message.reply("Yeh yeh, all that en, Please give me an actual command lovely.")
-let colors = ["#FF4AE7", "#A7F2F1"]
+let colors = ["#ff1251"]
 const helpEmbed = new Discord.MessageEmbed()
   .setTitle(command.name)
   .setDescription(command.description)

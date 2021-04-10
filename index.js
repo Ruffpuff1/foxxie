@@ -16,7 +16,7 @@ bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.seasideRes) return
     const welcomeChannel = bot.channels.cache.get("822189403060830279")
     const embed = new Discord.MessageEmbed()
-    embed.setColor('#fccc95')
+    embed.setColor('#ff8940')
     embed.setTitle(`A new member appeared!`)
     embed.setDescription(`Why, hello there, ${member} the cutie! Welcome to our little tropical paradise, located out in the middle of the ocean, Seaside Restaurant! Here’s some places you might want to visit first! Be sure to give the <#822189857593098310> channel a read, so we can keep peace on our little island. The <#822468803182329886> channel is where you can go to pick up some shiny roles for yourself. You can go to <#822454757151080489> to see our list of server staff. And when you’re finally ready, <#822193883726741565> is where you can go to meet the rest of the server’s friendly faces! Enjoy your stay! ^^ `)
     embed.setImage(`https://media.discordapp.net/attachments/827515349959835708/829619448972312576/unknown.png`)
@@ -30,7 +30,7 @@ bot.on("guildMemberRemove", (member) => {
     if (member.guild.id !== config.seasideRes) return
     const goodbyeChannel = bot.channels.cache.get("822189403060830279")
     const Embed = new Discord.MessageEmbed()
-    Embed.setColor('#fccc95')
+    Embed.setColor('#990670')
     Embed.setTitle(`A member continued their journey somewhere else...`)
     Embed.setDescription(`Sadly, ${member} hopped on a boat and sailed far away, back across the ocean. Safe travels! There are ${member.guild.memberCount} customers left, dwelling the island.`)
     Embed.setImage(`https://media.discordapp.net/attachments/829649102333149206/829654630132088842/94a0071504a8b2faf77ae446c56df37a.gif`)
@@ -42,7 +42,7 @@ bot.on("messageDelete", (messageDelete) => {
     if (messageDelete.guild.id !== config.seasideRes) return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
-    Embed.setColor('#fccc95')
+    Embed.setColor('#f55a22')
     Embed.setTitle(`Message Deleted.`)
     Embed.setDescription(`A message was deleted.
 
@@ -65,7 +65,7 @@ The Author:
     if (oldMessage.guild.id !== config.seasideRes) return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
-    Embed.setColor('#fccc95')
+    Embed.setColor('#ff7a4a')
     Embed.setTitle(`Message Edited.`)
     Embed.setDescription(`A message was Edited.
 
@@ -90,7 +90,11 @@ The Author:
     logChannel.send(Embed)
    });
 
-   
+bot.on("guildMemberAdd", (member) => {
+    if (member.guild.id !== config.fox) return
+    var role = member.guild.roles.find('830398532024139836');
+  member.addRole(role);
+})
 
 
 /**

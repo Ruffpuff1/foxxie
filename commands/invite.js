@@ -9,7 +9,7 @@ module.exports = {
         var url = invite[Math.floor(Math.random() * invite.length)];
         console.log(url)
         let embed = new Discord.MessageEmbed();
-        embed.setColor('RANDOM')
+        embed.setColor('#52a9ff')
         embed.setDescription(`
         **Fokushi's server link.**
         

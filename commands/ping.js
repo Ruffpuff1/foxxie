@@ -11,7 +11,7 @@ module.exports = {
       Embed.setTimestamp()
       Embed.setFooter(`Discord is shitty, so the ping may be high due to that. Sorry.`)
       Embed.setThumbnail(message.guild.iconURL())
-      Embed.setColor("#f59dcc")
+      Embed.setColor("#66b3ff")
   message.channel.send(Embed)
      }
   }

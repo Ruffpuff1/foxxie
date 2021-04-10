@@ -11,7 +11,7 @@ const servercreated = moment(message.guild.createdAt).format('llll');
 const dayssincecreation = moment().diff(servercreated, 'days');
 const serverEmbed = new Discord.MessageEmbed()
 
-    .setColor(message.guild.me.displayColor)
+    .setColor('#0081ff')
      .setTitle(`**${message.guild.name}**
 (ID: ${message.guild.id})`)
     .setDescription(`info about **${message.guild.name}**`)

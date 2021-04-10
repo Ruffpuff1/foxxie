@@ -31,7 +31,7 @@ message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m =
 :arrow_double_up: **Highest role**: ${message.member.roles.highest.name}
 `)
           
-            embed.setColor('RANDOM')
+            embed.setColor('#3d9fff')
             embed.setThumbnail(message.author.displayAvatarURL({ format: "png", dynamic: true, size: 4096}));
             embed.setTimestamp()
             embed.setFooter('WOOOOOOOOOOOOOOOOOOOO', message.author.displayAvatarURL({ format: "png", dynamic: true, size: 4096}));
@@ -50,12 +50,15 @@ message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m =
     .join(", ")
     .replace(", @everyone", " ")}
     
-Highest role: ${message.GuildMember.highestRole}
+    :calendar: **Joined at:** ${moment(men.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(men.joinedAt).format('YYYY'), moment(men.joinedAt).format('M') - 1, moment(men.joinedAt).format('D')]).toNow(true)} ago)** 
 
-Online status: ${men.online.presence}`)
-embed.addField("User Joined", message.guild.joinedAt)
+    :calendar: **Created at:** ${moment(men.createdAt).format('MMMM Do YYYY')} **(${moment([moment(men.createdAt).format('YYYY'), moment(men.createdAt).format('M') - 1, moment(men.createdAt).format('D')]).toNow(true)} ago)**
+    
+    :arrow_double_up: **Highest role**: ${men.roles.highest.name}
+
+`)
             
-            embed.setColor('RANDOM')
+            embed.setColor('#3d9fff')
             embed.setThumbnail(men.user.displayAvatarURL({ format: "png", dynamic: true, size: 4096}));
             embed.setTimestamp()
             embed.setFooter('WOOOOOOOOOOOOOOOOOOO', men.user.displayAvatarURL({ format: "png", dynamic: true, size: 4096}));

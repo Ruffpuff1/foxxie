@@ -11,7 +11,7 @@ message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m =
             embed.setTitle(`${message.author.username}, your ID.
             
 ID: ${message.author.id} `)
-            embed.setColor('#RANDOM')
+            embed.setColor('#2694ff')
 
             message.channel.send(embed)
         } else { 
@@ -19,6 +19,7 @@ ID: ${message.author.id} `)
             embed.setTitle(`${men.user.tag}, their ID. 
 
 ID: ${men.user.id}`)
+embed.setColor('#2694ff')
             message.channel.send(embed)
         }
     }

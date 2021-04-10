@@ -13,7 +13,7 @@ message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m =
 i hope you like it.
 
 (ID: ${message.author.id}) `)
-            embed.setColor('#000000')
+            embed.setColor('#0057ab')
             embed.setTimestamp()
             embed.setImage(message.author.displayAvatarURL({ format: "png", dynamic: true, size: 4096}));
             message.channel.send(embed)
@@ -24,6 +24,7 @@ i hope you like it.
 
 (ID: ${men.user.id})`)
 embed.setTimestamp()
+embed.setColor('#0057ab')
             embed.setImage(men.user.displayAvatarURL({ format: "png", dynamic: true, size: 4096}));
             message.channel.send(embed)
         }
