@@ -90,8 +90,7 @@ The Author:
     logChannel.send(Embed)
    });
 
-   let member = message.mentions.members.first();
-   if(member.id === config.fokushi) return message.channel.reply('heya! im fokushi, or foxu for short. my prefix is \`hk\`.')
+   
 
 
 /**
