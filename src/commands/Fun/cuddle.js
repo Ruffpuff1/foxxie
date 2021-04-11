@@ -1,5 +1,4 @@
 const Discord = require('discord.js')
-const db = require('quick.db')
 const gifs = require('../../../lib/structures/roleplayCommand')
 module.exports = {
     name: 'cuddle',

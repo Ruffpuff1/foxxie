@@ -1,4 +1,3 @@
-const db = require('quick.db')
 const Discord = require('discord.js')
 const fs = require('fs')
 const ms = require('ms')
@@ -17,11 +16,7 @@ module.exports = {
             // prevents bot dms
             if (message.channel.type === 'dm') return
 
-            // !d bump check
-
-            let disboardChannel = db.get(`Guilds.${message.guild.id}.Settings.Disboardchannel`)
     
-            //if (message.content.toLowerCase() === '!d bump' && !db.has(`Guilds.${message.guild.id}.Reminders.Disboardreminder`)) {
             if (message.content.toLowerCase() === '!d bump') {
                 await mongo().then(async (mongoose) => {
                     try {
@@ -71,16 +66,13 @@ module.exports = {
             })
             }
 
-            // message counters for info cmd    
-            db.add(`Guilds.${message.guild.id}.Users.${message.author.id}.Stats.Messages`, 1)
-            db.add(`Guilds.${message.guild.id}.Stats.Messages`, 1)
             // mimu pick command
             if (message.guild.id === '761512748898844702' && message.content.toLowerCase() === '.pick') return message.channel.send('**Darlin\'** I\'m flattered you want to pick me but again mimu\'s prefix is \`?\`.')
 
             // command handler
 
             var lang;
-            var language = db.get(`Guilds.${message.guild.id}.Settings.Language`)
+            var language = 'en'
             if (language 
             ? language = language
             : language = 'en') 

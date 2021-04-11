@@ -1,5 +1,4 @@
 const axios = require('axios')
-const { emojis: { infinity } } = require('../../../lib/util/constants')
 const Discord = require('discord.js')
 module.exports = {
     name: 'cat',

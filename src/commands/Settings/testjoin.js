@@ -1,4 +1,3 @@
-const db = require('quick.db')
 const Discord = require('discord.js')
 const moment = require('moment')
 const mongo = require('../../../lib/structures/database/mongo')

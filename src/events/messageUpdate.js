@@ -1,4 +1,3 @@
-const db = require('quick.db')
 const config = require('../../lib/config')
 const errormsg = require('../../lib/util/error')
 module.exports = {
@@ -8,7 +7,7 @@ module.exports = {
         if (newMessage.channel.type === 'dm') return
 
         var lang;
-        var language = db.get(`Guilds.${newMessage.guild.id}.Settings.Language`)
+        var language = 'en'
         if (language 
             ? language = language
             : language = 'en') 
