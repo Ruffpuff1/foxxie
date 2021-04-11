@@ -54,9 +54,7 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                                 const logChannel = message.guild.channels.cache.get(results.channelId);
                                 if (logChannel) logChannel.send(nukeEmbed)
     
-                            } finally {
-                                mongoose.connection.close()
-                            }
+                            } finally {}
 
                         })
                         }).catch(() => {})

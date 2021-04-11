@@ -53,9 +53,7 @@ const connectToMongoDB = async () => {
     await mongo().then(mongoose => {
         try {
             console.log(`Connected to MongoDB`)
-        } finally {
-            mongoose.connection.close();
-        }
+        } finally {}
     })
 }
 

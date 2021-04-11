@@ -13,6 +13,7 @@ module.exports = {
     usage: 'eval [code]',
     guildOnly: true,
     execute: async (lang, message, args, client) => {
+
         if (config.devs.includes(message.author.id)) {
             let codein = args.slice(0).join(" ")
             if (!codein.toLowerCase().includes("token") && !codein.toLowerCase().includes("config")) {

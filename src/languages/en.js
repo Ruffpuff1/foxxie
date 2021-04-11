@@ -82,6 +82,10 @@ Hope I can fix things up for ya.`,
     COMMAND_PING_DISCORD: "Discord Latency",
     COMMAND_PING_FOOTER: "Ping may be high due to Discord breaking, not my problem.",
     COMMAND_PING_NETWORK: "Network Latency",
+    COMMAND_POLL_EMBED_FOOTER: "React to one of the emotes below to vote", // needs spanish
+    COMMAND_POLL_POLL_BY: "Poll by", // needs spanish
+    COMMAND_POLL_TOO_FEW_OPTIONS: "**Sorry,** you need to have at least two options for the poll. Remember to separate them with a comma `,`", // needs spanish
+    COMMAND_POLL_TOO_MANY_OPTIONS: "**Sorry,** I can only create polls with up to **ten options**.", // needs spanish
     COMMAND_REMINDME_AGOFOR: "ago for:",
     COMMAND_REMINDME_CONFIRMED: "**Alright,** I'll send that reminder your way in",
     COMMAND_REMINDME_FOR: "Reminder For",
@@ -108,7 +112,13 @@ Hope I can fix things up for ya.`,
     COMMAND_SERVERLIST: "Servers using Foxxie",
     COMMAND_SERVERLIST_MEMBERCOUNT: "members",
     COMMAND_SERVERLIST_TOTALSERVERS: "total servers",
-    COMMAND_SERVERLIST_PAGE: "Page",  
+    COMMAND_SERVERLIST_PAGE: "Page",
+    COMMAND_SETCOLOR_INVALIDCOLOR: "This isn't a **valid color** that I can set roles to, sorry!", // needs spanish
+    COMMAND_SETCOLOR_NOPERMS: "**Sorry,** I don't have the permissions to set the color of this role. Try moving my role **above** the roles you want to set the color of.", // needs spanish
+    COMMAND_SETCOLOR_NO_ROLE: "You need to provide **a role** for me to set the color", // needs spanish
+    COMMAND_STEAL_MAX_EMOJI: "**Sorry,** this server already has the maxium amount of emojis it can have.", // needs spanish
+    COMMAND_STEAL_NO_ARGS: "I can't steal **an emoji** if you don't provide one.", // needs spanish
+    COMMAND_STEAL_STOLE: "Stole", // needs spanish
     COMMAND_SUPPORT_HERE: "Hey hey, here's the link to my support server.",
     COMMAND_SUPPORT_BODY: `[Click here!](${supportServer})
 Hope we can help you out abit.`,
@@ -120,6 +130,8 @@ Hope we can help you out abit.`,
     COMMAND_UPTIME_SECONDS: 'seconds ago.',
     COMMAND_URBAN_NO_DATA: "**Yikes,** sorry I couldn't find any data for that word.",
     COMMAND_URBAN_NO_WORD: "**Okay,** how do you expect me to define a word if you don't provide one?",
+    COMMAND_WOLFRAM_NO_ARGS: "Heya, a **search term** is required for this command.", // needs spanish
+    COMMAND_WOLFRAM_NO_DATA: "**Sorry,** I couldn't find any data for that search term.", // needs spanish
 
     COMMAND_DESCRIPTIONS : {
 
@@ -134,7 +146,12 @@ Hope we can help you out abit.`,
         URBAN: "Defines a word using it's Urban Dictionary definition. Only works in NSFW channels due to potential inapropriate content.",
 
         CLEARNOTE: "Clears all public notes from a user's profile.",
+        LOCK: "Locks a channel so users won't be able to speak in it until unlocked. (Note: if you have a role that grants message permissions this command won't work)", // needs spanish
         NOTE: "Adds a server-only public note to a user's profile.",
+        PURGE: "Clears a specified amount of messages from a channel, and logs into a modlogs channel if set.", // needs spanish
+        NUKE: "Completely wipes a channel of all messages. Only server owners can use this command due to the harm it may cause.", // needs spanish
+        SLOWMODE: "Adds a slowmode to the channel you're in, unlike normal discord I can set a slowmode of any amount you want.", // needs spanish
+        UNLOCK: "Unlocks a channel if locked. (Note: if you have a role that grants message permissions this command won't work)", // needs spanish
         WARN: "Adds a server-only warning to a user in case they break a rule, also sends em a DM to make sure they see it.", // Needs Spanish
 
         BLUSH: "Blush at someone.",
@@ -157,6 +174,7 @@ Hope we can help you out abit.`,
         ABOUT: "Get some basic information about me, my statistics, and some of my credits.",
         AFK: "Sets an AFK for when people ping ya. You can provide a reason, but if no reason is provided it will show as \'none\'. When pinged in chat your AFK status will show. And the next time you talk in chat your AFK will be removed.",
         AVATAR: "Get a high resolution image of a user's profile picture. In PNG, JPEG, and WEBP formats.",
+        BADGES: "Gives a rough estimate for how many user badges there are in a server. Although due to Discord's limitaions this only works in smaller servers 800 members or less.", // needs spanish
         BUGREPORT: "Send a bugreport straight to the developer in case something goes wrong.", // needs spanish
         CORONA: "Get the current statistics of the Covid-19 pandemic. You can enter a country name, or global for statistics of the whole world.",
         DEFINE: "Defines a term using the Merriam-Webster Dictionary API.",

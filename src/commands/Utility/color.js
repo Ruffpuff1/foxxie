@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const color = require('tinycolor2');
 module.exports = {
     name: 'color',
+    aliases: ['colour'],
     usage: 'fox color (color)',
     execute: async(lang, message, args, client) => {
         let colorshow = args[0]

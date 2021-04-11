@@ -37,9 +37,7 @@ module.exports = {
                     upsert: true
                 })
                 message.react('✅')
-            } finally {
-                mongoose.connection.close()
-            }
+            } finally {}
         })
         
     }

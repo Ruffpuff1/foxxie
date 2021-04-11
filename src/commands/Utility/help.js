@@ -18,7 +18,7 @@ module.exports = {
                 },
                 {
                     name: lang.COMMAND_HELP_MODERATION,
-                    value: "`clearnote`, `clearwarn`, `note`, `nuke`, `warn`",
+                    value: "`clearnote`, `clearwarn`, `lock`, `note`, `nuke`, `purge`, `slowmode`, `unlock`, `warn`",
                     inline: false
                 },
                 /*
@@ -35,7 +35,7 @@ module.exports = {
                 },
                 {
                     name: lang.COMMAND_HELP_UTILITY,
-                    value: "`about`, `afk`, `avatar`, `bugreport`, `corona`, `define`, `embed`, `help`, `info` `invite`, `ping`, `poll`, `remindme`, `say`, `setcolor`, `steal`, `support`, `uptime`, `weather`, `wolfram`",
+                    value: "`about`, `afk`, `avatar`, `badges`, `bugreport`, `corona`, `define`, `embed`, `help`, `info` `invite`, `ping`, `poll`, `remindme`, `say`, `setcolor`, `steal`, `support`, `uptime`, `weather`, `wolfram`",
                     inline: false
                 },
                 {

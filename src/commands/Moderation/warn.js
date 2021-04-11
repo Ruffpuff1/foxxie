@@ -43,7 +43,7 @@ module.exports = {
                 }, {
                     upsert: true
                 })
-
+                message.react('✅')
                 const results = await modchannelSchema.findById({
                     _id: message.guild.id
                 })
@@ -67,12 +67,10 @@ module.exports = {
                 target.send(warnDmEmbed)
                     .catch(error => console.error(error))
 
-                message.react('✅')
-
                 if (results === null) return
 
                 const warnEmbed = new Discord.MessageEmbed()
-                    .setTitle(`Warned ${target.tag}`)
+                    .setTitle(`Warned ${target.user.tag}`)
                     .setColor(message.guild.me.displayColor)
                     .setTimestamp()
                     .addFields(
@@ -86,9 +84,7 @@ module.exports = {
                 const logChannel = message.guild.channels.cache.get(results.channelId);
                 if (logChannel) logChannel.send(warnEmbed)
 
-            } finally {
-                mongoose.connection.close()
-            }
+            } finally {}
         })
     }
 }

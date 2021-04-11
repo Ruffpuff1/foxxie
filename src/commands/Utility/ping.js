@@ -6,7 +6,6 @@ module.exports = {
     usage: 'ping',
     guildOnly: true,
     execute(lang, message) {
-        console.log('Commands/Utility/ping.js')
         message.channel.send(lang.COMMAND_PING)
             .then(resultMessage => {
                 const ping = resultMessage.createdTimestamp - message.createdTimestamp

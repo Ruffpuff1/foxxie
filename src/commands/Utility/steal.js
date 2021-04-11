@@ -3,9 +3,16 @@ module.exports = {
     name: 'steal',
     aliases: ['se', 'yoink', 'take'],
     usage: 'fox steal [emoji] (name)',
+    permissions: 'MANAGE_EMOJIS',
     execute: async (lang, message, args) => {
 
-        if (!args[0]) return message.channel.send(`COMMAND_STEAL_NO_ARGS`)
+        let emoCount = message.guild.emojis.cache.size
+        if (emoCount >= `${message.guild.premiumTier === 0 ? '50' 
+        : message.guild.premiumTier === 1 ? '100'
+        : message.guild.premiumTier === 2 ? '150'
+        : message.guild.premiumTier === 3 ? '200' : ''}`) return message.channel.send(lang.COMMAND_STEAL_MAX_EMOJI)
+
+        if (!args[0]) return message.channel.send(lang.COMMAND_STEAL_NO_ARGS)
 
         let ext = '.png'
         if (args[0].includes('<a:')) ext = '.gif'
@@ -19,7 +26,7 @@ module.exports = {
         message.guild.emojis.create(url, name)
         
         const embed = new Discord.MessageEmbed()
-        .setTitle(`Stole ${name}`)
+        .setTitle(`${lang.COMMAND_STEAL_STOLE} ${name}`)
         .setColor(message.guild.me.displayColor)
         .setDescription(`**ID:** \`${regex}\`\n**Raw:** \`<${ext = '.gif'?'a':''}:${name}:${regex}>\``)
         .setImage(url)

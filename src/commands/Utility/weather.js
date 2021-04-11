@@ -7,12 +7,12 @@ module.exports = {
     usage: 'fox weather [city]',
     guildOnly: true,
     execute(lang, message, args) {
-        if (!args[0]) return message.channel.send(`Ya gotta enter a city for me to give the weather.`)
+        if (!args[0]) return message.channel.send(`Ya gotta enter a **city** for me to give the weather.`)
         message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
         weather.find({search: args.join(" "), degreeType: 'F'}, function(err, result) {
             if (err) message.channel.send(err.message)
             if(result.length === 0) {
-                message.channel.send('**Please Enter A Valid Location.**')
+                message.channel.send('**Please,** Enter A Valid Location.')
                 return undefined;
             }
             var current = result[0].current;

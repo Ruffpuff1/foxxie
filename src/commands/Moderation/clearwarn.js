@@ -30,7 +30,7 @@ module.exports = {
                     guildId,
                     userId,
                 })
-
+                message.react('✅')
                 const results = await modchannelSchema.findById({
                     _id: message.guild.id
                 })
@@ -63,9 +63,7 @@ module.exports = {
                 const logChannel = message.guild.channels.cache.get(results.channelId);
                 if (logChannel) logChannel.send(warnEmbed)
 
-            } finally {
-                mongoose.connection.close()  
-            }
+            } finally {}
         })
     }
 }

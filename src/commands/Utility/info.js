@@ -3,6 +3,8 @@ const { emojis: { perms: { granted, notSpecified } } } = require('../../../lib/u
 const mongo = require('../../../lib/structures/database/mongo')
 const warnSchema = require('../../../lib/structures/database/schemas/warnSchema')
 const noteSchema = require('../../../lib/structures/database/schemas/noteSchema')
+const messageCountSchema = require('../../../lib/structures/database/schemas/messageCountSchema')
+const serverMessageCountSchema = require('../../../lib/structures/database/schemas/serverMessageCountSchema')
 const db = require('quick.db')
 const moment = require('moment')
 module.exports = {
@@ -147,35 +149,46 @@ module.exports = {
             return message.channel.send(embed);    }
 
         if (server && args[0] === 'server') {
-        
-            const guild = server; //guild.createdAt
-            let messages = db.get(`Guilds.${guild.id}.Stats.Messages`) || '0'
-            const toxicity = 0
+            let guildId = server.id
 
-            await message.guild.members.fetch(message.guild.ownerID);
+            await mongo().then(async mongoose => {
+                try {
+                    const results = await serverMessageCountSchema.findOne({
+                        guildId
+                    })
+                    
+                    let messages;
+                    messages = 0
+                    if (results !== null) messages = results.messageCount
+                    const guild = server; //guild.createdAt
+                    const toxicity = 0
 
-            const embed = new MessageEmbed()
-                .setTitle(`${guild.name} (ID: ${guild.id})`)
-                .setDescription(`Created by **${guild.owner.user.tag}** on ${moment(guild.createdAt).format('MMMM Do YYYY')} **(${moment([moment(guild.createdAt).format('YYYY'), moment(guild.createdAt).format('M') - 1, moment(guild.createdAt).format('D')]).toNow(true)} ago)**`)
-                .addField(':crown: **Owner**', guild.owner.user.tag, true)
-                .addField(':busts_in_silhouette: **Members**', `${guild.memberCount} (cached: ${guild.members.cache.size})`, true)
-                .addField(`:speech_balloon: **Channels (${guild.channels.cache.size})**`, guild.channels.cache.size>0?`Text: **${guild.channels.cache.filter(c => c.type === "text").size}**\nVoice: **${guild.channels.cache.filter(c => c.type === "voice").size}**`:'None', true)
-                .addField(':map: **Region**', this.regions[guild.region], true)
-                .addField(`:scroll: **Roles**`, guild.roles.cache.size > 0 ? guild.roles.cache.size : 'None', true)
-                .addField(':sunglasses: **Emojis**', guild.emojis.cache.size > 0 ? guild.emojis.cache.size : 'None', true)
-                .addField(':bar_chart: **Statistics**', `${messages.toLocaleString()} messages ${toxicity !== 0 ? `with an average toxicity of ${Math.round(toxicity * 100)}%` : ''} sent`)
-                .addField(':lock: **Security**', [
-                    `Verification level: ${this.verificationLevels[message.guild.verificationLevel]}`,
-                    `Explicit filter: ${this.filterLevels[message.guild.explicitContentFilter]}`
-                ].join('\n'));
+                    await message.guild.members.fetch(message.guild.ownerID);
 
-            embed.setThumbnail(guild.iconURL({ format: 'png', dynamic: true }))
-            embed.setColor(message.guild.me.displayColor)
+                    const embed = new MessageEmbed()
+                        .setTitle(`${guild.name} (ID: ${guild.id})`)
+                        .setDescription(`Created by **${guild.owner.user.tag}** on ${moment(guild.createdAt).format('MMMM Do YYYY')} **(${moment([moment(guild.createdAt).format('YYYY'), moment(guild.createdAt).format('M') - 1, moment(guild.createdAt).format('D')]).toNow(true)} ago)**`)
+                        .addField(':crown: **Owner**', guild.owner.user.tag, true)
+                        .addField(':busts_in_silhouette: **Members**', `${guild.memberCount} (cached: ${guild.members.cache.size})`, true)
+                        .addField(`:speech_balloon: **Channels (${guild.channels.cache.size})**`, guild.channels.cache.size>0?`Text: **${guild.channels.cache.filter(c => c.type === "text").size}**\nVoice: **${guild.channels.cache.filter(c => c.type === "voice").size}**`:'None', true)
+                        .addField(':map: **Region**', this.regions[guild.region], true)
+                        .addField(`:scroll: **Roles**`, guild.roles.cache.size > 0 ? guild.roles.cache.size : 'None', true)
+                        .addField(':sunglasses: **Emojis**', guild.emojis.cache.size > 0 ? guild.emojis.cache.size : 'None', true)
+                        .addField(':bar_chart: **Statistics**', `${messages.toLocaleString()} messages ${toxicity !== 0 ? `with an average toxicity of ${Math.round(toxicity * 100)}%` : ''} sent`)
+                        .addField(':lock: **Security**', [
+                            `Verification level: ${this.verificationLevels[message.guild.verificationLevel]}`,
+                            `Explicit filter: ${this.filterLevels[message.guild.explicitContentFilter]}`
+                        ].join('\n'));
 
-            return message.channel.send(embed);
+                    embed.setThumbnail(guild.iconURL({ format: 'png', dynamic: true }))
+                    embed.setColor(message.guild.me.displayColor)
+                    return message.channel.send(embed);
+
+                } finally {}
+            })
         }
 
-        if (user) {
+        if (user && args[0] !== 'server') {
         
             const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
 
@@ -196,12 +209,31 @@ module.exports = {
                     ];
             
                     if (member) {
-                        let stats_messages = db.get(`Guilds.${message.guild.id}.Users.${member.user.id}.Stats.Messages`) || '0'
-                        statistics.push((
-                            `${member.user.id == message.guild.ownerID ? 'Created' : 'Joined'} ${message.guild.name} ${moment(member.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)} ago)**`
-                        ))
+
+                        await mongo().then(async mongoose => {
+                            try {
+                                console.log(member.user.id)
+                                guildId = message.guild.id
+                                userId = member.user.id
+
+                                const results = await messageCountSchema.findOne({
+                                    guildId,
+                                    userId
+                                })
+
+                                let stats_messages;
+                                stats_messages = 0
+                                if (results !== null) stats_messages = results.messageCount
+                                statistics.push((
+                                    `${member.user.id == message.guild.ownerID ? 'Created' : 'Joined'} ${message.guild.name} ${moment(member.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)} ago)**`
+                                ))
                         
-                        statistics.push(`${stats_messages.toLocaleString()} messages sent`);
+                                statistics.push(`${stats_messages.toLocaleString()} messages sent`);
+
+                            } finally {}
+
+                        })
+
             
                         embed.addField(`:pencil: **Statistics**`, statistics.join('\n'));
                         if (!member) return embed;

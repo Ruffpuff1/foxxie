@@ -60,9 +60,7 @@ module.exports = {
                 loading.delete()
                 return message.channel.send(embed)
 
-            } finally {
-                mongoose.connection.close()
-            }
+            } finally {}
         })
     }
 }
