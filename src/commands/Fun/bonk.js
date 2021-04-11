@@ -8,7 +8,7 @@ module.exports = {
     usage: `fox bonk [user] (reason)`,
     guildOnly: true,
     execute(lang, message, args) {
-        let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+        let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(u => u.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase())
         if(!mentionMember) return message.channel.send("**Hey,** you needa tell me who ya wanna hit on the head. Try again with `fox bonk [user] (reason)`")
     
         let BonkText = args.slice(1).join(' ');

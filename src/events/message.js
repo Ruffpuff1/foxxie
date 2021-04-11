@@ -5,8 +5,10 @@ const ms = require('ms')
 const config = require('../../lib/config')
 const errormsg = require('../../lib/util/error')
 const mongo = require('../../lib/structures/database/mongo')
-const messageCountSchema = require('../../lib/structures/database/schemas/messageCountSchema')
-const serverMessageCountSchema = require('../../lib/structures/database/schemas/serverMessageCountSchema')
+const messageCountSchema = require('../../lib/structures/database/schemas/server/messageCountSchema')
+const serverMessageCountSchema = require('../../lib/structures/database/schemas/server/serverMessageCountSchema')
+const disboardBumpSchema = require('../../lib/structures/database/schemas/server/disboard/disboardBumpSchema')
+const disboardChannelSchema = require('../../lib/structures/database/schemas/server/disboard/disboardChannelSchema')
 module.exports = {
 	name: 'message',
 	execute: async(message) => {
@@ -19,21 +21,41 @@ module.exports = {
 
             let disboardChannel = db.get(`Guilds.${message.guild.id}.Settings.Disboardchannel`)
     
-            if (message.content.toLowerCase() === '!d bump' && !db.has(`Guilds.${message.guild.id}.Reminders.Disboardreminder`)) {
-                if (disboardChannel === undefined) return
-                if (message.channel.id === disboardChannel) {
+            //if (message.content.toLowerCase() === '!d bump' && !db.has(`Guilds.${message.guild.id}.Reminders.Disboardreminder`)) {
+            if (message.content.toLowerCase() === '!d bump') {
+                await mongo().then(async (mongoose) => {
+                    try {
+                        let guildId = message.guild.id
+                        let bump = await disboardBumpSchema.findById({
+                            _id: guildId
+                        })
+                        if (bump !== null) return
 
-                client.disboard = require('../store/disboard.json')
-                let remindTime = '2h'
-                let deleteTime = '90m'
+                        let disboardchannel = await disboardChannelSchema.findById({
+                            _id: guildId
+                        })
+                        if (disboardchannel === null) return
+                        if (message.channel.id !== disboardchannel.disboardChannel) return
+                        console.log('bumping owo')
+
+                        client.disboard = require('../store/disboard.json')
+                        let remindTime = '20s'
+                        let deleteTime = '10s'
     
-                db.set(`Guilds.${message.guild.id}.Reminders.Disboardreminder`, true)
+                await disboardBumpSchema.findByIdAndUpdate({
+                    _id: guildId
+                }, {
+                    _id: guildId,
+                    disboardBump: true
+                }, {
+                    upsert: true
+                })
     
                 client.disboard [message.guild.id] = {
                     guild: message.guild.id,
                     authID: message.author.id,
                     time: Date.now() + ms(remindTime),
-                    channelID: disboardChannel,
+                    channelID: disboardchannel.disboardChannel,
                     displayColor: message.guild.me.displayColor,
                     deleteDbTime: Date.now() + ms(deleteTime)
                 }
@@ -44,7 +66,9 @@ module.exports = {
                 if (err) console.log(err)
                 })
                 message.react('✅')
-                }
+                
+            } finally {}
+            })
             }
 
             // message counters for info cmd    

@@ -18,8 +18,6 @@ const config = require('../lib/config')
 const reminder = require('./tasks/reminder')
 const afkcheck = require('./tasks/afkcheck')
 const membercount = require('./tasks/membercount')
-const clock = require('./tasks/clock')
-const disboardcheck = require('./tasks/disboardcheck')
 const mongo = require('../lib/structures/database/mongo')
 
 client.on('ready', async () => {
@@ -28,17 +26,6 @@ client.on('ready', async () => {
     reminder(client)
     afkcheck(client)
     membercount(client)
-    clock(client)
-*/
-    disboardcheck(client)
-/*
-    await mongo () .then(mongoose => {
-        try {
-            console.log('Connected to mongo!')
-        } finally {
-            mongoose.connection.close()
-        }
-    })
 */
     module.exports = {
 

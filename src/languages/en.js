@@ -165,11 +165,12 @@ Hope we can help you out abit.`,
         PAT: "Give someone headpats.",
 
         DISBOARDCHANNEL: "If you use the Disboard bot you can set a channel for me to send bump reminders every two hours. Alternatively to disable these reminders you can put `fox disboardchannel none`.",
-        DISBOARDMESSAGE: "Change the text I'll send ya when Disboard is off cooldown. Put 'none' to reset back to my default, or just do `fox disboardmessage` to show the current message if one is set.",
+        DISBOARDMESSAGE: "Change the text I'll send ya when Disboard is off cooldown. Put `none` to reset back to my default, or just do `fox disboardmessage` to show the current message if one is set.",
         LANGUAGE: "Set the language of the guild. Choose either English, Spanish, or `none` to reset to the default.",
         MODCHANNEL: "Set the moderation logging channel of the server. If no channel is specified I will show the current channel set, if there is no channel currently set I will show none.",
         TESTJOIN: "Simulates what would happen if a new member joins the server.",
         WELCOMECHANNEL: "Set the channel where I should send welcome messages. This will initiate whenever a new member joins or you can use `fox testwelcome` to test it out beforehand.",
+        WELCOMEMESSAGE: "Change the text I'll send ya when a new member joins the server. Put `none` to reset back to my default, or just do `fox welcomemessage` to show the current message if one is set.", // needs spanish
 
         ABOUT: "Get some basic information about me, my statistics, and some of my credits.",
         AFK: "Sets an AFK for when people ping ya. You can provide a reason, but if no reason is provided it will show as \'none\'. When pinged in chat your AFK status will show. And the next time you talk in chat your AFK will be removed.",
@@ -231,5 +232,42 @@ Hope we can help you out abit.`,
         USE_VAD: 'Use Voice Activity',
         STREAM: 'Go Live',
         ROLE: 'testing role thing'
+    },
+
+    REGIONS : {
+        'eu-central': 'Central Europe',
+		india: 'India',
+		london: 'London',
+		japan: 'Japan',
+		amsterdam: 'Amsterdam',
+		brazil: 'Brazil',
+		'us-west': 'US West',
+		hongkong: 'Hong Kong',
+		southafrica: 'South Africa',
+		sydney: 'Sydney',
+		europe: 'Europe',
+		singapore: 'Singapore',
+		'us-central': 'US Central',
+		'eu-west': 'Western Europe',
+		dubai: 'Dubai',
+		'us-south': 'US South',
+		'us-east': 'US East',
+		frankfurt: 'Frankfurt',
+		russia: 'Russia'
+    },
+
+    VERIFICATION_LEVELS : {
+        NONE: 'None',
+		LOW: 'Low',
+		MEDIUM: 'Medium',
+		HIGH: '(╯°□°）╯︵ ┻━┻',
+		VERY_HIGH: '┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻'
+    },
+
+    FILTER_LEVELS : {
+        DISABLED: "Don't scan any messages",
+		MEMBERS_WITHOUT_ROLES: 'Scan messages from members without a role',
+		ALL_MEMBERS: 'Scan messages by all members'
     }
+
 }

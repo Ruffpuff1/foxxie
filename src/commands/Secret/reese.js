@@ -4,6 +4,6 @@ module.exports = {
     guildOnly: true,
     execute(lang, message) {
         message.delete()
-        message.channel.send(reese)
+        message.channel.send(reese[Math.floor(Math.random() * reese.length)])
     }
 }

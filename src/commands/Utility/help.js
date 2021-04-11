@@ -21,16 +21,9 @@ module.exports = {
                     value: "`clearnote`, `clearwarn`, `lock`, `note`, `nuke`, `purge`, `slowmode`, `unlock`, `warn`",
                     inline: false
                 },
-                /*
-                {
-                    name: lang.COMMAND_HELP_ROLEPLAY,
-                    value: "`blush`, `bonk`, `boop`, `cry`, `cuddle`, `dab`, `facepalm`, `hug`, `pat`",
-                    inline: false
-                },
-                */
                 {
                     name: lang.COMMAND_HELP_SETTINGS,
-                    value: "`disboardchannel`, `disboardmessage`, `language`, `modchannel`, `testjoin`, `welcomechannel`",
+                    value: "`disboardchannel`, `disboardmessage`, `modchannel`, `testjoin`, `welcomechannel`, `welcomemessage`",
                     inline: false
                 },
                 {

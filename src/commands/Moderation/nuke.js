@@ -1,7 +1,7 @@
 const mongo = require('../../../lib/structures/database/mongo')
 const moment = require('moment')
 const Discord = require('discord.js')
-const modchannelSchema = require('../../../lib/structures/database/schemas/modchannelSchema')
+const modchannelSchema = require('../../../lib/structures/database/schemas/server/moderation/modchannelSchema')
 module.exports = {
     name: 'nuke',
     usage: 'fox nuke',
@@ -30,8 +30,6 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                             channel.send(`**Heh First,** anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`)
                             })
 
-                            message.channel.delete()
-
                             await mongo().then(async (mongoose) => {
 
                             try {
@@ -50,10 +48,13 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                                         { name: `**Reason**`, value: `No reason specified`, inline: true },
                                         { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
                                         { name: `**Date / Time**`, value: `${warnDate}`, inline: true })
-    
+
+
                                 const logChannel = message.guild.channels.cache.get(results.channelId);
-                                if (logChannel) logChannel.send(nukeEmbed)
+                                if (logChannel) logChannel.send(results.channelId)
     
+                                message.channel.delete()
+
                             } finally {}
 
                         })

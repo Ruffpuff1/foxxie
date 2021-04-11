@@ -1,5 +1,5 @@
 const mongo = require('../../../lib/structures/database/mongo')
-const noteSchema = require('../../../lib/structures/database/schemas/noteSchema')
+const noteSchema = require('../../../lib/structures/database/schemas/server/moderation/noteSchema')
 module.exports = {
     name: 'note',
     aliases: ['n'],

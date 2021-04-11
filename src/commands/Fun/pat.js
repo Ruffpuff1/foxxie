@@ -7,7 +7,7 @@ module.exports = {
     usage: `fox pat [user] (reason)`,
     guildOnly: true,
     execute(lang, message, args) {
-        let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+        let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(u => u.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase())
         if(!mentionMember) return message.channel.send('**Hey,** you needa tell me who ya wanna pat. Try again with \`fox pat [user] (reason)\`')
         
         let patText = args.slice(1).join(' ');

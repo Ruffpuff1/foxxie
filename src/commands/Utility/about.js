@@ -1,5 +1,4 @@
 const Discord = require('discord.js')
-const moment = require('moment')
 module.exports = {
     name: 'about',
     aliases: ['botinfo'],
@@ -7,7 +6,6 @@ module.exports = {
     usage: 'fox about',
     category: 'utility',
     execute(lang, message, args, client) {
-        var daysSinceCreation = moment().diff('2021-02-15', 'days');
         const embed = new Discord.MessageEmbed()
             .setTitle(lang.COMMAND_ABOUT_TITLE)
             .setColor(message.guild.me.displayColor)

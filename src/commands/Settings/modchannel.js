@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
-const modchannelSchema = require('../../../lib/structures/database/schemas/modchannelSchema')
+const modchannelSchema = require('../../../lib/structures/database/schemas/server/moderation/modchannelSchema')
 module.exports = {
     name: 'modchannel',
     aliases: ['mc', 'modlogs'],

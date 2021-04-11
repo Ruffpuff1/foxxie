@@ -1,8 +1,8 @@
 const mongo = require('../../../lib/structures/database/mongo')
 const moment = require('moment')
 const Discord = require('discord.js')
-const warnSchema = require('../../../lib/structures/database/schemas/warnSchema')
-const modchannelSchema = require('../../../lib/structures/database/schemas/modchannelSchema')
+const warnSchema = require('../../../lib/structures/database/schemas/server/moderation/warnSchema')
+const modchannelSchema = require('../../../lib/structures/database/schemas/server/moderation/modchannelSchema')
 module.exports = {
     name: 'clearwarn',
     aliases: ['clearwarns', 'cw', 'unwarn', 'uw', 'pardon', 'warnremove'],

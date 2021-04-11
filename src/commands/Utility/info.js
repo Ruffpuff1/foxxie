@@ -1,11 +1,10 @@
 const { MessageEmbed, Permissions: { FLAGS } } = require('discord.js');
 const { emojis: { perms: { granted, notSpecified } } } = require('../../../lib/util/constants')
 const mongo = require('../../../lib/structures/database/mongo')
-const warnSchema = require('../../../lib/structures/database/schemas/warnSchema')
-const noteSchema = require('../../../lib/structures/database/schemas/noteSchema')
-const messageCountSchema = require('../../../lib/structures/database/schemas/messageCountSchema')
-const serverMessageCountSchema = require('../../../lib/structures/database/schemas/serverMessageCountSchema')
-const db = require('quick.db')
+const warnSchema = require('../../../lib/structures/database/schemas/server/moderation/warnSchema')
+const noteSchema = require('../../../lib/structures/database/schemas/server/moderation/noteSchema')
+const messageCountSchema = require('../../../lib/structures/database/schemas/server/messageCountSchema')
+const serverMessageCountSchema = require('../../../lib/structures/database/schemas/server/serverMessageCountSchema')
 const moment = require('moment')
 module.exports = {
     name: 'info',
@@ -20,46 +19,11 @@ module.exports = {
 		let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase()); 
 
 		this.perms = lang.PERMISSIONS
-
-        this.regions = {
-			'eu-central': 'Central Europe',
-			india: 'India',
-			london: 'London',
-			japan: 'Japan',
-			amsterdam: 'Amsterdam',
-			brazil: 'Brazil',
-			'us-west': 'US West',
-			hongkong: 'Hong Kong',
-			southafrica: 'South Africa',
-			sydney: 'Sydney',
-			europe: 'Europe',
-			singapore: 'Singapore',
-			'us-central': 'US Central',
-			'eu-west': 'Western Europe',
-			dubai: 'Dubai',
-			'us-south': 'US South',
-			'us-east': 'US East',
-			frankfurt: 'Frankfurt',
-			russia: 'Russia'
-		};
-
-        this.verificationLevels = {
-			NONE: 'None',
-			LOW: 'Low',
-			MEDIUM: 'Medium',
-			HIGH: '(╯°□°）╯︵ ┻━┻',
-			VERY_HIGH: '┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻'
-        };
-
-        this.filterLevels = {
-			DISABLED: "Don't scan any messages",
-			MEMBERS_WITHOUT_ROLES: 'Scan messages from members without a role',
-			ALL_MEMBERS: 'Scan messages by all members'
-        };
-
+        this.regions = lang.REGIONS
+        this.verificationLevels = lang.VERIFICATION_LEVELS
+        this.filterLevels = lang.FILTER_LEVELS
 
         if (args[0]) {
-
 
             const regex = args[0].replace(/^<a?:\w+:(\d+)>$/, '$1');
             const emoji = message.client.emojis.cache.find((emj) => emj.name === args[0] || emj.id === regex)
@@ -79,7 +43,6 @@ module.exports = {
                 return message.channel.send(embed)
             }
         }
-
 
         if (channel) {
 
@@ -120,7 +83,6 @@ module.exports = {
 
             return message.channel.send(embed)
         }
-
 
         if (role) { 
             const [bots, humans] = role.members.partition(member => member.user.bot);
@@ -198,9 +160,7 @@ module.exports = {
                     .setTitle(`${user.tag} (ID: ${user.id})`)
                     .setThumbnail(user.displayAvatarURL({ dynamic: true }));
 
-                    user.id === '754598258742919178' ? embed
-                                                        .setDescription(`• Certified Cutie`)
-                                                   : '';
+                    user.id === '754598258742919178' ? embed.setDescription(`• Certified Cutie`) : '';
             
                     const member = message.guild ? await message.guild.members.fetch(user).catch(() => null) : null;
             
@@ -212,7 +172,6 @@ module.exports = {
 
                         await mongo().then(async mongoose => {
                             try {
-                                console.log(member.user.id)
                                 guildId = message.guild.id
                                 userId = member.user.id
 
@@ -234,7 +193,6 @@ module.exports = {
 
                         })
 
-            
                         embed.addField(`:pencil: **Statistics**`, statistics.join('\n'));
                         if (!member) return embed;
                 
@@ -293,9 +251,7 @@ module.exports = {
                                     );
                                 }
                             }
-                            finally {
-                                mongoose.connection.close()
-                            }
+                            finally {}
                         })
 
                         embed.setColor(member.displayColor)

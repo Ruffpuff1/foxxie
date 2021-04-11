@@ -1,5 +1,5 @@
 const mongo = require('../../../lib/structures/database/mongo')
-const modchannelSchema = require('../../../lib/structures/database/schemas/modchannelSchema')
+const modchannelSchema = require('../../../lib/structures/database/schemas/server/moderation/modchannelSchema')
 const Discord = require('discord.js')
 const moment = require('moment')
 module.exports = {

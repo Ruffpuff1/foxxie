@@ -1,18 +1,32 @@
 const db = require('quick.db')
 const Discord = require('discord.js')
 const moment = require('moment')
+const mongo = require('../../../lib/structures/database/mongo')
+const welcomeMessageSchema = require('../../../lib/structures/database/schemas/server/welcome/welcomeMessageSchema')
+const welcomeChannelSchema = require('../../../lib/structures/database/schemas/server/welcome/welcomeChannelSchema')
 module.exports = {
     name: 'testjoin',
-    alises: ['testwelcome'],
-    usage: 'fox testjoin',
+    aliases: ['testwelcome'],
+    usage: 'fox testjoin (member)',
     guildOnly: true,
-    execute(lang, message, args, client) {
-        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-        let welchn = db.get (`Guilds.${message.guild.id}.Settings.Welcomechannel`);
-        const welChannel = message.guild.channels.cache.get(welchn)
-            if (welChannel === undefined) return
+    execute: async(lang, message, args, client) => {
 
-        message.delete();      
+        let guildId = message.guild.id
+        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
+
+        await mongo().then(async (mongoose) => {
+            try {
+                let welchn = await welcomeChannelSchema.findById({
+                    _id: guildId
+                })
+
+                if (welchn === null) return;
+
+                const welChannel = message.guild.channels.cache.get(welchn.welcomeChannel)
+                    if (welChannel === undefined) return
+
+                message.delete();     
+
         const created = moment(member.user.createdTimestamp).format('llll');
         const joined = moment(member.joinedTimestamp).format('llll');
         const embed = new Discord.MessageEmbed()
@@ -34,6 +48,16 @@ module.exports = {
         return welChannel.send(`<@${member.id}> **Just joined the server. <@&774173127717552139> be sure to welcome them.**`, {embed: welcomeEmbed,})
         .then(msg => {setTimeout(() => msg.delete(), 300000)})
         }
-        welChannel.send(`**<@${member.id}>** just joined the server!`)
+
+        let welmsg = await welcomeMessageSchema.findById({
+            _id: guildId
+        })
+        let welcomemsg = `**<@${member.id}>** just joined the server!`
+        if (welmsg !== null) welcomemsg = welmsg.welcomeMessage
+        
+        welChannel.send(welcomemsg)
+
+            } finally {}
+        })
     }
 }
