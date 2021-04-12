@@ -22,7 +22,7 @@ module.exports = {
 
 **Utility** (8)
 
-\`avatar, server, id, user, invite, say, ping, serveravatar\`
+\`avatar, server, id, user, invite, say, ping, serveravatar, embed, stealemote\`
 
 (Do hk help (command) or more info on each command.)`)
         embed.setTimestamp()
