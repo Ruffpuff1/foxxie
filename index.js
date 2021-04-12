@@ -12,7 +12,7 @@ bot.on("ready", () => {
     console.log(`${bot.user.tag} is online.`)
 })
 bot.on("guildMemberAdd", (member) => {
-    if (member.guild.id !== config.seasideRes) return
+    if (member.guild.id !== config.seasideRest) return
     const welcomeChannel = bot.channels.cache.get("822189403060830279")
     const embed = new Discord.MessageEmbed()
     embed.setColor('#ff8940')
@@ -26,7 +26,7 @@ bot.on("guildMemberAdd", (member) => {
     welcomeChannel.send(embed)
 })
 bot.on("guildMemberRemove", (member) => {
-    if (member.guild.id !== config.seasideRes) return
+    if (member.guild.id !== config.seasideRest) return
     const goodbyeChannel = bot.channels.cache.get("822189403060830279")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#990670')
@@ -38,7 +38,7 @@ bot.on("guildMemberRemove", (member) => {
     goodbyeChannel.send(Embed)
 })
 bot.on("messageDelete", (messageDelete) => {
-    if (messageDelete.guild.id !== config.seasideRes) return
+    if (messageDelete.guild.id !== config.seasideRest) return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#f55a22')
@@ -61,7 +61,7 @@ The Author:
     logChannel.send(Embed)
    });
    bot.on("messageUpdate", (oldMessage, newMessage) => {
-    if (oldMessage.guild.id !== config.seasideRes) return
+    if (oldMessage.guild.id !== config.seasideRest) return
     const logChannel = bot.channels.cache.get("828563803532296252")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#ff7a4a')
