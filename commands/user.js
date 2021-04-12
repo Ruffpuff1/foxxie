@@ -58,7 +58,10 @@ message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m =
     
     :arrow_double_up: **Highest role**: ${men.roles.highest.name}
 
-    <:SRDnd:831111495076675594> **Status**: ${men.user.presence.status}
+    ${men.user.presence.status === "online"?"<:SROnline:831122923728535582>"
+    : men.user.presence.status === "idle"?"<:SRIdle:831122864203759657>"
+    : men.user.presence.status === "dnd"?"<:SRDnd:831111495076675594>"
+    : men.user.presence.status === "offline"?"<:SROffline:831122726751567892>":"<:SROffline:831122726751567892>"} **Status**: ${men.user.presence.status}
 
 `)
             
