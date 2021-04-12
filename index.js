@@ -105,7 +105,7 @@ The Author:
 })
 bot.on("guildMemberRemove", (member) => {
     if (member.guild.id !== config.fox) return
-    const goodbyeChannel = bot.channels.cache.get("822189403060830279")
+    const goodbyeChannel = bot.channels.cache.get("831180747008114688")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#990670')
     Embed.setTitle(`A member continued their journey somewhere else...`)
@@ -115,8 +115,81 @@ bot.on("guildMemberRemove", (member) => {
     Embed.setFooter('We will mourn them in general. | Left ');
     goodbyeChannel.send(Embed)
 })
+bot.on("guildMemberAdd", (member) => {
+    if (member.guild.id !== config.ok) return
+    const welcomeChannel = bot.channels.cache.get("831180747008114688")
+    const embed = new Discord.MessageEmbed()
+    embed.setColor('#ff8940')
+    embed.setTitle(`A new member appeared!`)
+    embed.setDescription(`:0 ${member} joined!! hiii`)
+    embed.setTimestamp()
+    embed.setFooter('noice');
+    welcomeChannel.send('A new member joined! Give them a warm welcome please <@&829752715826823268>!')
+    welcomeChannel.send(embed)
+})
+bot.on("guildMemberRemove", (member) => {
+    if (member.guild.id !== config.ok) return
+    const goodbyeChannel = bot.channels.cache.get("829649102333149206")
+    const Embed = new Discord.MessageEmbed()
+    Embed.setColor('#990670')
+    Embed.setTitle(`sadness`)
+    Embed.setDescription(`sadge ${member} left. There are ${member.guild.memberCount} left :(`)
+    Embed.setTimestamp()
+    Embed.setFooter('We will mourn them in general. | Left ');
+    goodbyeChannel.send(Embed)
+})
 
+bot.on("messageDelete", (messageDelete) => {
+    if (messageDelete.guild.id !== config.ok) return
+    const staffchannel = bot.channels.cache.get("829649102333149206")
+    const Embed = new Discord.MessageEmbed()
+    Embed.setColor('#f55a22')
+    Embed.setTitle(`Message Deleted.`)
+    Embed.setDescription(`A message was deleted.
 
+The Message:
+
+***${messageDelete.content}***
+
+Location:
+
+${messageDelete.channel}
+
+The Author:
+
+**${messageDelete.author.tag}** `)
+    Embed.setTimestamp()
+    Embed.setFooter('why are you reading this lmao');
+    staffchannel.send(Embed)
+   });
+   bot.on("messageUpdate", (oldMessage, newMessage) => {
+    if (oldMessage.guild.id !== config.ok) return
+    const staffchannel = bot.channels.cache.get("829649102333149206")
+    const Embed = new Discord.MessageEmbed()
+    Embed.setColor('#ff7a4a')
+    Embed.setTitle(`Message Edited.`)
+    Embed.setDescription(`A message was Edited.
+
+The Before Message:
+
+***${oldMessage.content}***
+
+The After Message:
+
+***${newMessage.content}***
+
+The Location:
+
+${oldMessage.channel}
+
+The Author:
+
+**${oldMessage.author.tag}**
+`)
+    Embed.setTimestamp()
+    Embed.setFooter('why are you reading this lmao');
+    staffchannel.send(Embed)
+   });
 
 
 
