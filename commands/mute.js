@@ -9,6 +9,7 @@ module.exports = {
     async execute (message, args, bot) {
 
     const muteRoleId = message.guild.roles.cache.get('827204149656420393')
+    const memberRoleId = message.guild.roles.cache.get('822187823129034783')
     let muteRole;
 
     const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
@@ -31,6 +32,7 @@ module.exports = {
     if (member.roles.cache.has(muteRoleId))
       return message.channel.send('Do you even use your eyes, love? This user is already muted.');
 
+
     // Mute member
     try {
       await member.roles.add(muteRoleId);
@@ -39,6 +41,7 @@ module.exports = {
       return message.channel.send('Something went wrong.', err.message);
     }
     message.channel.send(`Alright, mate. I muted ${member} for ya, they're gonna not be able to talk for **${ms(time, { long: true })}**.`)
+    member.roles.remove(memberRoleId);
     let logChannel = message.guild.channels.cache.get("822454708894695444")
     let Embed = new Discord.MessageEmbed()
       Embed.setTitle('Mute Member')
