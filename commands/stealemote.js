@@ -2,6 +2,7 @@ module.exports = {
     name: "stealemote",
     aliases: ["se", "yoink", "take", "steal", "addemoji", "stealemoji"],
     description: "A command you can use to easily add emotes to your server.",
+    permissions: 'MANAGE_EMOJIS',
     cooldown: 3,
     execute(message, args) { 
       if (!args[0]) { return message.channel.send('Well yknow, thats not correct. you have to do \`hk se (emote/image`)\` (name) thanks.'); } 
