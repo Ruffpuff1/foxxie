@@ -6,8 +6,8 @@ module.exports = {
     description: 'Lets the owner, amber, do anything usually',
     aliases: ['ev'],
     execute(message, args, bot) {
-let ownerID = '814539604879081532'
-      if(message.author.id !== ownerID) return;
+const dev = ["814539604879081532", "826519563868307507", "617703637505802250"]
+      if(message.author.id !== dev) return;
       try {
         const code = args.join(" ");
         let evaled = eval(code);
