@@ -91,7 +91,7 @@ The Author:
 
    bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.fox) return
-    const welcomeChannel = bot.channels.cache.get("822189403060830279")
+    const welcomeChannel = bot.channels.cache.get("822414098439864360")
     const embed = new Discord.MessageEmbed()
     embed.setColor('#ff8940')
     embed.setTitle(`A new member appeared!`)
@@ -105,7 +105,7 @@ The Author:
 })
 bot.on("guildMemberRemove", (member) => {
     if (member.guild.id !== config.fox) return
-    const goodbyeChannel = bot.channels.cache.get("831180747008114688")
+    const goodbyeChannel = bot.channels.cache.get("822414098439864360")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#990670')
     Embed.setTitle(`A member continued their journey somewhere else...`)

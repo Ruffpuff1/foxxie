@@ -1,13 +1,13 @@
 const Discord = require('discord.js');
 const moment = require('moment')
+const config = require("./config.json");
 
 module.exports = {
     name: 'eval',
     description: 'Lets the owner, amber, do anything usually',
     aliases: ['ev'],
     execute(message, args, bot) {
-const dev = ["814539604879081532", "826519563868307507", "617703637505802250"]
-      if(message.author.id !== dev) return;
+if (!config.developerID.includes(message.author.id)) return;
       try {
         const code = args.join(" ");
         let evaled = eval(code);
