@@ -58,6 +58,8 @@ message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m =
     
     :arrow_double_up: **Highest role**: ${men.roles.highest.name}
 
+    <:SRDnd:831111495076675594> **Status**: ${men.user.presence.status}
+
 `)
             
             embed.setColor('#3d9fff')
