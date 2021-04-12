@@ -11,10 +11,10 @@ module.exports = {
        const emotee = (`${args[0]}`).match(regex)
        const image = (`${args[0]}`).match(/\b(https?:\/\/\S+(png|jpe?g|gif)\S*)\b/i)
        let emoCount = message.guild.emojis.cache.size
-       if (emoCount >= `${message.guild.premiumTier === 0 ? '50' 
-       : message.guild.premiumTier === 1 ? '100'
-       : message.guild.premiumTier === 2 ? '150'
-       : message.guild.premiumTier === 3 ? '200' : ''}`) return message.channel.send(`sadge max emotes :(`)
+       if (emoCount >= `${message.guild.premiumTier === 0 ? '100' 
+       : message.guild.premiumTier === 1 ? '200'
+       : message.guild.premiumTier === 2 ? '300'
+       : message.guild.premiumTier === 3 ? '400' : ''}`) return message.channel.send(`sadge max emotes :(`)
       if (!emotee && !image) { return message.channel.send('Well yknow, thats not correct. you have to do \`hk se (emote/image`)\` (name) thanks.'); }
       if (image) {
       if (image[2] === 'gif') { message.guild.emojis.create(args[0], args[1]).then(emoji => message.channel.send(`ey, i added a new emote for ya love: <a:${emoji.name}:${emoji.id}>`)).catch(console.error); }
