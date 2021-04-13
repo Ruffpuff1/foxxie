@@ -20,9 +20,9 @@ module.exports = {
         
 \`ban, kick, purge, slowmode, mute, unmute, nuke, permamute\`
 
-**Utility** (8)
+**Utility** (11)
 
-\`avatar, server, id, user, invite, say, ping, serveravatar, embed, stealemote\`
+\`avatar, server, id, user, invite, say, ping, serveravatar, embed, stealemote, nick\`
 
 (Do hk help (command) or more info on each command.)`)
         embed.setTimestamp()
