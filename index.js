@@ -141,7 +141,7 @@ bot.on("guildMemberRemove", (member) => {
 
 bot.on("messageDelete", (messageDelete) => {
     if (messageDelete.guild.id !== config.ok) return
-    const staffchannel = bot.channels.cache.get("829649102333149206")
+    const staffchannel = bot.channels.cache.get("831410626098102284")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#f55a22')
     Embed.setTitle(`Message Deleted.`)
@@ -164,7 +164,7 @@ The Author:
    });
    bot.on("messageUpdate", (oldMessage, newMessage) => {
     if (oldMessage.guild.id !== config.ok) return
-    const staffchannel = bot.channels.cache.get("829649102333149206")
+    const staffchannel = bot.channels.cache.get("831410626098102284")
     const Embed = new Discord.MessageEmbed()
     Embed.setColor('#ff7a4a')
     Embed.setTitle(`Message Edited.`)
