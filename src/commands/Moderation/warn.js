@@ -7,6 +7,7 @@ module.exports = {
     name: 'warn',
     aliases: ['w'],
     usage: 'fox warn [user] (reason)',
+    category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
     execute: async(lang, message, args) => {
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);

@@ -2,6 +2,7 @@ module.exports = {
     name: 'say',
     aliases: ['speak', 'message'],
     usage: 'fox say [message]',
+    category: 'utility',
     permissions: 'MANAGE_MESSAGES',
     execute(lang, message, args) {
         message.delete()

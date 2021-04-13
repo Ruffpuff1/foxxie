@@ -3,10 +3,9 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'dog',
     aliases: ['puppy'],
-    description: 'Shows a random image of a dog from dog.co/api.',
     usage: 'fox dog',
-    guildOnly: true,
-    execute: async(lang, message, args, client) => {
+    category: 'fun',
+    execute: async(lang, message) => {
         message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
         axios.get(`https://dog.ceo/api/breeds/image/random`)
         .then((res) => {

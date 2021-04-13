@@ -2,6 +2,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'support',
     usage: 'fox support',
+    category: 'utility',
     execute(lang, message, args, client) {
         const inviteEmbed = new Discord.MessageEmbed()
             .setAuthor(lang.COMMAND_SUPPORT_HERE, client.user.displayAvatarURL())

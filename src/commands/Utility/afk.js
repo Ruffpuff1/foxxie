@@ -3,9 +3,8 @@ const db = require('quick.db')
 module.exports = {
     name: 'afk',
     aliases: ['away', 'idle'],
-    description: 'Sets an AFK for when people ping ya. You can provide a reason, but if no reason is provided it will show as \'none\'. When pinged in chat your AFK status will show. And the next time you talk in chat your AFK will be removed.',
     usage: `fox afk (reason)`,
-    guildOnly: true,
+    category: 'utility',
     execute(lang, message, args) {
         let reason = args.slice(0).join(' ') || 'AFK';
 

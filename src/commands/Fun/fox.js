@@ -3,9 +3,8 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'fox',
     aliases: ['ruffy', 'foxxie', 'foxy'],
-    description: 'Shows a random image of a fox from randomfox.ca/floof.',
     usage: 'fox fox',
-    guildOnly: true,
+    category: 'fun',
     execute: async(lang, message, args, client) => {
       message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
       axios.get(`https://randomfox.ca/floof/`)

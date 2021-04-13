@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'invite',
     aliases: ['botinvite'],
-    description: 'Gives ya my invite link so you can have me help out your server.',
+    category: 'utility',
     usage: 'fox invite',
     execute(lang, message, args, client) {
         const inviteEmbed = new Discord.MessageEmbed()

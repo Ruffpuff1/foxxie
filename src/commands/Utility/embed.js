@@ -4,6 +4,7 @@ module.exports = {
     name: 'embed',
     aliases: ['broadcast', 'bc', 'announce', 'broadcasts', 'announcements'],
     usage: 'fox embed (title), [description], [footer], (color)',
+    category: 'utility',
     permissions: 'ADMINISTRATOR',
     execute: async (lang, message, args) => {
         let loading = await message.channel.send(emojis.infinity)

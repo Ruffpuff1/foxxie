@@ -5,8 +5,7 @@ module.exports = {
     name: "disboardchannel",
     aliases: ['dc', 'disboardlocation', 'bumpchannel'],
     usage: `fox disboardchannel (#channel)`,
-    description: "If you use the Disboard bot you can set a channel for me to send bump reminders every two hours. Alternatively to disable these reminders you can put `fox disboardchannel none`.",
-    guildOnly: true,
+    category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
         const guildId = message.guild.id

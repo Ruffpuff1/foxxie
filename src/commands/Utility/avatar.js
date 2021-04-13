@@ -2,9 +2,8 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'avatar',
     aliases: ['av', 'icon', 'pfp', 'usericon'],
-    description: 'Get a high resolution image of a user\'s profile picture. In PNG, JPEG, and WEBP formats.',
     usage: 'avatar (user)',
-    guildOnly: false,
+    category: 'utility',
     execute(lang, message, args, client) {
         let user = message.mentions.users.first() || client.users.cache.get(args[0]) || message.member.user;
         let isBot = user.id === '812546582531801118'

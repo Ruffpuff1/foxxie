@@ -4,7 +4,7 @@ module.exports = {
     name: 'note',
     aliases: ['n'],
     usage: 'fox note [member] [note]',
-    guildOnly: true,
+    category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
     execute: async(lang, message, args, client) => {
     

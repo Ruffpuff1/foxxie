@@ -2,16 +2,10 @@ const Discord = require('discord.js')
 const db = require('quick.db')
 module.exports = client => {
     client.on('message', message => {
+        
 
         if (message.author.bot) return
         if (message.channel.type === 'dm') return
-
-        var lang;
-        var language = db.get(`Guilds.${message.guild.id}.Settings.Language`)
-        if (language
-            ? language = language
-            : language = 'en')
-            lang = require(`../../src/languages/${language}`)
 
         if (db.has(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk.Status`)) {
             let afkNickname = db.get(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk.Nickname`)

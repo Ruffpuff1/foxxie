@@ -3,9 +3,8 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'pokemon',
     aliases: ['pkm', 'poke'],
-    description: 'Shows stats and an image of a given pokemon',
     usage: 'fox pokemon [pokemon]',
-    guildOnly: true,
+    category: 'fun',
     execute: async(lang, message, args, client) => {
         if (!args[0]) return message.channel.send(`**Cmon,** you gotta enter a pokemon for me to show.`)
         const pokemon = args[0].toLowerCase()

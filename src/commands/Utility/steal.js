@@ -3,6 +3,7 @@ module.exports = {
     name: 'steal',
     aliases: ['se', 'yoink', 'take'],
     usage: 'fox steal [emoji] (name)',
+    category: 'utility',
     permissions: 'MANAGE_EMOJIS',
     execute: async (lang, message, args) => {
 

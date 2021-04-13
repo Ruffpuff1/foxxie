@@ -1,17 +1,13 @@
 const config = require('../../lib/config')
 const errormsg = require('../../lib/util/error')
+const getGuildLang = require('../../lib/util/lang')
 module.exports = {
     name: 'messageUpdate',
     execute: async(oldMessage, newMessage) => {
 
         if (newMessage.channel.type === 'dm') return
-
-        var lang;
-        var language = 'en'
-        if (language 
-            ? language = language
-            : language = 'en') 
-            lang = require(`../../src/languages/${language}`)
+        if (oldMessage.content.includes('https://')) return
+        let lang = getGuildLang.getGuildLang(newMessage)
 
         if (newMessage.author.bot) return
 

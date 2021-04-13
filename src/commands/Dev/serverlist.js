@@ -2,9 +2,8 @@ const config = require('../../../lib/config')
 const Discord = require('discord.js')
 module.exports = {
     name: 'serverlist',
-    description: 'Provides the list of all the servers im in.',
     usage: 'serverlist',
-    guildOnly: true,
+    category: 'developer',
     execute: async (lang, message) => {
         if (config.devs.includes(message.author.id)) {
         let i0 = 0;

@@ -1,20 +1,25 @@
 const Discord = require('discord.js')
 const fs = require('fs')
 const ms = require('ms')
-const config = require('../../lib/config')
+require('../../lib/extentions/Message')
+const getGuildLang = require('../../lib/util/lang')
+const anti_invites = require('../monitors/anti-invites')
 const errormsg = require('../../lib/util/error')
 const mongo = require('../../lib/structures/database/mongo')
-const messageCountSchema = require('../../lib/structures/database/schemas/server/messageCountSchema')
-const serverMessageCountSchema = require('../../lib/structures/database/schemas/server/serverMessageCountSchema')
 const disboardBumpSchema = require('../../lib/structures/database/schemas/server/disboard/disboardBumpSchema')
 const disboardChannelSchema = require('../../lib/structures/database/schemas/server/disboard/disboardChannelSchema')
 module.exports = {
 	name: 'message',
 	execute: async(message) => {
-            
-            const client = message.client
+
+        const client = message.client
             // prevents bot dms
-            if (message.channel.type === 'dm') return
+        if (message.channel.type === 'dm') return
+
+        let = gPrefix = '..'
+        let lang = getGuildLang.getGuildLang(message)
+        let mod_anti_invite = true
+        if (mod_anti_invite) anti_invites.anti_invites(message)
 
     
             if (message.content.toLowerCase() === '!d bump') {
@@ -71,12 +76,6 @@ module.exports = {
 
             // command handler
 
-            var lang;
-            var language = 'en'
-            if (language 
-            ? language = language
-            : language = 'en') 
-            lang = require(`../../src/languages/${language}`)
 
             client.commands = new Discord.Collection();
 
@@ -89,10 +88,9 @@ module.exports = {
                 client.commands.set(command.name, command);
                 }
                 }
-
-            if (message.content.startsWith(config.prefix)) {
+            if (message.content.startsWith(gPrefix)) {
                 if (message.author.bot) return
-                const args = message.content.slice(config.prefix.length).trim().split(/ +/);
+                const args = message.content.slice(gPrefix.length).trim().split(/ +/);
                 const commandName = args.shift().toLowerCase();
                 const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
                         if (!command) return;
@@ -132,34 +130,5 @@ module.exports = {
                 return errormsg.codeError(lang, message)
             }
         }
-
-        // Message counter
-
-        let guildID = message.guild.id
-        let userID = message.author.id
-
-        await mongo().then(async (mongoose) => {
-            try {
-                await messageCountSchema.findOneAndUpdate({
-                    guildId: guildID,
-                    userId: userID
-                }, {
-                    $inc: {
-                        'messageCount': 1
-                    } 
-                }, {
-                    upsert: true
-                }).exec()
-                await serverMessageCountSchema.findOneAndUpdate({
-                    guildId: guildID
-                }, {
-                    $inc: {
-                        'messageCount': 1
-                    }
-                }, {
-                    upsert: true
-                }).exec()
-            } finally {}
-        })
     },
 };

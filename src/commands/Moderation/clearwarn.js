@@ -7,6 +7,7 @@ module.exports = {
     name: 'clearwarn',
     aliases: ['clearwarns', 'cw', 'unwarn', 'uw', 'pardon', 'warnremove'],
     usage: 'fox unwarn [user] [warn#] (reason)',
+    category: 'moderation',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);

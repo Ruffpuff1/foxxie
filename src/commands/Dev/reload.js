@@ -4,6 +4,7 @@ module.exports = {
     name: 'reload',
     aliases: ['r'],
     usage: 'fox reload [command]',
+    category: 'developer',
     execute: async(lang, message, args, client) => {
         if (config.devs.includes(message.author.id)) {
             if (!args.length) return message.channel.send(`**Hey,** you gotta pass a command in to reload.`);

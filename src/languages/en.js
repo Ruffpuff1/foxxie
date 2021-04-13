@@ -143,6 +143,7 @@ Hope we can help you out abit.`,
         DOG: "Shows a random image of a dog from dog.co/api.",
         FOX: "Shows a random image of a fox from randomfox.ca/floof.",
         POKEMON: "Shows stats and an image of a given pokemon.",
+        TOPIC: "Sends a random conversation starter from https://www.conversationstarters.com/random.php.", // needs spanish
         URBAN: "Defines a word using it's Urban Dictionary definition. Only works in NSFW channels due to potential inapropriate content.",
 
         CLEARNOTE: "Clears all public notes from a user's profile.",
@@ -191,6 +192,7 @@ Hope we can help you out abit.`,
         SETCOLOR: "Set the color for a role.", // needs spanish
         STEAL: "Steal any emoji from any discord server and have me automatically add it for you.", // needs spanish
         SUPPORT: "Gives ya the invite link to my support server, you can ask my dev questions or suggest new features.",
+        TOP: "Allows you to search for bots on top.gg showing information about the bot searched.", // needs spanish
         UPTIME: "Shows the time since the last reboot of the bot.",
         WEATHER: "Provides the weather for a city. Supports any city in the world, will provide weather, timezone, humidity, and more.",
         WOLFRAM: "Gets a result from Wolfram|Alpha.",

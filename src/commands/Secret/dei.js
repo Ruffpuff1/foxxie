@@ -2,7 +2,7 @@ const { emojis: { secretCommands: { dei } } } = require('../../../lib/util/const
 module.exports = {
     name: 'dei',
     aliases: ['connor'],
-    guildOnly: true,
+    category: 'secret',
     execute(lang, message) {
         message.delete()
         message.channel.send(dei)

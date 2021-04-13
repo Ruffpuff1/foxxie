@@ -2,8 +2,8 @@ const tc = require('tinycolor2');
 module.exports = {
     name: 'setcolor',
     aliases: ['sc', 'setcolour'],
-    guildOnly: true,
     usage: 'fox setcolor [role] [color]',
+    category: 'utility',
     permissions: 'MANAGE_ROLES',
     execute(lang, message, args) {
         let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);

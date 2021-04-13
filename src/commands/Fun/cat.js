@@ -3,9 +3,8 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'cat',
     aliases: ['kitty', 'pussy'],
-    description: 'Gets a random image of a cat using api.thecatapi.com.',
     usage: 'fox cat',
-    guildOnly: true,
+    category: 'fun',
     execute: async(lang, message, args, client) => {
         message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
        axios.get(`https://api.thecatapi.com/v1/images/search`)

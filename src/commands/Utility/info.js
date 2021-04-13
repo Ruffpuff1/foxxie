@@ -10,7 +10,7 @@ module.exports = {
     name: 'info',
 	aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
 	usage: 'fox info (role/server/user/channel/emoji)',
-	guildOnly: true,
+	category: 'utility',
     execute: async (lang, message, args, client) => {
         let user;
         channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name.toLowerCase() === args.join(' ').toLocaleLowerCase());

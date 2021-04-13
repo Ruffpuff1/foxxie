@@ -4,6 +4,7 @@ module.exports = {
     name: 'badges',
     aliases: ['bd'],
     usage: 'fox badges',
+    category: 'utility',
     execute: async (lang, message, args) => {
 
         const users = message.guild.members.cache.array();

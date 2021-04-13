@@ -5,6 +5,7 @@ module.exports = {
     name: 'welcomemessage',
     aliases: ['welcometext', 'wm', 'welcomemsg'],
     usage: `fox welcomemessage (message)`,
+    category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
         const guildID = message.guild.id

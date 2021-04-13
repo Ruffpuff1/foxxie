@@ -5,7 +5,7 @@ module.exports = {
     name: 'weather',
     aliases: ['temp', 'forcast'],
     usage: 'fox weather [city]',
-    guildOnly: true,
+    category: 'utility',
     execute(lang, message, args) {
         if (!args[0]) return message.channel.send(`Ya gotta enter a **city** for me to give the weather.`)
         message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {

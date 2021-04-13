@@ -1,12 +1,10 @@
-/*
 const db = require('quick.db')
 const Discord = require('discord.js')
 module.exports = {
     name: 'language',
     aliases: ['lang', 'setlang', 'setlanguage'],
-    description: 'Set the language of the guild. Choose either English, Spanish, or `none` to reset to the default.',
+    category: 'settings',
     usage: 'fox language [english/spanish/none]',
-    guildOnly: true,
     permissions: 'ADMINISTRATOR',
     execute(lang, message, args, client) {
         const embed = new Discord.MessageEmbed()
@@ -34,4 +32,3 @@ module.exports = {
         message.channel.send(embed)
     }
 }
-*/

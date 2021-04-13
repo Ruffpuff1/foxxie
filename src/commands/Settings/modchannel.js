@@ -5,6 +5,7 @@ module.exports = {
     name: 'modchannel',
     aliases: ['mc', 'modlogs'],
     usage: 'fox modchannel [#channel]',
+    category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
         

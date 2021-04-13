@@ -4,6 +4,7 @@ module.exports = {
     name: 'color',
     aliases: ['colour'],
     usage: 'fox color (color)',
+    category: 'utility',
     execute: async(lang, message, args, client) => {
         let colorshow = args[0]
         if (!colorshow) return message.channel.send(lang.COMMAND_COLOR_NOCOLOR)

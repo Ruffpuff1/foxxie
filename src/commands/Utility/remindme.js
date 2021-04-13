@@ -3,9 +3,8 @@ const ms = require('ms')
 module.exports = {
     name: 'remindme',
     aliases: ['rm'],
-    description: 'Send a reminder message straight to your dms.',
     usage: `remindme [1s/1m/1h/1d/1w] [reason]`,
-    guildOnly: false,
+    category: 'utility',
     execute(lang, message, args, client) {
         client.reminders = require('../../store/reminders.json')
         let remindTime = args[0]

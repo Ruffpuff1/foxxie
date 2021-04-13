@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'poll',
     usage: 'fox poll [option1], [option2]',
-    guildOnly: true,
+    category: 'utility',
     execute(lang, message, args, client) {
         let opt = args.join(" ").toString().split(/\,\s*/)
         let filtered = opt.filter(function (el) {

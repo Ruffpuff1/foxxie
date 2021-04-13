@@ -2,6 +2,7 @@ module.exports = {
         name: "uptime",
         aliases: ["up", 'stats'],
         usage: "stats",
+        category: 'utility',
     execute: async(lang, message, args, client) => {
         let days = Math.floor(client.uptime / 86400000);
         let hours = Math.floor(client.uptime / 3600000) % 24;

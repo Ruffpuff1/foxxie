@@ -3,9 +3,8 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'corona',
     aliases: ['cv', 'covid'],
-    description: 'Get the current statistics of the Covid-19 pandemic. You can enter a country name, or global for statistics of the whole world.',
     usage: 'fox covid [country/global/world]',
-    guildOnly: true,
+    category: 'utility',
     execute: async (lang, message, args, client) => {
         let arg = args.slice(0).join(" ")
 

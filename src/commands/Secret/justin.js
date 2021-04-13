@@ -3,8 +3,7 @@ const { justinName } = require('../../../lib/util/constants')
 module.exports = {
     name: 'justin',
     aliases: ['j', 'beaver'],
-    description: 'Gain the full name of Justin.',
-    guildOnly: true,
+    category: 'secret',
     execute(lang, message) {
         
 message.delete();

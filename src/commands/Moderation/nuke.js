@@ -5,6 +5,7 @@ const modchannelSchema = require('../../../lib/structures/database/schemas/serve
 module.exports = {
     name: 'nuke',
     usage: 'fox nuke',
+    category: 'moderation',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
 

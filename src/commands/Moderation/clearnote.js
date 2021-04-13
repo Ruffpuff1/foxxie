@@ -3,7 +3,7 @@ module.exports = {
     name: 'clearnote',
     aliases: ['un', 'ncl'],
     usage: 'fox clearnote [member] [all]',
-    guildOnly: true,
+    category: 'moderation',
     permissions: 'ADMINISTRATOR',
     execute(lang, message, args) {
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0])

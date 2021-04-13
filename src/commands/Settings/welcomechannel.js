@@ -4,8 +4,8 @@ const welcomeChannelSchema = require('../../../lib/structures/database/schemas/s
 module.exports = {
     name: 'welcomechannel',
     aliases: ['wc', 'welcomelocation'],
-    description: 'Set the channel where I should send welcome messages. This will initiate whenever a new member joins or you can use `fox testwelcome` to test it out beforehand.',
     usage: 'fox welcomechannel [#channel]',
+    category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
         let guildId = message.guild.id

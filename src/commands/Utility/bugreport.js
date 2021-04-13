@@ -3,7 +3,7 @@ module.exports = {
     name: 'bugreport',
     aliases: ['bug'],
     usage: 'fox bugreport [bug]',
-    guildOnly: true,
+    category: 'utility',
     execute: async(lang, message, args, client) => {
         let bug;
         const dev = client.users.cache.get(botOwner)

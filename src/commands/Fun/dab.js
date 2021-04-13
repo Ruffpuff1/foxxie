@@ -3,9 +3,8 @@ const gifs = require('../../../lib/structures/roleplayCommand')
 module.exports = {
     name: 'dab',
     aliases: ['epic'],
-    description: 'Dab on the haters.',
     usage: `fox dab [user] (reason)`,
-    guildOnly: true,
+    category: 'fun',
     execute(lang, message, args) {
         let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(u => u.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase())
         if(!mentionMember) return message.channel.send("**Hey,** you needa tell me who ya wanna dab at. Try again with `fox dab [user] (reason)`")

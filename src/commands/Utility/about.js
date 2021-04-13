@@ -2,7 +2,6 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'about',
     aliases: ['botinfo'],
-    description: 'Get some basic information about me, my statistics, and some of my credits.',
     usage: 'fox about',
     category: 'utility',
     execute(lang, message, args, client) {

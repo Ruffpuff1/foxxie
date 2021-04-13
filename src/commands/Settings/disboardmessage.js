@@ -5,8 +5,7 @@ module.exports = {
     name: 'disboardmessage',
     aliases: ['disboardtext', 'dm', 'disboardmsg'],
     usage: `fox disboardmessage (message)`,
-    description: "Change the text I'll send ya when Disboard is off cooldown. Put 'none' to reset back to my default, or just do `fox disboardmessage` to show the current message if one is set.",
-    guildOnly: true,
+    category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) =>{
         const guildID = message.guild.id

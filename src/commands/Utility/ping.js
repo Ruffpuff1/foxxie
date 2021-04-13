@@ -2,9 +2,8 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'ping',
     aliases: ['pong', 'latency', 'lagg', 'lag'],
-    description: 'Runs a connection test to Discord.',
     usage: 'ping',
-    guildOnly: true,
+    category: 'utility',
     execute(lang, message) {
         message.channel.send(lang.COMMAND_PING)
             .then(resultMessage => {

@@ -3,9 +3,8 @@ const axios = require('axios')
 module.exports = {
     name: "urban",
     aliases: ['ud', 'slang'],
-    description: 'Defines a word using it\'s Urban Dictionary definition. Only works in NSFW channels due to potential inapropriate content.',
     usage: 'fox urban [term]',
-    guildOnly: true,
+    category: 'fun',
     execute: async (lang, message, args, client) => {
         if(!message.channel.nsfw) return message.channel.send(lang.COMMAND_NSFW_ERROR)
         if (!args[0]) return message.channel.send(lang.COMMAND_URBAN_NO_WORD)

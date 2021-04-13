@@ -9,14 +9,13 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'eval',
     aliases: ['ev'],
-    description: 'Allows ya to evaluate JavaScript code straight from Discord.',
     usage: 'eval [code]',
-    guildOnly: true,
+    category: 'developer',
     execute: async (lang, message, args, client) => {
 
         if (config.devs.includes(message.author.id)) {
             let codein = args.slice(0).join(" ")
-            if (!codein.toLowerCase().includes("token") && !codein.toLowerCase().includes("config")) {
+            if (!codein.toLowerCase().includes("token")) {
                 try {
                     let code = eval(codein)
                     let type = typeof code

@@ -6,6 +6,7 @@ module.exports = {
     name: 'lock',
     aliases: ['l', 'lockdown'],
     permissions: 'MANAGE_CHANNELS',
+    category: 'moderation',
     usage: 'fox lock (reason)',
     execute: async(lang, message, args) => {
 
