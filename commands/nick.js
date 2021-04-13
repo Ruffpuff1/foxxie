@@ -5,7 +5,7 @@ module.exports = {
     aliases: ['nickname', 'name'],
     execute(message, args, bot) {
         message.delete();
-        let nickchannel = bot.channels.cache.get("828908497985863681")
+        let nickchannel = bot.channels.cache.get("831305968163094549")
         let text = args.slice(0).join(' ');
         if (!text) return;
         let Embed = new Discord.MessageEmbed()
