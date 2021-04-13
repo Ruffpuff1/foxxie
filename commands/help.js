@@ -8,9 +8,9 @@ module.exports = {
         embed.setColor('#ff1251')
         embed.setDescription(`The commands of Fokushi.
 
-**Developer Only** (2)
+**Developer Only** (3)
 
-\`shutdown, eval\`
+\`shutdown, eval, serverlist\`
 
 **Fun** (15)
 
