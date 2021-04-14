@@ -1,8 +1,8 @@
 const mongo = require('../../../lib/structures/database/mongo')
+const { getGuildModChannel } = require('../../../lib/settings')
 const moment = require('moment')
 const Discord = require('discord.js')
 const warnSchema = require('../../../lib/structures/database/schemas/server/moderation/warnSchema')
-const modchannelSchema = require('../../../lib/structures/database/schemas/server/moderation/modchannelSchema')
 module.exports = {
     name: 'clearwarn',
     aliases: ['clearwarns', 'cw', 'unwarn', 'uw', 'pardon', 'warnremove'],
@@ -32,9 +32,8 @@ module.exports = {
                     userId,
                 })
                 message.react('✅')
-                const results = await modchannelSchema.findById({
-                    _id: message.guild.id
-                })
+                
+                let results = await getGuildModChannel(message)
 
                 const warnDmEmbed = new Discord.MessageEmbed()
                     .setTitle(`Warnings cleared in ${message.guild.name}`)
@@ -46,8 +45,8 @@ module.exports = {
                     .catch(error => console.error(error))
                 
                 message.react('✅')
-
-                if (results === null) return
+                
+                if (results == null) return
 
                 const warnEmbed = new Discord.MessageEmbed()
                     .setTitle(`Cleared warnings for ${target.user.tag}`)

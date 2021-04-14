@@ -2,7 +2,7 @@ const mongo = require('../../../lib/structures/database/mongo')
 const moment = require('moment')
 const Discord = require('discord.js')
 const warnSchema = require('../../../lib/structures/database/schemas/server/moderation/warnSchema')
-const modchannelSchema = require('../../../lib/structures/database/schemas/server/moderation/modchannelSchema')
+const { getGuildModChannel } = require('../../../lib/settings')
 module.exports = {
     name: 'warn',
     aliases: ['w'],
@@ -45,9 +45,7 @@ module.exports = {
                     upsert: true
                 })
                 message.react('✅')
-                const results = await modchannelSchema.findById({
-                    _id: message.guild.id
-                })
+                let results = await getGuildModChannel(message)
 
                 const warns = await warnSchema.findOne({
                     guildId,

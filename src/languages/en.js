@@ -165,6 +165,7 @@ Hope we can help you out abit.`,
         HUG: "Hug your friends.",
         PAT: "Give someone headpats.",
 
+        ANTIINVITE: "Enables or disables my automatic Discord link filtering, although I won't delete for server Admins or the server Owner.",
         DISBOARDCHANNEL: "If you use the Disboard bot you can set a channel for me to send bump reminders every two hours. Alternatively to disable these reminders you can put `fox disboardchannel none`.",
         DISBOARDMESSAGE: "Change the text I'll send ya when Disboard is off cooldown. Put `none` to reset back to my default, or just do `fox disboardmessage` to show the current message if one is set.",
         LANGUAGE: "Set the language of the guild. Choose either English, Spanish, or `none` to reset to the default.",

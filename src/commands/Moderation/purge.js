@@ -1,7 +1,6 @@
-const mongo = require('../../../lib/structures/database/mongo')
-const modchannelSchema = require('../../../lib/structures/database/schemas/server/moderation/modchannelSchema')
 const Discord = require('discord.js')
 const moment = require('moment')
+const { getGuildModChannel } = require('../../../lib/settings')
 module.exports = {
     name: 'purge',
     aliases: ['prune', 'clear', 'clean', 'delete', 'p'],
@@ -45,18 +44,11 @@ module.exports = {
             .addField('**Location**', message.channel, true)
             .addField('**Date / Time**', purgeTime, true)
 
-        await mongo().then(async (mongoose) => {
-            try {
-                let results = await modchannelSchema.findById({
-                    _id: message.guild.id
-                })
+        let results = await getGuildModChannel(message)
 
-                if (results === null) return
+        if (results === null) return
 
-                const logChannel = message.guild.channels.cache.get(results.channelId);
-                if (logChannel) logChannel.send(embed)
-
-            } finally {}
-        })
+        const logChannel = message.guild.channels.cache.get(results.channelId);
+        if (logChannel) logChannel.send(embed)    
     }
 }

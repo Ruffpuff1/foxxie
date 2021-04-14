@@ -2,6 +2,7 @@ const fs = require('fs')
 const db = require('quick.db')
 const Discord = require('discord.js')
 module.exports = client => {
+    client.reminders = require('../store/reminders.json')
     client.setInterval(() => {
         for(let i in client.reminders) {
             let time = client.reminders[i].time

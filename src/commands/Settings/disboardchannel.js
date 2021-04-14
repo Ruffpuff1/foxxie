@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
 const disboardChannelSchema = require('../../../lib/structures/database/schemas/server/disboard/disboardChannelSchema')
+const { getDisboardChannel } = require('../../../lib/settings')
 module.exports = {
     name: "disboardchannel",
     aliases: ['dc', 'disboardlocation', 'bumpchannel'],
@@ -28,9 +29,7 @@ module.exports = {
                 let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
                 if (!channel) {
 
-                    const results = await disboardChannelSchema.findById({
-                        _id: guildId
-                    })
+                    let results = await getDisboardChannel(message)
 
                     if (results === null) {
                         embed.setDescription("There isn't a disboard channel set right now. If ya wanna set one use the command `fox disboardchannel [#channel]`")

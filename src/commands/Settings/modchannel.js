@@ -1,6 +1,7 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
 const modchannelSchema = require('../../../lib/structures/database/schemas/server/moderation/modchannelSchema')
+const { getGuildModChannel } = require('../../../lib/settings')
 module.exports = {
     name: 'modchannel',
     aliases: ['mc', 'modlogs'],
@@ -31,11 +32,9 @@ module.exports = {
                 let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
                 if (!channel) {
 
-                    const results = await modchannelSchema.findById({
-                        _id: message.guild.id
-                    })
+                    let results = await getGuildModChannel(message)
 
-                    if (results === null) {
+                    if (results == null) {
                         embed.setDescription(`Uhhh there isn't a modchannel set right now. You can set one with \`fox modchannel [#channel]\`.`)
                         loading.delete()
                         return message.channel.send(embed)

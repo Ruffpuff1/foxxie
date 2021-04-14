@@ -70,7 +70,7 @@ module.exports = {
                 `${HypeUsers.length ? `${discordHypesquad} ${HypeUsers.length} x HypeSquad Events` : ''}`,
                 `${NitroUsers.length 
                     ? `${discordNitro} ${NitroUsers.length} x Nitro` : ''} ${Boosters.length 
-                        ? `(${discordBooster} ${Boosters.length} x Boosters${Early.length 
+                        ? `(${discordBooster} ${Boosters.length} x Boosts${Early.length 
                             ? ',' : ')'}` 
                             : ''} ${Early.length  ? `${Boosters.length 
                                 ? '' : '('}${discordEarly} ${Early.length} Early Supporters)` 

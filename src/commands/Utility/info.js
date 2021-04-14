@@ -3,8 +3,7 @@ const { emojis: { perms: { granted, notSpecified } } } = require('../../../lib/u
 const mongo = require('../../../lib/structures/database/mongo')
 const warnSchema = require('../../../lib/structures/database/schemas/server/moderation/warnSchema')
 const noteSchema = require('../../../lib/structures/database/schemas/server/moderation/noteSchema')
-const messageCountSchema = require('../../../lib/structures/database/schemas/server/messageCountSchema')
-const serverMessageCountSchema = require('../../../lib/structures/database/schemas/server/serverMessageCountSchema')
+const { getUserMessageCount, getGuildMessageCount } = require('../../monitors/stats')
 const moment = require('moment')
 module.exports = {
     name: 'info',
@@ -108,46 +107,39 @@ module.exports = {
                         : `${notSpecified} ${lang.COMMAND_ROLE_INTEGRATION}`
                 ].join('\n'));
 
-            return message.channel.send(embed);    }
+            return message.channel.send(embed)
+        }
 
         if (server && args[0] === 'server') {
-            let guildId = server.id
-
-            await mongo().then(async mongoose => {
-                try {
-                    const results = await serverMessageCountSchema.findOne({
-                        guildId
-                    })
+        
+            let results = await getGuildMessageCount(message)
                     
-                    let messages;
-                    messages = 0
-                    if (results !== null) messages = results.messageCount
-                    const guild = server; //guild.createdAt
-                    const toxicity = 0
+            let messages;
+            messages = 0
+            if (results !== null) messages = results.messageCount
+            const guild = server; //guild.createdAt
+            const toxicity = 0
 
-                    await message.guild.members.fetch(message.guild.ownerID);
+            await message.guild.members.fetch(message.guild.ownerID);
 
-                    const embed = new MessageEmbed()
-                        .setTitle(`${guild.name} (ID: ${guild.id})`)
-                        .setDescription(`Created by **${guild.owner.user.tag}** on ${moment(guild.createdAt).format('MMMM Do YYYY')} **(${moment([moment(guild.createdAt).format('YYYY'), moment(guild.createdAt).format('M') - 1, moment(guild.createdAt).format('D')]).toNow(true)} ago)**`)
-                        .addField(':crown: **Owner**', guild.owner.user.tag, true)
-                        .addField(':busts_in_silhouette: **Members**', `${guild.memberCount} (cached: ${guild.members.cache.size})`, true)
-                        .addField(`:speech_balloon: **Channels (${guild.channels.cache.size})**`, guild.channels.cache.size>0?`Text: **${guild.channels.cache.filter(c => c.type === "text").size}**\nVoice: **${guild.channels.cache.filter(c => c.type === "voice").size}**`:'None', true)
-                        .addField(':map: **Region**', this.regions[guild.region], true)
-                        .addField(`:scroll: **Roles**`, guild.roles.cache.size > 0 ? guild.roles.cache.size : 'None', true)
-                        .addField(':sunglasses: **Emojis**', guild.emojis.cache.size > 0 ? guild.emojis.cache.size : 'None', true)
-                        .addField(':bar_chart: **Statistics**', `${messages.toLocaleString()} messages ${toxicity !== 0 ? `with an average toxicity of ${Math.round(toxicity * 100)}%` : ''} sent`)
-                        .addField(':lock: **Security**', [
-                            `Verification level: ${this.verificationLevels[message.guild.verificationLevel]}`,
-                            `Explicit filter: ${this.filterLevels[message.guild.explicitContentFilter]}`
-                        ].join('\n'));
+            const embed = new MessageEmbed()
+                .setTitle(`${guild.name} (ID: ${guild.id})`)
+                .setDescription(`Created by **${guild.owner.user.tag}** on ${moment(guild.createdAt).format('MMMM Do YYYY')} **(${moment([moment(guild.createdAt).format('YYYY'), moment(guild.createdAt).format('M') - 1, moment(guild.createdAt).format('D')]).toNow(true)} ago)**`)
+                .addField(':crown: **Owner**', guild.owner.user.tag, true)
+                .addField(':busts_in_silhouette: **Members**', `${guild.memberCount} (cached: ${guild.members.cache.size})`, true)
+                .addField(`:speech_balloon: **Channels (${guild.channels.cache.size})**`, guild.channels.cache.size>0?`Text: **${guild.channels.cache.filter(c => c.type === "text").size}**\nVoice: **${guild.channels.cache.filter(c => c.type === "voice").size}**`:'None', true)
+                .addField(':map: **Region**', this.regions[guild.region], true)
+                .addField(`:scroll: **Roles**`, guild.roles.cache.size > 0 ? guild.roles.cache.size : 'None', true)
+                .addField(':sunglasses: **Emojis**', guild.emojis.cache.size > 0 ? guild.emojis.cache.size : 'None', true)
+                .addField(':bar_chart: **Statistics**', `${messages.toLocaleString()} messages ${toxicity !== 0 ? `with an average toxicity of ${Math.round(toxicity * 100)}%` : ''} sent`)
+                .addField(':lock: **Security**', [
+                    `Verification level: ${this.verificationLevels[message.guild.verificationLevel]}`,
+                    `Explicit filter: ${this.filterLevels[message.guild.explicitContentFilter]}`
+                ].join('\n'));
 
-                    embed.setThumbnail(guild.iconURL({ format: 'png', dynamic: true }))
-                    embed.setColor(message.guild.me.displayColor)
-                    return message.channel.send(embed);
-
-                } finally {}
-            })
+            embed.setThumbnail(guild.iconURL({ format: 'png', dynamic: true }))
+            embed.setColor(message.guild.me.displayColor)
+            return message.channel.send(embed);
         }
 
         if (user && args[0] !== 'server') {
@@ -170,28 +162,19 @@ module.exports = {
             
                     if (member) {
 
-                        await mongo().then(async mongoose => {
-                            try {
-                                guildId = message.guild.id
-                                userId = member.user.id
+                        guildId = message.guild.id
+                        userId = member.user.id
 
-                                const results = await messageCountSchema.findOne({
-                                    guildId,
-                                    userId
-                                })
+                        let results = await getUserMessageCount(message)
 
-                                let stats_messages;
-                                stats_messages = 0
-                                if (results !== null) stats_messages = results.messageCount
-                                statistics.push((
-                                    `${member.user.id == message.guild.ownerID ? 'Created' : 'Joined'} ${message.guild.name} ${moment(member.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)} ago)**`
-                                ))
+                        let stats_messages;
+                        stats_messages = 0
+                        if (results !== null) stats_messages = results.messageCount
+                        statistics.push((
+                            `${member.user.id == message.guild.ownerID ? 'Created' : 'Joined'} ${message.guild.name} ${moment(member.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)} ago)**`
+                        ))
                         
-                                statistics.push(`${stats_messages.toLocaleString()} messages sent`);
-
-                            } finally {}
-
-                        })
+                        statistics.push(`${stats_messages.toLocaleString()} messages sent`);
 
                         embed.addField(`:pencil: **Statistics**`, statistics.join('\n'));
                         if (!member) return embed;

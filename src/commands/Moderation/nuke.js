@@ -1,7 +1,6 @@
-const mongo = require('../../../lib/structures/database/mongo')
 const moment = require('moment')
 const Discord = require('discord.js')
-const modchannelSchema = require('../../../lib/structures/database/schemas/server/moderation/modchannelSchema')
+const { getGuildModChannel } = require('../../../lib/settings')
 module.exports = {
     name: 'nuke',
     usage: 'fox nuke',
@@ -20,50 +19,39 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
             .then(() => {
                 const filter = m => message.author.id === m.author.id;
 
-                    message.channel.awaitMessages(filter, { time: 30000, max: 1, errors: ['time'] })
-                        .then(async messages => {
+                message.channel.awaitMessages(filter, { time: 30000, max: 1, errors: ['time'] })
+                    .then(async messages => {
 
-                            if (messages.first().content.toLowerCase() !== `yes, nuke ${message.channel.name}` || messages.first().content.toLowerCase() === 'cancel') return message.channel.send('Command **cancelled**.')
+                        if (messages.first().content.toLowerCase() !== `yes, nuke ${message.channel.name}` || messages.first().content.toLowerCase() === 'cancel') return message.channel.send('Command **cancelled**.')
 
-                            message.channel.clone().then(channel => {
+                        message.channel.clone().then(channel => {
                             channel.setPosition(message.channel.position)
                             channel.setTopic(topic)
                             channel.send(`**Heh First,** anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`)
-                            })
-
-                            await mongo().then(async (mongoose) => {
-
-                            try {
-                                let results = await modchannelSchema.findById({
-                                    _id: message.guild.id
-                                })
-    
-                                const nukeEmbed = new Discord.MessageEmbed()
-                                    .setTitle(`Nuked ${message.channel.name}`)
-                                    .setColor(message.guild.me.displayColor)
-                                    .setTimestamp()
-                                    .addFields(
-                                        { name: '**Nuked Channel**', value: `${message.channel.name} (ID: ${message.channel.id})`, inline: true },
-                                        { name: '**Moderator**', value: `<@${message.author.id}> (ID: ${message.author.id})`, inline: true },
-                                        { name: '\u200B', value: '\u200B', inline: true },
-                                        { name: `**Reason**`, value: `No reason specified`, inline: true },
-                                        { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
-                                        { name: `**Date / Time**`, value: `${warnDate}`, inline: true })
-
-
-                                const logChannel = message.guild.channels.cache.get(results.channelId);
-                                if (logChannel) logChannel.send(results.channelId)
-    
-                                message.channel.delete()
-
-                            } finally {}
-
                         })
-                        }).catch(() => {})
 
+                        let results = await getGuildModChannel(message)
     
-            }
+                            const nukeEmbed = new Discord.MessageEmbed()
+                                .setTitle(`Nuked ${message.channel.name}`)
+                                .setColor(message.guild.me.displayColor)
+                                .setTimestamp()
+                                .addFields(
+                                    { name: '**Nuked Channel**', value: `${message.channel.name} (ID: ${message.channel.id})`, inline: true },
+                                    { name: '**Moderator**', value: `<@${message.author.id}> (ID: ${message.author.id})`, inline: true },
+                                    { name: '\u200B', value: '\u200B', inline: true },
+                                    { name: `**Reason**`, value: `No reason specified`, inline: true },
+                                    { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
+                                    { name: `**Date / Time**`, value: `${warnDate}`, inline: true })
 
+                            const logChannel = message.guild.channels.cache.get(results.channelId);
+                            if (logChannel) logChannel.send(nukeEmbed)
+    
+                            message.channel.delete()
+
+                            
+                    }).catch(() => {})
+            }
         )
     }
 }
