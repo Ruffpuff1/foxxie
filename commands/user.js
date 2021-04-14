@@ -45,6 +45,7 @@ module.exports = {
     :butterfly: **Custom status**: ${men.user.presence.activities ? message.member.user.presence?.activities[0].state : "none"}
 
 `)
+
             
             message.channel.send(embed)
 }
