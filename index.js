@@ -10,6 +10,13 @@ bot.commands = new Discord.Collection();
  */
 bot.on("ready", () => {
     console.log(`${bot.user.tag} is online.`)
+    bot.user.setPresence({
+        status: "dnd",
+        activity: {
+            name: `with ${bot.guilds.cache.size}, pouncing and playing with ${bot.users.cache.size} users, and sticking my head in the snow to find ${bot.commands.size} commands.`,
+            type: "PLAYING"
+        }
+    });
 })
 bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.seasideRest) return

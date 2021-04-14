@@ -42,7 +42,7 @@ module.exports = {
     : men.user.presence.status === "dnd"?"<:SRDnd:831111495076675594>"
     : men.user.presence.status === "offline"?"<:SROffline:831122726751567892>":"<:SROffline:831122726751567892>"} **Status**: ${men.user.presence.status}
 
-    :butterfly: **Presence** ${men.user.presence.activities ? men.user.presence.activities[0].state : "none"}
+    :butterfly: **Custom status**: ${message.member.user.presence.activities ? message.member.user.presence?.activities[0].state : "none"}
 
 `)
             
