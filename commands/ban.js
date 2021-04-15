@@ -7,7 +7,7 @@ module.exports = {
     permissions: 'BAN_MEMBERS',
 
     async execute(message, args, bot){
-        let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) ||  await this.client.users.fetch(args[0])
         mentionMember.ban()
         if(!message.guild.me.hasPermission("BAN_MEMBERS")) return message.reply(`Haha, funny. You’re trying to ban with me without perms. Didn't think someone could be that stupid.`);
         if(!mentionMember) return message.reply(` Oh my, we have a real Einstein right here, folks. Mate, listen. You’ve got to specify the member you wish to ban.`);
