@@ -13,7 +13,7 @@ module.exports = {
         if(!mentionMember) return message.reply(` Oh my, we have a real Einstein right here, folks. Mate, listen. You’ve got to specify the member you wish to ban.`);
         let reason = args.slice(1).join(" ");
         if(!reason) reason = "Oops, the moderator that did this ban didnt supply a reason."; 
-        if(member.id === message.author.id) return message.reply(`haha, i see you're trying to be funny, you can't ban yourself with me.`);
+        if(mentionMember.id === message.author.id) return message.reply(`haha, i see you're trying to be funny, you can't ban yourself with me.`);
 
         let Embed = new Discord.MessageEmbed()
         Embed.setTitle(`You have been banned.`)
@@ -22,7 +22,7 @@ module.exports = {
         Reason: ${reason}
     `)
         Embed.setTimestamp()
-        Embed.setAuthor(member.user.tag, member.user.displayAvatarURL())
+        Embed.setAuthor(mentionMember.user.tag, mentionMember.user.displayAvatarURL())
         Embed.setThumbnail(message.guild.iconURL())
         Embed.setColor("#f59dcc")
 
@@ -30,12 +30,12 @@ module.exports = {
             member.send(Embed).catch(error => message.channel.send(`oh, i think the member you banned had their DMs off, because i couldnt DM them.`))
             .then(m => member.ban({reason}));
 
-            message.channel.send(`:white_check_mark: ${message.author.username}} has banished ${message.member.username} from the server. They will never be able to return. Adios!`)
+            message.channel.send(`:white_check_mark: ${message.author.username} has banished ${message.member.username} from the server. They will never be able to return. Adios!`)
             let logChannel = message.guild.channels.cache.get("822454708894695444")
             let embed = new Discord.MessageEmbed()
     embed.setColor('#ff00b7')
 	embed.setTitle(`Member banned.`)
-	embed.setDescription(`**${member.user}** was banned from the server.`)
+	embed.setDescription(`**${mentionMember.user}** was banned from the server.`)
 	embed.addFields(
         { name: 'Reason', value: `${reason}` },  { name: 'Moderator', value: `${message.author} (ID: ${message.author.id})` },
 
