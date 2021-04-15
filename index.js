@@ -13,7 +13,7 @@ bot.on("ready", () => {
     bot.user.setPresence({
         status: "dnd",
         activity: {
-            name: `with ${bot.guilds.cache.size}, pouncing and playing with ${bot.users.cache.size} users, and sticking my head in the snow to find ${bot.commands.size} commands.`,
+            name: `with ${bot.guilds.cache.size} servers, pouncing and playing with ${bot.users.cache.size} users, and sticking my head in the snow to find ${bot.commands.size} commands.`,
             type: "PLAYING"
         }
     });
