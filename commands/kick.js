@@ -20,20 +20,20 @@ module.exports = {
         
         **${reason}**`)
         Embed.setTimestamp()
-        Embed.setAuthor(member.user.tag, member.user.displayAvatarURL())
+        Embed.setAuthor(mentionMember.user.tag, mentionMember.user.displayAvatarURL())
         Embed.setThumbnail(message.guild.iconURL())
         Embed.setColor("#f59dcc")
 
-        if(member.kickable){
-            member.send(Embed).catch(error => message.channel.send(`oh, i think the member you kicked had their DMs off, because i couldnt DM them.`))
-            .then(m => member.kick({reason}));
+        if(mentionMember.kickable){
+            mentionMember.send(Embed).catch(error => message.channel.send(`oh, i think the member you kicked had their DMs off, because i couldnt DM them.`))
+            .then(m => mentionMember.kick({reason}));
 
             message.channel.send(`:white_check_mark: Member successfully kicked!`)
             let logChannel = message.guild.channels.cache.get("822454708894695444")
             let embed = new Discord.MessageEmbed()
     embed.setColor('#ff66d4')
 	embed.setTitle(`Member kicked.`)
-	embed.setDescription(`**${member.user}** was kicked from the server.`)
+	embed.setDescription(`**${mentionMember.user}** was kicked from the server.`)
 	embed.addFields(
         { name: 'Reason', value: `${reason}` },  { name: 'Moderator', value: `${message.author} (ID: ${message.author.id})` },
 
