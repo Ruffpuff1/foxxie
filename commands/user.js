@@ -42,7 +42,7 @@ ${men.user.presence.status === "online"?"<:SROnline:831122923728535582>"
 : men.user.presence.status === "dnd"?"<:SRDnd:831111495076675594>"
 : men.user.presence.status === "offline"?"<:SROffline:831122726751567892>":"<:SROffline:831122726751567892>"} **Status**: ${men.user.presence.status}
 
-    :butterfly: **Custom status**: ${men.user.presence.activities ? `${men.user.presence?.activities[0]["name"] === "Custom Status"
+:butterfly: **Custom status**: ${men.user.presence.activities ? `${men.user.presence?.activities[0]["name"] === "Custom Status"
                                                                                                                             ? men.user.presence?.activities[0]["state"] 
                                                                                                                             : men.user.presence?.activities[0]["name"] 
                                                                }` : "none"}

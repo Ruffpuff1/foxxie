@@ -12,7 +12,7 @@ module.exports = {
         if(!mentionMember) return message.reply(`Next time, actually **mention** a user you want to kick, dummy.`);
         let reason = args.slice(1).join(" ");
         if(!reason) reason = "Oops, the moderator that did this kick didnt supply a reason.";
-        if(member.id === message.author.id) return message.reply(`haha, i see you're trying to be funny, you cant kick yourself with me.`);
+        if(mentionMember.id === message.author.id) return message.reply(`haha, i see you're trying to be funny, you cant kick yourself with me.`);
 
         let Embed = new Discord.MessageEmbed()
         Embed.setTitle(`You have been kicked.`)
