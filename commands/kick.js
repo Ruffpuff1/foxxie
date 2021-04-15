@@ -9,7 +9,7 @@ module.exports = {
     async execute(message, args, bot){
         let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if(!message.guild.me.hasPermission("KICK_MEMBERS")) return message.reply(`Haha, funny. You’re trying to kick with me without perms. Didn't think someone could be that stupid.`);
-        if(!member) return message.reply(`Next time, actually **mention** a user you want to kick, dummy.`);
+        if(!mentionMember) return message.reply(`Next time, actually **mention** a user you want to kick, dummy.`);
         let reason = args.slice(1).join(" ");
         if(!reason) reason = "Oops, the moderator that did this kick didnt supply a reason.";
         if(member.id === message.author.id) return message.reply(`haha, i see you're trying to be funny, you cant kick yourself with me.`);
