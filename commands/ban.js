@@ -10,7 +10,7 @@ module.exports = {
         let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         mentionMember.ban()
         if(!message.guild.me.hasPermission("BAN_MEMBERS")) return message.reply(`Haha, funny. You’re trying to ban with me without perms. Didn't think someone could be that stupid.`);
-        if(!mentionMember) return message.reply(` Oh my, we have a real Einstein right here, folks. Mate, listen. You’ve got to specify the member you wish to ban.`);
+        if(!member) return message.reply(` Oh my, we have a real Einstein right here, folks. Mate, listen. You’ve got to specify the member you wish to ban.`);
         let reason = args.slice(1).join(" ");
         if(!reason) reason = "Oops, the moderator that did this ban didnt supply a reason."; 
         if(member.id === message.author.id) return message.reply(`haha, i see you're trying to be funny, you can't ban yourself with me.`);
