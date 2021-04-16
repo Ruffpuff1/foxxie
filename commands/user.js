@@ -12,13 +12,13 @@ module.exports = {
         if (args[0]) men = message.mentions.members.first() || message.guild.members.cache.find(m => m.displayName.toLowerCase() === args.join(' ').toLocaleLowerCase()) || 
         message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m => m.user.tag.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.guild.members.cache.find(m => m.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member; 
         
-let embed = new Discord.MessageEmbed()
-.setTitle(` **${men.user.tag}**, ${men.user.id === message.member.user.id ? "Info about you." : "Info about them."}`)
-.setColor('#3d9fff')
-.setThumbnail(men.user.displayAvatarURL({ format: "png", dynamic: true, size: 4096}))
-.setTimestamp()
-.setFooter('WOOOOOOOOOOOOOOOOOOO', men.user.displayAvatarURL({ format: "png", dynamic: true, size: 4096}))
-embed.setDescription(`
+        let embed = new Discord.MessageEmbed()
+            .setTitle(` **${men.user.tag}**, ${men.user.id === message.member.user.id ? "Info about you." : "Info about them."}`)
+            .setColor('#3d9fff')
+            .setThumbnail(men.user.displayAvatarURL({ format: "png", dynamic: true, size: 4096}))
+            .setTimestamp()
+            .setFooter('WOOOOOOOOOOOOOOOOOOO', men.user.displayAvatarURL({ format: "png", dynamic: true, size: 4096}))
+            .setDescription(`
 :crown: **Display name:** ${men}  
 
 :id: **User ID**: ${men.user.id}
@@ -40,14 +40,11 @@ ${men.user.presence.status === "online"?"<:SROnline:831122923728535582>"
 : men.user.presence.status === "dnd"?"<:SRDnd:831111495076675594>"
 : men.user.presence.status === "offline"?"<:SROffline:831122726751567892>":"<:SROffline:831122726751567892>"} **Status**: ${men.user.presence.status}
 
-:butterfly: **Custom status**: ${men.user.presence.activities ? `${men.user.presence?.activities[0]["name"] === "Custom Status"
+:butterfly: **Custom status**: ${men.user.presence.status === "offline" ? "none" : `${men.user.presence?.activities[0]["name"] === "Custom Status"
                                                                                                                             ? men.user.presence?.activities[0]["state"] 
                                                                                                                             : men.user.presence?.activities[0]["name"] 
-                                                               }` : "none"}
-
-`)
-
-            
-            message.channel.send(embed)
+                                                               }`}
+    `) 
+        message.channel.send(embed)
 }
     }
