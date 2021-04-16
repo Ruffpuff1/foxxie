@@ -24,4 +24,5 @@ const serverEmbed = new Discord.MessageEmbed()
 { name: `:speech_balloon: **Channels (${message.guild.channels.cache.size})**`, value: `${message.guild.channels.cache.size}` , inline: false },
 { name: `:scroll: **Roles (${message.guild.roles.cache.size})**`, value: `\`\`\`${message.guild.roles.cache.sort((a, b) => b.position - a.position).map(r => r.name).slice(0,55).join(", ").replace(', @everyone', " ")}\`\`\``, inline: false},
 { name: ':calendar: **Created At**', value: `${servercreated} **(${dayssincecreation} days ago.)**`, inline: false},)
+.setFooter(`${message.author.username} joined this server ${moment(message.member.joinedAt).format('MMMM Do YYYY')} (${moment([moment(message.member.joinedAt).format('YYYY'), moment(message.member.joinedAt).format('M') - 1, moment(message.member.joinedAt).format('D')]).toNow(true)} ago)   `)
 message.reply(serverEmbed);},};
