@@ -18,7 +18,7 @@ module.exports = {
         Embed.setTitle(`You have been kicked.`)
         Embed.setDescription(`You have been kicked from **${message.guild.name}** for: 
         
-        **${reason}**`)
+ **${reason}**`)
         Embed.setTimestamp()
         Embed.setAuthor(mentionMember.user.tag, mentionMember.user.displayAvatarURL())
         Embed.setThumbnail(message.guild.iconURL())

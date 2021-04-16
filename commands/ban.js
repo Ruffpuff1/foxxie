@@ -19,7 +19,7 @@ module.exports = {
         Embed.setTitle(`You have been banned.`)
         Embed.setDescription(` You have been forever banned from ${message.guild.name}. Sorry, mate. It’s nothing personal, but that’s the way the cookie crumbles.
 
-        Reason: ${reason}
+Reason: ${reason}
     `)
         Embed.setTimestamp()
         Embed.setAuthor(mentionMember.user.tag, mentionMember.user.displayAvatarURL())
