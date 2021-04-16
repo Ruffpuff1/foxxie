@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const moment = require('moment')
+const { addSlowmode } = require('../../tasks/modCountAdd')
 const { getGuildModChannel } = require('../../../lib/settings')
 module.exports = {
     name: 'slowmode',
@@ -40,6 +41,7 @@ module.exports = {
             .addField('**Location**', message.channel, true)
             .addField('**Date / Time**', slowTime, true)
 
+        addSlowmode(message)
         let results = await getGuildModChannel(message)
 
         if (results === null) return

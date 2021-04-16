@@ -36,13 +36,13 @@ module.exports.guildMessageCount = async (message) => {
     })
 }
 
-module.exports.getUserMessageCount = async (message) => {
+module.exports.getUserMessageCount = async (message, userId) => {
     if (message.channel.type == 'dm') return;
     await mongo().then(async mongoose => {
         try {
             this.userMsgCount = await messageCountSchema.findOne({
                 guildId: message.guild.id,
-                userId: message.author.id
+                userId: userId
             })
             return this.userMsgCount
         } finally {}
@@ -50,12 +50,12 @@ module.exports.getUserMessageCount = async (message) => {
     return this.userMsgCount
 }
 
-module.exports.getGuildMessageCount = async (message) => {
+module.exports.getGuildMessageCount = async (message, server) => {
     if (message.channel.type == 'dm') return;
     await mongo().then(async mongoose => {
         try {
             this.guildMsgCount = await serverMessageCountSchema.findOne({
-                guildId: message.guild.id
+                guildId: server
             })
             return this.guildMsgCount
         } finally {}

@@ -170,6 +170,8 @@ Hope we can help you out abit.`,
         DISBOARDMESSAGE: "Change the text I'll send ya when Disboard is off cooldown. Put `none` to reset back to my default, or just do `fox disboardmessage` to show the current message if one is set.",
         LANGUAGE: "Set the language of the guild. Choose either English, Spanish, or `none` to reset to the default.",
         MODCHANNEL: "Set the moderation logging channel of the server. If no channel is specified I will show the current channel set, if there is no channel currently set I will show none.",
+        SETTINGS: "Shows all the current settings of the server if any special settings are set.",
+        TESTDISBOARD: "Simulates what the server's disboard bump will look like.",
         TESTJOIN: "Simulates what would happen if a new member joins the server.",
         WELCOMECHANNEL: "Set the channel where I should send welcome messages. This will initiate whenever a new member joins or you can use `fox testwelcome` to test it out beforehand.",
         WELCOMEMESSAGE: "Change the text I'll send ya when a new member joins the server. Put `none` to reset back to my default, or just do `fox welcomemessage` to show the current message if one is set.", // needs spanish

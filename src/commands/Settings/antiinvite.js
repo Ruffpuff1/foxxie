@@ -31,15 +31,21 @@ module.exports = {
             if (args[0]?.toLowerCase() === 'off')
             try {
                 const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
-                await antiSchema.findByIdAndUpdate({
+                await antiSchema.findByIdAndDelete({
                     _id: message.guild.id
-                }, {
-                    _id: message.guild.id,
-                    antiInvites: false
-                }, {
-                    upsert: true
                 })
                 embed.setDescription("**Gotcha,** disabled automatic **invite** filtering. Now if someone sends an invite to a Discord server, I'll ignore it like normal.")
+                loading.delete()
+                return message.channel.send(embed)
+            } finally {}
+
+            if (args[0]?.toLowerCase() === 'none')
+            try {
+                const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING)
+                await antiSchema.findByIdAndDelete({
+                    _id: message.guild.id
+                })
+                embed.setDescription("**Gotcha,** reset automatic **invite** filtering to my default (off). Now if someone sends an invite to a Discord server, I'll ignore it like normal.")
                 loading.delete()
                 return message.channel.send(embed)
             } finally {}
@@ -52,6 +58,9 @@ module.exports = {
                     loading.delete()
                     return message.channel.send(embed)
                 }
+                embed.setDescription(`Currently anti-invite filitering is set to **off**. If ya wanna change this, use the command \`fox antiinvite [on/off]\`.`)
+                loading.delete()
+                return message.channel.send(embed)
             } 
         })
     }

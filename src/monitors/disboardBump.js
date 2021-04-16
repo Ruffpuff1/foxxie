@@ -18,8 +18,8 @@ module.exports.disboardBump = async (message) => {
                 if (message.channel.id !== disboardChannel)
 
                 message.client.disboard = require('../store/disboard.json')
-                let remindTime = '10s'
-                let deleteTime = '5s'
+                let remindTime = '2h'
+                let deleteTime = '90m'
 
                 await disboardBumpSchema.findOneAndUpdate({
                     _id: guildID

@@ -1,16 +1,18 @@
 const Discord = require('discord.js')
-const db = require('quick.db')
+const { setAfkNickname, setAfkReason, setAfkStatus, setAfkLastMsg } = require('../../../src/tasks/afkChange')
 module.exports = {
     name: 'afk',
     aliases: ['away', 'idle'],
     usage: `fox afk (reason)`,
     category: 'utility',
-    execute(lang, message, args) {
+    execute: async(lang, message, args) => {
         let reason = args.slice(0).join(' ') || 'AFK';
+        let boolean = true
 
-        db.set(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk.Nickname`, message.member.displayName)
-        db.set(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk.Status`, true)
-        db.set(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk.Reason`, reason)
+        setAfkNickname(message, message.member.displayName)
+        setAfkReason(message, reason)
+        setAfkStatus(message, boolean)
+        setAfkLastMsg(message)
 
         const AFKEmbed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)

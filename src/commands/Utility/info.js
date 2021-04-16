@@ -46,7 +46,7 @@ module.exports = {
         if (channel) {
 
             const embed = new MessageEmbed()
-                .setTitle(channel.name)
+                .setTitle(`${channel.name} (ID: ${channel.id})`)
                 .setColor(message.guild.me.displayColor)
                 .setThumbnail(message.guild.iconURL({ format: 'png', dynamic: true }))
                 .setDescription(`${channel.name} was created ${moment(channel.createdAt).format('MMMM Do YYYY')} **(${moment([moment(channel.createdAt).format('YYYY'), moment(channel.createdAt).format('M') - 1, moment(channel.createdAt).format('D')]).toNow(true)} ago)**`)
@@ -111,8 +111,8 @@ module.exports = {
         }
 
         if (server && args[0] === 'server') {
-        
-            let results = await getGuildMessageCount(message)
+
+            let results = await getGuildMessageCount(message, server.id)
                     
             let messages;
             messages = 0
@@ -165,7 +165,7 @@ module.exports = {
                         guildId = message.guild.id
                         userId = member.user.id
 
-                        let results = await getUserMessageCount(message)
+                        let results = await getUserMessageCount(message, userId)
 
                         let stats_messages;
                         stats_messages = 0

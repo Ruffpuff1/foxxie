@@ -1,5 +1,6 @@
 const moment = require('moment')
 const Discord = require('discord.js')
+const { addNuke } = require('../../tasks/modCountAdd')
 const { getGuildModChannel } = require('../../../lib/settings')
 module.exports = {
     name: 'nuke',
@@ -44,11 +45,12 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                                     { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
                                     { name: `**Date / Time**`, value: `${warnDate}`, inline: true })
 
+                            addNuke(message)
+                            message.channel.delete()
+                            if (results.channelId === message.channel.id) return;
                             const logChannel = message.guild.channels.cache.get(results.channelId);
                             if (logChannel) logChannel.send(nukeEmbed)
     
-                            message.channel.delete()
-
                             
                     }).catch(() => {})
             }

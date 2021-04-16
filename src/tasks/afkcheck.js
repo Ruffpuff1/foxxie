@@ -1,39 +1,43 @@
-// const Discord = require('discord.js')
-// const db = require('quick.db')
-// module.exports = client => {
-//     client.on('message', message => {
-        
+const Discord = require('discord.js')
+const db = require('quick.db')
+const { getAfk, delAfk } = require('./afkChange')
+const { getGuildLang } = require('../../lib/util/getGuildLang')
+module.exports.afkCheck = async message => {
 
-//         if (message.author.bot) return
-//         if (message.channel.type === 'dm') return
+    if (message.author.bot) return
+    if (message.channel.type === 'dm') return
+    lang = getGuildLang(message)
+    message.mentions.users.forEach(
+        async user => {
 
-//         if (db.has(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk.Status`)) {
-//             let afkNickname = db.get(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk.Nickname`)
-//             message.reply(lang.COMMAND_AFK_WELCOMEBACK)
-//             .then(msg => {setTimeout(() => msg.delete(), 10000)})
+            let userAfk = await getAfk(message, user)
+            if (userAfk === null) return;
+            if (message.author.bot) return;
 
-//             message.member.setNickname(afkNickname).catch(error => console.error())
-//             .then(db.delete(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk`))
-//         }
+            if (message.content.includes('@here') || message.content.includes('@everyone')) return false
 
-//         message.mentions.users.forEach(
-//             user => {
-//                 if (message.author.bot) return false
+            if (userAfk !== null) {
 
-//                 if (message.content.includes('@here') || message.content.includes('@everyone')) return false
+            const UserAfkEmbed = new Discord.MessageEmbed()
+                .setColor(message.guild.me.displayColor)
+                .setAuthor(`${user.tag} ${lang.COMMAND_AFK_ISSET}`, user.avatarURL( { dynamic: true } ))
+                .setDescription(`${lang.COMMAND_AFK_REASON} ${userAfk.afkReason}`)
 
-//                 if (db.has(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk.Status`)) {
-//                 let afkReasonShow = db.get(`Guilds.${message.guild.id}.Users.${message.author.id}.Afk.Reason`)
+            message.channel.send(UserAfkEmbed)
+            .then( msg => { setTimeout(() => msg.delete(), 10000)})
+            }
+        }
+    )
+        let user = message.member.user
+        let afk = await getAfk(message, user)
+        if (afk === null) return;
 
-//                 const UserAfkEmbed = new Discord.MessageEmbed()
-//                     .setColor(message.guild.me.displayColor)
-//                     .setAuthor(`${user.tag} ${lang.COMMAND_AFK_ISSET}`, user.avatarURL( { dynamic: true } ))
-//                     .setDescription(`${lang.COMMAND_AFK_REASON} ${afkReasonShow}`)
+        if (afk !== null) {
+            if (afk.lastMsg === message.content) return;
+            message.reply(lang.COMMAND_AFK_WELCOMEBACK)
+            .then(msg => {setTimeout(() => msg.delete(), 10000)})
 
-//                 message.channel.send(UserAfkEmbed)
-//                 .then( msg => { setTimeout(() => msg.delete(), 10000)})
-//                 }
-//             }
-//         )
-//     })
-// }
+            message.member.setNickname(afk.afkNickname).catch(error => console.error())
+            delAfk(message)
+        }
+}

@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const moment = require('moment')
+const { addPurge, addTotal } = require('../../tasks/modCountAdd')
 const { getGuildModChannel } = require('../../../lib/settings')
 module.exports = {
     name: 'purge',
@@ -44,6 +45,8 @@ module.exports = {
             .addField('**Location**', message.channel, true)
             .addField('**Date / Time**', purgeTime, true)
 
+        addPurge(message)
+        addTotal(message, num)
         let results = await getGuildModChannel(message)
 
         if (results === null) return

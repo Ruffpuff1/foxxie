@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const moment = require('moment')
+const { addUnlock } = require('../../tasks/modCountAdd')
 const { getGuildModChannel } = require('../../../lib/settings')
 module.exports = {
     name: 'unlock',
@@ -40,6 +41,7 @@ module.exports = {
             { name: `**Date / Time**`, value: `${lockTime}`, inline: true }
         )
 
+        addUnlock(message)
         let results = await getGuildModChannel(message)
 
         if (results === null) return

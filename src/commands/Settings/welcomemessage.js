@@ -56,7 +56,7 @@ module.exports = {
                     upsert: true
                 })
 
-                embed.setDescription(`**Gotcha,** set the welcome message to:\n\`\`\`${text}\`\`\`Now I'll send the message with my reminder embed.`)
+                embed.setDescription(`**Gotcha,** set the welcome message to:\n\`\`\`${text}\`\`\`Now I'll send the message when someone joins the server.`)
                 message.channel.send(embed)
 
             } finally {}   
