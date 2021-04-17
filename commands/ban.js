@@ -26,9 +26,9 @@ Reason: ${reason}
         Embed.setThumbnail(message.guild.iconURL())
         Embed.setColor("#f59dcc")
 
-        if(member.bannable){
-            member.send(Embed).catch(error => message.channel.send(`oh, i think the member you banned had their DMs off, because i couldnt DM them.`))
-            .then(m => member.ban({reason}));
+        if(mentionMember.bannable){
+            mentionMember.send(Embed).catch(error => message.channel.send(`oh, i think the member you banned had their DMs off, because i couldnt DM them.`))
+            .then(m => mentionMember.ban({reason}));
 
             message.channel.send(`:white_check_mark: ${message.author.username} has banished ${message.member.username} from the server. They will never be able to return. Adios!`)
             let logChannel = message.guild.channels.cache.get("822454708894695444")
