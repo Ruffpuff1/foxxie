@@ -11,11 +11,9 @@ module.exports = {
         let embed = new Discord.MessageEmbed();
         embed.setColor('#52a9ff')
         embed.setDescription(`
-        **Fokushi's server link.**
-        
-         please do keep in mind that Fokushi is still a new and improving bot so its not perfect! my developer is working hard to add everything! please let <@814539604879081532> know if you have any suggestions.
+        **Link to Seaside Restaurant**
 
-        Server link: https://discord.gg/Wh9gbFfjhD`)
+        https://discord.gg/K7PdNsbdAx`)
         embed.setTimestamp()
         message.channel.send(embed)
     }
