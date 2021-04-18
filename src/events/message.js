@@ -3,7 +3,6 @@ const { disboardBump } = require('../monitors/disboardBump')
 const { commandHandler } = require('./commandHandler')
 const { userMessageCount, guildMessageCount } = require('../monitors/stats')
 const { mimuPick } = require('../../lib/util/theCornerStore')
-const { antiInvitesEnabled } = require('../../lib/settings')
 const { afkCheck } = require('../tasks/afkcheck')
 module.exports = {
 	name: 'message',
@@ -11,6 +10,7 @@ module.exports = {
 
         // prevents bot dms
         if (!message.guild) return
+        if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return
         // Botwide
         antiInvites(message)
         disboardBump(message)

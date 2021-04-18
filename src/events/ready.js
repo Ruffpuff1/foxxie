@@ -1,8 +1,8 @@
 const reminder = require('../tasks/reminder')
-const afkcheck = require('../tasks/afkcheck')
 const { disboard } = require('../tasks/disboard')
 const { mongoDB } = require('../../lib/structures/database/mongoDB')
 const { memberCount, clock } = require('../../lib/util/theCornerStore')
+const { stats } = require('../../lib/util/stats')
 module.exports = {
 	name: 'ready',
 	once: true,
@@ -17,5 +17,11 @@ module.exports = {
         // The Corner Store, memberCount & clock
         memberCount(client)
         clock(client)
+
+        stats(client)
+        setInterval(() => {
+            stats(client)
+        }, 5000)
+
 	},
 };

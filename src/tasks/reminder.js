@@ -1,5 +1,5 @@
 const fs = require('fs')
-const db = require('quick.db')
+const { getGuildLang } = require('../../lib/util/getGuildLang')
 const Discord = require('discord.js')
 module.exports = client => {
     client.reminders = require('../store/reminders.json')
@@ -13,12 +13,7 @@ module.exports = client => {
             let timeSince = client.reminders[i].timeago
             let color = client.reminders[i].displayColor
 
-            var lang;
-            var language = db.get(`Guilds.${guildID}.Settings.Language`)
-            if (language ?
-                language = language
-                : language = 'en') 
-                lang = require(`../../src/languages/${language}`)
+            let lang = getGuildLang(message)
 
             if(Date.now() > time) {
                 let guild = client.guilds.cache.get(guildID)

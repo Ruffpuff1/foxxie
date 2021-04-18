@@ -1,5 +1,4 @@
 const Discord = require('discord.js')
-const db = require('quick.db')
 const { getAfk, delAfk } = require('./afkChange')
 const { getGuildLang } = require('../../lib/util/getGuildLang')
 module.exports.afkCheck = async message => {

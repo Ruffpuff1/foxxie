@@ -5,6 +5,7 @@ const warnSchema = require('../../../lib/structures/database/schemas/server/mode
 const noteSchema = require('../../../lib/structures/database/schemas/server/moderation/noteSchema')
 const { getUserMessageCount, getGuildMessageCount } = require('../../monitors/stats')
 const moment = require('moment')
+const { contributor } = require('../../../lib/config')
 module.exports = {
     name: 'info',
 	aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
@@ -152,7 +153,8 @@ module.exports = {
                     .setTitle(`${user.tag} (ID: ${user.id})`)
                     .setThumbnail(user.displayAvatarURL({ dynamic: true }));
 
-                    user.id === '754598258742919178' ? embed.setDescription(`• Certified Cutie`) : '';
+                    if (contributor.includes(user.id)) embed.setDescription(`<:Foxxie:825972379875409980> Foxxie Contributor`)
+                    user.id === '754598258742919178' ? embed.setDescription(`<:CertifiedCutiepieTallBoy:833197162610425857> Certified Cutiepie Tall Boy`) : '';
             
                     const member = message.guild ? await message.guild.members.fetch(user).catch(() => null) : null;
             

@@ -4,7 +4,6 @@ const constant = require('../../../lib/util/constants')
 const roleplay = require('../../../lib/structures/roleplayCommand')
 const english = require('../../languages/en')
 const spanish = require('../../languages/es')
-const db = require('quick.db')
 const Discord = require('discord.js')
 module.exports = {
     name: 'eval',

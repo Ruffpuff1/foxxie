@@ -2,6 +2,7 @@ const { getGuildModChannel } = require('../../../lib/settings')
 const { addLock } = require('../../tasks/modCountAdd')
 const Discord = require('discord.js')
 const moment = require('moment')
+const { botPermError } = require('../../../lib/util/error')
 module.exports = {
     name: 'lock',
     aliases: ['l', 'lockdown'],
@@ -11,6 +12,7 @@ module.exports = {
     execute: async(lang, message, args) => {
 
         if (!message.channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return message.channel.send('COMMAND_LOCK_CHANNEL_ALREADY_LOCKED')
+        if (!message.channel.permissionsFor(message.guild.me).has('MANAGE_CHANNELS')) return botPermError(lang, message, 'MANAGE_CHANNELS')
 
         let reason = args.slice(0).join(' ') || 'No reason specified'
         let lockTime = moment(message.createdTimestamp).format('llll')
@@ -25,7 +27,7 @@ module.exports = {
 
             msg.edit('COMMAND_LOCK_LOCKED_SUCCESS')
         } catch(e) {
-            message.channel.send(e)
+            console.log(e)
         }
 
         const embed = new Discord.MessageEmbed()
