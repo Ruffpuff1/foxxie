@@ -34,7 +34,10 @@ module.exports = {
 
         const helpEmbed = new Discord.MessageEmbed()
 
-        if (devs.includes(message.author.id) && message.content.includes('-d'))
+        let sendIn = /\-c\s*/
+        let devMenu = /\-d\s*/
+
+        if (devs.includes(message.author.id) && devMenu.test(message.content))
             helpEmbed
                 .addField("**Developer**" + ` **(${devCmds.length})**`, devCmds.map(a => `\`${a}\``).join(", "))
                 .addField("**Secret**" + ` **(${secCmds.length})**`, secCmds.map(a => `\`${a}\``).join(", "))
@@ -52,7 +55,7 @@ module.exports = {
 
         let descriptions = lang.COMMAND_DESCRIPTIONS
 
-        if (!args.length) {
+        if (!args.length || args[0]?.toLowerCase() === '-d') {
             message.react('✅')
             return message.author.send(helpEmbed)
             .then(() => {
@@ -66,7 +69,7 @@ module.exports = {
         const name = args[0].toLowerCase();
         const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
-        if (!command && message.content.includes('-c')) return message.channel.send(helpEmbed)
+        if (!command && sendIn.test(message.content)) return message.channel.send(helpEmbed)
 
         if (command) {
         

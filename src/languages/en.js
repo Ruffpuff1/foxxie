@@ -146,6 +146,7 @@ Hope we can help you out abit.`,
         TOPIC: "Sends a random conversation starter from https://www.conversationstarters.com/random.php.", // needs spanish
         URBAN: "Defines a word using it's Urban Dictionary definition. Only works in NSFW channels due to potential inapropriate content.",
 
+        BAN: "Bans a user from a guild and prevents them from joining back until unbanned. Command syntax should go `fox ban ruffpuff#0017 for spamming` however you can add an additional (-p) or (-purge) flag to the ban reason to clear 24 hours of that member's messages.",
         CLEARNOTE: "Clears all public notes from a user's profile.",
         LOCK: "Locks a channel so users won't be able to speak in it until unlocked. (Note: if you have a role that grants message permissions this command won't work)", // needs spanish
         NOTE: "Adds a server-only public note to a user's profile.",

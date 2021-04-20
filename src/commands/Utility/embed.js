@@ -26,6 +26,9 @@ module.exports = {
         arr[3] ? embed.setColor(arr[3].replace(/,/g, ' '))
         : '';
 
+        arr[4] ? embed.setImage(arr[4].replace(/,/g, ' '))
+        : '';
+
         loading.delete()
         message.channel.send(embed)
     }

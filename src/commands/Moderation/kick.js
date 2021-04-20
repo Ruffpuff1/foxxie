@@ -26,7 +26,7 @@ module.exports = {
         const date = moment(message.createdTimestamp).format('llll');
 
         let results = await getGuildModChannel(message)
-        addKick(message)
+        //addKick(message)
 
         message.react('✅')
 

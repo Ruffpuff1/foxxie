@@ -7,7 +7,7 @@ module.exports.antiInvites = async (message) => {
     if (anti_inv?.antiInvites == false || anti_inv == null) return
     if (message.author.id === message.guild.ownerID) return
     if (message.member?.hasPermission('ADMINISTRATOR')) return;
-    if (message.member.roles.highest.position > message.guild.me.roles.highest.position) return;
+    if (message.member?.roles?.highest?.position > message.guild.me?.roles?.highest?.position) return;
     
     inviteRegex = /(https?:\/\/)?(.*?@)?(www\.)?((discord|invite)\.(gg|li|me|io)|discord(app)?\.com\/invite)\/(\s)?.+/ui;
     //'https://discord.gg/kAbuCpfnCk' - deletes any discord server invite // 761512748898844702
@@ -15,9 +15,9 @@ module.exports.antiInvites = async (message) => {
     if (inviteRegex.test(message.content) && message.guild.id === '761512748898844702') {
 
         let reason = 'Server invite link'
-        moderationCommandWarn(message, reason, message.member, message.guild.me)
+        moderationCommandWarn(message, reason, message.member, message.guild.me)//auto warns in TCS
         message.delete()
     }
     // For other servers
-    if (inviteRegex.test(message.content) && message.guild.id !== '761512748898844702') return message.delete();
+    if (inviteRegex.test(message.content) && message.guild.id !== '761512748898844702') return message.delete(); // deletes
 }

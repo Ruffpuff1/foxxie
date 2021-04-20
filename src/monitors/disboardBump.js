@@ -15,11 +15,11 @@ module.exports.disboardBump = async (message) => {
 
                 let disChn = await getDisboardChannel(message)
                 if (disChn === null) return
-                if (message.channel.id !== disboardChannel)
+                if (message.channel.id !== disChn.disboardChannel)
 
                 message.client.disboard = require('../store/disboard.json')
                 let remindTime = '2h'
-                let deleteTime = '90m'
+                let deleteTime = '1h'
 
                 await disboardBumpSchema.findOneAndUpdate({
                     _id: guildID
@@ -30,12 +30,11 @@ module.exports.disboardBump = async (message) => {
                     upsert: true
                 })
 
-                disChn = disboardChannel
                 message.client.disboard[guildID] = {
                     guild: guildID,
                     authID: message.author.id,
                     time: Date.now() + ms(remindTime),
-                    channelID: disboardChannel,
+                    channelID: disChn.disboardChannel,
                     displayColor: message.guild.me.displayColor,
                     deleteDbTime: Date.now() + ms(deleteTime)
                 }
