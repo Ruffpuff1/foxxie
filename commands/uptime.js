@@ -5,7 +5,7 @@ module.exports = {
     description: 'Tells you the uptime of me.',
     aliases: ['ut', 'up'],
     execute(message, args, bot) {
-        let totalSeconds = (client.uptime / 1000);
+        let totalSeconds = (bot.uptime / 1000);
         let days = Math.floor(totalSeconds / 86400);
         totalSeconds %= 86400;
         let hours = Math.floor(totalSeconds / 3600);
