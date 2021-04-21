@@ -14,6 +14,7 @@ module.exports = {
         Embed.setTimestamp()
         Embed.setFooter(`${message.author.tag}`)
         Embed.setColor(`Random`);
+        
         nickchannel.send(Embed)
     }
 }
