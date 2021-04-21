@@ -27,7 +27,7 @@ uptime += `${days} days, ${hours} hours, ${minutes} minutes and ${seconds} secon
 
 
 
-message.channel.send(`my uptime is ${uptime}`)
+message.channel.send(`Ello, You wanted to know what my uptime was? I was last rebooted ${uptime} ago.`)
 
     }
 }
