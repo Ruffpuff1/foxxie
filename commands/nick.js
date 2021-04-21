@@ -6,7 +6,7 @@ module.exports = {
     execute(message, args, bot) {
         message.delete();
         if (message.guild.id !== config.seasideRest) return
-        let nickchannel = bot.channels.cache.get("831305968163094549")
+        let nickchannel = bot.channels.cache.get("822187934714167363")
         let text = args.slice(0).join(' ');
         if (!text) return;
         let Embed = new Discord.MessageEmbed()
