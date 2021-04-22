@@ -18,10 +18,6 @@ bot.on("ready", () => {
         }
     });
 })
-if (message.mentions.users.has(bot.user.id) && !message.author.bot) {
-    message.reply(`my prefix here is hk.`)
-    return
-  };
 bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.seasideRest) return
     const welcomeChannel = bot.channels.cache.get("822189403060830279")
