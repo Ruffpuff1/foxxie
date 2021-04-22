@@ -12,17 +12,17 @@ module.exports = {
 
 \`shutdown, eval, serverlist\`
 
-**Fun** (17)
+**Fun** (20)
 
-\`hug, kiss, pat, smug, slap, cry, kill, pee, poop, mad, cuddle, meow, goose, woof, trio, bleat, ruffy\`
+\`hug, kiss, pat, smug, slap, cry, kill, pee, poop, mad, cuddle, meow, goose, woof, trio, bleat, ruffy, feed, waifu, boop \`
         
 **Moderation** (8)
         
 \`ban, kick, purge, slowmode, mute, unmute, nuke, permamute\`
 
-**Utility** (14)
+**Utility** (15)
 
-\`avatar, server, id, user, invite, say, ping, serveravatar, embed, stealemote, nick, cody (emergency only), uptime, about\`
+\`avatar, server, id, user, invite, say, ping, serveravatar, embed, stealemote, nick, cody (emergency only), uptime, about, tos\`
 
 (Do hk help (command) or more info on each command.)`)
         embed.setTimestamp()

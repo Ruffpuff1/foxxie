@@ -11,13 +11,17 @@ bot.commands = new Discord.Collection();
 bot.on("ready", () => {
     console.log(`${bot.user.tag} is online.`)
     bot.user.setPresence({
-        status: "dnd",
+        status: "online",
         activity: {
             name: `with ${bot.guilds.cache.size} servers, pouncing and playing with ${bot.users.cache.size} users, and sticking my head in the snow to find ${bot.commands.size} commands.`,
             type: "PLAYING"
         }
     });
 })
+if (message.mentions.users.has(bot.user.id) && !message.author.bot) {
+    message.reply(`my prefix here is hk.`)
+    return
+  };
 bot.on("guildMemberAdd", (member) => {
     if (member.guild.id !== config.seasideRest) return
     const welcomeChannel = bot.channels.cache.get("822189403060830279")
