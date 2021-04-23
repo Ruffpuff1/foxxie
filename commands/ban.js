@@ -30,7 +30,7 @@ Reason: ${reason}
             mentionMember.send(Embed).catch(error => message.channel.send(`oh, i think the member you banned had their DMs off, because i couldnt DM them.`))
             .then(m => mentionMember.ban({reason}));
 
-            message.channel.send(`:white_check_mark: ${message.author.username} has banished ${message.mentionMember.username} from the server. They will never be able to return. Adios!`)
+            message.channel.send(`:white_check_mark: ${message.author.username} has banished ${mentionMember.user.username} from the server. They will never be able to return. Adios!`)
             let logChannel = message.guild.channels.cache.get("822454708894695444")
             let embed = new Discord.MessageEmbed()
     embed.setColor('#ff00b7')
