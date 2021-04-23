@@ -8,7 +8,7 @@ module.exports = {
     execute: async (lang, message, args, client) => {
         let arg = args.slice(0).join(" ")
 
-    if(!arg) return message.channel.send(lang.COMMAND_CORONA_NOARGS)
+    if(!arg) arg = 'global';
 
     const argCap = arg.charAt(0).toUpperCase() + arg.slice(1)
     let covid = new Discord.MessageEmbed()

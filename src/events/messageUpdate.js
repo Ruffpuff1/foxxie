@@ -31,8 +31,8 @@ module.exports = {
             .addField(`Message ID:`, `\`${message.id}\``, true)
             .addField(`Message Link:`, `[Here](${message.url})`, true)
             .addField(`\u200B`, `\u200B`, true)
-            .addField(`Before:`, `${oldMessage.content}`, true)
-            .addField(`After:`, `${message.content}`, true)
+            .addField(`Before:`, `${oldMessage.content}.`, true)
+            .addField(`After:`, `${message.content}.`, true)
             .addField(`\u200B`, `\u200B`, true)
 
         msgChn.send(embed)

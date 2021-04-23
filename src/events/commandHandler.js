@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const fs = require('fs')
 const { getGuildLang } = require('../../lib/util/getGuildLang')
-const { codeError, permError } = require('../../lib/util/error')
+const { codeError, permError, channelError } = require('../../lib/util/error')
 const { serverSettings } = require('../../lib/settings')
 module.exports.commandHandler = async (message) => {
 
@@ -33,6 +33,8 @@ module.exports.commandHandler = async (message) => {
         const command = message.client.commands.get(commandName) || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if (!command) return;
 
+        if (message.guild.id === '825853736768372746' && message.channel.id === '825853736768372751') return channelError(lang, message)
+
         if (command.permissions) {
             const authorPerms = message.channel.permissionsFor(message.author);
             if (!authorPerms || !authorPerms.has(command.permissions)) return permError(lang, message, command)  
@@ -53,6 +55,8 @@ module.exports.commandHandler = async (message) => {
         const commandName = args.shift().toLowerCase();
         const command = message.client.commands.get(commandName) || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if (!command) return;
+
+        if (message.guild.id === '825853736768372746' && message.channel.id === '825853736768372751') return channelError(lang, message)
 
         if (command.permissions) {
             const authorPerms = message.channel.permissionsFor(message.author);
