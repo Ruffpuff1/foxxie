@@ -3,7 +3,7 @@ const { emojis } = require('../../../lib/util/constants')
 module.exports = {
     name: 'embed',
     aliases: ['broadcast', 'bc', 'announce', 'broadcasts', 'announcements'],
-    usage: 'fox embed (title), [description], [footer], (color)',
+    usage: 'fox embed (title), (description), (footer), (color), (imageLink)',
     category: 'utility',
     permissions: 'ADMINISTRATOR',
     execute: async (lang, message, args) => {

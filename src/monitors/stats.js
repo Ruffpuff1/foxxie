@@ -1,9 +1,9 @@
 const mongo = require('../../lib/structures/database/mongo')
+const { serverSchema } = require('../../lib/structures/schemas')
 const messageCountSchema = require('../../lib/structures/database/schemas/server/messageCountSchema')
-const serverMessageCountSchema = require('../../lib/structures/database/schemas/server/serverMessageCountSchema')
 module.exports.userMessageCount = async (message) => {
     if (message.channel.type === 'dm') return;
-    await mongo().then(async mongoose => {
+    await mongo().then(async () => {
         try {
             await messageCountSchema.findOneAndUpdate({
                 guildId: message.guild.id,
@@ -21,10 +21,10 @@ module.exports.userMessageCount = async (message) => {
 
 module.exports.guildMessageCount = async (message) => {
     if (message.channel.type === 'dm') return;
-    await mongo().then(async mongoose => {
+    await mongo().then(async () => {
         try {
-            await serverMessageCountSchema.findOneAndUpdate({
-                guildId: message.guild.id
+            await serverSchema.findByIdAndUpdate({
+                _id: message.guild.id
             }, {
                 $inc: {
                     'messageCount': 1
@@ -38,7 +38,7 @@ module.exports.guildMessageCount = async (message) => {
 
 module.exports.getUserMessageCount = async (message, userId) => {
     if (message.channel.type == 'dm') return;
-    await mongo().then(async mongoose => {
+    await mongo().then(async () => {
         try {
             this.userMsgCount = await messageCountSchema.findOne({
                 guildId: message.guild.id,
@@ -52,10 +52,10 @@ module.exports.getUserMessageCount = async (message, userId) => {
 
 module.exports.getGuildMessageCount = async (message, server) => {
     if (message.channel.type == 'dm') return;
-    await mongo().then(async mongoose => {
+    await mongo().then(async () => {
         try {
-            this.guildMsgCount = await serverMessageCountSchema.findOne({
-                guildId: server
+            this.guildMsgCount = await serverSchema.findById({
+                _id: server
             })
             return this.guildMsgCount
         } finally {}

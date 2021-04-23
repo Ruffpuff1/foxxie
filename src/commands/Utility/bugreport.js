@@ -1,4 +1,5 @@
 const { botOwner } = require('../../../lib/config')
+const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'bugreport',
     aliases: ['bug'],
@@ -17,11 +18,11 @@ module.exports = {
                 if (messages.first().content.toLowerCase() === 'cancel') return message.channel.send('Command **cancelled**.')
                 bug = messages.first().content
                 dev.send(`Sent by **${message.member.user.tag} (ID: ${message.member.user.id})**:\n${bug}`) 
-                message.react("✅")
+                message.react(approved)
             })
         }).catch(() => {});
 
         dev.send(`Sent by **${message.member.user.tag} (ID: ${message.member.user.id})**:\n${bug}`)
-        message.react('✅')
+        message.react(approved)
     }
 }

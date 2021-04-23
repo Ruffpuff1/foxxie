@@ -4,12 +4,12 @@ module.exports = {
     aliases: ['botinfo'],
     usage: 'fox about',
     category: 'utility',
-    execute(lang, message, args, client) {
+    execute(lang, message) {
         const embed = new Discord.MessageEmbed()
             .setTitle(lang.COMMAND_ABOUT_TITLE)
             .setColor(message.guild.me.displayColor)
             .setDescription(lang.COMMAND_ABOUT_SUMMARY)
-            .setThumbnail(client.user.displayAvatarURL())
+            .setThumbnail(message.client.user.displayAvatarURL())
             .addFields(
                 {
                     name: lang.COMMAND_ABOUT_CREATED,
@@ -28,12 +28,12 @@ module.exports = {
                 },
                 {
                     name: lang.COMMAND_ABOUT_USERS,
-                    value: lang.COMMAND_ABOUT_USERS_SIZE,
+                    value: `**•** Right now I'm cleaning up after **${message.client.users.cache.size}** users.`,
                     inline: false
                 },
                 {
                     name: lang.COMMAND_ABOUT_GUILDS,
-                    value: lang.COMMAND_ABOUT_GUILDS_SIZE,
+                    value: `**•** I'm looking after **${message.client.guilds.cache.size}** servers.`,
                     inline: false
                 },
                 {

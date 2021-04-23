@@ -2,8 +2,8 @@ const { emojis: { perms: { granted, denied, notSpecified } } } = require('../../
 const { getModCount } = require('../../tasks/modCountAdd')
 module.exports = {
     name: 'stafflog',
-    aliases: ['sl', 'stafflogs'],
-    usage: 'fox stafflog (member)',
+    aliases: ['stafflogs'],
+    usage: 'fox stafflog (member|userId)',
     permissions: 'MANAGE_MESSAGES',
     category: 'moderation',
     execute: async(lang, message, args) => {

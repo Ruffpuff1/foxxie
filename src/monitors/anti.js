@@ -1,7 +1,7 @@
-const { antiInvitesEnabled } = require('../../lib/settings')
-const { moderationCommandWarn } = require('../../lib/structures/database/moderationCommand')
+const { serverSettings } = require('../../lib/settings')
+const { moderationCommandWarn } = require('../../lib/structures/moderationCommand')
 module.exports.antiInvites = async (message) => {
-    let anti_inv = await antiInvitesEnabled(message)
+    let anti_inv = await serverSettings(message)
 
     if (!message.guild) return
     if (anti_inv?.antiInvites == false || anti_inv == null) return

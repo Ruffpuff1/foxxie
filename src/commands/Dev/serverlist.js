@@ -2,7 +2,7 @@ const config = require('../../../lib/config')
 const Discord = require('discord.js')
 module.exports = {
     name: 'serverlist',
-    usage: 'serverlist',
+    usage: 'fox serverlist',
     category: 'developer',
     execute: async (lang, message) => {
         if (config.devs.includes(message.author.id)) {

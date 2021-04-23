@@ -1,10 +1,11 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
-const disboardMessageSchema = require('../../../lib/structures/database/schemas/server/disboard/disboardMessageSchema')
+const { serverSchema } = require('../../../lib/structures/schemas')
+const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'disboardmessage',
     aliases: ['disboardtext', 'dm', 'disboardmsg'],
-    usage: `fox disboardmessage (message)`,
+    usage: `fox disboardmessage (none|message)`,
     category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) =>{
@@ -16,8 +17,14 @@ module.exports = {
             try {
                 if (args[0]) {
                     if (args[0].toLowerCase() === 'none') {
-                        await disboardMessageSchema.findByIdAndDelete({
-                            _id: guildID
+                        await serverSchema.findByIdAndUpdate({
+                            _id: message.guild.id
+                        }, {
+                            _id: message.guild.id,
+                            $unset: {
+                                disboardMessage: '',
+                                disboardPing: ''
+                            }
                         })
                     
                     embed.setDescription("**Gotcha**, reset the Disboard message back to the default of mine.")
@@ -28,11 +35,9 @@ module.exports = {
                 let text = args.slice(0).join(' ')
                 if (!text) {
 
-                    const results = await disboardMessageSchema.findById({
-                        _id: guildID
-                    })
+                    let results = await serverSettings(message)
 
-                    if (results === null) {
+                    if (results === null || results?.disboardMessage == null) {
                         embed.setDescription(`There is no Disboard message set right now, my default message is:\n\`\`\`**•** Time to bump the server on disboard. Use the command \`!d bump\` then come back in **two hours**.\`\`\`You can set your own message using the command \`fox disboardmessage (message)\``)
                         return message.channel.send(embed)
                     }
@@ -46,10 +51,10 @@ module.exports = {
                 let disboardPing = message.mentions.roles.first()
                 if (!disboardPing) disboardPing = ''
 
-                await disboardMessageSchema.findByIdAndUpdate({
-                    _id: guildID
+                await serverSchema.findByIdAndUpdate({
+                    _id: message.guild.id
                 }, {
-                    _id: guildID,
+                    _id: message.guild.id,
                     disboardMessage: text,
                     disboardPing: disboardPing
                 }, {

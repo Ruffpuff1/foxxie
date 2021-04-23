@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'corona',
     aliases: ['cv', 'covid'],
-    usage: 'fox covid [country/global/world]',
+    usage: 'fox covid [country|global|world]',
     category: 'utility',
     execute: async (lang, message, args, client) => {
         let arg = args.slice(0).join(" ")

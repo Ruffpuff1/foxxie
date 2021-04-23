@@ -3,13 +3,12 @@ const mongo = require('../../../lib/structures/database/mongo')
 const { serverSchema } = require('../../../lib/structures/schemas')
 const { serverSettings } = require('../../../lib/settings')
 module.exports = {
-    name: 'goodbyechannel',
-    aliases: ['gc', 'goodbyelocation'],
-    usage: 'fox goodbyeChannel (none|channel)',
+    name: 'deletechannel',
+    aliases: ['dlc', 'deletelocation'],
+    usage: 'fox deletechannel (none|channel)',
     category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
-        let guildId = message.guild.id
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
 
@@ -22,10 +21,11 @@ module.exports = {
                         }, {
                             _id: message.guild.id,
                             $unset: {
-                                goodbyeChannel: ''
+                                deleteChannel: ''
                             }
                         })
-                        embed.setDescription(`**Got it,** removed the goodbye channel and disabled goodbye messages with this server.`)
+
+                        embed.setDescription(`**Got it,** removed the delete channel and disabled delete logging with this server.`)
                         return message.channel.send(embed)
                     }
                 }
@@ -35,14 +35,14 @@ module.exports = {
 
                     let results = await serverSettings(message)
 
-                    if (results === null || results?.goodbyeChannel == null) {
-                        embed.setDescription(`Uhhh there isn't a goodbye channel set right now. You can set one with \`fox goodbyeChannel [#channel]\`.`)
+                    if (results === null || results?.deleteChannel == null) {
+                        embed.setDescription(`Uhhh there isn't a welcome channel set right now. You can set one with \`fox deleteChannel [#channel]\`.`)
                         return message.channel.send(embed)
                     }
 
-                    let chn = results?.goodbyeChannel
+                    let chn = results?.deleteChannel
 
-                    embed.setDescription(`Right now, the goodbye channel is set to <#${chn}>. If you want to change it use \`fox goodbyeChannel [#channel]\`.`)
+                    embed.setDescription(`Right now, the welcome channel is set to <#${chn}>. If you want to change it use \`fox deleteChannel [#channel]\`.`)
                     return message.channel.send(embed)
                     }
 
@@ -50,12 +50,12 @@ module.exports = {
                         _id: message.guild.id
                     }, {
                         _id: message.guild.id,
-                        goodbyeChannel: channel
+                        deleteChannel: channel
                     }, {
                         upsert: true
                     })
 
-                embed.setDescription(`Kk, I set the goodbye channel as ${channel} for ya. Now I'll listen for when members leave the server and send goodbye messages.`)
+                embed.setDescription(`Kk, I set the delete channel as ${channel} for ya. Now I'll listen for when members delete a message, and I'll send it to this channel.`)
                 return message.channel.send(embed)
 
             } finally {}

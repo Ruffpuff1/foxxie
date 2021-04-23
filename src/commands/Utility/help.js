@@ -1,16 +1,18 @@
 const Discord = require('discord.js');
 const { devs } = require('../../../lib/config');
+const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'help',
     aliases: ['commands', 'h'],
     category: 'utility',
-    usage: 'help (command)',
+    usage: 'help (command) (-c)',
     execute(lang, message, args, client) {
 
         const { commands } = message.client;
         let cmdArr = commands.array();
         let funCmds = [];
         let modCmds = [];
+        let rpCmds = [];
         let setCmds = [];
         let utilCmds = [];
         let secCmds = [];
@@ -19,6 +21,7 @@ module.exports = {
         for (let c of cmdArr) {
             let fun = c.category === "fun"
             let mod = c.category === "moderation"
+            let rp = c.category === "roleplay"
             let set = c.category === "settings"
             let util = c.category === "utility"
             let dev = c.category === "developer"
@@ -27,6 +30,7 @@ module.exports = {
             if (fun) funCmds.push(c.name)
             if (mod) modCmds.push(c.name)
             if (dev) devCmds.push(c.name)
+            if (rp) rpCmds.push(c.name)
             if (set) setCmds.push(c.name)
             if (util) utilCmds.push(c.name)
             if (sec) secCmds.push(c.name)
@@ -34,8 +38,8 @@ module.exports = {
 
         const helpEmbed = new Discord.MessageEmbed()
 
-        let sendIn = /\-c\s*/
-        let devMenu = /\-d\s*/
+        let sendIn = /\-channel\s*|-c\s*/
+        let devMenu = /\-developer\s*|-dev\s*|-d\s*/
 
         if (devs.includes(message.author.id) && devMenu.test(message.content))
             helpEmbed
@@ -49,6 +53,7 @@ module.exports = {
             .setThumbnail(client.user.displayAvatarURL( { dynamic: true } ))
             .addField(lang.COMMAND_HELP_FUN + ` **(${funCmds.length})**`, funCmds.map(a => `\`${a}\``).join(", "))
             .addField(lang.COMMAND_HELP_MODERATION + ` **(${modCmds.length})**`, modCmds.map(a => `\`${a}\``).join(", "))
+            .addField(lang.COMMAND_HELP_ROLEPLAY + ` **(${rpCmds.length})**`, rpCmds.map(a => `\`${a}\``).join(", "))
             .addField(lang.COMMAND_HELP_SETTINGS + ` **(${setCmds.length})**`, setCmds.map(a => `\`${a}\``).join(", "))
             .addField(lang.COMMAND_HELP_UTILITY + ` **(${utilCmds.length})**`, utilCmds.map(a => `\`${a}\``).join(", "))
             .addField(lang.COMMAND_ABOUT_LINKS, lang.COMMAND_ABOUT_LINKS_LINKS)
@@ -56,7 +61,7 @@ module.exports = {
         let descriptions = lang.COMMAND_DESCRIPTIONS
 
         if (!args.length || args[0]?.toLowerCase() === '-d') {
-            message.react('✅')
+            message.react(approved)
             return message.author.send(helpEmbed)
             .then(() => {
                 if (message.channel.type === 'dm') return;
@@ -85,7 +90,7 @@ ${command.permissions?`**Permissions Required:** \`${command.permissions}\``:''}
             if (command.aliases) helpCommandEmbed.setTitle(`${command.name} (${command.aliases.join(', ')})`)
             if (message.content.includes('-c')) return message.channel.send(helpCommandEmbed)
 
-            message.react('✅')
+            message.react(approved)
             return message.author.send(helpCommandEmbed)
             .catch(error => {console.error(`Could not send help DM to ${message.author.tag}.\n`, error);
             return message.channel.send(helpCommandEmbed)})

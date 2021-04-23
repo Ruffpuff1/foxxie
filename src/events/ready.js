@@ -21,7 +21,7 @@ module.exports = {
         stats(client)
         setInterval(() => {
             stats(client)
-        }, 5000)
+        }, 10000)
 
 	},
 };

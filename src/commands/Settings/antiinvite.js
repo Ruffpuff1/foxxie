@@ -1,11 +1,11 @@
 const mongo = require('../../../lib/structures/database/mongo')
-const { antiInvitesEnabled } = require('../../../lib/settings')
-const { antiSchema } = require('../../../lib/structures/database/schemas/server/moderation/anti')
+const { serverSettings } = require('../../../lib/settings')
+const { serverSchema } = require('../../../lib/structures/schemas')
 const Discord = require('discord.js')
 module.exports = {
     name: 'antiinvite',
     aliases: ['antiinv', 'ai', 'anti-invite'],
-    usage: 'fox antiinvite [on/off]',
+    usage: 'fox antiinvite [on|off]',
     category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
@@ -15,11 +15,11 @@ module.exports = {
             if (args[0]?.toLowerCase() === 'on')
             try {
                 const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
-                await antiSchema.findByIdAndUpdate({
+                await serverSchema.findByIdAndUpdate({
                     _id: message.guild.id
                 }, {
                     _id: message.guild.id,
-                    antiInvites: true
+                    antiInvite: true
                 }, {
                     upsert: true
                 })
@@ -31,8 +31,13 @@ module.exports = {
             if (args[0]?.toLowerCase() === 'off')
             try {
                 const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
-                await antiSchema.findByIdAndDelete({
+                await serverSchema.findByIdAndUpdate({
                     _id: message.guild.id
+                }, {
+                    _id: message.guild.id,
+                    $unset: {
+                        antiInvite: ''
+                    }
                 })
                 embed.setDescription("**Gotcha,** disabled automatic **invite** filtering. Now if someone sends an invite to a Discord server, I'll ignore it like normal.")
                 loading.delete()
@@ -42,8 +47,13 @@ module.exports = {
             if (args[0]?.toLowerCase() === 'none')
             try {
                 const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING)
-                await antiSchema.findByIdAndDelete({
+                await serverSchema.findByIdAndUpdate({
                     _id: message.guild.id
+                }, {
+                    _id: message.guild.id,
+                    $unset: {
+                        antiInvite: ''
+                    }
                 })
                 embed.setDescription("**Gotcha,** reset automatic **invite** filtering to my default (off). Now if someone sends an invite to a Discord server, I'll ignore it like normal.")
                 loading.delete()
@@ -52,9 +62,9 @@ module.exports = {
 
             if (!args[0]) {
                 const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
-                let anti_inv = await antiInvitesEnabled(message)
+                let anti_inv = await serverSettings(message)
                 if (anti_inv !== null) {
-                    embed.setDescription(`Currently anti-invite filitering is set to **${anti_inv?.antiInvites ? "on" : 'off'}**. If ya wanna change this, use the command \`fox antiinvite [on/off]\`.`)
+                    embed.setDescription(`Currently anti-invite filitering is set to **${anti_inv?.antiInvite ? "on" : 'off'}**. If ya wanna change this, use the command \`fox antiinvite [on/off]\`.`)
                     loading.delete()
                     return message.channel.send(embed)
                 }

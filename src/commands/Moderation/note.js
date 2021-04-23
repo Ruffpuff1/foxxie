@@ -1,9 +1,10 @@
 const mongo = require('../../../lib/structures/database/mongo')
+const { emojis: { approved } } = require('../../../lib/util/constants')
 const noteSchema = require('../../../lib/structures/database/schemas/server/moderation/noteSchema')
 module.exports = {
     name: 'note',
     aliases: ['n'],
-    usage: 'fox note [member] [note]',
+    usage: 'fox note [member|userId] [note]',
     category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
     execute: async(lang, message, args, client) => {
@@ -36,7 +37,7 @@ module.exports = {
                 }, {
                     upsert: true
                 })
-                message.react('✅')
+                message.react(approved)
             } finally {}
         })
         

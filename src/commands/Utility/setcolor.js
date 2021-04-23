@@ -1,4 +1,5 @@
 const tc = require('tinycolor2');
+const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'setcolor',
     aliases: ['sc', 'setcolour'],
@@ -15,6 +16,6 @@ module.exports = {
 		if (colorData._format === false) return message.channel.send(lang.COMMAND_SETCOLOR_INVALIDCOLOR);
 		role.setColor(colorData.toHex()).catch((err) => message.channel.send(lang.COMMAND_SETCOLOR_NOPERMS));
 
-		message.react("✅")
+		message.react(approved)
     }
 }

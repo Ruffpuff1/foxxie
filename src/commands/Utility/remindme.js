@@ -3,7 +3,7 @@ const ms = require('ms')
 module.exports = {
     name: 'remindme',
     aliases: ['rm'],
-    usage: `remindme [1s/1m/1h/1d/1w] [reason]`,
+    usage: `remindme [1s|1m|1h|1d|1w] [reason] (-c|-channel)`,
     category: 'utility',
     execute(lang, message, args, client) {
         client.reminders = require('../../store/reminders.json')
@@ -16,13 +16,19 @@ module.exports = {
         if (!remindMsg) {
             return message.channel.send(lang.COMMAND_REMINDME_NOREASON)
         }
+
+        let sendIn = /\-channel\s*|-c\s*/gi
+        remindMsg = remindMsg.replace(sendIn, '')
+
         client.reminders [message.id] = {
             guild: message.guild.id,
             authID: message.author.id,
             time: Date.now() + ms(remindTime),
-            message: remindMsg,
+            rmdMessage: remindMsg,
             timeago: timeFromNow,
-            displayColor: message.guild.me.displayColor
+            message: message,
+            sendIn: sendIn.test(message.content),
+            color: message.guild.me.displayColor
         }
         fs.writeFile('./src/store/reminders.json', JSON.stringify(client.reminders, null, 4), err => {
             if (err) throw err

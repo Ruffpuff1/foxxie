@@ -1,5 +1,5 @@
 const { emojis: { perms: { granted, denied } } } = require('../../../lib/util/constants')
-const { getWelcomeChannel, getGuildModChannel, getDisboardChannel, antiInvitesEnabled, getGoodbyeChannel } = require('../../../lib/settings')
+const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'settings',
     aliases: ['set', 'setting'],
@@ -12,33 +12,32 @@ module.exports = {
 
         let desc1 = []
         let desc2 = []
-        let welcomes = await getWelcomeChannel(message.guild)
-        let goodbyes = await getGoodbyeChannel(message.guild)
-        let modlogs = await getGuildModChannel(message)
-        let disboard = await getDisboardChannel(message)
-        let anti_inv = await antiInvitesEnabled(message)
+        let desc3 = []
+        let settings = await serverSettings(message)
 
-
-
+        let blk = []
+        if (settings != null && settings?.blockedUsers != null) for (let user of settings.blockedUsers){
+            let u = message.client.users.cache.get(user[0])
+            blk.push(`**${u.tag}**`)
+        }
+      
         // `${notSpecified} Custom prefix **not enabled**`,
         // `${notSpecified} Language **not enabled**`,
-        // `${notSpecified} Bot channel **not enabled**`,
-        if (welcomes !== null) desc1.push(`${granted} Welcomes **enabled** (in <#${welcomes?.welcomeChannel}>)`)
-        if (goodbyes !== null) desc1.push(`${granted} Goodbyes **enabled** (in <#${goodbyes?.goodbyeChannel}>)`)
-        if (modlogs !== null) desc1.push(`${granted} Modlogs **enabled** (in <#${modlogs?.channelId}>)`)
-        //`${notSpecified} Message logs **not enabled**`,
-        if (disboard !== null) desc1.push(`${granted} Disboard **enabled** (in <#${disboard?.disboardChannel}>)`)
+        if (settings != null && settings?.welcomeChannel != null) desc1.push(`${granted} Welcomes **enabled** (in <#${settings?.welcomeChannel}>)`)
+        if (settings != null && settings?.goodbyeChannel != null) desc1.push(`${granted} Goodbyes **enabled** (in <#${settings?.goodbyeChannel}>)`)
+        if (settings != null && settings?.modChannel != null) desc1.push(`${granted} Modlogs **enabled** (in <#${settings?.modChannel}>)`)
+        if (settings != null && settings?.editChannel != null) desc1.push(`${granted} Edit logging **enabled** (in <#${settings?.editChannel}>)`)
+        if (settings != null && settings?.deleteChannel != null) desc1.push(`${granted} Delete logging **enabled** (in <#${settings?.deleteChannel}>)`)
+        if (settings != null && settings?.disboardChannel != null) desc1.push(`${granted} Disboard **enabled** (in <#${settings?.disboardChannel}>)`)
 
-        //`${notSpecified} Ignored channels **none**`,
-        //`${notSpecified} Disabled commands **none**`,
-        //`${notSpecified} Disabled sections **none**`,
-        if (anti_inv !== null) desc2.push(`${granted} Anti invites **enabled**`)
+        if (settings != null && settings?.antiInvite != null) desc2.push(`${granted} Anti invites **enabled**`)
 
-        //`${notSpecified} Blacklisted users **none**`
+        if (settings != null && settings?.blockedUsers.length != 0) desc3.push(`${denied} Blacklisted user${settings.blockedUsers.length > 1 ? 's' : ''} **${settings.blockedUsers.length}** (${blk.join(", ")})`)
 
         let arr = [
             desc1.filter(i => !!i).join('\n'),
-            desc2.filter(i => !!i).join('\n')
+            desc2.filter(i => !!i).join('\n'),
+            desc3.filter(i => !!i).join('\n')
         ].filter(i => !!i).join('\n\n');
 
         loading.delete()

@@ -2,9 +2,17 @@ const Discord = require('discord.js')
 const fs = require('fs')
 const { getGuildLang } = require('../../lib/util/getGuildLang')
 const { codeError, permError } = require('../../lib/util/error')
-module.exports.commandHandler = (message) => {
+const { serverSettings } = require('../../lib/settings')
+module.exports.commandHandler = async (message) => {
 
     if (message.author.bot) return;
+
+    const settings = await serverSettings(message)
+
+    if (settings != null && settings?.blockedUsers != null) {
+        if (settings.blockedUsers.includes(message.author.id)) return;
+    }
+
     let lang = getGuildLang(message)
 
     message.client.commands = new Discord.Collection();

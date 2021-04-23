@@ -13,17 +13,17 @@ module.exports = {
         .then((res) => {
 
             const argCap = args[0].charAt(0).toUpperCase()  + args[0].slice(1)
-            let ex = res.data.list[3]['example']
-            let str = res.data.list[3]['definition']
+            let ex = res?.data?.list[3]['example']
+            let str = res?.data?.list[3]['definition']
 
             const embed = new Discord.MessageEmbed()
             .setTitle(argCap)
-            .setURL(res.data.list[3]['permalink'])
+            .setURL(res?.data?.list[3]['permalink'])
             .setColor(message.guild.me.displayColor)
             .setThumbnail(`https://i.imgur.com/qNTzb3k.png`)
-            .setDescription(`${str.replace(/[\[\]']+/g,'')}\n\n\`👍\` ${res.data.list[3]['thumbs_up']}\n\`👎\` ${res.data.list[3]['thumbs_down']}`)
-            .setFooter(`By ${res.data.list[3]['author']}`)
-            .addField('Example', ex.replace(/[\[\]']+/g,''))
+            .setDescription(`${str?.replace(/[\[\]']+/g,'')}\n\n\`👍\` ${res?.data?.list[3]['thumbs_up']}\n\`👎\` ${res?.data?.list[3]['thumbs_down']}`)
+            .setFooter(`By ${res?.data?.list[3]['author']}`)
+            .addField('Example', ex?.replace(/[\[\]']+/g,''))
 
             message.channel.send(embed)
             resultMessage.delete()

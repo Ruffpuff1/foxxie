@@ -1,11 +1,12 @@
-const { getGuildModChannel } = require('../../../lib/settings');
 const { botPermError } = require('../../../lib/util/error');
+const { serverSettings } = require('../../../lib/settings')
+const { emojis: { approved } } = require('../../../lib/util/constants')
 const moment = require('moment')
 const Discord = require('discord.js')
 module.exports = {
     name: 'unban',
     aliases: ['ub', 'unbean'],
-    usage: 'fox unban [user] (reason)',
+    usage: 'fox unban [user|userId] (reason)',
     category: 'moderation',
     permissions: 'BAN_MEMBERS',
     execute: async (lang, message, args) => {
@@ -22,9 +23,9 @@ module.exports = {
 
         const date = moment(message.createdTimestamp).format('llll');
 
-        let results = await getGuildModChannel(message)
+        let results = await serverSettings(message)
 
-        message.react('✅')
+        message.react(approved)
 
         const dmEmbed = new Discord.MessageEmbed()
                 .setTitle(`Unbanned from ${message.guild.name}`)
@@ -38,7 +39,7 @@ module.exports = {
         message.guild.members.unban(member, res)
         .catch(console.error)
 
-        if (results === null) return
+        if (results == null || results?.modChannel == null) return
 
         const embed = new Discord.MessageEmbed()
             .setTitle(`Unbanned ${member.tag}`)
@@ -51,7 +52,7 @@ module.exports = {
             .addField('**Location**', message.channel, true)
             .addField('**Date / Time**', date, true)
 
-        const channel = message.guild.channels.cache.get(results.channelId);
+        const channel = message.guild.channels.cache.get(results.modChannel);
         if (channel) channel.send(embed)
     }
 }

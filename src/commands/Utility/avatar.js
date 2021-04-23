@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'avatar',
     aliases: ['av', 'icon', 'pfp', 'usericon'],
-    usage: 'avatar (user)',
+    usage: 'avatar (user|userId)',
     category: 'utility',
     execute(lang, message, args, client) {
         let user = message.mentions.users.first() || client.users.cache.get(args[0]) || message.member.user;

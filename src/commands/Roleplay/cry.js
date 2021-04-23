@@ -3,7 +3,7 @@ module.exports = {
     name: 'cry',
     aliases: ['sob'],
     usage: `fox cry [user] (reason)`,
-    category: 'fun',
+    category: 'roleplay',
     execute(lang, message, args) {
         
         let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(u => u.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase())

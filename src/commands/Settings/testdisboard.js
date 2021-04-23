@@ -1,5 +1,6 @@
-const { getDisboardChannel, getDisboardMessage } = require('../../../lib/settings')
+const { serverSettings } = require('../../../lib/settings')
 const Discord = require('discord.js')
+const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'testdisboard',
     aliases: ['td', 'testbump'],
@@ -7,7 +8,7 @@ module.exports = {
     permissions: 'MANAGE_MESSAGES',
     category: 'settings',
     execute: async(lang, message, args) => {
-        let results = await getDisboardChannel(message)
+        let results = await serverSettings(message)
         const dischannel = message.guild.channels.cache.get(results?.disboardChannel)
         if (!dischannel) return
 
@@ -16,11 +17,10 @@ module.exports = {
             .setTitle('Reminder to Bump')
             .setThumbnail(message.client.user.displayAvatarURL())
 
-        let dismessage = await getDisboardMessage(message)
-        embed.setDescription(dismessage?dismessage.disboardMessage:"Time to bump the server on disboard. Use the command `!d bump` then come back in **two hours**.")
+        embed.setDescription(results?.disboardMessage?results.disboardMessage:"Time to bump the server on disboard. Use the command `!d bump` then come back in **two hours**.")
         let dbPing = '';
-        if (dismessage) dbPing = `<@&${dismessage?.disboardPing}>`
-
-        dischannel.send(dbPing, {embed:embed})
+        if (results != null && results.disboardPing != null) dbPing = `<@&${results?.disboardPing}>`
+        message.react(approved)
+        dischannel.send(dbPing, { embed: embed } )
     }
 }

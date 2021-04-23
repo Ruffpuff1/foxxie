@@ -1,6 +1,7 @@
 const config = require('../../../lib/config')
 const moment = require('moment')
 const constant = require('../../../lib/util/constants')
+const { roleplayCommand } = require('../../../lib/structures/roleplayCommands')
 const roleplay = require('../../../lib/structures/roleplayCommand')
 const english = require('../../languages/en')
 const spanish = require('../../languages/es')
@@ -8,7 +9,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'eval',
     aliases: ['ev'],
-    usage: 'eval [code]',
+    usage: 'fox eval [code]',
     category: 'developer',
     execute: async (lang, message, args, client) => {
 

@@ -1,12 +1,13 @@
-const { getGuildModChannel } = require('../../../lib/settings');
+const { serverSettings } = require('../../../lib/settings')
 const { botPermError } = require('../../../lib/util/error');
 const { addKick } = require('../../tasks/modCountAdd');
+const { emojis: { approved } } = require('../../../lib/util/constants')
 const moment = require('moment')
 const Discord = require('discord.js')
 module.exports = {
     name: 'kick',
     aliases: ['k', 'boot', '409'],
-    usage: 'fox kick [user] (reason)',
+    usage: 'fox kick [user|userId] (reason)',
     category: 'moderation',
     permissions: 'KICK_MEMBERS',
     execute: async (lang, message, args) => {
@@ -25,10 +26,11 @@ module.exports = {
 
         const date = moment(message.createdTimestamp).format('llll');
 
-        let results = await getGuildModChannel(message)
+        let results = await serverSettings(message)
         //addKick(message)
 
-        message.react('✅')
+        message.react(approved)
+        addKick(message)
 
         const dmEmbed = new Discord.MessageEmbed()
                 .setTitle(`Kicked from ${message.guild.name}`)
@@ -42,7 +44,7 @@ module.exports = {
         member.kick()
         .catch(console.error)
 
-        if (results === null) return
+        if (results == null || results?.modChannel == null) return
 
         const embed = new Discord.MessageEmbed()
             .setTitle(`Kicked ${member.user.tag}`)
@@ -55,7 +57,7 @@ module.exports = {
             .addField('**Location**', message.channel, true)
             .addField('**Date / Time**', date, true)
 
-        const channel = message.guild.channels.cache.get(results.channelId);
+        const channel = message.guild.channels.cache.get(results.modChannel);
         if (channel) channel.send(embed)
     }
 }

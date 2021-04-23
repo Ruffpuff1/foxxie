@@ -1,7 +1,8 @@
 const Discord = require('discord.js')
 const moment = require('moment')
 const { addSlowmode } = require('../../tasks/modCountAdd')
-const { getGuildModChannel } = require('../../../lib/settings')
+const { serverSettings, server } = require('../../../lib/settings')
+const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'slowmode',
     aliases: ['slowchat', 'slow', 'freeze', 's', 'sm'],
@@ -26,7 +27,7 @@ module.exports = {
         }
 
         message.channel.setRateLimitPerUser(time)
-        message.react('✅')
+        message.react(approved)
 
         const embed = new Discord.MessageEmbed()
             .setTitle(`Slowmode ${time} second${time > 1 ? 's' 
@@ -42,11 +43,11 @@ module.exports = {
             .addField('**Date / Time**', slowTime, true)
 
         addSlowmode(message)
-        let results = await getGuildModChannel(message)
+        let results = await serverSettings(message)
 
-        if (results === null) return
+        if (results == null || results?.modChannel == null) return
 
-        const logChannel = message.guild.channels.cache.get(results.channelId);
+        const logChannel = message.guild.channels.cache.get(results.modChannel);
         if (logChannel) logChannel.send(embed)  
     }
 }

@@ -1,15 +1,14 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
-const disboardChannelSchema = require('../../../lib/structures/database/schemas/server/disboard/disboardChannelSchema')
-const { getDisboardChannel } = require('../../../lib/settings')
+const { serverSchema } = require('../../../lib/structures/schemas')
+const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: "disboardchannel",
     aliases: ['dc', 'disboardlocation', 'bumpchannel'],
-    usage: `fox disboardchannel (#channel)`,
+    usage: `fox disboardchannel (none|channel)`,
     category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
-        const guildId = message.guild.id
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
 
@@ -17,8 +16,13 @@ module.exports = {
             try {
                 if (args[0]) {
                     if (args[0].toLowerCase() === 'none') {
-                        await disboardChannelSchema.findByIdAndDelete({
-                            _id: guildId
+                        await serverSchema.findByIdAndUpdate({
+                            _id: message.guild.id
+                        }, {
+                            _id: message.guild.id,
+                            $unset: {
+                                disboardChannel: ''
+                            }
                         })
 
                     embed.setDescription("**Gotcha,** I'll remove the disboard reminders channel from this server.")
@@ -29,23 +33,23 @@ module.exports = {
                 let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
                 if (!channel) {
 
-                    let results = await getDisboardChannel(message)
+                    let results = await serverSettings(message)
 
-                    if (results === null) {
+                    if (results === null || results?.disboardChannel == null) {
                         embed.setDescription("There isn't a disboard channel set right now. If ya wanna set one use the command `fox disboardchannel [#channel]`")
                         return message.channel.send(embed)
                     }
 
-                    let chn = results.disboardChannel
+                    let chn = results?.disboardChannel
  
                     embed.setDescription(`Right now the Disboard channel is set to <#${chn}>. If ya wanna change it, use the command \`fox disboardchannel [#channel]\`.`)
                     return message.channel.send(embed)
                     }
 
-                await disboardChannelSchema.findByIdAndUpdate({
-                    _id: guildId
+                await serverSchema.findByIdAndUpdate({
+                    _id: message.guild.id
                 }, {
-                    _id: guildId,
+                    _id: message.guild.id,
                     disboardChannel: channel
                 }, {
                     upsert: true

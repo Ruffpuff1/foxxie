@@ -1,8 +1,9 @@
-const { moderationCommandWarn } = require('../../../lib/structures/database/moderationCommand')
+const { moderationCommandWarn } = require('../../../lib/structures/ModerationCommand')
+const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'warn',
     aliases: ['w'],
-    usage: 'fox warn [user] (reason)',
+    usage: 'fox warn [user|userId] (reason)',
     category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
     execute: async(lang, message, args) => {
@@ -18,6 +19,6 @@ module.exports = {
         if (!reason) reason = 'No reason specified'
 
         moderationCommandWarn(message, reason, target, message.member)
-        message.react('✅')
+        message.react(approved)
     }
 }

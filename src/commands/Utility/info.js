@@ -9,7 +9,7 @@ const { contributor } = require('../../../lib/config')
 module.exports = {
     name: 'info',
 	aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
-	usage: 'fox info (role/server/user/channel/emoji)',
+	usage: 'fox info (role|server|user|channel|emoji)',
 	category: 'utility',
     execute: async (lang, message, args, client) => {
         let user;

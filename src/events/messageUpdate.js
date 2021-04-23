@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js')
+const { serverSettings } = require('../../lib/settings')
 const { commandHandler } = require('./commandHandler')
 module.exports = {
     name: 'messageUpdate',
@@ -9,12 +10,15 @@ module.exports = {
         // Prevents the bot from reading DMs
         if (newMessage.channel.type === 'dm' || oldMessage.channel.type === 'dm') return
         // Doesn't log link embed edits
-        if (oldMessage.content.startsWith('https://')) return
+        if (oldMessage.content.includes('https://')) return
         // Command edit with cmd handler
         const message = newMessage
         commandHandler(message)
+        let editChannel = await serverSettings(message)
 
-        let msgChn = message.client.channels.cache.get("831939859480182794")
+        let msgChn = message.client.channels.cache.get(editChannel?.editChannel)
+
+        if (!msgChn) return
 
         if (message.author.bot) return
 
@@ -27,8 +31,8 @@ module.exports = {
             .addField(`Message ID:`, `\`${message.id}\``, true)
             .addField(`Message Link:`, `[Here](${message.url})`, true)
             .addField(`\u200B`, `\u200B`, true)
-            .addField(`Before:`, oldMessage.content, true)
-            .addField(`After:`, message.content, true)
+            .addField(`Before:`, `${oldMessage.content}`, true)
+            .addField(`After:`, `${message.content}`, true)
             .addField(`\u200B`, `\u200B`, true)
 
         msgChn.send(embed)

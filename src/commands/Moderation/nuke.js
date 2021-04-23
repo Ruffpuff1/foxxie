@@ -1,7 +1,7 @@
 const moment = require('moment')
 const Discord = require('discord.js')
 const { addNuke } = require('../../tasks/modCountAdd')
-const { getGuildModChannel } = require('../../../lib/settings')
+const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'nuke',
     usage: 'fox nuke',
@@ -31,7 +31,7 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                             channel.send(`**Heh First,** anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`)
                         })
 
-                        let results = await getGuildModChannel(message)
+                        let results = await serverSettings(message)
     
                             const nukeEmbed = new Discord.MessageEmbed()
                                 .setTitle(`Nuked ${message.channel.name}`)
@@ -45,10 +45,12 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                                     { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
                                     { name: `**Date / Time**`, value: `${warnDate}`, inline: true })
 
+                        if (results == null || results?.modChannel == null) return
+
                             addNuke(message)
                             message.channel.delete()
-                            if (results.channelId === message.channel.id) return;
-                            const logChannel = message.guild.channels.cache.get(results.channelId);
+                            if (results.modChannel === message.channel.id) return;
+                            const logChannel = message.guild.channels.cache.get(results.modChannel);
                             if (logChannel) logChannel.send(nukeEmbed)
     
                             

@@ -1,12 +1,13 @@
 const mongo = require('../../../lib/structures/database/mongo')
-const { getGuildModChannel } = require('../../../lib/settings')
+const { serverSettings } = require('../../../lib/settings')
 const moment = require('moment')
+const { emojis: { approved } } = require('../../../lib/util/constants')
 const Discord = require('discord.js')
 const warnSchema = require('../../../lib/structures/database/schemas/server/moderation/warnSchema')
 module.exports = {
     name: 'clearwarn',
     aliases: ['clearwarns', 'cw', 'unwarn', 'uw', 'pardon', 'warnremove'],
-    usage: 'fox unwarn [user] [warn#] (reason)',
+    usage: 'fox unwarn [user|userId] (reason)',
     category: 'moderation',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
@@ -31,9 +32,9 @@ module.exports = {
                     guildId,
                     userId,
                 })
-                message.react('✅')
+                message.react(approved)
                 
-                let results = await getGuildModChannel(message)
+                let results = await serverSettings(message)
 
                 const warnDmEmbed = new Discord.MessageEmbed()
                     .setTitle(`Warnings cleared in ${message.guild.name}`)
@@ -44,9 +45,9 @@ module.exports = {
                 target.send(warnDmEmbed)
                     .catch(error => console.error(error))
                 
-                message.react('✅')
+                message.react(approved)
                 
-                if (results == null) return
+                if (results == null || results?.modChannel == null) return
 
                 const warnEmbed = new Discord.MessageEmbed()
                     .setTitle(`Cleared warnings for ${target.user.tag}`)
@@ -60,7 +61,7 @@ module.exports = {
                         { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
                         { name: `**Date / Time**`, value: `${warnDate}`, inline: true })
 
-                const logChannel = message.guild.channels.cache.get(results.channelId);
+                const logChannel = message.guild.channels.cache.get(results.modChannel);
                 if (logChannel) logChannel.send(warnEmbed)
 
             } finally {}

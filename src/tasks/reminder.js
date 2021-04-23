@@ -8,24 +8,24 @@ module.exports = client => {
             let time = client.reminders[i].time
             let guildID = client.reminders[i].guildID
             let authID = client.reminders[i].authID
-            let remindMessage = client.reminders[i].message
+            let remindMessage = client.reminders[i].rmdMessage
             let member = client.users.cache.get(authID)
             let timeSince = client.reminders[i].timeago
-            let color = client.reminders[i].displayColor
+            let message = client.reminders[i].message
+            let sendIn = client.reminders[i].sendIn
 
-            let lang = getGuildLang(message)
+            let lang = getGuildLang()
 
             if(Date.now() > time) {
-                let guild = client.guilds.cache.get(guildID)
                 
                 if(time === null) return
                 const remindEmbed = new Discord.MessageEmbed()
                     .setAuthor(`Reminder For ${member.username}`, client.user.displayAvatarURL())
-                    .setColor(color)
+                    .setColor(client.reminders[i].color)
                     .setDescription(`${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`)
                     .setTimestamp()
                 
-                client.users.cache.get(authID).send(remindEmbed)
+                sendIn ? message?.channel?.send(`<@${authID}> ${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`) : client.users.cache.get(authID).send(remindEmbed)
                 delete client.reminders[i]
                 fs.writeFile('./src/store/reminders.json', JSON.stringify(client.reminders, null, 4), err => {
                     if (err) throw err

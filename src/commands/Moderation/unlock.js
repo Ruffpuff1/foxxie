@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const moment = require('moment')
+const { serverSettings, server } = require('../../../lib/settings')
 const { addUnlock } = require('../../tasks/modCountAdd')
-const { getGuildModChannel } = require('../../../lib/settings')
 module.exports = {
     name: 'unlock',
     aliases: ['ul', 'release'],
@@ -42,11 +42,11 @@ module.exports = {
         )
 
         addUnlock(message)
-        let results = await getGuildModChannel(message)
+        let results = await serverSettings(message)
 
-        if (results === null) return
+        if (results == null || results?.modChannel == null) return
 
-        const logChannel = message.guild.channels.cache.get(results.channelId);
+        const logChannel = message.guild.channels.cache.get(results.modChannel);
         if (logChannel) logChannel.send(embed)
     }
 }
