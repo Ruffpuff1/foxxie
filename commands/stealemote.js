@@ -12,9 +12,9 @@ module.exports = {
        const image = (`${args[0]}`).match(/\b(https?:\/\/\S+(png|jpe?g|gif)\S*)\b/i)
        let emoCount = message.guild.emojis.cache.size
        if (emoCount >= `${message.guild.premiumTier === 0 ? '100' 
-       : message.guild.premiumTier === 1 ? '200'
-       : message.guild.premiumTier === 2 ? '300'
-       : message.guild.premiumTier === 3 ? '400' : ''}`) return message.channel.send(`Awe, this guild is at its max amount of emotes. I guess that's too bad for you.`)
+       : message.guild.premiumTier === 1 ? '150'
+       : message.guild.premiumTier === 2 ? '200'
+       : message.guild.premiumTier === 3 ? '250' : ''}`) return message.channel.send(`Awe, this guild is at its max amount of emotes. I guess that's too bad for you.`)
       if (!emotee && !image) { return message.channel.send('Uh, you do know thats not how you do it right? Please do hk se (emote/image`) (name) thanks, I guess.'); }
       if (image) {
       if (image[2] === 'gif') { message.guild.emojis.create(args[0], args[1]).then(emoji => message.channel.send(`Emote successfully added. Hope you have fun using it love. 
