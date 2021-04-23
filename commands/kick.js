@@ -28,7 +28,7 @@ module.exports = {
             mentionMember.send(Embed).catch(error => message.channel.send(`oh, i think the member you kicked had their DMs off, because i couldnt DM them.`))
             .then(m => mentionMember.kick({reason}));
 
-            message.channel.send(`:white_check_mark: Member successfully kicked!`)
+            message.channel.send(`:white_check_mark: ${mentionMember.user.username} successfully kicked!`)
             let logChannel = message.guild.channels.cache.get("822454708894695444")
             let embed = new Discord.MessageEmbed()
     embed.setColor('#ff66d4')
