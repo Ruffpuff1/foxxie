@@ -8,22 +8,22 @@ module.exports = {
         let Embed = new Discord.MessageEmbed()
         Embed.setTitle(`All my links.`)
         Embed.setDescription(`
-Patreon
+⍟ Patreon
 - Coming soon
 
-Trello
+⍟ Trello
 - https://trello.com/b/nVlYiOKw/fokushi
 
-Website
+⍟ Website
 - Coming soon
 
-Invite the bot
+⍟ Invite the bot
 - Someday people, someday
 
-Vote for the bot
+⍟ Vote for the bot
 - Someday people, someday as well.
 
-Server
+⍟ Server
 - https://discord.gg/z7wJdCHGtT`)
         Embed.setTimestamp()
         Embed.setColor(`#006f9e`);
