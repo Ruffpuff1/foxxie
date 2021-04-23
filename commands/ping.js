@@ -10,7 +10,7 @@ module.exports = {
       Embed.setDescription(`\`🏓 Latency is ${Date.now() - message.createdTimestamp} ms\``)
       Embed.setTimestamp()
       Embed.setFooter(`Discord is shitty, so the ping may be high due to that. 
-  Sorry.`)
+Sorry.`)
       Embed.setThumbnail(message.guild.iconURL())
       Embed.setColor("#66b3ff")
   message.channel.send(Embed)
