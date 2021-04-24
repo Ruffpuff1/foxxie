@@ -2,11 +2,12 @@ const Discord = require('discord.js');
 const moment = require('moment')
 
 module.exports = {
-    name: 'user',
-    aliases: ["userinfo", "ui", "usr"],
-    description: 'Shows info about the specified user. ',
+    name: 'test',
+    aliases: ["t"],
+    description: 'testing ',
     
     execute(message, args) {
+        if (!config.dev.includes(message.author.id)) return;
         let men;
         men = message.member;
         let members = message.guild.members;
