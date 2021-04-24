@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const moment = require('moment')
 const config = require('../config.json')
 
-const emojis = { friends: '<:SRFriend:834697095968980998>' }
+const emojis = { friends: '<:SRFriend:834697095968980998>', devs: '<:SRDev:834697623423942657>', owners: '<:SRStrawberry:825745436665053194>' }
 
 module.exports = {
     name: 'test',
@@ -64,7 +64,8 @@ Created at: ${moment(men.user.createdAt).format('MMMM Do YYYY')} (${moment([mome
            
 
         if (config.friend.includes(men.user.id)) embed.setDescription(`${emojis.friends} Friends`)
-
+        if (config.dev.includes(men.user.id)) embed.setDescription(`${emojis.devs} Fokushi Dev`)
+        if (config.owner.includes(men.user.id)) embed.setDescription(`${emojis.owners} Seaside Restaurant Owner`)
 
         message.channel.send(embed)
     }
