@@ -10,7 +10,6 @@ module.exports = {
     description: 'Shows information about you or another user. ',
     
     execute(message, args) {
-        if (!config.dev.includes(message.author.id)) return;
         let men;
         men = message.member;
         let members = message.guild.members;
