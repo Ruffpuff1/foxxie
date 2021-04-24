@@ -5,9 +5,9 @@ const config = require('../config.json')
 const emojis = { friends: '<:SRFriend:834697095968980998>', devs: '<:SRDev:834697623423942657>', owners: '<:SRStrawberry:825745436665053194>', amber: '<:SRDev:834697623423942657>, <:SRStrawberry:825745436665053194>, <:SRFriend:834697095968980998>', foxxie: '<:Foxxie:835523155132153917>' }
 
 module.exports = {
-    name: 'test',
-    aliases: ["t"],
-    description: 'testing ',
+    name: 'user',
+    aliases: ["usr", "ui", "userinfo", "i"],
+    description: 'Shows information about you or another user. ',
     
     execute(message, args) {
         if (!config.dev.includes(message.author.id)) return;
