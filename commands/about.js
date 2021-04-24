@@ -19,7 +19,10 @@ I can help if you shout one of my **${bot.commands.size}** commands.
  
 Imagine being developed by <@814539604879081532>, and <@486396074282450946>. couldn't be me, huh?
 
-(hk help for more info)`)
+(hk help for more info)
+
+P.S 
+Go check out my brother bot, Foxxie. He's really good at what he does, and i learn a lot from him. vote for him and invite him on top.gg! https://is.gd/foxxie_topgg (while you cant for me) `)
         Embed.setTimestamp()
         Embed.setColor(`#0c5270`);
         message.channel.send(Embed)
