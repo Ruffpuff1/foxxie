@@ -2,6 +2,8 @@ const Discord = require('discord.js');
 const moment = require('moment')
 const config = require('../config.json')
 
+const emojis = { friends: '<:SRFriend:834697095968980998>' }
+
 module.exports = {
     name: 'test',
     aliases: ["t"],
@@ -60,6 +62,10 @@ module.exports = {
         embed.setFooter(`Joined at: ${moment(men.joinedAt).format('MMMM Do YYYY')} (${moment([moment(men.joinedAt).format('YYYY'), moment(men.joinedAt).format('M') - 1, moment(men.joinedAt).format('D')]).toNow(true)} ago)
 Created at: ${moment(men.user.createdAt).format('MMMM Do YYYY')} (${moment([moment(men.user.createdAt).format('YYYY'), moment(men.user.createdAt).format('M') - 1, moment(men.user.createdAt).format('D')]).toNow(true)} ago)`)
            
+
+        if (config.friend.includes(men.user.id)) embed.setDescription(`${emojis.friends} Friends`)
+
+
         message.channel.send(embed)
     }
 }
