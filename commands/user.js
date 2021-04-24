@@ -7,6 +7,8 @@ module.exports = {
     description: 'Shows info about the specified user. ',
     
     execute(message, args) {
+        if (!config.friend.includes(message.author.id)) return;
+        message.channel.send(`test`)
         let men;
         men = message.member;
         let members = message.guild.members;
