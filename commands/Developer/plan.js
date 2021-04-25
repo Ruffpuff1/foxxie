@@ -5,8 +5,8 @@ module.exports = {
     aliases: ['p', 'plans', 'planned'],
     description: 'My devs plans for me.',
     execute(message, args) {
-if (!config.ids.developerID.includes(message.author.id)) return;
-let Embed = new Discord.MessageEmbed()
+        if (!config.ids.developerID.includes(message.author.id)) return;
+        let Embed = new Discord.MessageEmbed()
 
 Embed.setDescription(`
 Plans for Fokushi in 2021
