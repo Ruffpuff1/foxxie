@@ -5,8 +5,9 @@ module.exports = {
     aliases: ['s', 'stats'],
     description: 'My current status.',
     execute(message, args) {
-let Embed = new Discor
-if (!config.ids.developerID.includes(message.author.id)) return;d.MessageEmbed()
+if (!config.ids.developerID.includes(message.author.id)) return;
+let Embed = new Discord.MessageEmbed()
+
 Embed.setDescription(`
 Hi! This is my current status.
 Version: ${config.botver}
