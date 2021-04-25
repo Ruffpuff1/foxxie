@@ -37,7 +37,7 @@ Version: **\`${config.botver}\`**
 
 Users: **\`${bot.users.cache.size}\`**
 
-Uptime: **\`${uptime}\`**
+Guilds: **\`${bot.guilds.cache.size}\`**
 
 \`Everything seems to be fine.\``)
 Embed.setTimestamp()
