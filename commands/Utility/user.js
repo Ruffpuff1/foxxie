@@ -66,7 +66,7 @@ Created at: ${moment(men.user.createdAt).format('MMMM Do YYYY')} (${moment([mome
         if (config.ids.dev.includes(men.user.id)) embed.setDescription(`${emojis.devs} Fokushi Dev`)
         if (config.ids.owner.includes(men.user.id)) embed.setDescription(`${emojis.owners} Seaside Restaurant Owner`)
         if (config.ids.amber.includes(men.user.id)) embed.setDescription(`${emojis.amber} Fokushi Dev, SR Owner, and Friend`)
-        if (config.ids.sibling.includes(men.user.id)) embed.setDescription(`${emojis.foxxie} Foxxie, The older brother of Fokushi `)
+        if (config.ids.sibling.includes(men.user.id)) embed.setDescription(`${emojis.foxxie} Brother Bot `)
 
         message.channel.send(embed)
     }
