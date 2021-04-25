@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const moment = require('moment')
-const config = require('../config.json')
+const config = require('../../config.json')
 
 const emojis = { friends: '<:SRFriend:834697095968980998>', devs: '<:SRDev:834697623423942657>', owners: '<:SRStrawberry:825745436665053194>', amber: '<:SRDev:834697623423942657>, <:SRStrawberry:825745436665053194>, <:SRFriend:834697095968980998>', foxxie: '<:Foxxie:835523155132153917>' }
 
@@ -10,7 +10,7 @@ module.exports = {
     description: 'testing ',
     
     execute(message, args) {
-        if (!config.dev.includes(message.author.id)) return;
+        if (!config.ids.developerID.includes(message.author.id)) return;
         let men;
         men = message.member;
         let members = message.guild.members;
@@ -63,11 +63,11 @@ module.exports = {
 Created at: ${moment(men.user.createdAt).format('MMMM Do YYYY')} (${moment([moment(men.user.createdAt).format('YYYY'), moment(men.user.createdAt).format('M') - 1, moment(men.user.createdAt).format('D')]).toNow(true)} ago)`)
            
 
-        if (config.friend.includes(men.user.id)) embed.setDescription(`${emojis.friends} Friends`)
-        if (config.dev.includes(men.user.id)) embed.setDescription(`${emojis.devs} Fokushi Dev`)
-        if (config.owner.includes(men.user.id)) embed.setDescription(`${emojis.owners} Seaside Restaurant Owner`)
-        if (config.amber.includes(men.user.id)) embed.setDescription(`${emojis.amber} Fokushi Dev, SR Owner, and Friend`)
-        if (config.sibling.includes(men.user.id)) embed.setDescription(`${emojis.foxxie} Foxxie, The older brother of Fokushi `)
+        if (config.ids.friend.includes(men.user.id)) embed.setDescription(`${emojis.friends} Friends`)
+        if (config.ids.dev.includes(men.user.id)) embed.setDescription(`${emojis.devs} Fokushi Dev`)
+        if (config.ids.owner.includes(men.user.id)) embed.setDescription(`${emojis.owners} Seaside Restaurant Owner`)
+        if (config.ids.amber.includes(men.user.id)) embed.setDescription(`${emojis.amber} Fokushi Dev, SR Owner, and Friend`)
+        if (config.ids.sibling.includes(men.user.id)) embed.setDescription(`${emojis.foxxie} Foxxie, The older brother of Fokushi `)
 
         message.channel.send(embed)
     }

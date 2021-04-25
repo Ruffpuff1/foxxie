@@ -1,13 +1,32 @@
 const config = require('../config.json')
+const fs = require('fs')
 module.exports = {
     name: 'message',
     execute(msg, bot) {
+
+        let mentionPrefix = `<@!${msg.client.user.id}>`
+
+        if (msg.content.startsWith(mentionPrefix) && msg.content.length === mentionPrefix.length) {
+            msg.channel.send(`My prefix is \`${config.prefix}\``)
+            .then(mess => {setTimeout(() => mess.delete(), 30000)});
+        };
+
         if (!msg.content.startsWith(config.prefix) || msg.author.bot) return;
 
         const args = msg.content.slice(config.prefix.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
+        if (!bot.commands.has(commandName)) return;
 
         const command = bot.commands.get(commandName) || bot.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+        const commandFolders = fs.readdirSync('./commands');
+
+        for (const folder of commandFolders) {
+            const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
+            for (const file of commandFiles) {
+                const command = require(`./commands/${folder}/${file}`);
+                client.commands.set(command.name, command);
+            }
+        }
 
         if (!command) return;
         if (command.permissions) {

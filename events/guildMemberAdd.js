@@ -30,9 +30,9 @@ module.exports = {
             welcomeChannel.send('A new member joined! Give them a warm welcome please <@&829752715826823268>!', {embed:embed})
         }
         // welcome channel id goes in the string of each function call right below here
-        if (oldMessage.guild.id === config.seasideRest) welcomeMessage("822189403060830279")
-        if (oldMessage.guild.id === config.ok) welcomeMessageOk("831180747008114688")
-        if (member.guild.id === config.fox) welcomeMessage("822414098439864360")
-        if (member.guild.id !== config.codes) welcomeMessage("790522490903330838")
+        if (oldMessage.guild.id === config.servers.seasideRest) welcomeMessage("822189403060830279")
+        if (oldMessage.guild.id === config.servers.ok) welcomeMessageOk("831180747008114688")
+        if (member.guild.id === config.servers.fox) welcomeMessage("822414098439864360")
+        if (member.guild.id !== config.servers.codes) welcomeMessage("790522490903330838")
     }
 }

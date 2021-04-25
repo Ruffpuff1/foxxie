@@ -5,7 +5,7 @@ module.exports = {
     aliases: ['nickname', 'name'],
     execute(message, args, bot) {
         message.delete();
-        if (message.guild.id !== config.seasideRest) return
+        if (message.guild.id !== config.servers.seasideRest) return
         let nickchannel = bot.channels.cache.get("822187934714167363")
         let text = args.slice(0).join(' ');
         if (!text) return;
