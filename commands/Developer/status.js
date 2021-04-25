@@ -5,7 +5,7 @@ module.exports = {
     name: 'status',
     aliases: ['s', 'stats'],
     description: 'My current status.',
-    execute(message, args) {
+    execute(message, args, bot) {
 if (!config.ids.developerID.includes(message.author.id)) return;
 let Embed = new Discord.MessageEmbed()
 
