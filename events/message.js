@@ -8,7 +8,7 @@ module.exports = {
         let mentionPrefix = `<@!${msg.client.user.id}>`
 
         if (msg.content.startsWith(mentionPrefix) && msg.content.length === mentionPrefix.length) {
-            msg.channel.send(`My prefix is \`${config.prefix}\``)
+            msg.channel.send(`Did you forget already? Seriously? Fine. The prefix is \`${config.prefix}\`. Better not forget it again.`)
             .then(mess => {setTimeout(() => mess.delete(), 30000)});
         };
 
