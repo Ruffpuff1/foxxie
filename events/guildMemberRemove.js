@@ -29,9 +29,9 @@ module.exports = {
             goodbyeChannel.send(Embed)
         }
         // goodbye channel id goes in the string of each function call right below here
-        if (oldMessage.guild.id === config.seasideRest) goodbyeMessage("822189403060830279")
-        if (oldMessage.guild.id === config.ok) goodbyeMessageOk("829649102333149206")
-        if (member.guild.id === config.fox) goodbyeMessage("822414098439864360")
-        if (member.guild.id !== config.codes) goodbyeMessage("790522490903330838")
+        if (oldMessage.guild.id === config.servers.seasideRest) goodbyeMessage("822189403060830279")
+        if (oldMessage.guild.id === config.servers.ok) goodbyeMessageOk("829649102333149206")
+        if (member.guild.id === config.servers.fox) goodbyeMessage("822414098439864360")
+        if (member.guild.id !== config.servers.codes) goodbyeMessage("790522490903330838")
     }
 }

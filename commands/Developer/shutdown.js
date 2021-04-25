@@ -5,7 +5,7 @@ module.exports = {
 
    
     execute(message, args, bot) {
-        if (!config.developerID.includes(message.author.id)) return;
+        if (!config.ids.developerID.includes(message.author.id)) return;
             message.channel.send("Shutting down...").then(() => { 
                 process.exit();
             })
