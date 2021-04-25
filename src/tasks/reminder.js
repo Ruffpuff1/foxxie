@@ -6,7 +6,6 @@ module.exports = client => {
     client.setInterval(() => {
         for(let i in client.reminders) {
             let time = client.reminders[i].time
-            let guildID = client.reminders[i].guildID
             let authID = client.reminders[i].authID
             let remindMessage = client.reminders[i].rmdMessage
             let member = client.users.cache.get(authID)
@@ -25,7 +24,12 @@ module.exports = client => {
                     .setDescription(`${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`)
                     .setTimestamp()
                 
-                sendIn ? message.channel.send(`<@${authID}> ${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`) : client.users.cache.get(authID).send(remindEmbed)
+                const channel = client.channels.cache.get(message.channel.id)
+
+                if (sendIn && channel) channel.send(`<@${authID}> ${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`)
+
+                if (!sendIn) client.users.cache.get(authID).send(remindEmbed)
+
                 delete client.reminders[i]
                 fs.writeFile('./src/store/reminders.json', JSON.stringify(client.reminders, null, 4), err => {
                     if (err) throw err

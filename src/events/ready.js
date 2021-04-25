@@ -19,10 +19,10 @@ module.exports = {
         memberCount(client)
         clock(client)
 
-        stats(client)
-        setInterval(() => {
-            stats(client)
-        }, 10000)
+        // stats(client)
+        // setInterval(() => {
+        //     stats(client)
+        // }, 10000)
 
         const actvs = [
             `with ${client.guilds.cache.size.toLocaleString()} servers & ${client.users.cache.size.toLocaleString()} users.`,

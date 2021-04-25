@@ -24,7 +24,7 @@ module.exports = {
         : '';
         // Embed Color
         arr[3] ? embed.setColor(arr[3].replace(/,/g, ' '))
-        : '';
+        : message.guild.me.displayColor;
 
         arr[4] ? embed.setImage(arr[4].replace(/,/g, ' '))
         : '';

@@ -36,7 +36,7 @@ module.exports = {
         const date = moment(message.createdTimestamp).format('llll');
 
         let results = await serverSettings(message)
-        //addBan(message)
+        addBan(message)
 
         message.react(approved)
         addBan(message)

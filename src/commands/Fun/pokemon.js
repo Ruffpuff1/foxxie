@@ -5,10 +5,12 @@ module.exports = {
     aliases: ['pkm', 'poke'],
     usage: 'fox pokemon [pokemon]',
     category: 'fun',
-    execute: async(lang, message, args, client) => {
+    execute: async(lang, message, args) => {
         if (!args[0]) return message.channel.send(`**Cmon,** you gotta enter a pokemon for me to show.`)
-        const pokemon = args[0].toLowerCase()
-        message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
+        const pokemon = args.slice(0).join(" ")
+        
+        let loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING)
+        
         axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon}/`)
         .then((res) => {
 
@@ -79,12 +81,13 @@ module.exports = {
                         inline: true
                     }
                 )
-                message.channel.send(embed)
-                resultMessage.delete()
+            loading.delete()
+            message.channel.send(embed)
         })
         .catch((err) => {
-            console.error(err)
-        })
-        })
+            loading.delete()
+            message.channel.send(`**Hey,** that Pokemon is invalid! How bout an actual one this time oki?`)
+            }
+        )
     }
 }

@@ -5,7 +5,7 @@ module.exports = {
     aliases: ['ud', 'slang'],
     usage: 'fox urban [term]',
     category: 'fun',
-    execute: async (lang, message, args, client) => {
+    execute: async (lang, message, args) => {
         if(!message.channel.nsfw) return message.channel.send(lang.COMMAND_NSFW_ERROR)
         if (!args[0]) return message.channel.send(lang.COMMAND_URBAN_NO_WORD)
         message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
@@ -13,8 +13,10 @@ module.exports = {
         .then((res) => {
 
             const argCap = args[0].charAt(0).toUpperCase()  + args[0].slice(1)
-            let ex = res.data.list[3]['example']
-            let str = res.data.list[3]['definition']
+            let ex;
+            let str;
+            res.data.list[3] ? ex = res.data.list[3]['example'] : ex = 'No example available.'
+            res.data.list[3] ? str = res.data.list[3]['definition'] : str = 'No definition available.'
 
             const embed = new Discord.MessageEmbed()
             .setTitle(argCap)

@@ -27,7 +27,7 @@ module.exports = {
         const date = moment(message.createdTimestamp).format('llll');
 
         let results = await serverSettings(message)
-        //addKick(message)
+        addKick(message)
 
         message.react(approved)
         addKick(message)

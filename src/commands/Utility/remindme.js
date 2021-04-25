@@ -9,9 +9,12 @@ module.exports = {
         client.reminders = require('../../store/reminders.json')
         let remindTime = args[0]
         let remindMsg = args.slice(1).join(' ');
-        if (!remindTime) {
-            return message.channel.send(lang.COMMAND_REMINDME_NOTIME)
-        }
+
+        if (!remindTime) return message.channel.send(lang.COMMAND_REMINDME_NOTIME)
+        let reg = /^\d[s|m|h|d|w]$/gmi
+
+        if (!reg.test(remindTime)) return message.channel.send(`That **doesn't** seem to be a proper time. Try again with the format [5s|5m|5h|5d|5w].`)
+        
         let timeFromNow = ms(ms(remindTime), { long: true })
         if (!remindMsg) {
             return message.channel.send(lang.COMMAND_REMINDME_NOREASON)
