@@ -1,5 +1,6 @@
 const config = require('../config.json')
 const fs = require('fs')
+const Discord = require('discord.js')
 module.exports = {
     name: 'message',
     execute(msg, bot) {
@@ -11,23 +12,23 @@ module.exports = {
             .then(mess => {setTimeout(() => mess.delete(), 30000)});
         };
 
-        if (!msg.content.startsWith(config.prefix) || msg.author.bot) return;
-
-        const args = msg.content.slice(config.prefix.length).trim().split(/ +/);
-        const commandName = args.shift().toLowerCase();
-        if (!bot.commands.has(commandName)) return;
-
-        const command = bot.commands.get(commandName) || bot.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
+        bot.commands = new Discord.Collection();
         const commandFolders = fs.readdirSync('./commands');
 
         for (const folder of commandFolders) {
             const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
             for (const file of commandFiles) {
-                const command = require(`./commands/${folder}/${file}`);
-                client.commands.set(command.name, command);
+                const command = require(`../commands/${folder}/${file}`);
+                bot.commands.set(command.name, command);
             }
         }
 
+        if (!msg.content.startsWith(config.prefix) || msg.author.bot) return;
+
+        const args = msg.content.slice(config.prefix.length).trim().split(/ +/);
+        const commandName = args.shift().toLowerCase();
+        const command = bot.commands.get(commandName) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+        
         if (!command) return;
         if (command.permissions) {
             const authorPerms = msg.channel.permissionsFor(msg.author);

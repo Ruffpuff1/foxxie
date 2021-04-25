@@ -47,17 +47,5 @@ const helpEmbed = new Discord.MessageEmbed()
 message.channel.send(helpEmbed)
 
 
-
-
-
-
-
-
-
-
-
-
-
-    
     }
 }
