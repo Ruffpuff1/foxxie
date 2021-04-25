@@ -47,7 +47,7 @@ module.exports = {
                 
                 message.react(approved)
                 
-                if (results == null || results?.modChannel == null) return
+                if (results == null || results.modChannel == null) return
 
                 const warnEmbed = new Discord.MessageEmbed()
                     .setTitle(`Cleared warnings for ${target.user.tag}`)

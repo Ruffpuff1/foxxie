@@ -39,13 +39,13 @@ module.exports = {
 
                     let results = await serverSettings(message)
 
-                    if (results === null || results?.modChannel == null) {
+                    if (results === null || results.modChannel == null) {
                         embed.setDescription(`Uhhh there isn't a modchannel set right now. You can set one with \`fox modchannel [#channel]\`.`)
                         loading.delete()
                         return message.channel.send(embed)
                     }
 
-                    let chn = results?.modChannel
+                    let chn = results.modChannel
 
                     embed.setDescription(`Right now, the modchannel is set to <#${chn}>. If you want to change it use \`fox modchannel [#channel]\`.`)
                     loading.delete()

@@ -35,12 +35,12 @@ module.exports = {
 
                     let results = await serverSettings(message)
 
-                    if (results === null || results?.disboardChannel == null) {
+                    if (results === null || results.disboardChannel == null) {
                         embed.setDescription("There isn't a disboard channel set right now. If ya wanna set one use the command `fox disboardchannel [#channel]`")
                         return message.channel.send(embed)
                     }
 
-                    let chn = results?.disboardChannel
+                    let chn = results.disboardChannel
  
                     embed.setDescription(`Right now the Disboard channel is set to <#${chn}>. If ya wanna change it, use the command \`fox disboardchannel [#channel]\`.`)
                     return message.channel.send(embed)

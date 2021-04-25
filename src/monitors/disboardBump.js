@@ -10,14 +10,14 @@ module.exports.disboardBump = async (message) => {
             try {
                 let guildID = message.guild.id
                 let bump = await serverSettings(message)
-                if (bump?.disboardBump != null) return
+                if (bump.disboardBump != null) return
 
-                if (bump == null || bump?.disboardChannel == null) return
+                if (bump == null || bump.disboardChannel == null) return
                 if (message.channel.id != bump.disboardChannel) return
 
                 message.client.disboard = require('../store/disboard.json')
-                let remindTime = '10s'
-                let deleteTime = '5s'
+                let remindTime = '2h'
+                let deleteTime = '30m'
 
                 await serverSchema.findByIdAndUpdate({
                     _id: guildID
@@ -33,7 +33,8 @@ module.exports.disboardBump = async (message) => {
                     time: Date.now() + ms(remindTime),
                     channelID: bump.disboardChannel,
                     deleteDbTime: Date.now() + ms(deleteTime),
-                    message: message
+                    message: message,
+                    color: message.guild.me.displayColor
                 }
 
                 fs.writeFile('src/store/disboard.json', JSON.stringify(message.client.disboard, null, 4), err => {

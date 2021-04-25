@@ -1,7 +1,6 @@
-const { GUILDS, USERS } = require('../index')
 const moment = require('moment')
 const { credits: { developer, spanishTranslation, additionalHelp }, emojis: { infinity } } = require('../../lib/util/constants')
-const { botVer, numOfAliases, numOfCommands, botInv, supportServer, serverLink } = require('../../lib/config')
+const { botVer, numOfAliases, numOfCommands, botInv, supportServer, serverLink, voteLink } = require('../../lib/config')
 module.exports = {
 
     COMMAND_ABOUT_COMMANDS: "**Commands**",
@@ -13,13 +12,13 @@ module.exports = {
 **•** Additional Help: ${additionalHelp}`,
     COMMAND_ABOUT_CURRENTVER: `**•** Currently I'm in version **${botVer}**, pretty much always getting worked on though ;)`,
     COMMAND_ABOUT_GUILDS: "**Guilds**",
-    COMMAND_ABOUT_GUILDS_SIZE: `**•** I'm looking after **${GUILDS}** servers.`,
+    COMMAND_ABOUT_GUILDS_SIZE: `**•** I'm looking after **1** servers.`,
     COMMAND_ABOUT_LINKS: "**Extra links and information**",
-    COMMAND_ABOUT_LINKS_LINKS: `[[Invite Foxxie](${botInv})] | [[Support Server](${supportServer})] | [[The Corner Store](${serverLink})] | [[Patreon](https://www.patreon.com/Thecornerstore)]`,
+    COMMAND_ABOUT_LINKS_LINKS: `[[Invite Foxxie](${botInv})] | [[Support Server](${supportServer})] | [[Vote](${voteLink})] | [[Patreon](https://www.patreon.com/Thecornerstore)]`,
     COMMAND_ABOUT_SUMMARY: "I started as a developmental project by **Ruffpuff#0017** to learn basic node.js and javascript. Then I was added to his server **The Corner Store** as a way to overall reduce the amount of bots. Now I'm hoping to be added to many guilds and maybe I could be helpful to ya.",
     COMMAND_ABOUT_TITLE: "About Foxxie!",
     COMMAND_ABOUT_USERS: "**Users**",
-    COMMAND_ABOUT_USERS_SIZE: `**•** Right now I'm cleaning up after **${USERS}** users.`,
+    COMMAND_ABOUT_USERS_SIZE: `**•** Right now I'm cleaning up after **1** users.`,
     COMMAND_ABOUT_VERSION: "Version",
     COMMAND_ABOUT_WASCREATED: `**•** I was created on Mon, Feb 15th 2021. **(${moment([moment('2021-02-15').format('YYYY'), moment('2021-02-15').format('M') - 1, moment('2021-02-15').format('D')]).toNow(true)} ago.)**`,
     COMMAND_AFK_HAS_SET: `has set an AFK`,
@@ -103,7 +102,7 @@ Hope I can fix things up for ya.`,
     COMMAND_ROLE_MENTIONABLE: "mentionable as",
     COMMAND_ROLE_NOCOLOR: "none",
     COMMAND_ROLE_NOT_MENTIONABLE: "not mentionable",
-    COMMAND_ROLE_NOTSEPERATE: "not displayed seperately",
+    COMMAND_ROLE_NOTSEPERATE: "not displayed separately",
     COMMAND_ROLE_PERMISSIONS: "**Permissions**",
     COMMAND_ROLE_PLURAL: "s",
     COMMAND_ROLE_PROPERTIES: "**Properties**",

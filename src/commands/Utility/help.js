@@ -60,7 +60,7 @@ module.exports = {
 
         let descriptions = lang.COMMAND_DESCRIPTIONS
 
-        if (!args.length || args[0]?.toLowerCase() === '-d') {
+        if (!args.length || args[0].toLowerCase() === '-d') {
             message.react(approved)
             return message.author.send(helpEmbed)
             .then(() => {

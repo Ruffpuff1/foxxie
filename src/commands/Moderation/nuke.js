@@ -45,7 +45,7 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                                     { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
                                     { name: `**Date / Time**`, value: `${warnDate}`, inline: true })
 
-                        if (results == null || results?.modChannel == null) return
+                        if (results == null || results.modChannel == null) return
 
                             addNuke(message)
                             message.channel.delete()

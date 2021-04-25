@@ -11,7 +11,7 @@ module.exports = {
         // prevents bot dms
         if (!message.guild) return
 
-        if (message?.content?.toLowerCase() === '@everyone') return message.delete()
+        if (message.content.toLowerCase() === '@everyone') return message.delete()
 
         // let messageAttachment = message.attachments.size > 0 ? message.attachments.array()[0].url : null
         // if (messageAttachment) message.channel.send(messageAttachment)

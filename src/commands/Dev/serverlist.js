@@ -9,22 +9,28 @@ module.exports = {
         let i0 = 0;
         let i1 = 10;
         let page = 1;
+
         let description = message.client.guilds.cache
             .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
             .map(r => r)
             .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${lang.COMMAND_SERVERLIST_MEMBERCOUNT}`)
             .slice(0, 10)
             .join("\n");
+
         let embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
             .setTitle(lang.COMMAND_SERVERLIST)
             .setFooter(`${message.client.guilds.cache.size} ${lang.COMMAND_SERVERLIST_TOTALSERVERS}\n${lang.COMMAND_SERVERLIST_PAGE} - ${page}/${Math.ceil(message.client.guilds.cache.size / 10)}`)
             .setDescription(description);
+
         let msg = await message.channel.send(embed);
+
         await msg.react("⬅");
         await msg.react("➡");
         await msg.react("❌");
+
         let collector = msg.createReactionCollector((reaction, user) => user.id === message.author.id)
+
         collector.on("collect", async (reaction, user) => {
             if (reaction._emoji.name === "⬅") {
                 // Updates variables
@@ -43,11 +49,12 @@ module.exports = {
             description = message.client.guilds.cache
                 .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
                 .map(r => r)
-                .map((r, i) => `**${i + 1}** - ${r.name} | ${r.memberCount} ${lang.COMMAND_SERVERLIST_MEMBERCOUNT}`)
+                .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${lang.COMMAND_SERVERLIST_MEMBERCOUNT}`)
                 .slice(i0, i1)
                 .join("\n");
+
             embed
-                .setFooter(`${message.client.guilds.cache.size} ${lang.COMMAND_SERVERLIST_TOTALSERVERS}\n${lang.COMMAND_SERVERLIST_PAGE} - ${page}/${Math.ceil(message.client.guilds.cache.size / 10 + 1)}`)
+                .setFooter(`${message.client.guilds.cache.size} ${lang.COMMAND_SERVERLIST_TOTALSERVERS}\n${lang.COMMAND_SERVERLIST_PAGE} - ${page}/${Math.ceil(message.client.guilds.cache.size / 10)}`)
                 .setDescription(description);
                 // Edit the message
             msg.edit(embed);
@@ -68,12 +75,12 @@ module.exports = {
             description = message.client.guilds.cache
                 .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
                 .map(r => r)
-                .map((r, i) => `**${i + 1}** - ${r.name} | ${r.memberCount} ${lang.COMMAND_SERVERLIST_MEMBERCOUNT}`)
+                .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${lang.COMMAND_SERVERLIST_MEMBERCOUNT}`)
                 .slice(i0, i1)
                 .join("\n");
             // Update the embed with new informations
             embed
-                .setFooter(`${message.client.guilds.cache.size} ${lang.COMMAND_SERVERLIST_TOTALSERVERS}\n${lang.COMMAND_SERVERLIST_PAGE} - ${page}/${Math.ceil(message.client.guilds.cache.size / 10 + 1)}`)
+                .setFooter(`${message.client.guilds.cache.size} ${lang.COMMAND_SERVERLIST_TOTALSERVERS}\n${lang.COMMAND_SERVERLIST_PAGE} - ${page}/${Math.ceil(message.client.guilds.cache.size / 10)}`)
                 .setDescription(description);
             // Edit the message
             msg.edit(embed);

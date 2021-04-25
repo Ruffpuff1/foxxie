@@ -16,7 +16,7 @@ module.exports = {
         commandHandler(message)
         let editChannel = await serverSettings(message)
 
-        let msgChn = message.client.channels.cache.get(editChannel?.editChannel)
+        let msgChn = message.client.channels.cache.get(editChannel.editChannel)
 
         if (!msgChn) return
 

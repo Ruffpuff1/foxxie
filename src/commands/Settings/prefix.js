@@ -3,13 +3,12 @@ const mongo = require('../../../lib/structures/database/mongo')
 const { serverSchema } = require('../../../lib/structures/schemas')
 const { serverSettings } = require('../../../lib/settings')
 module.exports = {
-    name: 'welcomechannel',
-    aliases: ['wc', 'welcomelocation'],
-    usage: 'fox welcomechannel (none|channel)',
+    name: 'prefix',
+    aliases: ['setprefix'],
+    usage: 'fox prefix (none|prefix)',
     category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
-        let guildId = message.guild.id
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
 
@@ -22,28 +21,28 @@ module.exports = {
                         }, {
                             _id: message.guild.id,
                             $unset: {
-                                welcomeChannel: ''
+                                prefix: ''
                             }
                         })
 
-                        embed.setDescription(`**Got it,** removed the welcome channel and disabled welcome messages with this server.`)
+                        embed.setDescription(`**Got it,** removed the server's custom prefix and reset back to my default \`.\`.`)
                         return message.channel.send(embed)
                     }
                 }
 
-                let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
-                if (!channel) {
+                let prefix = args[0]
+                if (!prefix) {
 
                     let results = await serverSettings(message)
 
-                    if (results === null || results.welcomeChannel == null) {
-                        embed.setDescription(`Uhhh there isn't a welcome channel set right now. You can set one with \`fox welcomechannel [#channel]\`.`)
+                    if (results === null || results.prefix == null) {
+                        embed.setDescription(`Uhhh there isn't a custom prefix set right now. You can set one with \`fox prefix (prefix)\` or use my defaults \`fox\` or \`.\`.`)
                         return message.channel.send(embed)
                     }
 
-                    let chn = results.welcomeChannel
+                    let chn = results.prefix
 
-                    embed.setDescription(`Right now, the welcome channel is set to <#${chn}>. If you want to change it use \`fox welcomechannel [#channel]\`.`)
+                    embed.setDescription(`Right now, this server's prefix is set to \`${chn}\`. If you want to change it use \`fox prefix (prefix)\`.`)
                     return message.channel.send(embed)
                     }
 
@@ -51,12 +50,12 @@ module.exports = {
                         _id: message.guild.id
                     }, {
                         _id: message.guild.id,
-                        welcomeChannel: channel
+                        prefix: prefix
                     }, {
                         upsert: true
                     })
 
-                embed.setDescription(`Kk, I set the welcome channel as ${channel} for ya. Now I'll listen for when members join the server and send welcome messages.`)
+                embed.setDescription(`Kk, I set the server's prefix as \`${prefix}\`. Now instead of my default, ill respond to that for commands.`)
                 return message.channel.send(embed)
 
             } finally {}

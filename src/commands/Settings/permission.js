@@ -14,7 +14,7 @@ module.exports = {
         await mongo().then(async () => {
             try {
                 if (!use) return message.channel.send('**Please,** specify a proper use case, either **allow**, **deny**, or **clear**.')
-                if (use?.toLowerCase() === 'deny') {
+                if (use.toLowerCase() === 'deny') {
                     if (!mem) return message.channel.send('**You need to** give either a user mention, or user ID for who you wanna perforn this action on.')
                     await serverSchema.findByIdAndUpdate({
                         _id: message.guild.id
@@ -27,7 +27,7 @@ module.exports = {
                         upsert: true
                     })
                     message.react(approved)
-                } else if (use?.toLowerCase() === 'allow') {
+                } else if (use.toLowerCase() === 'allow') {
                     if (!mem) return message.channel.send('**You need to** give either a user mention, or user ID for who you wanna perforn this action on.')
                     await serverSchema.findByIdAndUpdate({
                         _id: message.guild.id
@@ -40,7 +40,7 @@ module.exports = {
                         upsert: true
                     })
                     message.react(approved)
-                } else if (use?.toLowerCase() === 'clear') {
+                } else if (use.toLowerCase() === 'clear') {
 
 
                     await serverSchema.findByIdAndUpdate({

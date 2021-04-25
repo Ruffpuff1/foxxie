@@ -9,7 +9,7 @@ module.exports = {
     category: 'settings',
     execute: async(lang, message, args) => {
         let results = await serverSettings(message)
-        const dischannel = message.guild.channels.cache.get(results?.disboardChannel)
+        const dischannel = message.guild.channels.cache.get(results.disboardChannel)
         if (!dischannel) return
 
         const embed = new Discord.MessageEmbed()
@@ -17,9 +17,9 @@ module.exports = {
             .setTitle('Reminder to Bump')
             .setThumbnail(message.client.user.displayAvatarURL())
 
-        embed.setDescription(results?.disboardMessage?results.disboardMessage:"Time to bump the server on disboard. Use the command `!d bump` then come back in **two hours**.")
+        embed.setDescription(results.disboardMessage?results.disboardMessage:"Time to bump the server on disboard. Use the command `!d bump` then come back in **two hours**.")
         let dbPing = '';
-        if (results != null && results.disboardPing != null) dbPing = `<@&${results?.disboardPing}>`
+        if (results != null && results.disboardPing != null) dbPing = `<@&${results.disboardPing}>`
         message.react(approved)
         dischannel.send(dbPing, { embed: embed } )
     }

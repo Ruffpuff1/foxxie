@@ -1,4 +1,4 @@
-const { roleplayCommand } = require('../../../lib/structures/RoleplayCommands')
+const { roleplayCommand } = require('../../../lib/structures/roleplayCommands')
 module.exports = {
     name: 'blush',
     aliases: ['happy', 'smile'],

@@ -35,12 +35,12 @@ module.exports = {
 
                     let results = await serverSettings(message)
 
-                    if (results === null || results?.goodbyeChannel == null) {
+                    if (results === null || results.goodbyeChannel == null) {
                         embed.setDescription(`Uhhh there isn't a goodbye channel set right now. You can set one with \`fox goodbyeChannel [#channel]\`.`)
                         return message.channel.send(embed)
                     }
 
-                    let chn = results?.goodbyeChannel
+                    let chn = results.goodbyeChannel
 
                     embed.setDescription(`Right now, the goodbye channel is set to <#${chn}>. If you want to change it use \`fox goodbyeChannel [#channel]\`.`)
                     return message.channel.send(embed)

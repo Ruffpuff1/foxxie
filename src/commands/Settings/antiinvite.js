@@ -9,10 +9,11 @@ module.exports = {
     category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
+        if (!args[0]) return;
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
         await mongo().then(async () => {
-            if (args[0]?.toLowerCase() === 'on')
+            if (args[0].toLowerCase() === 'on')
             try {
                 const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
                 await serverSchema.findByIdAndUpdate({
@@ -28,7 +29,7 @@ module.exports = {
                 return message.channel.send(embed)
             } finally {}
 
-            if (args[0]?.toLowerCase() === 'off')
+            if (args[0].toLowerCase() === 'off')
             try {
                 const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
                 await serverSchema.findByIdAndUpdate({
@@ -44,7 +45,7 @@ module.exports = {
                 return message.channel.send(embed)
             } finally {}
 
-            if (args[0]?.toLowerCase() === 'none')
+            if (args[0].toLowerCase() === 'none')
             try {
                 const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING)
                 await serverSchema.findByIdAndUpdate({
@@ -64,7 +65,7 @@ module.exports = {
                 const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
                 let anti_inv = await serverSettings(message)
                 if (anti_inv !== null) {
-                    embed.setDescription(`Currently anti-invite filitering is set to **${anti_inv?.antiInvite ? "on" : 'off'}**. If ya wanna change this, use the command \`fox antiinvite [on/off]\`.`)
+                    embed.setDescription(`Currently anti-invite filitering is set to **${anti_inv.antiInvite ? "on" : 'off'}**. If ya wanna change this, use the command \`fox antiinvite [on/off]\`.`)
                     loading.delete()
                     return message.channel.send(embed)
                 }

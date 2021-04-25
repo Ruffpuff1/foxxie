@@ -16,23 +16,23 @@ module.exports = {
         let settings = await serverSettings(message)
 
         let blk = []
-        if (settings != null && settings?.blockedUsers != null) for (let user of settings.blockedUsers){
+        if (settings != null && settings.blockedUsers != null) for (let user of settings.blockedUsers){
             let u = message.client.users.cache.get(user[0])
             blk.push(`**${u.tag}**`)
         }
       
-        // `${notSpecified} Custom prefix **not enabled**`,
+        if (settings != null && settings.prefix != null) desc1.push(`${granted} Prefix **enabled** (\`${settings.prefix}\`)`)
         // `${notSpecified} Language **not enabled**`,
-        if (settings != null && settings?.welcomeChannel != null) desc1.push(`${granted} Welcomes **enabled** (in <#${settings?.welcomeChannel}>)`)
-        if (settings != null && settings?.goodbyeChannel != null) desc1.push(`${granted} Goodbyes **enabled** (in <#${settings?.goodbyeChannel}>)`)
-        if (settings != null && settings?.modChannel != null) desc1.push(`${granted} Modlogs **enabled** (in <#${settings?.modChannel}>)`)
-        if (settings != null && settings?.editChannel != null) desc1.push(`${granted} Edit logging **enabled** (in <#${settings?.editChannel}>)`)
-        if (settings != null && settings?.deleteChannel != null) desc1.push(`${granted} Delete logging **enabled** (in <#${settings?.deleteChannel}>)`)
-        if (settings != null && settings?.disboardChannel != null) desc1.push(`${granted} Disboard **enabled** (in <#${settings?.disboardChannel}>)`)
+        if (settings != null && settings.welcomeChannel != null) desc1.push(`${granted} Welcomes **enabled** (in <#${settings.welcomeChannel}>)`)
+        if (settings != null && settings.goodbyeChannel != null) desc1.push(`${granted} Goodbyes **enabled** (in <#${settings.goodbyeChannel}>)`)
+        if (settings != null && settings.modChannel != null) desc1.push(`${granted} Modlogs **enabled** (in <#${settings.modChannel}>)`)
+        if (settings != null && settings.editChannel != null) desc1.push(`${granted} Edit logging **enabled** (in <#${settings.editChannel}>)`)
+        if (settings != null && settings.deleteChannel != null) desc1.push(`${granted} Delete logging **enabled** (in <#${settings.deleteChannel}>)`)
+        if (settings != null && settings.disboardChannel != null) desc1.push(`${granted} Disboard **enabled** (in <#${settings.disboardChannel}>)`)
 
-        if (settings != null && settings?.antiInvite != null) desc2.push(`${granted} Anti invites **enabled**`)
+        if (settings != null && settings.antiInvite != null) desc2.push(`${granted} Anti invites **enabled**`)
 
-        if (settings != null && settings?.blockedUsers.length != 0) desc3.push(`${denied} Blacklisted user${settings.blockedUsers.length > 1 ? 's' : ''} **${settings.blockedUsers.length}** (${blk.join(", ")})`)
+        if (settings != null && settings.blockedUsers.length != 0) desc3.push(`${denied} Blacklisted user${settings.blockedUsers.length > 1 ? 's' : ''} **${settings.blockedUsers.length}** (${blk.join(", ")})`)
 
         let arr = [
             desc1.filter(i => !!i).join('\n'),

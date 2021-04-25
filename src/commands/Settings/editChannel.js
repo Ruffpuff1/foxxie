@@ -35,12 +35,12 @@ module.exports = {
 
                     let results = await serverSettings(message)
 
-                    if (results === null || results?.editChannel == null) {
+                    if (results === null || results.editChannel == null) {
                         embed.setDescription(`Uhhh there isn't a edit channel set right now. You can set one with \`fox editChannel [#channel]\`.`)
                         return message.channel.send(embed)
                     }
 
-                    let chn = results?.editChannel
+                    let chn = results.editChannel
 
                     embed.setDescription(`Right now, the edit channel is set to <#${chn}>. If you want to change it use \`fox editChannel [#channel]\`.`)
                     return message.channel.send(embed)

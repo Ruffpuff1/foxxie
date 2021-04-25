@@ -7,13 +7,15 @@ module.exports = {
 
         let deleteChannel = await serverSettings(message)
 
-        let msgChn = message.client.channels.cache.get(deleteChannel?.deleteChannel)
+        if (deleteChannel == null) return;
+
+        let msgChn = message.client.channels.cache.get(deleteChannel.deleteChannel)
 
         if (!msgChn) return
 
         if (message.author.bot) return
 
-        if (message.content?.toLowerCase() === '?pick') return
+        if (message.content.toLowerCase() === '?pick') return
 
         const embed = new MessageEmbed()
             .setTitle(`Message Deleted by ${message.author.tag}`)

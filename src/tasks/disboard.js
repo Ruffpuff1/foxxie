@@ -13,6 +13,7 @@ module.exports.disboard = (client) => {
             let channelID = client.disboard[i].channelID
             let channel = guild.channels.cache.get(channelID)
             let deleteTime = client.disboard[i].deleteDbTime
+            let color = client.disboard[i].color
             msg = client.disboard[i].message
 
             if (Date.now() > deleteTime) {
@@ -43,7 +44,7 @@ module.exports.disboard = (client) => {
                             .setDescription("Time to bump the server on disboard. Use the command `!d bump` then come back in **two hours**.")
 
                         // Checks if Disboard Message is set
-                        if (disb?.disboardMessage != null) embed.setDescription(disb.disboardMessage)
+                        if (disb.disboardMessage != null) embed.setDescription(disb.disboardMessage)
                         // Checks if guild is The Corner Store
                         if (guildID === '761512748898844702') {
                             delete client.disboard[i]
@@ -51,11 +52,11 @@ module.exports.disboard = (client) => {
                                 if (err) throw err
                             })
                             if (channel === undefined) return
-                            return channel.send('**Heya <@&774339676487548969> it\'s time to bump the server.**', {embed: remindEmbedDisboard})
+                            return channel.send('**Heya <@&774339676487548969> it\'s time to bump the server.**', {embed: embed})
                         }
                         // If other guild
                         let roleID
-                        if (disb?.disboardPing != null) roleID = disb.disboardPing
+                        if (disb.disboardPing != null) roleID = disb.disboardPing
                         let dbPing = ''
                         if (roleID !== '' && roleID !== undefined) dbPing = `<@&${roleID}>`
 

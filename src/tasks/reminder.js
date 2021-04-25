@@ -25,7 +25,7 @@ module.exports = client => {
                     .setDescription(`${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`)
                     .setTimestamp()
                 
-                sendIn ? message?.channel?.send(`<@${authID}> ${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`) : client.users.cache.get(authID).send(remindEmbed)
+                sendIn ? message.channel.send(`<@${authID}> ${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`) : client.users.cache.get(authID).send(remindEmbed)
                 delete client.reminders[i]
                 fs.writeFile('./src/store/reminders.json', JSON.stringify(client.reminders, null, 4), err => {
                     if (err) throw err

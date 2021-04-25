@@ -44,7 +44,7 @@ module.exports = {
         member.kick()
         .catch(console.error)
 
-        if (results == null || results?.modChannel == null) return
+        if (results == null || results.modChannel == null) return
 
         const embed = new Discord.MessageEmbed()
             .setTitle(`Kicked ${member.user.tag}`)

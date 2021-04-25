@@ -7,7 +7,7 @@ module.exports = {
     execute: async (lang, message, args) => {
 
         const users = message.guild.members.cache.array();
-        if (message.guild.memberCount > 800) return message.channel.send('COMMAND_BADGES_GUILDSIZE')
+        if (message.guild.memberCount > 1000) return message.channel.send('COMMAND_BADGES_GUILDSIZE')
 
         const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
 
@@ -22,7 +22,6 @@ module.exports = {
         const BotDevs = []
         const Bots = []
         const NitroUsers = []
-        const Boosters = []
         const Early = []
         const VerifiedBot = []
 
@@ -47,8 +46,10 @@ module.exports = {
             const Balance = flags.toArray().includes("HOUSE_BALANCE");
             if(Balance) BalanceUsers.push(user);
 
-            const Dev = flags.toArray().includes("EARLY_VERIFIED_BOT_DEVELOPER");
+            const Dev = flags.toArray().includes("VERIFIED_DEVELOPER");
             if(Dev) BotDevs.push(user);
+
+        
 
             const Bot = user.user.bot;
             const verifiedBot = flags.toArray().includes("VERIFIED_BOT")
@@ -59,8 +60,14 @@ module.exports = {
 
             if(Bot && !verifiedBot) Bots.push(user);
 
-            const Nitro = (user.user?.avatar?.startsWith('a_') || discrims.includes(user.user.discriminator));
-            if(Nitro) NitroUsers.push(user);
+            let Nitro; 
+            if (user.user.avatar != null) Nitro = (user.user.avatar.startsWith('a_') || discrims.includes(user.user.discriminator));
+
+            let earlySup = flags.toArray().includes("EARLY_SUPPORTER")
+
+            if (earlySup && Nitro) Early.push(user)
+
+            if(Nitro && !earlySup) NitroUsers.push(user);
 
 
             description = [
@@ -68,10 +75,10 @@ module.exports = {
                 `${PartnerUsers.length ? `${discordPartner} ${PartnerUsers.length} x Partnered Server Owner` : ''}`,
                 `${HypeUsers.length ? `${discordHypesquad} ${HypeUsers.length} x HypeSquad Events` : ''}`,
                 `${NitroUsers.length 
-                    ? `${discordNitro} ${NitroUsers.length} x Nitro` : ''} ${Boosters.length 
-                        ? `(${discordBooster} ${Boosters.length} x Boosts${Early.length 
+                    ? `${discordNitro} ${NitroUsers.length} x Nitro` : ''} ${message.guild.premiumSubscriptionCount > 0 
+                        ? `(${discordBooster} ${message.guild.premiumSubscriptionCount} x Boosts${Early.length 
                             ? ',' : ')'}` 
-                            : ''} ${Early.length  ? `${Boosters.length 
+                            : ''} ${Early.length  ? `${message.guild.premiumSubscriptionCount > 0 
                                 ? '' : '('}${discordEarly} ${Early.length} Early Supporters)` 
                                 : ''}`,
                 `${bugusers1.length ? `${discordBug1} ${bugusers1.length} x Bug Hunter Level 1` : ''}`,

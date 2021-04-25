@@ -39,7 +39,7 @@ module.exports = {
         message.guild.members.unban(member, res)
         .catch(console.error)
 
-        if (results == null || results?.modChannel == null) return
+        if (results == null || results.modChannel == null) return
 
         const embed = new Discord.MessageEmbed()
             .setTitle(`Unbanned ${member.tag}`)

@@ -3,7 +3,7 @@ module.exports.starUpdated = async (reaction, sbChannel, embed) => {
     let msgs = await sbChannel.messages.fetch( { limit: 100 } )
     let sentMessage = msgs.find(msg =>
         msg.embeds.length === 1
-        ? (msg.embeds[0]?.description?.endsWith(`(${reaction.message.url})`)
+        ? (msg.embeds[0].description.endsWith(`(${reaction.message.url})`)
             ? true
             : false)
         : false)

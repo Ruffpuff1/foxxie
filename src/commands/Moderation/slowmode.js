@@ -45,7 +45,7 @@ module.exports = {
         addSlowmode(message)
         let results = await serverSettings(message)
 
-        if (results == null || results?.modChannel == null) return
+        if (results == null || results.modChannel == null) return
 
         const logChannel = message.guild.channels.cache.get(results.modChannel);
         if (logChannel) logChannel.send(embed)  

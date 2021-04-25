@@ -112,7 +112,7 @@ module.exports = {
         }
 
         if (server && args[0] === 'server') {
-
+            console.log(server.id)
             let results = await getGuildMessageCount(message, server.id)
                     
             let messages;
@@ -155,6 +155,7 @@ module.exports = {
 
                     if (contributor.includes(user.id)) embed.setDescription(`<:Foxxie:825972379875409980> Foxxie Contributor`)
                     user.id === '754598258742919178' ? embed.setDescription(`<:CertifiedCutiepieTallBoy:833197162610425857> Certified Cutiepie Tall Boy`) : '';
+                    user.id === '827514096865509386' ? embed.setDescription(`<:Fokushi:835668026048380968> Sister Bot`) : '';
             
                     const member = message.guild ? await message.guild.members.fetch(user).catch(() => null) : null;
             

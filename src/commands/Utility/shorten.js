@@ -24,7 +24,7 @@ module.exports = {
             if (reg.test(name)) name = name.replace(reg, '_')
 
             isgd.custom(args[0], name, function(res) {
-                if (res?.startsWith('Error')) return message.channel.send(`The provided name **${name}** is already in use at the domain "is.gd".`)
+                if (res.startsWith('Error')) return message.channel.send(`The provided name **${name}** is already in use at the domain "is.gd".`)
                 message.react(approved)
                 message.channel.send(`Here is you're new **shortened** url with the name **${args[1]}** (<${res}>).`)
             });

@@ -1,4 +1,3 @@
-const cInfo = require('../index')
 const moment = require('moment')
 const { credits: { developer, spanishTranslation, additionalHelp }, emojis: { infinity } } = require('../../lib/util/constants')
 const { botVer, numOfAliases, numOfCommands, botInv, supportServer, serverLink } = require('../../lib/config')
@@ -13,13 +12,13 @@ module.exports = {
 **•** Ayuda adicional: ${additionalHelp}`,
     COMMAND_ABOUT_CURRENTVER: `**•** Por el momento estoy en la versión **${botVer}**, casi siempre estoy siendo revisado ;)`,
     COMMAND_ABOUT_GUILDS: "**Gremios**",
-    COMMAND_ABOUT_GUILDS_SIZE: `**•** Estoy cuidando **${cInfo.GUILDS}** servidores.`,
+    COMMAND_ABOUT_GUILDS_SIZE: `**•** Estoy cuidando **1** servidores.`,
     COMMAND_ABOUT_LINKS: "**Enlaces e información adicionales**",
     COMMAND_ABOUT_LINKS_LINKS: `[[Invitar Foxxie](${botInv})] | [[Servidor Soporte](${supportServer})] | [[The Corner Store](${serverLink})] | [[Patreon](https://www.patreon.com/Thecornerstore)]`,
     COMMAND_ABOUT_SUMMARY: "Empecé como un proyecto de desarrollo de **Ruffpuff#0017** como forma de aprender node.js y JavaScript. Luego fui agregado a este servidor **The Corner Store** para reducir los números de bots. Ahora espero ser agregado a muchos gremios y tal vez ser de alguna ayuda para ustedes.",
     COMMAND_ABOUT_TITLE: "¡Sobre Foxxie!",
     COMMAND_ABOUT_USERS: "**Usuarios**",
-    COMMAND_ABOUT_USERS_SIZE: `**•** Al momento estoy limpiando después de **${cInfo.USERS}** usuarios.`,
+    COMMAND_ABOUT_USERS_SIZE: `**•** Al momento estoy limpiando después de **1** usuarios.`,
     COMMAND_ABOUT_VERSION: "Versión",
     COMMAND_ABOUT_WASCREATED: `**•** Fui creado el lunes 15 de febrero de 2021. **(Hace ${moment([moment('2021-02-15').format('YYYY'), moment('2021-02-15').format('M') - 1, moment('2021-02-15').format('D')]).toNow(true)}.)**`,
     COMMAND_AFK_HAS_SET: `ha establecido un afk`,

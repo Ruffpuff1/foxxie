@@ -35,12 +35,12 @@ module.exports = {
 
                     let results = await serverSettings(message)
 
-                    if (results === null || results?.deleteChannel == null) {
+                    if (results === null || results.deleteChannel == null) {
                         embed.setDescription(`Uhhh there isn't a welcome channel set right now. You can set one with \`fox deleteChannel [#channel]\`.`)
                         return message.channel.send(embed)
                     }
 
-                    let chn = results?.deleteChannel
+                    let chn = results.deleteChannel
 
                     embed.setDescription(`Right now, the welcome channel is set to <#${chn}>. If you want to change it use \`fox deleteChannel [#channel]\`.`)
                     return message.channel.send(embed)

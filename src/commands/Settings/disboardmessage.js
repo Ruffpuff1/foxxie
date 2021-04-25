@@ -37,7 +37,7 @@ module.exports = {
 
                     let results = await serverSettings(message)
 
-                    if (results === null || results?.disboardMessage == null) {
+                    if (results === null || results.disboardMessage == null) {
                         embed.setDescription(`There is no Disboard message set right now, my default message is:\n\`\`\`**•** Time to bump the server on disboard. Use the command \`!d bump\` then come back in **two hours**.\`\`\`You can set your own message using the command \`fox disboardmessage (message)\``)
                         return message.channel.send(embed)
                     }
