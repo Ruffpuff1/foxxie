@@ -49,48 +49,7 @@ out of server user showing
 out of server bans
 out of server avs
 specific user purges
-
-`)
-Embed.addField(`April:
-Softbans
-Autoroles`)
-Embed.addField(`May:
-more rp commands
-out of server bans
-poll
-prefix set command
-unban`)
-Embed.addField(`June:
-out of server user showing
-out of server avs
-specific user purges
-lock and unlock
-role info`)
-Embed.addField(`July:
-antiinvite
-urban
-reminders
-rr
-music`)
-Embed.addField(`August:
-warnings
-afk
-welcome channel and goodbye channel
-welcome message and goodbye messsage command
-disboard channel command
-disboard message cmd
-Making a lot of non multiple guild commands multiple guilds`)
-Embed.addField(`September:
-log channel command
-bugreport
-ticket system
-rest of the remaining commands to make multiple guild and also the remaining commands to add`)
-Embed.addField(`
-October:
-fix any bugs, update any commands before 15th october
-Apply for top.gg before 15th
-Hopefully get 100 or 50 servers
-if 100 then apply for verification`)
+status command`)
 Embed.setTimestamp()
 Embed.setColor(`GREY`);
 message.channel.send(Embed)
