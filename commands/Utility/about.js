@@ -21,6 +21,8 @@ Imagine being developed by <@814539604879081532>, and <@486396074282450946>. cou
 
 (hk help for more info)
 
+My birthday: 13th Feb, 2021. 
+
 P.S 
 Go check out my brother bot, Foxxie. He's really good at what he does, and i learn a lot from him. vote for him and invite him on top.gg! https://is.gd/foxxie_topgg (while you cant for me) `)
         Embed.setTimestamp()
