@@ -8,13 +8,13 @@ module.exports = {
         embed.setColor('#ff1251')
         embed.setDescription(`The commands of Fokushi.
 
-**Developer Only** (5)
+**Developer Only** (6)
 
-\`shutdown, eval, serverlist, status, plan\`
+\`shutdown, eval, serverlist, status, plan, list\`
 
-**Fun** (20)
+**Fun** (21)
 
-\`hug, kiss, pat, smug, slap, cry, kill, pee, poop, mad, cuddle, meow, goose, woof, trio, bleat, ruffy, feed, waifu, boop \`
+\`hug, kiss, pat, smug, slap, cry, kill, pee, poop, mad, cuddle, meow, goose, woof, trio, bleat, ruffy, feed, waifu, boop, pikachu \`
         
 **Moderation** (8)
         
