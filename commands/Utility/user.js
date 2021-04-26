@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const moment = require('moment')
 const config = require('../../config.json')
 
-const emojis = { friends: '<:SRFriend:834697095968980998>', devs: '<:SRDev:834697623423942657>', owners: '<:SRStrawberry:825745436665053194>', amber: '<:SRDev:834697623423942657>, <:SRStrawberry:825745436665053194>, <:SRFriend:834697095968980998>', foxxie: '<:Foxxie:835523155132153917>' }
+const emojis = { friends: '<:Friend:836147589820448768>', devs: '<:Dev:836147617318174770>', owners: '<:Owner:836147637882454056>', amber: '<:Dev:836147617318174770>, <:Owner:836147637882454056>, <:Friend:836147589820448768>', foxxie: '<:Foxxie:836147744401522699>' }
 
 module.exports = {
     name: 'user',
