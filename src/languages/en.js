@@ -134,7 +134,7 @@ Hope we can help you out abit.`,
 
     COMMAND_DESCRIPTIONS : {
 
-        EVAL: "Allows ya to evaluate JavaScript code straight from Discord.",
+        EVAL: "Allows ya to evaluate JavaScript code straight from Discord. This command also takes advantage of my flags feature add `-s` or `-silent` to a message to prevent me from displaying the output. Add `-a` or `-async` to the message to wrap the given code inside of an asynchronous function. This command can only be used by developers because of the power it has.",
         RELOAD: "Reloads a command automatically so you don't have to restart the bot.", // needs spanish
         SERVERLIST: "Provides the list of all the servers im in.",
 

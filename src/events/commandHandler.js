@@ -4,13 +4,13 @@ const { getGuildLang } = require('../../lib/util/getGuildLang')
 const { codeError, permError, channelError } = require('../../lib/util/error')
 const { serverSettings } = require('../../lib/settings')
 module.exports.commandHandler = async (message) => {
-
+    
     if (message.author.bot) return;
 
     const settings = await serverSettings(message)
     
     let prefix;
-    prefix = '.'
+    prefix = message.client.user.id === '812546582531801118' ? '.' : 'd.'
     if (settings != null && settings.prefix != null) prefix = settings.prefix;
 
     if (settings != null && settings.blockedUsers != null) {
