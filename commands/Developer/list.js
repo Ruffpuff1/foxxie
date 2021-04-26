@@ -8,8 +8,7 @@ module.exports = {
     execute(message, args) {
         if (!config.ids.developerID.includes(message.author.id)) return;
         let Embed = new Discord.MessageEmbed()
-Embed.setDescription(``)
-Embed.addField(`April:
+Embed.setDescription(`April:
 Softbans
 Autoroles
 May:
