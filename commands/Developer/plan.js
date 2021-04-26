@@ -22,13 +22,13 @@ ambers goal for the amount of servers we get in the first month of fokushi being
 
 
 Commands list
+
 rr
 unlock and lock
 warnings
 unban
 afk
 music
-warn
 welcome message and goodbye messsage command
 prefix set command
 ticket system (idk about this one really)
@@ -37,8 +37,7 @@ foxu pfp (cody)
 role info
 reminders
 welcome channel and goodbye channel
-stafflogs
-softban
+stafflog
 log channel command
 disboard channel and message
 bugreport
@@ -50,6 +49,54 @@ out of server user showing
 out of server bans
 out of server avs
 specific user purges
+
+April:
+Softbans
+Autoroles
+
+May:
+more rp commands
+out of server bans
+poll
+prefix set command
+unban
+
+June:
+out of server user showing
+out of server avs
+specific user purges
+lock and unlock
+role info
+
+July:
+antiinvite
+urban
+reminders
+rr
+music
+
+August:
+warnings
+afk
+welcome channel and goodbye channel
+welcome message and goodbye messsage command
+disboard channel command
+disboard message cmd
+Making a lot of non multiple guild commands multiple guilds
+
+September:
+log channel command
+bugreport
+ticket system
+rest of the remaining commands to make multiple guild and also the remaining commands to add
+
+October:
+fix any bugs, update any commands before 15th october
+Apply for top.gg before 15th
+Hopefully get 100 or 50 servers
+if 100 then apply for verification
+
+
 `)
 Embed.setTimestamp()
 Embed.setColor(`GREY`);
