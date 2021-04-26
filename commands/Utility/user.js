@@ -16,10 +16,10 @@ module.exports = {
         if (args[0]) men = message.mentions.members.first() || members.cache.find(m => m.displayName.toLowerCase() === args.join(' ').toLocaleLowerCase()) || members.cache.get(args[0]) || members.cache.find(m => m.user.tag.toLowerCase() === args.join(' ').toLocaleLowerCase()) || members.cache.find(m => m.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member;
         
         let statusEmote;
-        if (men.user.presence.status === "online") statusEmote = "<:SROnline:831122923728535582>"
-        if (men.user.presence.status === "idle") statusEmote = "<:SRIdle:831122864203759657>"
-        if (men.user.presence.status === "dnd") statusEmote = "<:SRDnd:831111495076675594>"
-        if (men.user.presence.status === "offline") statusEmote = "<:SROffline:831122726751567892>"
+        if (men.user.presence.status === "online") statusEmote = "<:Online:836183082070704141>"
+        if (men.user.presence.status === "idle") statusEmote = " <:Idle:836183147808948244>"
+        if (men.user.presence.status === "dnd") statusEmote = " <:DND:836183111791673365>"
+        if (men.user.presence.status === "offline") statusEmote = " <:Offline:836183173439160330>"
         
         let embed = new Discord.MessageEmbed()
             .setTitle(`**${men.displayName}**, ${men.user.id === message.member.user.id ? "Info about you." : "Info about them."}`)
