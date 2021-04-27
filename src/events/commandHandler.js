@@ -10,7 +10,7 @@ module.exports.commandHandler = async (message) => {
     const settings = await serverSettings(message)
     
     let prefix;
-    prefix = '.'
+    prefix = message.client.user.id === '825130284382289920' ? 'd.' : '.'
     if (settings != null && settings.prefix != null) prefix = settings.prefix;
 
     if (settings != null && settings.blockedUsers != null) {
