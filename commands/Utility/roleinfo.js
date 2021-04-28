@@ -1,7 +1,11 @@
-const { MessageEmbed } = require('discord.js')
-module.exports.aliases = ['roleinfo', 'ri']
-module.exports.run = (bot, msg) => {
-  const args = msg.content.split(' ')
+const Discord = require('discord.js');
+
+module.exports = {
+    name: 'roleinfo',
+    aliases: ['rolei', 'role'],
+    description: 'Shows information about that specific role.',
+    execute(message, args) {
+        const args = msg.content.split(' ')
   let role = msg.mentions.roles.first() || msg.guild.roles.cache.get(args[0]) || msg.guild.roles.cache.find(role => role.name === args[0])
   if (!role) role = msg.member.roles.highest
   const embed = new MessageEmbed()
@@ -14,4 +18,5 @@ module.exports.run = (bot, msg) => {
     .addField('Manage Access', role.managed.toString())
     .addField('ID', role.id)
   msg.channel.send(embed)
+}
 }
