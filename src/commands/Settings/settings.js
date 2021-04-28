@@ -17,8 +17,8 @@ module.exports = {
 
         let blk = []
         if (settings != null && settings.blockedUsers != null) for (let user of settings.blockedUsers){
-            let u = message.client.users.cache.get(user[0])
-            blk.push(`**${u.tag}**`)
+            let u = message.guild.members.cache.get(user[0])
+            blk.push(`**${u.user.tag}**`)
         }
       
         if (settings != null && settings.prefix != null) desc1.push(`${granted} Prefix **enabled** (\`${settings.prefix}\`)`)

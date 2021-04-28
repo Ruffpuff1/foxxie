@@ -147,70 +147,68 @@ module.exports = {
         
             const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
 
-            let embed = new MessageEmbed();
-            
-                embed
-                    .setTitle(`${user.tag} (ID: ${user.id})`)
-                    .setThumbnail(user.displayAvatarURL({ dynamic: true }));
+            let embed = new MessageEmbed()
+                .setTitle(`${user.tag} (ID: ${user.id})`)
+                .setThumbnail(user.displayAvatarURL({ dynamic: true }));
 
-                    if (contributor.includes(user.id)) embed.setDescription(`<:Foxxie:825972379875409980> Foxxie Contributor`)
-                    user.id === '754598258742919178' ? embed.setDescription(`<:CertifiedCutiepieTallBoy:833197162610425857> Certified Cutiepie Tall Boy`) : '';
-                    user.id === '827514096865509386' ? embed.setDescription(`<:Fokushi:835668026048380968> Sister Bot`) : '';
+            if (contributor.includes(user.id)) embed.setDescription(`<:Foxxie:825972379875409980> Foxxie Contributor`)
+            user.id === '754598258742919178' ? embed.setDescription(`<:CertifiedCutiepieTallBoy:833197162610425857> Certified Cutiepie Tall Boy`) : '';
+            user.id === '827514096865509386' ? embed.setDescription(`<:Fokushi:835668026048380968> Sister Bot`) : '';
             
-                    const member = message.guild ? await message.guild.members.fetch(user).catch(() => null) : null;
+            const member = message.guild ? await message.guild.members.fetch(user).catch(() => null) : null;
             
-                    const statistics = [
-                        `Joined Discord on ${moment(user.createdAt).format('MMMM Do YYYY')} **(${moment([moment(user.createdAt).format('YYYY'), moment(user.createdAt).format('M') - 1, moment(user.createdAt).format('D')]).toNow(true)} ago)**` //Duration.toNow(user.createdAt)
-                    ];
+            const statistics = [
+                `Joined Discord on ${moment(user.createdAt).format('MMMM Do YYYY')} **(${moment([moment(user.createdAt).format('YYYY'), moment(user.createdAt).format('M') - 1, moment(user.createdAt).format('D')]).toNow(true)} ago)**` //Duration.toNow(user.createdAt)
+            ];
             
-                    if (member) {
+            if (member) {
 
-                        guildId = message.guild.id
-                        userId = member.user.id
+                guildId = message.guild.id
+                userId = member.user.id
 
-                        let results = await getUserMessageCount(message, userId)
+                let results = await getUserMessageCount(message, userId)
 
-                        let stats_messages;
-                        stats_messages = 0
-                        if (results !== null) stats_messages = results.messageCount
-                        statistics.push((
-                            `${member.user.id == message.guild.ownerID ? 'Created' : 'Joined'} ${message.guild.name} ${moment(member.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)} ago)**`
-                        ))
+                let stats_messages;
+                stats_messages = 0
+                if (results !== null) stats_messages = results.messageCount
+                statistics.push((
+                    `${member.user.id == message.guild.ownerID ? 'Created' : 'Joined'} ${message.guild.name} ${moment(member.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)} ago)**`
+                ))
                         
-                        statistics.push(`${stats_messages.toLocaleString()} messages sent`);
+                statistics.push(`${stats_messages.toLocaleString()} messages sent`);
 
-                        embed.addField(`:pencil: **Statistics**`, statistics.join('\n'));
-                        if (!member) return embed;
+                embed.addField(`:pencil: **Statistics**`, statistics.join('\n'));
+                if (!member) return embed;
                 
-                        const roles = member.roles.cache.sort((a, b) => b.position - a.position);
-                        let spacer = false;
-                        const roleString = roles
-                            .array()
-                            .filter(role => role.id !== message.guild.id)
-                            .reduce((acc, role, idx) => {
-                                if (acc.length + role.name.length < 1010) {
-                                    if (role.name === '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯') {
-                                        spacer = true;
-                                        return `${acc}\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n`;
-                                    } else {
-                                        const comma = (idx !== 0) && !spacer ? ', ' : '';
-                                        spacer = false;
-                                        return acc + comma + role.name;
-                                    }
-                                } else { return acc; }
-                            }, '');
+                const roles = member.roles.cache.sort((a, b) => b.position - a.position);
+                let spacer = false;
+                const roleString = roles
+                    .array()
+                    .filter(role => role.id !== message.guild.id)
+                    .reduce((acc, role, idx) => {
+                        if (acc.length + role.name.length < 1010) {
+                            if (role.name === '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯') {
+                                spacer = true;
+                                return `${acc}\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n`;
+                            } else {
+                                const comma = (idx !== 0) && !spacer ? ', ' : '';
+                                spacer = false;
+                                return acc + comma + role.name;
+                            }
+                        } else { return acc; }
+                    }, '');
                 
-                        if (roles.size) {
-                            embed.addField(
-                                `:scroll: **Role${roles.size > 2 ? `s (${roles.size - 1})` : roles.size === 2 ? '' : 's'}**`,
-                                roleString.length ? roleString : 'No roles'
-                            );
-                        }
+                if (roles.size) {
+                    embed.addField(
+                        `:scroll: **Role${roles.size > 2 ? `s (${roles.size - 1})` : roles.size === 2 ? '' : 's'}**`,
+                        roleString.length ? roleString : 'No roles'
+                    );
+                }
 
                         guildId = message.guild.id
                         userId = member.user.id
 
-                        await mongo().then(async mongoose => {
+                        await mongo().then(async () => {
                             try {
                                 const results = await warnSchema.findOne({
                                     guildId,

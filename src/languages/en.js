@@ -136,7 +136,7 @@ Hope we can help you out abit.`,
 
         EVAL: "Allows ya to evaluate JavaScript code straight from Discord. This command also takes advantage of my flags feature add `-s` or `-silent` to a message to prevent me from displaying the output. Add `-a` or `-async` to the message to wrap the given code inside of an asynchronous function. This command can only be used by developers because of the power it has.",
         RELOAD: "Reloads an individual command file that way if edits were made you do no have to restart the bot. This command is locked to only developers to to the potential risk it poses.", // needs spanish
-        SERVERLIST: "Provides a list of all of the servers I am in, use the reactions on the bottom of the embed to navagate from page to page. This command is locked to developers to do the security risk it poses for users.",
+        SERVERLIST: "Provides a list of all of the servers I am in, use the reactions on the bottom of the embed to navagate from page to page.",
 
         CAT: "Gets a random image of a cat using api.thecatapi.com.",
         DOG: "Shows a random image of a dog from dog.co/api.",
