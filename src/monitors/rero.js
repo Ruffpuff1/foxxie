@@ -3,8 +3,6 @@ module.exports = {
     name: 'rero',
     execute: async (reaction, user, act) => {
 
-        console.log('got reaction')
-
         let server = await serverSettings(reaction.message)
         if (server == null) return;
         if (server.reros == null) return;
