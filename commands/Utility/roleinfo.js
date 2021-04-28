@@ -4,7 +4,7 @@ module.exports = {
     name: 'roleinfo',
     aliases: ['rolei', 'role'],
     description: 'Shows information about that specific role.',
-    execute(message, args) {
+    execute(message) {
         const args = msg.content.split(' ')
   let role = msg.mentions.roles.first() || msg.guild.roles.cache.get(args[0]) || msg.guild.roles.cache.find(role => role.name === args[0])
   if (!role) role = msg.member.roles.highest
