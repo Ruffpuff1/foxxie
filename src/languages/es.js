@@ -147,7 +147,6 @@ Espero que te podemos ayudar un poquito.`,
         DISBOARDCHANNEL: "Si usas el bot de discord puedes instalar un canal dónde puedes promover tu servidor cada 2 horas. Alternativamente puedes desactivar estos recordatorios usando `fox disboardchannel none`.",
         DISBOARDMESSAGE: "Cambia el texto yo te mandaré cuando disboard se actualice. Ponga `none` si quiere reiniciar mi configuración por defecto, o nomás puede usar `fox disboardmessage` para enseñar el mensaje actual si está establecido.",
         LANGUAGE: "Establece el idioma del gremio. Elige Ingles, Espanol, o ninguno para restablecer la configuración por defecto.",
-        MODCHANNEL: "Establece el canal de registro de moderación para el servidor. Si no se especifica ningún canal, le mostraré el canal que está listo al momento. Si no hay ningún canal listo no  mostrará ninguno.",
         TESTJOIN: "Simula lo que pueda pasar si una nueva persona se une al servidor.",
         WELCOMECHANNEL: "Establece el canal donde pueda mandar un mensaje de bienvenida. Esto iniciará cuando un nuevo miembro se una o puede usar `fox testwelcome` para probar de antemano.",
 

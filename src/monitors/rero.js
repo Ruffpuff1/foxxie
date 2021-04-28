@@ -1,13 +1,24 @@
-module.exports.rero = async (reaction, user, act) => {
+const { serverSettings } = require('../../lib/settings')
+module.exports = {
+    name: 'rero',
+    execute: async (reaction, user, act) => {
 
-    const member = reaction.message.guild ? await reaction.message.guild.members.fetch(user).catch(() => null) : null;
+        let server = await serverSettings(reaction.message)
+        if (server == null) return;
+        if (server.reros == null) return;
 
-    // Asteri Announcement ping rero
-    if (reaction.emoji.id === '824751934539825232' && reaction.message.id === '833960900477714462') {
-        if (member) {
-            let announcementPing = reaction.message.guild.roles.cache.find(r => r.id === '833964155849277461')
-            if (act === 'add') member.roles.add(announcementPing)
-            if (act === 'remove') member.roles.remove(announcementPing)
+        const member = reaction.message.guild ? await reaction.message.guild.members.fetch(user).catch(() => null) : null;
+        if (!member) return;
+
+        for (let rero of server.reros){
+
+            if (reaction.emoji.id === rero[0].emoji || reaction.emoji.name === rero[0].emoji && reaction.message.id === rero[0].message) {
+
+                let role = reaction.message.guild.roles.cache.find(r => r.id === rero[0].role)
+
+                if (act === 'add') member.roles.add(role)
+                if (act === 'remove') member.roles.remove(role)
+            }
         }
     }
     // TCS Age rero

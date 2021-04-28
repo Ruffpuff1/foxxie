@@ -1,7 +1,9 @@
 const { serverSettings } = require('../../lib/settings')
 const fs = require('fs')
 const ms = require('ms')
-module.exports.disboardBump = async (message) => {
+module.exports = {
+    name: 'disboardbump',
+    execute: async (message) => {
 
     if (!message.guild) return
 
@@ -32,5 +34,5 @@ module.exports.disboardBump = async (message) => {
                 if (err) console.log(err)
             })
         }
-    }
+      }  }
 }

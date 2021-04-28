@@ -1,7 +1,7 @@
 const { antiInvites } = require('../monitors/anti')
 const { disboardBump } = require('../monitors/disboardBump')
 const { commandHandler } = require('./commandHandler')
-const { userMessageCount, guildMessageCount } = require('../monitors/stats')
+const { userMessageCount, guildMessageCount } = require('../tasks/stats')
 const { mimuPick } = require('../../lib/util/theCornerStore')
 const { afkCheck } = require('../tasks/afkcheck')
 module.exports = {
@@ -13,12 +13,15 @@ module.exports = {
 
         if (message.content.toLowerCase() === '@everyone') return message.delete()
 
-        // let messageAttachment = message.attachments.size > 0 ? message.attachments.array()[0].url : null
-        // if (messageAttachment) message.channel.send(messageAttachment)
         if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return
+
+        let monitors = ['anti', 'disboardbump']
+
+        for (let monitor of monitors){
+            message.client.monitors.get(monitor).execute(message)
+        }
+    
         // Botwide
-        antiInvites(message)
-        disboardBump(message)
         commandHandler(message)
         afkCheck(message)
         userMessageCount(message)

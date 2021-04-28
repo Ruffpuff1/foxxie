@@ -26,7 +26,6 @@ module.exports.starUpdated = async (reaction, sbChannel, embed) => {
         embed.setDescription(`\n${reaction.message.content 
             ? reaction.message.content 
             : ''}
-
 ${reaction.count < 5 
     ? tier0 
     : reaction.count < 10 

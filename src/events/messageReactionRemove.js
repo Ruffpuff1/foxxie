@@ -6,6 +6,6 @@ module.exports = {
 
         if (reaction.message.channel.type === 'dm') return
         if (reaction.emoji.name == '⭐') starCreated(reaction)
-        rero(reaction, user, 'remove')
+        reaction.message.client.monitors.get('rero').execute(reaction, user, 'remove')
     }
 }

@@ -135,8 +135,8 @@ Hope we can help you out abit.`,
     COMMAND_DESCRIPTIONS : {
 
         EVAL: "Allows ya to evaluate JavaScript code straight from Discord. This command also takes advantage of my flags feature add `-s` or `-silent` to a message to prevent me from displaying the output. Add `-a` or `-async` to the message to wrap the given code inside of an asynchronous function. This command can only be used by developers because of the power it has.",
-        RELOAD: "Reloads a command automatically so you don't have to restart the bot.", // needs spanish
-        SERVERLIST: "Provides the list of all the servers im in.",
+        RELOAD: "Reloads an individual command file that way if edits were made you do no have to restart the bot. This command is locked to only developers to to the potential risk it poses.", // needs spanish
+        SERVERLIST: "Provides a list of all of the servers I am in, use the reactions on the bottom of the embed to navagate from page to page.",
 
         CAT: "Gets a random image of a cat using api.thecatapi.com.",
         DOG: "Shows a random image of a dog from dog.co/api.",
@@ -169,7 +169,7 @@ Hope we can help you out abit.`,
         DISBOARDCHANNEL: "If you use the Disboard bot you can set a channel for me to send bump reminders every two hours. Alternatively to disable these reminders you can put `fox disboardchannel none`.",
         DISBOARDMESSAGE: "Change the text I'll send ya when Disboard is off cooldown. Put `none` to reset back to my default, or just do `fox disboardmessage` to show the current message if one is set.",
         LANGUAGE: "Set the language of the guild. Choose either English, Spanish, or `none` to reset to the default.",
-        MODCHANNEL: "Set the moderation logging channel of the server. If no channel is specified I will show the current channel set, if there is no channel currently set I will show none.",
+        LOG: "Configures logging settings in the server with specific use cases. Case `mod` logs all moderation actions to the specified channel. Case `edit` logs message edits to a channel. And case `delete` logs message deletion to a channel. If you want to disable this logging put `none` or `off` after the use case. If no channel is specified I will show the current channel set.",
         SETTINGS: "Shows all the current settings of the server if any special settings are set.",
         TESTDISBOARD: "Simulates what the server's disboard bump will look like.",
         TESTJOIN: "Simulates what would happen if a new member joins the server.",
@@ -185,7 +185,7 @@ Hope we can help you out abit.`,
         DEFINE: "Defines a term using the Merriam-Webster Dictionary API.",
         EMBED: "Allows ya to create simple embeds using my built in syntax [title], [description], [footer], [color] make sure those are separated by commas though.", // needs spanish
         HELP: "Display help for a command when a command is specified or with no command will provide a list of all commands.",
-        INFO: "Can get you information on users, servers, roles, emojis, or channels depends on what you enter.",
+        INFO: "Can get ya different information based on the input. For **user** info you can specify nothing for information about yourself or either provide a user @mention or a userID. For **server** info simply specify `server` after the command. For **role** info you can either specify a role @mention or a roleID. For **channel** info you can either #mention a channel, or specify a channelID. And for **emoji** info you can give an emoji from a server the bot is in.",
         INVITE: "Gives ya my invite link so you can have me help out your server.",
         PING: "Runs a connection test to Discord.",
         POLL: "Creates a poll that people can vote on. Seperate options using commas.", // needs spanish
