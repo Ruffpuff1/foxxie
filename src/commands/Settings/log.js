@@ -5,7 +5,7 @@ const { serverSettings, deleteLogSetting } = require('../../../lib/settings')
 module.exports = {
     name: 'log',
     aliases: ['logging', 'logchannel', 'lc'],
-    usage: 'fox log [mod|edit|delete] (#channel|none|off)',
+    usage: `fox log [mod|edit|delete] (#channel|none|off)`,
     permissions: 'ADMINISTRATOR',
     category: 'settings',
     execute: async (lang, msg, args) => {
@@ -21,7 +21,6 @@ module.exports = {
 
         let settings = await serverSettings(msg)
 
-        //if (!chn )
         let deleteCase = ['off', 'none']
     
         if (chn === undefined && !deleteCase.includes(args[1])) {

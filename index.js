@@ -13,4 +13,14 @@ for (const file of eventFiles) {
 	}
 }
 
+client.monitors = new Discord.Collection();
+        
+const monitorFiles = fs.readdirSync(`./src/monitors`).filter(file => file.endsWith('.js'));
+for (const file of monitorFiles) {
+    const monitor = require(`./src/monitors/${file}`);
+    client.monitors.set(monitor.name, monitor);
+	console.log(monitor.name)
+    }
+    
+
 client.login(process.env.DEV)

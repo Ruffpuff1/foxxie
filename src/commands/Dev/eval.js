@@ -22,7 +22,7 @@ module.exports = {
                     if (codein.legth < 1 && !codein)
                         return message.channel.send(`${lang.COMMAND_EVAL_OUTPUT}\n\`\`\`javascript\n${COMMAND_EVAL_UNDEFINED}\n\`\`\``)
                     if (typeof code !== "string")
-                        code = require("util").inspect(code, { depth : 0 } )
+                        code = require("util").inspect(code, { depth : 2 } )
                     
                     message.channel.send(`\n${lang.COMMAND_EVAL_OUTPUT}\n\`\`\`javascript\n${code.length > 1024 ? `${lang.COMMAND_EVAL_OVER}` : code}\n\`\`\`\n${lang.COMMAND_EVAL_TYPE}\n\`\`\`javascript\n${type}\n\`\`\``)
                         .then(resultMessage => {

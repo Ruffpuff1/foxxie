@@ -1,6 +1,8 @@
 const { serverSettings } = require('../../lib/settings')
 const { moderationCommandWarn } = require('../../lib/structures/ModerationCommand')
-module.exports.antiInvites = async (message) => {
+module.exports = {
+    name: 'anti',
+    execute: async(message) => {
     let anti_inv = await serverSettings(message)
 
     if (!message.guild) return
@@ -18,10 +20,10 @@ module.exports.antiInvites = async (message) => {
 
     if (inviteRegex.test(message.content) && message.guild.id === '761512748898844702') {
 
-        let reason = 'Server invite link'
-        moderationCommandWarn(message, reason, message.member, message.guild.me)//auto warns in TCS
+        moderationCommandWarn(message, 'Server invite link', message.member, message.guild.me)//auto warns in TCS
         message.delete()
     }
     // For other servers
     if (inviteRegex.test(message.content) && message.guild.id !== '761512748898844702') return message.delete(); // deletes
+    }
 }

@@ -1,13 +1,21 @@
-module.exports.rero = async (reaction, user, act) => {
+module.exports = {
+    name: 'rero',
+    execute: async (reaction, user, act) => {
 
-    const member = reaction.message.guild ? await reaction.message.guild.members.fetch(user).catch(() => null) : null;
+        let reros = [ { emoji: '824751934539825232', message: '836790354858606644', role: '825929686634856459' } ]
+        const member = reaction.message.guild ? await reaction.message.guild.members.fetch(user).catch(() => null) : null;
+        if (!member) return;
 
-    // Asteri Announcement ping rero
-    if (reaction.emoji.id === '824751934539825232' && reaction.message.id === '833960900477714462') {
-        if (member) {
-            let announcementPing = reaction.message.guild.roles.cache.find(r => r.id === '833964155849277461')
-            if (act === 'add') member.roles.add(announcementPing)
-            if (act === 'remove') member.roles.remove(announcementPing)
+        for (let rero of reros){
+            console.log('emoji:', rero.emoji)
+            console.log('message:', rero.message)
+            if (reaction.emoji.id === rero.emoji && reaction.message.id === rero.message) {
+                console.log('role:', rero.role)
+                let role = reaction.message.guild.roles.cache.find(r => r.id === rero.role)
+
+                if (act === 'add') member.roles.add(role)
+                if (act === 'remove') member.roles.remove(role)
+            }
         }
     }
 }
