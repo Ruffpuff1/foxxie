@@ -14,7 +14,7 @@ module.exports = {
         { name: 'Colour', value: `${role.hexColor}`, inline: true},
         { name: 'Created', value: `${role.createdAt.toDateString()}`, inline: true},
         { name: 'Modifiable', value: `${role.editable.toString()}`, inline: true},
-        { name: 'Permissions', value: `${role.permmissions.toString()}`, inline: true},
+        { name: 'Permissions', value: `${role.permmissions}`, inline: true},
         { name: 'ID', value: `${role.id}`, inline: false},)
 
       message.channel.send(embed)
