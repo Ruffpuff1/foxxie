@@ -15,7 +15,7 @@ module.exports = {
         { name: 'Created', value: `${role.createdAt.toDateString()}`, inline: true},
         { name: 'Modifiable', value: `${role.editable.toString()}`, inline: true},
         { name: 'Manage Access', value: `${role.managed.toString()}`, inline: true},
-        { name: 'ID', value: `${role.id}`, inline: false},)
+        { name: 'ID', value: `${role.id}`, inline: true},)
 
       message.channel.send(embed)
     }

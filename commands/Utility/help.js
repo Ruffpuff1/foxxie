@@ -34,7 +34,9 @@ if (!command) return message.reply("Yeh yeh, all that en, Please give me an actu
 let colors = ["#ff1251"]
 const helpEmbed = new Discord.MessageEmbed()
   .setTitle(command.name)
-  .setDescription(command.description)
+  .setDescription(command.description,
+
+command.usage)
   .setColor(colors[Math.floor(Math.random() * colors.length)])
   .setThumbnail(message.author.displayAvatarURL({ format: "png", dynamic: true, size: 4096}))
   .addField(
