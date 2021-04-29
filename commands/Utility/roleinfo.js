@@ -4,19 +4,19 @@ module.exports = {
     name: 'roleinfo',
     aliases: ['rolei', 'role'],
     description: 'Shows information about that specific role.',
-    execute(message, msg) {
-        const args = msg.content.slice(' ')
-  let role = msg.mentions.roles.first() || msg.guild.roles.cache.get(args[0]) || msg.guild.roles.cache.find(role => role.name === args[0])
-  if (!role) role = msg.member.roles.highest
-  const embed = new MessageEmbed()
-    .setColor(role.hexColor)
-    .setTitle(`Information about ${role.name}`)
-    .addField('Members', role.members.size)
-    .addField('Color', role.hexColor)
-    .addField('Creation Date', role.createdAt.toDateString())
-    .addField('Modifiablity', role.editable.toString())
-    .addField('Manage Access', role.managed.toString())
-    .addField('ID', role.id)
-  msg.channel.send(embed)
-}
+    execute(message, args) {
+      let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || msg.guild.roles.cache.find(role => role.name === args[0]) || message.member.roles.highest
+
+      const embed = new Discord.MessageEmbed()
+        .setColor(role.hexColor)
+        .setTitle(`Information about ${role.name}`)
+        .addField('Members', role.members.size)
+        .addField('Color', role.hexColor)
+        .addField('Creation Date', role.createdAt.toDateString())
+        .addField('Modifiablity', role.editable.toString())
+        .addField('Manage Access', role.managed.toString())
+        .addField('ID', role.id)
+
+      message.channel.send(embed)
+    }
 }
