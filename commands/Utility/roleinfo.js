@@ -9,13 +9,14 @@ module.exports = {
 
       const embed = new Discord.MessageEmbed()
         .setColor(role.hexColor)
-        .setTitle(`Information about ${role.name}`)
-        .addField('Members', role.members.size)
-        .addField('Color', role.hexColor)
-        .addField('Creation Date', role.createdAt.toDateString())
-        .addField('Modifiablity', role.editable.toString())
-        .addField('Manage Access', role.managed.toString())
-        .addField('ID', role.id)
+        .setTitle(`Information about the role ${role.name}`)
+        .addFields({ name: 'Members', value: `${role.members.size}`, inline: true},
+        { name: 'Members', value: `role.members.size`, inline: true },
+        { name: 'Colour', value: `${role.hexColor}`, inline: true},
+        { name: 'Created', value: `${role.createdAt.toDateString()}`, inline: false},
+        { name: 'Modifiable', value: `${role.editable.toString()}`, inline: true},
+        { name: 'Manage Access', value: `${role.managed.toString()}`, inline: true},
+        { name: 'ID', value: `${role.id}`, inline: false},)
 
       message.channel.send(embed)
     }
