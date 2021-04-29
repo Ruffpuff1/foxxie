@@ -26,7 +26,7 @@ module.exports = {
 
 (Do hk help (command) or more info on each command.)`)
         embed.setTimestamp()
-        if (!args.length) message.channel.send(embed)
+        if (!args.length) return message.channel.send(embed)
         const {commands} = message.client;
         const name = args[0].toLowerCase();
 const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
