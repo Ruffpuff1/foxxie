@@ -8,6 +8,7 @@ module.exports = {
       let Embed = new Discord.MessageEmbed()
       Embed.setTitle(`Fokushi's Ping`)
       Embed.setDescription(`\`🏓 Discord Latency is ${Date.now() - message.createdTimestamp} ms\`
+      
 \`🏓 Network Latency is ${message.client.ws.ping} ms\``)
       Embed.setTimestamp()
       Embed.setFooter(`Discord is shitty, so the ping may be high due to that. Sorry.`)
