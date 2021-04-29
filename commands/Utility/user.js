@@ -6,7 +6,7 @@ const emojis = { friends: '<:Friend:836147589820448768>', devs: '<:Dev:836147617
 
 module.exports = {
     name: 'user',
-    aliases: ["usr", "ui", "userinfo", "i"],
+    aliases: ["usr", "ui", "userinfo", "i", "profile", "card"],
     description: 'Shows information about you or another user. ',
     
     execute(message, args) {
