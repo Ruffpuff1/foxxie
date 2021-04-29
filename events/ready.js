@@ -6,7 +6,7 @@ module.exports = {
         bot.user.setPresence({
             status: "online",
             activity: {
-                name: `with ${bot.guilds.cache.size} servers | pouncing and playing with ${bot.users.cache.size} users | sticking my head in the snow to find ${client.commands.size} commands.`,
+                name: `with ${bot.guilds.cache.size} servers | pouncing and playing with ${bot.users.cache.size} users | sticking my head in the snow to find ${message.client.commands.size} commands.`,
                 type: "PLAYING"
             }
         });
