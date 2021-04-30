@@ -32,6 +32,6 @@ module.exports = {
         if (member.guild.id === config.servers.seasideRest) goodbyeMessage("822189403060830279")
         if (member.guild.id === config.servers.ok) goodbyeMessageOk("829649102333149206")
         if (member.guild.id === config.servers.fox) goodbyeMessage("822414098439864360")
-        if (member.guild.id !== config.servers.codes) goodbyeMessage("790522490903330838")
+        if (member.guild.id === config.servers.codes) goodbyeMessage("790522490903330838")
     }
 }

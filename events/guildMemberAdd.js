@@ -33,6 +33,6 @@ module.exports = {
         if (member.guild.id === config.servers.seasideRest) welcomeMessage("822189403060830279")
         if (member.guild.id === config.servers.ok) welcomeMessageOk("831180747008114688")
         if (member.guild.id === config.servers.fox) welcomeMessage("822414098439864360")
-        if (member.guild.id !== config.servers.codes) welcomeMessage("790522490903330838")
+        if (member.guild.id === config.servers.codes) welcomeMessage("790522490903330838")
     }
 }

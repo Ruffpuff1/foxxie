@@ -1,3 +1,5 @@
+const { status } = require("./status");
+
 module.exports = {
 	name: 'ready',
 	once: true,
@@ -10,5 +12,12 @@ module.exports = {
                 type: "PLAYING"
             }
         });
+
+        status(bot)
+        .catch()
+        setInterval(() => {
+            status(bot)
+        }, 15000)
+
 	},
 };
