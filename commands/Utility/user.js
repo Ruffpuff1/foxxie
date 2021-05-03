@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const moment = require('moment')
 const config = require('../../config.json')
 
-const emojis = { friends: '<:Friend:836147589820448768>', devs: '<:Dev:836147617318174770>', owners: '<:Owner:836147637882454056>', amber: '<:Dev:836147617318174770>, <:Owner:836147637882454056>, <:Friend:836147589820448768>', foxxie: '<:Foxxie:836147744401522699>' }
+const emojis = { friends: '<:BadgeFriend:836147589820448768>', devs: '<:BadgeDev:836147617318174770>', owners: '<:BadgeOwner:836147637882454056>', amber: '<:BadgeDev:836147617318174770>, <:BadgeOwner:836147637882454056>, <:BadgeFriend:836147589820448768>', foxxie: '<:BadgeFoxxie:836147744401522699>' }
 
 module.exports = {
     name: 'user',
@@ -16,10 +16,10 @@ module.exports = {
         if (args[0]) men = message.mentions.members.first() || members.cache.find(m => m.displayName.toLowerCase() === args.join(' ').toLocaleLowerCase()) || members.cache.get(args[0]) || members.cache.find(m => m.user.tag.toLowerCase() === args.join(' ').toLocaleLowerCase()) || members.cache.find(m => m.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member;
         
         let statusEmote;
-        if (men.user.presence.status === "online") statusEmote = "<:Online:836183082070704141>"
-        if (men.user.presence.status === "idle") statusEmote = " <:Idle:836183147808948244>"
-        if (men.user.presence.status === "dnd") statusEmote = " <:DND:836183111791673365>"
-        if (men.user.presence.status === "offline") statusEmote = " <:Offline:836183173439160330>"
+        if (men.user.presence.status === "online") statusEmote = "<:StatusOnline:836183082070704141>"
+        if (men.user.presence.status === "idle") statusEmote = " <:StatusIdle:836183147808948244>"
+        if (men.user.presence.status === "dnd") statusEmote = " <:StatusDND:836183111791673365>"
+        if (men.user.presence.status === "offline") statusEmote = " <:StatusOffline:836183173439160330>"
         
         let embed = new Discord.MessageEmbed()
             .setTitle(`**${men.displayName}**, ${men.user.id === message.member.user.id ? "Info about you." : "Info about them."}`)
