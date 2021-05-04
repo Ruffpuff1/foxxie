@@ -1,11 +1,11 @@
 const { MessageEmbed, Permissions: { FLAGS } } = require('discord.js');
-const { emojis: { perms: { granted, notSpecified } } } = require('../../../lib/util/constants')
+const { emojis: { perms: { granted, notSpecified }, foxxieBadges: { foxxie, fokushi, cutiepie } } } = require('../../../lib/util/constants')
 const mongo = require('../../../lib/structures/database/mongo')
-const warnSchema = require('../../../lib/structures/database/schemas/server/moderation/warnSchema')
-const noteSchema = require('../../../lib/structures/database/schemas/server/moderation/noteSchema')
+const { botSettingsSchema } = require('../../../lib/structures/database/BotSettingsSchema')
+const { userSchema } = require('../../../lib/structures/database/UserSchema.js')
 const { getUserMessageCount, getGuildMessageCount } = require('../../tasks/stats')
 const moment = require('moment')
-const { contributor } = require('../../../lib/config')
+//const { contributor } = require('../../../lib/config')
 module.exports = {
     name: 'info',
 	aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
@@ -112,7 +112,6 @@ module.exports = {
         }
 
         if (server && args[0] === 'server') {
-            console.log(server.id)
             let results = await getGuildMessageCount(message, server.id)
                     
             let messages;
@@ -151,9 +150,15 @@ module.exports = {
                 .setTitle(`${user.tag} (ID: ${user.id})`)
                 .setThumbnail(user.displayAvatarURL({ dynamic: true }));
 
-            if (contributor.includes(user.id)) embed.setDescription(`<:Foxxie:825972379875409980> Foxxie Contributor`)
-            user.id === '754598258742919178' ? embed.setDescription(`<:CertifiedCutiepieTallBoy:833197162610425857> Certified Cutiepie Tall Boy`) : '';
-            user.id === '827514096865509386' ? embed.setDescription(`<:Fokushi:835668026048380968> Sister Bot`) : '';
+            let badges = [];
+
+            let botSettings = await botSettingsSchema.findById({ _id: '812546582531801118' })
+
+            if (botSettings.contributors.includes(user.id)) badges.push(`${foxxie} Foxxie Contributor`)
+            if (botSettings.cutiepie.includes(user.id)) badges.push(`${cutiepie} Certified Cutiepie Tall Boy`)
+            if (botSettings.sisterBot.includes(user.id)) badges.push(`${fokushi} Sister Bot`)
+
+            embed.setDescription(badges.filter(i => !!i).join('\n'))
             
             const member = message.guild ? await message.guild.members.fetch(user).catch(() => null) : null;
             
@@ -166,16 +171,17 @@ module.exports = {
                 guildId = message.guild.id
                 userId = member.user.id
 
-                let results = await getUserMessageCount(message, userId)
-
                 let stats_messages;
                 stats_messages = 0
-                if (results !== null) stats_messages = results.messageCount
+
+                let results = await getUserMessageCount(message, userId)
+                results ? stats_messages = results.servers[0][0][guildId] ? results.servers[0][0][guildId]["messageCount"] : stats_messages = 0 : stats_messages = 0;
+
                 statistics.push((
                     `${member.user.id == message.guild.ownerID ? 'Created' : 'Joined'} ${message.guild.name} ${moment(member.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)} ago)**`
                 ))
                         
-                statistics.push(`${stats_messages.toLocaleString()} messages sent`);
+                statistics.push(`${stats_messages ? stats_messages.toLocaleString() : 0} messages sent`);
 
                 embed.addField(`:pencil: **Statistics**`, statistics.join('\n'));
                 if (!member) return embed;
@@ -210,32 +216,29 @@ module.exports = {
 
                         await mongo().then(async () => {
                             try {
-                                const results = await warnSchema.findOne({
-                                    guildId,
-                                    userId
+                                const results = await userSchema.findById({
+                                    _id: userId
                                 })
-                                results?this.warnings = results.warnings : this.warnings = [];
-                                if (this.warnings.length) {
-                                    embed.addField(
-                                        `:lock: **Warnings (${this.warnings.length})**`,
-                                        this.warnings.map((warn, idx) => `${idx + 1}. ${warn.reason} - **${client.users.cache.get(warn.author).tag}**`)
-                                    );
+                                results ? this.warnings = results.servers[0][0][guildId] ? results.servers[0][0][guildId]["warnings"] : [] : this.warnings = [];
+                                if (this.warnings) {
+                                    if (this.warnings.length) {
+                                        embed.addField(
+                                            `:lock: **Warnings (${this.warnings.length})**`,
+                                            this.warnings.map((warn, idx) => `${idx + 1}. ${warn.reason} - **${client.users.cache.get(warn.author).tag}**`)
+                                        );
+                                    }
+                                }
+
+                                results ? this.notes = results.servers[0][0][guildId] ? results.servers[0][0][guildId]["notes"] : [] : this.notes = []
+                                if (this.notes) {
+                                    if (this.notes.length) {
+                                        embed.addField(
+                                            `:label: **Note${this.notes.length > 1 ? 's' : ''} (${this.notes.length})**`,
+                                            this.notes.map((note, idx) => `${idx + 1}. ${note.reason} - **${client.users.cache.get(note.author).tag}**`)
+                                        );
+                                    }
                                 }
                             } finally {}
-                            try {
-                                const results2 = await noteSchema.findOne({
-                                    guildId,
-                                    userId
-                                })
-                                results2?notes = results2.notes : notes = [];
-                                if (notes.length) {
-                                    embed.addField(
-                                        `:label: **Notes (${notes.length})**`,
-                                        notes.map((note, idx) => `${idx + 1}. ${note.reason} - **${client.users.cache.get(note.author).tag}**`)
-                                    );
-                                }
-                            }
-                            finally {}
                         })
 
                         embed.setColor(member.displayColor)

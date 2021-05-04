@@ -1,6 +1,6 @@
 const fs = require('fs')
 const Discord = require('discord.js')
-const { serverSchema } = require('../../lib/structures/schemas')
+const { serverSchema } = require('../../lib/structures/database/ServerSchemas')
 const mongo = require('../../lib/structures/database/mongo')
 module.exports.disboard = (client) => {
     client.disboard = require('../store/disboard.json')
@@ -12,6 +12,7 @@ module.exports.disboard = (client) => {
             let color = client.disboard[i].color
 
             let guild = client.guilds.cache.get(guildID)
+            if (!guild) return
             let channel = guild.channels.cache.get(channelID)
 
             if (disboardTime === null) return;
@@ -23,8 +24,6 @@ module.exports.disboard = (client) => {
                             _id: guildID
                         })
 
-                        // if (disb == undefined) return;
-
                         const embed = new Discord.MessageEmbed()
                             .setColor(color)
                             .setTitle('Reminder to Bump')
@@ -33,7 +32,7 @@ module.exports.disboard = (client) => {
 
                         // Checks if Disboard Message is set
                         if (disb){
-                        if (disb.disboardMessage) embed.setDescription(disb.disboardMessage)
+                        if (disb.disboardMessage) embed.setDescription(disb.disboardMessage.replace(/{(server|guild)}/gi, guild.name))
                         }
                         // Checks if guild is The Corner Store
                         if (guildID === '761512748898844702') {

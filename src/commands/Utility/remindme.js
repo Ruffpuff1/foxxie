@@ -31,7 +31,8 @@ module.exports = {
             timeago: timeFromNow,
             message: message,
             sendIn: sendIn.test(message.content),
-            color: message.guild.me.displayColor
+            color: message.guild.me.displayColor,
+            channelId: message.channel.id
         }
         fs.writeFile('./src/store/reminders.json', JSON.stringify(client.reminders, null, 4), err => {
             if (err) throw err

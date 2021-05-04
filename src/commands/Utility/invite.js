@@ -14,7 +14,8 @@ module.exports = {
             if (message.content.includes(`-c`)) {
                 return message.channel.send(inviteEmbed)
             }
-        message.author.send(inviteEmbed).catch(error => {message.channel.send(inviteEmbed);
+        message.author.send(inviteEmbed).catch(error => {
+            message.channel.send(inviteEmbed);
         });
     
         message.react(approved)

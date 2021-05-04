@@ -1,6 +1,6 @@
 const mongo = require('../../../lib/structures/database/mongo')
 const { emojis: { approved } } = require('../../../lib/util/constants')
-const noteSchema = require('../../../lib/structures/database/schemas/server/moderation/noteSchema')
+const { userSchema } = require('../../../lib/structures/database/UserSchema.js')
 module.exports = {
     name: 'note',
     aliases: ['n'],
@@ -23,17 +23,17 @@ module.exports = {
             reason
         }
         
+        let guild = `servers.${guildId}.notes`
+
         await mongo () .then(async (mongoose) => {
             try {
-                await noteSchema.findOneAndUpdate({
-                    guildId,
-                    userId
+                await userSchema.findByIdAndUpdate({
+                    _id: userId,
+                    "servers._id": '[guildId]'
                 }, {
-                    guildId,
-                    userId,
+                    _id: userId,
                     $push: {
-                        notes: note
-                    }
+                         [guild]: note }
                 }, {
                     upsert: true
                 })

@@ -1,20 +1,20 @@
 const moment = require('moment')
 const { credits: { developer, spanishTranslation, additionalHelp }, emojis: { infinity } } = require('../../lib/util/constants')
-const { botVer, numOfAliases, numOfCommands, botInv, supportServer, serverLink } = require('../../lib/config')
+const { topggURL, supportServer, inviteURL, commands, aliases, version } = require('../../config/foxxie')
 module.exports = {
 
     COMMAND_ABOUT_COMMANDS: "**Commandos**",
-    COMMAND_ABOUT_COMMANDS_NOW: `**•** Ahorita tengo **${numOfCommands}** commandos y **${numOfAliases}** alias.`,
+    COMMAND_ABOUT_COMMANDS_NOW: `**•** Ahorita tengo **${commands}** commandos y **${aliases}** alias.`,
     COMMAND_ABOUT_CREATED: "**Creado**",
     COMMAND_ABOUT_CREDITS: "**Créditos**",
     COMMAND_ABOUT_CREDITS_LIST: `**•** Desarrollador: ${developer}
 **•** Traducciones de Español: ${spanishTranslation}
 **•** Ayuda adicional: ${additionalHelp}`,
-    COMMAND_ABOUT_CURRENTVER: `**•** Por el momento estoy en la versión **${botVer}**, casi siempre estoy siendo revisado ;)`,
+    COMMAND_ABOUT_CURRENTVER: `**•** Por el momento estoy en la versión **${version}**, casi siempre estoy siendo revisado ;)`,
     COMMAND_ABOUT_GUILDS: "**Gremios**",
     COMMAND_ABOUT_GUILDS_SIZE: `**•** Estoy cuidando **1** servidores.`,
     COMMAND_ABOUT_LINKS: "**Enlaces e información adicionales**",
-    COMMAND_ABOUT_LINKS_LINKS: `[[Invitar Foxxie](${botInv})] | [[Servidor Soporte](${supportServer})] | [[The Corner Store](${serverLink})] | [[Patreon](https://www.patreon.com/Thecornerstore)]`,
+    COMMAND_ABOUT_LINKS_LINKS: `[[Invitar Foxxie](${inviteURL}})] | [[Servidor Soporte](${supportServer})] | [[The Corner Store](${topggURL})] | [[Patreon](https://www.patreon.com/Thecornerstore)]`,
     COMMAND_ABOUT_SUMMARY: "Empecé como un proyecto de desarrollo de **Ruffpuff#0017** como forma de aprender node.js y JavaScript. Luego fui agregado a este servidor **The Corner Store** para reducir los números de bots. Ahora espero ser agregado a muchos gremios y tal vez ser de alguna ayuda para ustedes.",
     COMMAND_ABOUT_TITLE: "¡Sobre Foxxie!",
     COMMAND_ABOUT_USERS: "**Usuarios**",
@@ -65,7 +65,7 @@ Si necesitas mi ayuda puedes unirte a mi [servidor.](${supportServer})`,
     COMMAND_HELP_USAGE: "• Uso (solo servidor:",
     COMMAND_HELP_UTILITY: "**Utilidad**",
     COMMAND_INVITE_HERE: "Oye oye, aqui esta el enlace para que puedas invitar.",
-    COMMAND_INVITE_BODY: `[Haz click aquí!](${botInv})
+    COMMAND_INVITE_BODY: `[Haz click aquí!](${version})
 Espero poder arreglar las cosas por ti.`,
     COMMAND_LANGUAGE_ENGLISH: "**Entendido,** cambiaré el lenguaje de este servidor a \`Inglés/En\`.",
     COMMAND_LANGUAGE_NOARGS: "**Uhhh,** Yo no puedo cambiar el lenguaje si no me dices a qué lo quieres cambiar. Intenta de nuevo con \`fox language [lenguaje]\`.",
@@ -112,7 +112,7 @@ Espero poder arreglar las cosas por ti.`,
     COMMAND_SUPPORT_BODY: `[Haz click aquí!](${supportServer})
 Espero que te podemos ayudar un poquito.`,
     TESTING: "Prueba de",
-    COMMAND_UPTIME: `Hola! Foxxie **v${botVer}** por última vez desde`,
+    COMMAND_UPTIME: `Hola! Foxxie **v${version}** por última vez desde`,
     COMMAND_UPTIME_DAYS: 'días,',
     COMMAND_UPTIME_HOURS: 'horas,',
     COMMAND_UPTIME_MINUTES: 'minutos, y',

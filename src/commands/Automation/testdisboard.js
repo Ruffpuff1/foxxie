@@ -6,7 +6,7 @@ module.exports = {
     aliases: ['td', 'testbump'],
     usage: 'fox testdisboard',
     permissions: 'MANAGE_MESSAGES',
-    category: 'settings',
+    category: 'automation',
     execute: async(lang, message, args) => {
         let results = await serverSettings(message)
         const dischannel = message.guild.channels.cache.get(results.disboardChannel)
@@ -17,7 +17,7 @@ module.exports = {
             .setTitle('Reminder to Bump')
             .setThumbnail(message.client.user.displayAvatarURL())
 
-        embed.setDescription(results.disboardMessage?results.disboardMessage:"Time to bump the server on disboard. Use the command `!d bump` then come back in **two hours**.")
+        embed.setDescription(results.disboardMessage?results.disboardMessage.replace(/{(server|guild)}/gi, message.guild.name):"Time to bump the server on disboard. Use the command `!d bump` then come back in **two hours**.")
         let dbPing = '';
         if (results != null && results.disboardPing != null) dbPing = `<@&${results.disboardPing}>`
         message.react(approved)

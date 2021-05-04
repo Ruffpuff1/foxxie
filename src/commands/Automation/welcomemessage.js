@@ -1,15 +1,14 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
-const { serverSchema } = require('../../../lib/structures/schemas')
+const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
 const { serverSettings } = require('../../../lib/settings')
 module.exports = {
-    name: 'disboardmessage',
-    aliases: ['disboardtext', 'dm', 'disboardmsg'],
-    usage: `fox disboardmessage (none|message)`,
-    category: 'settings',
+    name: 'welcomemessage',
+    aliases: ['welcometext', 'wm', 'welcomemsg'],
+    usage: `fox welcomemessage (none|message)`,
+    category: 'automation',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) =>{
-        const guildID = message.guild.id
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
 
@@ -22,12 +21,11 @@ module.exports = {
                         }, {
                             _id: message.guild.id,
                             $unset: {
-                                disboardMessage: '',
-                                disboardPing: ''
+                                welcomeMessage: ''
                             }
                         })
                     
-                    embed.setDescription("**Gotcha**, reset the Disboard message back to the default of mine.")
+                    embed.setDescription("**Gotcha**, reset the welcome message back to the default of mine.")
                     return message.channel.send(embed)
                     }
                 }
@@ -37,31 +35,27 @@ module.exports = {
 
                     let results = await serverSettings(message)
 
-                    if (results === null || results.disboardMessage == null) {
-                        embed.setDescription(`There is no Disboard message set right now, my default message is:\n\`\`\`**•** Time to bump the server on disboard. Use the command \`!d bump\` then come back in **two hours**.\`\`\`You can set your own message using the command \`fox disboardmessage (message)\``)
+                    if (results === null || results.welcomeMessage == null) {
+                        embed.setDescription(`There is no welcome message set right now, my default message is:\n\`\`\`**{member}** just joined the server!\`\`\`You can set your own message using the command \`fox welcomemessage (message)\``)
                         return message.channel.send(embed)
                     }
 
-                    let msg = results.disboardMessage
+                    let msg = results.welcomeMessage
 
-                    embed.setDescription(`Right now the Disboard message is set to:\n\`\`\`${msg}\`\`\`If ya wanna change it, use the command \`fox disboardmessage (message)\`.`)
+                    embed.setDescription(`Right now the welcome message is set to:\n\`\`\`${msg}\`\`\`If ya wanna change it, use the command \`fox welcomemessage (message)\`.`)
                     return message.channel.send(embed)
                 }
-
-                let disboardPing = message.mentions.roles.first()
-                if (!disboardPing) disboardPing = ''
 
                 await serverSchema.findByIdAndUpdate({
                     _id: message.guild.id
                 }, {
                     _id: message.guild.id,
-                    disboardMessage: text,
-                    disboardPing: disboardPing
+                    welcomeMessage: text
                 }, {
                     upsert: true
                 })
 
-                embed.setDescription(`**Gotcha,** set the Disboard message to:\n\`\`\`${text}\`\`\`Now I'll send the message with my reminder embed.`)
+                embed.setDescription(`**Gotcha,** set the welcome message to:\n\`\`\`${text}\`\`\`Now I'll send the message with my welcome logging.`)
                 message.channel.send(embed)
 
             } finally {}   

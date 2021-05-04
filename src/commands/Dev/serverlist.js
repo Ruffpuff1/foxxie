@@ -1,11 +1,11 @@
-const config = require('../../../lib/config')
-const Discord = require('discord.js')
+const Discord = require('discord.js');
+const foxxie = require('../../../config/foxxie');
 module.exports = {
     name: 'serverlist',
     usage: 'fox serverlist',
     category: 'developer',
     execute: async (lang, message) => {
-        if (config.devs.includes(message.author.id)) {
+        if (foxxie.owner.includes(message.author.id)) {
         let i0 = 0;
         let i1 = 10;
         let page = 1;

@@ -1,7 +1,7 @@
 const mongo = require('../../../lib/structures/database/mongo')
 const Discord = require('discord.js')
-const { serverSchema } = require('../../../lib/structures/schemas')
-const { serverSettings, deleteLogSetting } = require('../../../lib/settings')
+const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
+const { serverSettings, deleteServerSetting } = require('../../../lib/settings')
 module.exports = {
     name: 'log',
     aliases: ['logging', 'logchannel', 'lc'],
@@ -36,47 +36,27 @@ module.exports = {
             return msg.channel.send(embed)
         }
 
+        let setting;
+        if (use === validCase[0].toLowerCase()) setting = 'modChannel'
+        if (use === validCase[1].toLowerCase()) setting = 'editChannel'
+        if (use === validCase[2].toLowerCase()) setting = 'deleteChannel'
+
         if (!chn && deleteCase.includes(args[1])){
-            return deleteLogSetting(msg, use)
+            return deleteServerSetting(msg, setting)
         }
 
         await mongo().then(async () => {
             try {
-
-        if (use === validCase[0].toLowerCase()) {
             await serverSchema.findByIdAndUpdate({
                 _id: msg.guild.id
             }, {
                 _id: msg.guild.id,
-                modChannel: chn
+                [setting]: chn
             }, {
                 upsert: true
             })
-            embed.setDescription(`Started **moderation** logging in ${chn}.`)
-        }
-        if (use === validCase[1].toLowerCase()) {
-            await serverSchema.findByIdAndUpdate({
-                _id: msg.guild.id
-            }, {
-                _id: msg.guild.id,
-                editChannel: chn
-            }, {
-                upsert: true
-            })
-            embed.setDescription(`Started **edit** logging in ${chn}.`)
-        }
-        if (use === validCase[2].toLowerCase()) {
-            await serverSchema.findByIdAndUpdate({
-                _id: msg.guild.id
-            }, {
-                _id: msg.guild.id,
-                deleteChannel: chn,
-            }, {
-                upsert: true
-            })
-            embed.setDescription(`Started **deletion** logging in ${chn}.`)
-        }
-        return msg.channel.send(embed)
+            embed.setDescription(`Got it, set the **${setting}** setting to log in ${chn}.`)
+            msg.channel.send(embed)
             } finally {}
         })
     }

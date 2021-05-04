@@ -1,5 +1,5 @@
 const mongo = require('../../../lib/structures/database/mongo')
-const { serverSchema } = require('../../../lib/structures/schemas')
+const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
 const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'permission',

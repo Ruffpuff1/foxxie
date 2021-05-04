@@ -1,35 +1,36 @@
-const Discord = require('discord.js')
 const { emojis } = require('../../../lib/util/constants')
 module.exports = {
     name: 'embed',
     aliases: ['broadcast', 'bc', 'announce', 'broadcasts', 'announcements'],
-    usage: 'fox embed (title), (description), (footer), (color), (imageLink)',
+    usage: 'fox embed (channel) { "title": "Embed Title" }',
     category: 'utility',
     permissions: 'ADMINISTRATOR',
     execute: async (lang, message, args) => {
-        let loading = await message.channel.send(emojis.infinity)
+        // Delete flag
 
-        const arr = args.join(" ").toString().split(',')
+        // get the target channel
+        let targetChannel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
+        if (targetChannel) args.shift()
+        if (!targetChannel) targetChannel = message.channel
 
-        const embed = new Discord.MessageEmbed()
-        // Embed Title
-        arr[0] ? embed.setTitle(arr[0].toLowerCase() === 'none'
-        ? '' : arr[0].replace(/,/g, ' '))
-        : '';
-        // Embed Description
-        arr[1] ? embed.setDescription(arr[1].replace(/,/g, ' '))
-        : '';
-        // Embed Footer
-        arr[2] ? embed.setFooter(arr[2].replace(/,/g, ' '))
-        : '';
-        // Embed Color
-        arr[3] ? embed.setColor(arr[3].replace(/,/g, ' '))
-        : message.guild.me.displayColor;
+        let loading = await targetChannel.send(emojis.infinity)
 
-        arr[4] ? embed.setImage(arr[4].replace(/,/g, ' '))
-        : '';
+        // removes the channel mention
 
-        loading.delete()
-        message.channel.send(embed)
+        try {
+            // get the JSON data
+            const json = JSON.parse(args.join(' '))
+            const { text = '' } = json
+
+            // send the embed
+            targetChannel.send(text, {
+                embed: json,
+            })
+            message.delete()
+            loading.delete()
+        } catch (error) {
+            loading.delete()
+            message.channel.send(`**Uh oh,** there seems to be an error with your embed format. Try making sure everything is correct or you could just copy paste from: https://embedbuilder.nadekobot.me/`)
+        }
     }
 }

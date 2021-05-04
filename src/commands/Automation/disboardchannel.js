@@ -1,18 +1,19 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
-const { serverSchema } = require('../../../lib/structures/schemas')
-const { serverSettings } = require('../../../lib/settings')
+const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
+const { serverSettings} = require('../../../lib/settings')
 module.exports = {
     name: "disboardchannel",
-    aliases: ['dc', 'disboardlocation', 'bumpchannel'],
-    usage: `fox disboardchannel (none|channel)`,
-    category: 'settings',
+    aliases: ['dc', 'disboardlocation'],
+    usage: `fox disboard [message|channel] (message|#channel|none|off)`,
+    category: 'automation',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
+
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
 
-        await mongo().then(async (mongoose) => {
+        await mongo().then(async () => {
             try {
                 if (args[0]) {
                     if (args[0].toLowerCase() === 'none') {

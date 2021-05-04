@@ -1,6 +1,6 @@
 const mongo = require('../../../lib/structures/database/mongo')
-const config = require('../../../lib/config')
-const { statusSchema } = require('../../../lib/structures/database/schemas/statusSchema')
+const { botSettingsSchema } = require("../../../lib/structures/database/BotSettingsSchema")
+const { owner } = require('../../../config/foxxie');
 module.exports = {
     name: 'status',
     aliases: ['state', 'update'],
@@ -8,7 +8,7 @@ module.exports = {
     category: 'developer',
     execute: async(lang, message, args) => {
 
-        if (!config.devs.includes(message.author.id)) return;
+        if (!owner.includes(message.author.id)) return;
 
         let status = args[0]
         let msg = args.slice(1).join(' ')
@@ -17,7 +17,7 @@ module.exports = {
 
         await mongo().then(async () => {
             try {
-                await statusSchema.findByIdAndUpdate({
+                await botSettingsSchema.findByIdAndUpdate({
                     _id: '812546582531801118'
                 }, {
                     _id: '812546582531801118',

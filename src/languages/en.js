@@ -1,20 +1,20 @@
 const moment = require('moment')
 const { credits: { developer, spanishTranslation, additionalHelp }, emojis: { infinity } } = require('../../lib/util/constants')
-const { botVer, numOfAliases, numOfCommands, botInv, supportServer, serverLink, voteLink } = require('../../lib/config')
+const { topggURL, supportServer, inviteURL, commands, aliases, version } = require('../../config/foxxie')
 module.exports = {
 
     COMMAND_ABOUT_COMMANDS: "**Commands**",
-    COMMAND_ABOUT_COMMANDS_NOW: `**•** Right now I have **${numOfCommands}** commands and **${numOfAliases}** aliases.`,
+    COMMAND_ABOUT_COMMANDS_NOW: `**•** Right now I have **${commands}** commands and **${aliases}** aliases.`,
     COMMAND_ABOUT_CREATED: "**Created**",
     COMMAND_ABOUT_CREDITS: "**Credits**",
     COMMAND_ABOUT_CREDITS_LIST: `**•** Developer: ${developer}
 **•** Spanish Translations: ${spanishTranslation}
 **•** Additional Help: ${additionalHelp}`,
-    COMMAND_ABOUT_CURRENTVER: `**•** Currently I'm in version **${botVer}**, pretty much always getting worked on though ;)`,
+    COMMAND_ABOUT_CURRENTVER: `**•** Currently I'm in version **${version}**, pretty much always getting worked on though ;)`,
     COMMAND_ABOUT_GUILDS: "**Guilds**",
     COMMAND_ABOUT_GUILDS_SIZE: `**•** I'm looking after **1** servers.`,
     COMMAND_ABOUT_LINKS: "**Extra links and information**",
-    COMMAND_ABOUT_LINKS_LINKS: `[[Invite Foxxie](${botInv})] | [[Support Server](${supportServer})] | [[Vote](${voteLink})] | [[Patreon](https://www.patreon.com/Thecornerstore)]`,
+    COMMAND_ABOUT_LINKS_LINKS: `[[Invite Foxxie](${inviteURL})] | [[Support Server](${supportServer})] | [[Vote](${topggURL})] | [[Patreon](https://www.patreon.com/Thecornerstore)]`,
     COMMAND_ABOUT_SUMMARY: "I started as a developmental project by **Ruffpuff#0017** to learn basic node.js and javascript. Then I was added to his server **The Corner Store** as a way to overall reduce the amount of bots. Now I'm hoping to be added to many guilds and maybe I could be helpful to ya.",
     COMMAND_ABOUT_TITLE: "About Foxxie!",
     COMMAND_ABOUT_USERS: "**Users**",
@@ -53,6 +53,12 @@ module.exports = {
     COMMAND_HELP_DESCRIPTION: `Here is a list of all my commands.
 For details on each command use \`fox help [command]\`.
 If you need more help join my [server.](${supportServer})`,
+    COMMAND_HELP_DESCRIPTION_BIG: `Additionally for each command you can use \`fox help (command)\` for a detailed description on that command as well as example usage.
+    \nFor arguments in commands:
+    \`[Brackets]\` means the argument is __required__.
+    \`(Parenthesis)\` means the argument is __optional__.
+    \`(Two|options)\` means choose __either option__ for that argument.
+    **Also don't include these symbols in your final commands-**`,
     COMMAND_HELP_DMERROR: `**Whoops,** I tried to DM you but I could't, please make sure your dms are open to everyone so I can send you a message in DMs.`,
     COMMAND_HELP_FALSE: "false",
     COMMAND_HELP_FUN: "**Fun**",
@@ -65,7 +71,7 @@ If you need more help join my [server.](${supportServer})`,
     COMMAND_HELP_USAGE: "• Usage (Server only:",
     COMMAND_HELP_UTILITY: "**Utility**",
     COMMAND_INVITE_HERE: "Hey hey, here's the link to invite me.",
-    COMMAND_INVITE_BODY: `[Click here!](${botInv})
+    COMMAND_INVITE_BODY: `[Click here!](${inviteURL})
 Hope I can fix things up for ya.`,
     COMMAND_LANGUAGE_ENGLISH: "**Gotcha,** set this server's language to \`English/En\`.",
     COMMAND_LANGUAGE_NOARGS: "**Uhhh,** I can't change the language if you don't tell me what you want me to change it to. Try again with \`fox language [language]\`.",
@@ -122,7 +128,7 @@ Hope I can fix things up for ya.`,
     COMMAND_SUPPORT_BODY: `[Click here!](${supportServer})
 Hope we can help you out abit.`,
     TESTING: "Test from",
-    COMMAND_UPTIME: `Hello! Foxxie **v${botVer}** has been last rebooted`,
+    COMMAND_UPTIME: `Hello! Foxxie **v${version}** has been last rebooted`,
     COMMAND_UPTIME_DAYS: 'days,',
     COMMAND_UPTIME_HOURS: 'hours,',
     COMMAND_UPTIME_MINUTES: 'minutes, and',
@@ -132,8 +138,11 @@ Hope we can help you out abit.`,
     COMMAND_WOLFRAM_NO_ARGS: "Heya, a **search term** is required for this command.", // needs spanish
     COMMAND_WOLFRAM_NO_DATA: "**Sorry,** I couldn't find any data for that search term.", // needs spanish
 
+    LOG_MODERATION_VCKICK: "Vckicked",
+
     COMMAND_DESCRIPTIONS : {
 
+        CREATEKEY: "Creates a \"key\" or profile badge for a user that can be seen using the `fox info` command. You can either `add` or `remove` badges depending on what ya need. This command is locked to the bot developer due to it's special nature.",
         EVAL: "Allows ya to evaluate JavaScript code straight from Discord. This command also takes advantage of my flags feature add `-s` or `-silent` to a message to prevent me from displaying the output. Add `-a` or `-async` to the message to wrap the given code inside of an asynchronous function. This command can only be used by developers because of the power it has.",
         RELOAD: "Reloads an individual command file that way if edits were made you do no have to restart the bot. This command is locked to only developers to to the potential risk it poses.", // needs spanish
         SERVERLIST: "Provides a list of all of the servers I am in, use the reactions on the bottom of the embed to navagate from page to page.",
@@ -153,6 +162,7 @@ Hope we can help you out abit.`,
         NUKE: "Completely wipes a channel of all messages. Only server owners can use this command due to the harm it may cause.", // needs spanish
         SLOWMODE: "Adds a slowmode to the channel you're in, unlike normal discord I can set a slowmode of any amount you want.", // needs spanish
         UNLOCK: "Unlocks a channel if locked. (Note: if you have a role that grants message permissions this command won't work)", // needs spanish
+        VCKICK: "Disconnected the specified user from a voice channel if they are in one. If a moderation logging channel is set, this action will log there.",
         WARN: "Adds a server-only warning to a user in case they break a rule, also sends em a DM to make sure they see it.", // Needs Spanish
 
         BLUSH: "Blush at someone.",
@@ -167,14 +177,15 @@ Hope we can help you out abit.`,
 
         ANTIINVITE: "Enables or disables my automatic Discord link filtering, although I won't delete for server Admins or the server Owner.",
         DISBOARDCHANNEL: "If you use the Disboard bot you can set a channel for me to send bump reminders every two hours. Alternatively to disable these reminders you can put `fox disboardchannel none`.",
-        DISBOARDMESSAGE: "Change the text I'll send ya when Disboard is off cooldown. Put `none` to reset back to my default, or just do `fox disboardmessage` to show the current message if one is set.",
+        DISBOARDMESSAGE: "Change the text I'll send ya when Disboard is off cooldown. Put `none` to reset back to my default, or just do `fox disboardmessage` to show the current message if one is set. In your disboard message you can also use variable `{server}` to display the server's name.",
+        GOODBYEMESSAGE: "Use case `message` allows you to set the message I send when a member leaves the server. In your goodbye message you can also use the variables  `{name}`, `{tag}` (ex: ArEo#1245), `{discrim}`, `{joined}`, `{server}`, and `{count}` for the server's member count.",
         LANGUAGE: "Set the language of the guild. Choose either English, Spanish, or `none` to reset to the default.",
         LOG: "Configures logging settings in the server with specific use cases. Case `mod` logs all moderation actions to the specified channel. Case `edit` logs message edits to a channel. And case `delete` logs message deletion to a channel. If you want to disable this logging put `none` or `off` after the use case. If no channel is specified I will show the current channel set.",
         SETTINGS: "Shows all the current settings of the server if any special settings are set.",
         TESTDISBOARD: "Simulates what the server's disboard bump will look like.",
         TESTJOIN: "Simulates what would happen if a new member joins the server.",
         WELCOMECHANNEL: "Set the channel where I should send welcome messages. This will initiate whenever a new member joins or you can use `fox testwelcome` to test it out beforehand.",
-        WELCOMEMESSAGE: "Change the text I'll send ya when a new member joins the server. Put `none` to reset back to my default, or just do `fox welcomemessage` to show the current message if one is set.", // needs spanish
+        WELCOMEMESSAGE: "Use case `message` allows you to set the message I send when a new member joined the server. In your welcome message you can also use the variables `{member}`, `{name}`, `{tag}` (ex: ArEo#1245), `{discrim}`, `{created}`, `{server}`, and `{count}` for the server's member count.", // needs spanish
 
         ABOUT: "Get some basic information about me, my statistics, and some of my credits.",
         AFK: "Sets an AFK for when people ping ya. You can provide a reason, but if no reason is provided it will show as \'none\'. When pinged in chat your AFK status will show. And the next time you talk in chat your AFK will be removed.",
@@ -183,10 +194,11 @@ Hope we can help you out abit.`,
         BUGREPORT: "Send a bugreport straight to the developer in case something goes wrong.", // needs spanish
         CORONA: "Get the current statistics of the Covid-19 pandemic. You can enter a country name, or global for statistics of the whole world.",
         DEFINE: "Defines a term using the Merriam-Webster Dictionary API.",
-        EMBED: "Allows ya to create simple embeds using my built in syntax [title], [description], [footer], [color] make sure those are separated by commas though.", // needs spanish
+        EMBED: "Allows ya to create simple embeds using built in JSON syntax. Formatted like: `{ \"title\": \"Embed Title\", \"description\": \"Embed Description\" }` this format can be confusing for some, so we suggest you use the embed builder at https://embedbuilder.nadekobot.me/ . You can also supply a channel to send the embed to before the JSON.", // needs spanish
         HELP: "Display help for a command when a command is specified or with no command will provide a list of all commands.",
         INFO: "Can get ya different information based on the input. For **user** info you can specify nothing for information about yourself or either provide a user @mention or a userID. For **server** info simply specify `server` after the command. For **role** info you can either specify a role @mention or a roleID. For **channel** info you can either #mention a channel, or specify a channelID. And for **emoji** info you can give an emoji from a server the bot is in.",
         INVITE: "Gives ya my invite link so you can have me help out your server.",
+        MATH: "Allows Foxxie to calculate a query using mathjs. Examples of queries include the following: `sqrt(3^2 + 4^2)` to calculate the square root of the given input. `cos(45 deg)` calculating complex expressions like cos, sin, tan. `2 inch to cm` for basic unit conversion. `50 + 100` for basic mathematical expressions (using `+`, `-`, `^`, `/`).",
         PING: "Runs a connection test to Discord.",
         POLL: "Creates a poll that people can vote on. Seperate options using commas.", // needs spanish
         REMINDME: "Send a reminder message straight to your dms.",
@@ -198,8 +210,17 @@ Hope we can help you out abit.`,
         TOP: "Allows you to search for bots on top.gg showing information about the bot searched.", // needs spanish
         UPTIME: "Shows the time since the last reboot of the bot.",
         WEATHER: "Provides the weather for a city. Supports any city in the world, will provide weather, timezone, humidity, and more.",
-        WOLFRAM: "Gets a result from Wolfram|Alpha.",
+        WOLFRAM: "Gets you a search result using the Wolfram|Alpha API. Wolfram|Alpha is a search engine compiled of a store of expert level knowledge with results from multiple acedemic fields. Some supported categories include: mathematics, music, politics, georgrapy, and science.",
 
+    },
+
+    CATEGORY_DESCRIPTIONS: {
+        AUTOMATION: "Set me to automatically do things around your server. Like welcome & goodbye messages, and Disboard reminders :)",
+        FUN: "Random fun commands that will hopefully make people on your server laugh.",
+        MODERATION: "Moderation commands to help you enforce rules and get the bad guys out.",
+        ROLEPLAY: "Commands for expressing how you feel to people on your server. From warm hugs to murder!.",
+        SETTINGS: "Configure how I work around your server. Like setting a custom prefix for me to respond to.",
+        UTILITY: "Useful commands for getting you infomation or completing simple tasks for you."
     },
 
     MESSAGE_ERROR_CODE_ERROR: "**Uh oh,** there seems to be some sort of problem with my source code. Now don't worry I'm not dying on ya but I'd appreciate it if you did \`fox bugreport [bug]\` to send a message to my developer about it.", // needs spanish

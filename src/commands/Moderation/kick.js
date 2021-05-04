@@ -1,6 +1,6 @@
 const { serverSettings } = require('../../../lib/settings')
 const { botPermError } = require('../../../lib/util/error');
-const { addKick } = require('../../tasks/modCountAdd');
+const { modStatsAdd } =  require('../../../src/tasks/stats')
 const { emojis: { approved } } = require('../../../lib/util/constants')
 const moment = require('moment')
 const Discord = require('discord.js')
@@ -27,10 +27,9 @@ module.exports = {
         const date = moment(message.createdTimestamp).format('llll');
 
         let results = await serverSettings(message)
-        addKick(message)
 
         message.react(approved)
-        addKick(message)
+        modStatsAdd(message, 'kick', 1)
 
         const dmEmbed = new Discord.MessageEmbed()
                 .setTitle(`Kicked from ${message.guild.name}`)

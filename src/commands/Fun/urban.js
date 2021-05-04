@@ -6,7 +6,7 @@ module.exports = {
     usage: 'fox urban [term]',
     category: 'fun',
     execute: async (lang, message, args) => {
-        if(!message.channel.nsfw) return message.channel.send(lang.COMMAND_NSFW_ERROR)
+        //if(!message.channel.nsfw) return message.channel.send(lang.COMMAND_NSFW_ERROR)
         if (!args[0]) return message.channel.send(lang.COMMAND_URBAN_NO_WORD)
         message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
         axios.get(`http://api.urbandictionary.com/v0/define?term=$%7B${args[0]}%7D`)

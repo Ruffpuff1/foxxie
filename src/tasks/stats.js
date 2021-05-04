@@ -1,16 +1,16 @@
 const mongo = require('../../lib/structures/database/mongo')
-const { serverSchema } = require('../../lib/structures/schemas')
-const messageCountSchema = require('../../lib/structures/database/schemas/server/messageCountSchema')
+const { serverSchema } = require('../../lib/structures/database/ServerSchemas')
+const { userSchema } = require('../../lib/structures/database/UserSchema.js')
 module.exports.userMessageCount = async (message) => {
     if (message.channel.type === 'dm') return;
     await mongo().then(async () => {
+        let guild = `servers.${message.guild.id}.messageCount`
         try {
-            await messageCountSchema.findOneAndUpdate({
-                guildId: message.guild.id,
-                userId: message.author.id
+            await userSchema.findByIdAndUpdate({
+                _id: message.author.id
             }, {
                 $inc: {
-                    'messageCount': 1
+                    [guild]: 1
                 }
             }, {
                 upsert: true
@@ -40,9 +40,8 @@ module.exports.getUserMessageCount = async (message, userId) => {
     if (message.channel.type == 'dm') return;
     await mongo().then(async () => {
         try {
-            this.userMsgCount = await messageCountSchema.findOne({
-                guildId: message.guild.id,
-                userId: userId
+            this.userMsgCount = await userSchema.findById({
+                _id: userId
             })
             return this.userMsgCount
         } finally {}
@@ -61,4 +60,21 @@ module.exports.getGuildMessageCount = async (message, server) => {
         } finally {}
     })
     return this.guildMsgCount
+}
+
+module.exports.modStatsAdd = async (message, act, total) => {
+    await mongo().then(async () => {
+        let guild = `servers.${message.guild.id}.modStats.${act}`
+        try {
+            await userSchema.findByIdAndUpdate({
+                _id: message.author.id
+            }, {
+                $inc: {
+                    [guild]: total
+                }
+            }, {
+                upsert: true
+            }).exec()
+        } finally {}
+    })
 }

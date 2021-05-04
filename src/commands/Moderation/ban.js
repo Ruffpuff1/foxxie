@@ -1,6 +1,6 @@
 const { botPermError } = require('../../../lib/util/error');
 const { serverSettings } = require('../../../lib/settings')
-const { addBan } = require('../../tasks/modCountAdd');
+const { modStatsAdd } =  require('../../../src/tasks/stats')
 const moment = require('moment')
 const Discord = require('discord.js')
 const { emojis: { approved } } = require('../../../lib/util/constants')
@@ -36,10 +36,9 @@ module.exports = {
         const date = moment(message.createdTimestamp).format('llll');
 
         let results = await serverSettings(message)
-        addBan(message)
 
         message.react(approved)
-        addBan(message)
+        modStatsAdd(message, 'ban', 1)
 
         const dmEmbed = new Discord.MessageEmbed()
                 .setTitle(`Banned from ${message.guild.name}`)

@@ -1,6 +1,6 @@
 const mongo = require('../../../lib/structures/database/mongo')
 const { serverSettings } = require('../../../lib/settings')
-const { serverSchema } = require('../../../lib/structures/schemas')
+const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
 const Discord = require('discord.js')
 module.exports = {
     name: 'antiinvite',

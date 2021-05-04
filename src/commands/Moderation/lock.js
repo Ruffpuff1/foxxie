@@ -1,5 +1,5 @@
 const { serverSettings } = require('../../../lib/settings')
-const { addLock } = require('../../tasks/modCountAdd')
+const { modStatsAdd } =  require('../../../src/tasks/stats')
 const Discord = require('discord.js')
 const moment = require('moment')
 const { botPermError } = require('../../../lib/util/error')
@@ -43,7 +43,7 @@ module.exports = {
             { name: `**Date / Time**`, value: `${lockTime}`, inline: true }
         )
         
-        addLock(message)
+        modStatsAdd(message, 'lock', 1)
         let results = await serverSettings(message)
 
         if (results == null || results.modChannel == null) return

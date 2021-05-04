@@ -1,5 +1,6 @@
 const Discord = require('discord.js')
 const fs = require('fs')
+const { prefix: { production, development } } = require('../../config/foxxie')
 const { getGuildLang } = require('../../lib/util/getGuildLang')
 const { codeError, permError, channelError } = require('../../lib/util/error')
 const { serverSettings } = require('../../lib/settings')
@@ -10,7 +11,7 @@ module.exports.commandHandler = async (message) => {
     const settings = await serverSettings(message)
     
     let prefix;
-    prefix = message.client.user.id === '825130284382289920' ? 'd.' : '.'
+    prefix = message.client.user.id === '825130284382289920' ? development : production
     if (settings != null && settings.prefix != null) prefix = settings.prefix;
 
     if (settings != null && settings.blockedUsers != null) {

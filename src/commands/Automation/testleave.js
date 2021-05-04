@@ -4,7 +4,7 @@ module.exports = {
     name: 'testleave',
     aliases: ['testgoodbye', 'testbye', 'tl'],
     usage: 'fox testjoin (member|userId)',
-    category: 'settings',
+    category: 'automation',
     guildOnly: true,
     execute: async(lang, message, args) => {
 

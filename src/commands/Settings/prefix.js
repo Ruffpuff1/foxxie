@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
-const { serverSchema } = require('../../../lib/structures/schemas')
+const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
 const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'prefix',

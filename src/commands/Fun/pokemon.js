@@ -7,18 +7,23 @@ module.exports = {
     category: 'fun',
     execute: async(lang, message, args) => {
         if (!args[0]) return message.channel.send(`**Cmon,** you gotta enter a pokemon for me to show.`)
-        const pokemon = args.slice(0).join(" ")
+        const pokemon = args[0]
         
         let loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING)
+
+        let isShine = /\-shiny\s*|-s\s*/
+        let shiny = isShine.test(message.content)
+
+        let newPokemon = pokemon.replace(isShine, '')
         
-        axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon}/`)
+        axios.get(`https://pokeapi.co/api/v2/pokemon/${newPokemon}/`)
         .then((res) => {
 
             const argCap = res.data.name.charAt(0).toUpperCase() + res.data.name.slice(1)
             const embed = new Discord.MessageEmbed()
                 .setColor(message.guild.me.displayColor)
                 .setTitle(`${argCap} (ID: ${res.data.id})`)
-                .setThumbnail(res.data.sprites[`front_default`])
+                .setThumbnail(res.data.sprites[`${shiny ? 'front_shiny' : 'front_default'}`])
                 .addFields(
                     {
                         name: ':scroll: **Type**',

@@ -1,12 +1,12 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
-const { serverSchema } = require('../../../lib/structures/schemas')
+const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
 const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'welcomechannel',
     aliases: ['wc', 'welcomelocation'],
     usage: 'fox welcomechannel (none|channel)',
-    category: 'settings',
+    category: 'automation',
     permissions: 'ADMINISTRATOR',
     execute: async(lang, message, args) => {
         let guildId = message.guild.id

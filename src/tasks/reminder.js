@@ -12,6 +12,7 @@ module.exports = client => {
             let timeSince = client.reminders[i].timeago
             let message = client.reminders[i].message
             let sendIn = client.reminders[i].sendIn
+            const channel = client.channels.cache.get(client.reminders[i].channelId)
 
             let lang = getGuildLang()
 
@@ -23,8 +24,6 @@ module.exports = client => {
                     .setColor(client.reminders[i].color)
                     .setDescription(`${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`)
                     .setTimestamp()
-                
-                const channel = client.channels.cache.get(message.channel.id)
 
                 if (sendIn && channel) channel.send(`<@${authID}> ${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`)
 

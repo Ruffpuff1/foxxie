@@ -5,7 +5,7 @@ require('dotenv').config()
 const eventFiles = fs.readdirSync('src/events').filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
-	const event = require(`./src/events/${file}`);
+	const event = require(`./events/${file}`);
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args, client));
 	} else {
@@ -17,9 +17,8 @@ client.monitors = new Discord.Collection();
         
 const monitorFiles = fs.readdirSync(`./src/monitors`).filter(file => file.endsWith('.js'));
 for (const file of monitorFiles) {
-    const monitor = require(`./src/monitors/${file}`);
+    const monitor = require(`./monitors/${file}`);
     client.monitors.set(monitor.name, monitor);
-	console.log(monitor.name)
     }
     
 

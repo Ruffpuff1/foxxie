@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const moment = require('moment')
-const { addPurge, addTotal } = require('../../tasks/modCountAdd')
+const { modStatsAdd } =  require('../../../src/tasks/stats')
 const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'purge',
@@ -45,8 +45,8 @@ module.exports = {
             .addField('**Location**', message.channel, true)
             .addField('**Date / Time**', purgeTime, true)
 
-        addPurge(message)
-        addTotal(message, num)
+        modStatsAdd(message, 'purge', 1)
+        modStatsAdd(message, 'purgeTotal', num)
         let results = await serverSettings(message)
 
         if (results == null || results.modChannel == null) return

@@ -4,7 +4,7 @@ module.exports = {
     execute: async(reaction, user) => {
 
         if (reaction.message.channel.type === 'dm') return;
-        if (reaction.emoji.name == '⭐') starCreated(reaction)
+        if (reaction.emoji.name == '⭐') starCreated(reaction, user)
         reaction.message.client.monitors.get('rero').execute(reaction, user, 'add')
     }
 }

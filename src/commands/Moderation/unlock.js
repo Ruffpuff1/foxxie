@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 const moment = require('moment')
 const { serverSettings, server } = require('../../../lib/settings')
-const { addUnlock } = require('../../tasks/modCountAdd')
+const { modStatsAdd } =  require('../../../src/tasks/stats')
 module.exports = {
     name: 'unlock',
     aliases: ['ul', 'release'],
@@ -41,7 +41,7 @@ module.exports = {
             { name: `**Date / Time**`, value: `${lockTime}`, inline: true }
         )
 
-        addUnlock(message)
+        modStatsAdd(message, 'unlock', 1)
         let results = await serverSettings(message)
 
         if (results == null || results.modChannel == null) return

@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const moment = require('moment')
-const { addSlowmode } = require('../../tasks/modCountAdd')
+const { modStatsAdd } =  require('../../../src/tasks/stats')
 const { serverSettings, server } = require('../../../lib/settings')
 const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
@@ -42,7 +42,7 @@ module.exports = {
             .addField('**Location**', message.channel, true)
             .addField('**Date / Time**', slowTime, true)
 
-        addSlowmode(message)
+        modStatsAdd(message, 'slowmode', 1)
         let results = await serverSettings(message)
 
         if (results == null || results.modChannel == null) return

@@ -1,4 +1,4 @@
-const config = require('../../../lib/config')
+const foxxie = require('../../../config/foxxie')
 const fs = require('fs')
 module.exports = {
     name: 'reload',
@@ -6,7 +6,7 @@ module.exports = {
     usage: 'fox reload [command]',
     category: 'developer',
     execute: async(lang, message, args, client) => {
-        if (config.devs.includes(message.author.id)) {
+        if (foxxie.owner.includes(message.author.id)) {
             if (!args.length) return message.channel.send(`**Hey,** you gotta pass a command in to reload.`);
             const commandName = args[0].toLowerCase();
             const command = message.client.commands.get(commandName)

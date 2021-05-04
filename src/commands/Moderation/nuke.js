@@ -1,6 +1,6 @@
 const moment = require('moment')
 const Discord = require('discord.js')
-const { addNuke } = require('../../tasks/modCountAdd')
+const { modStatsAdd } =  require('../../../src/tasks/stats')
 const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'nuke',
@@ -47,7 +47,7 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
 
                         if (results == null || results.modChannel == null) return
 
-                            addNuke(message)
+                        modStatsAdd(message, 'nuke', 1)
                             message.channel.delete()
                             if (results.modChannel === message.channel.id) return;
                             const logChannel = message.guild.channels.cache.get(results.modChannel);
