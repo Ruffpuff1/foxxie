@@ -3,7 +3,7 @@ const gif = require('nekos.life');
 const neko = new gif;
 module.exports = {
     name: 'feed',
-    description: 'Roleplay command for feed',
+    description: 'Lets you feed someone.',
     async execute(message, args) {
         var user = message.mentions.users.first();
         const feed = await neko.sfw.feed();

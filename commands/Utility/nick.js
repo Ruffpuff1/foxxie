@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 module.exports = {
     name: 'nick',
-    description: 'Lets you request a nickname if you dont have the perms for it :/',
+    description: 'Lets you request a nickname if you dont have the perms for it .',
     aliases: ['nickname', 'name'],
     execute(message, args, bot) {
         message.delete();

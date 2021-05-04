@@ -1,6 +1,6 @@
 module.exports = {
     name: 'bleat',
-    description: 'alter momento',
+    description: 'This is a gif of a screaming goat. (Custom command requesting by Alter)',
     aliases: ['altr', 'cutie', 'cute goat'],
     
     execute(message) {

@@ -7,7 +7,7 @@ const emojis = { friends: '<:SRFriend:834697095968980998>', devs: '<:SRDev:83469
 module.exports = {
     name: 'test',
     aliases: ["t"],
-    description: 'testing ',
+    description: 'Just for testing commands.',
     
     execute(message, args) {
         if (!config.ids.developerID.includes(message.author.id)) return;

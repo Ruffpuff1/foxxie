@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
     name: "ban",
     aliases: ["yeet"],
-    description: "Bans the specified user from the server. Add -s or -soft to the ban reason to ban a user and then immediently unban them, clearing all of their messages.",
+    description: "Bans the specified user from the server. Add -s or -soft to the ban reason to ban a user and then immediately  unban them, clearing all of their messages.",
     permissions: 'BAN_MEMBERS',
 
     async execute(message, args, bot){

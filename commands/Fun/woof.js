@@ -3,7 +3,7 @@ const gif = require('nekos.life');
 const neko = new gif;
 module.exports = {
     name: 'woof',
-    description: ' command for dogs',
+    description: 'Dog',
     aliases: ['dog'],
     async execute(message, args) {
         var user = message.mentions.users.first();

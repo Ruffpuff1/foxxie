@@ -3,7 +3,7 @@ const gif = require('nekos.life');
 const neko = new gif;
 module.exports = {
     name: 'waifu',
-    description: 'sends waifu',
+    description: 'Sends a picture of a random waifu.',
     async execute(message, args) {
         var user = message.mentions.users.first();
         const waifu = await neko.sfw.waifu();

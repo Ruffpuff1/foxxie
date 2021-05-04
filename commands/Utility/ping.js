@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'ping',
-    description: 'Shows the latency of the bot.',
+    description: 'Shows the ping of the bot.',
     aliases: ['pong', 'pimg'],
     execute(message) {
       let Embed = new Discord.MessageEmbed()

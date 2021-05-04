@@ -1,7 +1,7 @@
 module.exports = {
     name: 'amber',
     aliases: ["ori", "dev"],
-    description: 'Pings amber in case of raid or something',
+    description: 'Amber',
     execute(message, args) {
         message.channel.send('<@814539604879081532>');
         message.channel.send('<@814539604879081532>');

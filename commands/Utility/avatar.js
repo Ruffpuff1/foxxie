@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'avatar',
     aliases: ["av", "ava"],
-    description: 'Shows a users avatar',
+    description: 'Shows specified users discord avatar, or your own.',
     execute(message, args) {
         let men;
         men = message.member

@@ -2,7 +2,7 @@
 const Discord = require('discord.js');
 module.exports = {
     name: 'uptime',
-    description: 'Tells you the uptime of me.',
+    description: 'Tells you when i was last rebooted.',
     aliases: ['ut', 'up'],
     execute(message, args, bot) {
         let days = 0

@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 module.exports = {
     name: "invite",
     aliases: ["inv"],
-    description: "Invite to Fokushi's server",
+    description: "Invite to Fokushis support server and to Fokushi as well.",
     execute(message, args) {
         var user = message.mentions.users.first();
         const invite= ["Invite"]

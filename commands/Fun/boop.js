@@ -3,7 +3,7 @@ const gif = require('nekos.life');
 const neko = new gif;
 module.exports = {
     name: 'boop',
-    description: 'Roleplay command for boop',
+    description: 'Lets you boop someone.',
     async execute(message, args) {
         var user = message.mentions.users.first();
         const poke = await neko.sfw.poke();

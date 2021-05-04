@@ -4,7 +4,7 @@ const config = require('../../config.json')
 module.exports = {
     name: 'status',
     aliases: ['s', 'stats'],
-    description: 'My current status.',
+    description: 'Sends my stats, for example the memory i use, how long ago i was rebooted, and how many guilds and users i have.',
     execute(message, args, bot) {
         
 if (!config.ids.developerID.includes(message.author.id)) return;

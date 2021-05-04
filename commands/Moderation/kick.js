@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 module.exports = {
     name: "kick",
     aliases: ["bean"],
-    description: "kick the specified member from the server",
+    description: "kick the specified member from the server. This command kicks them from the server but unlike ban it lets them rejoin as well.",
     permissions: 'KICK_MEMBERS',
 
     async execute(message, args, bot){

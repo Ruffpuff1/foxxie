@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'unmute',
-    description: 'Unmutes the user specifiied',
+    description: 'Unmutes a muted members if their muted time is up or if they were muted accidentally.',
     aliases: ["free", "letoff", "unstfu"],
     permissions: 'MANAGE_MESSAGES',
 

@@ -1,6 +1,6 @@
 module.exports = {
     name: 'ruffy',
-    description: 'ruff lol',
+    description: 'Ruffy, one of the devs for fokushi, and as well as a great friend.',
     aliases: ['ruff', 'reese', 'best coder'],
     
     execute(message) {

@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 module.exports = {
     name: 'hug',
-    description: 'Roleplay for hug command',
+    description: 'Lets you hug someone.',
     execute(message, args, bot) {
         bot.users.cache.find(r => r.username.toLowerCase() === args.join(' ').toLocaleLowerCase())
         var user = message.mentions.users.first();

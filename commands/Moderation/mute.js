@@ -3,7 +3,7 @@ const ms = require("ms");
 
 module.exports = {
     name: "mute",
-    description: "Mutes a member for a specific time, making them not able to talk.",
+    description: "Gives the specified member the muted role so they cannot talk for the time specified.",
     permissions: ['MANAGE_MESSAGES'],
 
     async execute (message, args, bot) {

@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 module.exports = {
     name: 'pee',
     aliases: ["p"],
-    description: 'pee on someone ',
+    description: 'Lets you pee on someone...',
     execute(message, args) {
         const men = message.mentions.members.first() || message.guild.members.cache.find(m => m.displayName == args[0]) || 
 message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(m => m.user.tag == args[0]) 

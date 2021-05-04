@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'purge',
-    description: 'Purge a specific amount of messages from the channel.',
+    description: 'Removes the amount of messages specified by the moderator, specific user purges are coming soon as well.',
     aliases: ['delete', 'remove'],
     permissions: 'MANAGE_MESSAGES',
     
