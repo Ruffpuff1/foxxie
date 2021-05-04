@@ -29,10 +29,24 @@ module.exports = {
 
             welcomeChannel.send('A new member joined! Give them a warm welcome please <@&829752715826823268>!', {embed:embed})
         }
+
+        function welcomeMessageSupport(channel) {
+            const welcomeChannel = bot.channels.cache.get(channel)
+            const embed = new Discord.MessageEmbed()
+                .setColor('RED')
+                .setTitle(`A new member lurks.`)
+                .setDescription(`Welcome to the support server ${member}, You can go to <#838861481985441832> if you need support, you should read <#838861682540412978> if you dont wanna get yeeted before you even get support (or after, both are tragic.). You can go to <#835610513404592149> as well to see the latest changes in Fokushi. If you're just here to chill, you can go to <#835603340355567618> and interact with everyone here. Have fun.`)
+                .setTimestamp()
+                .setFooter('Do hk help for a list of Fokushis commands to use.');
+
+            welcomeChannel.send({embed:embed})
+        }
         // welcome channel id goes in the string of each function call right below here
         if (member.guild.id === config.servers.seasideRest) welcomeMessage("822189403060830279")
         if (member.guild.id === config.servers.ok) welcomeMessageOk("831180747008114688")
         if (member.guild.id === config.servers.fox) welcomeMessage("822414098439864360")
         if (member.guild.id === config.servers.codes) welcomeMessage("790522490903330838")
+        if (member.guild.id === config.servers.support) welcomeMessageSupport("839058853068275762")
+
     }
 }
