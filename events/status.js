@@ -22,7 +22,9 @@ module.exports.status = async (bot) => {
         .addField('**Stats**:', `**${bot.users.cache.size.toLocaleString()}** users and **${bot.guilds.cache.size.toLocaleString()}** guilds.`, false)
         .addField('**Memory**:', `**${Math.floor(process.memoryUsage().heapUsed / 1024 / 1024).toLocaleString()}** megabytes.`)
         .addField('**Uptime**:', `**${Math.floor(bot.uptime / 1000).toLocaleString()}** seconds.`, false)
-        .addField('**Message**:', `\`Everything seems to be fine.\``, false)
+        .addField('**Message**:', `\`\`\`js
+Everything seems to be fine.
+\`\`\``, false)
 
 
     message.edit(`Hi this is my current status.`, {embed:embed})
