@@ -1,13 +1,14 @@
 const moment = require('moment')
 const Discord = require('discord.js')
 const { modStatsAdd } =  require('../../../src/tasks/stats')
-const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'nuke',
     usage: 'fox nuke',
     category: 'moderation',
     permissions: 'ADMINISTRATOR',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { message, settings } = props
 
         if (message.author.id !== message.guild.ownerID)
             return message.channel.send('**Yeahhh no,** due to the harm this command can cause, it can only be excuted by the owner of the server.')
@@ -30,8 +31,6 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                             channel.setTopic(topic)
                             channel.send(`**Heh First,** anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`)
                         })
-
-                        let results = await serverSettings(message)
     
                             const nukeEmbed = new Discord.MessageEmbed()
                                 .setTitle(`Nuked ${message.channel.name}`)
@@ -45,12 +44,12 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                                     { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
                                     { name: `**Date / Time**`, value: `${warnDate}`, inline: true })
 
-                        if (results == null || results.modChannel == null) return
+                        if (settings == null || settings.modChannel == null) return
 
                         modStatsAdd(message, 'nuke', 1)
                             message.channel.delete()
-                            if (results.modChannel === message.channel.id) return;
-                            const logChannel = message.guild.channels.cache.get(results.modChannel);
+                            if (settings.modChannel === message.channel.id) return;
+                            const logChannel = message.guild.channels.cache.get(settings.modChannel);
                             if (logChannel) logChannel.send(nukeEmbed)
     
                             

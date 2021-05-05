@@ -4,11 +4,14 @@ module.exports = {
     aliases: ['ff', 'fxfact'],
     usage: 'fox foxfact',
     category: 'fun',
-    execute: async(lang, message, args) => {
-        const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
+    execute: async(props) => {
+
+        let { message, lang, language } = props
+
+        const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
         try {
             request("https://some-random-api.ml/facts/fox", function (error, _response, body) {
-                if (error) return message.channel.send("**Whoops,** looks like an error occured while fetching a fact.")
+                if (error) return message.responder.error.foxFact(message, lang)
                                     .then(() => console.error(error.message));
     
                 const json = JSON.parse(body);

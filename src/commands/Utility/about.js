@@ -4,7 +4,10 @@ module.exports = {
     aliases: ['botinfo'],
     usage: 'fox about',
     category: 'utility',
-    execute(lang, message) {
+    execute(props) {
+
+        let { lang, message, args } = props;
+
         const embed = new Discord.MessageEmbed()
             .setTitle(lang.COMMAND_ABOUT_TITLE)
             .setColor(message.guild.me.displayColor)

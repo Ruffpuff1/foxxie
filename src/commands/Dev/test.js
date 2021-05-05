@@ -2,7 +2,9 @@ const { MessageEmbed } = require("discord.js")
 
 module.exports = {
     name: 'test',
-    execute(lang, message, args){
+    execute(props){
+
+      let { message, args } = props
 
       const embed = new MessageEmbed()
         .setTitle(`:star: A new message made it into the starboard :star:`)

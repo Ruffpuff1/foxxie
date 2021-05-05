@@ -4,7 +4,10 @@ module.exports = {
     name: 'serverlist',
     usage: 'fox serverlist',
     category: 'developer',
-    execute: async (lang, message) => {
+    execute: async (props) => {
+
+        let { message, lang } = props
+
         if (foxxie.owner.includes(message.author.id)) {
         let i0 = 0;
         let i1 = 10;

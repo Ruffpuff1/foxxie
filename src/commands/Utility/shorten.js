@@ -5,8 +5,9 @@ module.exports = {
     aliases: ['sl', 'tiny'],
     usage: 'fox shorten [link] (name)',
     category: 'utility',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
 
+        let { lang, message, args } = props;
         if (!args[0]) return message.channel.send(`**Please,** specify a **link** you would like to be shortened.`)
 
         if (args[0] && !args[1]) {

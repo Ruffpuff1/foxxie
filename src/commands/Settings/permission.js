@@ -7,7 +7,9 @@ module.exports = {
     usage: 'fox permission [allow|deny|clear] (user|userId)',
     category: 'settings',
     permissions: 'ADMINISTRATOR',
-    execute: async (lang, message, args) => {
+    execute: async(props) => {
+
+        let { lang, message, args } = props
         use = args[0];
         mem = message.mentions.members.first() || message.guild.members.cache.get(args[1]);
 

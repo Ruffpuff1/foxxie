@@ -18,7 +18,7 @@
             
 
 //     if(arg.toLowerCase() == "world" || arg.toLowerCase() === "global") {
-//         message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
+//         message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
 //         const stayhome = api.all().then(response => {
 //         covid.addFields(
 //                 {
@@ -58,7 +58,7 @@
 
 //         try {
 //         const stayhome2 = api.countries({country:arg}).then(response => {
-//             message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
+//             message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
 //             if (response.cases === undefined) return message.channel.send(lang.COMMAND_CORONA_NOSTATS)    
 //         covid.addFields(
 //             {

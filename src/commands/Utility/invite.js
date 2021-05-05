@@ -5,9 +5,12 @@ module.exports = {
     aliases: ['botinvite'],
     category: 'utility',
     usage: 'fox invite',
-    execute(lang, message, args, client) {
+    execute(props) {
+
+        let { lang, message, args } = props;
+
         const inviteEmbed = new Discord.MessageEmbed()
-            .setAuthor(`${lang.COMMAND_INVITE_HERE}`, client.user.displayAvatarURL())
+            .setAuthor(`${lang.COMMAND_INVITE_HERE}`, message.client.user.displayAvatarURL())
             .setColor(message.guild.me.displayColor)
             .setDescription(lang.COMMAND_INVITE_BODY)
 

@@ -6,7 +6,9 @@ module.exports = {
     usage: 'fox testjoin (member|userId)',
     category: 'automation',
     guildOnly: true,
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { message, args } = props
 
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
         message.react(approved)

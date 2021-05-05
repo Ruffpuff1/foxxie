@@ -11,11 +11,14 @@ module.exports = {
 	aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
 	usage: 'fox info (role|server|user|channel|emoji)',
 	category: 'utility',
-    execute: async (lang, message, args, client) => {
+    execute: async (props) => {
+
+        let { lang, message, args, language } = props;
+
         let user;
         channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name.toLowerCase() === args.join(' ').toLocaleLowerCase());
-        user = message.mentions.users.first() || client.users.cache.get(args[0]) || client.users.cache.find(u => u.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member.user;
-        let server = client.guilds.cache.get(args[1]) || message.guild;
+        user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.client.users.cache.find(u => u.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member.user;
+        let server = message.client.guilds.cache.get(args[1]) || message.guild;
 		let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase()); 
 
 		this.perms = lang.PERMISSIONS
@@ -144,7 +147,7 @@ module.exports = {
 
         if (user && args[0] !== 'server') {
         
-            const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
+            const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
 
             let embed = new MessageEmbed()
                 .setTitle(`${user.tag} (ID: ${user.id})`)
@@ -224,7 +227,7 @@ module.exports = {
                                     if (this.warnings.length) {
                                         embed.addField(
                                             `:lock: **Warnings (${this.warnings.length})**`,
-                                            this.warnings.map((warn, idx) => `${idx + 1}. ${warn.reason} - **${client.users.cache.get(warn.author).tag}**`)
+                                            this.warnings.map((warn, idx) => `${idx + 1}. ${warn.reason} - **${message.guild.members.cache.get(warn.author).user.tag}**`)
                                         );
                                     }
                                 }
@@ -234,7 +237,7 @@ module.exports = {
                                     if (this.notes.length) {
                                         embed.addField(
                                             `:label: **Note${this.notes.length > 1 ? 's' : ''} (${this.notes.length})**`,
-                                            this.notes.map((note, idx) => `${idx + 1}. ${note.reason} - **${client.users.cache.get(note.author).tag}**`)
+                                            this.notes.map((note, idx) => `${idx + 1}. ${note.reason} - **${message.guild.members.cache.get(note.author).user.tag}**`)
                                         );
                                     }
                                 }

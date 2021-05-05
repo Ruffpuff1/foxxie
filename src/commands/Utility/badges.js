@@ -4,12 +4,13 @@ module.exports = {
     aliases: ['bd'],
     usage: 'fox badges',
     category: 'utility',
-    execute: async (lang, message, args) => {
+    execute: async (props) => {
 
+        let { lang, message, args, language } = props;
         const users = message.guild.members.cache.array();
         if (message.guild.memberCount > 1000) return message.channel.send('COMMAND_BADGES_GUILDSIZE')
 
-        const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
+        const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
 
         const StaffUsers = []
         const PartnerUsers = []

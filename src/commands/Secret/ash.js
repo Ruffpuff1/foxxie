@@ -3,7 +3,9 @@ module.exports = {
     name: 'ash',
     aliases: ['ashlee'],
     category: 'secret',
-    execute(lang, message) {
+    execute(props) {
+
+        let { message } = props
         message.delete()
         message.channel.send(ashlee)
     }

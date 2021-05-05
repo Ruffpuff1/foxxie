@@ -4,8 +4,10 @@ module.exports = {
     aliases: ['av', 'icon', 'pfp', 'usericon'],
     usage: 'avatar (user|userId)',
     category: 'utility',
-    execute(lang, message, args, client) {
-        let user = message.mentions.users.first() || client.users.cache.get(args[0]) || message.member.user;
+    execute(props) {
+
+        let { lang, message, args } = props;
+        let user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.member.user;
         let isBot = user.id === '812546582531801118'
 
         const urlPNG = user.displayAvatarURL({ format: "png", dynamic: true, size: 512});

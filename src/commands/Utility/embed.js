@@ -5,7 +5,10 @@ module.exports = {
     usage: 'fox embed (channel) { "title": "Embed Title" }',
     category: 'utility',
     permissions: 'ADMINISTRATOR',
-    execute: async (lang, message, args) => {
+    execute: async (props) => {
+
+        let { lang, message, args } = props;
+
         // Delete flag
 
         // get the target channel

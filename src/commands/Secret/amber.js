@@ -3,7 +3,9 @@ module.exports = {
     name: 'amber',
     aliases: ['ori', 'fokushi-dev'],
     category: 'secret',
-    execute(lang, message) {
+    execute(props) {
+
+        let { message } = props
         message.delete()
         message.channel.send(amber)
     }

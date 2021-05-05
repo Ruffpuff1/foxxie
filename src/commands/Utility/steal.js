@@ -5,8 +5,9 @@ module.exports = {
     usage: 'fox steal [emoji] (name)',
     category: 'utility',
     permissions: 'MANAGE_EMOJIS',
-    execute: async (lang, message, args) => {
+    execute: async (props) => {
 
+        let { lang, message, args } = props;
         let emoCount = message.guild.emojis.cache.size
         if (emoCount >= `${message.guild.premiumTier === 0 ? '50' 
         : message.guild.premiumTier === 1 ? '100'

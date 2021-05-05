@@ -4,7 +4,9 @@ module.exports = {
     aliases: ['hello', 'greet', 'bye', 'goodbye', 'hi', 'hey'],
     usage: `fox tease [user] (reason)`,
     category: 'roleplay',
-    execute(lang, message, args) {
+    execute(props) {
+
+        let { message, args, lang } = props
         
         let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(u => u.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase())
     

@@ -2,7 +2,9 @@ const { emojis: { secretCommands: { reese } } } = require('../../../lib/util/con
 module.exports = {
     name: 'reese',
     category: 'secret',
-    execute(lang, message) {
+    execute(props) {
+
+        let { message } = props
         message.delete()
         message.channel.send(reese[Math.floor(Math.random() * reese.length)])
     }

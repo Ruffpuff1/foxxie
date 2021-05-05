@@ -4,7 +4,9 @@ module.exports = {
     name: 'justin',
     aliases: ['j', 'beaver'],
     category: 'secret',
-    execute(lang, message) {
+    execute(props) {
+
+        let { message } = props
         
 message.delete();
 const justinEmbed = new Discord.MessageEmbed()

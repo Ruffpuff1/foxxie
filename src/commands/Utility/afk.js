@@ -6,7 +6,10 @@ module.exports = {
     aliases: ['away', 'idle'],
     usage: `fox afk (reason)`,
     category: 'utility',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { lang, message, args } = props;
+
         let reason = args.slice(0).join(' ') || 'AFK';
         let boolean = true
 

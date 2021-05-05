@@ -6,7 +6,9 @@ module.exports = {
     aliases: ['wa'],
     usage: 'fox wolfram [search]',
     category: 'utility',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { lang, message, args } = props;
         if (!args[0]) return message.channel.send(lang.COMMAND_WOLFRAM_NO_ARGS)
 
         try {

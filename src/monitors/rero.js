@@ -1,9 +1,8 @@
-const { serverSettings } = require('../../lib/settings')
 module.exports = {
     name: 'rero',
     execute: async (reaction, user, act) => {
 
-        let server = await serverSettings(reaction.message)
+        let server = await reaction.message.guild.settings.get(reaction.message.guild)
         if (server == null) return;
         if (server.reros == null) return;
 

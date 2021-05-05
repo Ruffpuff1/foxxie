@@ -1,11 +1,10 @@
 const { MessageEmbed } = require('discord.js')
-const { serverSettings } = require('../../lib/settings')
 module.exports = {
     name: 'messageDelete',
     execute: async(message) => {
         if (message.partial) return
 
-        let deleteChannel = await serverSettings(message)
+        let deleteChannel = await message.guild.settings.get(message.guild)
 
         if (deleteChannel == null) return;
 

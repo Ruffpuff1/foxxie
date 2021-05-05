@@ -10,17 +10,14 @@ module.exports = {
 
         // prevents bot dms
         if (!message.guild) return
+        if (message.author.bot) return;
 
         if (message.content.toLowerCase() === '@everyone') return message.delete()
-
         if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return
-
-        let monitors = ['anti', 'disboardbump']
-
-        for (let monitor of monitors){
+        
+        for (let monitor of ['anti', 'disboardbump']){
             message.client.monitors.get(monitor).execute(message)
         }
-    
         // Botwide
         commandHandler(message)
         afkCheck(message)

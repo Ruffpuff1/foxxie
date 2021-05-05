@@ -1,7 +1,6 @@
-const { serverSettings } = require('../../lib/settings')
 const moment = require('moment')
 module.exports.welcomeMsg = async (member) => {
-    let welcomeChannel = await serverSettings(member)
+    let welcomeChannel = await member.guild.settings.get(member.guild)
     if (!welcomeChannel || !welcomeChannel.welcomeChannel) return; 
 
     welChn = member.guild.channels.cache.get(welcomeChannel.welcomeChannel)

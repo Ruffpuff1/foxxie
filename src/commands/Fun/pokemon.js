@@ -3,13 +3,16 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'pokemon',
     aliases: ['pkm', 'poke'],
-    usage: 'fox pokemon [pokemon]',
+    usage: 'fox pokemon [pokemon] (-s|-shiny)',
     category: 'fun',
-    execute: async(lang, message, args) => {
-        if (!args[0]) return message.channel.send(`**Cmon,** you gotta enter a pokemon for me to show.`)
+    execute: async(props) => {
+
+        let { message, args, lang, language } = props
+
+        if (!args[0]) return message.channel.send(language.get('COMMAND_POKEMON_NOPOKEMON', 'en-US'))
         const pokemon = args[0]
         
-        let loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING)
+        let loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'))
 
         let isShine = /\-shiny\s*|-s\s*/
         let shiny = isShine.test(message.content)
@@ -26,7 +29,7 @@ module.exports = {
                 .setThumbnail(res.data.sprites[`${shiny ? 'front_shiny' : 'front_default'}`])
                 .addFields(
                     {
-                        name: ':scroll: **Type**',
+                        name: `:scroll: ${language.get('COMMAND_POKEMON_FIELD_TYPE', 'en-US')}`,
                         value: res.data.types[0].type['name'],
                         inline: true
                     },
@@ -41,42 +44,42 @@ module.exports = {
                         inline: true
                     },
                     {
-                        name: ':scales: **Weight**',
+                        name: `:scales: ${language.get('COMMAND_POKEMON_FIELD_WEIGHT', 'en-US')}`,
                         value: res.data.weight,
                         inline: true
                     },
                     {
-                        name: ':straight_ruler: **Height**',
+                        name: `:straight_ruler: ${language.get('COMMAND_POKEMON_FIELD_HEIGHT', 'en-US')}`,
                         value: res.data.height.toLocaleString(),
                         inline: true
                     },
                     {
-                        name: ':up: **Base Exp**',
+                        name: `:up: ${language.get('COMMAND_POKEMON_FIELD_BASEXP', 'en-US')}`,
                         value: res.data.base_experience,
                         inline: true
                     },
                     {
-                        name: ':boot: **Speed**',
+                        name: `:boot: ${language.get('COMMAND_POKEMON_FIELD_SPEED', 'en-US')}`,
                         value: res.data.stats[5]['base_stat'],
                         inline: true
                     },
                     {
-                        name: ':chains: **Special Def**',
+                        name: `:chains: ${language.get('COMMAND_POKEMON_FIELD_SPECIALDEF', 'en-US')}`,
                         value: res.data.stats[4]['base_stat'],
                         inline: true
                     },
                     {
-                        name: ':crystal_ball: **Special Atk**',
+                        name: `:crystal_ball: ${language.get('COMMAND_POKEMON_FIELD_SPECIALATTK', 'en-US')}`,
                         value: res.data.stats[3]['base_stat'],
                         inline: true
                     },
                     {
-                        name: ':shield: Defense',
+                        name: `:shield: ${language.get('COMMAND_POKEMON_FIELD_DEFENSE', 'en-US')}`,
                         value: res.data.stats[2]['base_stat'],
                         inline: true
                     },
                     {
-                        name: ':crossed_swords: Attack',
+                        name: `:crossed_swords: ${language.get('COMMAND_POKEMON_FIELD_ATTACK', 'en-US')}`,
                         value: res.data.stats[1]['base_stat'],
                         inline: true
                     },
@@ -91,7 +94,7 @@ module.exports = {
         })
         .catch((err) => {
             loading.delete()
-            message.channel.send(`**Hey,** that Pokemon is invalid! How bout an actual one this time oki?`)
+            message.channel.send(language.get('COMMAND_POKEMON_INVALIDPOKEMON', 'en-US'))
             }
         )
     }

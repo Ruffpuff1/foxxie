@@ -4,7 +4,9 @@ module.exports = {
     name: 'poll',
     usage: 'fox poll [option1], [option2]',
     category: 'utility',
-    execute(lang, message, args, client) {
+    execute(props) {
+
+        let { lang, message, args } = props;
         let opt = args.join(" ").toString().split(/\,\s*/)
         let filtered = opt.filter(function (el) {
             return el != null && el != "";

@@ -1,5 +1,4 @@
 const mongo = require('../../../lib/structures/database/mongo')
-const { serverSettings } = require('../../../lib/settings')
 const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
 const Discord = require('discord.js')
 module.exports = {
@@ -8,14 +7,17 @@ module.exports = {
     usage: 'fox antiinvite [on|off]',
     category: 'settings',
     permissions: 'ADMINISTRATOR',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { lang, message, args, language } = props
+
         if (!args[0]) return;
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
         await mongo().then(async () => {
             if (args[0].toLowerCase() === 'on')
             try {
-                const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
+                const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
                 await serverSchema.findByIdAndUpdate({
                     _id: message.guild.id
                 }, {
@@ -31,7 +33,7 @@ module.exports = {
 
             if (args[0].toLowerCase() === 'off')
             try {
-                const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
+                const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
                 await serverSchema.findByIdAndUpdate({
                     _id: message.guild.id
                 }, {
@@ -47,7 +49,7 @@ module.exports = {
 
             if (args[0].toLowerCase() === 'none')
             try {
-                const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING)
+                const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'))
                 await serverSchema.findByIdAndUpdate({
                     _id: message.guild.id
                 }, {
@@ -62,8 +64,8 @@ module.exports = {
             } finally {}
 
             if (!args[0]) {
-                const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
-                let anti_inv = await serverSettings(message)
+                const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
+                let anti_inv = await message.guild.settings.get(message.guild)
                 if (anti_inv !== null) {
                     embed.setDescription(`Currently anti-invite filitering is set to **${anti_inv.antiInvite ? "on" : 'off'}**. If ya wanna change this, use the command \`fox antiinvite [on/off]\`.`)
                     loading.delete()

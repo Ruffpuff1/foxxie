@@ -4,7 +4,10 @@ module.exports = {
     aliases: ['conversationstarter', 'conversationstarters', 'topics'],
     usage: `fox topic`,
     category: 'fun',
-    execute: async (lang, message) => {
+    execute: async (props) => {
+
+        let { message } = props
+
         axios.get(`https://www.conversationstarters.com/random.php`)
         .then((res) => {
             message.channel.send(res.data.slice(39))

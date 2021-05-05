@@ -7,7 +7,7 @@
 //     category: 'fun',
 //     execute: async(lang, message, args) => {
 //         let target = message.mentions.users.first() || message.author;
-//         const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
+//         const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
 
 // 	let avatar = message.attachments.array()[0];
 

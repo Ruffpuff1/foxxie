@@ -5,15 +5,18 @@ module.exports = {
     aliases: ['ruffy', 'foxxie', 'foxy'],
     usage: 'fox fox',
     category: 'fun',
-    execute: async(lang, message, args, client) => {
-      message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
+    execute: async(props) => {
+
+      let { message, lang, language } = props
+
+      message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
       axios.get(`https://randomfox.ca/floof/`)
       .then((res) => {
         const embed = new Discord.MessageEmbed()
-            .setTitle(`Random Fox:`)
+            .setTitle(language.get("COMMAND_FOX_TITLE", "en-US"))
             .setColor(message.guild.me.displayColor)
             .setImage(res.data.image)
-            .setFooter(`From randomfox.ca/floof`)
+            .setFooter(language.get("COMMAND_FOX_FOOTER", "en-US"))
             .setTimestamp()
         message.channel.send(embed)
         resultMessage.delete()

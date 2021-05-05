@@ -7,7 +7,7 @@
 //     category: 'fun',
 //     execute: async(lang, message, args) => {
 
-//         const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
+//         const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
         
 //         let notice3 = 'You need to provide some **text** for this command.'
 

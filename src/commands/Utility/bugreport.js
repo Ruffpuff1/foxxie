@@ -5,9 +5,12 @@ module.exports = {
     aliases: ['bug'],
     usage: 'fox bugreport [bug]',
     category: 'utility',
-    execute: async(lang, message, args, client) => {
+    execute: async(props) => {
+
+        let { lang, message, args } = props;
+
         let bug;
-        const dev = client.users.cache.get(owner[0])
+        const dev = message.client.users.cache.get(owner[0])
         bug = args.slice(0).join(' ')
         if (!bug) return message.channel.send('**Please,** describe in detail the bug you are experiencing, include the name of the command, and the usage that is causing the bug.')
         .then(() => {

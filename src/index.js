@@ -1,4 +1,8 @@
 const Discord = require('discord.js')
+
+require('../lib/extensions/Guild')
+require('../lib/extensions/Message')
+
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] })
 const fs = require('fs')
 require('dotenv').config()

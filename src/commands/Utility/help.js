@@ -6,7 +6,9 @@ module.exports = {
     aliases: ['commands', 'h'],
     category: 'utility',
     usage: 'help (command) (-c|-channel)',
-    execute(lang, message, args, client) {
+    execute(props) {
+
+        let { lang, message, args, language } = props;
 
         const channelFlag = /\-channel\s*|-c\s*/gi
         const orginalFlag = /\-orginal\s*|-o\s*/gi
@@ -126,7 +128,7 @@ module.exports = {
 
                 embed
                     .setTitle(command.name)
-                    .setDescription(`${descriptions[commandUp]}\n
+                    .setDescription(`${language.get(`COMMAND_${commandUp}_DESCRIPTION`, 'en-US')}\n
 ${command.permissions?`**Permissions Required:** \`${command.permissions}\``:''}`)
                     .addField(`**${lang.COMMAND_HELP_USAGE} ${lang.COMMAND_HELP_TRUE})**`, `\`${command.usage}\``);
 

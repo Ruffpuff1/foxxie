@@ -5,7 +5,10 @@ module.exports = {
     aliases: ['r'],
     usage: 'fox reload [command]',
     category: 'developer',
-    execute: async(lang, message, args, client) => {
+    execute: async(props) => {
+
+        let { message, args } = props
+
         if (foxxie.owner.includes(message.author.id)) {
             if (!args.length) return message.channel.send(`**Hey,** you gotta pass a command in to reload.`);
             const commandName = args[0].toLowerCase();

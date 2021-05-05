@@ -1,7 +1,6 @@
 const Discord = require('discord.js')
 const moment = require('moment')
 const { modStatsAdd } =  require('../../../src/tasks/stats')
-const { serverSettings, server } = require('../../../lib/settings')
 const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'slowmode',
@@ -9,7 +8,9 @@ module.exports = {
     usage: 'fox slowmode [seconds] (reason)',
     category: 'moderation',
     permissions: 'MANAGE_CHANNELS',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { message, args, lang, settings } = props
         
         if (!args[0]) return message.channel.send('COMMAND_SLOWMODE_NO_ARGS')
         let slowTime = moment(message.createdTimestamp).format('llll');
@@ -43,11 +44,10 @@ module.exports = {
             .addField('**Date / Time**', slowTime, true)
 
         modStatsAdd(message, 'slowmode', 1)
-        let results = await serverSettings(message)
 
-        if (results == null || results.modChannel == null) return
+        if (settings == null || settings.modChannel == null) return
 
-        const logChannel = message.guild.channels.cache.get(results.modChannel);
+        const logChannel = message.guild.channels.cache.get(settings.modChannel);
         if (logChannel) logChannel.send(embed)  
     }
 }

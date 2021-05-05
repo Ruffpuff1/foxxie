@@ -6,7 +6,9 @@ module.exports = {
     usage: 'fox setcolor [role] [color]',
     category: 'utility',
     permissions: 'MANAGE_ROLES',
-    execute(lang, message, args) {
+    execute(props) {
+
+        let { lang, message, args } = props;
         let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
         if (!role) return message.channel.send(lang.COMMAND_SETCOLOR_NO_ROLE)
         let color = args[1];

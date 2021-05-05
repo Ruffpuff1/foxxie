@@ -4,9 +4,11 @@ module.exports = {
     name: 'support',
     usage: 'fox support',
     category: 'utility',
-    execute(lang, message, args, client) {
+    execute(props) {
+
+        let { lang, message, args } = props;
         const inviteEmbed = new Discord.MessageEmbed()
-            .setAuthor(lang.COMMAND_SUPPORT_HERE, client.user.displayAvatarURL())
+            .setAuthor(lang.COMMAND_SUPPORT_HERE, message.client.user.displayAvatarURL())
             .setColor(message.guild.me.displayColor)
             .setDescription(lang.COMMAND_SUPPORT_BODY)
 

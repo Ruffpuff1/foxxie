@@ -7,7 +7,9 @@ module.exports = {
     aliases: ['crk', 'profilebadge'],
     category: 'developer',
     usage: 'fox createkey [add|remove] [badge] [user]',
-    execute: async (lang, msg, args) => {
+    execute: async (props) => {
+
+        let { message, args } = props
 
         if (!owner.includes(msg.author.id)) return;
 

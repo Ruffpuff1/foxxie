@@ -6,7 +6,9 @@ module.exports = {
     aliases: ['state', 'update'],
     usage: 'fox status [status] (message)',
     category: 'developer',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { message, args } = props
 
         if (!owner.includes(message.author.id)) return;
 

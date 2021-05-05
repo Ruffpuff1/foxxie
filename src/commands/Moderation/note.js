@@ -7,7 +7,9 @@ module.exports = {
     usage: 'fox note [member|userId] [note]',
     category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
-    execute: async(lang, message, args, client) => {
+    execute: async(props) => {
+
+        let { message, args } = props
     
         const target = message.mentions.users.first() || message.guild.members.cache.get(args[0]).user;
         if (!target) return message.channel.send("You need to provide **one member** to make a note of.")

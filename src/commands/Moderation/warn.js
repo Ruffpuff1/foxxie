@@ -6,7 +6,10 @@ module.exports = {
     usage: 'fox warn [user|userId] (reason)',
     category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { message, args, lang } = props
+
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!target) return message.channel.send("You need to provide **one member** to give a warn to.")
 

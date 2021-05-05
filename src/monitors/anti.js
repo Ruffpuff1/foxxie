@@ -1,9 +1,8 @@
-const { serverSettings } = require('../../lib/settings')
 const { moderationCommandWarn } = require('../../lib/structures/ModerationCommand')
 module.exports = {
     name: 'anti',
     execute: async(message) => {
-    let anti_inv = await serverSettings(message)
+    let anti_inv = await message.guild.settings.get(message.guild)
 
     if (!message.guild) return
     if (anti_inv == null) return

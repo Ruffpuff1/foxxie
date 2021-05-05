@@ -1,25 +1,27 @@
 const mongo = require('../../../lib/structures/database/mongo')
 const Discord = require('discord.js')
+const { emojis: { approved } } = require('../../../lib/util/constants')
 const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
-const { serverSettings, deleteServerSetting } = require('../../../lib/settings')
 module.exports = {
     name: 'log',
     aliases: ['logging', 'logchannel', 'lc'],
     usage: `fox log [mod|edit|delete] (#channel|none|off)`,
     permissions: 'ADMINISTRATOR',
     category: 'settings',
-    execute: async (lang, msg, args) => {
+    execute: async(props) => {
+
+        let { lang, message, args } = props
 
         validCase = ["mod", "edit", "delete"]
 
         const embed = new Discord.MessageEmbed()
-            .setColor(msg.guild.me.displayColor)
+            .setColor(message.guild.me.displayColor)
 
         let use = args[0];
-        let chn = msg.mentions.channels.first() || msg.guild.channels.cache.get(args[1])
-        if (!use || !validCase.includes(use.toLowerCase())) return msg.channel.send(`**Please,** specify a proper use case [mod|edit|delete].`)
+        let chn = message.mentions.channels.first() || message.guild.channels.cache.get(args[1])
+        if (!use || !validCase.includes(use.toLowerCase())) return message.channel.send(`**Please,** specify a proper use case [mod|edit|delete].`)
 
-        let settings = await serverSettings(msg)
+        let settings = await message.guild.settings.get(message.guild)
 
         let deleteCase = ['off', 'none']
     
@@ -33,7 +35,24 @@ module.exports = {
             if (use === validCase[1].toLowerCase() && settings.editChannel) embed.setDescription(`Currently logging **edits** in <#${settings.editChannel}>.`)
             if (use === validCase[2].toLowerCase() && settings.deleteChannel) embed.setDescription(`Currently logging **deletions** in <#${settings.deleteChannel}>.`)
 
-            return msg.channel.send(embed)
+            return message.channel.send(embed)
+        }
+
+        deleteServerSetting = async (message, use) => {
+            if (message.guild == undefined) return;
+            await mongo().then(async () => {
+                try {
+                        await serverSchema.findByIdAndUpdate({
+                            _id: message.guild.id
+                        }, {
+                            _id: message.guild.id,
+                            $unset: {
+                                [use]: ''
+                            }
+                        })
+                        return message.react(approved)
+                } finally {}
+            })
         }
 
         let setting;
@@ -42,21 +61,21 @@ module.exports = {
         if (use === validCase[2].toLowerCase()) setting = 'deleteChannel'
 
         if (!chn && deleteCase.includes(args[1])){
-            return deleteServerSetting(msg, setting)
+            return deleteServerSetting(message, setting)
         }
 
         await mongo().then(async () => {
             try {
             await serverSchema.findByIdAndUpdate({
-                _id: msg.guild.id
+                _id: message.guild.id
             }, {
-                _id: msg.guild.id,
+                _id: message.guild.id,
                 [setting]: chn
             }, {
                 upsert: true
             })
             embed.setDescription(`Got it, set the **${setting}** setting to log in ${chn}.`)
-            msg.channel.send(embed)
+            message.channel.send(embed)
             } finally {}
         })
     }

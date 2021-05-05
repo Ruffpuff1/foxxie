@@ -6,9 +6,11 @@ module.exports = {
     aliases: ['temp', 'forcast'],
     usage: 'fox weather [city]',
     category: 'utility',
-    execute(lang, message, args) {
+    execute(props) {
+
+        let { lang, message, args, language } = props;
         if (!args[0]) return message.channel.send(`Ya gotta enter a **city** for me to give the weather.`)
-        message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
+        message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
         weather.find({search: args.join(" "), degreeType: 'F'}, function(err, result) {
             if (err) message.channel.send(err.message)
             if(result.length === 0) {

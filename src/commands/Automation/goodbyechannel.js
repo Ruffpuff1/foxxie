@@ -1,15 +1,16 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
 const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
-const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'goodbyechannel',
     aliases: ['gc', 'goodbyelocation'],
     usage: 'fox goodbyeChannel (none|channel)',
     category: 'automation',
     permissions: 'ADMINISTRATOR',
-    execute: async(lang, message, args) => {
-        let guildId = message.guild.id
+    execute: async(props) => {
+
+        let { message, args, settings } = props
+
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
 
@@ -33,14 +34,12 @@ module.exports = {
                 let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
                 if (!channel) {
 
-                    let results = await serverSettings(message)
-
-                    if (results === null || results.goodbyeChannel == null) {
+                    if (settings === null || settings.goodbyeChannel == null) {
                         embed.setDescription(`Uhhh there isn't a goodbye channel set right now. You can set one with \`fox goodbyeChannel [#channel]\`.`)
                         return message.channel.send(embed)
                     }
 
-                    let chn = results.goodbyeChannel
+                    let chn = settings.goodbyeChannel
 
                     embed.setDescription(`Right now, the goodbye channel is set to <#${chn}>. If you want to change it use \`fox goodbyeChannel [#channel]\`.`)
                     return message.channel.send(embed)

@@ -5,7 +5,10 @@ module.exports = {
     aliases: ['def', 'word'],
     usage: 'fox define [word]',
     category: 'utility',
-    execute(lang, message, args) {
+    execute(props) {
+
+        let { lang, message, args, language } = props;
+
         let word;
         if (!args[0]) { message.channel.send(lang.COMMAND_DEFINE_NO_WORD).then(resultMessage => {
         
@@ -15,7 +18,7 @@ module.exports = {
             .then(messages => {
                 if (messages.first().content.toLowerCase() === 'cancel') return message.channel.send('Command **cancelled**.')
                 word = messages.first().content
-                resultMessage.edit(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
+                resultMessage.edit(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
 
                 axios.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
                 .then((res) => {
@@ -35,7 +38,7 @@ module.exports = {
 return } 
         word = args[0].toLowerCase()
 
-        message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
+        message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
 
         axios.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
         .then((res) => {

@@ -1,5 +1,4 @@
 const { MessageEmbed } = require('discord.js')
-const { serverSettings } = require('../../lib/settings')
 const { commandHandler } = require('./commandHandler')
 module.exports = {
     name: 'messageUpdate',
@@ -14,7 +13,7 @@ module.exports = {
         // Command edit with cmd handler
         const message = newMessage
         commandHandler(message)
-        let editChannel = await serverSettings(message)
+        let editChannel = await message.guild.settings.get(message.guild)
 
         if (editChannel == null) return;
 

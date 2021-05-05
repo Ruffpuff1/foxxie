@@ -1,4 +1,3 @@
-const { serverSettings } = require('../../lib/settings')
 const fs = require('fs')
 const ms = require('ms')
 module.exports = {
@@ -13,7 +12,7 @@ module.exports = {
         ? (message.embeds[0].description.endsWith(`https://disboard.org/`) ? true : false)
         : false
 
-        let server = await serverSettings(message)
+        let server = await message.guild.settings.get(message.guild)
         if (server == null) return;
         if (server.disboardChannel == null) return;
 

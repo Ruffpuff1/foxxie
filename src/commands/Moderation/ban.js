@@ -1,5 +1,3 @@
-const { botPermError } = require('../../../lib/util/error');
-const { serverSettings } = require('../../../lib/settings')
 const { modStatsAdd } =  require('../../../src/tasks/stats')
 const moment = require('moment')
 const Discord = require('discord.js')
@@ -10,8 +8,11 @@ module.exports = {
     usage: 'fox ban [user|userId] (reason) (-p|-purge)',
     category: 'moderation',
     permissions: 'BAN_MEMBERS',
-    execute: async (lang, message, args) => {
-        if (!message.channel.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return botPermError(lang, message, 'BAN_MEMBERS')
+    execute: async (props) => {
+
+        let { message, args, lang, settings } = props
+
+        if (!message.channel.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return message.responder.error.clientPerms(message, 'BAN_MEMBERS')
 
         let member = message.mentions.users.first() || message.client.users.cache.get(args[0]);
 
@@ -34,8 +35,6 @@ module.exports = {
         updatedRes = res.replace(reg, '')
 
         const date = moment(message.createdTimestamp).format('llll');
-
-        let results = await serverSettings(message)
 
         message.react(approved)
         modStatsAdd(message, 'ban', 1)
@@ -65,7 +64,7 @@ module.exports = {
             .catch(console.error)
         }
     }
-        if (results == null || results.modChannel == null) return
+        if (settings == null || settings.modChannel == null) return
 
         const embed = new Discord.MessageEmbed()
             .setTitle(`Banned ${member.tag}`)
@@ -78,7 +77,7 @@ module.exports = {
             .addField('**Location**', message.channel, true)
             .addField('**Date / Time**', date, true)
 
-        const channel = message.guild.channels.cache.get(results.modChannel);
+        const channel = message.guild.channels.cache.get(settings.modChannel);
         if (channel) channel.send(embed)
     }
 }

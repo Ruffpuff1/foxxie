@@ -6,10 +6,12 @@ module.exports = {
     usage: 'fox stafflog (member|userId)',
     permissions: 'MANAGE_MESSAGES',
     category: 'moderation',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { message, args, lang, language } = props
 
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-        const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
+        const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
 
         let desc1 = []
         let desc2 = []

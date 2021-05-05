@@ -1,18 +1,18 @@
-const { serverSettings } = require('../../../lib/settings')
 const { modStatsAdd } =  require('../../../src/tasks/stats')
 const Discord = require('discord.js')
 const moment = require('moment')
-const { botPermError } = require('../../../lib/util/error')
 module.exports = {
     name: 'lock',
     aliases: ['l', 'lockdown'],
     permissions: 'MANAGE_CHANNELS',
     category: 'moderation',
     usage: 'fox lock (reason)',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { message, args, lang } = props
 
         if (!message.channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return message.channel.send('COMMAND_LOCK_CHANNEL_ALREADY_LOCKED')
-        if (!message.channel.permissionsFor(message.guild.me).has('MANAGE_CHANNELS')) return botPermError(lang, message, 'MANAGE_CHANNELS')
+        if (!message.channel.permissionsFor(message.guild.me).has('MANAGE_CHANNELS')) return message.responder.error.clientPerms(message, 'MANAGE_CHANNELS')
 
         let reason = args.slice(0).join(' ') || 'No reason specified'
         let lockTime = moment(message.createdTimestamp).format('llll')
@@ -44,11 +44,10 @@ module.exports = {
         )
         
         modStatsAdd(message, 'lock', 1)
-        let results = await serverSettings(message)
 
-        if (results == null || results.modChannel == null) return
+        if (settings == null || settings.modChannel == null) return
 
-        const logChannel = message.guild.channels.cache.get(results.modChannel);
+        const logChannel = message.guild.channels.cache.get(settings.modChannel);
         if (logChannel) logChannel.send(embed)
     }
 }

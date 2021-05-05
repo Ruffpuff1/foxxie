@@ -1,14 +1,15 @@
 const Discord = require('discord.js')
 const mongo = require('../../../lib/structures/database/mongo')
 const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
-const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'prefix',
     aliases: ['setprefix'],
     usage: 'fox prefix (none|prefix)',
     category: 'settings',
     permissions: 'ADMINISTRATOR',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { lang, message, args, settings } = props
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
 
@@ -33,14 +34,12 @@ module.exports = {
                 let prefix = args[0]
                 if (!prefix) {
 
-                    let results = await serverSettings(message)
-
-                    if (results === null || results.prefix == null) {
+                    if (settings === null || settings.prefix == null) {
                         embed.setDescription(`Uhhh there isn't a custom prefix set right now. You can set one with \`fox prefix (prefix)\` or use my defaults \`fox\` or \`.\`.`)
                         return message.channel.send(embed)
                     }
 
-                    let chn = results.prefix
+                    let chn = settings.prefix
 
                     embed.setDescription(`Right now, this server's prefix is set to \`${chn}\`. If you want to change it use \`fox prefix (prefix)\`.`)
                     return message.channel.send(embed)

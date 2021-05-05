@@ -1,19 +1,19 @@
 const { emojis: { perms: { granted, denied } } } = require('../../../lib/util/constants')
-const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'settings',
     aliases: ['set', 'setting'],
     usage: 'fox settings',
     permissions: 'MANAGE_MESSAGES',
     category: 'settings',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
 
-        const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
+        let { lang, message, args, language } = props
+        const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
 
         let desc1 = []
         let desc2 = []
         let desc3 = []
-        let settings = await serverSettings(message)
+        let settings = await message.guild.settings.get(message.guild)
 
         let blk = []
         if (settings != null && settings.blockedUsers != null) for (let user of settings.blockedUsers){

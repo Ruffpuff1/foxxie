@@ -26,3 +26,29 @@
 * Configure monitors and tasks to work off the client.
 * Finish transferring user data to the new userSchema. (Afks, finish transferring existing mod stats, global ban system)
 * Transfer status schema to bot settings schema.
+
+### Language Order.
+* Default
+
+* Activities // ehhh
+* Error Messages // done 4 now
+* Message prompts
+
+* Automation
+* Fun
+* Moderation
+* Roleplay
+* Secret
+* Settings
+* Utility
+
+* Events
+* Inhibitors
+* Logs
+* Monitors
+* Resolvers
+* Tasks
+
+* 8 Ball
+
+* The Corner Store

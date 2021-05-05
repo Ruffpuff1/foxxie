@@ -5,7 +5,9 @@ module.exports = {
     aliases: ['calculate', 'calc', 'calculator', 'convert'],
     usage: "fox math [query]",
     category: 'utility',
-    execute: async (lang, message, args) => {
+    execute: async (props) => {
+
+        let { lang, message, args } = props;
 
         if (!args[0]) return message.channel.send("**Enter Something To Calculate**");
 

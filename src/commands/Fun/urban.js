@@ -5,18 +5,21 @@ module.exports = {
     aliases: ['ud', 'slang'],
     usage: 'fox urban [term]',
     category: 'fun',
-    execute: async (lang, message, args) => {
+    execute: async (props) => {
+
+        let { message, args, lang, language } = props
+
         //if(!message.channel.nsfw) return message.channel.send(lang.COMMAND_NSFW_ERROR)
-        if (!args[0]) return message.channel.send(lang.COMMAND_URBAN_NO_WORD)
-        message.channel.send(lang.COMMAND_MESSAGE_LOADING).then(resultMessage => {
+        if (!args[0]) return message.channel.send(language.get('COMMAND_URBAN_NOWORD', 'en-US'))
+        let loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'))
         axios.get(`http://api.urbandictionary.com/v0/define?term=$%7B${args[0]}%7D`)
         .then((res) => {
 
             const argCap = args[0].charAt(0).toUpperCase()  + args[0].slice(1)
             let ex;
             let str;
-            res.data.list[3] ? ex = res.data.list[3]['example'] : ex = 'No example available.'
-            res.data.list[3] ? str = res.data.list[3]['definition'] : str = 'No definition available.'
+            res.data.list[3] ? ex = res.data.list[3]['example'] : ex = language.get('COMMAND_URBAN_NODEFINITION', 'en-US')
+            res.data.list[3] ? str = res.data.list[3]['definition'] : str = language.get('COMMAND_URBAN_NOEXAMPLE', 'en-US')
 
             const embed = new Discord.MessageEmbed()
             .setTitle(argCap)
@@ -24,17 +27,16 @@ module.exports = {
             .setColor(message.guild.me.displayColor)
             .setThumbnail(`https://i.imgur.com/qNTzb3k.png`)
             .setDescription(`${str.replace(/[\[\]']+/g,'')}\n\n\`👍\` ${res.data.list[3]['thumbs_up']}\n\`👎\` ${res.data.list[3]['thumbs_down']}`)
-            .setFooter(`By ${res.data.list[3]['author']}`)
-            .addField('Example', ex.replace(/[\[\]']+/g,''))
+            .setFooter(language.get('COMMAND_URBAN_FOOTER', 'en-US', [res]))
+            .addField(language.get('COMMAND_URBAN_EXAMPLE', 'en-US'), ex.replace(/[\[\]']+/g,''))
 
             message.channel.send(embed)
-            resultMessage.delete()
+            loading.delete()
 
         })
             .catch((err) => {
-                console.error(err)
-                message.channel.send(lang.COMMAND_URBAN_NO_DATA)
-            })
+                loading.delete()
+                message.channel.send(language.get('COMMAND_URBAN_NODATA', 'en-US'))
         })
     }
 }

@@ -1,6 +1,5 @@
 const Discord = require('discord.js')
 const moment = require('moment')
-const { serverSettings, server } = require('../../../lib/settings')
 const { modStatsAdd } =  require('../../../src/tasks/stats')
 module.exports = {
     name: 'unlock',
@@ -8,7 +7,9 @@ module.exports = {
     permissions: 'MANAGE_CHANNELS',
     category: 'moderation',
     usage: 'fox unlock (reason)',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { message, args, lang, settings } = props
 
         if (message.channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return message.channel.send('COMMAND_UNLOCK_CHANNEL_NOT_LOCKED')
 
@@ -42,11 +43,10 @@ module.exports = {
         )
 
         modStatsAdd(message, 'unlock', 1)
-        let results = await serverSettings(message)
+        
+        if (settings == null || settings.modChannel == null) return
 
-        if (results == null || results.modChannel == null) return
-
-        const logChannel = message.guild.channels.cache.get(results.modChannel);
+        const logChannel = message.guild.channels.cache.get(settings.modChannel);
         if (logChannel) logChannel.send(embed)
     }
 }

@@ -1,14 +1,15 @@
 const Discord = require('discord.js')
 const moment = require('moment')
 const { modStatsAdd } =  require('../../../src/tasks/stats')
-const { serverSettings } = require('../../../lib/settings')
 module.exports = {
     name: 'purge',
     aliases: ['prune', 'clear', 'clean', 'delete', 'p'],
     usage: 'fox purge (messages) (reason)',
     category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
-    execute: async(lang, message, args) => {
+    execute: async(props) => {
+
+        let { message, args, lang, settings } = props
 
         let num;
         let purgeTime = moment(message.createdTimestamp).format('llll');
@@ -47,11 +48,10 @@ module.exports = {
 
         modStatsAdd(message, 'purge', 1)
         modStatsAdd(message, 'purgeTotal', num)
-        let results = await serverSettings(message)
 
-        if (results == null || results.modChannel == null) return
+        if (settings == null || settings.modChannel == null) return
 
-        const logChannel = message.guild.channels.cache.get(results.modChannel);
+        const logChannel = message.guild.channels.cache.get(settings.modChannel);
         if (logChannel) logChannel.send(embed)    
     }
 }
