@@ -14,7 +14,7 @@ Profile art by [Luna Spyker](https://twitter.com/LunaSpyker).
 
 ## Features
 
-* Over 75 commands and 120 aliases.
+* Over 95 commands and 180 aliases.
 * Fully scripted in English and partially scripted in Spanish.
 * Global ban tracker for all servers the bot is in.
 
