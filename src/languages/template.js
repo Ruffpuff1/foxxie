@@ -1,22 +1,44 @@
-const { emojis: { infinity } } = require('../../lib/util/constants')
+const { emojis: { infinity, perms: { notSpecified }, covid: { cases, tests, deaths, recoveries } } } = require('../../lib/util/constants');
+const { toUpperCaseFirst } = require('../../lib/util/util');
 
 module.exports = {
 
     template: {
-        DEFAULT: (key) => ``,
-        PREFIX_REMINDER: (prefix) => ``,
+        DEFAULT: key => ``,
+        PREFIX_REMINDER: prefix => ``,
 
         MESSAGE_LOADING: () => ``,
 
         // Responders
         RESPONDER_ERROR_CODE: () => ``,
         RESPONDER_ERROR_FOXFACT: () => ``,
-        RESPONDER_ERROR_PERMS_AUTHOR: (perm) => ``,
-        RESPONDER_ERROR_PERMS_CLIENT: (perm) => ``,
-        RESPONDER_FOXXIE_CUBBY_WRONG_CHANNEL: (msg) => ``,
+        RESPONDER_ERROR_PERMS_AUTHOR: perm => ``,
+        RESPONDER_ERROR_PERMS_CLIENT: perm => ``,
+        RESPONDER_FOXXIE_CUBBY_WRONG_CHANNEL: msg => ``,
         RESPONDER_TCS_MIMU_PICK: () => ``,
+
         // Automation Commands
+        COMMAND_WELCOMECHANNEL_DESCRIPTION: () => ``,
+        COMMAND_WELCOME_CHANNEL_NOCHANNEL: () => ``,
+        COMMAND_WELCOME_CHANNEL_NOW: channel => ``,
+        COMMAND_WELCOME_CHANNEL_REMOVED: () => ``,
+        COMMAND_WELCOME_CHANNEL_SET: channel => ``,
+
         // Dev Commands
+        COMMAND_CREATEKEY_DESCRIPTION: () => ``,
+        COMMAND_CREATEKEY_NOID: badges => ``,
+        COMMAND_CREATEKEY_SUCCESS: (badges, id, out) => ``,
+        COMMAND_EVAL_DESCRIPTION: () => ``,
+        COMMAND_EVAL_OUTPUT: () => ``,
+        COMMAND_EVAL_OVER: () => ``,
+        COMMAND_EVAL_TOKEN: () => ``,
+        COMMAND_EVAL_TYPE: () => ``,
+        COMMAND_EVAL_UNDEFINED: () => ``,
+        COMMAND_PROFILEBADGE_DESCRIPTION: () => ``,
+        COMMAND_PROFILEBADGE_NOBADGE: () => ``,
+        COMMAND_PROFILEBADGE_NOCASE: () => ``,
+        COMMAND_PROFILEBADGE_NOUSER: () => ``,
+
         // Fun Commands
         COMMAND_CAT_DESCRIPTION: () => ``,
         COMMAND_CAT_TITLE: () => ``,
@@ -43,24 +65,122 @@ module.exports = {
         COMMAND_TOPIC_DESCRIPTION: () => ``,
         COMMAND_URBAN_DESCRIPTION: () => ``,
         COMMAND_URBAN_EXAMPLE: () => ``,
-        COMMAND_URBAN_FOOTER: (res) => ``,
+        COMMAND_URBAN_FOOTER: res => ``,
         COMMAND_URBAN_NODATA: () => ``,
         COMMAND_URBAN_NODEFINITION: () => ``,
         COMMAND_URBAN_NOEXAMPLE: () => ``,
         COMMAND_URBAN_NOWORD: () => ``,
+
         // Moderation Commands
+        COMMAND_STAFFLOG_BAN: ban => ``,
+        COMMAND_STAFFLOG_DESCRIPTION: () => ``,
+        COMMAND_STAFFLOG_JAIL: jail => ``,
+        COMMAND_STAFFLOG_KICK: kick => ``,
+        COMMAND_STAFFLOG_LOCK: lock => ``,
+        COMMAND_STAFFLOG_MUTE: mute => ``,
+        COMMAND_STAFFLOG_NONE: () => ``,
+        COMMAND_STAFFLOG_NUKE: nuke => ``,
+        COMMAND_STAFFLOG_PURGE: (purge, total) => ``,
+        COMMAND_STAFFLOG_SLOWMODE: slowmode => ``,
+        COMMAND_STAFFLOG_TITLE: user => ``,
+        COMMAND_STAFFLOG_UNLOCK: unlock => ``,
+        COMMAND_STAFFLOG_WARN: warn => ``,
+        COMMAND_VCKICK_DESCRIPTION: () => ``,
+        COMMAND_VCKICK_NOMEMBER: () => ``,
+        COMMAND_VCKICK_NOVOICE: () => ``,
+
         // Roleplay Commands
         // Secret Commands
+
         // Settings Commands
+        COMMAND_TAG_ADDED: (tag, text) => ``,
+        COMMAND_TAG_DESCRIPTION: () => ``,
+        COMMAND_TAG_EXISTS: tag => ``,
+        COMMAND_TAGS_LIST: (guild, size) => ``,
+        COMMAND_TAG_NOEXIST: () => ``,
+        COMMAND_TAGS_NONE: () => ``,
+        COMMAND_TAG_NOTAG: () => ``,
+        COMMAND_TAG_NOTEXT: () => ``,
+        COMMAND_TAG_REMOVED: tag => ``,
+
         // Utility Commands
+        COMMAND_BADGES_BOOSTS: boosts => ``,
+        COMMAND_BADGES_BALANCE: () => ``,
+        COMMAND_BADGES_BOT: bots => ``,
+        COMMAND_BADGES_BOTDEV: devs => ``,
+        COMMAND_BADGES_BOTVERIFIED: verified => ``,
+        COMMAND_BADGES_BRAVERY: () => ``,
+        COMMAND_BADGES_BRILLIANCE: () => ``,
+        COMMAND_BADGES_BUG1: () => ``,
+        COMMAND_BADGES_BUG2: () => ``,
+        COMMAND_BADGES_DESCRIPTION: () => ``,
+        COMMAND_BADGES_DISCORD_EMPLOYEE: flag => ``,
+        COMMAND_BADGES_EARLY: supporters => ``,
+        COMMAND_BADGES_GUILDSIZE: size => ``,
+        COMMAND_BADGES_HYPE_EVENT: () => ``,
+        COMMAND_BADGES_NITRO: () => ``,
+        COMMAND_BADGES_PARTNERED: flag => ``,
+        COMMAND_CORONA_CASES_TITLE: () => ``,
+        COMMAND_CORONA_CASES_VALUE: stats => ``,
+        COMMAND_CORONA_DEATHS_TITLE: () => ``,
+        COMMAND_CORONA_DEATHS_VALUE: stats => ``,
+        COMMAND_CORONA_DESCRIPTION: () => ``,
+        COMMAND_CORONA_EMBED_TITLE: search => ``,
+        COMMAND_CORONA_EMBED_FOOTER: () => ``,
+        COMMAND_CORONA_NO_DATA: search => ``,
+        COMMAND_CORONA_RECOVERIES_TITLE: () => ``,
+        COMMAND_CORONA_RECOVERIES_VALUE: stats => ``,
+        COMMAND_CORONA_TESTS_TITLE: () => ``,
+        COMMAND_CORONA_TESTS_VALUE: stats => ``,
+        COMMAND_DEFINE_CANCELLED: () => ``,
+        COMMAND_DEFINE_DESCRIPTION: () => ``,
+        COMMAND_DEFINE_NOARGS: () => ``,
+        COMMAND_DEFINE_NORESULTS: word => ``,
+        COMMAND_INFO_DESCRIPTION: () => ``,
+        COMMAND_INFO_USER_BIRTHDAY: bday => ``,
+        COMMAND_INFO_USER_DISCORDJOIN: (join, timeSince) => ``,
+        COMMAND_INFO_USER_GUILDCREATE: props => ``,
+        COMMAND_INFO_USER_GUILDJOIN: props => ``,
+        COMMAND_USER_MESSAGES_SENT: msgs => ``,
+        COMMAND_INFO_USER_NOROLES: () => ``,
+        COMMAND_INFO_USER_NOTES: notes => ``,
+        COMMAND_INFO_USER_ROLES: roles => ``,
+        COMMAND_INFO_USER_STARS_EARNED: stars => ``,
+        COMMAND_INFO_USER_STATISTICS: () => ``,
+        COMMAND_INFO_USER_WARNINGS: warns => ``,
         COMMAND_PING: () => ``,
+        COMMAND_PING_DESCRIPTION: () => ``,
         COMMAND_PING_DISCORD: () => ``,
         COMMAND_PING_FOOTER: () => ``,
         COMMAND_PING_NETWORK: () => ``,
         COMMAND_PING_PONG: () => ``,
+        COMMAND_REDEEMKEY_DESCRIPTION: () => ``,
+        COMMAND_REDEEMKEY_NOEXIST: () => ``,
+        COMMAND_REDEEMKEY_NOKEY: () => ``,
+        COMMAND_REDEEMKEY_SUCCESS: (icon, title) => ``,
+
         // Events
         // Inhibitors
+
         // Logs
+        LOG_MODERATION_BANNED: tar => ``,
+        LOG_MODERATION_CLEAREDWARNS: tar => ``,
+        LOG_MODERATION_EMBED_DATE: () => ``,
+        LOG_MODERATION_EMBED_LOCATION: () => ``,
+        LOG_MODERATION_EMBED_MODERATOR: () => ``,
+        LOG_MODERATION_EMBED_REASON: () => ``,
+        LOG_MODERATION_EMBED_TITLE: act => ``,
+        LOG_MODERATION_KICKED: tar => ``,
+        LOG_MODERATION_LOCKED: () => ``,
+        LOG_MODERATION_NOREASON: () => ``,
+        LOG_MODERATION_NUKED: () => ``,
+        LOG_MODERATION_PURGED: () => ``,
+        LOG_MODERATION_SLOWMODED: () => ``,
+        LOG_MODERATION_UNBANNED: tar => ``,
+        LOG_MODERATION_UNLOCKED: () => ``,
+        LOG_MODERATION_VCKICKED: tar => ``,
+        LOG_MODERATION_WARNED: tar => ``,
+
         // Monitors
         // Resolvers
         // Tasks

@@ -22,7 +22,9 @@
   ],
   "dependencies": {
     "axios": "^0.21.1",
+    "crypto": "^1.0.1",
     "discord.js": "^12.5.1",
+    "discord.js-docs": "^0.1.2",
     "dotenv": "^8.2.0",
     "isgd": "^1.1.3",
     "mathjs": "^9.3.2",
@@ -34,7 +36,6 @@
     "request": "^2.88.2",
     "tinycolor2": "^1.4.2",
     "weather-js": "^2.0.0",
-    "wolfram-alpha-api": "^1.0.0-rc.1",
     "wolfram-alpha-node": "^0.0.3"
   }
 }

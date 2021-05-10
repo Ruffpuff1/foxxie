@@ -12,9 +12,8 @@ module.exports = {
         ? (message.embeds[0].description.endsWith(`https://disboard.org/`) ? true : false)
         : false
 
-        let server = await message.guild.settings.get(message.guild)
-        if (server == null) return;
-        if (server.disboardChannel == null) return;
+        let server = await message.guild.settings.get('discordChannel')
+        if (!server) return;
 
         if(emb){
             message.client.disboard = require('../store/disboard.json')

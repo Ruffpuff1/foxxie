@@ -1,101 +1,69 @@
-// const api = require('novelcovid')
-// const Discord = require('discord.js')
-// module.exports = {
-//     name: 'corona',
-//     aliases: ['cv', 'covid'],
-//     usage: 'fox covid [country|global|world]',
-//     category: 'utility',
-//     execute: async (lang, message, args, client) => {
-//         let arg = args.slice(0).join(" ")
+const api = require('novelcovid')
+const Discord = require('discord.js')
+const { emojis: { covid: { cases, tests, deaths, recoveries } }, regexes: { covid: { usStates, continents } } } = require('../../../lib/util/constants')
+module.exports = {
+    name: 'corona',
+    aliases: ['cv', 'covid'],
+    usage: 'fox corona [country|state|global|world]',
+    category: 'utility',
+    execute: async (props) => {
 
-//     if(!arg) arg = 'global';
+        let { lang, args, message, language } = props
+        let search = args.slice(0).join(" ")
+        const embed = new Discord.MessageEmbed()
+                .setColor(message.guild.me.displayColor)
+                .setFooter(language.get('COMMAND_CORONA_EMBED_FOOTER', lang))
 
-//     const argCap = arg.charAt(0).toUpperCase() + arg.slice(1)
-//     let covid = new Discord.MessageEmbed()
-//             .setColor(message.guild.me.displayColor)
-//             .setTitle(`${lang.COMMAND_CORONA_STATS} / ${argCap}`)
-//             .setFooter(lang.COMMAND_CORONA_FOOTER)
-            
+        if (!search || /(global|world|worldwide)/i.test(search)) return covidGlobal();
+        if (usStates.test(search)) return covidState();
+        covidCountry();
 
-//     if(arg.toLowerCase() == "world" || arg.toLowerCase() === "global") {
-//         message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
-//         const stayhome = api.all().then(response => {
-//         covid.addFields(
-//                 {
-//                     name: `:microbe: ${lang.COMMAND_CORONA_CASES}`,
-//                     value: `**${response.cases.toLocaleString()}** (+${response.todayCases.toLocaleString()} ${lang.COMMAND_CORONA_TODAY})
-// ${response.critical.toLocaleString() ?? 'N/A'} ${lang.COMMAND_CORONA_CRITICAL}
-// ${response.casesPerOneMillion? `${(response.casesPerOneMillion / 10000).toFixed(4)}%` : 'N/A'} ${lang.COMMAND_CORONA_ABSOLUTEINFECTION}`,
-//                     inline: false
-//                 },
-//                 {
-//                     name: `:headstone: ${lang.COMMAND_CORONA_DEATHS}`,
-//                     value: `**${response.deaths.toLocaleString() ?? 'N/A'}** (+${response.todayDeaths.toLocaleString()} ${lang.COMMAND_CORONA_TODAY})
-// ${response.cases && response.deaths ? `${((response.deaths / response.cases) * 100).toFixed(2)}%` : 'N/A'}% ${lang.COMMAND_CORONA_CASEFATAL}
-// ${response.deathsPerOneMillion ? `${(response.deathsPerOneMillion / 10000).toFixed(4)}%` : 'N/A'}% ${lang.COMMAND_CORONA_ABSOLUTEFATAL}`,
-//                     inline: false
-                
-//                 },
-//                 {
-//                     name: `:soap: ${lang.COMMAND_CORONA_RECOVERIES}`,
-//                     value: `**${response.recovered.toLocaleString() ?? 'N/A'}**
-// ${response.recovered && response.cases ? `${((response.recovered / response.cases) * 100).toFixed(2)}%` : 'N/A'} ${lang.COMMAND_CORONA_CASERECOVERY}`,
-//                     inline: false
-//                 },
-//                 {
-//                     name: `:test_tube: ${lang.COMMAND_CORONA_TEST}`,
-//                     value: `**${response.tests.toLocaleString() ?? 'N/A'}**
-// ${response.testsPerOneMillion ? `${(response.testsPerOneMillion / 10000).toFixed(4)}%` : 'N/A'} ${lang.COMMAND_CORONA_POPTESTED}`,
-//                     inline: false
-//                 }
-//             )
-//         message.channel.send(covid)
-//         resultMessage.delete()
-//         return
-//         })
-//         })
-//     } else{
+        async function covidGlobal(){
+            let loading = await message.channel.send(language.get('MESSAGE_LOADING', lang))
+            let stats = await api.all()
+            if (stats.message) { loading.delete(); return message.channel.send(language.get('COMMAND_CORONA_NO_DATA', lang, search)) }
 
-//         try {
-//         const stayhome2 = api.countries({country:arg}).then(response => {
-//             message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
-//             if (response.cases === undefined) return message.channel.send(lang.COMMAND_CORONA_NOSTATS)    
-//         covid.addFields(
-//             {
-//                 name: `:microbe: ${lang.COMMAND_CORONA_CASES}`,
-//                 value: `**${response.cases.toLocaleString()}** (+${response.todayCases.toLocaleString()} ${lang.COMMAND_CORONA_TODAY})
-// ${response.critical.toLocaleString() ?? 'N/A'} ${lang.COMMAND_CORONA_CRITICAL}
-// ${response.casesPerOneMillion? `${(response.casesPerOneMillion / 10000).toFixed(4)}%` : 'N/A'} ${lang.COMMAND_CORONA_ABSOLUTEINFECTION}`,
-//                 inline: false
-//             },
-//             {
-//                 name: `:headstone: ${lang.COMMAND_CORONA_DEATHS}`,
-//                 value: `**${response.deaths.toLocaleString() ?? 'N/A'}** (+${response.todayDeaths.toLocaleString()} ${lang.COMMAND_CORONA_TODAY})
-// ${response.cases && response.deaths ? `${((response.deaths / response.cases) * 100).toFixed(2)}%` : 'N/A'}% ${lang.COMMAND_CORONA_CASEFATAL}
-// ${response.deathsPerOneMillion ? `${(response.deathsPerOneMillion / 10000).toFixed(4)}%` : 'N/A'}% ${lang.COMMAND_CORONA_ABSOLUTEFATAL}`,
-//                 inline: false
-            
-//             },
-//             {
-//                 name: `:soap: ${lang.COMMAND_CORONA_RECOVERIES}`,
-//                 value: `**${response.recovered.toLocaleString() ?? 'N/A'}**
-// ${response.recovered && response.cases ? `${((response.recovered / response.cases) * 100).toFixed(2)}%` : 'N/A'} ${lang.COMMAND_CORONA_CASERECOVERY}`,
-//                 inline: false
-//             },
-//             {
-//                 name: `:test_tube: ${lang.COMMAND_CORONA_TEST}`,
-//                 value: `**${response.tests.toLocaleString() ?? 'N/A'}**
-// ${response.testsPerOneMillion ? `${(response.testsPerOneMillion / 10000).toFixed(4)}%` : 'N/A'} ${lang.COMMAND_CORONA_POPTESTED}`,
-//                 inline: false
-//             }
-//         )
-//         message.channel.send(covid)
-//         resultMessage.delete()
-//         })
-//         })
-//     }catch(e){
-// message.channel.send(e)
-//     }
+            embed
+                .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', lang, search))
+                .addField(language.get('COMMAND_CORONA_CASES_TITLE', lang), language.get('COMMAND_CORONA_CASES_VALUE', lang, stats))
+                .addField(language.get('COMMAND_CORONA_DEATHS_TITLE', lang), language.get('COMMAND_CORONA_DEATHS_VALUE', lang, stats))
+                .addField(language.get('COMMAND_CORONA_RECOVERIES_TITLE', lang), language.get('COMMAND_CORONA_RECOVERIES_VALUE', lang, stats))
+                .addField(language.get('COMMAND_CORONA_TESTS_TITLE', lang), language.get('COMMAND_CORONA_TESTS_VALUE', lang, stats))
 
-//     }
-// }}
+            await loading.delete();
+            return message.channel.send(embed);
+        }
+
+        async function covidState(){
+            let loading = await message.channel.send(language.get('MESSAGE_LOADING', lang))
+            let stats = await api.states({state:search})
+            if (stats.message) { loading.delete(); return message.channel.send(language.get('COMMAND_CORONA_NO_DATA', lang, search)) }
+
+            embed
+                .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', lang, search))
+                .addField(language.get('COMMAND_CORONA_CASES_TITLE', lang), language.get('COMMAND_CORONA_CASES_VALUE', lang, stats))
+                .addField(language.get('COMMAND_CORONA_DEATHS_TITLE', lang), language.get('COMMAND_CORONA_DEATHS_VALUE', lang, stats))
+                .addField(language.get('COMMAND_CORONA_RECOVERIES_TITLE', lang), language.get('COMMAND_CORONA_RECOVERIES_VALUE', lang, stats))
+                .addField(language.get('COMMAND_CORONA_TESTS_TITLE', lang), language.get('COMMAND_CORONA_TESTS_VALUE', lang, stats))
+
+            await loading.delete();
+            return message.channel.send(embed);
+        }
+
+        async function covidCountry(){
+            let loading = await message.channel.send(language.get('MESSAGE_LOADING', lang))
+            let stats = await api.countries({country:search});
+            if (stats.message) { loading.delete(); return message.channel.send(language.get('COMMAND_CORONA_NO_DATA', lang, search)) }
+
+            embed
+                .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', lang, search))
+                .addField(language.get('COMMAND_CORONA_CASES_TITLE', lang), language.get('COMMAND_CORONA_CASES_VALUE', lang, stats))
+                .addField(language.get('COMMAND_CORONA_DEATHS_TITLE', lang), language.get('COMMAND_CORONA_DEATHS_VALUE', lang, stats))
+                .addField(language.get('COMMAND_CORONA_RECOVERIES_TITLE', lang), language.get('COMMAND_CORONA_RECOVERIES_VALUE', lang, stats))
+                .addField(language.get('COMMAND_CORONA_TESTS_TITLE', lang), language.get('COMMAND_CORONA_TESTS_VALUE', lang, stats))
+
+            await loading.delete();
+            return message.channel.send(embed);
+        }
+    }
+}

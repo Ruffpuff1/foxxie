@@ -6,22 +6,19 @@ module.exports.commandHandler = async (message) => {
     
     if (message.author.bot) return;
 
-    let settings = await message.guild.settings.get(message.guild)
+    let settings = await message.guild.settings.get()
     let language = message.guild.language
     
-    let prefix;
-    prefix = message.client.user.id === '825130284382289920' ? development : production
-    if (settings != null && settings.prefix != null) prefix = settings.prefix;
+    let prefix = message.client.user.id === '825130284382289920' ? development : production;
+    if (settings.prefix != null) prefix = settings.prefix;
 
-    if (settings != null && settings.blockedUsers != null) {
-        if (settings.blockedUsers.includes(message.author.id)) return;
-    }
+    if (settings.blockedUsers != null) if (settings.blockedUsers.includes(message.author.id)) return;
 
-    let lang = getGuildLang(message)
+    let lang = 'en'//getGuildLang(message)
 
     let mentionPrefix = `<@!${message.client.user.id}>`
 
-    if (message.content.startsWith(mentionPrefix) && message.content.length === mentionPrefix.length) message.channel.send(language.get("PREFIX_REMINDER", 'en-US', [prefix]))
+    if (message.content.startsWith(mentionPrefix) && message.content.length === mentionPrefix.length) message.channel.send(language.get("PREFIX_REMINDER", 'en-US', prefix))
     .then(msg => {setTimeout(() => msg.delete(), 30000)});
     
     message.client.commands = new Discord.Collection();
@@ -42,11 +39,9 @@ module.exports.commandHandler = async (message) => {
         const command = message.client.commands.get(commandName) || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if (!command) return;
 
-        if (message.guild.id === '825853736768372746' && message.channel.id === '825853736768372751') return message.responder.error.channel(message, lang)
-
         if (command.permissions) {
             const authorPerms = message.channel.permissionsFor(message.author);
-            if (!authorPerms || !authorPerms.has(command.permissions)) return message.responder.error.authorPerms(message, lang, command)
+            if (!authorPerms || !authorPerms.has(command.permissions)) return message.responder.error('RESPONDER_ERROR_PERMS_AUTHOR', lang, command)
         };    
 
         try {
@@ -54,7 +49,7 @@ module.exports.commandHandler = async (message) => {
             command.execute(props)
         } catch (error) {
             console.error(error);
-            return message.responder.error.code(message, lang)
+            return message.responder.error('RESPONDER_ERROR_CODE', lang)
         }
     }
 
@@ -65,11 +60,9 @@ module.exports.commandHandler = async (message) => {
         const command = message.client.commands.get(commandName) || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if (!command) return;
 
-        if (message.guild.id === '825853736768372746' && message.channel.id === '825853736768372751') return message.responder.error.channel(message, lang)
-
         if (command.permissions) {
             const authorPerms = message.channel.permissionsFor(message.author);
-            if (!authorPerms || !authorPerms.has(command.permissions)) return message.responder.error.authorPerms(message, lang, command) 
+            if (!authorPerms || !authorPerms.has(command.permissions)) return message.responder.error('RESPONDER_ERROR_PERMS_AUTHOR', lang, command)
         };    
 
         try {
@@ -77,7 +70,7 @@ module.exports.commandHandler = async (message) => {
             command.execute(props)
         } catch (error) {
             console.error(error);
-            return message.responder.error.code(message, lang)
+            return message.responder.error('RESPONDER_ERROR_CODE', lang)
         }
     }
 }

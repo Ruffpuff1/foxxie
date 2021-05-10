@@ -65,9 +65,9 @@ module.exports = {
 
             if (!args[0]) {
                 const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
-                let anti_inv = await message.guild.settings.get(message.guild)
-                if (anti_inv !== null) {
-                    embed.setDescription(`Currently anti-invite filitering is set to **${anti_inv.antiInvite ? "on" : 'off'}**. If ya wanna change this, use the command \`fox antiinvite [on/off]\`.`)
+                let anti_inv = await message.guild.settings.get('antiInvite')
+                if (anti_inv) {
+                    embed.setDescription(`Currently anti-invite filitering is set to **${anti_inv ? "on" : 'off'}**. If ya wanna change this, use the command \`fox antiinvite [on/off]\`.`)
                     loading.delete()
                     return message.channel.send(embed)
                 }

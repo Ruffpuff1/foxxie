@@ -2,7 +2,7 @@ const axios = require('axios')
 const Discord = require('discord.js')
 module.exports = {
     name: 'fox',
-    aliases: ['ruffy', 'foxxie', 'foxy'],
+    aliases: ['ruffy', 'foxy'],
     usage: 'fox fox',
     category: 'fun',
     execute: async(props) => {

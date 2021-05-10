@@ -11,7 +11,7 @@ module.exports = {
         const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
         try {
             request("https://some-random-api.ml/facts/fox", function (error, _response, body) {
-                if (error) return message.responder.error.foxFact(message, lang)
+                if (error) return message.responder.error('RESPONDER_ERROR_FOXFACT', lang)
                                     .then(() => console.error(error.message));
     
                 const json = JSON.parse(body);

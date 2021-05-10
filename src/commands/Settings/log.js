@@ -21,7 +21,7 @@ module.exports = {
         let chn = message.mentions.channels.first() || message.guild.channels.cache.get(args[1])
         if (!use || !validCase.includes(use.toLowerCase())) return message.channel.send(`**Please,** specify a proper use case [mod|edit|delete].`)
 
-        let settings = await message.guild.settings.get(message.guild)
+        let settings = await message.guild.settings.get()
 
         let deleteCase = ['off', 'none']
     

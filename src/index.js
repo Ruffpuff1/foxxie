@@ -2,8 +2,9 @@ const Discord = require('discord.js')
 
 require('../lib/extensions/Guild')
 require('../lib/extensions/Message')
+require('../lib/extensions/User')
 
-const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] })
+const client = new Discord.Client({ shards: 'auto', partials: ['MESSAGE', 'CHANNEL', 'REACTION'] })
 const fs = require('fs')
 require('dotenv').config()
 const eventFiles = fs.readdirSync('src/events').filter(file => file.endsWith('.js'));

@@ -1,6 +1,4 @@
-const Discord = require('discord.js')
 const moment = require('moment')
-const { modStatsAdd } =  require('../../../src/tasks/stats')
 module.exports = {
     name: 'purge',
     aliases: ['prune', 'clear', 'clean', 'delete', 'p'],
@@ -9,11 +7,11 @@ module.exports = {
     permissions: 'MANAGE_MESSAGES',
     execute: async(props) => {
 
-        let { message, args, lang, settings } = props
+        let { message, args, lang, language } = props
 
         let num;
         let purgeTime = moment(message.createdTimestamp).format('llll');
-        let reason = args.slice(1).join(' ') || 'No reason specified'
+        let reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang)
         if (isNaN(args[0])) num = 50;
         if (!isNaN(args[0])) num = Number(args[0])
 
@@ -22,36 +20,19 @@ module.exports = {
         if (num == 0) return message.channel.send('COMMAND_PURGE_ZERO_MESSAGES')
         if (num > 99 || num < 0) return message.channel.send('COMMAND_PURGE_TOO_BIG_TOO_SMALL')
 
-            message.channel.messages.fetch({
-                limit: numLimit + 1
+        message.channel.messages.fetch({
+            limit: numLimit + 1
+        })
+        .then(msgs => {
+            let notPin = msgs.filter(fetchedmsgs => !fetchedmsgs.pinned)
+            message.channel.bulkDelete(notPin, true)
+            .then(message.channel.send('COMMAND_PURGE_SUCCESS')
+            .then(msg => {setTimeout(() => msg.delete(), 5000)}))
+            .catch(err => {
+                message.channel.send('COMMAND_PURGE_MSGS_TOO_OLD')
             })
-            .then(msgs => {
-                let notPin = msgs.filter(fetchedmsgs => !fetchedmsgs.pinned)
-                message.channel.bulkDelete(notPin, true)
-                .then(message.channel.send('COMMAND_PURGE_SUCCESS')
-                .then(msg => {setTimeout(() => msg.delete(), 5000)}))
-                .catch(err => {
-                    message.channel.send('COMMAND_PURGE_MSGS_TOO_OLD')
-                })
-            })
+        })
 
-        const embed = new Discord.MessageEmbed()
-            .setTitle(`Purged ${num} message${num > 1 ? 's' : ''}`)
-            .setColor(message.guild.me.displayColor)
-            .setTimestamp()
-            .addField('**Moderator**', `<@${message.member.user.id}> (ID: ${message.member.user.id})`, true)
-            .addField(`\u200B`, '\u200B', true)
-            .addField(`\u200B`, '\u200B', true)
-            .addField('**Reason**', reason, true)
-            .addField('**Location**', message.channel, true)
-            .addField('**Date / Time**', purgeTime, true)
-
-        modStatsAdd(message, 'purge', 1)
-        modStatsAdd(message, 'purgeTotal', num)
-
-        if (settings == null || settings.modChannel == null) return
-
-        const logChannel = message.guild.channels.cache.get(settings.modChannel);
-        if (logChannel) logChannel.send(embed)    
+        message.guild.logger.moderation(message, message.channel, reason, 'Purged', 'purge', lang, num)
     }
 }

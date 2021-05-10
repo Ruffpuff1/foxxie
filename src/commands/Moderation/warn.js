@@ -21,7 +21,7 @@ module.exports = {
         let reason = args.slice(1).join(' ')
         if (!reason) reason = 'No reason specified'
 
-        moderationCommandWarn(message, reason, target, message.member)
+        moderationCommandWarn(message, reason, target, message.member, lang)
         message.react(approved)
     }
 }

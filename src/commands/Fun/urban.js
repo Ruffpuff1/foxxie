@@ -27,7 +27,7 @@ module.exports = {
             .setColor(message.guild.me.displayColor)
             .setThumbnail(`https://i.imgur.com/qNTzb3k.png`)
             .setDescription(`${str.replace(/[\[\]']+/g,'')}\n\n\`👍\` ${res.data.list[3]['thumbs_up']}\n\`👎\` ${res.data.list[3]['thumbs_down']}`)
-            .setFooter(language.get('COMMAND_URBAN_FOOTER', 'en-US', [res]))
+            .setFooter(language.get('COMMAND_URBAN_FOOTER', 'en-US', res))
             .addField(language.get('COMMAND_URBAN_EXAMPLE', 'en-US'), ex.replace(/[\[\]']+/g,''))
 
             message.channel.send(embed)

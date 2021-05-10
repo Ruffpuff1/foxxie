@@ -1,5 +1,4 @@
 const { emojis: { approved } } = require('../../../lib/util/constants')
-const moment = require('moment')
 const Discord = require('discord.js')
 module.exports = {
     name: 'unban',
@@ -9,20 +8,17 @@ module.exports = {
     permissions: 'BAN_MEMBERS',
     execute: async (props) => {
 
-        let { message, args, lang, settings } = props
+        let { message, args, lang, language } = props
 
-        if (!message.channel.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return message.responder.error.clientPerms(message, 'BAN_MEMBERS')
+        if (!message.channel.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return message.responder.error('RESPONDER_ERROR_PERMS_CLIENT', lang, "BAN_MEMBERS")
 
-        let res = args.slice(1).join(' ') || 'No reason specified'
+        let res = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang)
         let member = message.mentions.users.first() || message.client.users.cache.get(args[0]);
 
         if (!member) return message.channel.send("You need to provide **one user** to unban.")
 
         if (member.id === message.member.user.id) return message.channel.send("self")
         if (member.id === message.guild.ownerID) return message.channel.send("owner")
-
-
-        const date = moment(message.createdTimestamp).format('llll');
 
         message.react(approved)
 
@@ -38,20 +34,6 @@ module.exports = {
         message.guild.members.unban(member, res)
         .catch(console.error)
 
-        if (settings == null || settings.modChannel == null) return
-
-        const embed = new Discord.MessageEmbed()
-            .setTitle(`Unbanned ${member.tag}`)
-            .setColor(message.guild.me.displayColor)
-            .setTimestamp()
-            .addField('**Unbanned User**', `<@${member.id}> (ID: ${member.id})`, true)
-            .addField('**Moderator**', `<@${message.member.user.id}> (ID: ${message.member.user.id})`, true)
-            .addField('\u200B', '\u200B', true)
-            .addField('**Reason**', res, true)
-            .addField('**Location**', message.channel, true)
-            .addField('**Date / Time**', date, true)
-
-        const channel = message.guild.channels.cache.get(settings.modChannel);
-        if (channel) channel.send(embed)
+        message.guild.logger.moderation(message, member, res, 'Unbanned', 'unban', lang)
     }
 }

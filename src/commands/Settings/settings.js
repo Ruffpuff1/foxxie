@@ -13,7 +13,7 @@ module.exports = {
         let desc1 = []
         let desc2 = []
         let desc3 = []
-        let settings = await message.guild.settings.get(message.guild)
+        let settings = await message.guild.settings.get()
 
         let blk = []
         if (settings != null && settings.blockedUsers != null) for (let user of settings.blockedUsers){

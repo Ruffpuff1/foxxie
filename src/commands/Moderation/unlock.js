@@ -1,6 +1,3 @@
-const Discord = require('discord.js')
-const moment = require('moment')
-const { modStatsAdd } =  require('../../../src/tasks/stats')
 module.exports = {
     name: 'unlock',
     aliases: ['ul', 'release'],
@@ -9,13 +6,12 @@ module.exports = {
     usage: 'fox unlock (reason)',
     execute: async(props) => {
 
-        let { message, args, lang, settings } = props
+        let { message, args, lang, language } = props
 
         if (message.channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return message.channel.send('COMMAND_UNLOCK_CHANNEL_NOT_LOCKED')
 
-        let reason = args.slice(0).join(' ') || 'No reason specified'
-        let lockTime = moment(message.createdTimestamp).format('llll')
-
+        let reason = args.slice(0).join(' ') || language.get('LOG_MODERATION_NOREASON', lang)
+        
         let msg = await message.channel.send('COMMAND_UNLOCK_UNLOCKING')
         try {
             message.channel.updateOverwrite(message.guild.roles.cache.find(e => e.name.toLowerCase().trim() == "@everyone"),
@@ -29,24 +25,6 @@ module.exports = {
             message.channel.send(e)
         }
 
-        const embed = new Discord.MessageEmbed()
-        .setTitle(`Unlocked channel`)
-        .setColor(message.guild.me.displayColor)
-        .setTimestamp()
-        .addFields(
-            { name: '**Channel locked**', value: `<#${message.channel.id}>`, inline: true },
-            { name: '**Moderator**', value: `<@${message.member.user.id}> (ID: ${message.member.user.id})`, inline: true },
-            { name: '\u200B', value: '\u200B', inline: true },
-            { name: `**Reason**`, value: `${reason}`, inline: true },
-            { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
-            { name: `**Date / Time**`, value: `${lockTime}`, inline: true }
-        )
-
-        modStatsAdd(message, 'unlock', 1)
-        
-        if (settings == null || settings.modChannel == null) return
-
-        const logChannel = message.guild.channels.cache.get(settings.modChannel);
-        if (logChannel) logChannel.send(embed)
+        message.guild.logger.moderation(message, message.channel, reason, 'Unlocked', 'unlock', lang)
     }
 }

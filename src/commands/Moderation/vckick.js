@@ -1,5 +1,4 @@
-const { moderationLog } = require("../../../lib/GuildLogger");
-
+const { emojis: { approved } } = require('../../../lib/util/constants');
 module.exports = {
     name: 'vckick',
     aliases: ['vck', 'disconnect'],
@@ -8,15 +7,16 @@ module.exports = {
     permissions: 'MOVE_MEMBERS',
     execute: async(props) => {
 
-        let { message, args, lang } = props
+        let { message, args, lang, language } = props
 
         const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        const reason = args[1] || language.get('LOG_MODERATION_NOREASON', lang)
 
-        if (!user) return message.channel.send('COMMAND_VOICEKICK_NOMEMBER')
-        if (!user.voice.channelID) return message.channel.send('COMMAND_VOICEKICK_NOVOICE');
+        if (!user) return message.channel.send(language.get('COMMAND_VCKICK_NOMEMBER', lang))
+        if (!user.voice.channelID) return message.channel.send(language.get('COMMAND_VCKICK_NOVOICE', lang));
 		user.voice.setChannel(null);
-		message.channel.send('COMMAND_VOICEKICK_SUCCESS');
+		message.react(approved);
 
-        moderationLog(message, user.user, args[1] || 'COMMAND_MODERATION_NOREASON', lang.LOG_MODERATION_VCKICK)
+        message.guild.logger.moderation(message, user.user, reason, 'Vckicked', 'vckick', lang)
     }
 }

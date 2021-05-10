@@ -6,93 +6,57 @@ module.exports = {
     category: 'utility',
     execute: async (props) => {
 
-        let { lang, message, args, language } = props;
-        const users = message.guild.members.cache.array();
-        if (message.guild.memberCount > 1000) return message.channel.send('COMMAND_BADGES_GUILDSIZE')
+        let { lang, message, language } = props;
+        const members = message.guild.members.cache.array();
+        if (message.guild.memberCount > 1000) return message.channel.send(language.get('COMMAND_BADGES_GUILDSIZE', lang, message.guild.memberCount))
 
-        const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
+        const loading = await message.channel.send(language.get("MESSAGE_LOADING", lang));
+        const [flags, bots, nitros, employees] = await getBadgeCounts()
+        const boosters = await message.guild.premiumSubscriptionCount
+        const description = [
+            flags[0] > 0 && `${discordStaff} ${flags[0]} x ${language.get('COMMAND_BADGES_DISCORD_EMPLOYEE', lang, flags[0])} (${employees.join(',')})`,
+            flags[1] > 0 && `${discordPartner} ${flags[1]} x ${language.get('COMMAND_BADGES_PARTNERED', lang, flags[1])}`,
+            flags[2] > 0 && `${discordHypesquad} ${flags[2]} x ${language.get('COMMAND_BADGES_HYPE_EVENT', lang)}`,
+            nitros > 0 && `${discordNitro} ${nitros} x ${language.get('COMMAND_BADGES_NITRO', lang)} ${(boosters > 0) || (flags[9] > 0)
+                    ? `(${boosters > 0
+                            ? `${discordBooster} ${boosters} x ${language.get('COMMAND_BADGES_BOOSTS', lang, boosters)}`
+                            : ''
+                    }${(boosters > 0) && (flags[9] > 0)
+                            ? ', '
+                            : ')'
+                    }${flags[9] > 0
+                            ? `${discordEarly} ${flags[9]} x ${language.get('COMMAND_BADGES_EARLY', lang, flags[9])})` 
+                            : ''
+                        }`
+                        : ''}`,
+            flags[3] > 0 && `${discordBug1} ${flags[3]} x ${language.get('COMMAND_BADGES_BUG1', lang)}`,
+            flags[14] > 0 && `${discordBug2} ${flags[14]} x ${language.get('COMMAND_BADGES_BUG2', lang)}`,
+            flags[6] > 0 && `${discordBravery} ${flags[6]} x ${language.get('COMMAND_BADGES_BRAVERY', lang)}`,
+            flags[7] > 0 && `${discordBrilliance} ${flags[7]} x ${language.get('COMMAND_BADGES_BRILLIANCE', lang)}`,
+            flags[8] > 0 && `${discordBalance} ${flags[8]} x ${language.get('COMMAND_BADGES_BALANCE', lang)}`,
+            flags[17] > 0 && `${discordEarlyDev} ${flags[17]} x ${language.get('COMMAND_BADGES_BOTDEV', lang, flags[17])}`,
+            bots > 0 && `${discordBot} ${bots - flags[16]} x ${language.get('COMMAND_BADGES_BOT', lang, bots, flags[17])}${flags[16] > 0 ? ` (${discordVerified} ${flags[16]} x ${language.get('COMMAND_BADGES_BOTVERIFIED', lang, flags[16])})` : ''}`
+		].filter(i => !!i).join('\n');
 
-        const StaffUsers = []
-        const PartnerUsers = []
-        const HypeUsers = []
-        const bugusers1 = []
-        const bugusers2 = []
-        const BrillianceUsers = []
-        const BraveryUsers = []
-        const BalanceUsers = []
-        const BotDevs = []
-        const Bots = []
-        const NitroUsers = []
-        const Early = []
-        const VerifiedBot = []
+        await message.channel.send(description)
+        return loading.delete()
 
-        let description = []
+        async function getBadgeCounts() {
+            
+                let bots = 0;
+                let nitros = 0;
+                const employees = [];
+                const flags = Array(18).fill(0);
 
-        for(let user of users){
-    
-            const flags = user.user.flags || await user.user.fetchFlags();
+                for (let member of members) {
+                    for (let i = 0; i < 18; i++) if (((member.user.flags && member.user.flags.bitfield ? member.user.flags.bitfield : 0) & (1 << i)) === 1 << i) flags[i]++;
+                    if (((member.user.flags && member.user.flags.bitfield ? member.user.flags.bitfield : 0) & 1) === 1) employees.push(`${member.user.tag} [${member.user.id}]`);
 
-            const bugs1 = flags.toArray().includes("BUGHUNTER_LEVEL_1");
-            if(bugs1) bugusers1.push(user);
-
-            const bugs2 = flags.toArray().includes("BUGHUNTER_LEVEL_2");
-            if(bugs2) bugusers2.push(user);
-
-            const Brilliance = flags.toArray().includes("HOUSE_BRILLIANCE");
-            if(Brilliance) BrillianceUsers.push(user);
-
-            const Bravery = flags.toArray().includes("HOUSE_BRAVERY");
-            if(Bravery) BraveryUsers.push(user);
-
-            const Balance = flags.toArray().includes("HOUSE_BALANCE");
-            if(Balance) BalanceUsers.push(user);
-
-            const Dev = flags.toArray().includes("VERIFIED_DEVELOPER");
-            if(Dev) BotDevs.push(user);
-
-        
-
-            const Bot = user.user.bot;
-            const verifiedBot = flags.toArray().includes("VERIFIED_BOT")
-            if (Bot && verifiedBot) {
-                VerifiedBot.push(user)
-        
-            }
-
-            if(Bot && !verifiedBot) Bots.push(user);
-
-            let Nitro; 
-            if (user.user.avatar != null) Nitro = (user.user.avatar.startsWith('a_') || discrims.includes(user.user.discriminator));
-
-            let earlySup = flags.toArray().includes("EARLY_SUPPORTER")
-
-            if (earlySup && Nitro) Early.push(user)
-
-            if(Nitro && !earlySup) NitroUsers.push(user);
-
-
-            description = [
-                `${StaffUsers.length ? `${discordStaff} ${StaffUsers.length} x Discord employee` : ''}`,
-                `${PartnerUsers.length ? `${discordPartner} ${PartnerUsers.length} x Partnered Server Owner` : ''}`,
-                `${HypeUsers.length ? `${discordHypesquad} ${HypeUsers.length} x HypeSquad Events` : ''}`,
-                `${NitroUsers.length 
-                    ? `${discordNitro} ${NitroUsers.length} x Nitro` : ''} ${message.guild.premiumSubscriptionCount > 0 
-                        ? `(${discordBooster} ${message.guild.premiumSubscriptionCount} x Boosts${Early.length 
-                            ? ',' : ')'}` 
-                            : ''} ${Early.length  ? `${message.guild.premiumSubscriptionCount > 0 
-                                ? '' : '('}${discordEarly} ${Early.length} Early Supporters)` 
-                                : ''}`,
-                `${bugusers1.length ? `${discordBug1} ${bugusers1.length} x Bug Hunter Level 1` : ''}`,
-                `${bugusers2.length ? `${discordBug2} ${bugusers2.length} x Bug Hunter Level 2` : ''}`,
-                `${BraveryUsers.length ? `${discordBravery} ${BraveryUsers.length} x House Bravery` : ''}`,
-                `${BrillianceUsers.length ? `${discordBrilliance} ${BrillianceUsers.length} x House Brilliance` : ''}`,
-                `${BalanceUsers.length ? `${discordBalance} ${BalanceUsers.length} x House Balance` : ''}`,
-                `${BotDevs.length ? `${discordEarlyDev} ${BotDevs.length} x Early Verified Bot Developer` : ''}`,
-                `${Bots.length ? `${discordBot} ${Bots.length} x Bot` : ''} ${VerifiedBot.length 
-                    ? `(${discordVerified} ${VerifiedBot.length} x Verified Bots)` : ''}`
-            ].filter(i => !!i).join('\n');
+                    if (member.user.bot) bots++;
+                    if (member.user.avatar && member.user.avatar.startsWith('a_') || discrims.includes(member.user.discriminator)) nitros++;
+                    member = null;
+                }
+                return [flags, bots, nitros, employees]
         }
-        loading.delete()
-        message.channel.send(description)
     }
 }

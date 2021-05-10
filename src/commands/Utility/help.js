@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { owner } = require('../../../config/foxxie');
+const { toUpperCaseFirst } = require('../../../lib/util/util');
 const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'help',
@@ -11,7 +11,6 @@ module.exports = {
         let { lang, message, args, language } = props;
 
         const channelFlag = /\-channel\s*|-c\s*/gi
-        const orginalFlag = /\-orginal\s*|-o\s*/gi
 
         const categories = ['automation', 'fun', 'moderation', 'roleplay', 'settings', 'utility']
         const { commands } = message.client;
@@ -51,10 +50,6 @@ module.exports = {
                 if (util) utilCmds.push(c.name)
                 if (sec) secCmds.push(c.name)
             };
-
-        argToCap = (cmd) => {
-            return cmd.charAt(0).toUpperCase() + cmd.slice(1)
-        }
 
         bigMenu = () => {
 
@@ -101,10 +96,10 @@ module.exports = {
             }
             
             embed
-                .setTitle(`Foxxie's ${argToCap(args[0].toLowerCase())} commands!`)
+                .setTitle(`Foxxie's ${args[0].toUpperCaseFirst()} commands!`)
                 .setDescription(`These are all of my **${args[0].toLowerCase()}** commands.\n${categoryDescriptions[args[0].toUpperCase()]}
 \nAdditionally for each command you can use \`fox help (command)\` for a detailed description on that command as well as example usage.`)
-                .addField(`**${argToCap(args[0].toLowerCase())}**` + ` **(${cateCmds.length})**`, cateCmds.map(a => `\`${a}\``).join(", "))
+                .addField(`**${args[0].toUpperCaseFirst()}**` + ` **(${cateCmds.length})**`, cateCmds.map(a => `\`${a}\``).join(", "))
                 .addField(lang.COMMAND_ABOUT_LINKS, lang.COMMAND_ABOUT_LINKS_LINKS)
 
             if (channelFlag.test(message.content)) return message.channel.send(embed)

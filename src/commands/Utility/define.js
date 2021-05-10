@@ -5,54 +5,42 @@ module.exports = {
     aliases: ['def', 'word'],
     usage: 'fox define [word]',
     category: 'utility',
-    execute(props) {
+    execute: async (props) => {
 
         let { lang, message, args, language } = props;
 
         let word;
-        if (!args[0]) { message.channel.send(lang.COMMAND_DEFINE_NO_WORD).then(resultMessage => {
-        
-            const filter = m => message.author.id === m.author.id;
-        
-            message.channel.awaitMessages(filter, { time: 60000, max: 1, errors: ['time'] })
-            .then(messages => {
-                if (messages.first().content.toLowerCase() === 'cancel') return message.channel.send('Command **cancelled**.')
-                word = messages.first().content
-                resultMessage.edit(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
+        let msg;
+        if (!args[0]) msg = await message.channel.send(language.get('COMMAND_DEFINE_NOARGS', lang))
 
-                axios.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
-                .then((res) => {
-                    resultMessage.edit(`(${res.data[0]['fl']}) **${res.data[0]['hwi']['hw']}** [${res.data[0]['hwi']['prs'][0]['mw']}]
+        if (args[0]) return response()
+        if (msg) return awaitResponse()
+
+        async function awaitResponse(){
+            message.channel.awaitMessages(m => message.author.id === m.author.id, { time: 60000, max: 1, errors: ['time'] })
+            .then(async msgs => {
+                if (msgs.first().content.toLowerCase() === 'cancel') return message.channel.send(language.get('COMMAND_DEFINE_CANCELLED', lang));
+                word = msgs.first().content;
+                msg.edit(language.get("MESSAGE_LOADING", lang))
+
+                let res = await axios.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
+                if (!res || !res.data[0] || !res.data[0]['hwi']) return msg.edit(language.get('COMMAND_DEFINE_NORESULTS', lang, word))
+
+                msg.edit(`(${res.data[0]['fl']}) **${res.data[0]['hwi']['hw'].replace(/\*/gi, '\\*')}** [${res.data[0]['hwi']['prs'][0]['mw']}]
 - ${res.data[0]['shortdef'][0]}\n${res.data[0]['shortdef'][1]
 ?`- ${res.data[0]['shortdef'][1]}`:''}`)
+            })    
+        }
+        
+        async function response(){
+            word = args[0].toLowerCase()
+            msg = await message.channel.send(language.get("MESSAGE_LOADING", lang))
 
-                })
-                    .catch((err) => {
-                        console.error(err)
-                        resultMessage.edit(lang.COMMAND_DEFINE_NO_DATA)
-                    })
-                })
-            })
-                .catch(() => {});
-        });
-return } 
-        word = args[0].toLowerCase()
+            let res = await axios.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
+            if (!res || !res.data[0] || !res.data[0]['hwi']) return msg.edit(language.get('COMMAND_DEFINE_NORESULTS', lang, word))
 
-        message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
-
-        axios.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
-        .then((res) => {
-            message.channel.send(`(${res.data[0]['fl']}) **${res.data[0]['hwi']['hw']}** [${res.data[0]['hwi']['prs'][0]['mw']}]
+            msg.edit(`(${res.data[0]['fl']}) **${res.data[0]['hwi']['hw'].replace(/\*/gi, '\\*')}** [${res.data[0]['hwi']['prs'][0]['mw']}]
 - ${res.data[0]['shortdef'][0]}\n${res.data[0]['shortdef'][1]
 ?`- ${res.data[0]['shortdef'][1]}`:''}`)
-
-        resultMessage.delete()
-        })
-            .catch((err) => {
-                console.error(err)
-                resultMessage.delete()
-                message.channel.send(lang.COMMAND_DEFINE_NO_DATA)
-            })
-        })
-    }
-}
+        }
+    }}

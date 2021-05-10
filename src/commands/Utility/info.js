@@ -1,11 +1,10 @@
-const { MessageEmbed, Permissions: { FLAGS } } = require('discord.js');
-const { emojis: { perms: { granted, notSpecified }, foxxieBadges: { foxxie, fokushi, cutiepie } } } = require('../../../lib/util/constants')
+const { MessageEmbed, Permissions: { FLAGS }, Role, Emoji, Channel, User } = require('discord.js');
+const { emojis: { perms: { granted, notSpecified } }, badges } = require('../../../lib/util/constants')
 const mongo = require('../../../lib/structures/database/mongo')
 const { botSettingsSchema } = require('../../../lib/structures/database/BotSettingsSchema')
 const { userSchema } = require('../../../lib/structures/database/UserSchema.js')
 const { getUserMessageCount, getGuildMessageCount } = require('../../tasks/stats')
 const moment = require('moment')
-//const { contributor } = require('../../../lib/config')
 module.exports = {
     name: 'info',
 	aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
@@ -15,39 +14,157 @@ module.exports = {
 
         let { lang, message, args, language } = props;
 
-        let user;
+        let user; let emoji;
         channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name.toLowerCase() === args.join(' ').toLocaleLowerCase());
         user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.client.users.cache.find(u => u.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member.user;
         let server = message.client.guilds.cache.get(args[1]) || message.guild;
 		let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase()); 
+        if (args[0]) emoji = message.client.emojis.cache.find((emj) => emj.name === args[0] || emj.id === args[0].replace(/^<a?:\w+:(\d+)>$/, '$1'))
+
+        if (channel instanceof Channel) return channelInfo();
+        if (emoji instanceof Emoji) return emojiinfo();
+        if (role instanceof Role) return roleinfo();
+        if (message.guild && args[0] === 'server') return serverinfo();
+		if (message.guild && args[0] === message.guild.id) serverinfo();
+        if (user instanceof User && args[0] !== 'server' && user) return userinfo();
 
 		this.perms = lang.PERMISSIONS
         this.regions = lang.REGIONS
         this.verificationLevels = lang.VERIFICATION_LEVELS
         this.filterLevels = lang.FILTER_LEVELS
 
-        if (args[0]) {
+        async function userinfo(){
 
-            const regex = args[0].replace(/^<a?:\w+:(\d+)>$/, '$1');
-            const emoji = message.client.emojis.cache.find((emj) => emj.name === args[0] || emj.id === regex)
-
-            if (emoji) {
-                let embed = new MessageEmbed()
-                    .setTitle(`${emoji.name} (ID: ${emoji.id})`)
-                    .setDescription(`The **${emoji.name}** emote was created ${moment(emoji.createdTimestamp).format('MMMM Do YYYY')} **(${moment([moment(emoji.createdTimestamp).format('YYYY'), moment(emoji.createdTimestamp).format('M') - 1, moment(emoji.createdTimestamp).format('D')]).toNow(true)} ${lang.COMMAND_ROLE_CREATED_AGO})**`)
-                    .setColor(message.guild.me.displayColor)
-                    .setImage(emoji.url)
-                    .addField(`:pencil2: **Name**`, emoji.name, true)
-                    .addField(`:projector: **Animated**`, `${emoji.animated?'Yes':'No'}`, true)
-                    .addField(':link: **Image Links**', `${emoji.animated
-                        ? `[PNG](${emoji.url.replace('.gif', '.png')}) | [JPEG](${emoji.url.replace('.gif', '.jpg')}) | [GIF](${emoji.url})`
-                        :`[PNG](${emoji.url}) | [JPEG](${emoji.url.replace('.png', '.jpeg')})`}`, true)
-
-                return message.channel.send(embed)
-            }
+            const loading = await message.channel.send(language.get("MESSAGE_LOADING", lang));
+            let embed = new MessageEmbed();
+            embed = await _addBaseData(embed);
+            embed = await _addBadges(embed);
+            embed = await _addMemberData(embed);
+            await loading.delete();
+            return message.channel.send(embed)
         }
 
-        if (channel) {
+        async function _addBaseData(embed) {
+            return embed
+                .setTitle(`${user.tag} (ID: ${user.id})`)
+                .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+        }
+
+        async function _addBadges(embed) {
+            const bitfield = await user.settings.get('badges')
+            const out = badges.filter((_, idx) => bitfield & (1 << idx)); /* eslint-disable-line no-bitwise */
+            if (!out.length) return embed;
+
+            return embed.setDescription(out.map(badge => `${badge.icon} ${badge.name}`).join('\n'));
+        }
+
+        async function _addMemberData(embed) {
+            const member = message.guild ? await message.guild.members.fetch(user).catch(() => null) : null;
+		    const creator = member && (member.joinedTimestamp - message.guild.createdTimestamp) < 3000;
+
+            const statistics = [
+                language.get('COMMAND_INFO_USER_DISCORDJOIN', lang, moment(user.createdAt).format('MMMM Do YYYY'), moment([moment(user.createdAt).format('YYYY'), moment(user.createdAt).format('M') - 1, moment(user.createdAt).format('D')]).toNow(true))
+            ];
+
+            if (member) {
+
+                let join = [message.guild.name,
+                    moment(member.joinedAt).format('MMMM Do YYYY'),
+                    moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)]
+
+                statistics.push(creator ? language.get('COMMAND_INFO_USER_GUILDCREATE', lang, join) 
+                                : language.get('COMMAND_INFO_USER_GUILDJOIN', lang, join)
+                );
+            
+                let personal = []
+
+                const birthday = null;
+		        if (birthday) {
+			        statistics.push(language.get('COMMAND_INFO_USER_BIRTHDAY', lang, birthday));
+		        }
+
+                let msgs = await member.user.settings.get('servers')
+                statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs[0][message.guild.id] ? msgs[0][message.guild.id].messageCount || 0 : 0));
+
+                let totalStar = null; if (msgs[0][message.guild.id]) totalStar = msgs[0][message.guild.id].starCount;
+		        if (totalStar) {
+			        statistics.push(language.get('COMMAND_INFO_USER_STARS_EARNED', lang, totalStar));
+		        }
+
+                // const birthday = '08-29'//null;
+		        // if (birthday) {
+			    //     statistics.push(language.get('COMMAND_INFO_USER_BIRTHDAY', lang, birthday));
+		        // }
+
+                statistics.push(personal.join(" "))
+            }
+
+            embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS', lang)}`, statistics.join('\n'));
+		    if (!member) return embed.setColor(message.guild.me.displayColor)
+
+            const roles = member.roles.cache.sorted((a, b) => b.position - a.position);
+            let spacer = false;
+            const roleString = roles
+                .array()
+                .filter(role => role.id !== message.guild.id)
+                .reduce((acc, role, idx) => {
+                    if (acc.length + role.name.length < 1010) {
+                        if (role.name === '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯') {
+                            spacer = true;
+                            return `${acc}\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n`;
+                        } else {
+                            const comma = (idx !== 0) && !spacer ? ', ' : '';
+                            spacer = false;
+                            return acc + comma + role.name;
+                        }
+                    } else { return acc; }
+                }, '')
+
+            if (roles.size) {
+                embed.addField(
+                    `:scroll: ${language.get('COMMAND_INFO_USER_ROLES', lang, roles.size)}`,
+                    roleString.length ? roleString : language.get('COMMAND_INFO_USER_NOROLES')
+                )
+            }
+
+            let punishments = await member.user.settings.get('servers')
+            const warnings = punishments[0][message.guild.id]? punishments[0][message.guild.id].warnings : null;
+		    if (warnings) {
+			    for (const { author } of warnings) await message.client.users.fetch(author);
+			    embed.addField(
+				    `:lock: ${language.get('COMMAND_INFO_USER_WARNINGS', lang, warnings)}`,
+				    warnings.map((warn, idx) => `${idx + 1}. ${warn.active ? '~~' : ''}${warn.reason} - **${message.client.users.cache.get(warn.author).tag}**${warn.active ? '~~' : ''}`)
+			    );
+		    }
+
+            const notes = punishments[0][message.guild.id] ? punishments[0][message.guild.id].notes : null;
+		    if (notes) {
+			    for (const { author } of notes) await message.client.users.fetch(author);
+			    embed.addField(
+				    `:label: ${language.get('COMMAND_INFO_USER_NOTES', lang, notes)}`,
+				    notes.map((note, idx) => `${idx + 1}. ${note.reason} - **${message.client.users.cache.get(note.author).tag}**`)
+			    );
+		    }
+            return embed.setColor(member.displayColor)
+        }
+
+        async function emojiinfo() {
+
+            let embed = new MessageEmbed()
+                .setTitle(`${emoji.name} (ID: ${emoji.id})`)
+                .setDescription(`The **${emoji.name}** emote was created ${moment(emoji.createdTimestamp).format('MMMM Do YYYY')} **(${moment([moment(emoji.createdTimestamp).format('YYYY'), moment(emoji.createdTimestamp).format('M') - 1, moment(emoji.createdTimestamp).format('D')]).toNow(true)} ${lang.COMMAND_ROLE_CREATED_AGO})**`)
+                .setColor(message.guild.me.displayColor)
+                .setImage(emoji.url)
+                .addField(`:pencil2: **Name**`, emoji.name, true)
+                .addField(`:projector: **Animated**`, `${emoji.animated?'Yes':'No'}`, true)
+                .addField(':link: **Image Links**', `${emoji.animated
+                    ? `[PNG](${emoji.url.replace('.gif', '.png')}) | [JPEG](${emoji.url.replace('.gif', '.jpg')}) | [GIF](${emoji.url})`
+                    :`[PNG](${emoji.url}) | [JPEG](${emoji.url.replace('.png', '.jpeg')})`}`, true)
+
+            return message.channel.send(embed)
+        }
+
+        async function channelInfo() {
 
             const embed = new MessageEmbed()
                 .setTitle(`${channel.name} (ID: ${channel.id})`)
@@ -87,7 +204,7 @@ module.exports = {
             return message.channel.send(embed)
         }
 
-        if (role) { 
+        async function roleinfo(){
             const [bots, humans] = role.members.partition(member => member.user.bot);
 
             const embed = new MessageEmbed()
@@ -114,7 +231,7 @@ module.exports = {
             return message.channel.send(embed)
         }
 
-        if (server && args[0] === 'server') {
+        async function serverinfo() {
             let results = await getGuildMessageCount(message, server.id)
                     
             let messages;
@@ -143,116 +260,6 @@ module.exports = {
             embed.setThumbnail(guild.iconURL({ format: 'png', dynamic: true }))
             embed.setColor(message.guild.me.displayColor)
             return message.channel.send(embed);
-        }
-
-        if (user && args[0] !== 'server') {
-        
-            const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
-
-            let embed = new MessageEmbed()
-                .setTitle(`${user.tag} (ID: ${user.id})`)
-                .setThumbnail(user.displayAvatarURL({ dynamic: true }));
-
-            let badges = [];
-
-            let botSettings = await botSettingsSchema.findById({ _id: '812546582531801118' })
-
-            if (botSettings.contributors.includes(user.id)) badges.push(`${foxxie} Foxxie Contributor`)
-            if (botSettings.cutiepie.includes(user.id)) badges.push(`${cutiepie} Certified Cutiepie Tall Boy`)
-            if (botSettings.sisterBot.includes(user.id)) badges.push(`${fokushi} Sister Bot`)
-
-            embed.setDescription(badges.filter(i => !!i).join('\n'))
-            
-            const member = message.guild ? await message.guild.members.fetch(user).catch(() => null) : null;
-            
-            const statistics = [
-                `Joined Discord on ${moment(user.createdAt).format('MMMM Do YYYY')} **(${moment([moment(user.createdAt).format('YYYY'), moment(user.createdAt).format('M') - 1, moment(user.createdAt).format('D')]).toNow(true)} ago)**` //Duration.toNow(user.createdAt)
-            ];
-            
-            if (member) {
-
-                guildId = message.guild.id
-                userId = member.user.id
-
-                let stats_messages;
-                stats_messages = 0
-
-                let results = await getUserMessageCount(message, userId)
-                results ? stats_messages = results.servers[0][0][guildId] ? results.servers[0][0][guildId]["messageCount"] : stats_messages = 0 : stats_messages = 0;
-
-                statistics.push((
-                    `${member.user.id == message.guild.ownerID ? 'Created' : 'Joined'} ${message.guild.name} ${moment(member.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)} ago)**`
-                ))
-                        
-                statistics.push(`${stats_messages ? stats_messages.toLocaleString() : 0} messages sent`);
-
-                embed.addField(`:pencil: **Statistics**`, statistics.join('\n'));
-                if (!member) return embed;
-                
-                const roles = member.roles.cache.sort((a, b) => b.position - a.position);
-                let spacer = false;
-                const roleString = roles
-                    .array()
-                    .filter(role => role.id !== message.guild.id)
-                    .reduce((acc, role, idx) => {
-                        if (acc.length + role.name.length < 1010) {
-                            if (role.name === '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯') {
-                                spacer = true;
-                                return `${acc}\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n`;
-                            } else {
-                                const comma = (idx !== 0) && !spacer ? ', ' : '';
-                                spacer = false;
-                                return acc + comma + role.name;
-                            }
-                        } else { return acc; }
-                    }, '');
-                
-                if (roles.size) {
-                    embed.addField(
-                        `:scroll: **Role${roles.size > 2 ? `s (${roles.size - 1})` : roles.size === 2 ? '' : 's'}**`,
-                        roleString.length ? roleString : 'No roles'
-                    );
-                }
-
-                        guildId = message.guild.id
-                        userId = member.user.id
-
-                        await mongo().then(async () => {
-                            try {
-                                const results = await userSchema.findById({
-                                    _id: userId
-                                })
-                                results ? this.warnings = results.servers[0][0][guildId] ? results.servers[0][0][guildId]["warnings"] : [] : this.warnings = [];
-                                if (this.warnings) {
-                                    if (this.warnings.length) {
-                                        embed.addField(
-                                            `:lock: **Warnings (${this.warnings.length})**`,
-                                            this.warnings.map((warn, idx) => `${idx + 1}. ${warn.reason} - **${message.guild.members.cache.get(warn.author).user.tag}**`)
-                                        );
-                                    }
-                                }
-
-                                results ? this.notes = results.servers[0][0][guildId] ? results.servers[0][0][guildId]["notes"] : [] : this.notes = []
-                                if (this.notes) {
-                                    if (this.notes.length) {
-                                        embed.addField(
-                                            `:label: **Note${this.notes.length > 1 ? 's' : ''} (${this.notes.length})**`,
-                                            this.notes.map((note, idx) => `${idx + 1}. ${note.reason} - **${message.guild.members.cache.get(note.author).user.tag}**`)
-                                        );
-                                    }
-                                }
-                            } finally {}
-                        })
-
-                        embed.setColor(member.displayColor)
-                    }
-
-                    if (!member) embed.addField(`:pencil: **Statistics**`, statistics.join('\n'));
-                    if (!member) embed.setColor(message.guild.me.displayColor)
-
-            loading.delete();
-            await message.channel.send(embed);
-    
         }
     }
 }

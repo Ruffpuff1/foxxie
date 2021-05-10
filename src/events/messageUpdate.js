@@ -13,14 +13,11 @@ module.exports = {
         // Command edit with cmd handler
         const message = newMessage
         commandHandler(message)
-        let editChannel = await message.guild.settings.get(message.guild)
+        let editChannel = await message.guild.settings.get('editChannel')
+        if (!editChannel) return;
 
-        if (editChannel == null) return;
-
-        let msgChn = message.client.channels.cache.get(editChannel.editChannel)
-
+        let msgChn = message.client.channels.cache.get(editChannel)
         if (!msgChn) return
-
         if (message.author.bot) return
 
         const embed = new MessageEmbed()

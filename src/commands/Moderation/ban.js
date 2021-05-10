@@ -1,5 +1,3 @@
-const { modStatsAdd } =  require('../../../src/tasks/stats')
-const moment = require('moment')
 const Discord = require('discord.js')
 const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
@@ -10,9 +8,9 @@ module.exports = {
     permissions: 'BAN_MEMBERS',
     execute: async (props) => {
 
-        let { message, args, lang, settings } = props
+        let { message, args, lang, language } = props
 
-        if (!message.channel.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return message.responder.error.clientPerms(message, 'BAN_MEMBERS')
+        if (!message.channel.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return message.responder.error('RESPONDER_ERROR_PERMS_CLIENT', lang, "BAN_MEMBERS")
 
         let member = message.mentions.users.first() || message.client.users.cache.get(args[0]);
 
@@ -31,14 +29,11 @@ module.exports = {
 
         let reg = /\-purge\s*|-p\s*/gi
         let tru = reg.test(message.content)
-        let res = args.slice(1).join(' ') || 'No reason specified';
+        let res = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
         updatedRes = res.replace(reg, '')
 
-        const date = moment(message.createdTimestamp).format('llll');
-
         message.react(approved)
-        modStatsAdd(message, 'ban', 1)
-
+    
         const dmEmbed = new Discord.MessageEmbed()
                 .setTitle(`Banned from ${message.guild.name}`)
                 .setColor(message.guild.me.displayColor)
@@ -64,20 +59,6 @@ module.exports = {
             .catch(console.error)
         }
     }
-        if (settings == null || settings.modChannel == null) return
-
-        const embed = new Discord.MessageEmbed()
-            .setTitle(`Banned ${member.tag}`)
-            .setColor(message.guild.me.displayColor)
-            .setTimestamp()
-            .addField('**Banned User**', `<@${member.id}> (ID: ${member.id})`, true)
-            .addField('**Moderator**', `<@${message.member.user.id}> (ID: ${message.member.user.id})`, true)
-            .addField('\u200B', '\u200B', true)
-            .addField('**Reason**', updatedRes, true)
-            .addField('**Location**', message.channel, true)
-            .addField('**Date / Time**', date, true)
-
-        const channel = message.guild.channels.cache.get(settings.modChannel);
-        if (channel) channel.send(embed)
+    message.guild.logger.moderation(message, mem, updatedRes, 'Banned', 'ban', lang)
     }
 }

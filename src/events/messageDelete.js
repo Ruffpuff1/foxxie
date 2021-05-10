@@ -2,20 +2,16 @@ const { MessageEmbed } = require('discord.js')
 module.exports = {
     name: 'messageDelete',
     execute: async(message) => {
+        
         if (message.partial) return
+        let deleteChannel = await message.guild.settings.get('deleteChannel')
+        if (!deleteChannel) return;
 
-        let deleteChannel = await message.guild.settings.get(message.guild)
-
-        if (deleteChannel == null) return;
-
-        let msgChn = message.client.channels.cache.get(deleteChannel.deleteChannel)
-
+        let msgChn = message.client.channels.cache.get(deleteChannel)
         if (!msgChn) return
 
         if (message.author.bot) return
-
         if (message.content.toLowerCase() === '?pick') return
-
         if (!message.content) return;
 
         const embed = new MessageEmbed()

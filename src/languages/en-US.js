@@ -1,23 +1,43 @@
-const { emojis: { infinity } } = require('../../lib/util/constants')
+const { emojis: { infinity, perms: { notSpecified }, covid: { cases, tests, deaths, recoveries } } } = require('../../lib/util/constants');
+const { toUpperCaseFirst } = require('../../lib/util/util');
 
 module.exports = {
 
     english: {
-        DEFAULT: (key) => `${key} has not been localised for en-US yet.`,
-        PREFIX_REMINDER: (prefix) => `**Heya!** My prefixes are \`fox\` and \`${prefix}\`. Try out \`fox help\` to get a list of my commands and sections.`,
+        DEFAULT: key => `${key} has not been localised for en-US yet.`,
+        PREFIX_REMINDER: prefix => `**Heya!** My prefixes are \`fox\` and \`${prefix}\`. Try out \`fox help\` to get a list of my commands and sections.`,
 
         MESSAGE_LOADING: () => `${infinity} **Alright, I'm taking your order.** This may take a few seconds.`,
 
         // Responders
         RESPONDER_ERROR_CODE: () => `**Uh oh,** there seems to be some sort of problem with my source code. Now don't worry I'm not dying on ya but I'd appreciate it if you did \`fox bugreport [bug]\` to send a message to my developer about it.`,
         RESPONDER_ERROR_FOXFACT: () => `**Whoops,** there was some sort of error while fetching your fact, do try again please.`,
-        RESPONDER_ERROR_PERMS_AUTHOR: (perm) => `You don't have the perms to use this command, for that you need the \`${perm}\` permission.`,
-        RESPONDER_ERROR_PERMS_CLIENT: (perm) => `I don't have the correct permissions to run this command! I need the \`${perm}\` permission in this channel. As an alternative you can give my role the \`ADMINISTRATOR\` permission to bypass this issue.`,
-        RESPONDER_FOXXIE_CUBBY_WRONG_CHANNEL: (msg) => `${msg.member}, this channel **isnt** meant to test out my commands. For that, you should head over to <#825896913810358274>.`,
+        RESPONDER_ERROR_PERMS_AUTHOR: perm => `You don't have the perms to use this command, for that you need the \`${perm}\` permission.`,
+        RESPONDER_ERROR_PERMS_CLIENT: perm => `I don't have the correct permissions to run this command! I need the \`${perm}\` permission in this channel. As an alternative you can give my role the \`ADMINISTRATOR\` permission to bypass this issue.`,
+        RESPONDER_FOXXIE_CUBBY_WRONG_CHANNEL: msg => `${msg.member}, this channel **isnt** meant to test out my commands. For that, you should head over to <#825896913810358274>.`,
         RESPONDER_TCS_MIMU_PICK: () => `**Darlin\'** I\'m flattered you want to pick me but again mimu\'s prefix is \`?\`.`,
 
         // Automation Commands
+        COMMAND_WELCOMECHANNEL_DESCRIPTION: () => `Set the channel where I should send welcome messages. This will initiate whenever a new member joins or you can use \`fox testwelcome\` to test it out beforehand.`,
+        COMMAND_WELCOMECHANNEL_NOCHANNEL: () => `Uhhh there isn't a welcome channel set right now. You can set one with \`fox welcomechannel [#channel]\`.`,
+        COMMAND_WELCOMECHANNEL_NOW: channel => `Right now, the welcome channel is set to <#${channel}>. If you want to change it use \`fox welcomechannel [#channel]\`.`,
+        COMMAND_WELCOMECHANNEL_REMOVED: () => `**Got it,** removed the welcome channel and disabled welcome messages with this server.`,
+        COMMAND_WELCOMECHANNEL_SET: channel => `Kk, I set the welcome channel as ${channel} for ya. Now I'll listen for when members join the server and send welcome messages.`,
+
         // Dev Commands
+        COMMAND_CREATEKEY_DESCRIPTION: () => `Creates a key that a user can redeem for a profile badge. Currently five valid ids: \`0\` Developer Ruff, \`1\` Foxxie Contributor, \`2\` Sister Bot, \`3\` Cutiepie, \`4\` Ruff's Friends. This command can only be used by the bot owner due to it's special nature.`,
+        COMMAND_CREATEKEY_NOID: badges => `**Hey,** you either didn't provide an Id or the Id provided is invalid. The current valid Ids are \`0 - 4\`.`,
+        COMMAND_CREATEKEY_SUCCESS: (badges, id, out) => `**Success!** here is a key for ${badges[id].icon} ${badges[id].name}: \`${out.join('-')}\`.`,
+        COMMAND_EVAL_DESCRIPTION: () => `Allows ya to evaluate JavaScript code straight from Discord. This command also takes advantage of my flags feature add \`-s\` or \`-silent\` to a message to prevent me from displaying the output. Add \`-a\` or \`-async\` to the message to wrap the given code inside of an asynchronous function. This command can only be used by developers because of the power it has.`,
+        COMMAND_EVAL_OUTPUT: () => `**Output**:`,
+        COMMAND_EVAL_OVER: () => `Characters over 2000!`,
+        COMMAND_EVAL_TOKEN: () => `Token Detected`,
+        COMMAND_EVAL_TYPE: () => `**Type**:`,
+        COMMAND_EVAL_UNDEFINED: () => `Undefined`,
+        COMMAND_PROFILEBADGE_DESCRIPTION: () => `Creates a \"key\" or profile badge for a user that can be seen using the \`fox info\` command. You can either \`add\` or \`remove\` badges depending on what ya need. This command is locked to the bot developer due to it's special nature.`,
+        COMMAND_PROFILEBADGE_NOBADGE: () => `**Please,** specify a proper badge [contributor|cutiepie|sister].`,
+        COMMAND_PROFILEBADGE_NOCASE: () => `**Please,** specify a proper use case [add|remove].`,
+        COMMAND_PROFILEBADGE_NOUSER: () => `**Please,** provide a user @mention or id to add the badge to.`,
 
         // Fun Commands
         COMMAND_CAT_DESCRIPTION: () => `Sends me to get you a random picture of a cat from https://api.thecatapi.com`,
@@ -45,28 +65,122 @@ module.exports = {
         COMMAND_TOPIC_DESCRIPTION: () => `I'll get you a random conversation starter for when your chat starts to doze off. Powered by https://www.conversationstarters.com`,
         COMMAND_URBAN_DESCRIPTION: () => `I'll get you data from an urban dictionary word you provide, including link, upvotes, definition, and examples.`,
         COMMAND_URBAN_EXAMPLE: () => `**Example**`,
-        COMMAND_URBAN_FOOTER: (res) => `By ${res[0].data.list[3].author}`,
+        COMMAND_URBAN_FOOTER: res => `By ${res[0].data.list[3].author}`,
         COMMAND_URBAN_NODATA: () => `**Yikes,** sorry I couldn't find any data for that word.`,
         COMMAND_URBAN_NODEFINITION: () => `No definition available.`,
         COMMAND_URBAN_NOEXAMPLE: () => `No example available.`,
         COMMAND_URBAN_NOWORD: () => `**Okay,** how do you expect me to define a word if you don't provide one?`,
 
         // Moderation Commands
+        COMMAND_STAFFLOG_BAN: ban => `${notSpecified} Issued ${ban.toLocaleString()} **ban${ban > 1 ? `s` : ``}**`,
+        COMMAND_STAFFLOG_DESCRIPTION: () => `Shows the stats of how many times you or a specific user has performed a moderation command on this server.`,
+        COMMAND_STAFFLOG_JAIL: jail => `${notSpecified} Issued ${jail.toLocaleString()} **jail${jail>1?`s`:``}**`,
+        COMMAND_STAFFLOG_KICK: kick => `${notSpecified} Issued ${kick.toLocaleString()} **kick${kick>1?`s`:``}**`,
+        COMMAND_STAFFLOG_LOCK: lock => `${notSpecified} Performed ${lock.toLocaleString()} **lock${lock>1?`s`:``}**`,
+        COMMAND_STAFFLOG_MUTE: mute => `${notSpecified} Issued ${mute.toLocaleString()} **mute${mute>1?`s`:``}**`,
+        COMMAND_STAFFLOG_NONE: () => `**Sorry,** this user hasn't performed any moderation actions in this server.`,
+        COMMAND_STAFFLOG_NUKE: nuke => `${notSpecified} Performed ${nuke.toLocaleString()} **nuke${nuke>1?`s`:``}**`,
+        COMMAND_STAFFLOG_PURGE: (purge, total) => `${notSpecified} Performed ${purge.toLocaleString()} **purge${purge>1?`s`:``}** (**${total.toLocaleString()}** message${total>1?`s`:``})`,
+        COMMAND_STAFFLOG_SLOWMODE: slowmode => `${notSpecified} Performed ${slowmode.toLocaleString()} **slowmode${slowmode>1?`s`:``}**`,
+        COMMAND_STAFFLOG_TITLE: user => `__Moderation logs for **${user}**:__\n\n`,
+        COMMAND_STAFFLOG_UNLOCK: unlock => `${notSpecified} Performed ${unlock.toLocaleString()} **unlock${unlock>1?`s`:``}**`,
+        COMMAND_STAFFLOG_WARN: warn => `${notSpecified} Issued ${warn.toLocaleString()} **warn${warn>1?`s`:``}**`,
+        COMMAND_VCKICK_DESCRIPTION: () => `Disconnects the specified user from a voice channel if they are in one. If a moderation logging channel is set, this action will log there.`,
+        COMMAND_VCKICK_NOMEMBER: () => `You need to specify **one member** to kick from a vc.`,
+        COMMAND_VCKICK_NOVOICE: () => `**Hey,** the user you specified is not currently in a vc.`,
+
         // Roleplay Commands
         // Secret Commands
+
         // Settings Commands
+        COMMAND_TAG_ADDED: (tag, text) => `**Gotcha,** added the tag \`${tag}\` with the content: \`\`\`${text}\`\`\``,
+        COMMAND_TAG_DESCRIPTION: () => `Allows you to create, remove or list special tags for this guild (Custom commands). It is strongly advised you do not create a tag with the same name as a command to avoid causing any conflicts.`,
+        COMMAND_TAG_EXISTS: tag => `**Whoops,** the tag \`${tag}\` already exists.`,
+        COMMAND_TAGS_LIST: (guild, size) => `**Tags in ${guild}** (${size})`,
+        COMMAND_TAG_NOEXIST: () => `**Whoops,** the tag \`${tag}\` doesn't exist.`,
+        COMMAND_TAGS_NONE: () => `**Hmmm,** it doesn't seem like theres any tags in this server.`,
+        COMMAND_TAG_NOTAG: () => `**Please,** provide a tag.`,
+        COMMAND_TAG_NOTEXT: () => `**Please,** provide some text to go along with this tag.`,
+        COMMAND_TAG_REMOVED: tag => `**Gotcha,** removed the tag \`${tag}\`.`,
 
         // Utility Commands
+        COMMAND_BADGES_BOOSTS: boosts => `Boost${boosts > 1 ? 's' : ''}`,
+        COMMAND_BADGES_BALANCE: () => `House Balance`,
+        COMMAND_BADGES_BOT: (bots, varif) => `Bot${bots - varif > 1 ? 's' : ''}`,
+        COMMAND_BADGES_BOTDEV: devs => `Early Verified Bot Developer${devs > 1 ? 's' : ''}`,
+        COMMAND_BADGES_BOTVERIFIED: verified => `Verified Bot${verified > 1 ? 's' : ''}`,
+        COMMAND_BADGES_BRAVERY: () => `House Bravery`,
+        COMMAND_BADGES_BRILLIANCE: () => `House Brilliance`,
+        COMMAND_BADGES_BUG1: () => `Bug Hunter Level 1`,
+        COMMAND_BADGES_BUG2: () => `Bug Hunter Level 2`,
+        COMMAND_BADGES_DESCRIPTION: () => `Gives a rough estimate for how many user badges there are in a server. Although right now, due to Discord's limitations this command only works in servers with 1,000 members or less.`,
+        COMMAND_BADGES_DISCORD_EMPLOYEE: flag => `Discord Employee${flag > 1 ? 's' : ''}`,
+        COMMAND_BADGES_EARLY: supporters => `Early Supporter${supporters > 1 ? 's' : ''}`,
+        COMMAND_BADGES_GUILDSIZE: size => `**Sorry,** requesting badges from this server is limited by Discord due to it's size, this server needs ${size-1000} members less for this command to work.`,
+        COMMAND_BADGES_HYPE_EVENT: () => `HypeSquad Events`,
+        COMMAND_BADGES_NITRO: () => `Nitro`,
+        COMMAND_BADGES_PARTNERED: flag => `Partnered Server Owner${flag > 1 ? 's' : ''}`,
+        COMMAND_CORONA_CASES_TITLE: () => `${cases} **Cases**`,
+        COMMAND_CORONA_CASES_VALUE: stats => `**${stats.cases ? stats.cases.toLocaleString() : 'N/A'}** ${stats.todayCases ? `(+${stats.todayCases.toLocaleString()} today)` : ''}\n${stats.critical ? stats.critical.toLocaleString() : 'N/A'} critical\n${stats.casesPerOneMillion? `${(stats.casesPerOneMillion / 10000).toFixed(2)}%` : 'N/A'} absolute infection rate`,
+        COMMAND_CORONA_DEATHS_TITLE: () => `${deaths} **Deaths**`,
+        COMMAND_CORONA_DEATHS_VALUE: stats => `**${stats.deaths ? stats.deaths.toLocaleString() : 'N/A'}** ${stats.todayDeaths ? `(+${stats.todayDeaths.toLocaleString()} today)` : ''}\n${stats.cases && stats.deaths ? `${((stats.deaths / stats.cases) * 100).toFixed(2)}%` : 'N/A'}% case fatality rate\n${stats.deathsPerOneMillion ? `${(stats.deathsPerOneMillion / 10000).toFixed(2)}%` : 'N/A'}% absolute fatality rate`,
+        COMMAND_CORONA_DESCRIPTION: () => `Get the current statistics of the Covid-19 pandemic. You can enter a country name, US-state name, or \`global\` for statistics of the whole world.`,
+        COMMAND_CORONA_EMBED_TITLE: search => `COVID-19 stats / ${search.toUpperCaseFirst()}`,
+        COMMAND_CORONA_EMBED_FOOTER: () => `Gotta tell ya that these stats may not necessarily comprehensive, complete, or up to date.\nDon't go tryna use this as medical advise or anything.`,
+        COMMAND_CORONA_NO_DATA: search => `**Sorry,** couldn't find any data for \`${search}\`.`,
+        COMMAND_CORONA_RECOVERIES_TITLE: () => `${recoveries} **Recoveries**`,
+        COMMAND_CORONA_RECOVERIES_VALUE: stats => `**${stats.recovered ? stats.recovered.toLocaleString() : 'N/A'}**\n${stats.recovered && stats.cases ? `${((stats.recovered / stats.cases) * 100).toFixed(2)}%` : 'N/A'} case recovery rate`,
+        COMMAND_CORONA_TESTS_TITLE: () => `${tests} **Tests**`,
+        COMMAND_CORONA_TESTS_VALUE: stats => `**${stats.tests ? stats.tests.toLocaleString() : 'N/A'}**\n${stats.testsPerOneMillion ? `${(stats.testsPerOneMillion / 10000).toFixed(2)}%` : 'N/A'} of population tested`,
+        COMMAND_DEFINE_CANCELLED: () => `Oki, command **cancelled**.`,
+        COMMAND_DEFINE_DESCRIPTION: () => `I'll fetch you the definition of a term using the Merriam-Webster Dictionary API.`,
+        COMMAND_DEFINE_NOARGS: () => `**Hey!** You didn't provide a word to define. Respond with a word in **60 seconds** or send \`cancel\` to cancel.`,
+        COMMAND_DEFINE_NORESULTS: word => `**Sorry,** I couldn't find a definition for the word \`${word}\`.`,
+        COMMAND_INFO_DESCRIPTION: () => ``,
+        COMMAND_INFO_USER_BIRTHDAY: bday => `Born on ${bday}.`,
+        COMMAND_INFO_USER_DISCORDJOIN: (join, timeSince) => `Joined Discord on ${join} **(${timeSince} ago)**`,
+        COMMAND_INFO_USER_GUILDCREATE: props => `Created ${props[0]} on ${props[1]} **(${props[2]} ago)**`,
+        COMMAND_INFO_USER_GUILDJOIN: props => `Joined ${props[0]} on ${props[1]} **(${props[2]} ago)**`,
+        COMMAND_USER_MESSAGES_SENT: msgs => `${msgs.toLocaleString()} message${msgs === 1 ? '' : 's'} sent.`,
+        COMMAND_INFO_USER_NOROLES: () => `No roles`,
+        COMMAND_INFO_USER_NOTES: notes => `**Note${notes.length > 1 ? 's' : ''} (${notes.length})**`,
+        COMMAND_INFO_USER_ROLES: roles => `**Role${roles > 2 ? `s` : ''} (${roles - 1})**`,
+        COMMAND_INFO_USER_STARS_EARNED: stars => `Earned ${stars} star${stars > 1 ? 's' : ''}.`,
+        COMMAND_INFO_USER_STATISTICS: () => `Statistics`,
+        COMMAND_INFO_USER_WARNINGS: warns => `**Warning${warns.length > 1 ? 's' : ''} (${warns.length})**`,
         COMMAND_PING: () => `Ping?`,
         COMMAND_PING_DESCRIPTION: () => `Runs a connection test to discord and tells ya how long it'll take for me to respond.`,
         COMMAND_PING_DISCORD: () => `Discord Latency`,
         COMMAND_PING_FOOTER: () => `Ping may be high due to Discord breaking, not my problem.`,
         COMMAND_PING_NETWORK: () => `Network Latency`,
-        COMMAND_PING_PONG: () => `**Pong**`
+        COMMAND_PING_PONG: () => `**Pong**`,
+        COMMAND_REDEEM_DESCRIPTION: () => `Allows you to redeem a key given by the bot owner for a special profile badge. These can be seen using \`fox info\`.`,
+        COMMAND_REDEEM_NOEXIST: () => `**Sorry,** the key id provided either doesn't exist or has already been redeemed.`,
+        COMMAND_REDEEM_NOKEY: () => `You didn't provide a **key Id** to redeem.`,
+        COMMAND_REDEEM_SUCCESS: (icon, title) => `**Congrats,** I successfully redeemed ${icon} ${title}. For ya.`,
 
         // Events
         // Inhibitors
+
         // Logs
+        LOG_MODERATION_BANNED: tar => `Banned ${tar}`,
+        LOG_MODERATION_CLEAREDWARNS: tar => `Cleared warnings for ${tar}`,
+        LOG_MODERATION_EMBED_DATE: () => `**Date / Time**`,
+        LOG_MODERATION_EMBED_LOCATION: () => `**Location**`,
+        LOG_MODERATION_EMBED_MODERATOR: () => `**Moderator**`,
+        LOG_MODERATION_EMBED_REASON: () => `**Reason**`,
+        LOG_MODERATION_EMBED_TITLE: act => `**${act} ${act === 'Purged' || 'Locked' || 'Unlocked' || 'slowmoded' ? 'Channel' : 'User'}**`,
+        LOG_MODERATION_KICKED: tar => `Kicked ${tar}`,
+        LOG_MODERATION_LOCKED: () => `Locked Channel`,
+        LOG_MODERATION_NOREASON: () => `No reason specified`,
+        LOG_MODERATION_NUKED: () => `Nuked Channel`,
+        LOG_MODERATION_PURGED: () => `Purged Messages`,
+        LOG_MODERATION_SLOWMODED: () => `Slowmode Set`,
+        LOG_MODERATION_UNBANNED: tar => `Unbanned ${tar}`,
+        LOG_MODERATION_UNLOCKED: () => `Unlocked Channel`,
+        LOG_MODERATION_VCKICKED: tar => `Vckicked ${tar}`,
+        LOG_MODERATION_WARNED: tar => `Warned ${tar}`,
+
         // Monitors
         // Resolvers
         // Tasks

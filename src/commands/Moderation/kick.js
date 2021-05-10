@@ -1,6 +1,4 @@
-const { modStatsAdd } =  require('../../../src/tasks/stats')
 const { emojis: { approved } } = require('../../../lib/util/constants')
-const moment = require('moment')
 const Discord = require('discord.js')
 module.exports = {
     name: 'kick',
@@ -10,11 +8,11 @@ module.exports = {
     permissions: 'KICK_MEMBERS',
     execute: async (props) => {
 
-        let { message, args, lang, settings } = props
+        let { message, args, lang, language } = props
 
-        if (!message.channel.permissionsFor(message.guild.me).has('KICK_MEMBERS')) return message.responder.error.clientPerms(message, 'KICK_MEMBERS')
+        if (!message.channel.permissionsFor(message.guild.me).has('KICK_MEMBERS')) return message.responder.error('RESPONDER_ERROR_PERMS_CLIENT', lang, "KICK_MEMBERS")
 
-        let res = args.slice(1).join(' ') || 'No reason specified'
+        let res = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
         if (!member) return message.channel.send("You need to provide **one member** to kick.")
@@ -24,11 +22,7 @@ module.exports = {
         if (member.user.id === message.member.user.id) return message.channel.send("self")
         if (member.user.id === message.guild.ownerID) return message.channel.send("owner")
 
-
-        const date = moment(message.createdTimestamp).format('llll');
-
         message.react(approved)
-        modStatsAdd(message, 'kick', 1)
 
         const dmEmbed = new Discord.MessageEmbed()
                 .setTitle(`Kicked from ${message.guild.name}`)
@@ -42,20 +36,6 @@ module.exports = {
         member.kick()
         .catch(console.error)
 
-        if (settings == null || settings.modChannel == null) return
-
-        const embed = new Discord.MessageEmbed()
-            .setTitle(`Kicked ${member.user.tag}`)
-            .setColor(message.guild.me.displayColor)
-            .setTimestamp()
-            .addField('**Kicked User**', `<@${member.user.id}> (ID: ${member.user.id})`, true)
-            .addField('**Moderator**', `<@${message.member.user.id}> (ID: ${message.member.user.id})`, true)
-            .addField('\u200B', '\u200B', true)
-            .addField('**Reason**', res, true)
-            .addField('**Location**', message.channel, true)
-            .addField('**Date / Time**', date, true)
-
-        const channel = message.guild.channels.cache.get(settings.modChannel);
-        if (channel) channel.send(embed)
+        message.guild.logger.moderation(message, member, res, 'Kicked', 'kick', lang)
     }
 }

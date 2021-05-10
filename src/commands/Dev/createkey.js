@@ -2,48 +2,38 @@ const { owner } = require("../../../config/foxxie");
 const { botSettingsSchema } = require("../../../lib/structures/database/BotSettingsSchema")
 const mongo = require("../../../lib/structures/database/mongo")
 const { emojis: { approved } } = require('../../../lib/util/constants')
+
+const { randomBytes } = require('crypto');
+const { base32 } = require('../../../lib/util/util');
+const { badges } = require('../../../lib/util/constants');
+
 module.exports = {
     name: 'createkey',
-    aliases: ['crk', 'profilebadge'],
+    aliases: ['crk'],
     category: 'developer',
-    usage: 'fox createkey [add|remove] [badge] [user]',
+    usage: 'fox createkey [id]',
     execute: async (props) => {
 
-        let { message, args } = props
+        let { message, args, language, lang } = props
+        if (!owner.includes(message.author.id)) return;
 
-        if (!owner.includes(msg.author.id)) return;
+        const id = args[0]
+        if (!/^(0|1|2|3|4)$/gm.test(id)) return message.channel.send(language.get('COMMAND_CREATEKEY_NOID', lang, badges))
 
-        let user = msg.mentions.users.first() || msg.client.users.cache.get(args[2])
-
-        validCase = ["add", "remove"]
-        validBadge = ["contributor", "cutiepie", "sister"]
-
-        if (!args[0] || !validCase.includes(args[0].toLowerCase())) return msg.channel.send(`**Please,** specify a proper use case [add|remove].`)
-        if (!args[1] || !validBadge.includes(args[1].toLowerCase())) return msg.channel.send(`**Please,** specify a proper badge [contributor|cutiepie|sister].`)
-
-        if (!user) return msg.channel.send(`**Please,** provide a user @mention or id to add the badge to.`)
-
-        let action; let badge;
-        if (args[0].toLowerCase() === 'add') action = '$push'
-        if (args[0].toLowerCase() === 'remove') action = '$pull'
-
-        if (args[1].toLowerCase() === 'contributor') badge = 'contributors'
-        if (args[1].toLowerCase() === 'cutiepie') badge = 'cutiepie'
-        if (args[1].toLowerCase() === 'sister') badge = 'sisterBot'
-
+        const out = [];
+        for (let i =0; i < 3; i++) {
+            const str = base32(randomBytes(3).readUIntLE(0, 3));
+            out.push(str);
+        }
+        await message.author.send(language.get('COMMAND_CREATEKEY_SUCCESS', lang, badges, id, out));
         await mongo().then(async () => {
-            try {
-                await botSettingsSchema.findByIdAndUpdate({
-                    _id: '812546582531801118'
-                }, {
-                    _id: '812546582531801118',
-                    [action]: {
-                        [badge]: user.id
-                    }
-                }, { upsert: true })
-                msg.react(approved)
+            try { await botSettingsSchema.findByIdAndUpdate(
+                { _id: '812546582531801118' },
+                { _id: '812546582531801118',
+                    $push: { keys: { id, key: out.join('') } } }, 
+                { upsert: true })
             } finally {}
         })
-
+        return message.react(approved)
     }
 }
