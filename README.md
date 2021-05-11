@@ -2,6 +2,8 @@
 
 A Smort Butler for your Server
 
+[![Discord Bots](https://top.gg/api/widget/812546582531801118.svg)](https://top.gg/bot/812546582531801118)
+
 ## About
 
 Foxxie is a Discord bot focused on Utility and Moderation executed in a way that is clean and professional.
