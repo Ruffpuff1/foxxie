@@ -1,4 +1,3 @@
-const { emojis: { approved } } = require('../../../lib/util/constants')
 const Discord = require('discord.js')
 module.exports = {
     name: 'unban',
@@ -20,7 +19,7 @@ module.exports = {
         if (member.id === message.member.user.id) return message.channel.send("self")
         if (member.id === message.guild.ownerID) return message.channel.send("owner")
 
-        message.react(approved)
+        message.responder.success();
 
         const dmEmbed = new Discord.MessageEmbed()
                 .setTitle(`Unbanned from ${message.guild.name}`)
@@ -34,6 +33,6 @@ module.exports = {
         message.guild.members.unban(member, res)
         .catch(console.error)
 
-        message.guild.logger.moderation(message, member, res, 'Unbanned', 'unban', lang)
+        message.guild.log.moderation(message, member, res, 'Unbanned', 'unban', lang)
     }
 }

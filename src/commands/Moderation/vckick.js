@@ -1,4 +1,3 @@
-const { emojis: { approved } } = require('../../../lib/util/constants');
 module.exports = {
     name: 'vckick',
     aliases: ['vck', 'disconnect'],
@@ -15,8 +14,8 @@ module.exports = {
         if (!user) return message.channel.send(language.get('COMMAND_VCKICK_NOMEMBER', lang))
         if (!user.voice.channelID) return message.channel.send(language.get('COMMAND_VCKICK_NOVOICE', lang));
 		user.voice.setChannel(null);
-		message.react(approved);
+		message.responder.success();
 
-        message.guild.logger.moderation(message, user.user, reason, 'Vckicked', 'vckick', lang)
+        message.guild.log.moderation(message, user.user, reason, 'Vckicked', 'vckick', lang)
     }
 }

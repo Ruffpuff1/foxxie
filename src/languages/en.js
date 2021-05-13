@@ -185,7 +185,7 @@ Hope we can help you out abit.`,
         TESTDISBOARD: "Simulates what the server's disboard bump will look like.",
         TESTJOIN: "Simulates what would happen if a new member joins the server.",
         WELCOMECHANNEL: "Set the channel where I should send welcome messages. This will initiate whenever a new member joins or you can use `fox testwelcome` to test it out beforehand.",
-        WELCOMEMESSAGE: "Use case `message` allows you to set the message I send when a new member joined the server. In your welcome message you can also use the variables `{member}`, `{name}`, `{tag}` (ex: ArEo#1245), `{discrim}`, `{created}`, `{server}`, and `{count}` for the server's member count.", // needs spanish
+        WELCOMEMESSAGE: "Use case `message` allows you to Set the message I send when a new member joined the server. In your welcome message you can also use the variables `{member}`, `{name}`, `{tag}` (ex: ArEo#1245), `{discrim}`, `{created}`, `{server}`, and `{count}` for the server's member count.", // needs spanish
 
         ABOUT: "Get some basic information about me, my statistics, and some of my credits.",
         AFK: "Sets an AFK for when people ping ya. You can provide a reason, but if no reason is provided it will show as \'none\'. When pinged in chat your AFK status will show. And the next time you talk in chat your AFK will be removed.",

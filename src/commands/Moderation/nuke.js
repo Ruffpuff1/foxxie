@@ -29,7 +29,7 @@ if you're positive go ahead and type \`yes, nuke ${message.channel.name}\` withi
                         channel.send(`**Heh First,** anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`)
                     })
     
-                    await message.guild.logger.moderation(message, message.channel, reason, 'Nuked', 'nuke', lang)
+                    await message.guild.log.moderation(message, message.channel, reason, 'Nuked', 'nuke', lang)
                     message.channel.delete()
                             
                 }).catch((e) => {})

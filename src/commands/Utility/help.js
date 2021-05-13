@@ -1,11 +1,10 @@
 const Discord = require('discord.js');
 const { toUpperCaseFirst } = require('../../../lib/util/util');
-const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'help',
     aliases: ['commands', 'h'],
     category: 'utility',
-    usage: 'help (command) (-c|-channel)',
+    usage: 'help (command|category) (-c|-channel)',
     execute(props) {
 
         let { lang, message, args, language } = props;
@@ -17,11 +16,7 @@ module.exports = {
         let cmdArr = commands.array();
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
-            //.setThumbnail(message.client.user.displayAvatarURL({dynamic: true}))
         
-        let categoryDescriptions = lang.CATEGORY_DESCRIPTIONS
-        let helpDescription = lang.COMMAND_HELP_DESCRIPTION_BIG
-
         let autoCmds = [];
             let funCmds = [];
             let modCmds = [];
@@ -54,38 +49,20 @@ module.exports = {
         bigMenu = () => {
 
             embed
-                .setTitle(`Foxxie's commands!`)
-                .setDescription(`These are all of my commands. For a list of commands in a certain category do \`fox help (category)\`.\n\n${helpDescription}`)
-                .addField(`:robot: **Automation (${autoCmds.length})**`, categoryDescriptions['AUTOMATION'], true)
-                .addField(`:laughing: **Fun (${funCmds.length})**`, categoryDescriptions['FUN'], true)
-                .addField(`:shield: **Moderation (${modCmds.length})**`, categoryDescriptions['MODERATION'], true)
-                .addField(`:hugging: **Roleplay (${rpCmds.length})**`, categoryDescriptions['ROLEPLAY'], true)
-                .addField(`:wrench: **Settings (${setCmds.length})**`, categoryDescriptions['SETTINGS'], true)
-                .addField(`:flashlight: **Utility (${utilCmds.length})**`, categoryDescriptions['UTILITY'], true)
-                .addField(lang.COMMAND_ABOUT_LINKS, lang.COMMAND_ABOUT_LINKS_LINKS)
+                .setTitle(language.get('COMMAND_HELP_EMBED_TITLE', lang, language, lang))
+                .setDescription(language.get('COMMAND_HELP_EMBED_DESCRIPTION', lang, language, lang))
+                .addField(language.get('COMMAND_HELP_EMBED_AUTOMATION', lang, autoCmds.length), language.get('COMMAND_HELP_CATEGORY_AUTOMATION', lang), true)
+                .addField(language.get('COMMAND_HELP_EMBED_FUN', lang, funCmds.length), language.get('COMMAND_HELP_CATEGORY_FUN', lang), true)
+                .addField(language.get('COMMAND_HELP_EMBED_MODERATION', lang, modCmds.length), language.get('COMMAND_HELP_CATEGORY_MODERATION', lang), true)
+                .addField(language.get('COMMAND_HELP_EMBED_ROLEPLAY', lang, rpCmds.length), language.get('COMMAND_HELP_CATEGORY_ROLEPLAY', lang), true)
+                .addField(language.get('COMMAND_HELP_EMBED_SETTINGS', lang, setCmds.length), language.get('COMMAND_HELP_CATEGORY_SETTINGS', lang), true)
+                .addField(language.get('COMMAND_HELP_EMBED_UTILITY', lang, utilCmds.length), language.get('COMMAND_HELP_CATEGORY_UTILITY', lang), true)
+                .addField(language.get('COMMAND_HELP_LINKS_TITLE', lang), language.get('COMMAND_HELP_LINKS_DESCRIPTION', lang))
 
             if (channelFlag.test(message.content)) return message.channel.send(embed)
-            message.react(approved)
+            message.responder.success();
             return message.author.send(embed)
-            .catch(error => message.channel.send(embed))
-        }
-
-        originalMenu = () => {
-            embed
-                .setTitle(lang.COMMAND_HELP_TITLE)
-                .setDescription(lang.COMMAND_HELP_DESCRIPTION)
-                .addField('**Automation**' + ` **(${autoCmds.length})**`, autoCmds.map(a => `\`${a}\``).join(", "))
-                .addField(lang.COMMAND_HELP_FUN + ` **(${funCmds.length})**`, funCmds.map(a => `\`${a}\``).join(", "))
-                .addField(lang.COMMAND_HELP_MODERATION + ` **(${modCmds.length})**`, modCmds.map(a => `\`${a}\``).join(", "))
-                .addField(lang.COMMAND_HELP_ROLEPLAY + ` **(${rpCmds.length})**`, rpCmds.map(a => `\`${a}\``).join(", "))
-                .addField(lang.COMMAND_HELP_SETTINGS + ` **(${setCmds.length})**`, setCmds.map(a => `\`${a}\``).join(", "))
-                .addField(lang.COMMAND_HELP_UTILITY + ` **(${utilCmds.length})**`, utilCmds.map(a => `\`${a}\``).join(", "))
-                .addField(lang.COMMAND_ABOUT_LINKS, lang.COMMAND_ABOUT_LINKS_LINKS)
-
-            if (channelFlag.test(message.content)) return message.channel.send(embed)
-            message.react(approved)
-            return message.author.send(embed)
-            .catch(error => message.channel.send(embed))
+            .catch(e => message.channel.send(embed))
         }
 
         commandCategories = () => {
@@ -96,17 +73,16 @@ module.exports = {
             }
             
             embed
-                .setTitle(`Foxxie's ${args[0].toUpperCaseFirst()} commands!`)
-                .setDescription(`These are all of my **${args[0].toLowerCase()}** commands.\n${categoryDescriptions[args[0].toUpperCase()]}
-\nAdditionally for each command you can use \`fox help (command)\` for a detailed description on that command as well as example usage.`)
+                .setTitle(language.get('COMMAND_HELP_CATEGORY_EMBED_TITLE', lang, args[0]))
+                .setDescription(language.get('COMMAND_HELP_CATEGORY_EMBED_DESCRIPTION', lang, args[0], language, lang))
                 .addField(`**${args[0].toUpperCaseFirst()}**` + ` **(${cateCmds.length})**`, cateCmds.map(a => `\`${a}\``).join(", "))
-                .addField(lang.COMMAND_ABOUT_LINKS, lang.COMMAND_ABOUT_LINKS_LINKS)
+                .addField(language.get('COMMAND_HELP_LINKS_TITLE', lang), language.get('COMMAND_HELP_LINKS_DESCRIPTION', lang))
 
             if (channelFlag.test(message.content)) return message.channel.send(embed)
 
-            message.react(approved)
+            message.responder.success();
             return message.author.send(embed)
-            .catch(error => message.channel.send(embed))
+            .catch(e => message.channel.send(embed))
         }
 
         commandMenu = () => {
@@ -114,29 +90,27 @@ module.exports = {
             const name = args[0].toLowerCase();
             const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
-            if (!command) return message.channel.send(lang.COMMAND_HELP_NOTVALID)
+            if (!command) return message.channel.send(language.get('COMMAND_HELP_COMMAND_NOTVALID'))//message.channel.send(lang.COMMAND_HELP_NOTVALID)
 
             if (command) {
         
                 let commandUp = command.name.toUpperCase()
-                let descriptions = lang.COMMAND_DESCRIPTIONS
 
                 embed
                     .setTitle(command.name)
                     .setDescription(`${language.get(`COMMAND_${commandUp}_DESCRIPTION`, 'en-US')}\n
-${command.permissions?`**Permissions Required:** \`${command.permissions}\``:''}`)
-                    .addField(`**${lang.COMMAND_HELP_USAGE} ${lang.COMMAND_HELP_TRUE})**`, `\`${command.usage}\``);
+${command.permissions? language.get('COMMAND_HELP_PERMISSIONS', lang, command.permissions) :''}`)
+                    .addField(language.get('COMMAND_HELP_USAGE', lang), `\`${command.usage}\``);
 
                 if (command.aliases) embed.setTitle(`${command.name} (${command.aliases.join(', ')})`)
                 if (channelFlag.test(message.content)) return message.channel.send(embed)
 
-                message.react(approved)
+                message.responder.success();
                 return message.author.send(embed)
                 .catch(error => message.channel.send(embed))
             }
         }
 
-        //if (!args.length || channelFlag.test(args[0]) && orginalFlag.test(message.content || args[0])) return originalMenu()
         if (!args.length || channelFlag.test(args[0])) return bigMenu()
         if (categories.includes(args[0].toLowerCase())) return commandCategories()
         commandMenu()

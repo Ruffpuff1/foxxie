@@ -83,10 +83,10 @@ module.exports = {
 			        statistics.push(language.get('COMMAND_INFO_USER_BIRTHDAY', lang, birthday));
 		        }
 
-                let msgs = await member.user.settings.get('servers')
-                statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs[0][message.guild.id] ? msgs[0][message.guild.id].messageCount || 0 : 0));
+                let msgs = await member.user.settings.get(`servers.${message.guild.id}`)
+                statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs ? msgs.messageCount : 0));
 
-                let totalStar = null; if (msgs[0][message.guild.id]) totalStar = msgs[0][message.guild.id].starCount;
+                let totalStar = null; if (msgs) totalStar = msgs.starCount;
 		        if (totalStar) {
 			        statistics.push(language.get('COMMAND_INFO_USER_STARS_EARNED', lang, totalStar));
 		        }
@@ -127,8 +127,8 @@ module.exports = {
                 )
             }
 
-            let punishments = await member.user.settings.get('servers')
-            const warnings = punishments[0][message.guild.id]? punishments[0][message.guild.id].warnings : null;
+            let punishments = await member.user.settings.get(`servers.${message.guild.id}`)
+            const warnings = punishments ? punishments.warnings : null;
 		    if (warnings) {
 			    for (const { author } of warnings) await message.client.users.fetch(author);
 			    embed.addField(
@@ -137,7 +137,7 @@ module.exports = {
 			    );
 		    }
 
-            const notes = punishments[0][message.guild.id] ? punishments[0][message.guild.id].notes : null;
+            const notes = punishments ? punishments.notes : null;
 		    if (notes) {
 			    for (const { author } of notes) await message.client.users.fetch(author);
 			    embed.addField(

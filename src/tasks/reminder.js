@@ -1,5 +1,4 @@
 const fs = require('fs')
-const { getGuildLang } = require('../../lib/util/getGuildLang')
 const Discord = require('discord.js')
 module.exports = client => {
     client.reminders = require('../store/reminders.json')
@@ -14,7 +13,7 @@ module.exports = client => {
             let sendIn = client.reminders[i].sendIn
             const channel = client.channels.cache.get(client.reminders[i].channelId)
 
-            let lang = getGuildLang()
+            let lang = require(`../../src/languages/en`)
 
             if(Date.now() > time) {
                 

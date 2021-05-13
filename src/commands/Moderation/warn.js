@@ -1,5 +1,4 @@
 const { moderationCommandWarn } = require('../../../lib/structures/ModerationCommand')
-const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'warn',
     aliases: ['w'],
@@ -22,6 +21,6 @@ module.exports = {
         if (!reason) reason = 'No reason specified'
 
         moderationCommandWarn(message, reason, target, message.member, lang)
-        message.react(approved)
+        message.responder.success();
     }
 }

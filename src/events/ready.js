@@ -1,6 +1,6 @@
 const reminder = require('../tasks/reminder')
 const { disboard } = require('../tasks/disboard')
-const { mongoDB } = require('../../lib/database')
+const { mongoDB } = require('../../lib/Database')
 const { memberCount, clock } = require('../../lib/util/theCornerStore')
 const { stats } = require('../../lib/util/stats')
 const { version, commands, aliases } = require('../../config/foxxie')

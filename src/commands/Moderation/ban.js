@@ -1,5 +1,4 @@
 const Discord = require('discord.js')
-const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'ban',
     aliases: ['b', 'bean', '410', 'yeet', 'banish', 'begone', 'perish'],
@@ -32,7 +31,7 @@ module.exports = {
         let res = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
         updatedRes = res.replace(reg, '')
 
-        message.react(approved)
+        message.responder.success();
     
         const dmEmbed = new Discord.MessageEmbed()
                 .setTitle(`Banned from ${message.guild.name}`)
@@ -59,6 +58,6 @@ module.exports = {
             .catch(console.error)
         }
     }
-    message.guild.logger.moderation(message, mem, updatedRes, 'Banned', 'ban', lang)
+    message.guild.log.moderation(message, mem, updatedRes, 'Banned', 'ban', lang)
     }
 }

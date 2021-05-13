@@ -12,28 +12,28 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
 
-        if (args[0]) if (args[0].toLowerCase() === 'none') {
+        if (args[0]?.toLowerCase() === 'none') {
                         
             await message.guild.settings.unset(message.guild, "welcome.channel")
-            embed.setDescription(language.get('COMMAND_WELCOME_CHANNEL_REMOVED', lang))
+            embed.setDescription(language.get('COMMAND_WELCOMECHANNEL_REMOVED', lang))
             return message.channel.send(embed)
         }
 
-        let welcome = await message.guild.settings.get('welcome')
+        let welcome = await message.guild.settings.get('welcome.channel')
         let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
         if (!channel) {
 
-            if (!welcome || !welcome['channel']) {
-                embed.setDescription(language.get('COMMAND_WELCOME_CHANNEL_NOCHANNEL', lang))
+            if (!welcome) {
+                embed.setDescription(language.get('COMMAND_WELCOMECHANNEL_NOCHANNEL', lang))
                 return message.channel.send(embed)
             }
 
-            embed.setDescription(language.get('COMMAND_WELCOME_CHANNEL_NOW', lang, welcome['channel']))
+            embed.setDescription(language.get('COMMAND_WELCOMECHANNEL_NOW', lang, welcome))
             return message.channel.send(embed)
         }
 
         await message.guild.settings.set(message.guild, "welcome.channel", channel)
-        embed.setDescription(language.get('COMMAND_WELCOME_CHANNEL_SET', lang, channel))
+        embed.setDescription(language.get('COMMAND_WELCOMECHANNEL_SET', lang, channel))
         return message.channel.send(embed)
     }
 }

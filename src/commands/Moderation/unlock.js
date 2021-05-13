@@ -25,6 +25,6 @@ module.exports = {
             message.channel.send(e)
         }
 
-        message.guild.logger.moderation(message, message.channel, reason, 'Unlocked', 'unlock', lang)
+        message.guild.log.moderation(message, message.channel, reason, 'Unlocked', 'unlock', lang)
     }
 }

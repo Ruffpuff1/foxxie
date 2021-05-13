@@ -1,5 +1,4 @@
 var isgd = require('isgd');
-const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'shorten',
     aliases: ['sl', 'tiny'],
@@ -13,7 +12,7 @@ module.exports = {
         if (args[0] && !args[1]) {
 
             isgd.shorten(args[0], function(res) {
-                message.react(approved)
+                message.responder.success();
                 message.channel.send(`Here is you're new **shortened** url (<${res}>).`)
             })
         }
@@ -26,7 +25,7 @@ module.exports = {
 
             isgd.custom(args[0], name, function(res) {
                 if (res.startsWith('Error')) return message.channel.send(`The provided name **${name}** is already in use at the domain "is.gd".`)
-                message.react(approved)
+                message.responder.success();
                 message.channel.send(`Here is you're new **shortened** url with the name **${args[1]}** (<${res}>).`)
             });
         }

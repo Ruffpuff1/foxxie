@@ -1,11 +1,10 @@
 const Discord = require('discord.js')
 const { getAfk, delAfk } = require('./afkChange')
-const { getGuildLang } = require('../../lib/util/getGuildLang')
 module.exports.afkCheck = async message => {
 
     if (message.author.bot) return
     if (message.channel.type === 'dm') return
-    lang = getGuildLang(message)
+    lang = require(`../../src/languages/en`)
     message.mentions.users.forEach(
         async user => {
 
@@ -33,7 +32,7 @@ module.exports.afkCheck = async message => {
 
         if (afk !== null) {
             if (afk.lastMsg === message.content) return;
-            message.reply(lang.COMMAND_AFK_WELCOMEBACK)
+            message.reply('lang.COMMAND_AFK_WELCOMEBACK')
             .then(msg => {setTimeout(() => msg.delete(), 10000)})
 
             message.member.setNickname(afk.afkNickname).catch(error => console.error())

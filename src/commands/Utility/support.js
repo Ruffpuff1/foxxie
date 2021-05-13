@@ -1,5 +1,4 @@
 const Discord = require('discord.js')
-const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'support',
     usage: 'fox support',
@@ -18,6 +17,6 @@ module.exports = {
         message.author.send(inviteEmbed).catch(error => {message.channel.send(inviteEmbed);
         });
     
-        message.react(approved)
+        message.responder.success();
     }
 }

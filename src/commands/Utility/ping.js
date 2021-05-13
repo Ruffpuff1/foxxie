@@ -6,27 +6,27 @@ module.exports = {
     category: 'utility',
     execute(props) {
 
-        let { lang, message, args } = props;
-        message.channel.send(message.guild.language.get('COMMAND_PING', 'en-US'))
+        let { lang, message, args, language } = props;
+        message.channel.send(message.guild.language.get('COMMAND_PING', lang))
             .then(resultMessage => {
                 const ping = resultMessage.createdTimestamp - message.createdTimestamp
                 const pingEmbed = new Discord.MessageEmbed()
                     .setColor(message.guild.me.displayColor)
-                    .setFooter(message.guild.language.get('COMMAND_PING_FOOTER', 'en-US'))
+                    .setFooter(language.get('COMMAND_PING_FOOTER', lang))
                     .addFields(
                         {
-                            name: message.guild.language.get('COMMAND_PING_DISCORD', 'en-US'),
+                            name: language.get('COMMAND_PING_DISCORD', lang),
                             value: `\`\`\`${ping} ms\`\`\``,
                             inline: true
                         },
                         {
-                            name: message.guild.language.get('COMMAND_PING_NETWORK', 'en-US'),
+                            name: language.get('COMMAND_PING_NETWORK', lang),
                             value: `\`\`\`${message.client.ws.ping} ms\`\`\``,
                             inline: true
                         }
                     )
 
-                resultMessage.edit(`:ping_pong: **${message.guild.language.get('COMMAND_PING_PONG', 'en-US')}**`, {embed: pingEmbed})
+                resultMessage.edit(`:ping_pong: **${language.get('COMMAND_PING_PONG', lang)}**`, {embed: pingEmbed})
             })
     },
 }

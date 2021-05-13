@@ -1,5 +1,4 @@
 const mongo = require('../../../lib/structures/database/mongo')
-const { emojis: { approved } } = require('../../../lib/util/constants')
 const { userSchema } = require('../../../lib/structures/database/UserSchema.js')
 module.exports = {
     name: 'note',
@@ -39,7 +38,7 @@ module.exports = {
                 }, {
                     upsert: true
                 })
-                message.react(approved)
+                message.responder.success();
             } finally {}
         })
         

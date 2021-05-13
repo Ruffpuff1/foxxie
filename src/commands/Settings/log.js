@@ -1,6 +1,5 @@
 const mongo = require('../../../lib/structures/database/mongo')
 const Discord = require('discord.js')
-const { emojis: { approved } } = require('../../../lib/util/constants')
 const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
 module.exports = {
     name: 'log',
@@ -50,7 +49,7 @@ module.exports = {
                                 [use]: ''
                             }
                         })
-                        return message.react(approved)
+                        return message.responder.success();
                 } finally {}
             })
         }

@@ -8,7 +8,7 @@ module.exports = {
     version,
     owner: ['486396074282450946'],
     commands: '98',
-    aliases: '183',
+    aliases: '186',
     communityServer: 'https://discord.gg/kAbuCpfnCk',
     supportServer: 'https://discord.gg/jMernA8hD9',
     inviteURL: 'https://discord.com/api/oauth2/authorize?client_id=812546582531801118&permissions=8&scope=bot',

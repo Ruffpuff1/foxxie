@@ -26,6 +26,6 @@ module.exports = {
             console.log(e)
         }
 
-        message.guild.logger.moderation(message, message.channel, reason, 'Locked', 'lock', lang)
+        message.guild.log.moderation(message, message.channel, reason, 'Locked', 'lock', lang)
     }
 }

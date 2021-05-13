@@ -33,6 +33,6 @@ module.exports = {
             })
         })
 
-        message.guild.logger.moderation(message, message.channel, reason, 'Purged', 'purge', lang, num)
+        message.guild.log.moderation(message, message.channel, reason, 'Purged', 'purge', lang, num)
     }
 }

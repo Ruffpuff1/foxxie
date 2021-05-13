@@ -1,5 +1,4 @@
 const { goodbyeMsg } = require('../../tasks/goodbyeMessage')
-const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'testleave',
     aliases: ['testgoodbye', 'testbye', 'tl'],
@@ -11,7 +10,7 @@ module.exports = {
         let { message, args } = props
 
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-        message.react(approved)
+        message.responder.success();
         goodbyeMsg(member)
     }
 }

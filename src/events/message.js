@@ -1,4 +1,4 @@
-const { commandHandler } = require('./commandHandler')
+const { commandHandler } = require('../handlers/commandHandler')
 const { userMessageCount, guildMessageCount } = require('../tasks/stats')
 const { afkCheck } = require('../tasks/afkcheck')
 module.exports = {
@@ -11,7 +11,8 @@ module.exports = {
         if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return
         
         for (let monitor of ['anti', 'disboardbump', 'regexTags']){
-            message.client.monitors.get(monitor).execute(message)
+            let moni = message.client.monitors.get(monitor)
+            if (moni) moni.execute(message)
         }
         // Botwide
         commandHandler(message)

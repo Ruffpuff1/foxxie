@@ -1,4 +1,3 @@
-const { emojis: { approved } } = require('../../../lib/util/constants')
 const Discord = require('discord.js')
 module.exports = {
     name: 'kick',
@@ -22,7 +21,7 @@ module.exports = {
         if (member.user.id === message.member.user.id) return message.channel.send("self")
         if (member.user.id === message.guild.ownerID) return message.channel.send("owner")
 
-        message.react(approved)
+        message.responder.success();
 
         const dmEmbed = new Discord.MessageEmbed()
                 .setTitle(`Kicked from ${message.guild.name}`)
@@ -36,6 +35,6 @@ module.exports = {
         member.kick()
         .catch(console.error)
 
-        message.guild.logger.moderation(message, member, res, 'Kicked', 'kick', lang)
+        message.guild.log.moderation(message, member, res, 'Kicked', 'kick', lang)
     }
 }

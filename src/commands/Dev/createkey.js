@@ -1,8 +1,6 @@
 const { owner } = require("../../../config/foxxie");
 const { botSettingsSchema } = require("../../../lib/structures/database/BotSettingsSchema")
 const mongo = require("../../../lib/structures/database/mongo")
-const { emojis: { approved } } = require('../../../lib/util/constants')
-
 const { randomBytes } = require('crypto');
 const { base32 } = require('../../../lib/util/util');
 const { badges } = require('../../../lib/util/constants');
@@ -18,7 +16,7 @@ module.exports = {
         if (!owner.includes(message.author.id)) return;
 
         const id = args[0]
-        if (!/^(0|1|2|3|4)$/gm.test(id)) return message.channel.send(language.get('COMMAND_CREATEKEY_NOID', lang, badges))
+        if (!/^(0|1|2|3|4)$/gm.test(id)) return message.responder.error('COMMAND_CREATEKEY_NOID', lang, badges);
 
         const out = [];
         for (let i =0; i < 3; i++) {
@@ -34,6 +32,6 @@ module.exports = {
                 { upsert: true })
             } finally {}
         })
-        return message.react(approved)
+        message.responder.success();
     }
 }

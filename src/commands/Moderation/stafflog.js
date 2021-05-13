@@ -14,9 +14,7 @@ module.exports = {
 
         let desc1 = []
         let desc2 = []
-        let servers = await member.user.settings.get('servers')
-        if (!servers[0][message.guild.id]) { loading.delete(); return message.channel.send(language.get('COMMAND_STAFFLOG_NONE', lang)) }
-        let modCounts = servers[0][message.guild.id].modStats
+        let modCounts = await member.user.settings.get(`servers.${message.guild.id}.modStats`)
         if (!modCounts) { loading.delete(); return message.channel.send(language.get('COMMAND_STAFFLOG_NONE', lang)) }
 
         if (modCounts.ban) desc1.push(language.get('COMMAND_STAFFLOG_BAN', lang, modCounts.ban))

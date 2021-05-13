@@ -1,4 +1,3 @@
-const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'slowmode',
     aliases: ['slowchat', 'slow', 'freeze', 's', 'sm'],
@@ -24,8 +23,8 @@ module.exports = {
         }
 
         message.channel.setRateLimitPerUser(time)
-        message.react(approved)
+        message.responder.success();
 
-        message.guild.logger.moderation(message, message.channel, reason, 'Slowmoded', 'slowmode', lang)
+        message.guild.log.moderation(message, message.channel, reason, 'Slowmoded', 'slowmode', lang)
     }
 }

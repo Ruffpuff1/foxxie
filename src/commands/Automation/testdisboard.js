@@ -1,5 +1,4 @@
 const Discord = require('discord.js')
-const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'testdisboard',
     aliases: ['td', 'testbump'],
@@ -21,7 +20,7 @@ module.exports = {
         embed.setDescription(settings.disboardMessage?settings.disboardMessage.replace(/{(server|guild)}/gi, message.guild.name):"Time to bump the server on disboard. Use the command `!d bump` then come back in **two hours**.")
         let dbPing = '';
         if (settings != null && settings.disboardPing != null) dbPing = `<@&${settings.disboardPing}>`
-        message.react(approved)
+        message.responder.success();
         dischannel.send(dbPing, { embed: embed } )
     }
 }

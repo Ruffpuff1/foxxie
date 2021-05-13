@@ -6,25 +6,8 @@ require('../lib/extensions/User')
 
 const client = new Discord.Client({ shards: 'auto', partials: ['MESSAGE', 'CHANNEL', 'REACTION'] })
 const fs = require('fs')
+const { launchEvents } = require('./handlers/LauchEvents')
 require('dotenv').config()
-const eventFiles = fs.readdirSync('src/events').filter(file => file.endsWith('.js'));
-
-for (const file of eventFiles) {
-	const event = require(`./events/${file}`);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args, client));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args, client));
-	}
-}
-
-client.monitors = new Discord.Collection();
-        
-const monitorFiles = fs.readdirSync(`./src/monitors`).filter(file => file.endsWith('.js'));
-for (const file of monitorFiles) {
-    const monitor = require(`./monitors/${file}`);
-    client.monitors.set(monitor.name, monitor);
-    }
-    
+launchEvents(client)
 
 client.login(process.env.DEV)

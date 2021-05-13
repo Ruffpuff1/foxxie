@@ -1,6 +1,5 @@
 const mongo = require('../../../lib/structures/database/mongo')
 const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
-const { emojis: { approved } } = require('../../../lib/util/constants')
 module.exports = {
     name: 'permission',
     aliases: ['permissions', 'perms', 'perm'],
@@ -16,7 +15,7 @@ module.exports = {
         await mongo().then(async () => {
             try {
                 if (!use) return message.channel.send('**Please,** specify a proper use case, either **allow**, **deny**, or **clear**.')
-                if (use.toLowerCase() === 'deny') {
+                if (/(deny|block|blacklist)/i.test(use)) {
                     if (!mem) return message.channel.send('**You need to** give either a user mention, or user ID for who you wanna perforn this action on.')
                     await serverSchema.findByIdAndUpdate({
                         _id: message.guild.id
@@ -28,8 +27,8 @@ module.exports = {
                     }, {
                         upsert: true
                     })
-                    message.react(approved)
-                } else if (use.toLowerCase() === 'allow') {
+                    message.responder.success();
+                } else if (/(allow|grant|whitelist)/i.test(use)) {
                     if (!mem) return message.channel.send('**You need to** give either a user mention, or user ID for who you wanna perforn this action on.')
                     await serverSchema.findByIdAndUpdate({
                         _id: message.guild.id
@@ -41,8 +40,8 @@ module.exports = {
                     }, {
                         upsert: true
                     })
-                    message.react(approved)
-                } else if (use.toLowerCase() === 'clear') {
+                    message.responder.success();
+                } else if (/(reset|clear)/i.test(use)) {
 
 
                     await serverSchema.findByIdAndUpdate({
@@ -53,7 +52,7 @@ module.exports = {
                             blockedUsers: ''
                         }
                     })
-                    message.react(approved)
+                    message.responder.success();
                 } else message.channel.send('**Please,** specify a proper use case, either **allow**, **deny**, or **clear**.')
 
             } finally {}

@@ -1,20 +1,13 @@
-const { roleplayCommand } = require('../../../lib/structures/roleplayCommands')
+const RoleplayCommand = require('../../../lib/structures/RoleplayCommand');
 module.exports = {
     name: 'blush',
     aliases: ['happy', 'smile'],
-    usage: `fox blush [user] (reason)`,
+    usage: `fox blush (user) (reason)`,
     category: 'roleplay',
     execute(props) {
 
         let { message, args, lang } = props
         
-        let mentionMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.guild.members.cache.find(u => u.user.username.toLowerCase() === args.join(' ').toLocaleLowerCase())
-    
-        let text = args.slice(1).join(' ');
-
-        let command = 'blush';
-        let actionText = 'blushes at';
-
-        roleplayCommand(message, command, mentionMember, text, actionText)
+        return new RoleplayCommand(message).execute(lang, "blush", args, true)
     }
 }

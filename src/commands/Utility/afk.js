@@ -1,5 +1,4 @@
 const Discord = require('discord.js')
-const { emojis: { approved } } = require('../../../lib/util/constants')
 const { setAfkNickname, setAfkReason, setAfkStatus, setAfkLastMsg } = require('../../../src/tasks/afkChange')
 module.exports = {
     name: 'afk',
@@ -26,7 +25,7 @@ module.exports = {
         message.member.setNickname(`[AFK] ${message.member.displayName}`)
         .catch(console.error).then(
             
-        message.react(approved),
+        message.responder.success(),
         message.channel.send(AFKEmbed)
         .then(msg => {setTimeout(() => msg.delete(), 10000) 
         }))

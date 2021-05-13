@@ -3,8 +3,7 @@ const moment = require('moment')
 const { modStatsAdd, getUserMessageCount, getGuildMessageCount } =  require('../../../src/tasks/stats')
 const { flags: { async, depth, silent } } = require('../../../lib/util/constants')
 const constant = require('../../../lib/util/constants')
-const { roleplayCommand } = require('../../../lib/structures/roleplayCommands')
-const roleplay = require('../../../lib/structures/roleplayCommand')
+const roleplay = require('../../store/roleplayGifs')
 const english = require('../../languages/en')
 const spanish = require('../../languages/es')
 const Discord = require('discord.js')
@@ -33,7 +32,7 @@ module.exports = {
         if (foxxie.owner.includes(message.author.id)) {
             if (!codein.toLowerCase().includes("token")) {
                 try {
-                    let code = eval(codein)
+                    let code  = eval(codein)
                     let type = typeof code
                     if (codein.legth < 1 && !codein)
                         return message.channel.send(`${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${language.get('COMMAND_EVAL_UNDEFINED', lang)}\n\`\`\``)

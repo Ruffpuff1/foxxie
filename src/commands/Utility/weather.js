@@ -1,80 +1,43 @@
 const weather = require('weather-js');
 const Discord = require('discord.js');
 const moment = require('moment');
+const { zws } = require('../../../lib/util/constants')
 module.exports = {
     name: 'weather',
     aliases: ['temp', 'forcast'],
     usage: 'fox weather [city]',
     category: 'utility',
-    execute(props) {
+    execute: async (props) => {
 
         let { lang, message, args, language } = props;
-        if (!args[0]) return message.channel.send(`Ya gotta enter a **city** for me to give the weather.`)
-        message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
-        weather.find({search: args.join(" "), degreeType: 'F'}, function(err, result) {
+
+        if (!args[0]) return message.channel.send(language.get('COMMAND_WEATHER_ERROR', lang))
+        let loading = await message.channel.send(language.get("MESSAGE_LOADING", lang))
+        weather.find({ search: args.join(" "), degreeType: 'F' }, function(err, result) {
             if (err) message.channel.send(err.message)
-            if(result.length === 0) {
-                message.channel.send('**Please,** Enter A Valid Location.')
-                return undefined;
-            }
+            if (result.length === 0) return message.channel.send(language.get('COMMAND_WEATHER_ERROR', lang))
+             
             var current = result[0].current;
             var location = result[0].location;
-            const date = moment(current.date).format('MMM Do YYYY');
+            const day = moment(current.date).format('MMM Do YYYY');
+
             const embed = new Discord.MessageEmbed()
-                .setTitle(`${current.observationpoint} (Weather: ${current.skytext})`)
+                .setTitle(language.get('COMMAND_WEATHER_TITLE', lang, current.observationpoint, current.skytext))
                 .setThumbnail(current.imageUrl)
                 .setColor(message.guild.me.displayColor)
                 .setTimestamp()
-                .addFields(
-                    {
-                        name: `**Timezone** :clock12:`,
-                        value: `UTC ${location.timezone}`,
-                        inline: true
-                    },
-                    {
-                        name: '\u200B',
-                        value: '\u200B',
-                        inline: true
-                    },
-                    {
-                        name: '\u200B',
-                        value: '\u200B',
-                        inline: true
-                    },
-                    {
-                        name: '**Temperature** :white_sun_cloud:',
-                        value: `${current.temperature} Degrees°F`,
-                        inline: true
-                    },
-                    {
-                        name: '**Feels Like** :sunflower:',
-                        value: `${current.feelslike} Degrees°F`,
-                        inline: true
-                    },
-                    {
-                        name: '**Winds** :wind_blowing_face:',
-                        value: `${current.winddisplay}`,
-                        inline: true
-                    },
-                    {
-                        name: '**Humidity** :hotsprings:',
-                        value: `${current.humidity}%`,
-                        inline: true
-                    },
-                    {
-                        name: '**Date** :calendar:',
-                        value: `${date}`,
-                        inline: true
-                    },
-                    {
-                        name: '**Day** :alarm_clock:',
-                        value: `${current.day}`,
-                        inline: true
-                    }
-                )
+                .addField(language.get('COMMAND_WEATHER_TIMEZONE', lang), `UTC ${location.timezone}`, true)
+                .addField(zws, zws, true)
+                .addField(zws, zws, true)
+                .addField(language.get('COMMAND_WEATHER_TEMPERATURE', lang), language.get('COMMAND_WEATHER_DEGREES_F', lang, current.temperature), true)
+                .addField(language.get('COMMAND_WEATHER_FEELS', lang), language.get('COMMAND_WEATHER_DEGREES_F', lang, current.feelslike), true)
+                .addField(language.get('COMMAND_WEATHER_WINDS', lang), `${current.winddisplay}`, true)
+                .addField(language.get('COMMAND_WEATHER_HUMID', lang), `${current.humidity}%`, true)
+                .addField(language.get('COMMAND_WEATHER_DATE', lang), `${day}`, true)
+                .addField(language.get('COMMAND_WEATHER_DAY', lang), `${current.day}`, true)
+
+            loading.delete();
             message.channel.send(embed)
-            resultMessage.delete()
-        })
-        })
+       })
     }
 }
