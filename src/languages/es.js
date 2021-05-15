@@ -2,7 +2,7 @@ const moment = require('moment')
 const { credits: { developer, spanishTranslation, additionalHelp }, emojis: { infinity } } = require('../../lib/util/constants')
 const { topggURL, supportServer, inviteURL, commands, aliases, version } = require('../../config/foxxie')
 module.exports = {
-
+    name: 'es',
     COMMAND_ABOUT_COMMANDS: "**Commandos**",
     COMMAND_ABOUT_COMMANDS_NOW: `**•** Ahorita tengo **${commands}** commandos y **${aliases}** alias.`,
     COMMAND_ABOUT_CREATED: "**Creado**",

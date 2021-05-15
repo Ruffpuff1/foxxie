@@ -2,7 +2,7 @@ const moment = require('moment')
 const { credits: { developer, spanishTranslation, additionalHelp }, emojis: { infinity } } = require('../../lib/util/constants')
 const { topggURL, supportServer, inviteURL, commands, aliases, version } = require('../../config/foxxie')
 module.exports = {
-
+    name: 'en',
     COMMAND_ABOUT_COMMANDS: "**Commands**",
     COMMAND_ABOUT_COMMANDS_NOW: `**•** Right now I have **${commands}** commands and **${aliases}** aliases.`,
     COMMAND_ABOUT_CREATED: "**Created**",
@@ -188,7 +188,7 @@ Hope we can help you out abit.`,
         WELCOMEMESSAGE: "Use case `message` allows you to Set the message I send when a new member joined the server. In your welcome message you can also use the variables `{member}`, `{name}`, `{tag}` (ex: ArEo#1245), `{discrim}`, `{created}`, `{server}`, and `{count}` for the server's member count.", // needs spanish
 
         ABOUT: "Get some basic information about me, my statistics, and some of my credits.",
-        AFK: "Sets an AFK for when people ping ya. You can provide a reason, but if no reason is provided it will show as \'none\'. When pinged in chat your AFK status will show. And the next time you talk in chat your AFK will be removed.",
+        AFK: "Sets an AFK for when people ping ya. You can provide a reason, but if no reason is provided it will show as \'AFK\'. When pinged in chat your AFK status will show. And the next time you talk in chat your AFK will be removed.",
         AVATAR: "Get a high resolution image of a user's profile picture. In PNG, JPEG, and WEBP formats.",
         BADGES: "Gives a rough estimate for how many user badges there are in a server. Although due to Discord's limitaions this only works in smaller servers 800 members or less.", // needs spanish
         BUGREPORT: "Send a bugreport straight to the developer in case something goes wrong.", // needs spanish

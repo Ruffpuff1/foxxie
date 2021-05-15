@@ -1,6 +1,6 @@
 const moment = require('moment')
 module.exports.goodbyeMsg = async (member) => {
-    let goodbyeChannel = await member.guild.settings.get(member.guild)
+    let goodbyeChannel = await member.guild.settings.get();
     if (goodbyeChannel == null) return;
     byeChn = member.guild.channels.cache.get(goodbyeChannel.goodbyeChannel)
     if (!byeChn) return;

@@ -16,10 +16,10 @@ module.exports = {
         if (!owner.includes(message.author.id)) return;
 
         const id = args[0]
-        if (!/^(0|1|2|3|4)$/gm.test(id)) return message.responder.error('COMMAND_CREATEKEY_NOID', lang, badges);
+        if (!/^(0|1|2)$/gm.test(id)) return message.responder.error('COMMAND_CREATEKEY_NOID', lang, badges);
 
         const out = [];
-        for (let i =0; i < 3; i++) {
+        for (let i = 0; i < 3; i++) {
             const str = base32(randomBytes(3).readUIntLE(0, 3));
             out.push(str);
         }

@@ -11,8 +11,8 @@ module.exports = {
         const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         const reason = args[1] || language.get('LOG_MODERATION_NOREASON', lang)
 
-        if (!user) return message.channel.send(language.get('COMMAND_VCKICK_NOMEMBER', lang))
-        if (!user.voice.channelID) return message.channel.send(language.get('COMMAND_VCKICK_NOVOICE', lang));
+        if (!user) return language.send('COMMAND_VCKICK_NOMEMBER', lang)
+        if (!user.voice.channelID) return language.send('COMMAND_VCKICK_NOVOICE', lang);
 		user.voice.setChannel(null);
 		message.responder.success();
 

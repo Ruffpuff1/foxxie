@@ -6,8 +6,8 @@ module.exports = {
     category: 'utility',
     execute(props) {
 
-        let { lang, message, args, language } = props;
-        message.channel.send(message.guild.language.get('COMMAND_PING', lang))
+        let { lang, message, language } = props;
+        language.send('COMMAND_PING', lang)
             .then(resultMessage => {
                 const ping = resultMessage.createdTimestamp - message.createdTimestamp
                 const pingEmbed = new Discord.MessageEmbed()

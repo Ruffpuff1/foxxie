@@ -9,22 +9,22 @@ module.exports = client => {
             let remindMessage = client.reminders[i].rmdMessage
             let member = client.users.cache.get(authID)
             let timeSince = client.reminders[i].timeago
-            let message = client.reminders[i].message
             let sendIn = client.reminders[i].sendIn
-            const channel = client.channels.cache.get(client.reminders[i].channelId)
-
-            let lang = require(`../../src/languages/en`)
+            const guild = client.guilds.cache.get(client.reminders[i].guildId);
+            const channel = guild.channels.cache.get(client.reminders[i].channelId)
+            const language = client.reminders[i].language
+            const lang = client.reminders[i].lang;
 
             if(Date.now() > time) {
                 
                 if(time === null) return
                 const remindEmbed = new Discord.MessageEmbed()
-                    .setAuthor(`Reminder For ${member.username}`, client.user.displayAvatarURL())
+                    .setAuthor(language.get('TASK_REMINDER_FOR', lang, member.username), client.user.displayAvatarURL())
                     .setColor(client.reminders[i].color)
-                    .setDescription(`${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`)
+                    .setDescription(language.get('TASK_REMINDER', lang, timeSince, remindMessage))
                     .setTimestamp()
 
-                if (sendIn && channel) channel.send(`<@${authID}> ${lang.COMMAND_REMINDER_HERE} **${timeSince}** ${lang.COMMAND_REMINDME_AGOFOR} **${remindMessage}**`)
+                if (sendIn && channel) channel.send(`<@${authID}> ${language.get('TASK_REMINDER', lang, timeSince, remindMessage)}`)
 
                 if (!sendIn) client.users.cache.get(authID).send(remindEmbed)
 

@@ -14,30 +14,30 @@ module.exports = {
 
         async function add(){
 
-            let tag = args[1]; if (!tag) return message.channel.send(language.get('COMMAND_TAG_NOTAG', lang))
+            let tag = args[1]; if (!tag) return language.send('COMMAND_TAG_NOTAG', lang);
             let settings = await message.guild.settings.get('tags');
-            if (settings) if (settings.filter((element) => element.name === tag.toLowerCase())[0]) return message.channel.send(language.get('COMMAND_TAG_EXISTS', lang, tag))
-            let text = args.slice(2).join(' '); if (!text) return message.channel.send(language.get('COMMAND_TAG_NOTEXT', lang))
+            if (settings) if (settings.filter((element) => element.name === tag.toLowerCase())[0]) return language.send('COMMAND_TAG_EXISTS', lang, tag);
+            let text = args.slice(2).join(' '); if (!text) return language.send('COMMAND_TAG_NOTEXT', lang);
             let tagPush = { name: tag.toLowerCase(), text: text }
-            await message.guild.settings.push(message.guild, 'tags', tagPush)
-            return message.channel.send(language.get('COMMAND_TAG_ADDED', lang, tag.toLowerCase(), text))
+            await message.guild.settings.push('tags', tagPush)
+            return language.send('COMMAND_TAG_ADDED', lang, tag.toLowerCase(), text);
         }
 
         async function remove(){
 
-            let tag = args[1]; if (!tag) return message.channel.send(language.get('COMMAND_TAG_NOTAG', lang))
-            let settings = await message.guild.settings.get('tags'); if (!settings) return message.channel.send(language.get('COMMAND_TAG_NOEXIST', lang))
+            let tag = args[1]; if (!tag) return language.send('COMMAND_TAG_NOTAG', lang);
+            let settings = await message.guild.settings.get('tags'); if (!settings) return language.send('COMMAND_TAG_NOEXIST', lang);
             let filtered = settings.filter((element) => element.name.toLowerCase() === tag.toLowerCase())
             try { // removes tag if it exists
-                await message.guild.settings.pull(message.guild, 'tags', filtered[0]) 
-                return message.channel.send(language.get('COMMAND_TAG_REMOVED', lang, tag))
-            } catch (e) { return message.channel.send(language.get('COMMAND_TAG_NOEXIST', lang)) }
+                await message.guild.settings.pull('tags', filtered[0]) 
+                return language.send('COMMAND_TAG_REMOVED', lang, tag);
+            } catch (e) { return language.send('COMMAND_TAG_NOEXIST', lang)}
         }
 
         async function list(){
 
             let set = await message.guild.settings.get('tags');
-            if (!set.length) return message.channel.send(language.get('COMMAND_TAGS_NONE'))
+            if (!set.length) return language.send('COMMAND_TAGS_NONE');
             let arr = [language.get('COMMAND_TAGS_LIST', lang, message.guild.name, set.length), '```asciidoc']
             let idx = 1
             for(let tag of set){

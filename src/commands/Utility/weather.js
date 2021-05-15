@@ -11,11 +11,11 @@ module.exports = {
 
         let { lang, message, args, language } = props;
 
-        if (!args[0]) return message.channel.send(language.get('COMMAND_WEATHER_ERROR', lang))
-        let loading = await message.channel.send(language.get("MESSAGE_LOADING", lang))
+        if (!args[0]) return language.send('COMMAND_WEATHER_ERROR', lang);
+        let loading = await language.send("MESSAGE_LOADING", lang);
         weather.find({ search: args.join(" "), degreeType: 'F' }, function(err, result) {
             if (err) message.channel.send(err.message)
-            if (result.length === 0) return message.channel.send(language.get('COMMAND_WEATHER_ERROR', lang))
+            if (result.length === 0) return language.send('COMMAND_WEATHER_ERROR', lang);
              
             var current = result[0].current;
             var location = result[0].location;

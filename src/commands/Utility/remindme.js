@@ -7,7 +7,7 @@ module.exports = {
     category: 'utility',
     execute(props) {
 
-        let { lang, message, args } = props;
+        let { lang, message, args, language } = props;
         message.client.reminders = require('../../store/reminders.json')
         let remindTime = args[0]
         let remindMsg = args.slice(1).join(' ');
@@ -31,10 +31,12 @@ module.exports = {
             time: Date.now() + ms(remindTime),
             rmdMessage: remindMsg,
             timeago: timeFromNow,
-            message: message,
+            guildId: message.guild.id,
+            lang: lang,
             sendIn: sendIn.test(message.content),
             color: message.guild.me.displayColor,
-            channelId: message.channel.id
+            channelId: message.channel.id,
+            language: language
         }
         fs.writeFile('./src/store/reminders.json', JSON.stringify(message.client.reminders, null, 4), err => {
             if (err) throw err

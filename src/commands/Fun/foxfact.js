@@ -8,10 +8,10 @@ module.exports = {
 
         let { message, lang, language } = props
 
-        const loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'));
+        let loading = await language.send("MESSAGE_LOADING", lang);
         try {
             request("https://some-random-api.ml/facts/fox", function (error, _response, body) {
-                if (error) return message.responder.error('RESPONDER_ERROR_FOXFACT', lang)
+                if (error) return language.send('COMMAND_FOXFACT_NOFACT', lang)
                                     .then(() => console.error(error.message));
     
                 const json = JSON.parse(body);

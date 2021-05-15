@@ -10,8 +10,8 @@ module.exports = {
         let { message, args, lang, language } = props
 
         //if(!message.channel.nsfw) return message.channel.send(lang.COMMAND_NSFW_ERROR)
-        if (!args[0]) return message.channel.send(language.get('COMMAND_URBAN_NOWORD', 'en-US'))
-        let loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'))
+        if (!args[0]) return language.send('COMMAND_URBAN_NOWORD', lang);
+        let loading = await language.send("MESSAGE_LOADING", lang);
         axios.get(`http://api.urbandictionary.com/v0/define?term=$%7B${args[0]}%7D`)
         .then((res) => {
 
@@ -36,7 +36,7 @@ module.exports = {
         })
             .catch((err) => {
                 loading.delete()
-                message.channel.send(language.get('COMMAND_URBAN_NODATA', 'en-US'))
+                language.send('COMMAND_URBAN_NODATA', lang);
         })
     }
 }

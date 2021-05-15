@@ -1,5 +1,3 @@
-const mongo = require('../../../lib/structures/database/mongo')
-const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
 module.exports = {
     name: 'permission',
     aliases: ['permissions', 'perms', 'perm'],
@@ -8,54 +6,28 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     execute: async(props) => {
 
-        let { lang, message, args } = props
-        use = args[0];
+        let { lang, message, args, language } = props;
         mem = message.mentions.members.first() || message.guild.members.cache.get(args[1]);
+        if (/(deny|block|blacklist)/i.test(args[0])) return _denyPerms();
+        if (/(allow|grant|whitelist)/i.test(args[0])) return _allowPerms();
+        if (/(reset|clear)/i.test(args[0])) return _resetPerms();
+        return language.send('COMMAND_PERMISSION_INVALIDUSE', lang);
 
-        await mongo().then(async () => {
-            try {
-                if (!use) return message.channel.send('**Please,** specify a proper use case, either **allow**, **deny**, or **clear**.')
-                if (/(deny|block|blacklist)/i.test(use)) {
-                    if (!mem) return message.channel.send('**You need to** give either a user mention, or user ID for who you wanna perforn this action on.')
-                    await serverSchema.findByIdAndUpdate({
-                        _id: message.guild.id
-                    }, {
-                        _id: message.guild.id,
-                        $push: {
-                            blockedUsers: mem.user.id
-                        }
-                    }, {
-                        upsert: true
-                    })
-                    message.responder.success();
-                } else if (/(allow|grant|whitelist)/i.test(use)) {
-                    if (!mem) return message.channel.send('**You need to** give either a user mention, or user ID for who you wanna perforn this action on.')
-                    await serverSchema.findByIdAndUpdate({
-                        _id: message.guild.id
-                    }, {
-                        _id: message.guild.id,
-                        $pull: {
-                            blockedUsers: mem.user.id
-                        }
-                    }, {
-                        upsert: true
-                    })
-                    message.responder.success();
-                } else if (/(reset|clear)/i.test(use)) {
+        function _denyPerms() {
+            if (!mem) return language.send('COMMAND_PERMISSION_NOMEMBER', lang);
+            message.guild.settings.push('blockedUsers', mem.user.id);
+            return message.responder.success();
+        };
 
+        function _allowPerms() {
+            if (!mem) return language.send('COMMAND_PERMISSION_NOMEMBER', lang);
+            message.guild.settings.pull('blockedUsers', mem.user.id);
+            return message.responder.success();
+        };
 
-                    await serverSchema.findByIdAndUpdate({
-                        _id: message.guild.id
-                    }, {
-                        _id: message.guild.id,
-                        $unset: {
-                            blockedUsers: ''
-                        }
-                    })
-                    message.responder.success();
-                } else message.channel.send('**Please,** specify a proper use case, either **allow**, **deny**, or **clear**.')
-
-            } finally {}
-        })
+        function _resetPerms() {
+            message.guild.settings.unset('blockedUsers');
+            return message.responder.success();
+        };
     }
 }

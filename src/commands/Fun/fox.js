@@ -9,21 +9,21 @@ module.exports = {
 
       let { message, lang, language } = props
 
-      message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
+      let loading = await language.send("MESSAGE_LOADING", lang);
+
       axios.get(`https://randomfox.ca/floof/`)
       .then((res) => {
         const embed = new Discord.MessageEmbed()
-            .setTitle(language.get("COMMAND_FOX_TITLE", "en-US"))
+            .setTitle(language.get("COMMAND_FOX_TITLE", lang))
             .setColor(message.guild.me.displayColor)
             .setImage(res.data.image)
-            .setFooter(language.get("COMMAND_FOX_FOOTER", "en-US"))
+            .setFooter(language.get("COMMAND_FOX_FOOTER", lang))
             .setTimestamp()
         message.channel.send(embed)
-        resultMessage.delete()
+        loading.delete()
       })
       .catch((err) => {
           console.error(err)
-      })
       })
     }
 }

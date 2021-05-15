@@ -12,8 +12,8 @@ module.exports = {
         ? (message.embeds[0].description.endsWith(`https://disboard.org/`) ? true : false)
         : false
 
-        let server = await message.guild.settings.get('discordChannel')
-        if (!server) return;
+        let discordChannel = await message.guild.settings.get('discordChannel')
+        if (!discordChannel) return;
 
         if(emb){
             message.client.disboard = require('../store/disboard.json')
@@ -23,7 +23,7 @@ module.exports = {
             message.client.disboard[message.guild.id] = {
                 guild: message.guild.id,
                 time: Date.now() + ms(remindTime),
-                channelID: server.disboardChannel,
+                channelID: disboardChannel,
                 message: message,
                 color: message.guild.me.displayColor
             }
@@ -32,5 +32,5 @@ module.exports = {
                 if (err) console.log(err)
             })
         }
-      }  }
+    }}
 }

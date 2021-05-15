@@ -8,14 +8,14 @@ module.exports = {
     execute: async(props) => {
 
         let { lang, message, args, language } = props
-        const loading = await message.channel.send(language.get("MESSAGE_LOADING", lang));
+        const loading = await language.send("MESSAGE_LOADING", lang);
         let settings = await message.guild.settings.get();
         if (/(welcome|join)/i.test(args[0])) return _welcomeSettings(settings?.welcome, 'welcome');
         if (/(goodbye|bye|leave)/i.test(args[0])) return _goodbyeSettings(settings?.goodbye, 'goodbye');
         if (/(log|logging|logger)/i.test(args[0])) return _loggerSettings(settings?.log, 'logger');
         if (/(star|starboard)/i.test(args[0])) return _starboardSettings(settings?.starboard, 'starboard');
         if (/(bump|disboard)/i.test(args[0])) return _disboardSettings(settings?.disboard, 'disboard');
-        if (/(anti|antis|auto|automod)/i.test(args[0])) return _antiSettings(settings?.anti, 'automod');
+        if (/(anti|antis|auto|automod)/i.test(args[0])) return _antiSettings(settings?.mod?.anti, 'automod');
         if (/(blacklist|users|perms)/i.test(args[0])) return _userSettings(settings?.blockedUsers, 'user');
         return _settingsAll(settings);
 
@@ -28,11 +28,11 @@ module.exports = {
             if (settings?.log?.mod?.channel || settings?.log?.edit?.channel || settings?.log?.delete?.channel || settings?.log?.invite?.channel || settings?.log?.commands?.channel) arr.push(language.get('COMMAND_SETTINGS_LOGGERS', lang, granted, 'enabled', lang, language));
             if (settings?.starboard?.channel) arr.push(language.get('COMMAND_SETTINGS_STARBOARDS', lang, granted, 'enabled', lang, language));
             if (settings?.disboard?.channel) arr.push(language.get('COMMAND_SETTINGS_DISBOARDS', lang, granted, 'enabled', lang, language));
-            if (settings?.anti && Object.keys(settings?.anti).length) arr.push(`${granted} **${Object.keys(settings?.anti).length}** Anti${Object.keys(settings?.anti).length > 1 ? 's' : ''} currently **enabled**`);
+            if (settings?.mod?.anti && Object.keys(settings?.mod?.anti).length) arr.push(`${granted} **${Object.keys(settings?.mod?.anti).length}** Anti${Object.keys(settings?.mod?.anti).length > 1 ? 's' : ''} currently **enabled**`);
             if (settings?.blockedUsers?.length) arr.push(language.get('COMMAND_SETTINGS_BLOCKED_USERS', lang, settings?.blockedUsers?.length))
 
-            loading.delete();
-            return message.channel.send(arr.length > 1 ? arr.join('\n') : language.get('COMMAND_SETTINGS_NONE', lang));
+            message.channel.send(arr.length > 1 ? arr.join('\n') : language.get('COMMAND_SETTINGS_NONE', lang));
+            return loading.delete();
         }
 
         async function _welcomeSettings(welcome, setting) {
@@ -43,8 +43,8 @@ module.exports = {
             if (welcome?.message) arr.push(language.get('COMMAND_SETTINGS_SIDE_MESSAGE', lang, granted, welcome?.message.substring(0, 12)))
             if (welcome?.ping) arr.push(language.get('COMMAND_SETTINGS_SIDE_PING', lang, message.guild.roles.cache.get(welcome?.ping).name));
     
-            loading.delete()
-            return message.channel.send(arr.join('\n'))
+            message.channel.send(arr.join('\n'));
+            return loading.delete();
         }
 
         async function _goodbyeSettings(goodbye, setting) {
@@ -54,8 +54,8 @@ module.exports = {
 
             if (goodbye?.message) arr.push(language.get('COMMAND_SETTINGS_SIDE_MESSAGE', lang, granted, goodbye?.message.substring(0, 12)))
     
-            loading.delete()
-            return message.channel.send(arr.join('\n'))
+            message.channel.send(arr.join('\n'));
+            return loading.delete();
         }
 
         async function _loggerSettings(log, setting) {
@@ -69,8 +69,8 @@ module.exports = {
             if (log?.invite?.channel) arr.push(language.get('COMMAND_SETTINGS_LOGGER_INVITE', lang, log?.invite?.channel));
             if (log?.commands?.channel) arr.push(language.get('COMMAND_SETTINGS_LOGGER_COMMAND', lang, log?.commands?.channel));
     
-            loading.delete()
-            return message.channel.send(arr.join('\n'))
+            message.channel.send(arr.join('\n'));
+            return loading.delete();
         }
 
         async function _starboardSettings(starboard, setting) {
@@ -83,8 +83,8 @@ module.exports = {
             if (starboard?.notifications === false) arr.push(language.get('COMMAND_SETTINGS_STARBOARD_NOTIFICATIONS', lang));
             if (starboard?.nostar?.length) arr.push(language.get('COMMAND_SETTINGS_STARBOARD_NOSTAR', lang, starboard?.nostar?.length, starboard?.nostar?.map(c => `<#${c}>`).join(", ")))
     
-            loading.delete()
-            return message.channel.send(arr.join('\n'))
+            message.channel.send(arr.join('\n'));
+            return loading.delete();
         }
 
         async function _disboardSettings(disboard, setting) {
@@ -96,20 +96,20 @@ module.exports = {
             if (disboard?.ping) arr.push(language.get('COMMAND_SETTINGS_SIDE_PING', lang, message.guild.roles.cache.get(disboard?.ping).name))
     
 
-            loading.delete()
-            return message.channel.send(arr.join('\n'))
+            message.channel.send(arr.join('\n'));
+            return loading.delete();
         }
 
         async function _antiSettings(anti, setting) {
             let arr = [language.get('COMMAND_SETTINGS_TITLE', lang, message.guild.name, setting, language, lang)]
             arr.push(language.get('COMMAND_SETTINGS_AUTOMODS', lang, settings?.anti ? Object.keys(settings?.anti).length : null))
 
-            if (anti?.invites) arr.push(language.get('COMMAND_SETTINGS_AUTOMOD_INVITES', lang));
-            if (anti?.images) arr.push(language.get('COMMAND_SETTINGS_AUTOMOD_IMAGES', lang));
-            if (anti?.gifts) arr.push(language.get('COMMAND_SETTINGS_AUTOMOD_GIFTS', lang));
+            if (anti?.invite) arr.push(language.get('COMMAND_SETTINGS_AUTOMOD_INVITES', lang));
+            if (anti?.image) arr.push(language.get('COMMAND_SETTINGS_AUTOMOD_IMAGES', lang));
+            if (anti?.gift) arr.push(language.get('COMMAND_SETTINGS_AUTOMOD_GIFTS', lang));
 
-            loading.delete()
-            return message.channel.send(arr.join('\n'))
+            message.channel.send(arr.join('\n'));
+            return loading.delete();
         }
 
         async function _userSettings(blocked, setting) {
@@ -124,8 +124,8 @@ module.exports = {
 
             arr.push(language.get('COMMAND_SETTINGS_BLOCKED_USERS', lang, blocked?.length, blk.map(u => `└─ ${denied} **${u}**`).join('\n')))
 
-            loading.delete()
-            return message.channel.send(arr.join('\n'))
+            message.channel.send(arr.join('\n'));
+            return loading.delete();
         }
     } 
 }

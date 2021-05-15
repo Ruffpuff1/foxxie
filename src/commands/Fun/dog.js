@@ -9,21 +9,21 @@ module.exports = {
 
         let { message, lang, language } = props
 
-        message.channel.send(language.get("MESSAGE_LOADING", 'en-US')).then(resultMessage => {
+        let loading = await language.send("MESSAGE_LOADING", 'en-US');
+
         axios.get(`https://dog.ceo/api/breeds/image/random`)
         .then((res) => {
             const embed = new Discord.MessageEmbed()
-            .setTitle(language.get("COMMAND_CAT_TITLE", "en-US"))
+            .setTitle(language.get("COMMAND_DOG_TITLE", lang))
             .setColor(message.guild.me.displayColor)
             .setImage(res.data.message)
-            .setFooter(language.get("COMMAND_CAT_FOOTER", "en-US"))
+            .setFooter(language.get("COMMAND_DOG_FOOTER", lang))
             .setTimestamp()
             message.channel.send(embed)
-            resultMessage.delete()
+            loading.delete()
         })
         .catch((err) => {
             console.error(err)
-        })
         })
     }
 }

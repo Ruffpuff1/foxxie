@@ -4,17 +4,18 @@ module.exports.commandHandler = async (message) => {
     if (message.author.bot) return;
 
     let settings = await message.guild.settings?.get()
-    let language = message.guild.language
+    let language = message.language
     let prefixes = ['fox'];
     
     if (!settings?.prefixes.length) prefixes.push(message.client.user.id === '825130284382289920' ? development : production);
     if (settings?.prefixes.length) settings?.prefixes.forEach(p => prefixes.push(p));
     if (settings?.blockedUsers != null) if (settings.blockedUsers.includes(message.author.id)) return;
 
-    let lang = 'en-US';
+    let lang = settings?.language;
+    if (!lang) lang = 'en-US';
     let mentionPrefix = `<@!${message.client.user.id}>`
 
-    if (message.content === mentionPrefix) message.channel.send(language.get("PREFIX_REMINDER", lang, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "), prefixes.pop()))
+    if (message.content === mentionPrefix) message.language.send("PREFIX_REMINDER", lang, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "), prefixes.pop());
     
     prefixes.forEach(pfx => {
         if (message.content.toLowerCase().startsWith(pfx.toLowerCase())) return _commandExecute(pfx);
@@ -28,7 +29,7 @@ module.exports.commandHandler = async (message) => {
 
         if (command.permissions) {
             const authorPerms = message.channel.permissionsFor(message.author);
-            if (!authorPerms || !authorPerms.has(command.permissions)) return message.responder.error('RESPONDER_ERROR_PERMS_AUTHOR', lang, command);
+            if (!authorPerms || !authorPerms.has(command.permissions)) return message.responder.error('RESPONDER_ERROR_PERMS_AUTHOR', lang,  command);
         };
 
         try {

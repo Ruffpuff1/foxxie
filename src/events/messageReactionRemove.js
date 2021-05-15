@@ -1,4 +1,3 @@
-const { rero } = require("../monitors/rero")
 const { starCreated } = require("./starCreated");
 module.exports = {
     name: 'messageReactionRemove',

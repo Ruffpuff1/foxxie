@@ -1,12 +1,5 @@
 const foxxie = require('../../../config/foxxie')
-const moment = require('moment')
-const { modStatsAdd, getUserMessageCount, getGuildMessageCount } =  require('../../../src/tasks/stats')
-const { flags: { async, depth, silent } } = require('../../../lib/util/constants')
-const constant = require('../../../lib/util/constants')
-const roleplay = require('../../store/roleplayGifs')
-const english = require('../../languages/en')
-const spanish = require('../../languages/es')
-const Discord = require('discord.js')
+const { flags: { async, depth, silent } } = require('../../../lib/util/constants');
 
 module.exports = {
     name: 'eval',

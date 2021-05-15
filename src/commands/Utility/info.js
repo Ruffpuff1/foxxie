@@ -1,10 +1,7 @@
 const { MessageEmbed, Permissions: { FLAGS }, Role, Emoji, Channel, User } = require('discord.js');
 const { emojis: { perms: { granted, notSpecified } }, badges } = require('../../../lib/util/constants')
-const mongo = require('../../../lib/structures/database/mongo')
-const { botSettingsSchema } = require('../../../lib/structures/database/BotSettingsSchema')
-const { userSchema } = require('../../../lib/structures/database/UserSchema.js')
-const { getUserMessageCount, getGuildMessageCount } = require('../../tasks/stats')
 const moment = require('moment')
+
 module.exports = {
     name: 'info',
 	aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
@@ -35,7 +32,7 @@ module.exports = {
 
         async function userinfo(){
 
-            const loading = await message.channel.send(language.get("MESSAGE_LOADING", lang));
+            const loading = await language.send("MESSAGE_LOADING", lang);
             let embed = new MessageEmbed();
             embed = await _addBaseData(embed);
             embed = await _addBadges(embed);
@@ -83,11 +80,12 @@ module.exports = {
 			        statistics.push(language.get('COMMAND_INFO_USER_BIRTHDAY', lang, birthday));
 		        }
 
-                let msgs = await member.user.settings.get(`servers.${message.guild.id}`)
-                statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs ? msgs.messageCount : 0));
+                let msgs = await member.user.settings.get(`servers.${message.guild.id}.messageCount`)
+                statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs || 0));
 
-                let totalStar = null; if (msgs) totalStar = msgs.starCount;
-		        if (totalStar) {
+                let totalStar = await member.user.settings.get(`servers.${message.guild.id}.starCount`);
+                let minimum = await message.guild.settings.get(`starboard.minimum`) || 3;
+		        if (totalStar && totalStar >= minimum) {
 			        statistics.push(language.get('COMMAND_INFO_USER_STARS_EARNED', lang, totalStar));
 		        }
 
@@ -123,12 +121,11 @@ module.exports = {
             if (roles.size) {
                 embed.addField(
                     `:scroll: ${language.get('COMMAND_INFO_USER_ROLES', lang, roles.size)}`,
-                    roleString.length ? roleString : language.get('COMMAND_INFO_USER_NOROLES')
+                    roleString.length ? roleString : language.get('COMMAND_INFO_USER_NOROLES', lang)
                 )
             }
 
-            let punishments = await member.user.settings.get(`servers.${message.guild.id}`)
-            const warnings = punishments ? punishments.warnings : null;
+            let warnings = await member.user.settings.get(`servers.${message.guild.id}.warnings`)
 		    if (warnings) {
 			    for (const { author } of warnings) await message.client.users.fetch(author);
 			    embed.addField(
@@ -137,7 +134,7 @@ module.exports = {
 			    );
 		    }
 
-            const notes = punishments ? punishments.notes : null;
+            const notes = await member.user.settings.get(`servers.${message.guild.id}.notes`)
 		    if (notes) {
 			    for (const { author } of notes) await message.client.users.fetch(author);
 			    embed.addField(
@@ -232,12 +229,11 @@ module.exports = {
         }
 
         async function serverinfo() {
-            let results = await getGuildMessageCount(message, server.id)
+            let messageCount = await server.settings.get('messageCount');
                     
-            let messages;
-            messages = 0
-            if (results !== null) messages = results.messageCount
-            const guild = server; //guild.createdAt
+            let messages = 0
+            if (messageCount) messages = messageCount;
+            const guild = server;
             const toxicity = 0
 
             await message.guild.members.fetch(message.guild.ownerID);

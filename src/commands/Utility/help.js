@@ -90,7 +90,7 @@ module.exports = {
             const name = args[0].toLowerCase();
             const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
-            if (!command) return message.channel.send(language.get('COMMAND_HELP_COMMAND_NOTVALID'))//message.channel.send(lang.COMMAND_HELP_NOTVALID)
+            if (!command) return language.send('COMMAND_HELP_COMMAND_NOTVALID', lang)//message.channel.send(lang.COMMAND_HELP_NOTVALID)
 
             if (command) {
         

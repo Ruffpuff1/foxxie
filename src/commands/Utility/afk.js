@@ -1,5 +1,4 @@
-const Discord = require('discord.js')
-const { setAfkNickname, setAfkReason, setAfkStatus, setAfkLastMsg } = require('../../../src/tasks/afkChange')
+const Discord = require('discord.js');
 module.exports = {
     name: 'afk',
     aliases: ['away', 'idle'],
@@ -7,27 +6,20 @@ module.exports = {
     category: 'utility',
     execute: async(props) => {
 
-        let { lang, message, args } = props;
+        let { lang, message, args, language } = props;
 
         let reason = args.slice(0).join(' ') || 'AFK';
-        let boolean = true
+        message.author.settings.set(`servers.${message.guild.id}.afk`, { nickname: message.member.displayName, reason, status: true, lastMessage: message.content })
 
-        setAfkNickname(message, message.member.displayName)
-        setAfkReason(message, reason)
-        setAfkStatus(message, boolean)
-        setAfkLastMsg(message)
-
-        const AFKEmbed = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
-            .setAuthor(`${message.author.tag} ${lang.COMMAND_AFK_HAS_SET}`, message.member.user.avatarURL( { dynamic: true } ))
-            .setDescription(`${lang.COMMAND_AFK_REASON} ${reason}`)
+            .setAuthor(language.get('COMMAND_AFK_EMBED_AUTHOR', lang, message.author.tag), message.member.user.avatarURL( { dynamic: true } ))
+            .setDescription(language.get('COMMAND_AFK_EMBED_DESCRIPTION', lang, reason))
 
-        message.member.setNickname(`[AFK] ${message.member.displayName}`)
-        .catch(console.error).then(
-            
+        message.member.setNickname(`[AFK] ${message.member.displayName}`).catch(e => console.error(e.message))
+        
         message.responder.success(),
-        message.channel.send(AFKEmbed)
-        .then(msg => {setTimeout(() => msg.delete(), 10000) 
-        }))
+        message.channel.send(embed)
+        .then(msg => {setTimeout(() => msg.delete(), 10000)})
     }
 }

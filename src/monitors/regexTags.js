@@ -4,7 +4,7 @@ module.exports = {
     execute: async(message) => {
         
         let settings = await message.guild.settings.get()
-        if (settings?.tags) tag()
+        if (settings?.tags) return tag();
 
         async function tag(){
 

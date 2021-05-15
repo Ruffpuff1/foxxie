@@ -37,5 +37,14 @@ module.exports.launchEvents = (client) => {
             client.commands.set(command.name, command);
         }
     }
- 
+
+    // Languages
+    client.languages = new Discord.Collection();
+
+    const langFiles = fs.readdirSync(`./src/languages`).filter(file => file.endsWith('.js'));
+    for (const file of langFiles) {
+        const language = require(`../languages/${file}`);
+        client.languages.set(language.name, language);
+    } 
+    
 }

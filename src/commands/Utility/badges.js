@@ -8,9 +8,9 @@ module.exports = {
 
         let { lang, message, language } = props;
         const members = message.guild.members.cache.array();
-        if (message.guild.memberCount > 1000) return message.channel.send(language.get('COMMAND_BADGES_GUILDSIZE', lang, message.guild.memberCount))
+        if (message.guild.memberCount > 1000) return language.send('COMMAND_BADGES_GUILDSIZE', lang, message.guild.memberCount);
 
-        const loading = await message.channel.send(language.get("MESSAGE_LOADING", lang));
+        const loading = await language.send("MESSAGE_LOADING", lang);
         const [flags, bots, nitros, employees] = await getBadgeCounts()
         const boosters = await message.guild.premiumSubscriptionCount
         const description = [

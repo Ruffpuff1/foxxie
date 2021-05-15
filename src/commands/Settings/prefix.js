@@ -1,4 +1,3 @@
-const Discord = require('discord.js')
 module.exports = {
     name: 'prefix',
     aliases: ['setprefix', 'prefixes'],
@@ -8,13 +7,12 @@ module.exports = {
     execute: async(props) => {
 
         let { lang, message, args, language } = props
-        const embed = new Discord.MessageEmbed()
-            .setColor(message.guild.me.displayColor)
+        const loading = await language.send("MESSAGE_LOADING", lang);
 
-        if (args[0]?.toLowerCase() === 'none') {
-            message.guild.settings.unset(message.guild, 'prefixes');
-            embed.setDescription(language.get('COMMAND_PREFIX_REMOVED', lang))
-            return message.channel.send(embed)
+        if (/(none|reset)/i.test(args[0])) {
+            message.guild.settings.unset('prefixes');
+            language.send('COMMAND_PREFIX_REMOVED', lang);
+            return loading.delete();
         }
 
         let prefix = args[0]
@@ -22,16 +20,16 @@ module.exports = {
             let prefixes = await message.guild.settings.get('prefixes')
 
             if (!prefixes?.length) {
-                embed.setDescription(language.get('COMMAND_PREFIX_NONE', lang))
-                return message.channel.send(embed)
+                language.send('COMMAND_PREFIX_NONE', lang);
+                return loading.delete();
             }
 
-            embed.setDescription(language.get('COMMAND_PREFIX_NOW', lang, prefixes, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", ")))
-            return message.channel.send(embed)
+            language.send('COMMAND_PREFIX_NOW', lang, prefixes, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "));
+            return loading.delete();
         }
 
-        message.guild.settings.push(message.guild, 'prefixes', prefix)
-        embed.setDescription(language.get('COMMAND_PREFIX_ADDED', lang, prefix))
-        return message.channel.send(embed)
+        message.guild.settings.push('prefixes', prefix)
+        language.send('COMMAND_PREFIX_ADDED', lang, prefix);
+        return loading.delete();
     }
 }

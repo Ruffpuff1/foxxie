@@ -11,7 +11,7 @@ module.exports = {
 
         let word;
         let msg;
-        if (!args[0]) msg = await message.channel.send(language.get('COMMAND_DEFINE_NOARGS', lang))
+        if (!args[0]) msg = await language.send('COMMAND_DEFINE_NOARGS', lang)
 
         if (args[0]) return response()
         if (msg) return awaitResponse()
@@ -19,7 +19,7 @@ module.exports = {
         async function awaitResponse(){
             message.channel.awaitMessages(m => message.author.id === m.author.id, { time: 60000, max: 1, errors: ['time'] })
             .then(async msgs => {
-                if (msgs.first().content.toLowerCase() === 'cancel') return message.channel.send(language.get('COMMAND_DEFINE_CANCELLED', lang));
+                if (msgs.first().content.toLowerCase() === 'cancel') return language.send('COMMAND_DEFINE_CANCELLED', lang)
                 word = msgs.first().content;
                 msg.edit(language.get("MESSAGE_LOADING", lang))
 
@@ -34,7 +34,7 @@ module.exports = {
         
         async function response(){
             word = args[0].toLowerCase()
-            msg = await message.channel.send(language.get("MESSAGE_LOADING", lang))
+            msg = await language.send("MESSAGE_LOADING", lang)
 
             let res = await axios.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
             if (!res || !res.data[0] || !res.data[0]['hwi']) return msg.edit(language.get('COMMAND_DEFINE_NORESULTS', lang, word))

@@ -19,9 +19,9 @@ module.exports = {
         covidCountry();
 
         async function covidGlobal(){
-            let loading = await message.channel.send(language.get('MESSAGE_LOADING', lang))
+            let loading = await language.send('MESSAGE_LOADING', lang)
             let stats = await api.all()
-            if (stats.message) { loading.delete(); return message.channel.send(language.get('COMMAND_CORONA_NO_DATA', lang, search)) }
+            if (stats.message) { loading.delete(); return language.send('COMMAND_CORONA_NO_DATA', lang, search) }
 
             embed
                 .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', lang, search))
@@ -35,9 +35,9 @@ module.exports = {
         }
 
         async function covidState(){
-            let loading = await message.channel.send(language.get('MESSAGE_LOADING', lang))
+            let loading = await language.send('MESSAGE_LOADING', lang)
             let stats = await api.states({state:search})
-            if (stats.message) { loading.delete(); return message.channel.send(language.get('COMMAND_CORONA_NO_DATA', lang, search)) }
+            if (stats.message) { loading.delete(); return language.send('COMMAND_CORONA_NO_DATA', lang, search) }
 
             embed
                 .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', lang, search))
@@ -51,9 +51,9 @@ module.exports = {
         }
 
         async function covidCountry(){
-            let loading = await message.channel.send(language.get('MESSAGE_LOADING', lang))
+            let loading = await language.send('MESSAGE_LOADING', lang)
             let stats = await api.countries({country:search});
-            if (stats.message) { loading.delete(); return message.channel.send(language.get('COMMAND_CORONA_NO_DATA', lang, search)) }
+            if (stats.message) { loading.delete(); return language.send('COMMAND_CORONA_NO_DATA', lang, search) }
 
             embed
                 .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', lang, search))

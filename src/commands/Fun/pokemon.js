@@ -9,10 +9,10 @@ module.exports = {
 
         let { message, args, lang, language } = props
 
-        if (!args[0]) return message.channel.send(language.get('COMMAND_POKEMON_NOPOKEMON', 'en-US'))
+        if (!args[0]) return language.send('COMMAND_POKEMON_NOPOKEMON', lang);
         const pokemon = args[0]
         
-        let loading = await message.channel.send(language.get("MESSAGE_LOADING", 'en-US'))
+        let loading = await language.send("MESSAGE_LOADING", lang);
 
         let isShine = /\-shiny\s*|-s\s*/
         let shiny = isShine.test(message.content)
@@ -94,7 +94,7 @@ module.exports = {
         })
         .catch((err) => {
             loading.delete()
-            message.channel.send(language.get('COMMAND_POKEMON_INVALIDPOKEMON', 'en-US'))
+            language.send('COMMAND_POKEMON_INVALIDPOKEMON', lang);
             }
         )
     }

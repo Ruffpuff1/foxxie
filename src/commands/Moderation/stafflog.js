@@ -10,12 +10,12 @@ module.exports = {
         let { message, args, lang, language } = props
 
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-        const loading = await message.channel.send(language.get("MESSAGE_LOADING", lang));
+        const loading = await language.send("MESSAGE_LOADING", lang);
 
         let desc1 = []
         let desc2 = []
         let modCounts = await member.user.settings.get(`servers.${message.guild.id}.modStats`)
-        if (!modCounts) { loading.delete(); return message.channel.send(language.get('COMMAND_STAFFLOG_NONE', lang)) }
+        if (!modCounts) { loading.delete(); return language.send('COMMAND_STAFFLOG_NONE', lang)}
 
         if (modCounts.ban) desc1.push(language.get('COMMAND_STAFFLOG_BAN', lang, modCounts.ban))
         if (modCounts.kick) desc1.push(language.get('COMMAND_STAFFLOG_KICK', lang, modCounts.kick))

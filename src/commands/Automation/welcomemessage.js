@@ -14,7 +14,7 @@ module.exports = {
 
         if (args[0]?.toLowerCase() === 'none') {
                         
-            await message.guild.settings.unset(message.guild, "welcome.message")
+            await message.guild.settings.unset("welcome.message")
             embed.setDescription(language.get('COMMAND_WELCOMEMESSAGE_REMOVED', lang))
             return message.channel.send(embed)
         }
@@ -33,7 +33,7 @@ module.exports = {
             return message.channel.send(embed)
         }
 
-        await message.guild.settings.set(message.guild, "welcome.message", text)
+        await message.guild.settings.set("welcome.message", text)
         embed.setDescription(language.get('COMMAND_WELCOMEMESSAGE_SET', lang, text))
         return message.channel.send(embed);
     }
