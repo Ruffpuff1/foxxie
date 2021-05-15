@@ -5,7 +5,7 @@ module.exports = {
     name: 'goodbyechannel',
     aliases: ['gc', 'goodbyelocation'],
     usage: 'fox goodbyeChannel (none|channel)',
-    category: 'automation',
+    category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(props) => {
 

@@ -5,7 +5,7 @@ module.exports = {
     name: "disboardchannel",
     aliases: ['dc', 'disboardlocation'],
     usage: `fox disboard [message|channel] (message|#channel|none|off)`,
-    category: 'automation',
+    category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(props) => {
 

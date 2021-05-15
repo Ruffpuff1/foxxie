@@ -5,7 +5,7 @@ module.exports = {
     name: 'disboardmessage',
     aliases: ['disboardtext', 'dm', 'disboardmsg'],
     usage: `fox disboardmessage (none|message)`,
-    category: 'automation',
+    category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(props) => {
 
