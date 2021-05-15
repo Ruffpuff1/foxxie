@@ -8,7 +8,8 @@ module.exports = {
 
         async function tag(){
 
-            let prefixes = ['fox'];
+            let prefixes = [];
+            message.client.user.id === '825130284382289920' ? prefixes.push('dev') : prefixes.push('fox');
             if (!settings?.prefixes.length) prefixes.push(message.client.user.id === '825130284382289920' ? development : production);
             if (settings?.prefixes.length) settings?.prefixes.forEach(p => prefixes.push(p));
 

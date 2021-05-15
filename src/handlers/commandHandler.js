@@ -5,8 +5,8 @@ module.exports.commandHandler = async (message) => {
 
     let settings = await message.guild.settings?.get()
     let language = message.language
-    let prefixes = ['fox'];
-    
+    let prefixes = [];
+    message.client.user.id === '825130284382289920' ? prefixes.push('dev') : prefixes.push('fox');
     if (!settings?.prefixes.length) prefixes.push(message.client.user.id === '825130284382289920' ? development : production);
     if (settings?.prefixes.length) settings?.prefixes.forEach(p => prefixes.push(p));
     if (settings?.blockedUsers != null) if (settings.blockedUsers.includes(message.author.id)) return;
