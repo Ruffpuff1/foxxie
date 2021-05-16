@@ -2,6 +2,7 @@ const weather = require('weather-js');
 const Discord = require('discord.js');
 const moment = require('moment');
 const { zws } = require('../../../lib/util/constants')
+
 module.exports = {
     name: 'weather',
     aliases: ['temp', 'forcast'],

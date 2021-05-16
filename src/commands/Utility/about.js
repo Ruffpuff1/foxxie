@@ -1,4 +1,5 @@
-const Discord = require('discord.js')
+const Discord = require('discord.js');
+const moment = require('moment');
 module.exports = {
     name: 'about',
     aliases: ['botinfo'],
@@ -6,50 +7,21 @@ module.exports = {
     category: 'utility',
     execute(props) {
 
-        let { lang, message, args } = props;
+        let { lang, message, language } = props;
 
         const embed = new Discord.MessageEmbed()
-            .setTitle(lang.COMMAND_ABOUT_TITLE)
+            .setTitle(language.get('COMMAND_ABOUT_TITLE', lang))
             .setColor(message.guild.me.displayColor)
-            .setDescription(lang.COMMAND_ABOUT_SUMMARY)
+            .setDescription(language.get('COMMAND_ABOUT_SUMMARY', lang))
             .setThumbnail(message.client.user.displayAvatarURL())
-            .addFields(
-                {
-                    name: lang.COMMAND_ABOUT_CREATED,
-                    value: lang.COMMAND_ABOUT_WASCREATED,
-                    inline: false
-                },
-                {
-                    name: lang.COMMAND_ABOUT_VERSION,
-                    value: lang.COMMAND_ABOUT_CURRENTVER,
-                    inline: false
-                },
-                {
-                    name: lang.COMMAND_ABOUT_COMMANDS,
-                    value: lang.COMMAND_ABOUT_COMMANDS_NOW,
-                    inline: false
-                },
-                {
-                    name: lang.COMMAND_ABOUT_USERS,
-                    value: `**•** Right now I'm cleaning up after **${message.client.users.cache.size}** users.`,
-                    inline: false
-                },
-                {
-                    name: lang.COMMAND_ABOUT_GUILDS,
-                    value: `**•** I'm looking after **${message.client.guilds.cache.size}** servers.`,
-                    inline: false
-                },
-                {
-                    name: lang.COMMAND_ABOUT_CREDITS,
-                    value: lang.COMMAND_ABOUT_CREDITS_LIST,
-                    inline: false
-                },
-                {
-                    name: lang.COMMAND_ABOUT_LINKS,
-                    value: lang.COMMAND_ABOUT_LINKS_LINKS,
-                    inline: false
-                }
-            )
+            .addField(language.get('COMMAND_ABOUT_CREATED_TITLE', lang), language.get('COMMAND_ABOUT_CREATED_VALUE', lang, moment([moment('2021-02-15').format('YYYY'), moment('2021-02-15').format('M') - 1, moment('2021-02-15').format('D')]).toNow(true)))
+            .addField(language.get('COMMAND_ABOUT_VERSION_TITLE', lang), language.get('COMMAND_ABOUT_VERSION_VALUE', lang))
+            .addField(language.get('COMMAND_ABOUT_COMMANDS_TITLE', lang), language.get('COMMAND_ABOUT_COMMANDS_VALUE', lang))
+            .addField(language.get('COMMAND_ABOUT_USERS_TITLE', lang), language.get('COMMAND_ABOUT_USERS_VALUE', lang, message.client.users.cache.size))
+            .addField(language.get('COMMAND_ABOUT_GUILDS_TITLE', lang), language.get('COMMAND_ABOUT_GUILDS_VALUE', lang, message.client.guilds.cache.size))
+            .addField(language.get('COMMAND_ABOUT_CREDITS_TITLE', lang), language.get('COMMAND_ABOUT_CREDITS_VALUE', lang))
+            .addField(language.get('COMMAND_HELP_LINKS_TITLE', lang), language.get('COMMAND_HELP_LINKS_DESCRIPTION', lang))
+            
         message.channel.send(embed)
     }
 }

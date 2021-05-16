@@ -5,18 +5,15 @@ module.exports = {
     category: 'utility',
     execute(props) {
 
-        let { lang, message, args } = props;
-        const inviteEmbed = new Discord.MessageEmbed()
-            .setAuthor(lang.COMMAND_SUPPORT_HERE, message.client.user.displayAvatarURL())
-            .setColor(message.guild.me.displayColor)
-            .setDescription(lang.COMMAND_SUPPORT_BODY)
+        let { lang, message, language } = props;
 
-            if (message.content.includes(`-c`)) {
-                return message.channel.send(inviteEmbed)
-            }
-        message.author.send(inviteEmbed).catch(error => {message.channel.send(inviteEmbed);
-        });
-    
+        const inviteEmbed = new Discord.MessageEmbed()
+            .setAuthor(language.get('COMMAND_SUPPORT_HERE', lang), message.client.user.displayAvatarURL())
+            .setColor(message.guild.me.displayColor)
+            .setDescription(language.get('COMMAND_SUPPORT_BODY', lang))
+
+        if (/(-c|-channel)/i.test(message.content)) return message.channel.send(inviteEmbed);
+        message.author.send(inviteEmbed).catch(e => { message.channel.send(inviteEmbed) });
         message.responder.success();
     }
 }

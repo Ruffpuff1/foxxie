@@ -10,7 +10,7 @@ module.exports = {
         if (message.author.bot) return;
         if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return
         
-        for (let monitor of ['anti-invite', 'disboardbump', 'regextags']){
+        for (let monitor of ['anti-invite', 'disboardbump', 'tag']){
             let moni = message.client.monitors.get(monitor)
             if (moni) moni.execute(message)
         }

@@ -33,7 +33,6 @@ module.exports = {
             sendIn: sendIn.test(message.content),
             color: message.guild.me.displayColor,
             channelId: message.channel.id,
-            language: language
         }
         fs.writeFile('./src/store/reminders.json', JSON.stringify(message.client.reminders, null, 4), err => {
             if (err) throw err

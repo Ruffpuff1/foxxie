@@ -6,7 +6,7 @@ module.exports = {
     permissions: 'MANAGE_MESSAGES',
     execute(props) {
 
-        let { lang, message, args } = props;
+        let { message, args } = props;
         message.delete()
         let text = args.slice(0).join(' ')
         if (!text) return

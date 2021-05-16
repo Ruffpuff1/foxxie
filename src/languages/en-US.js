@@ -1,5 +1,5 @@
-const { emojis: { infinity, perms: { notSpecified, granted, denied }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } } } = require('../../lib/util/constants');
-const { topggURL, supportServer, inviteURL } = require('../../config/foxxie')
+const { emojis: { infinity, perms: { notSpecified, granted, denied }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('../../lib/util/constants');
+const { topggURL, supportServer, inviteURL, version, commands, aliases } = require('../../config/foxxie')
 const { toUpperCaseFirst } = require('../../lib/util/util');
 
 module.exports = {
@@ -269,6 +269,21 @@ module.exports = {
         COMMAND_TAG_REMOVED: tag => `**Gotcha,** removed the tag \`${tag}\`.`,
 
         // Utility Commands
+        COMMAND_ABOUT_COMMANDS_TITLE: `**Commands**`,
+        COMMAND_ABOUT_COMMANDS_VALUE: `**•** As of now, I have **${commands}** commands and **${aliases}** aliases.`,
+        COMMAND_ABOUT_CREATED_TITLE: `**Created**`,
+        COMMAND_ABOUT_CREATED_VALUE: date => `**•** I was created on Mon, Feb 15th 2021. **(${date} ago)**`,
+        COMMAND_ABOUT_CREDITS_TITLE: `**Credits**`,
+        COMMAND_ABOUT_CREDITS_VALUE: `**•** Developer: ${developer}\n**•** Spanish Translations: ${spanishTranslation}\n**•** Additional Help: ${additionalHelp}`,
+        COMMAND_ABOUT_DESCRIPTION: `Get some basic information about me, my statistics, and some of my credits.`,
+        COMMAND_ABOUT_GUILDS_TITLE: `**Guilds**`,
+        COMMAND_ABOUT_GUILDS_VALUE: guilds => `**•** I'm looking after **${guilds}** servers.`,
+        COMMAND_ABOUT_SUMMARY: `I started as a developmental project by **Ruffpuff#0017** to learn basic node.js and javascript. Then I was added to his server **The Corner Store** as a way to overall reduce the amount of bots. Now I'm hoping to be added to many guilds and maybe I could be helpful to ya.`,
+        COMMAND_ABOUT_TITLE: `About Foxxie!`,
+        COMMAND_ABOUT_USERS_TITLE: `**Users**`,
+        COMMAND_ABOUT_USERS_VALUE: users => `**•** Right now I'm cleaning up after **${users}** users.`,
+        COMMAND_ABOUT_VERSION_TITLE: `**Version**`,
+        COMMAND_ABOUT_VERSION_VALUE: `**•** Currently I'm in version **${version}**, pretty much always getting worked on though ;)`,
         COMMAND_AFK_DESCRIPTION: `Sets an AFK for when people ping ya. You can provide a reason, but if no reason is provided it will show as \`AFK\`. When pinged in chat your AFK status will show. And the next time you talk in chat your AFK will be removed.`,
         COMMAND_AFK_EMBED_AUTHOR: user => `${user} has set an AFK`,
         COMMAND_AFK_EMBED_DESCRIPTION: reason => `**Reason**: ${reason}`,
@@ -345,6 +360,16 @@ module.exports = {
         COMMAND_REMINDME_NOREASON: `**Whoops,** you need to specify a reason for this reminder.`,
         COMMAND_REMINDME_NOTIME: `**Sorry,** in order for me to remind you, you need to tell me when.`,
         COMMAND_REMINDME_SUCCESS: time => `**Alrighty,** I'll send that reminder your way in **${time}**.`,
+        COMMAND_STEAL_DESCRIPTION: `Steals a provided emoji and automatically adds it to your server. You can also provide a name for the emoji to automatically be named.`,
+        COMMAND_STEAL_MAXEMOJI: `**Uh oh,** I can't steal anymore emojis because this server is already at the max it can have.`,
+        COMMAND_STEAL_NOARGS: `**Whoops,** I can't steal an emoji if you don't provide one.`,
+        COMMAND_STEAL_NOTEMOJI: `**Hey,** I can only steal proper emojis.`,
+        COMMAND_STEAL_SUCCESS: name => `Stole ${name}`,
+        COMMAND_SUPPORT_BODY: `[Click here!](${supportServer})\nHope we can help you out abit.`,
+        COMMAND_SUPPORT_DESCRIPTION: `Provides the link to my support server if you have a question, request, or feedback.`,
+        COMMAND_SUPPORT_HERE: `Hey hey, here's the link to my support server.`,
+        COMMAND_UPTIME: (d, h, m, s) => `Hello! Foxxie **v${version}** was last rebooted **${d}** days, **${h}** hours, **${m}** minutes, and **${s}** seconds ago.`,
+        COMMAND_UPTIME_DESCRIPTION: `Provides how long it has been since my last reboot. In days, hours, minutes, and seconds.`,
         COMMAND_WEATHER_DATE: `${date} **Date**`,
         COMMAND_WEATHER_DAY: `${dayCurrent} **Day**`,
         COMMAND_WEATHER_DEGREES_F: input => `${input} Degrees°F`,
@@ -356,6 +381,9 @@ module.exports = {
         COMMAND_WEATHER_TITLE: (local, sky) => `${local} (Weather: ${sky})`,
         COMMAND_WEATHER_TIMEZONE: `${timezone} **Timezone**`,
         COMMAND_WEATHER_WINDS: `${winds} **Winds**`,
+        COMMAND_WOLFRAM_DESCRIPTION: `I'll get you data for a search result using the Wolfram|Alpha API.`,
+        COMMAND_WOLFRAM_NO_ARGS: `**Whoops,** remember you need to specify a **search term**.`,
+        COMMAND_WOLFRAM_NO_DATA: `**Sorry,** I couldn't find any data for that search.`,
 
         // Events
         EVENT_STARBOARD_JUMP: `Jump to Message`,

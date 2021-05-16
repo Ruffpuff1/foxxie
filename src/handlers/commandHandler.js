@@ -29,7 +29,7 @@ module.exports.commandHandler = async (message) => {
 
         if (command.permissions) {
             const authorPerms = message.channel.permissionsFor(message.author);
-            if (!authorPerms || !authorPerms.has(command.permissions)) return message.responder.error('RESPONDER_ERROR_PERMS_AUTHOR', lang,  command);
+            if (!authorPerms || !authorPerms.has(command.permissions)) return message.responder.error('RESPONDER_ERROR_PERMS_AUTHOR', lang,  command.permissions);
         };
 
         try {

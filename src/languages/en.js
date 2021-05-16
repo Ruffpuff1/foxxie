@@ -214,19 +214,6 @@ Hope we can help you out abit.`,
 
     },
 
-    CATEGORY_DESCRIPTIONS: {
-        AUTOMATION: "Set me to automatically do things around your server. Like welcome & goodbye messages, and Disboard reminders :)",
-        FUN: "Random fun commands that will hopefully make people on your server laugh.",
-        MODERATION: "Moderation commands to help you enforce rules and get the bad guys out.",
-        ROLEPLAY: "Commands for expressing how you feel to people on your server. From warm hugs to murder!.",
-        SETTINGS: "Configure how I work around your server. Like setting a custom prefix for me to respond to.",
-        UTILITY: "Useful commands for getting you infomation or completing simple tasks for you."
-    },
-
-    MESSAGE_ERROR_CODE_ERROR: "**Uh oh,** there seems to be some sort of problem with my source code. Now don't worry I'm not dying on ya but I'd appreciate it if you did \`fox bugreport [bug]\` to send a message to my developer about it.", // needs spanish
-    MESSAGE_ERROR_PERM_ERROR1: "You don't have the perms to use this command, for that you need the", // needs spanish
-    MESSAGE_ERROR_PERM_ERROR2: "permission.", // needs spanish
-
     PERMISSIONS : {
         ADMINISTRATOR: 'Administrator',
         VIEW_AUDIT_LOG: 'View Audit Log',

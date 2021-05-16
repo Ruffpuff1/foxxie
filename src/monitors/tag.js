@@ -1,6 +1,6 @@
 const { prefix: { production, development } } = require('../../config/foxxie')
 module.exports = {
-    name: 'regextags',
+    name: 'tag',
     execute: async(message) => {
         
         let settings = await message.guild.settings.get()
@@ -19,7 +19,7 @@ module.exports = {
 
             function sendTag(p) {
                 for (let tag of settings.tags){
-                    if (message.content.replace(/ /g, "").startsWith(`${p}${tag['name']}`))
+                    if (message.content.replace(/ /g, "") === `${p}${tag['name']}`)
                     message.channel.send(tag['text'].replace(/\\n*(\s*)?/gi, "\n").replace(/{(member|user|mention)}/gi, message.member.toString()))
                 }
             }
