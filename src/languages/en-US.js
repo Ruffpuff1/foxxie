@@ -16,18 +16,6 @@ module.exports = {
         RESPONDER_ERROR_PERMS_CLIENT: perm => `I don't have the correct permissions to run this command! I need the \`${perm}\` permission in this channel. As an alternative you can give my role the \`ADMINISTRATOR\` permission to bypass this issue.`,
         RESPONDER_FOXXIE_CUBBY_WRONG_CHANNEL: msg => `${msg.member}, this channel **isnt** meant to test out my commands. For that, you should head over to <#825896913810358274>.`,
 
-        // Automation Commands
-        COMMAND_WELCOME_DESCRIPTION: `Configure my welcome settings for your server using different arguments. If you want to test out the welcome settings you can use the \`testjoin\` command.\n\nSpecify \`channel\` to set the channel where I should send welcome messages.\n\nSpecify \`message\` to set the message I'll send in the set welcome channel. In your message you can also use the variables: \`{member}\`, \`{name}\`, \`{tag}\` (ex: ArEo#1245), \`{discrim}\`, \`{created}\`, \`{server}\`, and \`{count}\` for the server's member count.`,
-        COMMAND_WELCOME_CHANNEL_NOCHANNEL: `**Whoops,** there isn't any welcome channel set right now. Try setting one with \`fox welcome channel #channel\`.`,
-        COMMAND_WELCOME_CHANNEL_NOW: channel => `**Heya,** right now the welcome channel is set as <#${channel}>.`,
-        COMMAND_WELCOME_CHANNEL_REMOVED: `**Alrighty,** I removed the welcome channel for you.`,
-        COMMAND_WELCOME_CHANNEL_SET: channel => `**Gotcha,** set the welcome channel to ${channel}.`,
-        COMMAND_WELCOME_INVALIDUSE: `**Please,** specify a proper use case [channel|message].`,
-        COMMAND_WELCOME_MESSAGE_NOMESSAGE: `**Heya,** right now there isn't any welcome message set. For now I'll use my default:\`\`\`**{member}** just joined the server!\`\`\``,
-        COMMAND_WELCOME_MESSAGE_NOW: message => `**Heya,** right now the welcome message is set to: \`\`\`${message}\`\`\``,
-        COMMAND_WELCOME_MESSAGE_REMOVED: `**Oki,** I'll remove the welcome message and use my default instead.`,
-        COMMAND_WELCOME_MESSAGE_SET: message => `**Gotcha,** I'll set the welcome message to \`\`\`${message}\`\`\``,
-
         // Dev Commands
         COMMAND_CREATEKEY_DESCRIPTION: `Creates a key that a user can redeem for a profile badge. Currently five valid ids: \`0\` Developer Ruff, \`1\` Foxxie Contributor, \`2\` Cutiepie. This command can only be used by the bot owner due to it's special nature.`,
         COMMAND_CREATEKEY_NOID: `**Hey,** you either didn't provide an Id or the Id provided is invalid. The current valid Ids are \`0 - 2\`.`,
@@ -222,6 +210,16 @@ module.exports = {
         COMMAND_ANTI_DISABLED: setting => `**Gotcha,** stopped filtering **${setting}s**.`,
         COMMAND_ANTI_ENABLED: setting => `**Oki,** now I'll start filtering **${setting}s**.`,
         COMMAND_ANTI_INVALIDUSE: `**Please,** specify a proper use case [invite|clear].`,
+        COMMAND_GOODBYE_DESCRIPTION: `Configure my goodbye settings for your server using different arguments. If you want to test out the goodbye settings you can use the \`testleave\` command.\n\nSpecify \`channel\` to set the channel where I should send goodbye messages.\n\nSpecify \`message\` to set the message I'll send in the set goodbye channel. In your message you can also use the variables: \`{name}\`, \`{tag}\` (ex: ArEo#1245), \`{discrim}\`, \`{joined}\`, \`{server}\`, and \`{count}\` for the server's member count.`,
+        COMMAND_GOODBYE_CHANNEL_NOCHANNEL: `**Whoops,** there isn't any goodbye channel set right now. Try setting one with \`fox goodbye channel #channel\`.`,
+        COMMAND_GOODBYE_CHANNEL_NOW: channel => `**Heya,** right now the goodbye channel is set as <#${channel}>.`,
+        COMMAND_GOODBYE_CHANNEL_REMOVED: `**Alrighty,** I removed the goodbye channel for you.`,
+        COMMAND_GOODBYE_CHANNEL_SET: channel => `**Gotcha,** set the goodbye channel to ${channel}.`,
+        COMMAND_GOODBYE_INVALIDUSE: `**Please,** specify a proper use case [channel|message].`,
+        COMMAND_GOODBYE_MESSAGE_NOMESSAGE: `**Heya,** right now there isn't any goodbye message set. For now I'll use my default:\`\`\`**{member}** just joined the server!\`\`\``,
+        COMMAND_GOODBYE_MESSAGE_NOW: message => `**Heya,** right now the goodbye message is set to: \`\`\`${message}\`\`\``,
+        COMMAND_GOODBYE_MESSAGE_REMOVED: `**Oki,** I'll remove the goodbye message and use my default instead.`,
+        COMMAND_GOODBYE_MESSAGE_SET: message => `**Gotcha,** I'll set the goodbye message to \`\`\`${message}\`\`\``,
         COMMAND_PERMISSION_DESCRIPTION: `Allows you to enable or disable certain users from using my commands in your server.`,
         COMMAND_PERMISSION_INVALIDUSE: `**Hey,** you need to specify a proper user case [allow|deny|reset].`,
         COMMAND_PERMISSION_NOMEMBER: `**Sorry,** you need to provide either a user @mention or user Id.`,
@@ -275,6 +273,18 @@ module.exports = {
         COMMAND_TAG_NOTAG: `**Please,** provide a tag.`,
         COMMAND_TAG_NOTEXT: `**Please,** provide some text to go along with this tag.`,
         COMMAND_TAG_REMOVED: tag => `**Gotcha,** removed the tag \`${tag}\`.`,
+        COMMAND_TESTJOIN_DESCRIPTION: `Simulates what would happen if a new member joined the server, sending a message to your specified welcome channel.`,
+        COMMAND_TESTLEAVE_DESCRIPTION: `Simulates what would happen if a member left the server. Sending a goodbye message to your specified goodbye channel.`,
+        COMMAND_WELCOME_DESCRIPTION: `Configure my welcome settings for your server using different arguments. If you want to test out the welcome settings you can use the \`testjoin\` command.\n\nSpecify \`channel\` to set the channel where I should send welcome messages.\n\nSpecify \`message\` to set the message I'll send in the set welcome channel. In your message you can also use the variables: \`{member}\`, \`{name}\`, \`{tag}\` (ex: ArEo#1245), \`{discrim}\`, \`{created}\`, \`{server}\`, and \`{count}\` for the server's member count.`,
+        COMMAND_WELCOME_CHANNEL_NOCHANNEL: `**Whoops,** there isn't any welcome channel set right now. Try setting one with \`fox welcome channel #channel\`.`,
+        COMMAND_WELCOME_CHANNEL_NOW: channel => `**Heya,** right now the welcome channel is set as <#${channel}>.`,
+        COMMAND_WELCOME_CHANNEL_REMOVED: `**Alrighty,** I removed the welcome channel for you.`,
+        COMMAND_WELCOME_CHANNEL_SET: channel => `**Gotcha,** set the welcome channel to ${channel}.`,
+        COMMAND_WELCOME_INVALIDUSE: `**Please,** specify a proper use case [channel|message].`,
+        COMMAND_WELCOME_MESSAGE_NOMESSAGE: `**Heya,** right now there isn't any welcome message set. For now I'll use my default:\`\`\`**{member}** just joined the server!\`\`\``,
+        COMMAND_WELCOME_MESSAGE_NOW: message => `**Heya,** right now the welcome message is set to: \`\`\`${message}\`\`\``,
+        COMMAND_WELCOME_MESSAGE_REMOVED: `**Oki,** I'll remove the welcome message and use my default instead.`,
+        COMMAND_WELCOME_MESSAGE_SET: message => `**Gotcha,** I'll set the welcome message to \`\`\`${message}\`\`\``,
 
         // Utility Commands
         COMMAND_ABOUT_COMMANDS_TITLE: `**Commands**`,
@@ -396,6 +406,8 @@ module.exports = {
         COMMAND_WOLFRAM_NO_DATA: `**Sorry,** I couldn't find any data for that search.`,
 
         // Events
+        EVENT_GUILDMEMBERADD_DEFAULT_WELCOMEMESSAGE: member => `**${member.toString()}** just joined the server!`,
+        EVENT_GUILDMEMBERREMOVE_DEFAULT_GOODBYEMESSAGE: member => `**${member.user.tag}** just left the server :(`,
         EVENT_STARBOARD_JUMP: `Jump to Message`,
         EVENT_STARBOARD_NOTIF_DESCRIPTION: (user, channel, link) => `A message by ${user} got starred enough to make it into the ${channel}.\nCheck it out [here](${link})`,
         EVENT_STARBOARD_NOTIF_TITLE: `:star: A new message made it into the starboard :star:`,
