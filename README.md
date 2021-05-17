@@ -1,8 +1,7 @@
 # Foxxie
+[![Discord Bots](https://top.gg/api/widget/status/812546582531801118.svg)](https://top.gg/bot/812546582531801118) [![Discord Bots](https://top.gg/api/widget/upvotes/812546582531801118.svg)](https://top.gg/bot/812546582531801118)
 
 A Smort Butler for your Server
-
-[![Discord Bots](https://top.gg/api/widget/812546582531801118.svg)](https://top.gg/bot/812546582531801118)
 
 ## About
 
