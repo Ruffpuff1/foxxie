@@ -9,11 +9,8 @@ module.exports = {
         if (!message.guild) return
         if (message.author.bot) return;
         if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return
-        
-        for (let monitor of ['anti-invite', 'disboardbump', 'tag']){
-            let moni = message.client.monitors.get(monitor)
-            if (moni) moni.execute(message)
-        }
+        // Execute Monitors
+        message.client.monitors.forEach(m => { if (m.type === 'message') m.execute(message) });
         // Botwide
         commandHandler(message)
         afkCheck(message)

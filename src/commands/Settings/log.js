@@ -6,7 +6,7 @@ module.exports = {
     aliases: ['logging', 'logchannel', 'lc'],
     usage: `fox log [mod|edit|delete] (#channel|none|off)`,
     permissions: 'ADMINISTRATOR',
-    category: 'settings',
+    //category: 'settings',
     execute: async(props) => {
 
         let { lang, message, args } = props

@@ -2,7 +2,7 @@ module.exports = {
     name: 'slowmode',
     aliases: ['slowchat', 'slow', 'freeze', 's', 'sm'],
     usage: 'fox slowmode [seconds] (reason)',
-    category: 'moderation',
+    //category: 'moderation',
     permissions: 'MANAGE_CHANNELS',
     execute: async(props) => {
 

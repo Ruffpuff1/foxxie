@@ -4,7 +4,7 @@ module.exports = {
     aliases: ['td', 'testbump'],
     usage: 'fox testdisboard',
     permissions: 'MANAGE_MESSAGES',
-    category: 'settings',
+    //category: 'settings',
     execute: async(props) => {
 
         let { message, settings } = props

@@ -6,7 +6,7 @@ module.exports.commandHandler = async (message) => {
     let settings = await message.guild.settings?.get()
     let language = message.language
     let prefixes = [];
-    message.client.user.id === '825130284382289920' ? prefixes.push('dev') : prefixes.push('fox');
+    message.client.user.id === '825130284382289920' ? prefixes.push('aev') : prefixes.push('fox');
     if (!settings?.prefixes.length) prefixes.push(message.client.user.id === '825130284382289920' ? development : production);
     if (settings?.prefixes.length) settings?.prefixes.forEach(p => prefixes.push(p));
     if (settings?.blockedUsers != null) if (settings.blockedUsers.includes(message.author.id)) return;
@@ -16,10 +16,12 @@ module.exports.commandHandler = async (message) => {
     let mentionPrefix = `<@!${message.client.user.id}>`
 
     if (message.content === mentionPrefix) message.language.send("PREFIX_REMINDER", lang, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "), prefixes.pop());
+
+    let uprefixes = [...new Set(prefixes)];
     
-    prefixes.forEach(pfx => {
+    uprefixes.forEach(pfx => {
         if (message.content.toLowerCase().startsWith(pfx.toLowerCase())) return _commandExecute(pfx);
-    })
+    });
 
     async function _commandExecute(pre) {
         const args = message.content.slice(pre.length).trim().split(/ +/);

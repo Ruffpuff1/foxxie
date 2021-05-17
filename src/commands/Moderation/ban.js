@@ -3,7 +3,7 @@ module.exports = {
     name: 'ban',
     aliases: ['b', 'bean', '410', 'yeet', 'banish', 'begone', 'perish'],
     usage: 'fox ban [user|userId] (reason) (-p|-purge)',
-    category: 'moderation',
+    //category: 'moderation',
     permissions: 'BAN_MEMBERS',
     execute: async (props) => {
 
@@ -45,19 +45,19 @@ module.exports = {
         if (!mem) {
         message.guild.members.ban(member.id, {reason:updatedRes})
         .catch(console.error)
-    }
-
-    if (mem) {
-
-        if (tru) {
-            mem.ban({reason:updatedRes, days: 1})
-            .catch(console.error)
         }
-        if (!tru) {
-            mem.ban({reason:updatedRes})
-            .catch(console.error)
+
+        if (mem) {
+
+            if (tru) {
+                mem.ban({reason:updatedRes, days: 1})
+                .catch(console.error)
+            }
+            if (!tru) {
+                mem.ban({reason:updatedRes})
+                .catch(console.error)
+            }
         }
-    }
-    message.guild.log.moderation(message, mem, updatedRes, 'Banned', 'ban', lang)
+        message.guild.log.moderation(message, mem, updatedRes, 'Banned', 'ban', lang)
     }
 }

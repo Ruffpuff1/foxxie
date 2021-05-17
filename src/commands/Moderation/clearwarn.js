@@ -1,70 +1,37 @@
-// const mongo = require('../../../lib/structures/database/mongo')
-// const { serverSettings } = require('../../../lib/settings')
-// const moment = require('moment')
-// const { emojis: { approved } } = require('../../../lib/util/constants')
-// const Discord = require('discord.js')
-// const warnSchema = require('../../../lib/structures/database/schemas/server/moderation/warnSchema')
-// module.exports = {
-//     name: 'clearwarn',
-//     aliases: ['clearwarns', 'cw', 'unwarn', 'uw', 'pardon', 'warnremove'],
-//     usage: 'fox unwarn [user|userId] (reason)',
-//     category: 'moderation',
-//     permissions: 'ADMINISTRATOR',
-//     execute: async(lang, message, args) => {
-//         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-//         if (!target) return message.channel.send("You need to provide **one member** to unwarn");
+module.exports = {
+    name: 'clearwarn',
+    aliases: ['clearwarns', 'cw', 'pardon'],
+    usage: 'fox clearwarn [user|userId] [warnid|all] (reason)',
+    category: 'moderation',
+    permissions: 'MANAGE_MESSAGES',
+    execute: async(props) => { 
 
-//         if (target.roles.highest.position > message.member.roles.highest.position) return message.channel.send("Higher roles")
-//         if (target.roles.highest.position > message.guild.me.roles.highest.position) return message.channel.send("Higher roles")
+        const { lang, language, message, args } = props;
 
-//         const guildId = message.guild.id
-//         const userId = target.user.id
-//         let reason = args.slice(1).join(' ')
+        const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        if (!target) return language.send('COMMAND_CLEARWARN_NOMEMBER', lang);
 
-//         const warnDate = moment(message.createdTimestamp).format('llll');
+        if (/all/.test(args[1])) return _clearWarns();
 
-//         if (!reason) reason = 'No reason specified'
+        let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
+        let set = await target.user.settings.get(`servers.${message.guild.id}.warnings[${args[1] - 1}]`);
+        if (!set) return language.send('COMMAND_CLEARWARN_INVALIDWARNID', lang);
+        
+        target.user.settings.pull(`servers.${message.guild.id}.warnings`, set);
 
-//         await mongo().then(async (mongoose) => {
-//             try {
+        message.guild.log.moderation(message, target.user, reason, 'Clearedwarns', 'clearwarn', lang)
+        return message.responder.success();
 
-//                 await warnSchema.findOneAndDelete({
-//                     guildId,
-//                     userId,
-//                 })
-//                 message.react(approved)
-                
-//                 let results = await serverSettings(message)
+        async function _clearWarns() {
 
-//                 const warnDmEmbed = new Discord.MessageEmbed()
-//                     .setTitle(`Warnings cleared in ${message.guild.name}`)
-//                     .setColor(message.guild.me.displayColor)
-//                     .setThumbnail(message.guild.iconURL({dynamic: true}))
-//                     .setDescription(`Your warnings have been cleared in ${message.guild.name} with the following reason:\n\`\`\`${reason}\`\`\``)
+            let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
 
-//                 target.send(warnDmEmbed)
-//                     .catch(error => console.error(error))
-                
-//                 message.react(approved)
-                
-//                 if (results == null || results.modChannel == null) return
+            let set = await target.user.settings.get(`servers.${message.guild.id}.warnings`);
+            if (!set?.length) return language.send('COMMAND_CLEARWARN_NOWARNINGS', lang);
 
-//                 const warnEmbed = new Discord.MessageEmbed()
-//                     .setTitle(`Cleared warnings for ${target.user.tag}`)
-//                     .setColor(message.guild.me.displayColor)
-//                     .setTimestamp()
-//                     .addFields(
-//                         { name: '**Cleared User**', value: `${target} (ID: ${target.user.id})`, inline: true },
-//                         { name: '**Moderator**', value: `<@${message.author.id}> (ID: ${message.author.id})`, inline: true },
-//                         { name: '\u200B', value: '\u200B', inline: true },
-//                         { name: `**Reason**`, value: `${reason}`, inline: true },
-//                         { name: `**Location**`, value: `<#${message.channel.id}>`, inline: true },
-//                         { name: `**Date / Time**`, value: `${warnDate}`, inline: true })
-
-//                 const logChannel = message.guild.channels.cache.get(results.modChannel);
-//                 if (logChannel) logChannel.send(warnEmbed)
-
-//             } finally {}
-//         })
-//     }
-// }
+            target.user.settings.unset(`servers.${message.guild.id}.warnings`);
+            message.guild.log.moderation(message, target.user, reason, 'Clearedwarns', 'clearwarn', lang)
+            return message.responder.success();
+        }
+    }
+}

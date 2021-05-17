@@ -1,6 +1,7 @@
 const { prefix: { production, development } } = require('../../config/foxxie')
 module.exports = {
     name: 'tag',
+    type: 'message',
     execute: async(message) => {
         
         let settings = await message.guild.settings.get()

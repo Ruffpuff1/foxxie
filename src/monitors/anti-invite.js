@@ -2,6 +2,7 @@ const { moderationCommandWarn } = require('../../lib/structures/ModerationComman
 const { regexes: { discord: { invite } } } = require('../../lib/util/constants')
 module.exports = {
     name: 'anti-invite',
+    type: 'message',
     execute: async(message) => {
         
         if (!message.guild || !await message.guild.settings.get('mod.anti.invite') || message.author.id === message.guild.ownerID || message.member.hasPermission('ADMINISTRATOR')) return;

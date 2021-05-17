@@ -2,6 +2,7 @@ const fs = require('fs')
 const ms = require('ms')
 module.exports = {
     name: 'disboardbump',
+    type: 'message',
     execute: async (message) => {
 
     if (!message.guild) return

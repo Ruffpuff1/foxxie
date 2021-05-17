@@ -3,7 +3,7 @@ module.exports = {
     name: 'kick',
     aliases: ['k', 'boot', '409'],
     usage: 'fox kick [user|userId] (reason)',
-    category: 'moderation',
+    //category: 'moderation',
     permissions: 'KICK_MEMBERS',
     execute: async (props) => {
 

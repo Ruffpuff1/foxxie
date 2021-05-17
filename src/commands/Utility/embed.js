@@ -3,7 +3,7 @@ module.exports = {
     name: 'embed',
     aliases: ['broadcast', 'bc', 'announce', 'broadcasts', 'announcements'],
     usage: 'fox embed (channel) { "title": "Embed Title" }',
-    category: 'utility',
+    //category: 'utility',
     permissions: 'ADMINISTRATOR',
     execute: async (props) => {
 

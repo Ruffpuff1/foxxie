@@ -5,7 +5,7 @@ module.exports = {
     name: 'goodbyemessage',
     aliases: ['goodbyetext', 'gm', 'goodbyemsg'],
     usage: `fox goodbyemessage (none|message)`,
-    category: 'settings',
+    //category: 'settings',
     permissions: 'ADMINISTRATOR',
     execute: async(props) => {
 

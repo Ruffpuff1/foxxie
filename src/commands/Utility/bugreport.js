@@ -3,7 +3,7 @@ module.exports = {
     name: 'bugreport',
     aliases: ['bug'],
     usage: 'fox bugreport [bug]',
-    category: 'utility',
+    //category: 'utility',
     execute: async(props) => {
 
         let { lang, message, args } = props;

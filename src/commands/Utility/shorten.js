@@ -3,7 +3,7 @@ module.exports = {
     name: 'shorten',
     aliases: ['sl', 'tiny'],
     usage: 'fox shorten [link] (name)',
-    category: 'utility',
+    //category: 'utility',
     execute: async(props) => {
 
         let { lang, message, args } = props;

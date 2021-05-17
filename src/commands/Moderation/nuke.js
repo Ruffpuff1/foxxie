@@ -1,7 +1,7 @@
 module.exports = {
     name: 'nuke',
     usage: 'fox nuke',
-    category: 'moderation',
+    //category: 'moderation',
     permissions: 'ADMINISTRATOR',
     execute: async(props) => {
 

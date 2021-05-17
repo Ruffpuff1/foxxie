@@ -50,7 +50,7 @@ module.exports = {
 
                 for (let member of members) {
                     for (let i = 0; i < 18; i++) if (((member.user.flags && member.user.flags.bitfield ? member.user.flags.bitfield : 0) & (1 << i)) === 1 << i) flags[i]++;
-                    if (((member.user.flags && member.user.flags.bitfield ? member.user.flags.bitfield : 0) & 1) === 1) employees.push(`${member.user.tag} [${member.user.id}]`);
+                    if (((member.user.flags && member.user.flags.bitfield ? member.user.flags.bitfield : 0) & 1) === 1) employees.push(`**${member.user.tag}**`);
 
                     if (member.user.bot) bots++;
                     if (member.user.avatar && member.user.avatar.startsWith('a_') || discrims.includes(member.user.discriminator)) nitros++;

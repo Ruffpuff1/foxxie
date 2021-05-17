@@ -3,7 +3,7 @@ module.exports = {
     name: 'testleave',
     aliases: ['testgoodbye', 'testbye', 'tl'],
     usage: 'fox testjoin (member|userId)',
-    category: 'settings',
+    //category: 'settings',
     guildOnly: true,
     execute: async(props) => {
 

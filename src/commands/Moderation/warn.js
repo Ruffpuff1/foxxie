@@ -3,7 +3,7 @@ module.exports = {
     name: 'warn',
     aliases: ['w'],
     usage: 'fox warn [user|userId] (reason)',
-    category: 'moderation',
+    //category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
     execute: async(props) => {
 

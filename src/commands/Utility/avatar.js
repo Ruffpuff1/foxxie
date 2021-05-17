@@ -6,21 +6,21 @@ module.exports = {
     category: 'utility',
     execute(props) {
 
-        let { lang, message, args } = props;
-        let user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.member.user;
-        let isBot = user.id === '812546582531801118'
+        let { lang, message, args, language} = props;
+        let user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.guild.members.cache.find(m => m.user.username.toLowerCase() === args[0]?.toLowerCase())?.user || message.guild.members.cache.find(m => m.displayName === args[0]?.toLowerCase())?.user || message.member.user;
+        
+        const description = [
+            `(**ID**: ${user.id})`,
+            `[PNG](${user.displayAvatarURL({ format: "png", dynamic: true, size: 512})}) | [JPEG](${user.displayAvatarURL({ format: "jpeg", dynamic: true, size: 512})}) | [WEBP](${user.displayAvatarURL({ format: "webp", dynamic: true, size: 512})})`
+        ];
+        if (user.id === message.client.user.id) description.push("\n" + language.get('COMMAND_AVATAR_FOXXIE', lang))
 
-        const urlPNG = user.displayAvatarURL({ format: "png", dynamic: true, size: 512});
-        const urlJPEG = user.displayAvatarURL({ format: "jpeg", dynamic: true, size: 512});
-        const urlWEBP = user.displayAvatarURL({ format: "webp", dynamic: true, size: 512});
-
-        const avatarEmbed = new Discord.MessageEmbed()
+        const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
             .setTitle(user.tag)
-            .setDescription(`(**ID:** ${user.id})\n[PNG](${urlPNG}) | [JPEG](${urlJPEG}) | [WEBP](${urlWEBP})`)
-            .setImage(urlPNG)
+            .setDescription(description.join("\n"))
+            .setImage(user.displayAvatarURL({ format: "png", dynamic: true, size: 512}))
 
-        if (isBot) avatarEmbed.setDescription(`(**ID:** ${user.id})\n[PNG](${urlPNG}) | [JPEG](${urlJPEG}) | [WEBP](${urlWEBP})\n\n${lang.COMMAND_AVATAR_FOXXIEAV}`)
-        message.reply(avatarEmbed)
+        message.reply(embed)
     }
 }

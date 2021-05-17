@@ -3,7 +3,7 @@ module.exports = {
     name: 'purge',
     aliases: ['prune', 'clear', 'clean', 'delete', 'p'],
     usage: 'fox purge (messages) (reason)',
-    category: 'moderation',
+    //category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
     execute: async(props) => {
 

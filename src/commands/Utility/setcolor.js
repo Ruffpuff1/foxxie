@@ -3,7 +3,7 @@ module.exports = {
     name: 'setcolor',
     aliases: ['sc', 'setcolour'],
     usage: 'fox setcolor [role] [color]',
-    category: 'utility',
+    //category: 'utility',
     permissions: 'MANAGE_ROLES',
     execute(props) {
 

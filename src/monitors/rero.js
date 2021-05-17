@@ -1,5 +1,6 @@
 module.exports = {
     name: 'rero',
+    type: 'reaction',
     execute: async (reaction, user, act) => {
         
         let server = await reaction.message.guild.settings.get('reros'); if (!server) return;

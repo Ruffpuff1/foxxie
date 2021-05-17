@@ -6,7 +6,7 @@ module.exports = {
     name: 'info',
 	aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
 	usage: 'fox info (role|server|user|channel|emoji)',
-	category: 'utility',
+	//category: 'utility',
     execute: async (props) => {
 
         let { lang, message, args, language } = props;
@@ -16,19 +16,80 @@ module.exports = {
         user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.client.users.cache.find(u => u.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member.user;
         let server = message.client.guilds.cache.get(args[1]) || message.guild;
 		let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase()); 
-        if (args[0]) emoji = message.client.emojis.cache.find((emj) => emj.name === args[0] || emj.id === args[0].replace(/^<a?:\w+:(\d+)>$/, '$1'))
+        if (args[0]) emoji = message.client.emojis.cache.find((emj) => emj.id === args[0].replace(/^<a?:\w+:(\d+)>$/, '$1'))
+
+		this.perms = {
+        ADMINISTRATOR: 'Administrator',
+        VIEW_AUDIT_LOG: 'View Audit Log',
+        MANAGE_GUILD: 'Manage Server',
+        MANAGE_ROLES: 'Manage Roles',
+        MANAGE_CHANNELS: 'Manage Channels',
+        KICK_MEMBERS: 'Kick Members',
+        BAN_MEMBERS: 'Ban Members',
+        CREATE_INSTANT_INVITE: 'Create Instant Invite',
+        CHANGE_NICKNAME: 'Change Nickname',
+        MANAGE_NICKNAMES: 'Manage Nicknames',
+        MANAGE_EMOJIS: 'Manage Emojis',
+        MANAGE_WEBHOOKS: 'Manage Webhooks',
+        VIEW_CHANNEL: 'Read Text Channels and See Voice Channels',
+        SEND_MESSAGES: 'Send Messages',
+        SEND_TTS_MESSAGES: 'Send TTS Messages',
+        MANAGE_MESSAGES: 'Manage Messages',
+        EMBED_LINKS: 'Embed Links',
+        ATTACH_FILES: 'Attach Files',
+        READ_MESSAGE_HISTORY: 'Read Message History',
+        MENTION_EVERYONE: 'Mention Everyone',
+        USE_EXTERNAL_EMOJIS: 'Use External Emojis',
+        ADD_REACTIONS: 'Add Reactions',
+        CONNECT: 'Connect',
+        SPEAK: 'Speak',
+        MUTE_MEMBERS: 'Mute Members',
+        DEAFEN_MEMBERS: 'Deafen Members',
+        MOVE_MEMBERS: 'Move Members',
+        USE_VAD: 'Use Voice Activity',
+        STREAM: 'Go Live',
+        ROLE: 'testing role thing'
+    }
+        this.regions = {
+            'eu-central': 'Central Europe',
+            india: 'India',
+            london: 'London',
+            japan: 'Japan',
+            amsterdam: 'Amsterdam',
+            brazil: 'Brazil',
+            'us-west': 'US West',
+            hongkong: 'Hong Kong',
+            southafrica: 'South Africa',
+            sydney: 'Sydney',
+            europe: 'Europe',
+            singapore: 'Singapore',
+            'us-central': 'US Central',
+            'eu-west': 'Western Europe',
+            dubai: 'Dubai',
+            'us-south': 'US South',
+            'us-east': 'US East',
+            frankfurt: 'Frankfurt',
+            russia: 'Russia'
+        }
+        this.verificationLevels = {
+            NONE: 'None',
+            LOW: 'Low',
+            MEDIUM: 'Medium',
+            HIGH: '(╯°□°）╯︵ ┻━┻',
+            VERY_HIGH: '┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻'
+        }
+        this.filterLevels = {
+            DISABLED: "Don't scan any messages",
+            MEMBERS_WITHOUT_ROLES: 'Scan messages from members without a role',
+            ALL_MEMBERS: 'Scan messages by all members'
+        }
 
         if (channel instanceof Channel) return channelInfo();
         if (emoji instanceof Emoji) return emojiinfo();
-        if (role instanceof Role) return roleinfo();
-        if (message.guild && args[0] === 'server') return serverinfo();
-		if (message.guild && args[0] === message.guild.id) serverinfo();
+        if (role instanceof Role) return roleinfo(this.perms);
+        if (message.guild && args[0] === 'server') return serverinfo(this.regions, this.verificationLevels, this.filterLevels);
+		if (message.guild && args[0] === message.guild.id) serverinfo(this.regions, this.verificationLevels, this.filterLevels);
         if (user instanceof User && args[0] !== 'server' && user) return userinfo();
-
-		this.perms = lang.PERMISSIONS
-        this.regions = lang.REGIONS
-        this.verificationLevels = lang.VERIFICATION_LEVELS
-        this.filterLevels = lang.FILTER_LEVELS
 
         async function userinfo(){
 
@@ -126,7 +187,7 @@ module.exports = {
             }
 
             let warnings = await member.user.settings.get(`servers.${message.guild.id}.warnings`)
-		    if (warnings) {
+		    if (warnings?.length) {
 			    for (const { author } of warnings) await message.client.users.fetch(author);
 			    embed.addField(
 				    `:lock: ${language.get('COMMAND_INFO_USER_WARNINGS', lang, warnings)}`,
@@ -135,7 +196,7 @@ module.exports = {
 		    }
 
             const notes = await member.user.settings.get(`servers.${message.guild.id}.notes`)
-		    if (notes) {
+		    if (notes?.length) {
 			    for (const { author } of notes) await message.client.users.fetch(author);
 			    embed.addField(
 				    `:label: ${language.get('COMMAND_INFO_USER_NOTES', lang, notes)}`,
@@ -201,7 +262,7 @@ module.exports = {
             return message.channel.send(embed)
         }
 
-        async function roleinfo(){
+        async function roleinfo(perms){
             const [bots, humans] = role.members.partition(member => member.user.bot);
 
             const embed = new MessageEmbed()
@@ -211,7 +272,7 @@ module.exports = {
                 .addField(`:people_hugging: ${lang.COMMAND_ROLE_MEMBERS}`, `${humans.size} ${lang.COMMAND_ROLE_USER}${humans.size === 1 ? '' : lang.COMMAND_ROLE_PLURAL}, ${bots.size} ${lang.COMMAND_ROLE_BOTS}${bots.size === 1 ? '' : lang.COMMAND_ROLE_PLURAL}`, true)
                 .addField(`:hammer: ${lang.COMMAND_ROLE_PERMISSIONS}`, role.permissions.has(FLAGS.ADMINISTRATOR)
                     ? lang.COMMAND_ROLE_ALLPERMS
-                    : Object.entries(role.permissions.serialize()).filter(perm => perm[1]).map(([perm]) => this.perms[perm]).join(', ') || lang.COMMAND_ROLE_NOCOLOR, true)
+                    : Object.entries(role.permissions.serialize()).filter(perm => perm[1]).map(([perm]) => perms[perm]).join(', ') || lang.COMMAND_ROLE_NOCOLOR, true)
                 .addField(`:calendar: ${lang.COMMAND_ROLE_CREATED}`, `${moment(role.createdAt).format('MMMM Do YYYY')} **(${moment([moment(role.createdAt).format('YYYY'), moment(role.createdAt).format('M') - 1, moment(role.createdAt).format('D')]).toNow(true)} ${lang.COMMAND_ROLE_CREATED_AGO})**`, true)
                 .addField(`:bookmark_tabs: ${lang.COMMAND_ROLE_PROPERTIES}`, [
                     role.hoist
@@ -228,7 +289,7 @@ module.exports = {
             return message.channel.send(embed)
         }
 
-        async function serverinfo() {
+        async function serverinfo(region, veri, filter) {
             let messageCount = await server.settings.get('messageCount');
                     
             let messages = 0
@@ -244,13 +305,13 @@ module.exports = {
                 .addField(':crown: **Owner**', guild.owner.user.tag, true)
                 .addField(':busts_in_silhouette: **Members**', `${guild.memberCount} (cached: ${guild.members.cache.size})`, true)
                 .addField(`:speech_balloon: **Channels (${guild.channels.cache.size})**`, guild.channels.cache.size>0?`Text: **${guild.channels.cache.filter(c => c.type === "text").size}**\nVoice: **${guild.channels.cache.filter(c => c.type === "voice").size}**`:'None', true)
-                .addField(':map: **Region**', this.regions[guild.region], true)
+                .addField(':map: **Region**', region[guild.region], true)
                 .addField(`:scroll: **Roles**`, guild.roles.cache.size > 0 ? guild.roles.cache.size : 'None', true)
                 .addField(':sunglasses: **Emojis**', guild.emojis.cache.size > 0 ? guild.emojis.cache.size : 'None', true)
                 .addField(':bar_chart: **Statistics**', `${messages.toLocaleString()} messages ${toxicity !== 0 ? `with an average toxicity of ${Math.round(toxicity * 100)}%` : ''} sent`)
                 .addField(':lock: **Security**', [
-                    `Verification level: ${this.verificationLevels[message.guild.verificationLevel]}`,
-                    `Explicit filter: ${this.filterLevels[message.guild.explicitContentFilter]}`
+                    `Verification level: ${veri[message.guild.verificationLevel]}`,
+                    `Explicit filter: ${filter[message.guild.explicitContentFilter]}`
                 ].join('\n'));
 
             embed.setThumbnail(guild.iconURL({ format: 'png', dynamic: true }))

@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'poll',
     usage: 'fox poll [option1], [option2]',
-    category: 'utility',
+    //category: 'utility',
     execute(props) {
 
         let { lang, message, args } = props;

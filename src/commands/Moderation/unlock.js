@@ -2,7 +2,7 @@ module.exports = {
     name: 'unlock',
     aliases: ['ul', 'release'],
     permissions: 'MANAGE_CHANNELS',
-    category: 'moderation',
+    //category: 'moderation',
     usage: 'fox unlock (reason)',
     execute: async(props) => {
 

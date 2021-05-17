@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 module.exports = {
     name: 'invite',
     aliases: ['botinvite'],
-    category: 'utility',
+    //category: 'utility',
     usage: 'fox invite',
     execute(props) {
 

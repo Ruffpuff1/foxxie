@@ -4,7 +4,7 @@ module.exports = {
     name: "math",
     aliases: ['calculate', 'calc', 'calculator', 'convert'],
     usage: "fox math [query]",
-    category: 'utility',
+    //category: 'utility',
     execute: async (props) => {
 
         let { lang, message, args } = props;

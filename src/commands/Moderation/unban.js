@@ -3,7 +3,7 @@ module.exports = {
     name: 'unban',
     aliases: ['ub', 'unbean'],
     usage: 'fox unban [user|userId] (reason)',
-    category: 'moderation',
+    //category: 'moderation',
     permissions: 'BAN_MEMBERS',
     execute: async (props) => {
 

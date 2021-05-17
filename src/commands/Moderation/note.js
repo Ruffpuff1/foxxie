@@ -4,7 +4,7 @@ module.exports = {
     name: 'note',
     aliases: ['n'],
     usage: 'fox note [member|userId] [note]',
-    category: 'moderation',
+    //category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
     execute: async(props) => {
 
