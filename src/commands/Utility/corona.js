@@ -1,6 +1,6 @@
 const api = require('novelcovid')
 const Discord = require('discord.js')
-const { emojis: { covid: { cases, tests, deaths, recoveries } }, regexes: { covid: { usStates, continents } } } = require('../../../lib/util/constants')
+const { regexes: { covid: { usStates } } } = require('../../../lib/util/constants');
 module.exports = {
     name: 'corona',
     aliases: ['cv', 'covid'],
