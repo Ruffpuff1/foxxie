@@ -2,7 +2,7 @@ const fs = require('fs')
 const Discord = require('discord.js')
 const { serverSchema } = require('../../lib/structures/database/ServerSchemas')
 const mongo = require('../../lib/structures/database/mongo')
-module.exports.disboard = (client) => {
+module.exports.disboard = client => {
     client.disboard = require('../store/disboard.json')
     client.setInterval(async () => {
         for(let i in client.disboard) {
