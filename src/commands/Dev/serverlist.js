@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const foxxie = require('../../../config/foxxie');
 module.exports = {
     name: 'serverlist',
+    aliases: ['sl'],
     usage: 'fox serverlist',
     category: 'developer',
     execute: async (props) => {
@@ -24,7 +25,7 @@ module.exports = {
         let embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
             .setTitle(language.get('COMMAND_SERVERLIST_EMBED_TITLE', lang))
-            .setFooter(`${message.client.guilds.cache.size} ${lang.COMMAND_SERVERLIST_TOTALSERVERS}\n${lang.COMMAND_SERVERLIST_PAGE} - ${page}/${Math.ceil(message.client.guilds.cache.size / 10)}`)
+            .setFooter(language.get('COMMAND_SERVERLIST_EMBED_FOOTER', lang, message.client.guilds.cache.size, page, Math.ceil(message.client.guilds.cache.size / 10)))
             .setDescription(description);
 
         let msg = await message.channel.send(embed);
@@ -59,7 +60,7 @@ module.exports = {
                 .join("\n");
 
             embed
-                .setFooter(`${message.client.guilds.cache.size} ${lang.COMMAND_SERVERLIST_TOTALSERVERS}\n${lang.COMMAND_SERVERLIST_PAGE} - ${page}/${Math.ceil(message.client.guilds.cache.size / 10)}`)
+                .setFooter(language.get('COMMAND_SERVERLIST_EMBED_FOOTER', lang, message.client.guilds.cache.size, page, Math.ceil(message.client.guilds.cache.size / 10)))
                 .setDescription(description);
                 // Edit the message
             msg.edit(embed);
@@ -85,7 +86,7 @@ module.exports = {
                 .join("\n");
             // Update the embed with new informations
             embed
-                .setFooter(`${message.client.guilds.cache.size} ${lang.COMMAND_SERVERLIST_TOTALSERVERS}\n${lang.COMMAND_SERVERLIST_PAGE} - ${page}/${Math.ceil(message.client.guilds.cache.size / 10)}`)
+                .setFooter(language.get('COMMAND_SERVERLIST_EMBED_FOOTER', lang, message.client.guilds.cache.size, page, Math.ceil(message.client.guilds.cache.size / 10)))
                 .setDescription(description);
             // Edit the message
             msg.edit(embed);

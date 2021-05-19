@@ -1,81 +1,64 @@
-const mongo = require('../../../lib/structures/database/mongo')
-const Discord = require('discord.js')
-const { serverSchema } = require('../../../lib/structures/database/ServerSchemas')
 module.exports = {
     name: 'log',
     aliases: ['logging', 'logchannel', 'lc'],
-    usage: `fox log [mod|edit|delete] (#channel|none|off)`,
+    usage: `fox log [mod|edit|delete|reset] (#channel|none)`,
     permissions: 'ADMINISTRATOR',
-    //category: 'settings',
-    execute: async(props) => {
+    category: 'settings',
+    execute: async function (props) {
 
-        let { lang, message, args } = props
+        let { lang, args, language } = props
 
-        validCase = ["mod", "edit", "delete"]
+        const loading = await language.send("MESSAGE_LOADING", lang);
+        if (/(moderation|mod)/i.test(args[0])) return this._settings(props, loading, 'mod');
+        if (/(edit|editing)/i.test(args[0])) return this._settings(props, loading, 'edit');
+        if (/(delete|deleting)/i.test(args[0])) return this._settings(props, loading, 'delete');
+        if (/(reset|none)/i.test(args[0])) return this._resetSettings(props, loading);
+        loading.delete();
+        return language.send('COMMAND_LOG_INVALIDUSE', lang);
 
-        const embed = new Discord.MessageEmbed()
-            .setColor(message.guild.me.displayColor)
+    },
 
-        let use = args[0];
-        let chn = message.mentions.channels.first() || message.guild.channels.cache.get(args[1])
-        if (!use || !validCase.includes(use.toLowerCase())) return message.channel.send(`**Please,** specify a proper use case [mod|edit|delete].`)
+    async _resetSettings(props, loading) {
 
-        let settings = await message.guild.settings.get()
+        const { message, lang } = props;
+        const { guild } = message;
 
-        let deleteCase = ['off', 'none']
-    
-        if (chn === undefined && !deleteCase.includes(args[1])) {
-            if (!settings) return;
-            if (use === validCase[0].toLowerCase() && !settings.modChannel) embed.setDescription(`Currently not logging **moderation**. You can set the moderation channel with \`fox log mod [#channel]\`.`)
-            if (use === validCase[1].toLowerCase() && !settings.editChannel) embed.setDescription(`Currently not logging **edits**. You can set the edit channel with \`fox log edit [#channel]\`.`)
-            if (use === validCase[2].toLowerCase() && !settings.deleteChannel) embed.setDescription(`Currently not logging **deletions**. You can set the delete channel with \`fox log delete [#channel]\`.`)
+        function confirmed() {
 
-            if (use === validCase[0].toLowerCase() && settings.modChannel) embed.setDescription(`Currently logging **moderation** in <#${settings.modChannel}>.`)
-            if (use === validCase[1].toLowerCase() && settings.editChannel) embed.setDescription(`Currently logging **edits** in <#${settings.editChannel}>.`)
-            if (use === validCase[2].toLowerCase() && settings.deleteChannel) embed.setDescription(`Currently logging **deletions** in <#${settings.deleteChannel}>.`)
+            guild.settings.unset('log');
+            loading.delete();
+            return message.responder.success();
+        }
+        return loading.confirm(loading, 'COMMAND_LOG_CONFIRM', lang, message, confirmed)
+    },
 
-            return message.channel.send(embed)
+    async _settings(props, loading, setting) {
+
+        const { message, args, lang, language } = props;
+        const { guild } = message;
+
+        if (/(remove|none|off)/i.test(args[1])) {
+
+            guild.settings.unset(`log.${setting}`);
+            language.send(`COMMAND_LOG_${setting.toUpperCase()}_REMOVED`, lang);
+            return loading.delete();
         }
 
-        deleteServerSetting = async (message, use) => {
-            if (message.guild == undefined) return;
-            await mongo().then(async () => {
-                try {
-                        await serverSchema.findByIdAndUpdate({
-                            _id: message.guild.id
-                        }, {
-                            _id: message.guild.id,
-                            $unset: {
-                                [use]: ''
-                            }
-                        })
-                        return message.responder.success();
-                } finally {}
-            })
+        const channel = message.mentions.channels.first() || guild.channels.cache.get(args[1]) || message.guild.channels.cache.find(c => c.name === args[1]);
+        if (!channel) {
+
+            let channelId = await guild.settings.get(`log.${setting}.channel`);
+            if (!channelId) {
+
+                language.send(`COMMAND_LOG_${setting.toUpperCase()}_NOCHANNEL`, lang);
+                return loading.delete();
+            }
+            language.send(`COMMAND_LOG_${setting.toUpperCase()}_NOW`, lang, channelId);
+            return loading.delete();
         }
 
-        let setting;
-        if (use === validCase[0].toLowerCase()) setting = 'modChannel'
-        if (use === validCase[1].toLowerCase()) setting = 'editChannel'
-        if (use === validCase[2].toLowerCase()) setting = 'deleteChannel'
-
-        if (!chn && deleteCase.includes(args[1])){
-            return deleteServerSetting(message, setting)
-        }
-
-        await mongo().then(async () => {
-            try {
-            await serverSchema.findByIdAndUpdate({
-                _id: message.guild.id
-            }, {
-                _id: message.guild.id,
-                [setting]: chn
-            }, {
-                upsert: true
-            })
-            embed.setDescription(`Got it, set the **${setting}** setting to log in ${chn}.`)
-            message.channel.send(embed)
-            } finally {}
-        })
+        await guild.settings.set(`log.${setting}.channel`, channel.id);
+        language.send(`COMMAND_LOG_${setting.toUpperCase()}_SET`, lang, channel);
+        return loading.delete();
     }
 }

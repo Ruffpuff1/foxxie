@@ -24,7 +24,7 @@ module.exports = {
 
         // Persisteny
         const persistroles = await member.user.settings.get(`servers.${member.guild.id}.persistRoles`);
-		if (persistroles) await member.roles.add(persistroles.filter(id => !autoroles.includes(id)), member.guild.language.get('EVENT_GUILDMEMBERADD_PERSISTREASON', lang)).catch(() => null);
+		if (persistroles) await member.roles.add(persistroles.filter(id => !autoroles?.includes(id)), member.guild.language.get('EVENT_GUILDMEMBERADD_PERSISTREASON', lang)).catch(() => null);
 		const persistnick = await member.user.settings.get(`servers.${member.guild.id}.persistNickname`);
 		if (persistnick) await member.setNickname(persistnick).catch(e => e);
 
