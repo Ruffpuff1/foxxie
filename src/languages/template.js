@@ -8,6 +8,7 @@ module.exports = {
         DEFAULT: key => ``,
         PREFIX_REMINDER: (prefix, prefixes) => ``,
 
+        MESSAGE_CANCELLED: ``,
         MESSAGE_LOADING: ``,
 
         // Responders
@@ -80,6 +81,7 @@ module.exports = {
         COMMAND_CLEARNOTE_NOMEMBER: ``,
         COMMAND_CLEARNOTE_NOWARNINGS: ``,
         COMMAND_CLEARNOTE_INVALIDWARNID: ``,
+        COMMAND_CLEARWARN_CONFIRM: ``,
         COMMAND_CLEARWARN_DESCRIPTION: ``,
         COMMAND_CLEARWARN_NOMEMBER: ``,
         COMMAND_CLEARWARN_NOWARNINGS: ``,
@@ -262,7 +264,7 @@ module.exports = {
         COMMAND_JUSTIN_NAME: ``,
 
         // Settings Commands
-        COMMAND_ANTI_CLEAR: ``,
+        COMMAND_ANTI_CONFIRM: ``,
         COMMAND_ANTI_CURRENT: (setting, enabled) => ``,
         COMMAND_ANTI_DESCRIPTION: ``,
         COMMAND_ANTI_DISABLED: setting => ``,
@@ -288,14 +290,18 @@ module.exports = {
         COMMAND_GOODBYE_MESSAGE_NOW: message => ``,
         COMMAND_GOODBYE_MESSAGE_REMOVED: ``,
         COMMAND_GOODBYE_MESSAGE_SET: message => ``,
+        COMMAND_LANGUAGE_ARRAY: [],
+        COMMAND_LANGUAGE_DESCRIPTION: ``,
+        COMMAND_LANGUAGE_SUCCESS: ``,
         COMMAND_LOG_DESCRIPTION: ``,
+        COMMAND_PERMISSION_CONFIRM: ``,
         COMMAND_PERMISSION_DESCRIPTION: ``,
         COMMAND_PERMISSION_INVALIDUSE: ``,
         COMMAND_PERMISSION_NOMEMBER: ``,
+        COMMAND_PREFIX_CONFIRMED: ``,
         COMMAND_PREFIX_DESCRIPTION: ``,
         COMMAND_PREFIX_NONE: ``,
         COMMAND_PREFIX_NOW: (prefixs, list) => ``,
-        COMMAND_PREFIX_REMOVED: ``,
         COMMAND_PREFIX_ADDED: prefix => ``,
         COMMAND_SETTINGS_AUTOMOD: ``,
         COMMAND_SETTINGS_AUTOMOD_GIFTS: ``,

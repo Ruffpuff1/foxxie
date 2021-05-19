@@ -8,6 +8,7 @@ module.exports = {
         DEFAULT: key => `${key} has not been localized for en-US yet.`,
         PREFIX_REMINDER: (prefix, prefixes) => `**Heya!** My prefixes for this guild are ${prefix} and \`${prefixes}\`. Try out \`fox help\` to get a list of my commands and categories.`,
 
+        MESSAGE_CANCELLED: `Command **cancelled**.`,
         MESSAGE_LOADING: `${infinity} **Alright, I'm taking your order.** This may take a few seconds.`,
 
         // Responders
@@ -70,6 +71,7 @@ module.exports = {
         COMMAND_URBAN_NOWORD: `**Okay,** how do you expect me to define a word if you don't provide one?`,
 
         // Moderation Commands
+        COMMAND_CLEARWARN_CONFIRM: `**Hey,** are you sure you want to clear all warnings for this member?`,
         COMMAND_CLEARWARN_DESCRIPTION: `Remove or clear warnings for the specified user. Specify a warn Id to clear that specific warning, or specify \`all\` to clear all warnings for that user.\nWarnings and their Id's can be seen with the \`info\` command.`,
         COMMAND_CLEARWARN_NOWARNINGS: `**Sorry,** this member currently has **no warnings** to clear.`,
         COMMAND_CLEARWARN_NOMEMBER: `**Hey,** you need to specify **one member** to clear warnings for.`,
@@ -218,7 +220,7 @@ module.exports = {
         // Secret Commands
 
         // Settings Commands
-        COMMAND_ANTI_CLEAR: `**Gotcha,** clear all anti settings for this server.`,
+        COMMAND_ANTI_CONFIRM: `**Hey,** are you sure you want to delete **all anti** settings on this server?`,
         COMMAND_ANTI_CURRENT: (setting, enabled) => `**anti-${setting}s** are currently **${state === true ? 'enabled' : 'disabled'}**.`,
         COMMAND_ANTI_DESCRIPTION: `Toggle anti or automod in your server. Current options are \`invite\` to filter Discord invite links, and \`clear\` to reset anti settings.`,
         COMMAND_ANTI_DISABLED: setting => `**Gotcha,** stopped filtering **${setting}s**.`,
@@ -234,13 +236,17 @@ module.exports = {
         COMMAND_GOODBYE_MESSAGE_NOW: message => `**Heya,** right now the goodbye message is set to: \`\`\`${message}\`\`\``,
         COMMAND_GOODBYE_MESSAGE_REMOVED: `**Oki,** I'll remove the goodbye message and use my default instead.`,
         COMMAND_GOODBYE_MESSAGE_SET: message => `**Gotcha,** I'll set the goodbye message to \`\`\`${message}\`\`\``,
+        COMMAND_LANGUAGE_ARRAY: ['__Foxxie\'s Supported Languages__:\n', ':flag_us: **en-US** (English)', ':flag_mx: **es-MX** (Spanish)'].join('\n'),
+        COMMAND_LANGUAGE_DESCRIPTION: `Set the server's language or view my list of supported languages. By default my language will be \`en-US\`.`,
+        COMMAND_LANGUAGE_SUCCESS: `**Successfully** set guild language to **en-US**.`,
+        COMMAND_PERMISSION_CONFIRM: `**Hey,** are you sure you want to reset **all permission** settings on this server?`,
         COMMAND_PERMISSION_DESCRIPTION: `Allows you to enable or disable certain users from using my commands in your server.`,
         COMMAND_PERMISSION_INVALIDUSE: `**Hey,** you need to specify a proper user case [allow|deny|reset].`,
         COMMAND_PERMISSION_NOMEMBER: `**Sorry,** you need to provide either a user @mention or user Id.`,
         COMMAND_PREFIX_DESCRIPTION: `Lets you add custom per-server prefixes that I will listen to for commands and tags. To clear all custom prefixes just specify \`none\`.`,
+        COMMAND_PREFIX_CONFIRM: `**Hey,** are you sure you want to reset **all prefixes** on this server?`,
         COMMAND_PREFIX_NONE: `**Whoops,** there isn't any custom prefixes set right now. You can add one with \`fox prefix (prefix)\`.`,
         COMMAND_PREFIX_NOW: (prefixes, list) => `Right now, this server's prefix${prefixes.length > 1 ? 'es are' : ' is'} set to ${prefixes.length > 1 ?  `${list} and \`${prefixes.pop()}\`` : `\`${prefixes[0]}\``}`,
-        COMMAND_PREFIX_REMOVED: `**Gotcha,** removed the server's custom prefixes and reset to listening to my defaults.`,
         COMMAND_PREFIX_ADDED: prefix => `**Alright,** I added \`${prefix}\` to the list of this server's custom prefixes.`,
         COMMAND_SETTINGS_AUTOMOD: `automod`,
         COMMAND_SETTINGS_AUTOMOD_GIFTS: `└─ ${granted} Gifts **filtered**`,
