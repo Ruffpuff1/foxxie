@@ -39,7 +39,7 @@ module.exports = {
         async function _message() {
 
             if (/(none|reset)/i.test(args[1])) {
-                language.send('COMMAND_GODBYE_MESSAGE_REMOVED', lang);
+                language.send('COMMAND_GOODBYE_MESSAGE_REMOVED', lang);
                 loading.delete();
                 return message.guild.settings.unset('goodbye.message');
             }

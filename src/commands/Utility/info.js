@@ -134,31 +134,26 @@ module.exports = {
                                 : language.get('COMMAND_INFO_USER_GUILDJOIN', lang, join)
                 );
             
-                let personal = []
-
-                const birthday = null;
-		        if (birthday) {
-			        statistics.push(language.get('COMMAND_INFO_USER_BIRTHDAY', lang, birthday));
-		        }
+                let personal = [];
 
                 let msgs = await member.user.settings.get(`servers.${message.guild.id}.messageCount`)
-                statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs || 0));
+                personal.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs || 0));
+
+                const birthday = null;
+		        // if (birthday) {
+			    //     personal.push(`:cake: **${birthday}**`)//(language.get('COMMAND_INFO_USER_BIRTHDAY', lang, birthday));
+		        // }
 
                 let totalStar = await member.user.settings.get(`servers.${message.guild.id}.starCount`);
                 let minimum = await message.guild.settings.get(`starboard.minimum`) || 3;
-		        if (totalStar && totalStar >= minimum) {
-			        statistics.push(language.get('COMMAND_INFO_USER_STARS_EARNED', lang, totalStar));
-		        }
-
-                // const birthday = '08-29'//null;
-		        // if (birthday) {
-			    //     statistics.push(language.get('COMMAND_INFO_USER_BIRTHDAY', lang, birthday));
+		        // if (totalStar && totalStar >= minimum) {
+			    //     personal.push(`:star: **${totalStar}**`)//(language.get('COMMAND_INFO_USER_STARS_EARNED', lang, totalStar));
 		        // }
-
-                statistics.push(personal.join(" "))
+                statistics.push(personal.join(" "));
+                if (member) embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS', lang)} ${totalStar && totalStar >= minimum ? `:star: **${totalStar}**` : ''} ${birthday ? `:cake: **${birthday}**` : ''}`, statistics.join('\n'));
             }
 
-            embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS', lang)}`, statistics.join('\n'));
+            if (!member) embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS', lang)}`, statistics.join('\n'));
 		    if (!member) return embed.setColor(message.guild.me.displayColor)
 
             const roles = member.roles.cache.sorted((a, b) => b.position - a.position);

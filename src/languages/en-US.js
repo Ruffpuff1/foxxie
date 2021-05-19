@@ -435,7 +435,10 @@ module.exports = {
         COMMAND_WOLFRAM_NO_DATA: `**Sorry,** I couldn't find any data for that search.`,
 
         // Events
+        EVENT_AUTOROLE_REASON: `Autorole - A role automatically assigned to members who join.`,
+        EVENT_BOTROLE_REASON: `Botrole - A role automatically given to bots that join.`,
         EVENT_GUILDMEMBERADD_DEFAULT_WELCOMEMESSAGE: member => `**${member.toString()}** just joined the server!`,
+        EVENT_GUILDMEMBERADD_PERSISTREASON: `Role persistency this member had these roles before leaving.`,
         EVENT_GUILDMEMBERREMOVE_DEFAULT_GOODBYEMESSAGE: member => `**${member.user.tag}** just left the server :(`,
         EVENT_STARBOARD_JUMP: `Jump to Message`,
         EVENT_STARBOARD_NOTIF_DESCRIPTION: (user, channel, link) => `A message by ${user} got starred enough to make it into the ${channel}.\nCheck it out [here](${link})`,
