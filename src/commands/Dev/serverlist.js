@@ -6,9 +6,10 @@ module.exports = {
     category: 'developer',
     execute: async (props) => {
 
-        let { message, lang } = props
+        let { message, lang, language } = props
 
-        if (foxxie.owner.includes(message.author.id)) {
+        if (!foxxie.owner.includes(message.author.id)) return;
+
         let i0 = 0;
         let i1 = 10;
         let page = 1;
@@ -16,13 +17,13 @@ module.exports = {
         let description = message.client.guilds.cache
             .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
             .map(r => r)
-            .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${lang.COMMAND_SERVERLIST_MEMBERCOUNT}`)
+            .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${language.get('COMMAND_SERVERLIST_MEMBERCOUNT', lang)}`)
             .slice(0, 10)
             .join("\n");
 
         let embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
-            .setTitle(lang.COMMAND_SERVERLIST)
+            .setTitle(language.get('COMMAND_SERVERLIST_EMBED_TITLE', lang))
             .setFooter(`${message.client.guilds.cache.size} ${lang.COMMAND_SERVERLIST_TOTALSERVERS}\n${lang.COMMAND_SERVERLIST_PAGE} - ${page}/${Math.ceil(message.client.guilds.cache.size / 10)}`)
             .setDescription(description);
 
@@ -30,11 +31,12 @@ module.exports = {
 
         await msg.react("⬅");
         await msg.react("➡");
-        await msg.react("❌");
+        await msg.react("834628295303495681");
 
         let collector = msg.createReactionCollector((reaction, user) => user.id === message.author.id)
 
         collector.on("collect", async (reaction, user) => {
+
             if (reaction._emoji.name === "⬅") {
                 // Updates variables
                 i0 = i0 - 10;
@@ -88,14 +90,13 @@ module.exports = {
             // Edit the message
             msg.edit(embed);
             }
-            if (reaction._emoji.name === "❌") {
+            if (reaction._emoji.id === "834628295303495681") {
                 return msg.delete();
             }
         // Remove the reaction when the user react to the message
             await reaction.users.remove(message.author.id);
-        })} 
-        else {
-            return
-        }
+        }) 
+        
+        
     }
 }

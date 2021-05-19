@@ -13,11 +13,15 @@ module.exports = {
         if (/(invite|invites)/i.test(args[0])) return _Anti('invite');
         language.send('COMMAND_ANTI_INVALIDUSE', lang); return loading.delete();
 
-        function _clearAnti() {
+        async function _clearAnti() {
 
-            language.send('COMMAND_ANTI_CLEAR', lang);
-            loading.delete();
-            return message.guild.settings.unset("mod.anti")
+            function confirmed() {
+
+                message.guild.settings.unset("mod.anti");
+                loading.delete();
+                return message.responder.success();
+            }
+            loading.confirm(loading, 'COMMAND_ANTI_CONFIRM', lang, message, confirmed);                         
         }
 
         async function _Anti(setting) {

@@ -24,14 +24,21 @@ module.exports = {
 
         async function _clearWarns() {
 
+            const loading = await language.send("MESSAGE_LOADING", lang);
+
+            function confirmed() {
+
+                target.user.settings.unset(`servers.${message.guild.id}.warnings`);
+                message.guild.log.moderation(message, target.user, reason, 'Clearedwarns', 'clearwarn', lang);
+                loading.delete();
+                return message.responder.success();
+            };
+
             let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
 
             let set = await target.user.settings.get(`servers.${message.guild.id}.warnings`);
-            if (!set?.length) return language.send('COMMAND_CLEARWARN_NOWARNINGS', lang);
-
-            target.user.settings.unset(`servers.${message.guild.id}.warnings`);
-            message.guild.log.moderation(message, target.user, reason, 'Clearedwarns', 'clearwarn', lang)
-            return message.responder.success();
+            if (!set?.length) return language.send('COMMAND_CLEARWARN_NOWARNINGS', lang).then(loading.delete());
+            return loading.confirm(loading, 'COMMAND_CLEARWARN_CONFIRM', lang, message, confirmed);
         }
     }
 }

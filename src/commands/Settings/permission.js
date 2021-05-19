@@ -25,9 +25,15 @@ module.exports = {
             return message.responder.success();
         };
 
-        function _resetPerms() {
-            message.guild.settings.unset('blockedUsers');
-            return message.responder.success();
+        async function _resetPerms() {
+
+            const loading = await language.send("MESSAGE_LOADING", lang);
+            function confirmed() {
+                message.guild.settings.unset('blockedUsers');
+                loading.delete();
+                return message.responder.success();
+            }
+            loading.confirm(loading, 'COMMAND_PERMISSION_CONFIRM', lang, message, confirmed);
         };
     }
 }

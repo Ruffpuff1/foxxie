@@ -10,9 +10,14 @@ module.exports = {
         const loading = await language.send("MESSAGE_LOADING", lang);
 
         if (/(none|reset)/i.test(args[0])) {
-            message.guild.settings.unset('prefixes');
-            language.send('COMMAND_PREFIX_REMOVED', lang);
-            return loading.delete();
+
+            function confirmed() {
+
+                message.guild.settings.unset('prefixes');
+                loading.delete();
+                return message.responder.success();
+            }
+            return loading.confirm(loading, 'COMMAND_PREFIX_CONFIRM', lang, message, confirmed);
         }
 
         let prefix = args[0]
