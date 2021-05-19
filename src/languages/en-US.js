@@ -98,7 +98,7 @@ module.exports = {
         COMMAND_VCKICK_NOVOICE: `**Hey,** the user you specified is not currently in a vc.`,
 
         // Roleplay Commands
-        COMMAND_ANGRY_DESCRIPTION: ``,
+        COMMAND_ANGRY_DESCRIPTION: `Get angry at someone (ಠ_ಠ)`,
         COMMAND_ANGRY_FOOTER: (sender, reciever, authNum, recNum) => `${sender} got angry ${authNum} times, and ${reciever} made others angry ${recNum} times`,
         COMMAND_ANGRY_MULTIPLE: (sender, reciever) => `**${sender}** got angry because of **${reciever}**`,
         COMMAND_ANGRY_SELF: `is angry`,
@@ -147,7 +147,7 @@ module.exports = {
         COMMAND_KISS_FOOTER: (sender, reciever, authNum, recNum) => `${reciever} got kissed ${recNum} times and ${sender} kissed others ${authNum} times`,
         COMMAND_KISS_MULTIPLE: (sender, reciever) => `**${sender}** gives kisses to **${reciever}**`,
         COMMAND_KISS_SINGLE: (sender, reciever) => `**${sender}** and **${reciever}** are kissing`,
-        COMMAND_LICK_DESCRIPTION: ``,
+        COMMAND_LICK_DESCRIPTION: `Give someone a licky lick`,
         COMMAND_LICK_FOOTER: (sender, reciever, authNum, recNum) => `${reciever} has been licked ${recNum} times and ${sender} has licked others ${authNum} times`,
         COMMAND_LICK_MULTIPLE: (sender, reciever) => `**${reciever}** are getting licked by **${sender}**`,
         COMMAND_LICK_SINGLE: (sender, reciever) => `**${sender}** is licking **${reciever}**`,
@@ -192,7 +192,7 @@ module.exports = {
         COMMAND_SLAP_FOOTER: (sender, reciever, authNum, recNum) => `${reciever} got slapped ${recNum} times and ${sender} slapped others ${authNum} times`,
         COMMAND_SLAP_MULTIPLE: (sender, reciever) => `**${reciever}** get slapped by **${sender}**`,
         COMMAND_SLAP_SINGLE: (sender, reciever) => `**${sender}** is slapping **${reciever}**`,
-        COMMAND_SLEEP_DESCRIPTION: ``,
+        COMMAND_SLEEP_DESCRIPTION: `Go to sleep (ya seriously need it)`,
         COMMAND_SLEEP_FOOTER: (sender, reciever, authNum, recNum) => `${sender} has fallen asleep ${authNum} times and ${reciever} has been slept with ${recNum} times`,
         COMMAND_SLEEP_MULTIPLE: (sender, reciever) => `**${sender}** is sleeping with **${reciever}**`,
         COMMAND_SLEEP_SELF: `is going to sleep`,
