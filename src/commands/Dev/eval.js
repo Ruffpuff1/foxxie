@@ -1,4 +1,5 @@
-const foxxie = require('../../../config/foxxie')
+const foxxie = require('../../../config/foxxie');
+const { performance } = require('perf_hooks');
 const { flags: { async, depth, silent } } = require('../../../lib/util/constants');
 
 module.exports = {
@@ -10,50 +11,41 @@ module.exports = {
 
         let { message, args, lang, language } = props
 
-        let client = message.client
+        let client = message.client;
+        if (!foxxie.owner.includes(message.author.id)) return;
+        const start = performance.now().toFixed(2);
+        let arg = args.slice(0).join(" ");
+        let silent = /(-silent|-s)/gi.test(arg);
+        let async = /(-async|-a)/gi.test(arg);
+        let msg = /(-message|-m)/gi.test(arg);
 
-        let tru = silent.test(message.content)
-        let asyn = async.test(message.content)
-        let msg = /\-message\s*|-m\s*/gi
-        let truMsg = msg.test(message.content)
-        let codein = args.slice(0).join(" ").replace(silent, '')
-        codein = codein.replace(async, '')
-        codein = codein.replace(msg, '')
-        asyn ? codein = `(async () => {\n${codein}\n})();` : ''
+        function codeReplace() {
+            return arg
+                .replace(/(-silent|-s)/gi, '')
+                .replace(/(-async|-a)/gi, '')
+                .replace(/(-message|-m)/gi, '');
+        };
 
+        try {
 
-        if (foxxie.owner.includes(message.author.id)) {
-            if (!codein.toLowerCase().includes("token")) {
-                try {
-                    let code  = eval(codein)
-                    let type = typeof code
-                    if (codein.legth < 1 && !codein)
-                        return message.channel.send(`${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${language.get('COMMAND_EVAL_UNDEFINED', lang)}\n\`\`\``)
-                    if (typeof code !== "string")
-                        code = require("util").inspect(code, { depth : 0 } )
-                    
-                    if (!tru && !truMsg) message.channel.send(`\n${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${code.length > 1024 ? `${language.get('COMMAND_EVAL_OVER', lang)}` : code}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE', lang)}\n\`\`\`javascript\n${type}\n\`\`\``)
-                        .then(resultmessage => {
-                            const time = resultmessage.createdTimestamp - message.createdTimestamp
-                            const timeMs = resultmessage.createdTimestamp*1000 - message.createdTimestamp*1000
-                            resultmessage.edit(`\n${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${code.length > 1024 ? `${language.get('COMMAND_EVAL_OVER', lang)}` : code}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE', lang)}\n\`\`\`javascript\n${type}\n\`\`\`\n:stopwatch: ${time}ms (${timeMs.toLocaleString()}μs)`)
-                        }
-                    )
-                    if (truMsg) message.channel.send('output: ' + code.length > 1024 ? `${language.get('COMMAND_EVAL_OVER', lang)}` : code)
-                } catch(e) {
-                    let eType = typeof e
-                    message.channel.send(`\n${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${e.length > 1024 ? `${language.get('COMMAND_EVAL_OVER', lang)}` : e}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE', lang)}\n\`\`\`javascript\n${eType}\n\`\`\``)
-                        .then(resultmessage => {
-                            const time = resultmessage.createdTimestamp - message.createdTimestamp
-                            const timeMs = resultmessage.createdTimestamp*1000 - message.createdTimestamp*1000
-                            resultmessage.edit(`\n${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${e.length > 1024 ? `${language.get('COMMAND_EVAL_OVER', lang)}` : e}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE', lang)}\n\`\`\`javascript\n${eType}\n\`\`\`\n:stopwatch: ${time}ms (${timeMs.toLocaleString()}μs)`) 
-                        }
-                    )
-                }
-            }
-                else {
-                    message.channel.send(`${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${language.get('COMMAND_EVAL_TOKEN', lang)}\n\`\`\``)
-                }
+            let code = await codeReplace();
+            if (async) code = `(async () => {\n${code}\n})();`;
+            let result = eval(code);
+            let type = typeof result;
+
+            if (result.length < 1 && result) return message.channel.send(`${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${language.get('COMMAND_EVAL_UNDEFINED', lang)}\n\`\`\``);
+            if (typeof result !== "string") result = require("util").inspect(result, { depth : 0 } );
+            const end = performance.now().toFixed(2);
+            let time = (end*1000) - (start*1000);
+
+            if (!msg && !silent) message.channel.send(`\n${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${result.length > 1024 ? `${language.get('COMMAND_EVAL_OVER', lang)}` : result}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE', lang)}\n\`\`\`javascript\n${type}\n\`\`\`\n:stopwatch: ${Math.floor(time)}μs`);
+            if (msg) message.channel.send('output: ' + result.length > 1024 ? `${language.get('COMMAND_EVAL_OVER', lang)}` : result);
+        } catch(e) {
+
+            let err = typeof e;
+            const end = performance.now().toFixed(2);
+            let time = (end*1000) - (start*1000);
+            message.channel.send(`\n${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${e.length > 1024 ? `${language.get('COMMAND_EVAL_OVER', lang)}` : e}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE', lang)}\n\`\`\`javascript\n${err}\n\`\`\`\n:stopwatch: ${Math.floor(time)}μs`)
         }
     }
 }

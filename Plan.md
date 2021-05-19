@@ -10,7 +10,6 @@
 ### More moderation commands.
 * Mute
 * Jail
-* Clearwarn
 * Clearnote
 * Vcmute
 * Vcdeafen
@@ -18,11 +17,9 @@
 ### Additional.
 * More fun cmds
 * Block channels
-* Settings revamp
 * Start building permissions nodes
 
 ### Internal code fixes.
 * Reorganize functions
-* Configure monitors and tasks to work off the client.
-* Finish transferring user data to the new userSchema. (Afks, finish transferring existing mod stats, global ban system)
-* Transfer status schema to bot settings schema.
+* Configure tasks to work off the client.
+* Finish transferring user data to the new userSchema. (Afks, finish transferring existing mod stats, global ban system);
