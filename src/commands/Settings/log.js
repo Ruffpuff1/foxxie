@@ -18,9 +18,8 @@ module.exports = {
 
     },
 
-    async _resetSettings(props, loading) {
+    async _resetSettings({ message, lang }, loading) {
 
-        const { message, lang } = props;
         const { guild } = message;
 
         function confirmed() {
@@ -32,9 +31,8 @@ module.exports = {
         return loading.confirm(loading, 'COMMAND_LOG_CONFIRM', lang, message, confirmed)
     },
 
-    async _settings(props, loading, setting) {
+    async _settings({ message, args, lang, language }, loading, setting) {
 
-        const { message, args, lang, language } = props;
         const { guild } = message;
 
         if (/(remove|none|off)/i.test(args[1])) {

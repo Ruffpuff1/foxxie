@@ -3,7 +3,7 @@ const moment = require('moment');
 
 module.exports = {
     name: 'guildMemberAdd',
-    execute: async function(member) {
+    async execute (member) {
 
         // Returns if self
         if (member.user.id === member.guild.me.user.id) return;

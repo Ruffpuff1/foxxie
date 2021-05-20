@@ -4,6 +4,8 @@ const Doc = require('discord.js-docs')
 module.exports = {
     name: 'docs',
     usage: 'fox docs [search]',
+    category: 'developer',
+    permissionLevel: 9,
     execute: async (props) => {
         
         let { message, args, lang, language } = props

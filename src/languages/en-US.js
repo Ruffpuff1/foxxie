@@ -13,7 +13,6 @@ module.exports = {
 
         // Responders
         RESPONDER_ERROR_CODE: `**Uh oh,** there seems to be some sort of problem with my source code. Now don't worry I'm not dying on ya but I'd appreciate it if you did \`fox bugreport [bug]\` to send a message to my developer about it.`,
-        RESPONDER_ERROR_PERMS_AUTHOR: perm => `You don't have the perms to use this command, for that you need the \`${perm}\` permission.`,
         RESPONDER_ERROR_PERMS_CLIENT: perm => `I don't have the correct permissions to run this command! I need the \`${perm}\` permission in this channel. As an alternative you can give my role the \`ADMINISTRATOR\` permission to bypass this issue.`,
         RESPONDER_FOXXIE_CUBBY_WRONG_CHANNEL: msg => `${msg.member}, this channel **isnt** meant to test out my commands. For that, you should head over to <#825896913810358274>.`,
 
@@ -477,6 +476,8 @@ module.exports = {
         EVENT_STARBOARD_NOTIF_TITLE: `:star: A new message made it into the starboard :star:`,
 
         // Inhibitors
+        INHIBITORS_PERMISSIONS_AUTHOR: perm => `**You don't** have permission to run this command, you need the **${perm.toLowerCase().replace(/_/g, ' ')}** permission.`,
+        INHIBITORS_PERMISSIONS_GUILDOWNER: `**Nope,** due to the harm this command can cause it can only be excuted by the guild owner.`,
 
         // Logs
         LOG_MODERATION_BANNED: tar => `Banned ${tar}`,

@@ -1,32 +1,32 @@
-const { owner } = require("../../../config/foxxie");
-
 module.exports = {
     name: 'gif',
     category: 'developer',
     usage: 'fox gif [add|list] [roleplay] [name] (gif)',
-    execute: async (props) => {
+    category: 'developer',
+    permissionLevel: 9,
+    async execute (props) {
 
-        let { message, args, language, lang } = props;
-        if (!owner.includes(message.author.id)) return;
-        if (/(add|new)/i.test(args[0])) return _add();
-        if (/(list|show)/i.test(args[0])) return _list();
+        let { args, language, lang } = props;
+        if (/(add|new)/i.test(args[0])) return this._add(props);
+        if (/(list|show)/i.test(args[0])) return this._list(prop);
         return language.send('COMMAND_GIF_INVALIDUSE', lang);
+    },
 
-        async function _add() {
+    async _add({ message, args, language, lang }) {
 
-            if (!/(roleplay)/.test(args[1])) return language.send('COMMAND_GIF_INVALIDLABEL', lang);
-            await message.bot.push(`gifs.${args[1]}.${args[2]}`, args[3].replace('<', "").replace('>', ""));
-            
-            return language.send('COMMAND_GIF_ADDED_SUCCESS', lang, args[2], args[3]);
-        }
-        async function _list() {
+        if (!/(roleplay)/.test(args[1])) return language.send('COMMAND_GIF_INVALIDLABEL', lang);
+        await message.bot.push(`gifs.${args[1]}.${args[2]}`, args[3].replace('<', "").replace('>', ""));
+        
+        return language.send('COMMAND_GIF_ADDED_SUCCESS', lang, args[2], args[3]);
+    },
 
-            if (!/(roleplay)/.test(args[1])) return language.send('COMMAND_GIF_INVALIDLABEL', lang);
+    async _list( { message, args, language, lang } ) {
 
-            let ls = await message.bot.get(`gifs.${args[1]}.${args[2]}`);
-            if (!ls) return language.send('COMMAND_GIF_NOLIST', lang);
+        if (!/(roleplay)/.test(args[1])) return language.send('COMMAND_GIF_INVALIDLABEL', lang);
 
-            return message.channel.send(`\`\`\`js\n${ls.map(l => `"${l}"`).join('\n')}\n\`\`\``);
-        }
+        let ls = await message.bot.get(`gifs.${args[1]}.${args[2]}`);
+        if (!ls) return language.send('COMMAND_GIF_NOLIST', lang);
+
+        return message.channel.send(`\`\`\`js\n${ls.map(l => `"${l}"`).join('\n')}\n\`\`\``);
     }
 }

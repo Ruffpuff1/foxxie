@@ -1,15 +1,13 @@
 const Discord = require('discord.js');
-const foxxie = require('../../../config/foxxie');
 module.exports = {
     name: 'serverlist',
     aliases: ['sl'],
     usage: 'fox serverlist',
+    permissionLevel: 9,
     category: 'developer',
     execute: async (props) => {
 
         let { message, lang, language } = props
-
-        if (!foxxie.owner.includes(message.author.id)) return;
 
         let i0 = 0;
         let i1 = 10;

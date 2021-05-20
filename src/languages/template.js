@@ -13,7 +13,6 @@ module.exports = {
 
         // Responders
         RESPONDER_ERROR_CODE: ``,
-        RESPONDER_ERROR_PERMS_AUTHOR: perm => ``,
         RESPONDER_ERROR_PERMS_CLIENT: perm => ``,
         RESPONDER_FOXXIE_CUBBY_WRONG_CHANNEL: msg => ``,
 
@@ -554,6 +553,8 @@ module.exports = {
         EVENT_STARBOARD_NOTIF_TITLE: ``,
 
         // Inhibitors
+        INHIBITORS_PERMISSIONS_AUTHOR: perm => ``,
+        INHIBITORS_PERMISSIONS_GUILDOWNER: ``,
 
         // Logs
         LOG_MODERATION_BANNED: tar => ``,

@@ -1,5 +1,5 @@
-const { MessageEmbed } = require('discord.js')
-const { commandHandler } = require('../handlers/commandHandler')
+const { MessageEmbed } = require('discord.js');
+const commandHandler = require('../handlers/commandHandler');
 module.exports = {
     name: 'messageUpdate',
     execute: async(oldMessage, newMessage) => {
@@ -12,7 +12,7 @@ module.exports = {
         if (oldMessage.content.includes('https://')) return
         // Command edit with cmd handler
         const message = newMessage
-        commandHandler(message)
+        commandHandler.execute(message);
         let editChannel = await message.guild.settings.get('log.edit.channel')
         if (!editChannel) return;
 

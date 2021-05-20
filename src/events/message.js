@@ -1,4 +1,4 @@
-const { commandHandler } = require('../handlers/commandHandler');
+const commandHandler = require('../handlers/commandHandler');
 const { afkCheck } = require('../tasks/afkcheck');
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
         // Execute Monitors
         message.client.monitors.forEach(m => { if (m.type === 'message') m.execute(message) });
         // Botwide
-        commandHandler(message)
+        commandHandler.execute(message);
         afkCheck(message)
         // Counters
         // message.author.settings.inc(`servers.${message.guild.id}.messageCount`)

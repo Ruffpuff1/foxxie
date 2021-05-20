@@ -1,16 +1,14 @@
 const mongo = require('../../../lib/structures/database/mongo')
 const { botSettingsSchema } = require("../../../lib/structures/database/BotSettingsSchema")
-const { owner } = require('../../../config/foxxie');
 module.exports = {
     name: 'status',
     aliases: ['state', 'update'],
     usage: 'fox status [status] (message)',
+    permissionLevel: 9,
     category: 'developer',
     execute: async(props) => {
 
         let { message, args } = props
-
-        if (!owner.includes(message.author.id)) return;
 
         let status = args[0]
         let msg = args.slice(1).join(' ')

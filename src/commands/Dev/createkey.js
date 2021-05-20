@@ -1,4 +1,3 @@
-const { owner } = require("../../../config/foxxie");
 const { botSettingsSchema } = require("../../../lib/structures/database/BotSettingsSchema")
 const mongo = require("../../../lib/structures/database/mongo")
 const { randomBytes } = require('crypto');
@@ -10,10 +9,10 @@ module.exports = {
     aliases: ['crk'],
     category: 'developer',
     usage: 'fox createkey [id]',
+    permissionLevel: 9,
     execute: async (props) => {
 
         let { message, args, language, lang } = props
-        if (!owner.includes(message.author.id)) return;
 
         const id = args[0]
         if (!/^(0|1|2)$/gm.test(id)) return message.responder.error('COMMAND_CREATEKEY_NOID', lang, badges);

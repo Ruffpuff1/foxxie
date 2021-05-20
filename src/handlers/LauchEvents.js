@@ -46,5 +46,13 @@ module.exports.launchEvents = (client) => {
         const language = require(`../languages/${file}`);
         client.languages.set(language.name, language);
     } 
-    
+
+    // Inhibitors 
+    client.inhibitors = new Discord.Collection();
+
+    const inFiles = fs.readdirSync('./src/inhibitors').filter(file => file.endsWith('.js'));
+    for (const file of inFiles) {
+        const inhibitor = require(`../inhibitors/${file}`);
+        client.inhibitors.set(inhibitor.name, inhibitor);
+    };
 }

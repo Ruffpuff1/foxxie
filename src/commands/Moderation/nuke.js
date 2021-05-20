@@ -2,7 +2,7 @@ module.exports = {
     name: 'nuke',
     usage: 'fox nuke',
     //category: 'moderation',
-    permissions: 'ADMINISTRATOR',
+    permissionLevel: 7,
     execute: async(props) => {
 
         let { message, lang, args, language } = props

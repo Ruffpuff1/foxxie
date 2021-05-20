@@ -4,14 +4,14 @@ module.exports = {
     usage: 'fox clearwarn [user|userId] [warnid|all] (reason)',
     category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
-    execute: async(props) => { 
+    async execute (props) { 
 
         const { lang, language, message, args } = props;
 
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!target) return language.send('COMMAND_CLEARWARN_NOMEMBER', lang);
 
-        if (/all/.test(args[1])) return _clearWarns();
+        if (/all/.test(args[1])) return this._clearWarns(props, target);
 
         let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
         let set = await target.user.settings.get(`servers.${message.guild.id}.warnings[${args[1] - 1}]`);
@@ -22,23 +22,24 @@ module.exports = {
         message.guild.log.moderation(message, target.user, reason, 'Clearedwarns', 'clearwarn', lang)
         return message.responder.success();
 
-        async function _clearWarns() {
+    }, 
 
-            const loading = await language.send("MESSAGE_LOADING", lang);
+    async _clearWarns({ message, args, language, lang }, target ) {
 
-            function confirmed() {
+        const loading = await language.send("MESSAGE_LOADING", lang);
 
-                target.user.settings.unset(`servers.${message.guild.id}.warnings`);
-                message.guild.log.moderation(message, target.user, reason, 'Clearedwarns', 'clearwarn', lang);
-                loading.delete();
-                return message.responder.success();
-            };
+        function confirmed() {
 
-            let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
+            target.user.settings.unset(`servers.${message.guild.id}.warnings`);
+            message.guild.log.moderation(message, target.user, reason, 'Clearedwarns', 'clearwarn', lang);
+            loading.delete();
+            return message.responder.success();
+        };
 
-            let set = await target.user.settings.get(`servers.${message.guild.id}.warnings`);
-            if (!set?.length) return language.send('COMMAND_CLEARWARN_NOWARNINGS', lang).then(loading.delete());
-            return loading.confirm(loading, 'COMMAND_CLEARWARN_CONFIRM', lang, message, confirmed);
-        }
+        let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
+
+        let set = await target.user.settings.get(`servers.${message.guild.id}.warnings`);
+        if (!set?.length) return language.send('COMMAND_CLEARWARN_NOWARNINGS', lang).then(loading.delete());
+        return loading.confirm(loading, 'COMMAND_CLEARWARN_CONFIRM', lang, message, confirmed);
     }
 }
