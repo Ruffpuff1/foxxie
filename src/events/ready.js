@@ -16,8 +16,8 @@ module.exports = {
         // afkcheck(client)
         disboard(client)
         // The Corner Store, memberCount & clock
-        memberCount(client)
-        clock(client)
+        // memberCount(client)
+        // clock(client)
 
         // stats(client)
         // setInterval(() => {
