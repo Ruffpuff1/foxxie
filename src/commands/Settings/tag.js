@@ -7,7 +7,7 @@ module.exports = {
     async execute (props) {
         let { args } = props;
 
-        if (!args[0] || args[0].toLowerCase() === 'list') return list();
+        if (!args[0] || args[0].toLowerCase() === 'list') return this._list(props);
         if (args[0].toLowerCase() === 'add') return this._add(props);
         if (args[0].toLowerCase() === 'remove') return this._remove(props);
         return this._list(props);

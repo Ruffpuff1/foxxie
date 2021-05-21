@@ -14,6 +14,7 @@ module.exports = {
         // Botwide
         commandHandler.execute(message);
         afkCheck(message)
+
         // Counters
         // message.author.settings.inc(`servers.${message.guild.id}.messageCount`)
         // message.guild.settings.inc('messageCount');

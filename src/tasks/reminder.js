@@ -1,45 +1,41 @@
-const fs = require('fs')
 const Discord = require('discord.js');
-const Language = require('../../lib/Language')
+const Language = require('../../lib/Language');
+const Reminder = require('../../lib/structures/Reminder');
 
-module.exports = client => {
-    client.reminders = require('../store/reminders.json')
-    client.setInterval(() => {
-        for(let i in client.reminders) {
-            
-            let time = client.reminders[i].time
-            let authID = client.reminders[i].authID
-            let remindMessage = client.reminders[i].rmdMessage
-            let member = client.users.cache.get(authID)
-            let timeSince = client.reminders[i].timeago
-            let sendIn = client.reminders[i].sendIn
-            const guild = client.guilds.cache.get(client.reminders[i].guildId);
-            const channel = guild.channels.cache.get(client.reminders[i].channelId)
+module.exports = {
+    name: 'reminder',
+    async execute(client) {
+    
+        client.setInterval(async () => {
 
-            const language = new Language(guild)
-            const lang = client.reminders[i].lang;
+            const reminder = new Reminder(client);
+            const reminders = await reminder.fetch('reminders');
 
-            if(Date.now() > time) {
-                
-                try {
+            reminders.forEach(async rmdr => {
 
-                    const remindEmbed = new Discord.MessageEmbed()
-                        .setAuthor(language.get('TASK_REMINDER_FOR', lang, member.username), client.user.displayAvatarURL())
-                        .setColor(client.reminders[i].color)
-                        .setDescription(language.get('TASK_REMINDER', lang, timeSince, remindMessage))
-                        .setTimestamp()
+                const { time, authID, guildId, channelId } = rmdr;
+                let member = client.users.cache.get(authID);
+                const guild = client.guilds.cache.get(guildId);
+                const channel = guild.channels.cache.get(channelId);
+                const language = new Language(guild);
 
-                    if (sendIn && channel) channel.send(`<@${authID}> ${language.get('TASK_REMINDER', lang, timeSince, remindMessage)}`)
-                    if (!sendIn) client.users.cache.get(authID).send(remindEmbed)
-
-                    delete client.reminders[i]
-                    fs.writeFile('./src/store/reminders.json', JSON.stringify(client.reminders, null, 4), err => { if (err) throw err })
-                } catch {
-
-                    delete client.reminders[i]
-                    fs.writeFile('./src/store/reminders.json', JSON.stringify(client.reminders, null, 4), err => { if (err) throw err }) 
+                if (Date.now() > time) {
+                    this._remind(client, rmdr, { member, channel, language });
+                    reminder.delete('reminders', rmdr);
                 }
-            }
-        }
-    }, 1000);
-}
+            });
+        }, 1000);
+    }, 
+
+    _remind(client, { rmdMessage, timeago, sendIn, lang, color, authID }, { member, channel, language }) {
+
+        const embed = new Discord.MessageEmbed()
+                .setAuthor(language.get('TASK_REMINDER_FOR', lang, member.username), client.user.displayAvatarURL())
+                .setColor(color)
+                .setDescription(language.get('TASK_REMINDER', lang, timeago, rmdMessage))
+                .setTimestamp();
+
+        if (sendIn && channel) channel.send(`<@${authID}> ${language.get('TASK_REMINDER', lang, timeago, rmdMessage)}`);
+        if (!sendIn) client.users.cache.get(authID)?.send(embed);
+    }
+};

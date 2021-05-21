@@ -55,4 +55,13 @@ module.exports.launchEvents = (client) => {
         const inhibitor = require(`../inhibitors/${file}`);
         client.inhibitors.set(inhibitor.name, inhibitor);
     };
+
+    // tasks
+    client.tasks = new Discord.Collection();
+
+    const tasks = fs.readdirSync('./src/tasks').filter(file => file.endsWith('.js'));
+    for (const file of tasks) {
+        const task = require(`../tasks/${file}`);
+        client.tasks.set(task.name, task);
+    };
 }

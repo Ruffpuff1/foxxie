@@ -12,7 +12,7 @@ module.exports = {
 		console.log(`Ready! Logged in as ${client.user.tag}`)
         mongoDB()
         // Botwide
-        reminder(client)
+        client.tasks.get('reminder').execute(client);
         // afkcheck(client)
         disboard(client)
         // The Corner Store, memberCount & clock

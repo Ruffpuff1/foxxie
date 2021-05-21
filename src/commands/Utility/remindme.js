@@ -1,4 +1,3 @@
-const fs = require('fs')
 const ms = require('ms')
 
 module.exports = {
@@ -22,7 +21,7 @@ module.exports = {
         let sendIn = /\-channel\s*|-c\s*/gi
         remindMsg = remindMsg.replace(sendIn, '')
 
-        message.client.reminders [message.id] = {
+        const reminder = {
             guild: message.guild.id,
             authID: message.author.id,
             time: Date.now() + ms(remindTime),
@@ -34,9 +33,8 @@ module.exports = {
             color: message.guild.me.displayColor,
             channelId: message.channel.id,
         }
-        fs.writeFile('./src/store/reminders.json', JSON.stringify(message.client.reminders, null, 4), err => {
-            if (err) throw err
-            language.send('COMMAND_REMINDME_SUCCESS', lang, timeFromNow);
-        })
+
+        message.bot.push('reminders', reminder);
+        language.send('COMMAND_REMINDME_SUCCESS', lang, timeFromNow);
     }
 }
