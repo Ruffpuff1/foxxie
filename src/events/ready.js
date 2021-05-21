@@ -1,5 +1,3 @@
-const reminder = require('../tasks/reminder')
-const { disboard } = require('../tasks/disboard')
 const { mongoDB } = require('../../lib/Database')
 const { memberCount, clock } = require('../../lib/util/theCornerStore')
 const { stats } = require('../../lib/util/stats')
@@ -13,8 +11,8 @@ module.exports = {
         mongoDB()
         // Botwide
         client.tasks.get('reminder').execute(client);
+        client.tasks.get('disboard').execute(client);
         // afkcheck(client)
-        disboard(client)
         // The Corner Store, memberCount & clock
         // memberCount(client)
         // clock(client)
@@ -22,7 +20,7 @@ module.exports = {
         // stats(client)
         // setInterval(() => {
         //     stats(client)
-        // }, 10000)
+        // }, 15000)
 
         const actvs = [
             `with ${client.guilds.cache.size.toLocaleString()} servers & ${client.users.cache.size.toLocaleString()} users.`,

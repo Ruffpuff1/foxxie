@@ -1,72 +1,52 @@
-const fs = require('fs')
 const Discord = require('discord.js')
-const { serverSchema } = require('../../lib/structures/database/ServerSchemas')
-const mongo = require('../../lib/structures/database/mongo')
-module.exports.disboard = client => {
-    client.disboard = require('../store/disboard.json')
-    client.setInterval(async () => {
-        for(let i in client.disboard) {
-            let guildID = client.disboard[i].guild
-            let disboardTime = client.disboard[i].time
-            let channelID = client.disboard[i].channelID
-            let color = client.disboard[i].color
 
-            let guild = client.guilds.cache.get(guildID)
-            if (!guild) return
-            let channel = guild.channels.cache.get(channelID)
+module.exports = {
+    name: 'disboard',
+    async execute(client) {
 
-            if (disboardTime === null) return;
+        client.setInterval(async () => {
 
-            if (Date.now() > disboardTime) {
-                await mongo().then(async () => {
-                    try {
-                        let disb = await serverSchema.findById({
-                            _id: guildID
-                        })
+            const disboard = await client.schedule.fetch('disboard');
 
-                        const embed = new Discord.MessageEmbed()
-                            .setColor(color)
-                            .setTitle('Reminder to Bump')
-                            .setThumbnail(client.user.displayAvatarURL())
-                            .setDescription("Time to bump the server on disboard. Use the command `!d bump` then come back in **two hours**.")
+            disboard?.forEach(async dsb => {
 
-                        // Checks if Disboard Message is set
-                        if (disb){
-                        if (disb.disboardMessage) embed.setDescription(disb.disboardMessage.replace(/{(server|guild)}/gi, guild.name))
-                        }
-                        // Checks if guild is The Corner Store
-                        if (guildID === '761512748898844702') {
-                            delete client.disboard[i]
-                            fs.writeFile('src/store/disboard.json', JSON.stringify(client.disboard, null, 4), err => {
-                                if (err) throw err
-                            })
-                            if (channel === undefined) return
-                            return channel.send('**Heya <@&774339676487548969> it\'s time to bump the server.**', {embed: embed})
-                        }
-                        // If other guild
+                const { guildId, time } = dsb;
+                let guild = client.guilds.cache.get(guildId);
+                if (!guild) return;
 
-                        delete client.disboard[i]
-                        fs.writeFile('src/store/disboard.json', JSON.stringify(client.disboard, null, 4), err => {
-                            if (err) throw err
-                        })
+                if (Date.now() > time) {
 
-                        let roleID;
-                        if (disb) {
-                            if (disb.disboardPing != null) roleID = disb.disboardPing
-                            let dbPing = ''
-                            if (roleID !== '' && roleID !== undefined) dbPing = `<@&${roleID}>`
-                            
-                            if (channel === undefined) return
-                            return channel.send(dbPing, {embed: embed} )
-                        }
+                    await this.message(client, guild);
+                    return client.schedule.delete('disboard', dsb);
+                }
+            })
+        }, 1000)
+    },
 
-                        if (channel === undefined) return
-                        channel.send(embed)
-                       
-                    } finally {}
-                })
-            }
+    async message(client, guild) {
 
-        }
-    }, 1000)
+        let channelId = await guild.settings.get('disboard.channel');
+        if (!channelId) return;
+        let channel = guild.channels.cache.get(channelId);
+        if (!channel) return;
+
+        let lang = await guild.settings.get('language');
+        if (!lang) lang = 'en-US';
+
+        let message = await guild.settings.get('disboard.message');
+        if (!message) message = guild.language.get('TASK_DISBOARD_DEFAULT_MESSAGE', lang);
+
+        let role = '';
+        let ping = await guild.settings.get('disboard.ping');
+        if (ping) role = `<@&${ping}>`;
+        if (guild.id === '761512748898844702') role = '**Heya <@&774339676487548969> it\'s time to bump the server.**';
+
+        const embed = new Discord.MessageEmbed()
+            .setColor(guild.me.displayColor)
+            .setTitle(guild.language.get('TASK_DISBOARD_EMBED_TITLE', lang))
+            .setThumbnail(client.user.displayAvatarURL({dynamic: true}))
+            .setDescription(message);
+
+        await channel.send(role, embed);
+    }
 }

@@ -1,37 +1,27 @@
-const fs = require('fs')
-const ms = require('ms')
+const ms = require('ms');
+
 module.exports = {
     name: 'disboardbump',
     type: 'message',
-    execute: async (message) => {
+    async execute (message) {
 
-    if (!message.guild) return
-
-    if (message.author.id === '302050872383242240'){
+        if (!message.author.id === '302050872383242240') return;
 
         let emb = message.embeds.length === 1
-        ? (message.embeds[0].description.endsWith(`https://disboard.org/`) ? true : false)
+        ? (message.embeds[0]?.description?.endsWith(`https://disboard.org/`) ? true : false)
         : false
 
-        let discordChannel = await message.guild.settings.get('discordChannel')
-        if (!discordChannel) return;
+        if (!emb) return;
+        return this._bumped(message);
+    },
 
-        if(emb){
-            message.client.disboard = require('../store/disboard.json')
+    async _bumped(message) {
 
-            let remindTime = '2h'
-            
-            message.client.disboard[message.guild.id] = {
-                guild: message.guild.id,
-                time: Date.now() + ms(remindTime),
-                channelID: disboardChannel,
-                message: message,
-                color: message.guild.me.displayColor
-            }
+        const bump = {
+            guildId: message.guild.id,
+            time: Date.now() + ms('2m')
+        };
 
-            fs.writeFile('src/store/disboard.json', JSON.stringify(message.client.disboard, null, 4), err => {
-                if (err) console.log(err)
-            })
-        }
-    }}
+        message.client.schedule.create('disboard', bump);
+    }
 }

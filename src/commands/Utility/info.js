@@ -88,11 +88,11 @@ module.exports = {
 		let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase()); 
         if (args[0]) emoji = message.client.emojis.cache.find((emj) => emj.id === args[0].replace(/^<a?:\w+:(\d+)>$/, '$1'))
 
-        if (channel instanceof Channel) return channelInfo();
+        if (channel instanceof Channel) return this.channelInfo();
         if (emoji instanceof Emoji) return this.emojiinfo(message, emoji, language, lang);
         if (role instanceof Role) return this.roleinfo(role, message, language, lang);
-        if (message.guild && args[0] === 'server') return serverinfo(this.regions, this.verificationLevels, this.filterLevels);
-		if (message.guild && args[0] === message.guild.id) serverinfo(this.regions, this.verificationLevels, this.filterLevels);
+        if (message.guild && args[0] === 'server') return this.serverinfo(this.regions, this.verificationLevels, this.filterLevels);
+		if (message.guild && args[0] === message.guild.id) this.serverinfo(this.regions, this.verificationLevels, this.filterLevels);
         if (user instanceof User && args[0] !== 'server' && user) return this.userInfo(message, user, language, lang);
 
     },

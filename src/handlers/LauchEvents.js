@@ -1,8 +1,8 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const Reminder = require('../../lib/structures/Reminder');
+const Schedule = require('../../lib/structures/Schedule');
 
-module.exports.launchEvents = (client) => {
+module.exports.launchEvents = client => {
 
     // Events
     const eventFiles = fs.readdirSync('./src/events').filter(file => file.endsWith('.js'));
@@ -17,10 +17,8 @@ module.exports.launchEvents = (client) => {
     }
 
     // Schedules
-    client.schedule = new Discord.Collection();
-    client.schedule.reminder = new Reminder(client);
-
-
+    client.schedule = new Schedule(client);
+   
     // Montiors
     client.monitors = new Discord.Collection();
         

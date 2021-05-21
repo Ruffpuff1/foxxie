@@ -18,8 +18,8 @@ module.exports = {
             const argCap = args[0].charAt(0).toUpperCase()  + args[0].slice(1)
             let ex;
             let str;
-            res.data.list[3] ? ex = res.data.list[3]['example'] : ex = language.get('COMMAND_URBAN_NODEFINITION', 'en-US')
-            res.data.list[3] ? str = res.data.list[3]['definition'] : str = language.get('COMMAND_URBAN_NOEXAMPLE', 'en-US')
+            res.data.list[3] ? ex = res.data.list[3]['example'] : ex = language.get('COMMAND_URBAN_NODEFINITION', lang)
+            res.data.list[3] ? str = res.data.list[3]['definition'] : str = language.get('COMMAND_URBAN_NOEXAMPLE', lang)
 
             const embed = new Discord.MessageEmbed()
             .setTitle(argCap)
@@ -27,14 +27,14 @@ module.exports = {
             .setColor(message.guild.me.displayColor)
             .setThumbnail(`https://i.imgur.com/qNTzb3k.png`)
             .setDescription(`${str.replace(/[\[\]']+/g,'')}\n\n\`👍\` ${res.data.list[3]['thumbs_up']}\n\`👎\` ${res.data.list[3]['thumbs_down']}`)
-            .setFooter(language.get('COMMAND_URBAN_FOOTER', 'en-US', res))
-            .addField(language.get('COMMAND_URBAN_EXAMPLE', 'en-US'), ex.replace(/[\[\]']+/g,''))
+            .setFooter(language.get('COMMAND_URBAN_FOOTER', lang, res))
+            .addField(language.get('COMMAND_URBAN_EXAMPLE', lang), ex.replace(/[\[\]']+/g,''))
 
             message.channel.send(embed)
             loading.delete()
 
         })
-            .catch((err) => {
+            .catch((e) => {
                 loading.delete()
                 language.send('COMMAND_URBAN_NODATA', lang);
         })

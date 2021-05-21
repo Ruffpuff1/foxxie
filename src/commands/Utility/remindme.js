@@ -33,7 +33,7 @@ module.exports = {
             channelId: message.channel.id,
         }
 
-        message.client.schedule.reminder.create(reminder);
+        message.client.schedule.create('reminders', reminder);
         language.send('COMMAND_REMINDME_SUCCESS', lang, timeFromNow);
     }
 }
