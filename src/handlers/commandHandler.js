@@ -1,4 +1,5 @@
-const { prefix: { production, development } } = require('../../config/foxxie')
+const { prefix: { production, development } } = require('../../config/foxxie');
+const Reminder = require('../../lib/structures/Reminder');
 
 module.exports = {
     name: 'commandHandler',

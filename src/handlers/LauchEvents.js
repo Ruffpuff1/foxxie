@@ -1,5 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js');
+const Reminder = require('../../lib/structures/Reminder');
 
 module.exports.launchEvents = (client) => {
 
@@ -14,6 +15,10 @@ module.exports.launchEvents = (client) => {
 		    client.on(event.name, (...args) => event.execute(...args, client));
 	    }
     }
+
+    // Schedules
+    client.schedule = new Discord.Collection();
+    client.schedule.reminder = new Reminder(client);
 
 
     // Montiors

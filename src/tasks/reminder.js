@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const Language = require('../../lib/Language');
-const Reminder = require('../../lib/structures/Reminder');
 
 module.exports = {
     name: 'reminder',
@@ -8,8 +7,7 @@ module.exports = {
     
         client.setInterval(async () => {
 
-            const reminder = new Reminder(client);
-            const reminders = await reminder.fetch('reminders');
+            const reminders = await client.schedule.reminder.fetch();
 
             reminders.forEach(async rmdr => {
 
@@ -21,7 +19,7 @@ module.exports = {
 
                 if (Date.now() > time) {
                     this._remind(client, rmdr, { member, channel, language });
-                    reminder.delete('reminders', rmdr);
+                    client.schedule.reminder.delete(rmdr);
                 }
             });
         }, 1000);

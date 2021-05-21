@@ -141,13 +141,12 @@ module.exports = {
             );
             
             let msgs = await member.user.settings.get(`servers.${msg.guild.id}.messageCount`); 
-            description.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs || 0));
+            statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs || 0));
 
             const birthday = null;
             let totalStar = await member.user.settings.get(`servers.${msg.guild.id}.starCount`);
             let minimum = await msg.guild.settings.get(`starboard.minimum`) || 3;
-		        
-            statistics.push(personal.join(" "));
+		    
             if (member) embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS', lang)} ${totalStar && totalStar >= minimum ? `:star: **${totalStar}**` : ''} ${birthday ? `:cake: **${birthday}**` : ''}`, statistics.join('\n'));
         };
 

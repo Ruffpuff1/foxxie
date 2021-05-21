@@ -8,7 +8,6 @@ module.exports = {
     execute(props) {
 
         let { lang, message, args, language } = props;
-        message.client.reminders = require('../../store/reminders.json')
         let remindTime = args[0]
         let remindMsg = args.slice(1).join(' ');
 
@@ -34,7 +33,7 @@ module.exports = {
             channelId: message.channel.id,
         }
 
-        message.bot.push('reminders', reminder);
+        message.client.schedule.reminder.create(reminder);
         language.send('COMMAND_REMINDME_SUCCESS', lang, timeFromNow);
     }
 }
