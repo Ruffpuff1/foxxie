@@ -5,7 +5,7 @@ require('../lib/extensions/Message');
 require('../lib/extensions/User');
 
 const client = new Discord.Client({ shards: 'auto', partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
-const { launchEvents } = require('./handlers/LauchEvents');
+const { launchEvents } = require('./ws/events/LaunchEvents');
 require('dotenv').config();
 launchEvents(client);
 

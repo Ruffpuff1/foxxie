@@ -7,12 +7,11 @@ module.exports = {
 	once: true,
 	execute: async (client) => {
 		// logs "ready", runs connection to mongoDB
-		console.log(`Ready! Logged in as ${client.user.tag}`)
+		console.log(`[${client.user.username}] Ready! Logged in with ${client.commands.size} commands.`)
         mongoDB()
         // Botwide
         client.tasks.get('reminder').execute(client);
         client.tasks.get('disboard').execute(client);
-        // afkcheck(client)
         // The Corner Store, memberCount & clock
         // memberCount(client)
         // clock(client)

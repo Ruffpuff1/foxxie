@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const commandHandler = require('../handlers/commandHandler');
+const commandHandler = require('../ws/commandHandler');
 module.exports = {
     name: 'messageUpdate',
     execute: async(oldMessage, newMessage) => {

@@ -19,7 +19,7 @@ module.exports = {
 
         const bump = {
             guildId: message.guild.id,
-            time: Date.now() + ms('2m')
+            time: Date.now() + ms('2h')
         };
 
         message.client.schedule.create('disboard', bump);
