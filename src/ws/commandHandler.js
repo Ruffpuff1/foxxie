@@ -28,10 +28,12 @@ module.exports = {
     },
     
     async _commandExecute(pre, message, lang, language) {
+
         const args = message.content.slice(pre.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
         const command = message.client.commands.get(commandName) || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
         if (!command) return;
+
         // Permissions check,
         try { 
             await message.client.inhibitors.get('permissions').execute({command, message});
@@ -39,6 +41,7 @@ module.exports = {
             if (e === true) return;
             return language.send(e, lang, command.permissions)
         };
+        
         // Command Execute.
         try {
             let props = { lang, message, args, language };

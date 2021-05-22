@@ -34,7 +34,7 @@ module.exports = {
         if (!lang) lang = 'en-US';
 
         let message = await guild.settings.get('disboard.message');
-        if (!message) message = guild.language.get('TASK_DISBOARD_DEFAULT_MESSAGE', lang);
+        if (!message) message = guild.language.get('TASK_DISBOARD_DEFAULT_DISBOARDMESSAGE', lang);
 
         let role = '';
         let ping = await guild.settings.get('disboard.ping');
@@ -45,7 +45,7 @@ module.exports = {
             .setColor(guild.me.displayColor)
             .setTitle(guild.language.get('TASK_DISBOARD_EMBED_TITLE', lang))
             .setThumbnail(client.user.displayAvatarURL({dynamic: true}))
-            .setDescription(message);
+            .setDescription(message.replace(/{(server|guild)}/gi, guild.name));
 
         await channel.send(role, embed);
     }
