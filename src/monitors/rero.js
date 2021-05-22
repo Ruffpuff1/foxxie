@@ -10,8 +10,8 @@ module.exports = {
             if (reaction.emoji.id === rero.emoji || reaction.emoji.name === rero.emoji && reaction.message.id === rero.message) {
 
                 let role = reaction.message.guild.roles.cache.find(r => r.id === rero.role)
-                if (act === 'add') member.roles.add(role)
-                if (act === 'remove') member.roles.remove(role)
+                if (act === 'add') member.roles.add(role).catch(e => e);
+                if (act === 'remove') member.roles.remove(role).catch(e => e);
             }
         }
     }

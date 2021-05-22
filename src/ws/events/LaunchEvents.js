@@ -1,6 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const Schedule = require('../../../lib/structures/Schedule');
+const Schedule = require('../../../lib/Schedule');
 
 module.exports.launchEvents = client => {
 

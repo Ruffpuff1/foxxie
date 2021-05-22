@@ -99,6 +99,10 @@ module.exports = {
         COMMAND_VCKICK_DESCRIPTION: `Disconnects the specified user from a voice channel if they are in one. If a moderation logging channel is set, this action will log there.`,
         COMMAND_VCKICK_NOMEMBER: `You need to specify **one member** to kick from a vc.`,
         COMMAND_VCKICK_NOVOICE: `**Hey,** the user you specified is not currently in a vc.`,
+        COMMAND_VCMUTE_ALREADY_MUTED: `**Whoops,** this member is already server muted.`,
+        COMMAND_VCMUTE_DESCRIPTION: `Server mutes the specified member in a v cso they can no longer talk.`,
+        COMMAND_VCMUTE_NOMEMBER: `You need to specify **one member** vcmute.`,
+        COMMAND_VCMUTE_NOVOICE: `**Hey,** looks like the member you're trying to vcmute isn't even in a vc.`,
 
         // Roleplay Commands
         COMMAND_ANGRY_DESCRIPTION: `Get angry at someone (ಠ_ಠ)`,
@@ -496,6 +500,7 @@ module.exports = {
         LOG_MODERATION_UNBANNED: tar => `Unbanned ${tar}`,
         LOG_MODERATION_UNLOCKED: `Unlocked Channel`,
         LOG_MODERATION_VCKICKED: tar => `Vckicked ${tar}`,
+        LOG_MODERATION_VCMUTED: tar => `Vcmuted ${tar}`,
         LOG_MODERATION_WARNED: tar => `Warned ${tar}`,
 
         // Monitors

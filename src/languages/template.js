@@ -134,6 +134,10 @@ module.exports = {
         COMMAND_VCKICK_DESCRIPTION: ``,
         COMMAND_VCKICK_NOMEMBER: ``,
         COMMAND_VCKICK_NOVOICE: ``,
+        COMMAND_VCMUTE_ALREADY_MUTED: ``,
+        COMMAND_VCMUTE_DESCRIPTION: ``,
+        COMMAND_VCMUTE_NOMEMBER: ``,
+        COMMAND_VCMUTE_NOVOICE: ``,
         COMMAND_WARN_DESCRIPTION: ``,
         COMMAND_WARN_DM_DESCRIPTION: (guild, reason) => ``,
         COMMAND_WARN_DM_TITLE: guild => ``,
@@ -573,6 +577,7 @@ module.exports = {
         LOG_MODERATION_UNBANNED: tar => ``,
         LOG_MODERATION_UNLOCKED: ``,
         LOG_MODERATION_VCKICKED: tar => ``,
+        LOG_MODERATION_VCMUTED: tar => ``,
         LOG_MODERATION_WARNED: tar => ``,
 
         // Monitors
