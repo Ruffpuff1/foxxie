@@ -588,7 +588,6 @@ module.exports = {
         TASK_AFK_EMBED_DESCRIPTION: reason => ``,
         TASK_AFK_WELCOMEBACK: ``,
         TASK_DISBOARD_DEFAULT_DISBOARDMESSAGE: ``,
-        TASK_DISBOARD_EMBED_DESCRIPTION: ``,
         TASK_DISBOARD_EMBED_TITLE: ``,
         TASK_REMINDER: (time, reason) => ``,
         TASK_REMINDER_FOR: user => ``,

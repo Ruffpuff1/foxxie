@@ -1,24 +1,15 @@
 {
   "name": "foxxie",
   "version": "2.0",
-  "description": "",
+  "description": "Foxxie is a smort server butler suited for taking care of and managing your server.",
   "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "authors": [
-    {
-      "name": "Ruff",
-      "github": "Ruffpuff1",
-      "discord": "Ruffpuff#0017"
-    },
-    {
-      "name": "Raindrop",
-      "github": "Raindrop-droptop"
-    }
+  "author": "Ruff (https://github.com/Ruffpuff1)",
+  "contributors": [
+    "Ruff (https://github.com/Ruffpuff1)",
+    "Raindrop (https://github.com/Raindrop-Droptop)",
+    "Sug4r",
+    "Ari"
   ],
   "dependencies": {
     "axios": "^0.21.1",

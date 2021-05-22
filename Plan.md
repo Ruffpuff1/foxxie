@@ -14,8 +14,8 @@
 * Vcdeafen
 
 ### Additional.
-* More fun cmds
-* Block channels
+* More fun cmds.
+* Block channels.
 
 ### Internal code fixes.
 * Finish transferring user data to the new userSchema. (finish transferring existing mod stats);

@@ -510,6 +510,8 @@ module.exports = {
         TASK_AFK_EMBED_AUTHOR: user => `${user} is set as AFK`,
         TASK_AFK_EMBED_DESCRIPTION: reason => `**Reason**: ${reason}`,
         TASK_AFK_WELCOMEBACK: `Hey welcome back, I'll remove that afk for you.`,
+        TASK_DISBOARD_DEFAULT_DISBOARDMESSAGE: `Time to bump the server on disboard. Use the command \`!d bump\` then come back in **two hours**.`,
+        TASK_DISBOARD_EMBED_TITLE: `Reminder to Bump`,
         TASK_REMINDER: (time, reason) => `Hey there, here's that reminder you scheduled **${time}** ago for: **${reason}**.`,
         TASK_REMINDER_FOR: user => `Reminder For ${user}`,
 
