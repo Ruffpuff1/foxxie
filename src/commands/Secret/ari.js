@@ -3,9 +3,8 @@ module.exports = {
     name: 'ari',
     aliases: ['aria'],
     category: 'secret',
-    execute(props) {
+    execute({ message }) {
 
-        let { message } = props
         message.delete();
         message.channel.send(ari)
     }

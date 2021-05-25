@@ -3,7 +3,7 @@ const { version } = require('../package.json')
 module.exports = {
     prefix: {
         production: '.',
-        development: 'a.'
+        development: 'd.'
     },
     version,
     owner: ['486396074282450946', '749845359689465977'],

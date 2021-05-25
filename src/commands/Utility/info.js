@@ -88,24 +88,24 @@ module.exports = {
 		let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase()); 
         if (args[0]) emoji = message.client.emojis.cache.find((emj) => emj.id === args[0].replace(/^<a?:\w+:(\d+)>$/, '$1'))
 
-        if (channel instanceof Channel) return this.channelInfo();
-        if (emoji instanceof Emoji) return this.emojiinfo(message, emoji, language, lang);
-        if (role instanceof Role) return this.roleinfo(role, message, language, lang);
-        if (message.guild && args[0] === 'server') return this.serverinfo(this.regions, this.verificationLevels, this.filterLevels);
-		if (message.guild && args[0] === message.guild.id) this.serverinfo(this.regions, this.verificationLevels, this.filterLevels);
-        if (user instanceof User && args[0] !== 'server' && user) return this.userInfo(message, user, language, lang);
+        if (channel instanceof Channel) return this.channelInfo(props, channel);
+        if (emoji instanceof Emoji) return this.emojiinfo(props, emoji,);
+        if (role instanceof Role) return this.roleinfo(props, role);
+        if (message.guild && args[0] === 'server') return this.serverinfo(props, server);
+		if (message.guild && args[0] === message.guild.id) this.serverinfo(props, server);
+        if (user instanceof User && args[0] !== 'server' && user) return this.userInfo(props, user);
 
     },
 
-    async userInfo(msg, user, language, lang) {
+    async userInfo({message, language, lang}, user) {
 
         const loading = await language.send("MESSAGE_LOADING", lang);
         let embed = new MessageEmbed();
         embed = await this._addBaseData(embed, user);
         embed = await this._addBadges(embed, user);
-        embed = await this._addMemberData(embed, msg, user, language, lang);
+        embed = await this._addMemberData(embed, message, user, language, lang);
         await loading.delete();
-        return msg.channel.send(embed);
+        return message.channel.send(embed);
     },
 
     async _addBaseData(embed, user) {
@@ -143,7 +143,7 @@ module.exports = {
             let msgs = await member.user.settings.get(`servers.${msg.guild.id}.messageCount`); 
             statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs || 0));
 
-            const birthday = null;
+            const birthday = await member.user.settings.get(`birthday`);
             let totalStar = await member.user.settings.get(`servers.${msg.guild.id}.starCount`);
             let minimum = await msg.guild.settings.get(`starboard.minimum`) || 3;
 		    
@@ -198,7 +198,7 @@ module.exports = {
         return embed.setColor(member.displayColor)
     },
 
-    async emojiinfo(msg, emoji, language, lang) {
+    async emojiinfo({ message: msg, language, lang }, emoji) {
 
         let embed = new MessageEmbed()
             .setTitle(`${emoji.name} (ID: ${emoji.id})`)
@@ -214,7 +214,7 @@ module.exports = {
         return msg.channel.send(embed)
     },
 
-    async channelInfo() {
+    async channelInfo({ message, language, lang }, channel) {
 
         const embed = new MessageEmbed()
             .setTitle(`${channel.name} (ID: ${channel.id})`)
@@ -254,7 +254,7 @@ module.exports = {
             return message.channel.send(embed)
         },
 
-    async roleinfo(role, message, language, lang){
+    async roleinfo({ message, language, lang }, role){
         const [bots, humans] = role.members.partition(member => member.user.bot);
 
         const embed = new MessageEmbed()
@@ -272,7 +272,7 @@ module.exports = {
         return message.channel.send(embed);
     },
 
-        async serverinfo(region, veri, filter) {
+        async serverinfo({ message, language, lang }, server) {
             let messageCount = await server.settings.get('messageCount');
                     
             let messages = 0
@@ -288,13 +288,13 @@ module.exports = {
                 .addField(':crown: **Owner**', guild.owner.user.tag, true)
                 .addField(':busts_in_silhouette: **Members**', `${guild.memberCount} (cached: ${guild.members.cache.size})`, true)
                 .addField(`:speech_balloon: **Channels (${guild.channels.cache.size})**`, guild.channels.cache.size>0?`Text: **${guild.channels.cache.filter(c => c.type === "text").size}**\nVoice: **${guild.channels.cache.filter(c => c.type === "voice").size}**`:'None', true)
-                .addField(':map: **Region**', region[guild.region], true)
+                .addField(':map: **Region**', this.regions[guild.region], true)
                 .addField(`:scroll: **Roles**`, guild.roles.cache.size > 0 ? guild.roles.cache.size : 'None', true)
                 .addField(':sunglasses: **Emojis**', guild.emojis.cache.size > 0 ? guild.emojis.cache.size : 'None', true)
                 .addField(':bar_chart: **Statistics**', `${messages.toLocaleString()} messages ${toxicity !== 0 ? `with an average toxicity of ${Math.round(toxicity * 100)}%` : ''} sent`)
                 .addField(':lock: **Security**', [
-                    `Verification level: ${veri[message.guild.verificationLevel]}`,
-                    `Explicit filter: ${filter[message.guild.explicitContentFilter]}`
+                    `Verification level: ${this.verificationLevels[message.guild.verificationLevel]}`,
+                    `Explicit filter: ${this.filterLevels[message.guild.explicitContentFilter]}`
                 ].join('\n'));
 
             embed.setThumbnail(guild.iconURL({ format: 'png', dynamic: true }))

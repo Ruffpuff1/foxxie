@@ -391,6 +391,8 @@ module.exports = {
         COMMAND_DEFINE_DESCRIPTION: `I'll fetch you the definition of a term using the Merriam-Webster Dictionary API.`,
         COMMAND_DEFINE_NOARGS: `**Hey!** You didn't provide a word to define. Respond with a word in **60 seconds** or send \`cancel\` to cancel.`,
         COMMAND_DEFINE_NORESULTS: word => `**Sorry,** I couldn't find a definition for the word \`${word}\`.`,
+        COMMAND_EMBED_DESCRIPTION: `Allows ya to create simple embeds using built in JSON syntax. Formatted like: \`{ \"title\": \"Embed Title\", \"description\": \"Embed Description\" }\` this format can be confusing for some, so we suggest you use the embed builder at https://embedbuilder.yua.gg . You can also supply a channel to send the embed to before the JSON.`,
+        COMMAND_EMBED_ERROR: `**Uh oh,** there seems to be an error with your embed format. Try making sure everything is correct or you could just copy paste from: <https://embedbuilder.yua.gg>`,
         COMMAND_HELP_COMMAND_NOTVALID: `**Hey,** that's not a valid command!`,
         COMMAND_HELP_DESCRIPTION: `Will display information on my commands or display all of them in a nice menu. You can also specify the \`-c\` or \`-channel\` flag to send the menu in the current channel.`,
         COMMAND_HELP_EMBED_AUTOMATION: size => `:robot: **Automation (${size})**`,

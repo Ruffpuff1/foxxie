@@ -3,9 +3,8 @@ module.exports = {
     name: 'strax',
     aliases: ['straxy'],
     category: 'secret',
-    execute(props) {
+    execute({ message }) {
 
-        let { message } = props
         message.delete();
         message.channel.send(strax)
     }

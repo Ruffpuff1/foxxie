@@ -9,7 +9,7 @@ module.exports = {
         let { lang, message, args, language } = props
         const loading = await language.send("MESSAGE_LOADING", lang);
 
-        if (/(none|reset)/i.test(args[0])) {
+        if (/(none|reset|clear)/i.test(args[0])) {
 
             function confirmed() {
 

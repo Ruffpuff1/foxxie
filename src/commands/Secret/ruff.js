@@ -2,9 +2,8 @@ const { emojis: { secretCommands: { ruff } } } = require('../../../lib/util/cons
 module.exports = {
     name: 'ruff',
     category: 'secret',
-    execute(props) {
+    execute({ message }) {
 
-        let { message } = props
         message.delete();
         message.channel.send(ruff)
     }
