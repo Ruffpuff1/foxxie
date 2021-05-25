@@ -27,6 +27,6 @@ module.exports = {
             `Happy pride month!`];
         
         client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]);
-        setInterval(() => client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]), 20000);
+        setInterval(() => client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]), 30000);
 	},
 };
