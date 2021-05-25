@@ -23,7 +23,8 @@ module.exports = {
             `with ${client.guilds.cache.size.toLocaleString()} servers & ${client.users.cache.size.toLocaleString()} users.`,
             `v${version} | fox help`,
             `with ${commands} Commands & ${aliases} Aliases`,
-            `v${version} | fox support`];
+            `v${version} | fox support`,
+            `Happy pride month!`];
         
         client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]);
         setInterval(() => client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]), 20000);
