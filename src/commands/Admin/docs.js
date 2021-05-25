@@ -4,12 +4,10 @@ const Doc = require('discord.js-docs')
 module.exports = {
     name: 'docs',
     usage: 'fox docs [search]',
-    category: 'developer',
+    category: 'admin',
     permissionLevel: 9,
-    execute: async (props) => {
+    execute: async ({ message, args }) => {
         
-        let { message, args, lang, language } = props
-
         const doc = await Doc.fetch('stable')
         let search = doc.search(args[0])[0]
 

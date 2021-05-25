@@ -1,14 +1,12 @@
 const mongo = require('../../../lib/structures/database/mongo')
-const { botSettingsSchema } = require("../../../lib/structures/database/BotSettingsSchema")
+const { foxxieSchema } = require("../../../lib/structures/database/FoxxieSchema")
 module.exports = {
     name: 'status',
     aliases: ['state', 'update'],
     usage: 'fox status [status] (message)',
     permissionLevel: 9,
-    category: 'developer',
-    execute: async(props) => {
-
-        let { message, args } = props
+    category: 'admin',
+    execute: async({ message, args }) => {
 
         let status = args[0]
         let msg = args.slice(1).join(' ')
@@ -17,7 +15,7 @@ module.exports = {
 
         await mongo().then(async () => {
             try {
-                await botSettingsSchema.findByIdAndUpdate({
+                await foxxieSchema.findByIdAndUpdate({
                     _id: '812546582531801118'
                 }, {
                     _id: '812546582531801118',

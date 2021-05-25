@@ -4,10 +4,8 @@ module.exports = {
     aliases: ['sl'],
     usage: 'fox serverlist',
     permissionLevel: 9,
-    category: 'developer',
-    execute: async (props) => {
-
-        let { message, lang, language } = props
+    category: 'admin',
+    execute: async ({ message, language, lang }) => {
 
         let i0 = 0;
         let i1 = 10;

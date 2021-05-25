@@ -1,4 +1,4 @@
-const { botSettingsSchema } = require("../../../lib/structures/database/BotSettingsSchema")
+const { foxxieSchema } = require("../../../lib/structures/database/FoxxieSchema")
 const mongo = require("../../../lib/structures/database/mongo")
 const { badges } = require("../../../lib/util/constants")
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
 
         await mongo().then(async () => {
             try { 
-                const client = await botSettingsSchema.findById(
+                const client = await foxxieSchema.findById(
                 { _id: '812546582531801118' })
                 
                 const badgesUser = await message.author.settings.get('badges')
@@ -27,7 +27,7 @@ module.exports = {
                 language.send('COMMAND_REDEEM_SUCCESS', lang, badges[found.id].icon, badges[found.id].name);
 
                 await message.author.settings.set('badges', badgesUser | ( 1 << found.id ))
-                await botSettingsSchema.findByIdAndUpdate(
+                await foxxieSchema.findByIdAndUpdate(
                     { _id: '812546582531801118' },
                     { _id: '812546582531801118',
                         $pull: { keys: found } }

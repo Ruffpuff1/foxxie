@@ -1,4 +1,4 @@
-const { botSettingsSchema } = require("../../../lib/structures/database/BotSettingsSchema")
+const { foxxieSchema } = require("../../../lib/structures/database/FoxxieSchema")
 const mongo = require("../../../lib/structures/database/mongo")
 const { randomBytes } = require('crypto');
 const { base32 } = require('../../../lib/util/util');
@@ -7,12 +7,10 @@ const { badges } = require('../../../lib/util/constants');
 module.exports = {
     name: 'createkey',
     aliases: ['crk'],
-    category: 'developer',
+    category: 'admin',
     usage: 'fox createkey [id]',
     permissionLevel: 9,
-    execute: async (props) => {
-
-        let { message, args, language, lang } = props
+    execute: async ({ message, args, language, lang }) => {
 
         const id = args[0]
         if (!/^(0|1|2)$/gm.test(id)) return message.responder.error('COMMAND_CREATEKEY_NOID', lang, badges);
@@ -24,7 +22,7 @@ module.exports = {
         }
         await message.author.send(language.get('COMMAND_CREATEKEY_SUCCESS', lang, badges, id, out));
         await mongo().then(async () => {
-            try { await botSettingsSchema.findByIdAndUpdate(
+            try { await foxxieSchema.findByIdAndUpdate(
                 { _id: '812546582531801118' },
                 { _id: '812546582531801118',
                     $push: { keys: { id, key: out.join('') } } }, 

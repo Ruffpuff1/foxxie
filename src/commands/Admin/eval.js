@@ -5,11 +5,9 @@ module.exports = {
     name: 'eval',
     aliases: ['ev'],
     usage: 'fox eval [code] (-async|-a) (-silent|-s) (-message|-m)',
-    category: 'developer',
+    category: 'admin',
     permissionLevel: 9,
-    async execute (props) {
-
-        let { message, args, lang, language } = props
+    async execute ({ message, args, language, lang }) {
 
         let client = message.client;
         const start = performance.now().toFixed(2);

@@ -1,8 +1,7 @@
 module.exports = {
     name: 'gif',
-    category: 'developer',
     usage: 'fox gif [add|list] [roleplay] [name] (gif)',
-    category: 'developer',
+    category: 'admin',
     permissionLevel: 9,
     async execute (props) {
 

@@ -28,7 +28,7 @@ module.exports = {
                 let rp = c.category === "roleplay"; if (rp) rpCmds.push(c.name);
                 let set = c.category === "settings"; if (set) setCmds.push(c.name);
                 let util = c.category === "utility"; if (util) utilCmds.push(c.name);
-                let dev = c.category === "developer"; if (dev) devCmds.push(c.name);
+                let dev = c.category === "admin"; if (dev) devCmds.push(c.name);
                 let sec = c.category === "secret"; if (sec) secCmds.push(c.name);
             };
 
