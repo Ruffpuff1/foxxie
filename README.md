@@ -11,31 +11,27 @@ The original project was meant to be a custom bot for [my Discord server](https:
 
 If you have any questions regarding the project you can join his [support server](https://discord.gg/jMernA8hD9) or directly DM me on Discord at Ruffpuff#0017.
 
-Profile art by [Luna Spyker](https://twitter.com/LunaSpyker).
-
 ## Features
 
-* Over 95 commands and 180 aliases.
+* Over 100 commands and 190 aliases.
 * Fully scripted in English and partially scripted in Spanish.
-* Global ban tracker for all servers the bot is in.
+* Utility, roleplay, reminders, moderation.
 
 ## Dependancies and tools
 
 Foxxie has many dependencies and tools that he uses to function properly. A full list can be viewed in the package.json file however here are some of the most important:
 - [Discord.js](https://discord.js.org) - A powerful and easy to use wrapper around the Discord API
-- [MongoDB](https://www.mongodb.com/) - A general purpose, document-based, distributed NoSQL database
+- [MongoDB](https://www.mongodb.com/) - A general purpose, document-based, distributed NoSQL database paired with [mongoose](https://mongoosejs.com).
 - [Moment](https://momentjs.com) - Parse, validate, manipulate,
 and display dates and times in JavaScript
 - [Axios](https://www.npmjs.com/package/axios) - Promise based HTTP client for the browser and node.js
 
-### Inspiration
+### Inspiration and credit.
 
-* This project was inspired by [Aero](https://aero.bot).
-
-### Commands
-
-* Some command credit goes to [ravy](https://ravy.xyz) from [The Aero Team](https://aero.bot).
-* All other commands are by [Ruff](https://github.com/Ruffpuff1)
+* This project was inspired by [Aero](https://aero.bot) and [Eli](https://discord.com/invite/yua).
+* Profile art by [Luna Spyker](https://twitter.com/LunaSpyker).
+* Roleplay gifs from [tenor](https://tenor.com).
+* All other commands, monitors, tasks, and other aspects of this project are by [Ruff](https://github.com/Ruffpuff1). Contributors with translations will be listed below.
 
 ## Contributors
 
