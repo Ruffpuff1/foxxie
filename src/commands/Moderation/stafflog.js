@@ -21,7 +21,7 @@ module.exports = {
         if (modCounts.kick) desc1.push(language.get('COMMAND_STAFFLOG_KICK', lang, modCounts.kick))
         if (modCounts.warn) desc1.push(language.get('COMMAND_STAFFLOG_WARN', lang, modCounts.warn))
         if (modCounts.jail) desc1.push(language.get('COMMAND_STAFFLOG_JAIL', lang, modCounts.jail))
-        if (modCounts.mute) desc1.push(language.get('COMMAND_STAFFLOG_MUTE'))
+        if (modCounts.mute) desc1.push(language.get('COMMAND_STAFFLOG_MUTE', lang, modCounts.mute))
 
         if (modCounts.slowmode) desc2.push(language.get('COMMAND_STAFFLOG_SLOWMODE', lang, modCounts.slowmode))
         if (modCounts.lock) desc2.push(language.get('COMMAND_STAFFLOG_LOCK', lang, modCounts.lock))

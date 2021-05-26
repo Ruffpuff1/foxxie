@@ -1,7 +1,7 @@
 module.exports = {
     name: 'starboard',
     aliases: ['sb', 'star', 'starboardsettings'],
-    usage: 'fox starboard [channel|minimum|self|notifications|nostar] (setting)',
+    usage: 'fox starboard [channel|minimum|self|notifications] (setting)',
     permissions: 'ADMINISTRATOR',
     category: 'settings',
     async execute (props) {
@@ -11,7 +11,9 @@ module.exports = {
         const starboard = await message.guild.settings.get('starboard');
 
         if (/(channel|location|c)/i.test(args[0])) return this._channel(props, starboard, loading);
-        if (/(minimum|number|min|m)/i.test(args[0])) return this._minimum(props, starboard, loading)
+        if (/(minimum|number|min|m)/i.test(args[0])) return this._minimum(props, starboard, loading);
+        if (/(selfstar|self|s)/i.test(args[0])) return this._self(props, starboard, loading);
+        if (/(notifications|notification|notifs|notif|n)/i.test(args[0])) return this._notifications(props, starboard, loading)
         language.send('COMMAND_STARBOARD_INVALIDUSE', lang);
         return loading.delete();
     },
@@ -53,6 +55,38 @@ module.exports = {
         }
         await message.guild.settings.set('starboard.minimum', parseInt(minimum));
         language.send('COMMAND_STARBOARD_MINIMUM_SET', lang, parseInt(minimum));
+        return loading.delete();
+    },
+
+    async _self({ message, args, language, lang }, starboard, loading) {
+
+        if (/(none|reset|on|true|allow|yes)/i.test(args[1])) {
+            language.send('COMMAND_STARBOARD_SELF_REMOVED', lang);
+            loading.delete();
+            return message.guild.settings.unset('starboard.self');
+        }
+        if (/(false|off|deny|no)/i.test(args[1])) {
+            message.guild.settings.set('starboard.self', false);
+            language.send('COMMAND_STARBOARD_SELF_DENIED', lang);
+            return loading.delete();
+        }
+        language.send('COMMAND_STARBOARD_SELF_NOW', lang, starboard?.self);
+        return loading.delete();
+    },
+
+    async _notifications({ message, args, language, lang }, starboard, loading) {
+
+        if (/(none|reset|on|true|allow|yes)/i.test(args[1])) {
+            language.send('COMMAND_STARBOARD_NOTIFICATIONS_REMOVED', lang);
+            loading.delete();
+            return message.guild.settings.unset('starboard.notifications');
+        }
+        if (/(false|off|deny|no)/i.test(args[1])) {
+            message.guild.settings.set('starboard.notifications', false);
+            language.send('COMMAND_STARBOARD_NOTIFICATIONS_DENIED', lang);
+            return loading.delete();
+        }
+        language.send('COMMAND_STARBOARD_NOTIFICATIONS_NOW', lang, starboard?.notifications);
         return loading.delete();
     }
 }

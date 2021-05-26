@@ -1,6 +1,5 @@
 const { mongoDB } = require('../../lib/Database');
 const { memberCount, clock } = require('../../lib/util/theCornerStore');
-const { stats } = require('../../lib/util/stats');
 const { version, commands, aliases } = require('../../config/foxxie');
 module.exports = {
 	name: 'ready',
@@ -15,9 +14,6 @@ module.exports = {
         // The Corner Store, memberCount & clock
         // memberCount(client);
         // clock(client);
-
-        stats(client);
-        setInterval(() => stats(client), 15000);
 
         const actvs = [
             `with ${client.guilds.cache.size.toLocaleString()} servers & ${client.users.cache.size.toLocaleString()} users.`,
