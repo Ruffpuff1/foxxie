@@ -26,7 +26,6 @@ module.exports = {
         // Persisteny
         const highestRole = member.guild.me.roles.highest;
         const persistroles = await member.user.settings.get(`servers.${member.guild.id}.persistRoles`);
-        console.log(persistroles);
 		if (persistroles && member.guild.me.permissions.has(FLAGS.MANAGE_ROLES)) await member.roles.add(persistroles.filter(id => !autoroles?.includes(id)).filter(id => highestRole.comparePositionTo(id) > 0), member.guild.language.get('EVENT_GUILDMEMBERADD_PERSISTREASON', lang)).catch((() => null));
 		const persistnick = await member.user.settings.get(`servers.${member.guild.id}.persistNickname`);
 		if (persistnick) await member.setNickname(persistnick).catch(e => e);
