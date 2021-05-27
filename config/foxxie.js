@@ -3,14 +3,14 @@ const { version } = require('../package.json')
 module.exports = {
     prefix: {
         production: '.',
-        development: 'a.'
+        development: 'd.'
     },
     version,
     owner: ['486396074282450946', '749845359689465977'],
     commands: '101',
     aliases: '186',
-    communityServer: 'https://discord.gg/kAbuCpfnCk',
-    supportServer: 'https://discord.gg/jMernA8hD9',
-    inviteURL: 'https://discord.com/api/oauth2/authorize?client_id=812546582531801118&permissions=8&scope=bot',
-    topggURL: 'https://top.gg/bot/812546582531801118/vote'
+    communityServer: 'http://ruff.cafe/community',
+    supportServer: 'http://foxxie.ruff.cafe/support',
+    inviteURL: 'http://foxxie.ruff.cafe/invite',
+    topggURL: 'http://foxxie.ruff.cafe/vote'
 }
