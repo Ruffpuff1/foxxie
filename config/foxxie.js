@@ -3,12 +3,12 @@ const { version } = require('../package.json')
 module.exports = {
     prefix: {
         production: '.',
-        development: 'd.'
+        development: 'a.'
     },
     version,
     owner: ['486396074282450946', '749845359689465977'],
     commands: '101',
-    aliases: '188',
+    aliases: '186',
     communityServer: 'https://discord.gg/kAbuCpfnCk',
     supportServer: 'https://discord.gg/jMernA8hD9',
     inviteURL: 'https://discord.com/api/oauth2/authorize?client_id=812546582531801118&permissions=8&scope=bot',

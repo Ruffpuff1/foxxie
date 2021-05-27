@@ -8,7 +8,7 @@ module.exports = {
         client.setInterval(async () => {
 
             const reminders = await client.schedule.fetch('reminders');
-
+            console.log(reminders);
             reminders?.forEach(async rmdr => {
 
                 const { time, authID, guildId, channelId } = rmdr;

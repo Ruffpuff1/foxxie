@@ -1,5 +1,3 @@
-const { foxxieSchema } = require("../../../lib/structures/database/FoxxieSchema")
-const mongo = require("../../../lib/structures/database/mongo")
 const { randomBytes } = require('crypto');
 const { base32 } = require('../../../lib/util/util');
 const { badges } = require('../../../lib/util/constants');
@@ -20,15 +18,8 @@ module.exports = {
             const str = base32(randomBytes(3).readUIntLE(0, 3));
             out.push(str);
         }
-        await message.author.send(language.get('COMMAND_CREATEKEY_SUCCESS', lang, badges, id, out));
-        await mongo().then(async () => {
-            try { await foxxieSchema.findByIdAndUpdate(
-                { _id: '812546582531801118' },
-                { _id: '812546582531801118',
-                    $push: { keys: { id, key: out.join('') } } }, 
-                { upsert: true })
-            } finally {}
-        })
+        message.author.send(language.get('COMMAND_CREATEKEY_SUCCESS', lang, badges, id, out));
+        message.client.framework.push(`keys`, { id, key: out.join('') });
         message.responder.success();
     }
 }

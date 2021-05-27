@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const Schedule = require('../../../lib/Schedule');
+const Foxxie = require('../../../lib/extensions/Client');
 
 module.exports.launchEvents = client => {
 
@@ -17,6 +18,9 @@ module.exports.launchEvents = client => {
 		    client.on(event.name, (...args) => event.execute(...args, client));
 	    }
     }
+
+    // Settings framework
+    client.framework = new Foxxie(client);
 
     // Schedules
     client.schedule = new Schedule(client);

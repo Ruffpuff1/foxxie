@@ -1,5 +1,3 @@
-const { foxxieSchema } = require("../../../lib/structures/database/FoxxieSchema")
-const mongo = require("../../../lib/structures/database/mongo")
 const { badges } = require("../../../lib/util/constants")
 module.exports = {
     name: 'redeem',
@@ -13,27 +11,15 @@ module.exports = {
         let key = args[0];
         if (!key) return language.send('COMMAND_REDEEM_NOKEY', lang);
 
-        key = key.replace(/-/g, '')
-
-        await mongo().then(async () => {
-            try { 
-                const client = await foxxieSchema.findById(
-                { _id: '812546582531801118' })
+        key = key.replace(/-/g, '');
+        message.client.keys = await message.client.framework.get('keys');
                 
-                const badgesUser = await message.author.settings.get('badges')
+        const badgesUser = await message.author.settings.get('badges')
+        const found = message.client.keys.find(item => item.key === key);
+        if (!found) return language.send('COMMAND_REDEEM_NOEXIST', lang);
 
-                const found = client.keys.find(item => item.key === key);
-                if (!found) return language.send('COMMAND_REDEEM_NOEXIST', lang);
-                language.send('COMMAND_REDEEM_SUCCESS', lang, badges[found.id].icon, badges[found.id].name);
-
-                await message.author.settings.set('badges', badgesUser | ( 1 << found.id ))
-                await foxxieSchema.findByIdAndUpdate(
-                    { _id: '812546582531801118' },
-                    { _id: '812546582531801118',
-                        $pull: { keys: found } }
-                )
-
-            } finally {}
-        })
+        language.send('COMMAND_REDEEM_SUCCESS', lang, badges[found.id].icon, badges[found.id].name);
+        message.author.settings.set('badges', badgesUser | ( 1 << found.id ))
+        message.client.framework.pull('keys', found);
     }
 }
