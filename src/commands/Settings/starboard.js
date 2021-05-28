@@ -1,7 +1,7 @@
 module.exports = {
     name: 'starboard',
     aliases: ['sb', 'star', 'starboardsettings'],
-    usage: 'fox starboard [channel|minimum|self|notifications] (setting)',
+    usage: 'fox starboard [channel|minimum|self|notifs] (setting)',
     permissions: 'ADMINISTRATOR',
     category: 'settings',
     async execute (props) {
@@ -12,8 +12,8 @@ module.exports = {
 
         if (/(channel|location|c)/i.test(args[0])) return this._channel(props, starboard, loading);
         if (/(minimum|number|min|m)/i.test(args[0])) return this._minimum(props, starboard, loading);
+        if (/(notifs|n)/i.test(args[0])) return this._notifications(props, starboard, loading);
         if (/(selfstar|self|s)/i.test(args[0])) return this._self(props, starboard, loading);
-        if (/(notifications|notification|notifs|notif|n)/i.test(args[0])) return this._notifications(props, starboard, loading)
         language.send('COMMAND_STARBOARD_INVALIDUSE', lang);
         return loading.delete();
     },
@@ -75,7 +75,7 @@ module.exports = {
     },
 
     async _notifications({ message, args, language, lang }, starboard, loading) {
-
+        console.log(args)
         if (/(none|reset|on|true|allow|yes)/i.test(args[1])) {
             language.send('COMMAND_STARBOARD_NOTIFICATIONS_REMOVED', lang);
             loading.delete();
