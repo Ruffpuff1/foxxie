@@ -107,6 +107,8 @@ module.exports = {
         COMMAND_VCMUTE_DESCRIPTION: `Server mutes the specified member in a v cso they can no longer talk.`,
         COMMAND_VCMUTE_NOMEMBER: `You need to specify **one member** vcmute.`,
         COMMAND_VCMUTE_NOVOICE: `**Hey,** looks like the member you're trying to vcmute isn't even in a vc.`,
+        COMMAND_WARN_DESCRIPTION: `Allows you to give warnings to members of your server for me to keep track of. Warnings will be sent as a DM to the member warned and get logged to the server's mod log channel if set. You can view a user's warnings using the \`info\` command.`,
+        COMMAND_WARN_NOMEMBER: `**Hey,** you need to provide **one member** to warn.`,
 
         // Roleplay Commands
         COMMAND_ANGRY_DESCRIPTION: `Get angry at someone (ಠ_ಠ)`,
@@ -517,9 +519,11 @@ module.exports = {
         // Logs
         LOG_ACTION_MUTE: `Muted Member`,
         LOG_ACTION_TEMPMUTE: 'Temporarily Muted Member',
+        LOG_ACTION_WARN: `Warned Member`,
 
         LOG_DM_MUTE: 'You have been muted',
         LOG_DM_TEMPMUTE: 'You have been temporarily muted',
+        LOG_DM_WARN: 'You have been warned',
 
         LOG_ARGS_MEMBER: (name, mention, id) => `**Member**: ${name} ${mention} (ID: ${id})`,
         LOG_ARGS_CHANNEL: (mention, id) => `**Location**: ${mention} (ID: ${id})`,

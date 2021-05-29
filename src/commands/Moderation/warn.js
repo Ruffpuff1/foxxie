@@ -1,26 +1,25 @@
-const { moderationCommandWarn } = require('../../../lib/structures/ModerationCommand')
 module.exports = {
     name: 'warn',
     aliases: ['w'],
     usage: 'fox warn [user|userId] (reason)',
-    //category: 'moderation',
+    category: 'moderation',
     permissions: 'MANAGE_MESSAGES',
     execute: async(props) => {
 
-        let { message, args, lang } = props
+        let { message, args, lang, language } = props
 
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        if (!target) return message.channel.send("You need to provide **one member** to give a warn to.")
+        if (!target) return language.send('COMMAND_WARN_NOMEMBER', lang)
 
-        if (target.roles.highest.position >= message.member.roles.highest.position) return message.channel.send("Higher roles")
-        if (target.roles.highest.position >= message.guild.me.roles.highest.position) return message.channel.send("Higher roles")
-        if (target.user.id === message.member.user.id) return message.channel.send("self")
-        if (target.user.id === message.guild.ownerID) return message.channel.send("owner")
+        const reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
 
-        let reason = args.slice(1).join(' ')
-        if (!reason) reason = 'No reason specified'
+        target.user.settings.push(`servers.${message.guild.id}.warnings`, { author: message.member, timestamp: new Date().getTime(), reason })
+        if (message.guild.id === '761512748898844702') {
+            let warns = await target.user.settings.get(`servers.${message.guild.id}.warnings`);
+            const staffChn = message.guild.channels.cache.get('817006909492166656');
+            if (warns?.length >= 3 && staffChn) staffChn.send(`${target.user.tag} (ID: ${target.user.id}) now has **${warns?.length}** warnings.`)
+        }
 
-        moderationCommandWarn(message, reason, target, message.member, lang)
-        message.responder.success();
+        message.guild.log.send({ type: 'mod', action: 'warn', member: target, moderator: message.member, reason, channel: message.channel, dm: true, counter: 'warn', msg: message });
     }
 }

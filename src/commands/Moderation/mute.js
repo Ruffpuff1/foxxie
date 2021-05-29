@@ -10,7 +10,7 @@ module.exports = {
 
         const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!member) return language.send('COMMAND_MUTE_NOMEMBER', lang);
-        const reason = args[1] || language.get('LOG_MODERATION_NOREASON', lang);
+        const reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
 
         let muterole = await message.guild.settings.get('mod.roles.mute');
         if (!message.guild.roles.cache.get(muterole)) muterole = await message.guild.createMuteRole();
