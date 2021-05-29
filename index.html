@@ -7,8 +7,8 @@
   		<meta name="author" content="Foxxie">
 		<title>Foxxie - Discord</title>
 		<link rel="icon" href="http//ruff.cafe/images/foxxie.png">
-		<link rel="stylesheet" href="/cdn/css/bulma.css">
-		<link rel="stylesheet" href="/cdn/css/main.css">
+		<!-- <link rel="stylesheet" href="/cdn/css/bulma.css"> -->
+		<link rel="stylesheet" href="/cdn/css/styles.css">
         <meta property="og:url" content="http//foxxie.ruff.cafe">
         <meta property="og:type" content="website">
         <meta property="og:title" content="A smort server butler.">
@@ -16,20 +16,6 @@
         <meta property="og:image" content="http//ruff.cafe/images/foxxie.png">
         <meta property="og:image:secure_url" content="http//ruff.cafe/images/foxxie.png">
 		<meta name="viewport" content="width=device-width, initial-scale=0.8">
-		<style>
-			#particle-js {
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				background-repeat: no-repeat;
-				background-size: cover;
-				background-position: 50% 50%;
-				opacity: 0.48;
-			}
-			canvas {
-				position: fixed;
-			}
-		</style>
 	</head>
 	<body>
 		<section class="hero is-info is-fullheight" style=" background-size: cover; background-color: #151517;">
@@ -40,7 +26,7 @@
 							<a href="/" class="nav-item is-active">Foxxie</a>
 							<a href="commands" class="nav-item ">Commands</a>
 							<a href="support" class="nav-item">Support</a>
-							<a href="invite" class="nav-item " style="color: #ffffff;">
+							<a href="./invite/index.html" class="nav-item " style="color: #ffffff;">
 								<span>Invite Foxxie</span>
 							</a>						
 						</div>
@@ -65,7 +51,7 @@
 				</div>
 				</h2>
 				<div style="margin-top:3em;">
-					<a href="/invite" class=" button is-info is-inverted " style="background-color: #ffbebb00; color: #ffffff; border-color: white;">
+					<a href="./invite/index.html" class=" button is-info is-inverted " style="background-color: #ffbebb00; color: #ffffff; border-color: white;">
 						<span>Invite Foxxie</span>
 					</a>
 				</div>
@@ -173,7 +159,7 @@
 					"mode": "repulse"
 				},
 				"onclick": {
-					"enable": true,
+					"enable": false,
 					"mode": "push"
 				},
 				"resize": true
