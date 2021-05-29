@@ -83,6 +83,8 @@ module.exports = {
         COMMAND_LOCK_DESCRIPTION: `Lets you lock a channel in the event of a raid or downtime. Although this command only updates the @everyone permission, so if you have a role that grants permissions to \`SEND_MESSAGES\` users with that role will still be able to speak.`,
         COMMAND_LOCK_LOCKING: `${infinity} **Locking** up the channel...`,
         COMMAND_LOCK_SUCCESS: `**Successfully** locked up the channel for ya.`,
+        COMMAND_MUTE_DESCRIPTION: `Allows you to mute a member of the server to prevent them from talking, this command will use a premade mute role by the bot and log to the moderation channel if set.`,
+        COMMAND_MUTE_NOMEMBER: `**Hey,** you need to specify **one member** to mute.`,
         COMMAND_MUTE_ROLE_DEFAULT: `Silenced`,
         COMMAND_MUTE_ROLE_REASON: `Setting up the mute settings.`,
         COMMAND_STAFFLOG_BAN: ban => `${notSpecified} Issued ${ban.toLocaleString()} **ban${ban > 1 ? `s` : ``}**`,
