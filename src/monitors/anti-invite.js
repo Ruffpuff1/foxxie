@@ -1,4 +1,3 @@
-const { moderationCommandWarn } = require('../../lib/structures/ModerationCommand')
 const { regexes: { discord: { invite } } } = require('../../lib/util/constants')
 module.exports = {
     name: 'anti-invite',

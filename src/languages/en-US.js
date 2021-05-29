@@ -1,6 +1,7 @@
 const { emojis: { infinity, perms: { notSpecified, granted, denied }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('../../lib/util/constants');
 const { topggURL, supportServer, inviteURL, version, commands, aliases } = require('../../config/foxxie')
 const { toUpperCaseFirst } = require('../../lib/util/util');
+const moment = require('moment');
 
 module.exports = {
 
@@ -517,10 +518,14 @@ module.exports = {
         INHIBITORS_PERMISSIONS_GUILDOWNER: `**Nope,** due to the harm this command can cause it can only be excuted by the guild owner.`,
 
         // Logs
+        LOG_ACTION_CLEARWARN: `Removed Warning From Member`,
+        LOG_ACTION_CLEARWARNS: `Cleared Warnings From Member`,
         LOG_ACTION_MUTE: `Muted Member`,
         LOG_ACTION_TEMPMUTE: 'Temporarily Muted Member',
         LOG_ACTION_WARN: `Warned Member`,
 
+        LOG_DM_CLEARWARN: `Your warning has been removed`,
+        LOG_DM_CLEARWARNS: `Your warnings have been cleared`,
         LOG_DM_MUTE: 'You have been muted',
         LOG_DM_TEMPMUTE: 'You have been temporarily muted',
         LOG_DM_WARN: 'You have been warned',
@@ -530,6 +535,8 @@ module.exports = {
 
         LOG_ARGS_MODERATOR: (tag, mention, id) => `**Moderator**: ${tag} ${mention} (ID: ${id})`,
 		LOG_ARGS_REASON: reason => `**Reason**: ${reason}`,
+        LOG_ARGS_WARN: (warnRes, warnTime, warnAuthTag, warnAuth, warnAuthId) => `**Warn**: ${warnRes}\non ${moment(warnTime).format('llll')}\nBy: ${warnAuthTag} ${warnAuth} (ID: ${warnAuthId})`, 
+        LOG_ARGS_WARNS: (warns, client) => `**Warns**:\n${warns.map((w, idx) => `${idx + 1}. ${w.reason}\non ${moment(w.timestamp).format('llll')}\nBy: ${client.users.cache.get(w.author).tag} ${client.users.cache.get(w.author).toString()} (ID: ${w.author})`).join('\n\n')}`,
         LOG_ARGS_DURATION: duration => `**Duration**: ${duration}`,
 
         LOG_ARGS_DATE: date => `**Date**: ${date}`,
