@@ -15,6 +15,7 @@ module.exports = {
         let muterole = await message.guild.settings.get('mod.roles.mute');
         if (!message.guild.roles.cache.get(muterole)) muterole = await message.guild.createMuteRole();
 
+        const duration = null;
         await this.executeMutes(member, reason, muterole, message.member.user);
         await message.guild.log.send({ type: 'mod', action: duration ? 'tempmute' : 'mute', member, moderator: message.member, reason, channel: message.channel, duration: duration, dm: true, msg: message, counter: 'mute' })
         message.responder.success();

@@ -11,7 +11,7 @@ module.exports = {
         //'https://discord.gg/kAbuCpfnCk' - deletes any discord server invite // 761512748898844702
         if (invite.test(message.content)) {
 
-            if (message.guild.id === '761512748898844702') await moderationCommandWarn(message, 'Server invite link', message.member, message.guild.me);//auto warns in TCS
+            if (message.guild.id === '761512748898844702') await message.client.commands.get("warn").executeWarn({ message, reason: "Server Invite Link", target: message.member, moderator: message.guild.me, channel: message.channel })//auto warns in TCS
             message.delete()
         }
     }
