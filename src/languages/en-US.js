@@ -513,6 +513,25 @@ module.exports = {
         INHIBITORS_PERMISSIONS_GUILDOWNER: `**Nope,** due to the harm this command can cause it can only be excuted by the guild owner.`,
 
         // Logs
+        LOG_ACTION_MUTE: `Muted Member`,
+        LOG_ACTION_TEMPMUTE: 'Temporarily Muted Member',
+
+        LOG_DM_MUTE: 'You have been muted',
+        LOG_DM_TEMPMUTE: 'You have been temporarily muted',
+
+        LOG_ARGS_MEMBER: (name, mention, id) => `**Member**: ${name} ${mention} (ID: ${id})`,
+        LOG_ARGS_CHANNEL: (mention, id) => `**Location**: ${mention} (ID: ${id})`,
+
+        LOG_ARGS_MODERATOR: (tag, mention, id) => `**Moderator**: ${tag} ${mention} (ID: ${id})`,
+		LOG_ARGS_REASON: reason => `**Reason**: ${reason}`,
+        LOG_ARGS_DURATION: duration => `**Duration**: ${duration}`,
+
+        LOG_ARGS_DATE: date => `**Date**: ${date}`,
+
+
+
+
+
         LOG_MODERATION_BANNED: tar => `Banned ${tar}`,
         LOG_MODERATION_CLEAREDWARNS: tar => `Cleared warnings for ${tar}`,
         LOG_MODERATION_EMBED_DATE: `**Date / Time**`,
