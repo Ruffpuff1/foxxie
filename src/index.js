@@ -4,6 +4,7 @@ require('../lib/extensions/Guild');
 require('../lib/extensions/Message');
 require('../lib/extensions/User');
 require('../lib/extensions/GuildMember');
+require('../lib/extensions/TextChannel');
 
 const client = new Discord.Client({ shards: 'auto', partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const { launchEvents } = require('./ws/events/LaunchEvents');

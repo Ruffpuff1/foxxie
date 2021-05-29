@@ -93,6 +93,8 @@ module.exports = {
         COMMAND_LOCK_DESCRIPTION: ``,
         COMMAND_LOCK_LOCKING: ``,
         COMMAND_LOCK_SUCCESS: ``,
+        COMMAND_MUTE_ROLE_DEFAULT: ``,
+        COMMAND_MUTE_ROLE_REASON: ``,
         COMMAND_NOTE_DESCRIPTION: ``,
         COMMAND_NOTE_NOMEMBER: ``,
         COMMAND_NOTE_NONOTE: ``,
