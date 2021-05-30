@@ -4,9 +4,7 @@ module.exports = {
     permissions: 'MANAGE_CHANNELS',
     category: 'moderation',
     usage: 'fox lock (reason)',
-    async execute (props) {
-
-        let { message, args, lang, language } = props
+    async execute ({ message, args, lang, language }) {
 
         if (!message.channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return language.send('COMMAND_LOCK_ALREADY', lang)
         let reason = args.slice(0).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
