@@ -23,6 +23,6 @@ module.exports = {
 
     executeBans({ message, user, reason, purge, moderator, duration, regex }) {
         if (purge) return message.guild.members.ban(user.id, { reason: `${duration ? `[temp]` : ''} ${moderator.user.tag} | ${reason.replace(regex, '')}`, days: 1 }).catch(() => null);
-        message.guild.members.ban(user.id, { reason: reason.replace(regex, '') }).catch(() => null);
+        message.guild.members.ban(user.id, { reason: `${duration ? `[temp]` : ''} ${moderator.user.tag} | ${reason.replace(regex, '')}` }).catch(() => null);
     }
 }

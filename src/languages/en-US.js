@@ -523,6 +523,7 @@ module.exports = {
         LOG_ACTION_BAN: `Banned User`,
         LOG_ACTION_CLEARWARN: `Removed Warning From Member`,
         LOG_ACTION_CLEARWARNS: `Cleared Warnings From Member`,
+        LOG_ACTION_LOCK: `Locked Channel`,
         LOG_ACTION_MUTE: `Muted Member`,
         LOG_ACTION_TEMPMUTE: 'Temporarily Muted Member',
         LOG_ACTION_WARN: `Warned Member`,
