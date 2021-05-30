@@ -75,6 +75,8 @@ module.exports = {
         COMMAND_URBAN_NOWORD: `**Okay,** how do you expect me to define a word if you don't provide one?`,
 
         // Moderation Commands
+        COMMAND_BAN_DESCRIPTION: `Bans a user from a guild and prevents them from joining back until unbanned. Command syntax should go \`fox ban ArEo#1245 for spamming\` however you can add an additional (-p) or (-purge) flag to the ban reason to clear 24 hours of that member's messages.`,
+        COMMAND_BAN_NOUSER: `You need to provide **one user** to ban.`,
         COMMAND_CLEARWARN_CONFIRM: `**Hey,** are you sure you want to clear all warnings for this member?`,
         COMMAND_CLEARWARN_DESCRIPTION: `Remove or clear warnings for the specified user. Specify a warn Id to clear that specific warning, or specify \`all\` to clear all warnings for that user.\nWarnings and their Id's can be seen with the \`info\` command.`,
         COMMAND_CLEARWARN_NOWARNINGS: `**Sorry,** this member currently has **no warnings** to clear.`,
@@ -518,12 +520,14 @@ module.exports = {
         INHIBITORS_PERMISSIONS_GUILDOWNER: `**Nope,** due to the harm this command can cause it can only be excuted by the guild owner.`,
 
         // Logs
+        LOG_ACTION_BAN: `Banned User`,
         LOG_ACTION_CLEARWARN: `Removed Warning From Member`,
         LOG_ACTION_CLEARWARNS: `Cleared Warnings From Member`,
         LOG_ACTION_MUTE: `Muted Member`,
         LOG_ACTION_TEMPMUTE: 'Temporarily Muted Member',
         LOG_ACTION_WARN: `Warned Member`,
 
+        LOG_DM_BAN: `You have been banned`,
         LOG_DM_CLEARWARN: `Your warning has been removed`,
         LOG_DM_CLEARWARNS: `Your warnings have been cleared`,
         LOG_DM_MUTE: 'You have been muted',
@@ -532,7 +536,7 @@ module.exports = {
 
         LOG_ARGS_MEMBER: (name, mention, id) => `**Member**: ${name} ${mention} (ID: ${id})`,
         LOG_ARGS_CHANNEL: (mention, id) => `**Location**: ${mention} (ID: ${id})`,
-
+        LOG_ARGS_USER: (tag, mention, id) => `**User**: ${tag} ${mention} (ID: ${id})`,
         LOG_ARGS_MODERATOR: (tag, mention, id) => `**Moderator**: ${tag} ${mention} (ID: ${id})`,
 		LOG_ARGS_REASON: reason => `**Reason**: ${reason}`,
         LOG_ARGS_WARN: (warnRes, warnTime, warnAuthTag, warnAuth, warnAuthId) => `**Warn**: ${warnRes}\non ${moment(warnTime).format('llll')}\nBy: ${warnAuthTag} ${warnAuth} (ID: ${warnAuthId})`, 

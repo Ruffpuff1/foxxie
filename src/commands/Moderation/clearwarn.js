@@ -20,7 +20,6 @@ module.exports = {
         target.user.settings.pull(`servers.${message.guild.id}.warnings`, set);
 
         await message.guild.log.send({ type: 'mod', action: 'clearwarn', member: target, moderator: message.member, reason, channel: message.channel, dm: true, warn: set, msg: message })
-        // message.guild.log.moderation(message, target.user, reason, 'Clearedwarns', 'clearwarn', lang)
         return message.responder.success();
 
     }, 
