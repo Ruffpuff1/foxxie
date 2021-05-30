@@ -75,7 +75,7 @@ module.exports = {
         COMMAND_URBAN_NOWORD: `**Okay,** how do you expect me to define a word if you don't provide one?`,
 
         // Moderation Commands
-        COMMAND_BAN_DESCRIPTION: `Bans a user from a guild and prevents them from joining back until unbanned. Command syntax should go \`fox ban ArEo#1245 for spamming\` however you can add an additional (-p) or (-purge) flag to the ban reason to clear 24 hours of that member's messages.`,
+        COMMAND_BAN_DESCRIPTION: `Bans a user from a guild and prevents them from joining back until unbanned. Command syntax should go \`fox ban ArEo#1245 for spamming\` however you can add an additional \`-p\` or \`-purge\` flag to the ban reason to clear 24 hours of that member's messages.`,
         COMMAND_BAN_NOUSER: `You need to provide **one user** to ban.`,
         COMMAND_CLEARWARN_CONFIRM: `**Hey,** are you sure you want to clear all warnings for this member?`,
         COMMAND_CLEARWARN_DESCRIPTION: `Remove or clear warnings for the specified user. Specify a warn Id to clear that specific warning, or specify \`all\` to clear all warnings for that user.\nWarnings and their Id's can be seen with the \`info\` command.`,

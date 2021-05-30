@@ -132,7 +132,13 @@ module.exports = {
 
         if (member) {
 
-            let join = [msg.guild.name,
+            let join = 
+            // Ari join 
+                member.user.id === '754598258742919178' && msg.guild.id === '761512748898844702'
+                ? [msg.guild.name,
+                moment(1609073125000).format('MMMM Do YYYY'),
+                moment([moment(1609073125000).format('YYYY'), moment(1609073125000).format('M') - 1, moment(1609073125000).format('D')]).toNow(true)]
+                : [msg.guild.name,
                 moment(member.joinedAt).format('MMMM Do YYYY'),
                 moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)]
 
