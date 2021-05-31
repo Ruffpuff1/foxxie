@@ -96,6 +96,10 @@ module.exports = {
         COMMAND_NUKE_DESCRIPTION: `Completely wipes a channel of all messages and clones its permissions, topic, and position. Only server owners can use this command due to the harm it may cause. Also keep in mind: mine or any other bot's settings will no longer work in that channel.`,
         COMMAND_NUKE_FIRST: `**First hehe,** anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`,
         COMMAND_NUKE_WARNING: (author, channel) => `${author}, ya sure you want to nuke this channel? This will get rid of **all messages** in the channel and **can't be undone**. If you're positive go ahead and type \`yes, nuke ${channel}\` within the next 30 seconds. If you'd like to cancel just send \`cancel\` or any other message. Also, gotta tell you that this simply clones the channel meaning some settings from myself or other bots won't work anymore.`,
+        COMMAND_PURGE_DESCRIPTION: `Clears out messages with optional filters, by default I won't clear important pinned messages.\n\`link\` will only clear links.\n\`invite\` will only clear discord invites.\n\`bots\` will only clear messages sent by bots.\n\`you\` will only clear messages sent by me.\n\`me\` will only clear messages sent by you.\n\`upload\` will only clear file uploads, like images and videos.\n\`text\` will only clear text, avoiding any images.\n\`user\` lets you specify a user to clear messages from, this can be their @mention or their user Id.`,
+        COMMAND_PURGE_NOLIMIT: `**Please,** specify a proper number of messages to purge.`,
+        COMMAND_PURGE_SUCCESS: num => `**Successfully** cleared out ${num} message${num === 1 ? '' : 's'} for you.`,
+        COMMAND_PURGE_USER: `**Please,** specify **one user** to purge messages from.`,
         COMMAND_STAFFLOG_BAN: ban => `${notSpecified} Issued ${ban.toLocaleString()} **ban${ban > 1 ? `s` : ``}**`,
         COMMAND_STAFFLOG_DESCRIPTION: `Shows the stats of how many times you or a specific user has performed a moderation command on this server.`,
         COMMAND_STAFFLOG_JAIL: jail => `${notSpecified} Issued ${jail.toLocaleString()} **jail${jail>1?`s`:``}**`,
@@ -532,6 +536,7 @@ module.exports = {
         LOG_ACTION_LOCK: `Locked Channel`,
         LOG_ACTION_MUTE: `Muted Member`,
         LOG_ACTION_NUKE: `Nuked Channel`,
+        LOG_ACTION_PURGE: `Purged Messages`,
         LOG_ACTION_TEMPMUTE: 'Temporarily Muted Member',
         LOG_ACTION_WARN: `Warned Member`,
 
