@@ -5,7 +5,7 @@ module.exports = {
     aliases: ['def', 'word'],
     usage: 'fox define [word]',
     category: 'utility',
-    execute: async (props) => {
+    async execute(props) {
 
         let { lang, args, language } = props;
 

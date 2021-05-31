@@ -1,32 +1,21 @@
 const Discord = require('discord.js');
+
 module.exports = {
     name: 'ping',
     aliases: ['pong', 'latency', 'lagg', 'lag'],
     usage: 'fox ping',
     category: 'utility',
-    execute(props) {
+    async execute({ lang, message, language }) {
 
-        let { lang, message, language } = props;
-        language.send('COMMAND_PING', lang)
-            .then(resultMessage => {
-                const ping = resultMessage.createdTimestamp - message.createdTimestamp
-                const pingEmbed = new Discord.MessageEmbed()
-                    .setColor(message.guild.me.displayColor)
-                    .setFooter(language.get('COMMAND_PING_FOOTER', lang))
-                    .addFields(
-                        {
-                            name: language.get('COMMAND_PING_DISCORD', lang),
-                            value: `\`\`\`${ping} ms\`\`\``,
-                            inline: true
-                        },
-                        {
-                            name: language.get('COMMAND_PING_NETWORK', lang),
-                            value: `\`\`\`${message.client.ws.ping} ms\`\`\``,
-                            inline: true
-                        }
-                    )
+        const msg = await language.send('COMMAND_PING', lang);
+        const ping = msg.createdTimestamp - message.createdTimestamp;
 
-                resultMessage.edit(`:ping_pong: **${language.get('COMMAND_PING_PONG', lang)}**`, {embed: pingEmbed})
-            })
-    },
+        const embed = new Discord.MessageEmbed()
+            .setColor(message.guild.me.displayColor)
+            .setFooter(language.get('COMMAND_PING_FOOTER', lang))
+            .addField(language.get('COMMAND_PING_DISCORD', lang), `\`\`\`${ping} ms\`\`\``, true)
+            .addField(language.get('COMMAND_PING_NETWORK', lang), `\`\`\`${message.client.ws.ping} ms\`\`\``, true)
+
+        msg.edit(`:ping_pong: **${language.get('COMMAND_PING_PONG', lang)}**`, { embed });
+    }
 }

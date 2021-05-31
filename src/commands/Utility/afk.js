@@ -18,6 +18,7 @@ module.exports = {
 
         message.member.setNickname(`[AFK] ${message.member.displayName}`).catch(e => e);
         message.responder.success();
-        message.channel.send(embed).then(msg => setTimeout(() => msg.delete(), 10000));
+        const msg = await message.channel.send(embed);
+        msg.delete({ timeout: 10000 });
     }
 }

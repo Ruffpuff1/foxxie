@@ -22,6 +22,6 @@ module.exports = {
             .addField(language.get('COMMAND_ABOUT_CREDITS_TITLE', lang), language.get('COMMAND_ABOUT_CREDITS_VALUE', lang))
             .addField(language.get('COMMAND_HELP_LINKS_TITLE', lang), language.get('COMMAND_HELP_LINKS_DESCRIPTION', lang))
             
-        message.channel.send(embed)
+        return message.channel.send(embed)
     }
 }

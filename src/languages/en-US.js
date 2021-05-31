@@ -68,7 +68,7 @@ module.exports = {
         COMMAND_TOPIC_DESCRIPTION: `I'll get you a random conversation starter for when your chat starts to doze off. Powered by https://www.conversationstarters.com`,
         COMMAND_URBAN_DESCRIPTION: `I'll get you data from an urban dictionary word you provide, including link, upvotes, definition, and examples.`,
         COMMAND_URBAN_EXAMPLE: `**Example**`,
-        COMMAND_URBAN_FOOTER: res => `By ${res[0].data.list[3].author}`,
+        COMMAND_URBAN_FOOTER: author => `By ${author}`,
         COMMAND_URBAN_NODATA: `**Yikes,** sorry I couldn't find any data for that word.`,
         COMMAND_URBAN_NODEFINITION: `No definition available.`,
         COMMAND_URBAN_NOEXAMPLE: `No example available.`,

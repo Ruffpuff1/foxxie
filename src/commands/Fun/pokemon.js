@@ -1,101 +1,42 @@
-const axios = require('axios')
-const Discord = require('discord.js')
+const axios = require('axios');
+const Discord = require('discord.js');
+const { toUpperCaseFirst } = require('../../../lib/util/util');
+const { zws } = require('../../../lib/util/constants');
+
 module.exports = {
     name: 'pokemon',
     aliases: ['pkm', 'poke'],
     usage: 'fox pokemon [pokemon] (-s|-shiny)',
     category: 'fun',
-    execute: async(props) => {
+    execute: async({ message, args: [pokemon], lang, language }) => {
 
-        let { message, args, lang, language } = props
-
-        if (!args[0]) return language.send('COMMAND_POKEMON_NOPOKEMON', lang);
-        const pokemon = args[0]
+        if (!pokemon) return language.send('COMMAND_POKEMON_NOPOKEMON', lang);
         
         let loading = await language.send("MESSAGE_LOADING", lang);
-
-        let isShine = /\-shiny\s*|-s\s*/
-        let shiny = isShine.test(message.content)
-
-        let newPokemon = pokemon.replace(isShine, '')
+        let shiny = /\-shiny\s*|-s\s*/.test(message.content);
         
-        axios.get(`https://pokeapi.co/api/v2/pokemon/${newPokemon}/`)
-        .then((res) => {
-
-            const argCap = res.data.name.charAt(0).toUpperCase() + res.data.name.slice(1)
-            const embed = new Discord.MessageEmbed()
-                .setColor(message.guild.me.displayColor)
-                .setTitle(`${argCap} (ID: ${res.data.id})`)
-                .setThumbnail(res.data.sprites[`${shiny ? 'front_shiny' : 'front_default'}`])
-                .addFields(
-                    {
-                        name: `:scroll: ${language.get('COMMAND_POKEMON_FIELD_TYPE', 'en-US')}`,
-                        value: res.data.types[0].type['name'],
-                        inline: true
-                    },
-                    {
-                        name: '\u200B',
-                        value: '\u200B',
-                        inline: true
-                    },
-                    {
-                        name: '\u200B',
-                        value: '\u200B',
-                        inline: true
-                    },
-                    {
-                        name: `:scales: ${language.get('COMMAND_POKEMON_FIELD_WEIGHT', 'en-US')}`,
-                        value: res.data.weight,
-                        inline: true
-                    },
-                    {
-                        name: `:straight_ruler: ${language.get('COMMAND_POKEMON_FIELD_HEIGHT', 'en-US')}`,
-                        value: res.data.height.toLocaleString(),
-                        inline: true
-                    },
-                    {
-                        name: `:up: ${language.get('COMMAND_POKEMON_FIELD_BASEXP', 'en-US')}`,
-                        value: res.data.base_experience,
-                        inline: true
-                    },
-                    {
-                        name: `:boot: ${language.get('COMMAND_POKEMON_FIELD_SPEED', 'en-US')}`,
-                        value: res.data.stats[5]['base_stat'],
-                        inline: true
-                    },
-                    {
-                        name: `:chains: ${language.get('COMMAND_POKEMON_FIELD_SPECIALDEF', 'en-US')}`,
-                        value: res.data.stats[4]['base_stat'],
-                        inline: true
-                    },
-                    {
-                        name: `:crystal_ball: ${language.get('COMMAND_POKEMON_FIELD_SPECIALATTK', 'en-US')}`,
-                        value: res.data.stats[3]['base_stat'],
-                        inline: true
-                    },
-                    {
-                        name: `:shield: ${language.get('COMMAND_POKEMON_FIELD_DEFENSE', 'en-US')}`,
-                        value: res.data.stats[2]['base_stat'],
-                        inline: true
-                    },
-                    {
-                        name: `:crossed_swords: ${language.get('COMMAND_POKEMON_FIELD_ATTACK', 'en-US')}`,
-                        value: res.data.stats[1]['base_stat'],
-                        inline: true
-                    },
-                    {
-                        name: ':heart: HP',
-                        value: res.data.stats[0]['base_stat'],
-                        inline: true
-                    }
-                )
-            loading.delete()
-            message.channel.send(embed)
-        })
-        .catch((err) => {
-            loading.delete()
+        const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon.replace(/\-shiny\s*|-s\s*/, '')}/`).catch(() => {
             language.send('COMMAND_POKEMON_INVALIDPOKEMON', lang);
-            }
-        )
+            return loading.delete();
+        })
+
+        const embed = new Discord.MessageEmbed()
+            .setTitle(`${res.data.name.toUpperCaseFirst()} (ID: ${res.data.id})`)
+            .setThumbnail(res.data.sprites[`${shiny ? 'front_shiny' : 'front_default'}`])
+            .addField(`:scroll: ${language.get('COMMAND_POKEMON_FIELD_TYPE', lang)}`, res.data.types[0].type['name'], true)
+            .addField(zws, zws, true)
+            .addField(zws, zws, true)
+            .addField(`:scales: ${language.get('COMMAND_POKEMON_FIELD_WEIGHT', lang)}`, res.data.weight, true)
+            .addField(`:straight_ruler: ${language.get('COMMAND_POKEMON_FIELD_HEIGHT', lang)}`, res.data.height.toLocaleString(), true)
+            .addField(`:up: ${language.get('COMMAND_POKEMON_FIELD_BASEXP', lang)}`, res.data.base_experience, true)
+            .addField(`:boot: ${language.get('COMMAND_POKEMON_FIELD_SPEED', lang)}`, res.data.stats[5]['base_stat'], true)
+            .addField(`:chains: ${language.get('COMMAND_POKEMON_FIELD_SPECIALDEF', lang)}`, res.data.stats[4]['base_stat'], true)
+            .addField(`:crystal_ball: ${language.get('COMMAND_POKEMON_FIELD_SPECIALATTK', lang)}`, res.data.stats[3]['base_stat'], true)
+            .addField(`:shield: ${language.get('COMMAND_POKEMON_FIELD_DEFENSE', lang)}`, res.data.stats[2]['base_stat'], true)
+            .addField(`:crossed_swords: ${language.get('COMMAND_POKEMON_FIELD_ATTACK', lang)}`, res.data.stats[1]['base_stat'], true)
+            .addField(':heart: HP', res.data.stats[0]['base_stat'], true)
+
+        message.channel.send(embed);
+        loading.delete();
     }
 }

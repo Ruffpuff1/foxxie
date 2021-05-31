@@ -4,16 +4,10 @@ module.exports = {
     aliases: ['conversationstarter', 'conversationstarters', 'topics'],
     usage: `fox topic`,
     category: 'fun',
-    execute: async (props) => {
+    execute: async ({ message }) => {
 
-        let { message } = props
-
-        axios.get(`https://www.conversationstarters.com/random.php`)
-        .then((res) => {
-            message.channel.send(res.data.slice(39))
-        })
-        .catch((err) => {
-            message.channel.send(err)
-        })
+        const result = await axios.get(`https://www.conversationstarters.com/random.php`)
+        if (!result) return message.responder.error();
+        message.channel.send(result.data.slice(39));
     }
 }

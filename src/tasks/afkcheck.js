@@ -18,7 +18,8 @@ module.exports = {
                 .setAuthor(message.language.get('TASK_AFK_EMBED_AUTHOR', lang, user.tag), user.avatarURL({dynamic: true}))
                 .setDescription(message.language.get('TASK_AFK_EMBED_DESCRIPTION', lang, afk.reason))
 
-            message.channel.send(embed).then(msg => setTimeout(() => msg.delete(), 10000));
+            const msg = await message.channel.send(embed);
+            msg.delete({ timeout: 10000 });
         })
 
         // Checks if message author is AFK. 
@@ -26,7 +27,8 @@ module.exports = {
         if (!afk || message.content === afk.lastMessage) return;
 
         // Sends welcome back msg, and changes nickname. 
-        message.reply(message.language.get('TASK_AFK_WELCOMEBACK', lang)).then(msg => setTimeout(() => msg.delete(), 10000));
+        const msg = await message.reply(message.language.get('TASK_AFK_WELCOMEBACK', lang));
+        msg.delete({ timeout: 10000 });
         message.member.setNickname(afk.nickname).catch(e => e);
         message.author.settings.unset(`servers.${message.guild.id}.afk`)
     }

@@ -1,10 +1,11 @@
-const { poll } = require('../../../lib/util/constants')
-const Discord = require('discord.js')
+const { poll } = require('../../../lib/util/constants');
+const Discord = require('discord.js');
+
 module.exports = {
     name: 'poll',
     usage: 'fox poll [option1], [option2]',
     //category: 'utility',
-    execute(props) {
+    async execute(props) {
 
         let { lang, message, args } = props;
         let opt = args.join(" ").toString().split(/\,\s*/)
@@ -25,10 +26,9 @@ module.exports = {
             .setDescription(filtered.map((option, idx) => `${idx + 1}. ${option.replace(/,/g, ' ')}`).join('\n'))
             .setFooter(lang.COMMAND_POLL_EMBED_FOOTER)
 
-        message.channel.send(embed).then(async message => {
-            for (let i = 0; i < filtered.length; i++) {
-                await message.react(this.numbers[i + 1]);
-            }
-        })
+        let msg = await message.channel.send(embed)
+        for (let i = 0; i < filtered.length; i++) {
+            await msg.react(this.numbers[i + 1]);
+        }
     }
 }

@@ -28,8 +28,11 @@ module.exports = {
 
         const loading = await language.send("MESSAGE_LOADING", lang);
         let set = await target.user.settings.get(`servers.${message.guild.id}.warnings`);
-        if (!set?.length) return language.send('COMMAND_CLEARWARN_NOWARNINGS', lang).then(loading.delete());
-
+        if (!set?.length) {
+            language.send('COMMAND_CLEARWARN_NOWARNINGS', lang);
+            return loading.delete();
+        }
+        
         async function confirmed() {
 
             target.user.settings.unset(`servers.${message.guild.id}.warnings`);
