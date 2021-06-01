@@ -1,5 +1,5 @@
 const { MessageEmbed, Permissions: { FLAGS }, Role, Emoji, Channel, User } = require('discord.js');
-const { emojis: { perms: { granted, notSpecified } }, badges } = require('../../../lib/util/constants')
+const { emojis: { }, badges } = require('../../../lib/util/constants')
 const moment = require('moment')
 
 module.exports = {
@@ -79,7 +79,7 @@ module.exports = {
 
     async execute (props) {
 
-        let { lang, message, args, language } = props;
+        let { message, args } = props;
 
         let user; let emoji;
         channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name.toLowerCase() === args.join(' ').toLocaleLowerCase());
@@ -97,13 +97,13 @@ module.exports = {
 
     },
 
-    async userInfo({message, language, lang}, user) {
+    async userInfo({message, language}, user) {
 
-        const loading = await language.send("MESSAGE_LOADING", lang);
+        const loading = await message.responder.loading();
         let embed = new MessageEmbed();
         embed = await this._addBaseData(embed, user);
         embed = await this._addBadges(embed, user);
-        embed = await this._addMemberData(embed, message, user, language, lang);
+        embed = await this._addMemberData(embed, message, user, language);
         await loading.delete();
         return message.channel.send(embed);
     },
@@ -121,13 +121,13 @@ module.exports = {
         return embed.setDescription(out.map(badge => `${badge.icon} ${badge.name}`).join('\n'));
     },
 
-    async _addMemberData(embed, msg, user, language, lang) {
+    async _addMemberData(embed, msg, user, language) {
 
         const member = msg.guild ? await msg.guild.members.fetch(user).catch(() => null) : null;
 		const creator = member && (member.joinedTimestamp - msg.guild.createdTimestamp) < 3000;
 
         const statistics = [
-            language.get('COMMAND_INFO_USER_DISCORDJOIN', lang, moment(user.createdAt).format('MMMM Do YYYY'), moment([moment(user.createdAt).format('YYYY'), moment(user.createdAt).format('M') - 1, moment(user.createdAt).format('D')]).toNow(true))
+            language.get('COMMAND_INFO_USER_DISCORDJOIN', moment(user.createdAt).format('MMMM Do YYYY'), moment([moment(user.createdAt).format('YYYY'), moment(user.createdAt).format('M') - 1, moment(user.createdAt).format('D')]).toNow(true))
         ];
 
         if (member) {
@@ -142,21 +142,21 @@ module.exports = {
                 moment(member.joinedAt).format('MMMM Do YYYY'),
                 moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)]
 
-            statistics.push(creator ? language.get('COMMAND_INFO_USER_GUILDCREATE', lang, join) 
-                : language.get('COMMAND_INFO_USER_GUILDJOIN', lang, join)
+            statistics.push(creator ? language.get('COMMAND_INFO_USER_GUILDCREATE', join) 
+                : language.get('COMMAND_INFO_USER_GUILDJOIN', join)
             );
             
             let msgs = await member.user.settings.get(`servers.${msg.guild.id}.messageCount`); 
-            statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', lang, msgs || 0));
+            statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', msgs || 0));
 
             const birthday = await member.user.settings.get(`birthday`);
             let totalStar = await member.user.settings.get(`servers.${msg.guild.id}.starCount`);
             let minimum = await msg.guild.settings.get(`starboard.minimum`) || 3;
 		    
-            if (member) embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS', lang)} ${totalStar && totalStar >= minimum ? `:star: **${totalStar}**` : ''} ${birthday ? `:cake: **${birthday}**` : ''}`, statistics.join('\n'));
+            if (member) embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS')} ${totalStar && totalStar >= minimum ? `:star: **${totalStar}**` : ''} ${birthday ? `:cake: **${birthday}**` : ''}`, statistics.join('\n'));
         };
 
-        if (!member) embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS', lang)}`, statistics.join('\n'));
+        if (!member) embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS')}`, statistics.join('\n'));
 		if (!member) return embed.setColor(msg.guild.me.displayColor)
 
         const roles = member.roles.cache.sorted((a, b) => b.position - a.position);
@@ -179,8 +179,8 @@ module.exports = {
 
         if (roles.size) {
             embed.addField(
-                `:scroll: ${language.get('COMMAND_INFO_USER_ROLES', lang, roles.size)}`,
-                roleString.length ? roleString : language.get('COMMAND_INFO_USER_NOROLES', lang)
+                `:scroll: ${language.get('COMMAND_INFO_USER_ROLES', roles.size)}`,
+                roleString.length ? roleString : language.get('COMMAND_INFO_USER_NOROLES')
             )
         };
 
@@ -188,7 +188,7 @@ module.exports = {
 		if (warnings?.length) {
 			for (const { author } of warnings) await msg.client.users.fetch(author);
 			embed.addField(
-				`:lock: ${language.get('COMMAND_INFO_USER_WARNINGS', lang, warnings)}`,
+				`:lock: ${language.get('COMMAND_INFO_USER_WARNINGS', warnings)}`,
 				warnings.map((warn, idx) => `${idx + 1}. ${warn.active ? '~~' : ''}${warn.reason} - **${msg.client.users.cache.get(warn.author).tag}**${warn.active ? '~~' : ''}`)
 			);
 		}
@@ -197,30 +197,30 @@ module.exports = {
 		if (notes?.length) {
 			for (const { author } of notes) await msg.client.users.fetch(author);
 			embed.addField(
-				`:label: ${language.get('COMMAND_INFO_USER_NOTES', lang, notes)}`,
+				`:label: ${language.get('COMMAND_INFO_USER_NOTES', notes)}`,
 				notes.map((note, idx) => `${idx + 1}. ${note.reason} - **${msg.client.users.cache.get(note.author).tag}**`)
 			);
 		}
         return embed.setColor(member.displayColor)
     },
 
-    async emojiinfo({ message: msg, language, lang }, emoji) {
+    async emojiinfo({ message: msg, language }, emoji) {
 
         let embed = new MessageEmbed()
             .setTitle(`${emoji.name} (ID: ${emoji.id})`)
-            .setDescription(language.get('COMMAND_INFO_EMOJI_CREATED', lang, emoji.name, moment(emoji.createdTimestamp).format('MMMM Do YYYY'), moment([moment(emoji.createdTimestamp).format('YYYY'), moment(emoji.createdTimestamp).format('M') - 1, moment(emoji.createdTimestamp).format('D')]).toNow(true)))
+            .setDescription(language.get('COMMAND_INFO_EMOJI_CREATED', emoji.name, moment(emoji.createdTimestamp).format('MMMM Do YYYY'), moment([moment(emoji.createdTimestamp).format('YYYY'), moment(emoji.createdTimestamp).format('M') - 1, moment(emoji.createdTimestamp).format('D')]).toNow(true)))
             .setColor(msg.guild.me.displayColor)
             .setImage(emoji.url)
-            .addField(`:pencil2: ${language.get('COMMAND_INFO_EMOJI_NAME_TITLE', lang)}`, emoji.name, true)
-            .addField(`:projector: ${language.get('COMMAND_INFO_EMOJI_ANIMATED_TITLE', lang)}`, language.get('COMMAND_INFO_EMOJI_ANIMATED_VALUE', lang, emoji.animated), true)
-            .addField(`:link: ${language.get('COMMAND_INFO_EMOJI_LINKS_TITLE', lang)}`, `${emoji.animated
+            .addField(`:pencil2: ${language.get('COMMAND_INFO_EMOJI_NAME_TITLE')}`, emoji.name, true)
+            .addField(`:projector: ${language.get('COMMAND_INFO_EMOJI_ANIMATED_TITLE')}`, language.get('COMMAND_INFO_EMOJI_ANIMATED_VALUE', emoji.animated), true)
+            .addField(`:link: ${language.get('COMMAND_INFO_EMOJI_LINKS_TITLE')}`, `${emoji.animated
                 ? `[PNG](${emoji.url.replace('.gif', '.png')}) | [JPEG](${emoji.url.replace('.gif', '.jpg')}) | [GIF](${emoji.url})`
                 :`[PNG](${emoji.url}) | [JPEG](${emoji.url.replace('.png', '.jpeg')})`}`, true)
 
         return msg.channel.send(embed)
     },
 
-    async channelInfo({ message, language, lang }, channel) {
+    async channelInfo({ message }, channel) {
 
         const embed = new MessageEmbed()
             .setTitle(`${channel.name} (ID: ${channel.id})`)
@@ -260,25 +260,25 @@ module.exports = {
             return message.channel.send(embed)
         },
 
-    async roleinfo({ message, language, lang }, role){
+    async roleinfo({ message, language }, role){
         const [bots, humans] = role.members.partition(member => member.user.bot);
 
         const embed = new MessageEmbed()
             .setTitle(`${role.name} (ID: ${role.id})`)
             .setColor(role.color)
-            .addField(`:art: ${language.get('COMMAND_INFO_ROLE_COLOR', lang)}`, role.color ? role.hexColor : language.get('COMMAND_INFO_ROLE_NONE', lang), true)
-            .addField(`:people_hugging: ${language.get('COMMAND_INFO_ROLE_MEMBERS_TITLE', lang)}`, language.get('COMMAND_INFO_ROLE_MEMBERS_VALUE', lang, humans.size, bots.size), true)
-            .addField(`:hammer: ${language.get('COMMAND_INFO_ROLE_PERMISSIONS_TITLE', lang)}`, role.permissions.has(FLAGS.ADMINISTRATOR)
-                ? language.get('COMMAND_INFO_ROLE_ALLPERMS', lang)
-                : Object.entries(role.permissions.serialize()).filter(perm => perm[1]).map(([perm]) => this.perms[perm]).join(', ') || language.get('COMMAND_INFO_ROLE_NONE', lang), true)
-            .addField(`:calendar: ${language.get('COMMAND_INFO_ROLE_CREATED_TITLE', lang)}`, language.get('COMMAND_INFO_ROLE_CREATED_VALUE', lang, moment(role.createdAt).format('MMMM Do YYYY'), moment([moment(role.createdAt).format('YYYY'), moment(role.createdAt).format('M') - 1, moment(role.createdAt).format('D')]).toNow(true)), true)
+            .addField(`:art: ${language.get('COMMAND_INFO_ROLE_COLOR')}`, role.color ? role.hexColor : language.get('COMMAND_INFO_ROLE_NONE'), true)
+            .addField(`:people_hugging: ${language.get('COMMAND_INFO_ROLE_MEMBERS_TITLE')}`, language.get('COMMAND_INFO_ROLE_MEMBERS_VALUE', humans.size, bots.size), true)
+            .addField(`:hammer: ${language.get('COMMAND_INFO_ROLE_PERMISSIONS_TITLE')}`, role.permissions.has(FLAGS.ADMINISTRATOR)
+                ? language.get('COMMAND_INFO_ROLE_ALLPERMS')
+                : Object.entries(role.permissions.serialize()).filter(perm => perm[1]).map(([perm]) => this.perms[perm]).join(', ') || language.get('COMMAND_INFO_ROLE_NONE'), true)
+            .addField(`:calendar: ${language.get('COMMAND_INFO_ROLE_CREATED_TITLE')}`, language.get('COMMAND_INFO_ROLE_CREATED_VALUE', moment(role.createdAt).format('MMMM Do YYYY'), moment([moment(role.createdAt).format('YYYY'), moment(role.createdAt).format('M') - 1, moment(role.createdAt).format('D')]).toNow(true)), true)
             
-            .addField(`:bookmark_tabs: ${language.get('COMMAND_INFO_ROLE_PROPERTIES_TITLE', lang)}`, language.get('COMMAND_INFO_ROLE_PROPERTIES_ARRAY', lang, role.hoist, role.mentionable, !role.managed, role.toString()));
+            .addField(`:bookmark_tabs: ${language.get('COMMAND_INFO_ROLE_PROPERTIES_TITLE')}`, language.get('COMMAND_INFO_ROLE_PROPERTIES_ARRAY', role.hoist, role.mentionable, !role.managed, role.toString()));
 
         return message.channel.send(embed);
     },
 
-        async serverinfo({ message, language, lang }, server) {
+        async serverinfo({ message }, server) {
             let messageCount = await server.settings.get('messageCount');
                     
             let messages = 0

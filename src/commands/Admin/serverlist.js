@@ -5,7 +5,7 @@ module.exports = {
     usage: 'fox serverlist',
     permissionLevel: 9,
     category: 'admin',
-    execute: async ({ message, language, lang }) => {
+    execute: async ({ message, language }) => {
 
         let i0 = 0;
         let i1 = 10;
@@ -14,14 +14,14 @@ module.exports = {
         let description = message.client.guilds.cache
             .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
             .map(r => r)
-            .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${language.get('COMMAND_SERVERLIST_MEMBERCOUNT', lang)}`)
+            .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${language.get('COMMAND_SERVERLIST_MEMBERCOUNT')}`)
             .slice(0, 10)
             .join("\n");
 
         let embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
-            .setTitle(language.get('COMMAND_SERVERLIST_EMBED_TITLE', lang))
-            .setFooter(language.get('COMMAND_SERVERLIST_EMBED_FOOTER', lang, message.client.guilds.cache.size, page, Math.ceil(message.client.guilds.cache.size / 10)))
+            .setTitle(language.get('COMMAND_SERVERLIST_EMBED_TITLE'))
+            .setFooter(language.get('COMMAND_SERVERLIST_EMBED_FOOTER', message.client.guilds.cache.size, page, Math.ceil(message.client.guilds.cache.size / 10)))
             .setDescription(description);
 
         let msg = await message.channel.send(embed);
@@ -32,7 +32,7 @@ module.exports = {
 
         let collector = msg.createReactionCollector((reaction, user) => user.id === message.author.id)
 
-        collector.on("collect", async (reaction, user) => {
+        collector.on("collect", async (reaction) => {
 
             if (reaction._emoji.name === "⬅") {
                 // Updates variables
@@ -51,12 +51,12 @@ module.exports = {
             description = message.client.guilds.cache
                 .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
                 .map(r => r)
-                .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${lang.COMMAND_SERVERLIST_MEMBERCOUNT}`)
+                .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${language.get('COMMAND_SERVERLIST_MEMBERCOUNT')}`)
                 .slice(i0, i1)
                 .join("\n");
 
             embed
-                .setFooter(language.get('COMMAND_SERVERLIST_EMBED_FOOTER', lang, message.client.guilds.cache.size, page, Math.ceil(message.client.guilds.cache.size / 10)))
+                .setFooter(language.get('COMMAND_SERVERLIST_EMBED_FOOTER', message.client.guilds.cache.size, page, Math.ceil(message.client.guilds.cache.size / 10)))
                 .setDescription(description);
                 // Edit the message
             msg.edit(embed);
@@ -77,12 +77,12 @@ module.exports = {
             description = message.client.guilds.cache
                 .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
                 .map(r => r)
-                .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${lang.COMMAND_SERVERLIST_MEMBERCOUNT}`)
+                .map((r, i) => `**${i + 1}**. ${r.name} (**ID:** ${r.id}) | **${r.memberCount}** ${language.get('COMMAND_SERVERLIST_MEMBERCOUNT')}`)
                 .slice(i0, i1)
                 .join("\n");
             // Update the embed with new informations
             embed
-                .setFooter(language.get('COMMAND_SERVERLIST_EMBED_FOOTER', lang, message.client.guilds.cache.size, page, Math.ceil(message.client.guilds.cache.size / 10)))
+                .setFooter(language.get('COMMAND_SERVERLIST_EMBED_FOOTER', message.client.guilds.cache.size, page, Math.ceil(message.client.guilds.cache.size / 10)))
                 .setDescription(description);
             // Edit the message
             msg.edit(embed);

@@ -24,19 +24,19 @@ module.exports = {
         }, 1000);
     }, 
 
-    _remind(client, { rmdMessage, timeago, sendIn, lang, color, authID }, { member, channel, language }) {
+    _remind(client, { rmdMessage, timeago, sendIn, color, authID }, { member, channel, language }) {
 
         const user = client.users.cache.get(authID);
         if (!channel) return;
         if (!user) return;
 
         const embed = new Discord.MessageEmbed()
-                .setAuthor(language.get('TASK_REMINDER_FOR', lang, member.username), client.user.displayAvatarURL())
+                .setAuthor(language.get('TASK_REMINDER_FOR', member.username), client.user.displayAvatarURL())
                 .setColor(color)
-                .setDescription(language.get('TASK_REMINDER', lang, timeago, rmdMessage))
+                .setDescription(language.get('TASK_REMINDER', timeago, rmdMessage))
                 .setTimestamp();
 
-        if (sendIn && channel) channel.send(`<@${authID}> ${language.get('TASK_REMINDER', lang, timeago, rmdMessage)}`);
+        if (sendIn && channel) channel.send(`<@${authID}> ${language.get('TASK_REMINDER', timeago, rmdMessage)}`);
         if (!sendIn) user.send(embed);
     }
 };

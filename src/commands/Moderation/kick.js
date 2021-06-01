@@ -9,9 +9,9 @@ module.exports = {
 
         let { message, args, lang, language } = props
 
-        if (!message.channel.permissionsFor(message.guild.me).has('KICK_MEMBERS')) return message.responder.error('RESPONDER_ERROR_PERMS_CLIENT', lang, "KICK_MEMBERS")
+        if (!message.channel.permissionsFor(message.guild.me).has('KICK_MEMBERS')) return message.responder.error('RESPONDER_ERROR_PERMS_CLIENT', "KICK_MEMBERS")
 
-        let res = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
+        let res = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON');
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
 
         if (!member) return message.channel.send("You need to provide **one member** to kick.")

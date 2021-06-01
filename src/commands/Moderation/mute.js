@@ -8,15 +8,15 @@ module.exports = {
     category: 'moderation',
     async execute (props) {
 
-        const { message, args, lang, language } = props;
+        const { message, args, language } = props;
 
         const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        if (!member) return language.send('COMMAND_MUTE_NOMEMBER', lang);
+        if (!member) return message.responder.error('COMMAND_MUTE_NOMEMBER');
         if (/^\d*[s|m|h|d|w|y]$/gmi.test(args[1])) await this.scheduleMutes(props, member) 
 
         const reason = /^\d*[s|m|h|d|w|y]$/gmi.test(args[1])
-            ? args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON', lang)
-            : args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
+            ? args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON')
+            : args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON');
 
         let muterole = await message.guild.settings.get('mod.roles.mute');
         if (!message.guild.roles.cache.get(muterole)) muterole = await message.guild.createMuteRole();
@@ -27,9 +27,9 @@ module.exports = {
         message.responder.success();
     },
 
-    async scheduleMutes({ message, args, language, lang}, member) {
+    async scheduleMutes({ message, args, language}, member) {
 
-        const reason = args.slice(2).join(" ") || language.get('LOG_MODERATION_NOREASON', lang);
+        const reason = args.slice(2).join(" ") || language.get('LOG_MODERATION_NOREASON');
         message.client.schedule.create('mutes',
             { 
                 guildId: message.guild.id,

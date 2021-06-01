@@ -9,13 +9,13 @@ module.exports = {
     category: 'utility',
     execute: async(props) => {
 
-        let { lang, message, args, language } = props;
-        if (!args[0]) return language.send('COMMAND_WOLFRAM_NO_ARGS', lang);
+        let { message, args } = props;
+        if (!args[0]) return message.responder.error('COMMAND_WOLFRAM_NO_ARGS');
 
         try {
             message.channel.send(await waApi.getShort(args.slice(0).join(' ')))
         } catch(e) {
-            language.send('COMMAND_WOLFRAM_NO_DATA', lang);
+            message.responder.error('COMMAND_WOLFRAM_NO_DATA');
         }
     }
 }

@@ -6,20 +6,20 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     async execute (props) {
 
-        let { message, args, lang, language } = props
+        let { message, args } = props
 
-        const loading = await language.send("MESSAGE_LOADING", lang);
+        const loading = await message.responder.loading();
         const welcome = await message.guild.settings.get('welcome');
         if (/(channel|location|c)/i.test(args[0])) return this._channel(props, welcome, loading);
         if (/(message|text|m)/i.test(args[0])) return this._message(props, welcome, loading);
-        language.send('COMMAND_WELCOME_INVALIDUSE', lang);
+        message.responder.error('COMMAND_WELCOME_INVALIDUSE');
         loading.delete();
     }, 
 
-    async _channel({ message, args, language, lang }, welcome, loading) {
+    async _channel({ message, args }, welcome, loading) {
 
         if (/(none|reset)/i.test(args[1])) {
-            language.send('COMMAND_WELCOME_CHANNEL_REMOVED', lang);
+            message.responder.success('COMMAND_WELCOME_CHANNEL_REMOVED');
             loading.delete();
             return message.guild.settings.unset('welcome.channel');
         }
@@ -27,21 +27,21 @@ module.exports = {
         if (!channel) {
 
             if (!welcome.channel) {
-                language.send('COMMAND_WELCOME_CHANNEL_NOCHANNEL', lang);
+                message.responder.error('COMMAND_WELCOME_CHANNEL_NOCHANNEL');
                 return loading.delete();
             }
-            language.send('COMMAND_WELCOME_CHANNEL_NOW', lang, welcome.channel);
+            message.responder.success('COMMAND_WELCOME_CHANNEL_NOW', welcome.channel);
             return loading.delete();
         }
         await message.guild.settings.set('welcome.channel', channel);
-        language.send('COMMAND_WELCOME_CHANNEL_SET', lang, channel);
+        message.responder.success('COMMAND_WELCOME_CHANNEL_SET', channel);
         return loading.delete();
     },
 
-    async _message({ message, args, language, lang }, welcome, loading) {
+    async _message({ message, args }, welcome, loading) {
 
         if (/(none|reset)/i.test(args[1])) {
-            language.send('COMMAND_WELCOME_MESSAGE_REMOVED', lang);
+            message.responder.success('COMMAND_WELCOME_MESSAGE_REMOVED');
             loading.delete();
             return message.guild.settings.unset('welcome.message');
         }
@@ -49,14 +49,14 @@ module.exports = {
         if (!msg) {
 
             if (!welcome.message) {
-                language.send('COMMAND_WELCOME_MESSAGE_NOMESSAGE', lang);
+                message.responder.error('COMMAND_WELCOME_MESSAGE_NOMESSAGE');
                 return loading.delete();
             }
-            language.send('COMMAND_WELCOME_MESSAGE_NOW', lang, welcome.message);
+            message.responder.success('COMMAND_WELCOME_MESSAGE_NOW', welcome.message);
             return loading.delete();
         }
         await message.guild.settings.set('welcome.message', msg);
-        language.send('COMMAND_WELCOME_MESSAGE_SET', lang, msg);
+        message.responder.success('COMMAND_WELCOME_MESSAGE_SET', msg);
         return loading.delete();
     }
 }

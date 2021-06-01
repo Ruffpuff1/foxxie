@@ -6,20 +6,20 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     execute: async(props) => {
 
-        let { message, args, language, lang} = props;
+        let { message, args} = props;
 
-        const loading = await language.send("MESSAGE_LOADING", lang);
+        const loading = await message.responder.loading();
         const goodbye = await message.guild.settings.get('goodbye');
         if (/(channel|location|c)/i.test(args[0])) return this._channel(props, loading, goodbye);
         if (/(message|text|m)/i.test(args[0])) return this._message(props, loading, goodbye);
-        language.send('COMMAND_GOODBYE_INVALIDUSE', lang);
+        message.responder.error('COMMAND_GOODBYE_INVALIDUSE');
         loading.delete();
     },
 
-    async _message({ message, args, language, lang }, loading, goodbye) {
+    async _message({ message, args }, loading, goodbye) {
 
         if (/(none|reset)/i.test(args[1])) {
-            language.send('COMMAND_GOODBYE_MESSAGE_REMOVED', lang);
+            message.responder.success('COMMAND_GOODBYE_MESSAGE_REMOVED');
             loading.delete();
             return message.guild.settings.unset('goodbye.message');
         }
@@ -27,21 +27,21 @@ module.exports = {
         if (!msg) {
 
             if (!goodbye.message) {
-                language.send('COMMAND_GOODBYE_MESSAGE_NOMESSAGE', lang);
+                message.responder.error('COMMAND_GOODBYE_MESSAGE_NOMESSAGE');
                 return loading.delete();
             }
-            language.send('COMMAND_GOODBYE_MESSAGE_NOW', lang, goodbye.message);
+            message.responder.success('COMMAND_GOODBYE_MESSAGE_NOW', goodbye.message);
             return loading.delete();
         }
         await message.guild.settings.set('goodbye.message', msg);
-        language.send('COMMAND_GOODBYE_MESSAGE_SET', lang, msg);
+        message.responder.success('COMMAND_GOODBYE_MESSAGE_SET', msg);
         return loading.delete();
     },
 
-    async _channel({ message, args, language, lang }, loading, goodbye) {
+    async _channel({ message, args }, loading, goodbye) {
 
         if (/(none|reset)/i.test(args[1])) {
-            language.send('COMMAND_GOODBYE_CHANNEL_REMOVED', lang);
+            message.responder.success('COMMAND_GOODBYE_CHANNEL_REMOVED');
             loading.delete();
             return message.guild.settings.unset('goodbye.channel');
         }
@@ -49,14 +49,14 @@ module.exports = {
         if (!channel) {
 
             if (!goodbye.channel) {
-                language.send('COMMAND_GOODBYE_CHANNEL_NOCHANNEL', lang);
+                message.responder.error('COMMAND_GOODBYE_CHANNEL_NOCHANNEL');
                 return loading.delete();
             }
-            language.send('COMMAND_GOODBYE_CHANNEL_NOW', lang, goodbye.channel);
+            message.responder.success('COMMAND_GOODBYE_CHANNEL_NOW', goodbye.channel);
             return loading.delete();
         }
         await message.guild.settings.set('goodbye.channel', channel);
-        language.send('COMMAND_GOODBYE_CHANNEL_SET', lang, channel);
+        message.responder.success('COMMAND_GOODBYE_CHANNEL_SET', channel);
         return loading.delete();
     }
 }

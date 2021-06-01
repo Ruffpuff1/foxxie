@@ -30,11 +30,8 @@ module.exports = {
         let channel = guild.channels.cache.get(channelId);
         if (!channel) return;
 
-        let lang = await guild.settings.get('language');
-        if (!lang) lang = 'en-US';
-
         let message = await guild.settings.get('disboard.message');
-        if (!message) message = guild.language.get('TASK_DISBOARD_DEFAULT_DISBOARDMESSAGE', lang);
+        if (!message) message = guild.language.get('TASK_DISBOARD_DEFAULT_DISBOARDMESSAGE');
 
         let role = '';
         let ping = await guild.settings.get('disboard.ping');
@@ -43,7 +40,7 @@ module.exports = {
 
         const embed = new Discord.MessageEmbed()
             .setColor(guild.me.displayColor)
-            .setTitle(guild.language.get('TASK_DISBOARD_EMBED_TITLE', lang))
+            .setTitle(guild.language.get('TASK_DISBOARD_EMBED_TITLE'))
             .setThumbnail(client.user.displayAvatarURL({dynamic: true}))
             .setDescription(message.replace(/{(server|guild)}/gi, guild.name));
 

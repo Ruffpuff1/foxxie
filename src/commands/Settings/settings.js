@@ -8,7 +8,7 @@ module.exports = {
     async execute (props) {
 
         let { lang, message, args, language } = props
-        const loading = await language.send("MESSAGE_LOADING", lang);
+        const loading = await message.responder.loading();
         let settings = await message.guild.settings.get();
         if (/(welcome|join)/i.test(args[0])) return this._welcomeSettings(props, settings?.welcome, 'welcome', loading);
         if (/(goodbye|bye|leave)/i.test(args[0])) return this._goodbyeSettings(props, settings?.goodbye, 'goodbye', loading);

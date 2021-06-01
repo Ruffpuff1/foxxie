@@ -6,8 +6,8 @@ module.exports = {
     category: 'roleplay',
     execute(props) {
 
-        let { message, args, lang } = props
+        let { message, args } = props
         
-        return new RoleplayCommand(message).execute(lang, "bonk", args, false)
+        return new RoleplayCommand(message).execute("bonk", args, false)
     }
 }

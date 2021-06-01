@@ -9,10 +9,10 @@ module.exports = {
         let { message, args, lang, language } = props
 
         const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        const reason = args[1] || language.get('LOG_MODERATION_NOREASON', lang)
+        const reason = args[1] || language.get('LOG_MODERATION_NOREASON')
 
-        if (!user) return language.send('COMMAND_VCKICK_NOMEMBER', lang)
-        if (!user.voice.channelID) return language.send('COMMAND_VCKICK_NOVOICE', lang);
+        if (!user) return message.responder.error('COMMAND_VCKICK_NOMEMBER')
+        if (!user.voice.channelID) return message.responder.error('COMMAND_VCKICK_NOVOICE');
 		user.voice.setChannel(null);
 		message.responder.success();
 

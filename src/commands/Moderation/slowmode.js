@@ -9,7 +9,7 @@ module.exports = {
         let { message, args, lang, language } = props
         
         if (!args[0]) return message.channel.send('COMMAND_SLOWMODE_NO_ARGS')
-        let reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang)
+        let reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON')
 
         if (args[0].toLowerCase() === 'none') args[0] = 0
 

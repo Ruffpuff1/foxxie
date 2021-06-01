@@ -5,16 +5,16 @@ module.exports = {
     aliases: ['kitty', 'pussy'],
     usage: 'fox cat',
     category: 'fun',
-    async execute ({ message, lang, language }) {
+    async execute ({ message, language }) {
 
-        let loading = await language.send("MESSAGE_LOADING", lang);
+        let loading = await message.responder.loading();
         const img = await axios.get(`https://api.thecatapi.com/v1/images/search`).catch(() => null);
 
         const embed = new Discord.MessageEmbed()
-            .setTitle(language.get("COMMAND_CAT_TITLE", lang))
+            .setTitle(language.get("COMMAND_CAT_TITLE"))
             .setColor(message.guild.me.displayColor)
             .setImage(img.data[0].url)
-            .setFooter(language.get("COMMAND_CAT_FOOTER", lang))
+            .setFooter(language.get("COMMAND_CAT_FOOTER"))
             .setTimestamp()
 
         message.channel.send(embed);

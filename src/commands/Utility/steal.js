@@ -7,9 +7,9 @@ module.exports = {
     permissions: 'MANAGE_EMOJIS',
     execute: async (props) => {
 
-        let { lang, message, args, language} = props;
-        if (!args[0]) return language.send('COMMAND_STEAL_NOARGS', lang);
-        if (!/<a:.+?:\d+>|<:.+?:\d+>/.test(args[0])) return language.send('COMMAND_STEAL_NOTEMOJI', lang);
+        let { message, args, language} = props;
+        if (!args[0]) return message.responder.error('COMMAND_STEAL_NOARGS');
+        if (!/<a:.+?:\d+>|<:.+?:\d+>/.test(args[0])) return message.responder.error('COMMAND_STEAL_NOTEMOJI');
 
         let ext = '.png';
         if (args[0].includes('<a:')) ext = '.gif';
@@ -23,11 +23,11 @@ module.exports = {
         try {
             message.guild.emojis.create(url, name);
         } catch (e) {
-            language.send('COMMAND_STEAL_MAXEMOJI', lang);
+            message.responder.error('COMMAND_STEAL_MAXEMOJI');
         };
 
         const embed = new Discord.MessageEmbed()
-            .setTitle(language.get('COMMAND_STEAL_SUCCESS', lang, name))
+            .setTitle(language.get('COMMAND_STEAL_SUCCESS', name))
             .setColor(message.guild.me.displayColor)
             .setDescription(`**ID:** \`${regex}\`\n**Raw:** \`<${ext = '.gif'?'a':''}:${name}:${regex}>\``)
             .setImage(url);

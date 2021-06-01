@@ -6,32 +6,32 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     async execute (props) {
 
-        let { lang, args, language } = props
-        const loading = await language.send("MESSAGE_LOADING", lang);
+        let { args } = props
+        const loading = await message.responder.loading();
 
         if (/(reset|clear)/i.test(args[0])) return this._clearAnti(props, loading);
         if (/(invite|invites)/i.test(args[0])) return this._Anti(props, loading, 'invite');
-        language.send('COMMAND_ANTI_INVALIDUSE', lang); return loading.delete();
+        message.responder.error('COMMAND_ANTI_INVALIDUSE'); return loading.delete();
     },
 
-    async _Anti({ message, args, lang, language }, loading, setting) {
+    async _Anti({ message, args }, loading, setting) {
 
         if (/(on|enable)/i.test(args[1])) {
-            language.send('COMMAND_ANTI_ENABLED', lang, setting);
+            message.responder.success('COMMAND_ANTI_ENABLED', setting);
             loading.delete();
             return message.guild.settings.set(`mod.anti.${setting}`, true);
         }
         if (/(off|disable)/i.test(args[1])) {
-            language.send('COMMAND_ANTI_DISABLED', lang, setting);
+            message.responder.success('COMMAND_ANTI_DISABLED', setting);
             loading.delete();
             return message.guild.settings.unset(`mod.anti.${setting}`);
         }
         state = await message.guild.settings.get(`mod.anti.${setting}`);
-        language.send('COMMAND_ANTI_CURRENT', lang, setting, state);
+        message.responder.success('COMMAND_ANTI_CURRENT', setting, state);
         return loading.delete();
     },
 
-    async _clearAnti({ message, lang }, loading) {
+    async _clearAnti({ message }, loading) {
 
         function confirmed() {
 
@@ -39,6 +39,6 @@ module.exports = {
             loading.delete();
             return message.responder.success();
         }
-        loading.confirm(loading, 'COMMAND_ANTI_CONFIRM', lang, message, confirmed);                         
+        loading.confirm(loading, 'COMMAND_ANTI_CONFIRM', message, confirmed);                         
     }
 }

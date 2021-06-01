@@ -14,20 +14,18 @@ module.exports = {
         if (settings?.prefixes.length) settings?.prefixes.forEach(p => prefixes.push(p));
         if (settings?.blockedUsers != null) if (settings.blockedUsers.includes(message.author.id)) return;
 
-        let lang = settings?.language;
-        if (!lang) lang = 'en-US';
         let mentionPrefix = `<@!${message.client.user.id}>`
 
-        if (message.content === mentionPrefix) message.language.send("PREFIX_REMINDER", lang, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "), prefixes.pop());
+        if (message.content === mentionPrefix) message.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "), prefixes.pop());
 
         let uprefixes = [...new Set(prefixes)];
     
         uprefixes.forEach(pfx => {
-            if (message.content.toLowerCase().startsWith(pfx.toLowerCase())) return this._commandExecute(pfx, message, lang, language);
+            if (message.content.toLowerCase().startsWith(pfx.toLowerCase())) return this._commandExecute(pfx, message, language);
         });
     },
     
-    async _commandExecute(pre, message, lang, language) {
+    async _commandExecute(pre, message, language) {
 
         const args = message.content.slice(pre.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
@@ -39,16 +37,16 @@ module.exports = {
             await message.client.inhibitors.get('permissions').execute({command, message});
         } catch (e) { 
             if (e === true) return;
-            return language.send(e, lang, command.permissions)
+            return message.responder.error(e, command.permissions)
         };
         
         // Command Execute.
         try {
-            let props = { lang, message, args, language };
+            let props = { message, args, language };
             command.execute(props); 
         } catch (e) {
             console.error(e);
-            return message.responder.error('RESPONDER_ERROR_CODE', lang)
+            return message.responder.error('RESPONDER_ERROR_CODE')
         }
     }
 }

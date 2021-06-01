@@ -7,36 +7,36 @@ module.exports = {
     permissionLevel: 9,
     async execute (props) {
 
-        let { lang, message, language } = props;
+        let { message, language } = props;
         const members = message.guild.members.cache.array();
-        if (message.guild.memberCount > 1000) return language.send('COMMAND_BADGES_GUILDSIZE', lang, message.guild.memberCount);
+        if (message.guild.memberCount > 1000) return message.responder.error('COMMAND_BADGES_GUILDSIZE', message.guild.memberCount);
 
-        const loading = await language.send("MESSAGE_LOADING", lang);
+        const loading = await message.responder.loading();
         const [flags, bots, nitros, employees] = await this._getBadgeCounts(members)
         const boosters = await message.guild.premiumSubscriptionCount
         const description = [
-            flags[0] > 0 && `${discordStaff} ${flags[0]} x ${language.get('COMMAND_BADGES_DISCORD_EMPLOYEE', lang, flags[0])} (${employees.join(',')})`,
-            flags[1] > 0 && `${discordPartner} ${flags[1]} x ${language.get('COMMAND_BADGES_PARTNERED', lang, flags[1])}`,
-            flags[2] > 0 && `${discordHypesquad} ${flags[2]} x ${language.get('COMMAND_BADGES_HYPE_EVENT', lang)}`,
-            nitros > 0 && `${discordNitro} ${nitros} x ${language.get('COMMAND_BADGES_NITRO', lang)} ${(boosters > 0) || (flags[9] > 0)
+            flags[0] > 0 && `${discordStaff} ${flags[0]} x ${language.get('COMMAND_BADGES_DISCORD_EMPLOYEE', flags[0])} (${employees.join(',')})`,
+            flags[1] > 0 && `${discordPartner} ${flags[1]} x ${language.get('COMMAND_BADGES_PARTNERED', flags[1])}`,
+            flags[2] > 0 && `${discordHypesquad} ${flags[2]} x ${language.get('COMMAND_BADGES_HYPE_EVENT')}`,
+            nitros > 0 && `${discordNitro} ${nitros} x ${language.get('COMMAND_BADGES_NITRO')} ${(boosters > 0) || (flags[9] > 0)
                     ? `(${boosters > 0
-                            ? `${discordBooster} ${boosters} x ${language.get('COMMAND_BADGES_BOOSTS', lang, boosters)}`
+                            ? `${discordBooster} ${boosters} x ${language.get('COMMAND_BADGES_BOOSTS', boosters)}`
                             : ''
                     }${(boosters > 0) && (flags[9] > 0)
                             ? ', '
                             : ')'
                     }${flags[9] > 0
-                            ? `${discordEarly} ${flags[9]} x ${language.get('COMMAND_BADGES_EARLY', lang, flags[9])})` 
+                            ? `${discordEarly} ${flags[9]} x ${language.get('COMMAND_BADGES_EARLY', flags[9])})` 
                             : ''
                         }`
                         : ''}`,
-            flags[3] > 0 && `${discordBug1} ${flags[3]} x ${language.get('COMMAND_BADGES_BUG1', lang)}`,
-            flags[14] > 0 && `${discordBug2} ${flags[14]} x ${language.get('COMMAND_BADGES_BUG2', lang)}`,
-            flags[6] > 0 && `${discordBravery} ${flags[6]} x ${language.get('COMMAND_BADGES_BRAVERY', lang)}`,
-            flags[7] > 0 && `${discordBrilliance} ${flags[7]} x ${language.get('COMMAND_BADGES_BRILLIANCE', lang)}`,
-            flags[8] > 0 && `${discordBalance} ${flags[8]} x ${language.get('COMMAND_BADGES_BALANCE', lang)}`,
-            flags[17] > 0 && `${discordEarlyDev} ${flags[17]} x ${language.get('COMMAND_BADGES_BOTDEV', lang, flags[17])}`,
-            bots > 0 && `${discordBot} ${bots - flags[16]} x ${language.get('COMMAND_BADGES_BOT', lang, bots, flags[17])}${flags[16] > 0 ? ` (${discordVerified} ${flags[16]} x ${language.get('COMMAND_BADGES_BOTVERIFIED', lang, flags[16])})` : ''}`
+            flags[3] > 0 && `${discordBug1} ${flags[3]} x ${language.get('COMMAND_BADGES_BUG1')}`,
+            flags[14] > 0 && `${discordBug2} ${flags[14]} x ${language.get('COMMAND_BADGES_BUG2')}`,
+            flags[6] > 0 && `${discordBravery} ${flags[6]} x ${language.get('COMMAND_BADGES_BRAVERY')}`,
+            flags[7] > 0 && `${discordBrilliance} ${flags[7]} x ${language.get('COMMAND_BADGES_BRILLIANCE')}`,
+            flags[8] > 0 && `${discordBalance} ${flags[8]} x ${language.get('COMMAND_BADGES_BALANCE')}`,
+            flags[17] > 0 && `${discordEarlyDev} ${flags[17]} x ${language.get('COMMAND_BADGES_BOTDEV', flags[17])}`,
+            bots > 0 && `${discordBot} ${bots - flags[16]} x ${language.get('COMMAND_BADGES_BOT', bots, flags[17])}${flags[16] > 0 ? ` (${discordVerified} ${flags[16]} x ${language.get('COMMAND_BADGES_BOTVERIFIED', flags[16])})` : ''}`
 		].filter(i => !!i).join('\n');
 
         await message.channel.send(description)

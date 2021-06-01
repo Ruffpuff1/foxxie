@@ -9,9 +9,9 @@ module.exports = {
 
         let { message, args, lang, language } = props
 
-        if (!message.channel.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return message.responder.error('RESPONDER_ERROR_PERMS_CLIENT', lang, "BAN_MEMBERS")
+        if (!message.channel.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return message.responder.error('RESPONDER_ERROR_PERMS_CLIENT', "BAN_MEMBERS")
 
-        let res = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang)
+        let res = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON')
         let member = message.mentions.users.first() || message.client.users.cache.get(args[0]);
 
         if (!member) return message.channel.send("You need to provide **one user** to unban.")

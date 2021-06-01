@@ -7,15 +7,15 @@ module.exports = {
     category: 'utility',
     execute(props) {
 
-        let { lang, message, args, language } = props;
+        let { message, args } = props;
         let remindTime = args[0]
         let remindMsg = args.slice(1).join(' ');
 
-        if (!remindTime) return language.send('COMMAND_REMINDME_NOTIME', lang);
-        if (!/^\d*[s|m|h|d|w|y]$/gmi.test(remindTime)) return language.send('COMMAND_REMINDME_INVALIDTIME', lang);
+        if (!remindTime) return message.responder.error('COMMAND_REMINDME_NOTIME');
+        if (!/^\d*[s|m|h|d|w|y]$/gmi.test(remindTime)) return message.responder.error('COMMAND_REMINDME_INVALIDTIME');
         
         let timeFromNow = ms(ms(remindTime), { long: true } )
-        if (!remindMsg) return language.send('COMMAND_REMINDME_NOREASON', lang);
+        if (!remindMsg) return message.responder.error('COMMAND_REMINDME_NOREASON');
 
         let sendIn = /\-channel\s*|-c\s*/gi
         remindMsg = remindMsg.replace(sendIn, '')
@@ -27,13 +27,12 @@ module.exports = {
             rmdMessage: remindMsg,
             timeago: timeFromNow,
             guildId: message.guild.id,
-            lang: lang,
             sendIn: sendIn.test(message.content),
             color: message.guild.me.displayColor,
             channelId: message.channel.id,
         }
 
         message.client.schedule.create('reminders', reminder);
-        language.send('COMMAND_REMINDME_SUCCESS', lang, timeFromNow);
+        message.responder.success('COMMAND_REMINDME_SUCCESS', timeFromNow);
     }
 }

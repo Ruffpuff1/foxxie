@@ -6,13 +6,13 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     execute: async (props) => {
 
-        let { lang, message, args, language } = props;
+        let { message, args } = props;
 
         let targetChannel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
         if (targetChannel) args.shift()
         if (!targetChannel) targetChannel = message.channel
 
-        let loading = await await language.send('MESSAGE_LOADING', lang);
+        let loading = await message.responder.loading();
 
         try {
             const json = JSON.parse(args.join(' '))
@@ -21,7 +21,7 @@ module.exports = {
             loading.delete()
         } catch (error) {
             loading.delete()
-            language.send('COMMAND_EMBED_ERROR', lang)
+            message.responder.error('COMMAND_EMBED_ERROR')
         }
     }
 }

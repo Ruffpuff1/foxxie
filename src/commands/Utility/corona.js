@@ -8,60 +8,60 @@ module.exports = {
     category: 'utility',
     async execute (props) {
 
-        let { lang, args, message, language } = props
+        let { args, message, language } = props
         let search = args.slice(0).join(" ")
         const embed = new Discord.MessageEmbed()
                 .setColor(message.guild.me.displayColor)
-                .setFooter(language.get('COMMAND_CORONA_EMBED_FOOTER', lang))
+                .setFooter(language.get('COMMAND_CORONA_EMBED_FOOTER'))
 
         if (!search || /(global|world|worldwide)/i.test(search)) return this._covidGlobal(props, search, embed);
         if (usStates.test(search)) return this._covidState(props, search, embed);
         this._covidCountry(props, search, embed);
     },
 
-    async _covidGlobal({ message, language, lang }, search, embed){
-        let loading = await language.send('MESSAGE_LOADING', lang)
+    async _covidGlobal({ message, language }, search, embed){
+        let loading = await message.responder.loading();
         let stats = await api.all()
-        if (stats.message) { loading.delete(); return language.send('COMMAND_CORONA_NO_DATA', lang, search) }
+        if (stats.message) { loading.delete(); return message.responder.error('COMMAND_CORONA_NO_DATA', search) }
 
         embed
-            .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', lang, search || 'Global'))
-            .addField(language.get('COMMAND_CORONA_CASES_TITLE', lang), language.get('COMMAND_CORONA_CASES_VALUE', lang, stats))
-            .addField(language.get('COMMAND_CORONA_DEATHS_TITLE', lang), language.get('COMMAND_CORONA_DEATHS_VALUE', lang, stats))
-            .addField(language.get('COMMAND_CORONA_RECOVERIES_TITLE', lang), language.get('COMMAND_CORONA_RECOVERIES_VALUE', lang, stats))
-            .addField(language.get('COMMAND_CORONA_TESTS_TITLE', lang), language.get('COMMAND_CORONA_TESTS_VALUE', lang, stats))
+            .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', search || 'Global'))
+            .addField(language.get('COMMAND_CORONA_CASES_TITLE'), language.get('COMMAND_CORONA_CASES_VALUE', stats))
+            .addField(language.get('COMMAND_CORONA_DEATHS_TITLE'), language.get('COMMAND_CORONA_DEATHS_VALUE', stats))
+            .addField(language.get('COMMAND_CORONA_RECOVERIES_TITLE'), language.get('COMMAND_CORONA_RECOVERIES_VALUE', stats))
+            .addField(language.get('COMMAND_CORONA_TESTS_TITLE'), language.get('COMMAND_CORONA_TESTS_VALUE', stats))
 
         await loading.delete();
         return message.channel.send(embed);
     },
 
-    async _covidState({ message, language, lang }, search, embed){
-        let loading = await language.send('MESSAGE_LOADING', lang)
+    async _covidState({ message, language }, search, embed){
+        let loading = await message.responder.loading();
         let stats = await api.states({state:search})
-        if (stats.message) { loading.delete(); return language.send('COMMAND_CORONA_NO_DATA', lang, search) }
+        if (stats.message) { loading.delete(); return message.responder.error('COMMAND_CORONA_NO_DATA', search) }
 
         embed
-            .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', lang, search))
-            .addField(language.get('COMMAND_CORONA_CASES_TITLE', lang), language.get('COMMAND_CORONA_CASES_VALUE', lang, stats))
-            .addField(language.get('COMMAND_CORONA_DEATHS_TITLE', lang), language.get('COMMAND_CORONA_DEATHS_VALUE', lang, stats))
-            .addField(language.get('COMMAND_CORONA_RECOVERIES_TITLE', lang), language.get('COMMAND_CORONA_RECOVERIES_VALUE', lang, stats))
-            .addField(language.get('COMMAND_CORONA_TESTS_TITLE', lang), language.get('COMMAND_CORONA_TESTS_VALUE', lang, stats))
+            .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', search))
+            .addField(language.get('COMMAND_CORONA_CASES_TITLE'), language.get('COMMAND_CORONA_CASES_VALUE', stats))
+            .addField(language.get('COMMAND_CORONA_DEATHS_TITLE'), language.get('COMMAND_CORONA_DEATHS_VALUE', stats))
+            .addField(language.get('COMMAND_CORONA_RECOVERIES_TITLE'), language.get('COMMAND_CORONA_RECOVERIES_VALUE', stats))
+            .addField(language.get('COMMAND_CORONA_TESTS_TITLE'), language.get('COMMAND_CORONA_TESTS_VALUE', stats))
 
         await loading.delete();
         return message.channel.send(embed);
     },
 
-    async _covidCountry({ message, language, lang }, search, embed){
-        let loading = await language.send('MESSAGE_LOADING', lang)
+    async _covidCountry({ message, language }, search, embed){
+        let loading = await message.responder.loading();
         let stats = await api.countries({country:search});
-        if (stats.message) { loading.delete(); return language.send('COMMAND_CORONA_NO_DATA', lang, search) }
+        if (stats.message) { loading.delete(); return message.responder.error('COMMAND_CORONA_NO_DATA', search) }
 
         embed
-            .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', lang, search))
-            .addField(language.get('COMMAND_CORONA_CASES_TITLE', lang), language.get('COMMAND_CORONA_CASES_VALUE', lang, stats))
-            .addField(language.get('COMMAND_CORONA_DEATHS_TITLE', lang), language.get('COMMAND_CORONA_DEATHS_VALUE', lang, stats))
-            .addField(language.get('COMMAND_CORONA_RECOVERIES_TITLE', lang), language.get('COMMAND_CORONA_RECOVERIES_VALUE', lang, stats))
-            .addField(language.get('COMMAND_CORONA_TESTS_TITLE', lang), language.get('COMMAND_CORONA_TESTS_VALUE', lang, stats))
+            .setTitle(language.get('COMMAND_CORONA_EMBED_TITLE', search))
+            .addField(language.get('COMMAND_CORONA_CASES_TITLE'), language.get('COMMAND_CORONA_CASES_VALUE', stats))
+            .addField(language.get('COMMAND_CORONA_DEATHS_TITLE'), language.get('COMMAND_CORONA_DEATHS_VALUE', stats))
+            .addField(language.get('COMMAND_CORONA_RECOVERIES_TITLE'), language.get('COMMAND_CORONA_RECOVERIES_VALUE', stats))
+            .addField(language.get('COMMAND_CORONA_TESTS_TITLE'), language.get('COMMAND_CORONA_TESTS_VALUE', stats))
 
         await loading.delete();
         return message.channel.send(embed);

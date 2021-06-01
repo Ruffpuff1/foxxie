@@ -6,7 +6,7 @@ module.exports = {
     usage: 'fox invite',
     execute(props) {
 
-        let { lang, message, args } = props;
+        let { lang, message } = props;
 
         const inviteEmbed = new Discord.MessageEmbed()
             .setAuthor(`${lang.COMMAND_INVITE_HERE}`, message.client.user.displayAvatarURL())
@@ -16,7 +16,7 @@ module.exports = {
             if (message.content.includes(`-c`)) {
                 return message.channel.send(inviteEmbed)
             }
-        message.author.send(inviteEmbed).catch(e => message.channel.send(inviteEmbed));
+        message.author.send(inviteEmbed).catch(() => message.channel.send(inviteEmbed));
         message.responder.success();
     }
 }

@@ -6,19 +6,19 @@ module.exports = {
     category: 'settings',
     execute: async function (props) {
 
-        let { lang, args, language } = props
+        let { args } = props
 
-        const loading = await language.send("MESSAGE_LOADING", lang);
+        const loading = await message.responder.loading();
         if (/(moderation|mod)/i.test(args[0])) return this._settings(props, loading, 'mod');
         if (/(edit|editing)/i.test(args[0])) return this._settings(props, loading, 'edit');
         if (/(delete|deleting)/i.test(args[0])) return this._settings(props, loading, 'delete');
         if (/(reset|none)/i.test(args[0])) return this._resetSettings(props, loading);
         loading.delete();
-        return language.send('COMMAND_LOG_INVALIDUSE', lang);
+        return message.responder.error('COMMAND_LOG_INVALIDUSE');
 
     },
 
-    async _resetSettings({ message, lang }, loading) {
+    async _resetSettings({ message }, loading) {
 
         const { guild } = message;
 
@@ -28,17 +28,17 @@ module.exports = {
             loading.delete();
             return message.responder.success();
         }
-        return loading.confirm(loading, 'COMMAND_LOG_CONFIRM', lang, message, confirmed)
+        return loading.confirm(loading, 'COMMAND_LOG_CONFIRM', message, confirmed)
     },
 
-    async _settings({ message, args, lang, language }, loading, setting) {
+    async _settings({ message, args }, loading, setting) {
 
         const { guild } = message;
 
         if (/(remove|none|off)/i.test(args[1])) {
 
             guild.settings.unset(`log.${setting}`);
-            language.send(`COMMAND_LOG_${setting.toUpperCase()}_REMOVED`, lang);
+            message.responder.success(`COMMAND_LOG_${setting.toUpperCase()}_REMOVED`);
             return loading.delete();
         }
 
@@ -48,15 +48,15 @@ module.exports = {
             let channelId = await guild.settings.get(`log.${setting}.channel`);
             if (!channelId) {
 
-                language.send(`COMMAND_LOG_${setting.toUpperCase()}_NOCHANNEL`, lang);
+                message.responder.error(`COMMAND_LOG_${setting.toUpperCase()}_NOCHANNEL`);
                 return loading.delete();
             }
-            language.send(`COMMAND_LOG_${setting.toUpperCase()}_NOW`, lang, channelId);
+            message.responder.success(`COMMAND_LOG_${setting.toUpperCase()}_NOW`, channelId);
             return loading.delete();
         }
 
         await guild.settings.set(`log.${setting}.channel`, channel.id);
-        language.send(`COMMAND_LOG_${setting.toUpperCase()}_SET`, lang, channel);
+        message.responder.success(`COMMAND_LOG_${setting.toUpperCase()}_SET`, channel);
         return loading.delete();
     }
 }

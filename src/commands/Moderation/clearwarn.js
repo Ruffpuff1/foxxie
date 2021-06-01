@@ -6,16 +6,16 @@ module.exports = {
     permissions: 'MANAGE_MESSAGES',
     async execute (props) { 
 
-        const { lang, language, message, args } = props;
+        const { language, message, args } = props;
 
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        if (!target) return language.send('COMMAND_CLEARWARN_NOMEMBER', lang);
+        if (!target) return message.responder.error('COMMAND_CLEARWARN_NOMEMBER');
 
         if (/all/.test(args[1])) return this._clearWarns(props, target);
 
-        let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
+        let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON');
         let set = await target.user.settings.get(`servers.${message.guild.id}.warnings[${args[1] - 1}]`);
-        if (!set) return language.send('COMMAND_CLEARWARN_INVALIDWARNID', lang);
+        if (!set) return message.responder.error('COMMAND_CLEARWARN_INVALIDWARNID');
         
         target.user.settings.pull(`servers.${message.guild.id}.warnings`, set);
 
@@ -24,12 +24,12 @@ module.exports = {
 
     }, 
 
-    async _clearWarns({ message, args, language, lang }, target ) {
+    async _clearWarns({ message, args, language }, target ) {
 
-        const loading = await language.send("MESSAGE_LOADING", lang);
+        const loading = await message.responder.loading();
         let set = await target.user.settings.get(`servers.${message.guild.id}.warnings`);
         if (!set?.length) {
-            language.send('COMMAND_CLEARWARN_NOWARNINGS', lang);
+            message.responder.error('COMMAND_CLEARWARN_NOWARNINGS');
             return loading.delete();
         }
         
@@ -41,7 +41,7 @@ module.exports = {
             return message.responder.success();
         };
 
-        let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
-        return loading.confirm(loading, 'COMMAND_CLEARWARN_CONFIRM', lang, message, confirmed);
+        let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON');
+        return loading.confirm(loading, 'COMMAND_CLEARWARN_CONFIRM', message, confirmed);
     }
 }

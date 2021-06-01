@@ -19,8 +19,7 @@ module.exports = {
                 const channel = guild.channels.cache.get(channelId);
 
                 if (Date.now() > time) {
-                    const lang = await guild.settings.get('language') || 'en-US';
-                    this.executeUnmutes(member, lang);
+                    this.executeUnmutes(member);
                     guild.log.send({ type: 'mod', action: 'tempunmute', member, moderator, reason, channel, dm: true, duration, guild })
                     client.schedule.delete('mutes', m);
                 }
@@ -28,7 +27,7 @@ module.exports = {
         }, 1000)
     },
 
-    async executeUnmutes(member, lang) {
-        await member.unmute(new Language(member.guild).get('TASKS_ENDTEMPMUTE_REASON', lang));
+    async executeUnmutes(member) {
+        await member.unmute(new Language(member.guild).get('TASKS_ENDTEMPMUTE_REASON'));
     }
 }

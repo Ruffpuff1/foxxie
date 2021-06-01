@@ -6,12 +6,12 @@ module.exports = {
     permissions: 'MANAGE_MESSAGES',
     async execute (props) {
 
-        let { message, args, lang, language } = props
+        let { message, args, language } = props
 
         const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        if (!target) return language.send('COMMAND_WARN_NOMEMBER', lang)
+        if (!target) return message.responder.error('COMMAND_WARN_NOMEMBER')
 
-        const reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON', lang);
+        const reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON');
         const moderator = message.member;
         const channel = message.channel;
         await this.executeWarn({ message, reason, target, moderator, channel });

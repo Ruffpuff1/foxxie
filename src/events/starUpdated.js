@@ -10,15 +10,13 @@ module.exports.starUpdated = async (reaction, sbChannel, embed) => {
         : false);
 
     if (!sentMessage) return;
-    let lang = await reaction.message.guild.settings.get('language');
-    if (!lang) lang = 'en-US';
     let language = reaction.message.language;
 
     if (starboard.test(reaction.message.content)) {
         embed
             .setImage(reaction.message.content)
             .setDescription(`\n${reaction.count < 5 ? tier0 : reaction.count < 10 ? tier1 : reaction.count < 15 ? tier2 : tier3
-            } **${reaction.count}** | ${reaction.message.channel} | [${language.get('EVENT_STARBOARD_JUMP', lang)}](${reaction.message.url})`)
+            } **${reaction.count}** | ${reaction.message.channel} | [${language.get('EVENT_STARBOARD_JUMP')}](${reaction.message.url})`)
 
         sentMessage.edit(embed)
         return edited = true;
@@ -26,7 +24,7 @@ module.exports.starUpdated = async (reaction, sbChannel, embed) => {
 
     embed.setDescription(`\n${reaction.message.content ? reaction.message.content : ''}\n\n${reaction.count < 5 ? tier0 : reaction.count < 10 
         ? tier1 : reaction.count < 15 ? tier2 : tier3
-        } **${reaction.count}** | ${reaction.message.channel} | [${language.get('EVENT_STARBOARD_JUMP', lang)}](${reaction.message.url})`);
+        } **${reaction.count}** | ${reaction.message.channel} | [${language.get('EVENT_STARBOARD_JUMP')}](${reaction.message.url})`);
 
     sentMessage.edit(embed);
     return edited = true;

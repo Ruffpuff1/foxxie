@@ -17,9 +17,6 @@ module.exports = {
 
     async goodbye(member) {
 
-        let lang = await member.guild.settings.get('language');
-        if (!lang) lang = 'en-US';
-
         const { guild } = member;
         const channelId = await guild.settings.get('goodbye.channel');
         if (!channelId) return member;
@@ -28,7 +25,7 @@ module.exports = {
 
         let message = await guild.settings.get('goodbye.message');
         if (!message) {
-            channel.send(guild.language.get('EVENT_GUILDMEMBERREMOVE_DEFAULT_GOODBYEMESSAGE', lang, member)).catch(e => e);
+            channel.send(guild.language.get('EVENT_GUILDMEMBERREMOVE_DEFAULT_GOODBYEMESSAGE', member)).catch(e => e);
             return member;
         };
 

@@ -6,7 +6,7 @@ module.exports = {
     usage: 'help (command|category) (-c|-channel)',
     execute(props) {
 
-        let { lang, message, args, language } = props;
+        let { message, args, language } = props;
         const channelFlag = /\-channel\s*|-c\s*/gi
         const { commands } = message.client;
         let cmdArr = commands.array();
@@ -35,42 +35,42 @@ module.exports = {
         bigMenu = () => {
 
             embed
-                .setTitle(language.get('COMMAND_HELP_EMBED_TITLE', lang, language, lang))
+                .setTitle(language.get('COMMAND_HELP_EMBED_TITLE'))
                 .setThumbnail(message.client.user.avatarURL({dynamic: true}))
-                .setDescription(language.get('COMMAND_HELP_EMBED_DESCRIPTION', lang, language, lang))
-                .addField(language.get('COMMAND_HELP_EMBED_FUN', lang, funCmds.length), funCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_EMBED_MODERATION', lang, modCmds.length), modCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_EMBED_ROLEPLAY', lang, rpCmds.length), rpCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_EMBED_SETTINGS', lang, setCmds.length), setCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_EMBED_UTILITY', lang, utilCmds.length), utilCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_LINKS_TITLE', lang), language.get('COMMAND_HELP_LINKS_DESCRIPTION', lang))
+                .setDescription(language.get('COMMAND_HELP_EMBED_DESCRIPTION'))
+                .addField(language.get('COMMAND_HELP_EMBED_FUN', funCmds.length), funCmds.map(a => `\`${a}\``).join(", "), false)
+                .addField(language.get('COMMAND_HELP_EMBED_MODERATION', modCmds.length), modCmds.map(a => `\`${a}\``).join(", "), false)
+                .addField(language.get('COMMAND_HELP_EMBED_ROLEPLAY', rpCmds.length), rpCmds.map(a => `\`${a}\``).join(", "), false)
+                .addField(language.get('COMMAND_HELP_EMBED_SETTINGS', setCmds.length), setCmds.map(a => `\`${a}\``).join(", "), false)
+                .addField(language.get('COMMAND_HELP_EMBED_UTILITY', utilCmds.length), utilCmds.map(a => `\`${a}\``).join(", "), false)
+                .addField(language.get('COMMAND_HELP_LINKS_TITLE'), language.get('COMMAND_HELP_LINKS_DESCRIPTION'))
 
             if (channelFlag.test(message.content)) return message.channel.send(embed)
             message.responder.success();
             return message.author.send(embed)
-            .catch(e => message.channel.send(embed))
+            .catch(() => message.channel.send(embed))
         }
 
         commandMenu = () => {
 
             const name = args[0].toLowerCase();
             const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
-            if (!command) return language.send('COMMAND_HELP_COMMAND_NOTVALID', lang);
+            if (!command) return message.responder.error('COMMAND_HELP_COMMAND_NOTVALID');
 
             if (command) {
         
                 embed
                     .setTitle(command.name)
-                    .setDescription(`${language.get(`COMMAND_${command.name.toUpperCase()}_DESCRIPTION`, 'en-US')}\n
-${command.permissions? language.get('COMMAND_HELP_PERMISSIONS', lang, command.permissions) :''}`)
-                    .addField(language.get('COMMAND_HELP_USAGE', lang), `\`${command.usage}\``);
+                    .setDescription(`${language.get(`COMMAND_${command.name.toUpperCase()}_DESCRIPTION`)}\n
+${command.permissions? language.get('COMMAND_HELP_PERMISSIONS', command.permissions) :''}`)
+                    .addField(language.get('COMMAND_HELP_USAGE'), `\`${command.usage}\``);
 
                 if (command.aliases) embed.setTitle(`${command.name} (${command.aliases.join(', ')})`)
                 if (channelFlag.test(message.content)) return message.channel.send(embed)
 
                 message.responder.success();
                 return message.author.send(embed)
-                .catch(e => message.channel.send(embed))
+                .catch(() => message.channel.send(embed))
             }
         }
         if (!args.length || channelFlag.test(args[0])) return bigMenu();

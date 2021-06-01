@@ -6,7 +6,7 @@ module.exports = {
     //category: 'utility',
     execute: async(props) => {
 
-        let { lang, message, args } = props;
+        let { message, args } = props;
 
         let bug;
         const dev = message.client.users.cache.get(owner[0])

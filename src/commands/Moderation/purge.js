@@ -7,9 +7,9 @@ module.exports = {
     permissions: 'MANAGE_MESSAGES',
     async execute (props) {
 
-        let { message, args, lang, language } = props;
+        let { message, args, language } = props;
         let limit = args[0];
-        if (!limit || !parseInt(limit) || !/^\d+$/.test(limit)) return language.send('COMMAND_PURGE_NOLIMIT', lang);
+        if (!limit || !parseInt(limit) || !/^\d+$/.test(limit)) return message.responder.error('COMMAND_PURGE_NOLIMIT');
         args.shift();
         const userInstance = message.mentions.users.first() || message.client.users.cache.get(args[1]);
         let filter = args[0];
@@ -18,7 +18,7 @@ module.exports = {
         if (/(link|invite|bots|you|me|upload|user|pin|text)/i.test(filter)) {
             
             const user = /user/i.test(filter) && userInstance instanceof User ? userInstance : null;
-            if (/user/i.test(filter) && !user) return language.send('COMMAND_PURGE_USER', lang)
+            if (/user/i.test(filter) && !user) return message.responder.error('COMMAND_PURGE_USER')
             messages = messages.filter(mes => !mes.pinned).filter(this.getFilter(message, filter, user));
         }
         let reason = /(link|invite|bots|you|me|upload|user|pin|text)/i.test(filter)
@@ -26,7 +26,7 @@ module.exports = {
                 ? args.slice(2).join(' ')
                 : args.slice(1).join(' ')
             : args.join(' ');
-        if (!reason) reason = language.get('LOG_MODERATION_NOREASON', lang);
+        if (!reason) reason = language.get('LOG_MODERATION_NOREASON');
 
         messages = messages.filter(mes => !mes.pinned);
         if (messages.has(message.id)) limit++;
@@ -34,7 +34,7 @@ module.exports = {
         if (!messages.includes(message.id)) messages.push(message.id);
 
         await message.channel.bulkDelete(messages);
-        const msg = await language.send('COMMAND_PURGE_SUCCESS', lang, messages.length - 1);
+        const msg = await message.responder.success('COMMAND_PURGE_SUCCESS', messages.length - 1);
         await message.guild.log.send({ type: 'mod', action: 'purge', moderator: message.member, reason, msg: message, counter: 'purge', total: messages.length, channel: message.channel });
         msg.delete({ timeout: 10000 }).catch(() => null);
     },

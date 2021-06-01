@@ -6,8 +6,8 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     execute: async(props) => {
 
-        let { lang, message, args, language } = props
-        const loading = await language.send("MESSAGE_LOADING", lang);
+        let { message, args } = props
+        const loading = await message.responder.loading();
 
         if (/(none|reset|clear)/i.test(args[0])) {
 
@@ -17,7 +17,7 @@ module.exports = {
                 loading.delete();
                 return message.responder.success();
             }
-            return loading.confirm(loading, 'COMMAND_PREFIX_CONFIRM', lang, message, confirmed);
+            return loading.confirm(loading, 'COMMAND_PREFIX_CONFIRM', message, confirmed);
         }
 
         let prefix = args[0]
@@ -25,16 +25,16 @@ module.exports = {
             let prefixes = await message.guild.settings.get('prefixes')
 
             if (!prefixes?.length) {
-                language.send('COMMAND_PREFIX_NONE', lang);
+                message.responder.error('COMMAND_PREFIX_NONE');
                 return loading.delete();
             }
 
-            language.send('COMMAND_PREFIX_NOW', lang, prefixes, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "));
+            message.responder.success('COMMAND_PREFIX_NOW', prefixes, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "));
             return loading.delete();
         }
 
         message.guild.settings.push('prefixes', prefix)
-        language.send('COMMAND_PREFIX_ADDED', lang, prefix);
+        message.responder.success('COMMAND_PREFIX_ADDED', prefix);
         return loading.delete();
     }
 }

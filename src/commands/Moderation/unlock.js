@@ -10,7 +10,7 @@ module.exports = {
 
         if (message.channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return message.channel.send('COMMAND_UNLOCK_CHANNEL_NOT_LOCKED')
 
-        let reason = args.slice(0).join(' ') || language.get('LOG_MODERATION_NOREASON', lang)
+        let reason = args.slice(0).join(' ') || language.get('LOG_MODERATION_NOREASON')
         
         let msg = await message.channel.send('COMMAND_UNLOCK_UNLOCKING')
         try {

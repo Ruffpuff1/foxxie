@@ -9,11 +9,11 @@ module.exports = {
         let { message, args, lang, language } = props;
 
         const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        const reason = args[1] || language.get('LOG_MODERATION_NOREASON', lang);
+        const reason = args[1] || language.get('LOG_MODERATION_NOREASON');
 
-        if (!member) return language.send('COMMAND_VCMUTE_NOMEMBER', lang);
-        if (!member.voice.channelID) return language.send('COMMAND_VCMUTE_NOVOICE', lang);
-        if (member.voice.serverMute) return language.send('COMMAND_VCMUTE_ALREADY_MUTED', lang);
+        if (!member) return message.responder.error('COMMAND_VCMUTE_NOMEMBER');
+        if (!member.voice.channelID) return message.responder.error('COMMAND_VCMUTE_NOVOICE');
+        if (member.voice.serverMute) return message.responder.error('COMMAND_VCMUTE_ALREADY_MUTED');
         member.voice.setMute(true, reason);
         message.responder.success();
 

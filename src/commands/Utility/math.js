@@ -7,7 +7,7 @@ module.exports = {
     //category: 'utility',
     execute: async (props) => {
 
-        let { lang, message, args } = props;
+        let { message, args } = props;
 
         if (!args[0]) return message.channel.send("**Enter Something To Calculate**");
 
