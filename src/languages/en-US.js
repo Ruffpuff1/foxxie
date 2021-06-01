@@ -86,7 +86,7 @@ module.exports = {
         COMMAND_LOCK_DESCRIPTION: `Lets you lock a channel in the event of a raid or downtime. Although this command only updates the @everyone permission, so if you have a role that grants permissions to \`SEND_MESSAGES\` users with that role will still be able to speak.`,
         COMMAND_LOCK_LOCKING: `${infinity} **Locking** up the channel...`,
         COMMAND_LOCK_SUCCESS: `**Successfully** locked up the channel for ya.`,
-        COMMAND_MUTE_DESCRIPTION: `Allows you to mute a member of the server to prevent them from talking, this command will use a premade mute role by the bot and log to the moderation channel if set.`,
+        COMMAND_MUTE_DESCRIPTION: `Allows you to mute a member of the server to prevent them from talking, this command will use a premade mute role by the bot and log to the moderation channel if set. You can also specify a time for the mute to automatically expire at such as \`1d\` for one day.`,
         COMMAND_MUTE_NOMEMBER: `**Hey,** you need to specify **one member** to mute.`,
         COMMAND_MUTE_ROLE_DEFAULT: `Silenced`,
         COMMAND_MUTE_ROLE_REASON: `Setting up the mute settings.`,
@@ -538,6 +538,7 @@ module.exports = {
         LOG_ACTION_NUKE: `Nuked Channel`,
         LOG_ACTION_PURGE: `Purged Messages`,
         LOG_ACTION_TEMPMUTE: 'Temporarily Muted Member',
+        LOG_ACTION_TEMPUNMUTE: 'Temporary Mute Expired',
         LOG_ACTION_WARN: `Warned Member`,
 
         LOG_DM_BAN: `You have been banned`,
@@ -545,6 +546,7 @@ module.exports = {
         LOG_DM_CLEARWARNS: `Your warnings have been cleared`,
         LOG_DM_MUTE: 'You have been muted',
         LOG_DM_TEMPMUTE: 'You have been temporarily muted',
+        LOG_DM_TEMPUNMUTE: 'You temporary mute has expired',
         LOG_DM_WARN: 'You have been warned',
 
         LOG_ARGS_MEMBER: (name, mention, id) => `**Member**: ${name} ${mention} (ID: ${id})`,

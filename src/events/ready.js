@@ -11,6 +11,7 @@ module.exports = {
         // Botwide
         client.tasks.get('reminder').execute(client);
         client.tasks.get('disboard').execute(client);
+        client.tasks.get('endTempmute').execute(client);
         // The Corner Store, memberCount & clock
         // memberCount(client);
         // clock(client);
