@@ -4,6 +4,7 @@ module.exports = {
     execute: async(message) => {
         
         if (message.partial) return
+        if (!message.guild) return;
         let deleteChannel = await message.guild.settings.get('log.delete.channel')
         if (!deleteChannel) return;
 

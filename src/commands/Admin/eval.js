@@ -11,7 +11,8 @@ module.exports = {
 
         let client = message.client;
         const start = performance.now().toFixed(2);
-        let arg = args.slice(0).join(" ");
+        const depth = /d=\d/i.test(args[0]) ? args[0].slice(2, 3) : 0;
+        let arg = /d=\d/i.test(args[0]) ? args.slice(1).join(" ") : args.slice(0).join(" ");
         let silent = /(-silent|-s)/gi.test(arg);
         let async = /(-async|-a)/gi.test(arg);
         let msg = /(-message|-m)/gi.test(arg);
@@ -20,11 +21,11 @@ module.exports = {
 
             let code = await this.codeReplace(arg);
             if (async) code = `(async () => {\n${code}\n})();`;
-            let result = eval(code);
+            let result = await eval(code);
             let type = typeof result;
 
             if (result?.length < 1 && result) return message.channel.send(`${language.get('COMMAND_EVAL_OUTPUT', lang)}\n\`\`\`javascript\n${language.get('COMMAND_EVAL_UNDEFINED', lang)}\n\`\`\``);
-            if (typeof result !== "string") result = require("util").inspect(result, { depth : 0 } );
+            if (typeof result !== "string") result = require("util").inspect(result, { depth : depth } );
             const end = performance.now().toFixed(2);
             let time = (end*1000) - (start*1000);
 

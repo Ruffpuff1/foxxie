@@ -27,7 +27,7 @@ module.exports = {
         message.responder.success();
     },
 
-    async scheduleMutes({ message, args }, member) {
+    async scheduleMutes({ message, args, language, lang}, member) {
 
         const reason = args.slice(2).join(" ") || language.get('LOG_MODERATION_NOREASON', lang);
         message.client.schedule.create('mutes',

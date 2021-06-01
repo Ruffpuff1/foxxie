@@ -5,9 +5,7 @@ module.exports = {
     execute: async(oldMessage, newMessage) => {
 
         if (oldMessage.partial || newMessage.partial) return
-
-        // Prevents the bot from reading DMs
-        if (newMessage.channel.type === 'dm' || oldMessage.channel.type === 'dm') return
+        if (!oldMessage.guild || !newMessage.guild) return;
         // Doesn't log link embed edits
         if (oldMessage.content.includes('https://')) return
         // Command edit with cmd handler
