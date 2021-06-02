@@ -9,24 +9,26 @@ module.exports = {
         // Returns if self
         if (member.user.id === member.guild.me.user.id) return;
 
-        // Language  
-
-        // Autoroles
+        // Persisteny & botroles
         const autoroles = await member.guild.settings.get('mod.roles.auto');
-        const botrole = await member.guild.settings.get('mod.roles.bots');
+		const botrole = await member.guild.settings.get('mod.roles.bots');
 
-        if (autoroles && !member.user.bot && !member.pending) {
-            await member.roles.add(autoroles, member.guild.language.get('EVENT_AUTOROLE_REASON')).catch(() => null);
-        } else if (member.user.bot && botrole) {
-			await member.roles.add(botrole, member.guild.language.get('EVENT_BOTROLE_REASON')).catch(() => null);
-		};
+        const botsHighestRole = member.guild.me.roles.highest;
+        const persistroles = member.user.settings.get(`servers.${member.guild.id}.persistRoles`).filter(id => !autoroles.includes(id)).filter(id => botsHighestRole.comparePositionTo(id) > 0).array();
+        const persistnick = member.user.settings.get(`servers.${member.guild.id}.persistNickname`);
+        if (persistnick) await member.setNickname(persistnick);
 
-        // Persisteny
-        const highestRole = member.guild.me.roles.highest;
-        const persistroles = await member.user.settings.get(`servers.${member.guild.id}.persistRoles`);
-		if (persistroles && member.guild.me.permissions.has(FLAGS.MANAGE_ROLES)) await member.roles.add(persistroles.filter(id => !autoroles?.includes(id)).filter(id => highestRole.comparePositionTo(id) > 0), member.guild.language.get('EVENT_GUILDMEMBERADD_PERSISTREASON')).catch((() => null));
-		const persistnick = await member.user.settings.get(`servers.${member.guild.id}.persistNickname`);
-		if (persistnick) await member.setNickname(persistnick).catch(e => e);
+        if (member.guild.me.permissions.has(FLAGS.MANAGE_ROLES)) {
+            let roles = persistroles;
+
+            if (autoroles && !member.user.bot && !member.pending) {
+                roles = roles.concat(autoroles);
+            } else if (member.user.bot && botrole) {
+                roles = roles.concat(botrole)
+            }
+
+            member.roles.add(roles)
+        }
 
 
         // Welcoming
