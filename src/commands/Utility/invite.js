@@ -1,22 +1,19 @@
-const Discord = require('discord.js')
+const Discord = require('discord.js');
+
 module.exports = {
     name: 'invite',
-    aliases: ['botinvite'],
-    //category: 'utility',
+    aliases: ['botinvite', 'support', 'vote'],
+    category: 'utility',
     usage: 'fox invite',
-    execute(props) {
+    execute({ message, language }) {
 
-        let { lang, message } = props;
-
-        const inviteEmbed = new Discord.MessageEmbed()
-            .setAuthor(`${lang.COMMAND_INVITE_HERE}`, message.client.user.displayAvatarURL())
+        const chnFlag = /\-channel\s*|-c\s*/gi;
+        const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
-            .setDescription(lang.COMMAND_INVITE_BODY)
+            .setTitle(language.get('COMMAND_INVITE_EMBED_TITLE'))
+            .setDescription(language.get('COMMAND_INVITE_EMBED_DESCRIPTION'))
 
-            if (message.content.includes(`-c`)) {
-                return message.channel.send(inviteEmbed)
-            }
-        message.author.send(inviteEmbed).catch(() => message.channel.send(inviteEmbed));
+        chnFlag.test(message.content) ? message.channel.send(embed) : message.author.send(embed).catch(() => null);
         message.responder.success();
     }
 }

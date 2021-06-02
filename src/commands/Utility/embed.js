@@ -12,15 +12,11 @@ module.exports = {
         if (targetChannel) args.shift()
         if (!targetChannel) targetChannel = message.channel
 
-        let loading = await message.responder.loading();
-
         try {
             const json = JSON.parse(args.join(' '))
             targetChannel.send(json)
             message.delete()
-            loading.delete()
         } catch (error) {
-            loading.delete()
             message.responder.error('COMMAND_EMBED_ERROR')
         }
     }
