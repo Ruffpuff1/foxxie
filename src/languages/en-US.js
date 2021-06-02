@@ -555,16 +555,26 @@ module.exports = {
         LOG_DM_TEMPUNMUTE: 'You temporary mute has expired',
         LOG_DM_WARN: 'You have been warned',
 
+        LOG_ARGS_IMAGES: `Image`,
+        LOG_ARGS_ATTACHMENTS: attachments => `**Attachments**: ${attachments.join(` | `)}`,
         LOG_ARGS_MEMBER: (name, mention, id) => `**Member**: ${name} ${mention} (ID: ${id})`,
         LOG_ARGS_CHANNEL: (mention, id) => `**Location**: ${mention} (ID: ${id})`,
         LOG_ARGS_USER: (tag, mention, id) => `**User**: ${tag} ${mention} (ID: ${id})`,
         LOG_ARGS_MODERATOR: (tag, mention, id) => `**Moderator**: ${tag} ${mention} (ID: ${id})`,
 		LOG_ARGS_REASON: reason => `**Reason**: ${reason}`,
+        LOG_ARGS_MESSAGE: content => `**Message**: ${content}`,
+        LOG_ARGS_MESSAGES: (oldContent, newContent) => [
+            `**Before**: ${oldContent}`,
+            `**After**: ${newContent}`,
+        ].join('\n'),
+        LOG_ARGS_LINK: link => `**Link**: [Here](${link})`,
         LOG_ARGS_WARN: (warnRes, warnTime, warnAuthTag, warnAuth, warnAuthId) => `**Warn**: ${warnRes}\non ${moment(warnTime).format('llll')}\nBy: ${warnAuthTag} ${warnAuth} (ID: ${warnAuthId})`, 
         LOG_ARGS_WARNS: (warns, client) => `**Warns**:\n${warns.map((w, idx) => `${idx + 1}. ${w.reason}\non ${moment(w.timestamp).format('llll')}\nBy: ${client.users.cache.get(w.author).tag} ${client.users.cache.get(w.author).toString()} (ID: ${w.author})`).join('\n\n')}`,
         LOG_ARGS_DURATION: duration => `**Duration**: ${duration}`,
-
         LOG_ARGS_DATE: date => `**Date**: ${date}`,
+
+        LOG_ACTION_DELETE: `Message Deleted`,
+        LOG_ACTION_EDIT: `Message Edited`,
 
 
 

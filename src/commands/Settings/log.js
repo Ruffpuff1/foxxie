@@ -4,9 +4,9 @@ module.exports = {
     usage: `fox log [mod|edit|delete|reset] (#channel|none)`,
     permissions: 'ADMINISTRATOR',
     category: 'settings',
-    execute: async function (props) {
+    async execute (props) {
 
-        let { args } = props
+        let { args, message } = props
 
         const loading = await message.responder.loading();
         if (/(moderation|mod)/i.test(args[0])) return this._settings(props, loading, 'mod');
