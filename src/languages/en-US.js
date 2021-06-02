@@ -424,6 +424,8 @@ module.exports = {
         COMMAND_BADGES_HYPE_EVENT: `HypeSquad Events`,
         COMMAND_BADGES_NITRO: `Nitro`,
         COMMAND_BADGES_PARTNERED: flag => `Partnered Server Owner${flag > 1 ? 's' : ''}`,
+        COMMAND_BUGREPORT_DESCRIPTION: `Allows you to report a bug to the bot developer, please describe the bug along with the command that caused it. Please note that any joke reports could lead to a user or guild blacklist.`,
+        COMMAND_BUGREPORT_NOBUG: `**Hey!** you didnt provide a bug to report. Respond with a bug in **60 seconds** or send \`cancel\` to cancel.`,
         COMMAND_CORONA_CASES_TITLE: `${cases} **Cases**`,
         COMMAND_CORONA_CASES_VALUE: stats => `**${stats.cases ? stats.cases.toLocaleString() : 'N/A'}** ${stats.todayCases ? `(+${stats.todayCases.toLocaleString()} today)` : ''}\n${stats.critical ? stats.critical.toLocaleString() : 'N/A'} critical\n${stats.casesPerOneMillion? `${(stats.casesPerOneMillion / 10000).toFixed(2)}%` : 'N/A'} absolute infection rate`,
         COMMAND_CORONA_DEATHS_TITLE: `${deaths} **Deaths**`,

@@ -1,6 +1,5 @@
 ## Plan for Foxxie 3.0  -  Starboard update
 ### More moderation commands.
-* Mute
 * Jail
 * Clearnote
 * Vcdeafen
