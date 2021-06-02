@@ -14,9 +14,7 @@ module.exports = {
         if (settings?.prefixes.length) settings?.prefixes.forEach(p => prefixes.push(p));
         if (settings?.blockedUsers != null) if (settings.blockedUsers.includes(message.author.id)) return;
 
-        let mentionPrefix = `<@!${message.client.user.id}>`
-
-        if (message.content === mentionPrefix) message.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "), prefixes.pop());
+        if (message.content === `<@!${message.client.user.id}>` || message.content === `<@${message.client.user.id}>`) message.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "), prefixes.pop());
 
         let uprefixes = [...new Set(prefixes)];
     
