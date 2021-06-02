@@ -4,12 +4,13 @@ module.exports = {
     aliases: ['commands', 'h'],
     category: 'utility',
     usage: 'help (command|category) (-c|-channel)',
-    execute(props) {
+    async execute(props) {
 
         let { message, args, language } = props;
         const channelFlag = /\-channel\s*|-c\s*/gi
         const { commands } = message.client;
-        let cmdArr = commands.array();
+        const blockedCmds = await message.client.framework.get('blockedCommands');
+        let cmdArr = commands.filter(c => c.permissionLevel !== 9).filter(c => c.category !== 'admin').filter(c => !c.category !== 'secret').filter(c => !blockedCmds.includes(c.name)).array();
 
         const embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
@@ -19,8 +20,6 @@ module.exports = {
             let rpCmds = [];
             let setCmds = [];
             let utilCmds = [];
-            let secCmds = [];
-            let devCmds = [];
 
             for (let c of cmdArr) {
                 let fun = c.category === "fun"; if (fun) funCmds.push(c.name);
@@ -28,8 +27,6 @@ module.exports = {
                 let rp = c.category === "roleplay"; if (rp) rpCmds.push(c.name);
                 let set = c.category === "settings"; if (set) setCmds.push(c.name);
                 let util = c.category === "utility"; if (util) utilCmds.push(c.name);
-                let dev = c.category === "admin"; if (dev) devCmds.push(c.name);
-                let sec = c.category === "secret"; if (sec) secCmds.push(c.name);
             };
 
         bigMenu = () => {
@@ -74,6 +71,6 @@ ${command.permissions? language.get('COMMAND_HELP_PERMISSIONS', command.permissi
             }
         }
         if (!args.length || channelFlag.test(args[0])) return bigMenu();
-        commandMenu()
+        commandMenu();
     }
 }

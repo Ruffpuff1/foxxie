@@ -21,7 +21,7 @@ module.exports = {
 
             let code = await this.codeReplace(arg);
             if (async) code = `(async () => {\n${code}\n})();`;
-            let result = await eval(code);
+            let result = async ? eval(code) : await eval(code);
             let type = typeof result;
 
             if (result?.length < 1 && result) return message.channel.send(`${language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`javascript\n${language.get('COMMAND_EVAL_UNDEFINED')}\n\`\`\``);

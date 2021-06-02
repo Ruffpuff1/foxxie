@@ -8,12 +8,12 @@ module.exports = {
     async execute (props) {
 
         let { message, args, language } = props;
+
         let limit = args[0];
         if (!limit || !parseInt(limit) || !/^\d+$/.test(limit)) return message.responder.error('COMMAND_PURGE_NOLIMIT');
         args.shift();
         const userInstance = message.mentions.users.first() || message.client.users.cache.get(args[1]);
         let filter = args[0];
-
         let messages = await message.channel.messages.fetch({ limit: 100 });
         if (/(link|invite|bots|you|me|upload|user|pin|text)/i.test(filter)) {
             
@@ -35,7 +35,7 @@ module.exports = {
 
         await message.channel.bulkDelete(messages);
         const msg = await message.responder.success('COMMAND_PURGE_SUCCESS', messages.length - 1);
-        await message.guild.log.send({ type: 'mod', action: 'purge', moderator: message.member, reason, msg: message, counter: 'purge', total: messages.length, channel: message.channel });
+        await message.guild.log.send({ type: 'mod', action: 'purge', user: userInstance, moderator: message.member, reason, msg: message, counter: 'purge', total: messages.length - 1, channel: message.channel });
         msg.delete({ timeout: 10000 }).catch(() => null);
     },
 

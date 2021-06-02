@@ -6,16 +6,15 @@ module.exports = {
     permissions: 'MOVE_MEMBERS',
     execute: async(props) => {
 
-        let { message, args, lang, language } = props
+        let { message, args, language } = props
 
-        const user = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         const reason = args[1] || language.get('LOG_MODERATION_NOREASON')
 
-        if (!user) return message.responder.error('COMMAND_VCKICK_NOMEMBER')
-        if (!user.voice.channelID) return message.responder.error('COMMAND_VCKICK_NOVOICE');
-		user.voice.setChannel(null);
+        if (!member) return message.responder.error('COMMAND_VCKICK_NOMEMBER')
+        if (!member.voice.channelID) return message.responder.error('COMMAND_VCKICK_NOVOICE');
+		await member.voice.setChannel(null).catch(() => null);
+        message.guild.log.send({ member, reason, type: 'mod', action: 'vckick', channel: message.channel, moderator: message.member, dm: true })
 		message.responder.success();
-
-        message.guild.log.moderation(message, user.user, reason, 'Vckicked', 'vckick', lang)
     }
 }

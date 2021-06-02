@@ -10,7 +10,7 @@ module.exports = {
         let reason = args.slice(0).join(' ') || language.get('LOG_MODERATION_NOREASON');
         let msg = await message.responder.success('COMMAND_LOCK_LOCKING');
 
-        message.channel.updateOverwrite(
+        await message.channel.updateOverwrite(
             message.guild.id,
             { 
                 SEND_MESSAGES : false 

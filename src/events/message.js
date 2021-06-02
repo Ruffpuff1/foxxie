@@ -5,7 +5,6 @@ module.exports = {
 	execute: async(message) => {
 
         // prevents bot dms
-        console.log(message.content);
         if (!message.guild) return;
 
         // Execute monitors

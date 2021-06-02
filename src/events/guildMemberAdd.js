@@ -14,20 +14,20 @@ module.exports = {
 		const botrole = await member.guild.settings.get('mod.roles.bots');
 
         const botsHighestRole = member.guild.me.roles.highest;
-        const persistroles = member.user.settings.get(`servers.${member.guild.id}.persistRoles`).filter(id => !autoroles.includes(id)).filter(id => botsHighestRole.comparePositionTo(id) > 0).array();
-        const persistnick = member.user.settings.get(`servers.${member.guild.id}.persistNickname`);
-        if (persistnick) await member.setNickname(persistnick);
+        const persistroles = await member.user.settings.get(`servers.${member.guild.id}.persistRoles`);
+        const persistnick = await member.user.settings.get(`servers.${member.guild.id}.persistNickname`);
+        if (persistnick) await member.setNickname(persistnick).catch(() => null);
 
         if (member.guild.me.permissions.has(FLAGS.MANAGE_ROLES)) {
-            let roles = persistroles;
-
+            let roles = persistroles?.filter(id => !autoroles.includes(id)).filter(id => botsHighestRole.comparePositionTo(id) > 0);
+            
             if (autoroles && !member.user.bot && !member.pending) {
                 roles = roles.concat(autoroles);
             } else if (member.user.bot && botrole) {
                 roles = roles.concat(botrole)
             }
 
-            member.roles.add(roles)
+            member.roles.add(roles).catch(() => null);
         }
 
 

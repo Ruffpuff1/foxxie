@@ -1,38 +1,20 @@
-const Discord = require('discord.js')
 module.exports = {
     name: 'unban',
     aliases: ['ub', 'unbean'],
     usage: 'fox unban [user|userId] (reason)',
-    //category: 'moderation',
+    category: 'moderation',
     permissions: 'BAN_MEMBERS',
-    execute: async (props) => {
+    async execute ({ message, args, language }) {
 
-        let { message, args, lang, language } = props
-
-        if (!message.channel.permissionsFor(message.guild.me).has('BAN_MEMBERS')) return message.responder.error('RESPONDER_ERROR_PERMS_CLIENT', "BAN_MEMBERS")
-
-        let res = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON')
-        let member = message.mentions.users.first() || message.client.users.cache.get(args[0]);
-
-        if (!member) return message.channel.send("You need to provide **one user** to unban.")
-
-        if (member.id === message.member.user.id) return message.channel.send("self")
-        if (member.id === message.guild.ownerID) return message.channel.send("owner")
-
+        let user = message.mentions.users.first() || message.client.users.cache.get(args[0]);
+        let reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON');
+        if (!user) return message.responder.error('COMMAND_UNBAN_NOUSER');
+        await this.executeUnbans(message, user, reason);
+        message.guild.log.send({ type: 'mod', action: 'unban', moderator: message.member, user, reason, dm: true, counter: 'unban', channel: message.channel })
         message.responder.success();
+    }, 
 
-        const dmEmbed = new Discord.MessageEmbed()
-                .setTitle(`Unbanned from ${message.guild.name}`)
-                .setColor(message.guild.me.displayColor)
-                .setThumbnail(message.guild.iconURL({dynamic:true}))
-                .setDescription(`You have been unbanned from ${message.guild.name} with the following reason:\n\`\`\`${res}\`\`\``)
-
-        member.send(dmEmbed)
-        .catch(e => console.error(e))
-
-        message.guild.members.unban(member, res)
-        .catch(console.error)
-
-        message.guild.log.moderation(message, member, res, 'Unbanned', 'unban', lang)
+    executeUnbans(msg, user, reason) {
+        msg.guild.members.unban(user, reason).catch(() => null);
     }
 }
