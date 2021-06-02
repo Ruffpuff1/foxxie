@@ -17,7 +17,7 @@ module.exports = {
         
     },
 
-    async _response({ language }, msg, word){
+    async _response({ language, message }, msg, word){
         
         if (msg) msg = await msg.edit(language.get("MESSAGE_LOADING"));
         if (!msg) msg = await message.responder.loading();

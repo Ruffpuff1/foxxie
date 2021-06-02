@@ -4,7 +4,7 @@ module.exports = {
     usage: 'fox goodbye [channel|message] (none|#channel|message)',
     category: 'settings',
     permissions: 'ADMINISTRATOR',
-    execute: async(props) => {
+    async execute(props) {
 
         let { message, args} = props;
 
