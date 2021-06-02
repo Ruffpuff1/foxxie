@@ -3,31 +3,30 @@ const Discord = require('discord.js');
 
 module.exports = {
     name: 'poll',
-    usage: 'fox poll [option1], [option2]',
-    //category: 'utility',
-    async execute(props) {
+    aliases: ['strawpoll'],
+    usage: 'fox poll (title=Title-Here) [option1], [option2]',
+    category: 'utility',
+    async execute({ message, args, language }) {
 
-        let { lang, message, args } = props;
-        let opt = args.join(" ").toString().split(/\,\s*/)
-        let filtered = opt.filter(function (el) {
-            return el != null && el != "";
-        })
-        if (filtered.length > 10) 
-            return message.channel.send(lang.COMMAND_POLL_TOO_MANY_OPTIONS)
+        // Sees if title variable is args 0 and if so performs args.shift();
+        const title = /title=.*/i.test(args[0]) ? args[0].slice(6, args[0].length).replace(/(-|_|\/)/gi, ' ') : null;
+        if (title) args.shift();
 
-        if (filtered.length < 2)
-            return message.channel.send(lang.COMMAND_POLL_TOO_FEW_OPTIONS)
-
-        this.numbers = poll
+        // separates args by comma and filters out nullish args;
+        let opt = args.join(" ").toString().split(/\,\s*/).filter(e => !!e && e !== '');
+        if (opt.length > 10 || opt.length < 2) return message.responder.error('COMMAND_POLL_OPTIONS');
+        this.numbers = poll;
 
         const embed = new Discord.MessageEmbed()
-            .setTitle(`${lang.COMMAND_POLL_POLL_BY} ${message.member.user.tag}`)
+            .setTitle(title || language.get('COMMAND_POLL_EMBED_TITLE', message.author.tag))
             .setColor(message.guild.me.displayColor)
-            .setDescription(filtered.map((option, idx) => `${idx + 1}. ${option.replace(/,/g, ' ')}`).join('\n'))
-            .setFooter(lang.COMMAND_POLL_EMBED_FOOTER)
+            .setDescription(opt.map((option, idx) => `${idx + 1}. ${option.replace(/,/g, ' ')}`).join('\n'))
+            .setFooter(language.get('COMMAND_POLL_EMBED_FOOTER'))
 
-        let msg = await message.channel.send(embed)
-        for (let i = 0; i < filtered.length; i++) {
+        let msg = await message.channel.send(embed);
+
+        // reacts to the message with the amount of args sent;
+        for (let i = 0; i < opt.length; i++) {
             await msg.react(this.numbers[i + 1]);
         }
     }

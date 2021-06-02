@@ -22,9 +22,9 @@ module.exports = {
             let roles = persistroles?.filter(id => !autoroles.includes(id)).filter(id => botsHighestRole.comparePositionTo(id) > 0);
             
             if (autoroles && !member.user.bot && !member.pending) {
-                roles = roles.concat(autoroles);
+                roles = roles ? roles.concat(autoroles) : autoroles;
             } else if (member.user.bot && botrole) {
-                roles = roles.concat(botrole)
+                roles = roles ? roles.concat(botrole) : botrole;
             }
 
             member.roles.add(roles).catch(() => null);

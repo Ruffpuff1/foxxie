@@ -75,7 +75,6 @@ module.exports = {
     },
 
     async _notifications({ message, args }, starboard, loading) {
-        console.log(args)
         if (/(none|reset|on|true|allow|yes)/i.test(args[1])) {
             message.responder.success('COMMAND_STARBOARD_NOTIFICATIONS_REMOVED');
             loading.delete();
