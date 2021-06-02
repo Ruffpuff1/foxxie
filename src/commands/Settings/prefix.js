@@ -1,12 +1,11 @@
 module.exports = {
     name: 'prefix',
     aliases: ['setprefix', 'prefixes'],
-    usage: 'fox prefix (none|prefix)',
+    usage: 'fox prefix (none|remove|prefix)',
     category: 'settings',
     permissions: 'ADMINISTRATOR',
-    execute: async(props) => {
+    async execute ({ message, args }) {
 
-        let { message, args } = props
         const loading = await message.responder.loading();
 
         if (/(none|reset|clear)/i.test(args[0])) {
@@ -18,6 +17,22 @@ module.exports = {
                 return message.responder.success();
             }
             return loading.confirm(loading, 'COMMAND_PREFIX_CONFIRM', message, confirmed);
+        }
+
+        if (/(remove)/i.test(args[0])) {
+            let prefix = args[1];
+            if (!prefix) {
+                message.responder.error('COMMAND_PREFIX_REMOVE_NOARGS');
+                return loading.delete();
+            }
+            const prefixes = await message.guild.settings.get('prefixes');
+            if (!prefixes?.some(prfx => prfx === prefix)) {
+                message.responder.error('COMMAND_PREFIX_REMOVE_NOEXIST', prefix);
+                return loading.delete();
+            }
+            await message.guild.settings.pull('prefixes', prefix);
+            message.responder.success('COMMAND_PREFIX_REMOVE_SUCCESS', prefix);
+            return loading.delete();
         }
 
         let prefix = args[0]
