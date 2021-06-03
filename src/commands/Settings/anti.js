@@ -6,7 +6,7 @@ module.exports = {
     permissions: 'ADMINISTRATOR',
     async execute (props) {
 
-        let { args } = props
+        let { args, message } = props
         const loading = await message.responder.loading();
 
         if (/(reset|clear)/i.test(args[0])) return this._clearAnti(props, loading);
