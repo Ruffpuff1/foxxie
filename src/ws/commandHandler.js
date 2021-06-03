@@ -7,14 +7,19 @@ module.exports = {
         if (message.author.bot) return;
 
         let settings = await message.guild.settings?.get()
-        let language = message.language
-        let prefixes = [];
+        let language = message.language;
+        let prefixes = [`<@!${message.client.user.id}>`, `<@${message.client.user.id}>`];
         message.client.user.id === '825130284382289920' ? prefixes.push('dev') : prefixes.push('fox');
-        if (!settings?.prefixes.length) prefixes.push(message.client.user.id === '825130284382289920' ? development : production);
+        if (!settings?.prefixes.length) 
+        prefixes.push(message.client.user.id === '825130284382289920' ? development : production);
         if (settings?.prefixes.length) settings?.prefixes.forEach(p => prefixes.push(p));
         if (settings?.blockedUsers != null) if (settings.blockedUsers.includes(message.author.id)) return;
 
-        if (message.content === `<@!${message.client.user.id}>` || message.content === `<@${message.client.user.id}>`) message.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "), prefixes.pop());
+        if (message.content === `<@!${message.client.user.id}>` || message.content === `<@${message.client.user.id}>`) {
+            prefixes.shift();
+            prefixes.shift();
+            message.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "), prefixes.pop());
+        }
 
         let uprefixes = [...new Set(prefixes)];
     

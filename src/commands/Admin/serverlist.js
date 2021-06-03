@@ -41,7 +41,6 @@ module.exports = {
                 page = page - 1;
                 // if there is no guild to display, delete the message
                 if (i0 + 1 < 0) {
-                    console.log(i0)
                     return msg.delete();
                 }
                 if (!i0 || !i1) {

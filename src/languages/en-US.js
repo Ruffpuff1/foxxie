@@ -89,7 +89,8 @@ module.exports = {
         COMMAND_LOCK_LOCKING: `${infinity} **Locking** up the channel...`,
         COMMAND_LOCK_SUCCESS: `**Successfully** locked up the channel for ya.`,
         COMMAND_MUTE_DESCRIPTION: `Allows you to mute a member of the server to prevent them from talking, this command will use a premade mute role by the bot and log to the moderation channel if set. You can also specify a time for the mute to automatically expire at such as \`1d\` for one day.`,
-        COMMAND_MUTE_NOMEMBER: `**Hey,** you need to specify **one member** to mute.`,
+        COMMAND_MUTE_NOMEMBER: `**Hey,** you need to specify **one or more members** to mute.`,
+        COMMAND_MUTE_NOPERMS: multiple => `**Whoops,** you can't mute ${multiple ? 'any of the specified members' : 'the specified member'}.`,
         COMMAND_MUTE_ROLE_DEFAULT: `Silenced`,
         COMMAND_MUTE_ROLE_REASON: `Setting up the mute settings.`,
         COMMAND_NOTE_DESCRIPTION: `Adds a server-only public note to a user's profile. These can be viewed using the \`info\` command.`,
@@ -562,23 +563,23 @@ module.exports = {
 
         // Logs
         LOG_ACTION_BAN: `Banned User`,
-        LOG_ACTION_CLEARWARN: `Removed Warning From Member`,
-        LOG_ACTION_CLEARWARNS: `Cleared Warnings From Member`,
-        LOG_ACTION_KICK: `Kicked Member`,
+        LOG_ACTION_CLEARWARN: `Removed Warning From User`,
+        LOG_ACTION_CLEARWARNS: `Cleared Warnings From User`,
+        LOG_ACTION_KICK: `Kicked User`,
         LOG_ACTION_LOCK: `Locked Channel`,
-        LOG_ACTION_MUTE: `Muted Member`,
+        LOG_ACTION_MUTE: plural => `Muted User${plural ? 's' : ''}`,
         LOG_ACTION_NUKE: `Nuked Channel`,
         LOG_ACTION_PURGE: total => `Purged ${total} Messages`,
         LOG_ACTION_SLOWMODE: `Slowmode Set`,
-        LOG_ACTION_TEMPMUTE: 'Temporarily Muted Member',
-        LOG_ACTION_TEMPUNMUTE: 'Temporary Mute Expired',
+        LOG_ACTION_TEMPMUTE: plural => `Temporarily Muted User${plural ? 's' : ''}`,
+        LOG_ACTION_TEMPUNMUTE: plural => `Temporary Mute${plural ? 's' : ''} Expired`,
         LOG_ACTION_UNBAN: `Unbanned User`,
         LOG_ACTION_UNLOCK: `Unlocked Channel`,
-        LOG_ACTION_UNMUTE: `Unmuted Member`,
-        LOG_ACTION_VCKICK: `Kicked Member From VC`,
-        LOG_ACTION_VCMUTE: `Muted Member in VC`,
-        LOG_ACTION_VCUNMUTE: `Unmuted Member in VC`,
-        LOG_ACTION_WARN: `Warned Member`,
+        LOG_ACTION_UNMUTE: plural => `Unmuted User${plural ? 's' : ''}`,
+        LOG_ACTION_VCKICK: `Kicked User From VC`,
+        LOG_ACTION_VCMUTE: `Muted User in VC`,
+        LOG_ACTION_VCUNMUTE: `Unmuted User in VC`,
+        LOG_ACTION_WARN: `Warned User`,
 
         LOG_DM_BAN: `You have been banned`,
         LOG_DM_CLEARWARN: `Your warning has been removed`,
@@ -591,7 +592,7 @@ module.exports = {
         LOG_DM_UNMUTE: `You have been unmuted`,
         LOG_DM_VCKICK: `You have been kicked from a VC`,
         LOG_DM_VCMUTE: `You have been muted in a VC`,
-        LOG_DM_VCUNMUTE: `You have been unmute in a VC`,
+        LOG_DM_VCUNMUTE: `You have been unmuted in a VC`,
         LOG_DM_WARN: 'You have been warned',
 
         LOG_ARGS_IMAGES: `Image`,
@@ -599,6 +600,7 @@ module.exports = {
         LOG_ARGS_MEMBER: (name, mention, id) => `**Member**: ${name} ${mention} (ID: ${id})`,
         LOG_ARGS_CHANNEL: (mention, id) => `**Location**: ${mention} (ID: ${id})`,
         LOG_ARGS_USER: (tag, mention, id) => `**User**: ${tag} ${mention} (ID: ${id})`,
+        LOG_ARGS_USERS: users => `**Users**:\n${users}\n`,
         LOG_ARGS_MODERATOR: (tag, mention, id) => `**Moderator**: ${tag} ${mention} (ID: ${id})`,
 		LOG_ARGS_REASON: reason => `**Reason**: ${reason}`,
         LOG_ARGS_MESSAGE: content => `**Message**: ${content}`,
@@ -614,29 +616,7 @@ module.exports = {
 
         LOG_ACTION_DELETE: `Message Deleted`,
         LOG_ACTION_EDIT: `Message Edited`,
-
-
-
-
-
-        LOG_MODERATION_BANNED: tar => `Banned ${tar}`,
-        LOG_MODERATION_CLEAREDWARNS: tar => `Cleared warnings for ${tar}`,
-        LOG_MODERATION_EMBED_DATE: `**Date / Time**`,
-        LOG_MODERATION_EMBED_LOCATION: `**Location**`,
-        LOG_MODERATION_EMBED_MODERATOR: `**Moderator**`,
-        LOG_MODERATION_EMBED_REASON: `**Reason**`,
-        LOG_MODERATION_EMBED_TITLE: act => act === 'Clearedwarns' ? `Cleared warns for User` : `**${act} ${['Purged', 'Locked', 'Unlocked', 'Slowmoded'].includes(act) ? 'Channel' : 'User'}**`,
-        LOG_MODERATION_KICKED: tar => `Kicked ${tar}`,
-        LOG_MODERATION_LOCKED: `Locked Channel`,
         LOG_MODERATION_NOREASON: `No reason specified`,
-        LOG_MODERATION_NUKED: `Nuked Channel`,
-        LOG_MODERATION_PURGED: `Purged Messages`,
-        LOG_MODERATION_SLOWMODED: `Slowmode Set`,
-        LOG_MODERATION_UNBANNED: tar => `Unbanned ${tar}`,
-        LOG_MODERATION_UNLOCKED: `Unlocked Channel`,
-        LOG_MODERATION_VCKICKED: tar => `Vckicked ${tar}`,
-        LOG_MODERATION_VCMUTED: tar => `Vcmuted ${tar}`,
-        LOG_MODERATION_WARNED: tar => `Warned ${tar}`,
 
         // Monitors
         // Resolvers
