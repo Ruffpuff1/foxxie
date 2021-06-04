@@ -5,7 +5,7 @@ module.exports = {
     name: 'mute',
     aliases: ['m', 'silence', 'shush', 'quiet', '403', 'zip'],
     permissions: 'BAN_MEMBERS',
-    usage: 'fox mute [user] (5s|5m|5h|5d|5w) (reason)',
+    usage: 'fox mute (5s|5m|5h|5d|5w) [users] (reason)',
     category: 'moderation',
     async execute (props) {
 

@@ -2,9 +2,8 @@ const { owner } = require("../../config/foxxie");
 
 module.exports = {
     name: 'permissions',
-    async execute (props) {
+    async execute (command, message) {
 
-        const { command, message } = props;
         // Secure commands for bot owner, will fail silently.
         if (command.permissionLevel >= 9 && !owner.includes(message.author.id)) throw true;
         // Overwrite perm level for bot owner.

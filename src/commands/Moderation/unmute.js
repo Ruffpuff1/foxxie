@@ -1,35 +1,38 @@
+const Command = require('../../../lib/structures/MultiModerationCommand');
+
 module.exports = {
     name: 'unmute',
     aliases: ['um', 'unzip', 'noise'],
     permissions: 'BAN_MEMBERS',
-    usage: 'fox unmute [user] (reason)',
+    usage: 'fox unmute [users] (reason)',
     category: 'moderation',
     async execute (props) {
 
         const { message, args, language } = props;
 
-        const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        if (!member) return message.responder.error('COMMAND_UNMUTE_NOMEMBER');
-        const reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON');
-        let muterole = await message.guild.settings.get('mod.roles.mute');
-        if (!message.guild.roles.cache.get(muterole)) muterole = await message.guild.createMuteRole();
+        const members = message.args.members() || message.args.memberIds();
+        if (!members) return message.responder.error('MESSAGE_MEMBERS_NONE');
+        const unmuteable = await new Command().getModeratable(message.member, members, true, message);
+		if (!unmuteable.length) return message.responder.error('COMMAND_MUTE_NOPERMS', members.length > 1);
 
-        if (!member.roles.cache.has(muterole)) return message.responder.error('COMMAND_UNMUTE_NOTMUTED');
-        await this.executeUnmutes(member, reason);
-        const mutes = await message.client.schedule.fetch('mutes')
-        if (mutes?.some(m => m.memberId === member.user.id)) await this.updateSchedule(props, member);
-        message.guild.log.send({ type: 'mod', action: 'unmute', member, reason, moderator: message.member, dm: true, channel: message.channel })
+        const reason = args.slice(members.length).join(' ') || language.get('LOG_MODERATION_NOREASON');    
+        await this.executeUnmutes(unmuteable, reason, props);
+        await new Command().logActions(message.guild, unmuteable.map(member => member.user), { type: 'mod', reason, channel: message.channel, dm: true, moderator: message.member, action: 'unmute' })
         message.responder.success();
     },
 
-    executeUnmutes(member, reason) {
-        member.unmute(reason);
+    async executeUnmutes(members, reason, props) {
+        for (const member of members) {
+            member.unmute(reason);
+
+            const mutes = await member.client.schedule.fetch('mutes');
+            const hasmute = mutes?.some(m => m.memberId === member.user.id);
+            if (hasmute) this.updateSchedule(props, member, mutes)
+        }
     },
 
-    async updateSchedule({ message }, member) {
-        const mutes = await message.client.schedule.fetch('mutes');
-        mutes.forEach(m => {
-            if (m.memberId === member.user.id) message.client.schedule.delete('mutes', m);
-        })
+    async updateSchedule({ message }, member, mutes) {
+
+        await mutes.filter(m => m.guildId === message.guild.id).filter(m => m.memberId === member.user.id).forEach(m => message.client.schedule.delete('mutes', m));
     }
 }
