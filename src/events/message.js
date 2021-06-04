@@ -13,6 +13,7 @@ module.exports = {
         // Prevents bot commands.
         if (message.author.bot) return;
         if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return;
+        message.client.launchCommands(message);
         commandHandler.execute(message);
 
         // Checks if member is AFK
