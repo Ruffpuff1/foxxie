@@ -1,47 +1,54 @@
 const { performance } = require('perf_hooks');
-const { flags: { async, depth, silent } } = require('../../../lib/util/constants');
+const Command = require('../../../lib/structures/Command');
 
-module.exports = {
-    name: 'eval',
-    aliases: ['ev'],
-    usage: 'fox eval [code] (-async|-a) (-silent|-s) (-message|-m)',
-    category: 'admin',
-    permissionLevel: 9,
-    async execute ({ message, args, language }) {
+module.exports = class extends Command {
+    
+    constructor(...args) {
+        super(...args, {
+            name: 'eval',
+            aliases: ['ev'],
+            description: language => language.get('COMMAND_EVAL_DESCRIPTION'),
+            usage: 'fox eval (d=Number) (code) (-a|-s|-m)',
+            permissionLevel: 9,
+            category: 'admin',
+        })
+    }
 
-        let client = message.client;
+    async run(message, args) {
+
+        const client = this.client;
+        const msg = message;
         const start = performance.now().toFixed(2);
         const depth = /d=\d/i.test(args[0]) ? args[0].slice(2, 3) : 0;
-        let arg = /d=\d/i.test(args[0]) ? args.slice(1).join(" ") : args.slice(0).join(" ");
-        let silent = /(-silent|-s)/gi.test(arg);
-        let async = /(-async|-a)/gi.test(arg);
-        let msg = /(-message|-m)/gi.test(arg);
+
+        let code = depth === 0 ? args.slice(0).join(" ") : args.slice(1).join(" ");
+        let silent = /(-silent|-s)/gi.test(code);
+        let async = /(-async|-a)/gi.test(code);
+        let mess = /(-message|-m)/gi.test(code);
 
         try {
-
-            let code = await this.codeReplace(arg);
-            if (async) code = `(async () => {\n${code}\n})();`;
+            code = await this.codeReplace(code);
+            if (async) code = `(async () => {\n${code}\n})`;
             let result = async ? eval(code) : await eval(code);
             let type = typeof result;
 
-            if (result?.length < 1 && result) return message.channel.send(`${language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`javascript\n${language.get('COMMAND_EVAL_UNDEFINED')}\n\`\`\``);
-            if (typeof result !== "string") result = require("util").inspect(result, { depth : depth } );
+            if (result?.length < 1 && result) return message.channel.send(`${message.language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`js\n${message.language.get('COMMAND_EVAL_UNDEFINED')}\n\`\`\``);
+            if (typeof result !== 'string') result = require('util').inspect(result, { depth });
             const end = performance.now().toFixed(2);
             let time = (end*1000) - (start*1000);
 
-            if (!msg && !silent) message.channel.send(`\n${language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`javascript\n${result.length > 1900 ? result.substring(0, 1900) : result}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE')}\n\`\`\`javascript\n${type}\n\`\`\`\n:stopwatch: ${Math.floor(time)}μs`);
-            if (msg) message.channel.send('output: ' + result?.length > 1900 ? result.substring(0, 1900) : result);
-        } catch(e) {
+            if (!mess && !silent) return message.channel.send(`\n${message.language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`js\n${result.length > 1900 ? result.substring(0, 1900) : result}\n\`\`\`\n${message.language.get('COMMAND_EVAL_TYPE')}\n\`\`\`js\n${type}\n\`\`\`\n:stopwatch: ${Math.floor(time)}μs`);
+            if (mess) return message.channel.send(result?.length > 1900 ? result.substring(0, 1900) : result);
+        } catch (e) {
 
-            let err = typeof e;
             const end = performance.now().toFixed(2);
             let time = (end*1000) - (start*1000);
-            message.channel.send(`\n${language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`javascript\n${e?.length > 1900 ? e.substring(0, 1900) : e}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE')}\n\`\`\`javascript\n${err}\n\`\`\`\n:stopwatch: ${Math.floor(time)}μs`)
+            return message.channel.send(`\n${message.language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`js\n${e.message.length > 1900 ? e.message.substring(0, 1900) : e.message?.toString()}\n\`\`\`\n${message.language.get('COMMAND_EVAL_TYPE')}\n\`\`\`js\n${e.name}\n\`\`\`\n:stopwatch: ${Math.floor(time)}μs`);
         }
-    },
+    }
 
-    codeReplace(arg) {
-        return arg
+    codeReplace(code) {
+        return code
             .replace(/(-silent|-s)/gi, '')
             .replace(/(-async|-a)/gi, '')
             .replace(/(-message|-m)/gi, '');
