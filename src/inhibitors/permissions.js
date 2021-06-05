@@ -1,13 +1,11 @@
-const { owner } = require("../../config/foxxie");
-
 module.exports = {
     name: 'permissions',
     async execute (command, message) {
-
+        
         // Secure commands for bot owner, will fail silently.
-        if (command.permissionLevel >= 9 && !owner.includes(message.author.id)) throw true;
+        if (command.permissionLevel >= 9 && !message.client.owners.has(message.author)) throw true;
         // Overwrite perm level for bot owner.
-        if (owner.includes(message.author.id)) return;
+        if (message.client.owners.has(message.author)) return;
         // Guild Owner Only.
         if (command.permissionLevel >= 7 && message.guild.ownerID !== message.author.id) throw 'INHIBITORS_PERMISSIONS_GUILDOWNER';
         // Permissions checking.

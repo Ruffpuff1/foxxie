@@ -27,7 +27,7 @@ module.exports = class extends Command {
         }
 
         message.author.send(message.language.get('COMMAND_CREATEKEY_SUCCESS', badges, id, out));
-        this.client.framework.push(`keys`, { id, key: out.join('') });
+        this.client.settings.push(`keys`, { id, key: out.join('') });
         message.responder.success();
     }
 }

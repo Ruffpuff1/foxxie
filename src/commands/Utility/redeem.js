@@ -12,7 +12,7 @@ module.exports = {
         if (!key) return message.responder.error('COMMAND_REDEEM_NOKEY',);
 
         key = key.replace(/-/g, '');
-        message.client.keys = await message.client.framework.get('keys');
+        message.client.keys = await message.client.settings.get('keys');
                 
         const badgesUser = await message.author.settings.get('badges')
         const found = message.client.keys.find(item => item.key === key);
@@ -20,6 +20,6 @@ module.exports = {
 
         message.responder.success('COMMAND_REDEEM_SUCCESS', badges[found.id].icon, badges[found.id].name);
         message.author.settings.set('badges', badgesUser | ( 1 << found.id ))
-        message.client.framework.pull('keys', found);
+        message.client.settings.pull('keys', found);
     }
 }

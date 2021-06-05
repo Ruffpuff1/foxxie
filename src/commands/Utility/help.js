@@ -9,7 +9,7 @@ module.exports = {
         let { message, args, language } = props;
         const channelFlag = /\-channel\s*|-c\s*/gi
         const { commands } = message.client;
-        const blockedCmds = await message.client.framework.get('blockedCommands');
+        const blockedCmds = await message.client.settings.get('blockedCommands');
         let cmdArr = commands.filter(c => c.permissionLevel !== 9).filter(c => c.category !== 'admin').filter(c => !c.category !== 'secret').filter(c => !blockedCmds.includes(c.name)).array();
 
         const embed = new Discord.MessageEmbed()
