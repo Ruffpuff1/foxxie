@@ -1,4 +1,4 @@
-const Command = require('../../../lib/structures/Command');
+const Command = require('../../../lib/structures/Command'), Language = require('../../../lib/Language');
 const Stopwatch = require('../../../lib/util/Stopwatch');
 const fs = require('fs');
 const { Message } = require('discord.js');
@@ -22,13 +22,13 @@ module.exports = class extends Command {
         const instance = this.client.commands.get(piece) || this.client.monitors.get(piece) || this.client.languages.get(piece);
         if (!instance) return;
        
-        let value = await this._reload(message, instance);
+        let value = await this._reload(message, instance, piece);
         if (value instanceof Message) return;
         const { time, type, name } = value;
         return message.responder.success(`COMMAND_RELOAD_${type.toUpperCase()}_SUCCESS`, name, time);
     }
 
-    async _reload(msg, piece) {
+    async _reload(msg, piece, instance) {
 
         const stopwatch = new Stopwatch();
         let folderName, newPiece, name = piece.name;
@@ -42,7 +42,7 @@ module.exports = class extends Command {
             newPiece = new newPiece(msg.language);
         }
 
-        if (msg.client.languages.get(name)) delete require.cache[require.resolve(`../../languages/${name}.js`)];
+        if (msg.client.languages.get(instance)) delete require.cache[require.resolve(`../../languages/${instance}.js`)];
         if (msg.client.monitors.get(name)) delete require.cache[require.resolve(`../../monitors/${name}.js`)];
 
         try {
@@ -52,10 +52,11 @@ module.exports = class extends Command {
                 return { time: stopwatch.toString(), type: 'COMMAND', name };
             }
 
-            if (msg.client.languages.get(name)) {
-                newPiece = require(`../../languages/${name}.js`)
-                msg.client.languages.set(newPiece.name, newPiece);
-                return { time: stopwatch.toString(), type: 'LANGUAGE', name }
+            if (piece instanceof Language) {
+                newPiece = require(`../../languages/${instance}.js`);
+                newPiece = new newPiece(msg);
+                msg.client.languages.set(instance, newPiece);
+                return { time: stopwatch.toString(), type: 'LANGUAGE', instance }
             }
 
             if (msg.client.monitors.get(name)) {

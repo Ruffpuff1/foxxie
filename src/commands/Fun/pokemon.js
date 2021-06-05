@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { MessageEmbed } = require('discord.js');
-const { toUpperCaseFirst } = require('../../../lib/util/util');
+const util = require('../../../lib/util/util');
 const { zws } = require('../../../lib/util/constants');
 const Command = require('../../../lib/structures/Command');
 
@@ -28,7 +28,7 @@ module.exports = class extends Command {
         })
 
         const embed = new MessageEmbed()
-            .setTitle(`${res.data?.name.toUpperCaseFirst()} (ID: ${res.data?.id})`)
+            .setTitle(`${util.toTitleCase(res.data?.name)} (ID: ${res.data?.id})`)
             .setThumbnail(res.data?.sprites[`${shiny ? 'front_shiny' : 'front_default'}`])
             .setColor(msg.guild.me.displayColor)
             .addField(`:scroll: ${msg.language.get('COMMAND_POKEMON_FIELD_TYPE')}`, res.data?.types[0].type['name'], true)

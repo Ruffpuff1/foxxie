@@ -1,5 +1,5 @@
 const { randomBytes } = require('crypto');
-const { base32 } = require('../../../lib/util/util');
+const util = require('../../../lib/util/util');
 const { badges } = require('../../../lib/util/constants');
 const Command = require('../../../lib/structures/Command');
 
@@ -22,7 +22,7 @@ module.exports = class extends Command {
 
         const out = [];
         for (let i = 0; i < 3; i++) {
-            const str = base32(randomBytes(3).readUIntLE(0, 3));
+            const str = util.base32(randomBytes(3).readUIntLE(0, 3));
             out.push(str);
         }
 
