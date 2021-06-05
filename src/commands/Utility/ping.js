@@ -3,8 +3,8 @@ const Command = require('../../../lib/structures/Command');
 
 module.exports = class extends Command {
 
-    constructor(language) {
-        super(language, {
+    constructor(...args) {
+        super(...args, {
             name: 'ping',
             aliases: ['pong', 'latency', 'lagg', 'lag'],
             description: language => language.get('COMMAND_PING_DESCRIPTION'),
