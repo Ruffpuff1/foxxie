@@ -1,13 +1,8 @@
 const RoleplayCommand = require('../../../lib/structures/RoleplayCommand');
-module.exports = {
-    name: 'sleep',
-    aliases: ['sleepy', 'tired'],
-    usage: `fox sleep (user) (reason)`,
-    category: 'roleplay',
-    execute(props) {
 
-        let { message, args } = props
-        
-        return new RoleplayCommand(message).execute("sleep", args, true)
+module.exports = class extends RoleplayCommand {
+
+    constructor(...args) {
+        super('sleep', ['sleepy', 'tired'], true, ...args)
     }
 }
