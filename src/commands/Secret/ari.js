@@ -1,14 +1,26 @@
-const { emojis: { secretCommands: { ari } } } = require('../../../lib/util/constants')
-module.exports = {
-    name: 'ari',
-    aliases: ['aria'],
-    category: 'secret',
-    execute({ message }) {
+const Command = require('../../../lib/structures/Command');
+const { emojis: { secretCommands: { ari } } } = require('../../../lib/util/constants');
 
-        message.delete();
-        message.channel.send(ari)
+module.exports = class extends Command {
+
+    constructor(...args) {
+        super(...args, {
+            name: 'ari',
+            aliases: ['aria'],
+            description: language => language.get('COMMAND_ARI_DESCRIPTION'),
+            usage: 'fox ari',
+            category: 'secret'
+        })
+
+        this.emoji = ari;
+    }
+
+    run(msg) {
+        msg.delete();
+        return msg.channel.send(this.emoji)
     }
 }
+
 // Goodbye message 1
 
 /* 

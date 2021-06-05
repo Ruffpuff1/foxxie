@@ -1,20 +1,31 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
+const Command = require('../../../lib/structures/Command');
 const { justinName } = require('../../../lib/util/constants');
 
-module.exports = {
-    name: 'justin',
-    aliases: ['j', 'beaver'],
-    category: 'secret',
-    async execute({ message }) {
-        
-        message.delete();
+module.exports = class extends Command {
 
-        const embed = new Discord.MessageEmbed()
-            .setColor(message.guild.me.displayColor)
-            .setThumbnail('https://cdn.discordapp.com/avatars/282321212766552065/97dff710cef05a13142c623778f4b974.webp?size=512')
-            .setDescription(`**Here is the full name of <@282321212766552065>:**\n*${justinName}*`);
+    constructor(...args) {
+        super(...args, {
+            name: 'justin',
+            aliases: ['j', 'beaver'],
+            description: language => language.get('COMMAND_JUSTIN_DESCRIPTION'),
+            usage: 'fox justin',
+            category: 'secret'
+        })
+        this.justin = justinName;
+    }
 
-        const msg = await message.reply(embed);
-        msg.delete({ timeout: 300000 })
+    async run(msg) {
+
+        this.user = this.client.users.cache.get('282321212766552065');
+        msg.delete();
+
+        const embed = new MessageEmbed()
+            .setColor(msg.guild.me.displayColor)
+            .setThumbnail(this.user.displayAvatarURL({ dynamic: true}))
+            .setDescription(`**Here is the full name of ${this.user.toString()}**:\n*${this.justin}*`)
+
+        const message = await msg.channel.send(embed);
+        return message.delete({ timeout: 300000 });
     }
 }
