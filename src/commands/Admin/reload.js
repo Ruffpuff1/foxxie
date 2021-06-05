@@ -1,66 +1,71 @@
-const { performance } = require('perf_hooks');
-const fs = require('fs')
-module.exports = {
-    name: 'reload',
-    aliases: ['r'],
-    usage: 'fox reload [command|monitor|language]',
-    permissionLevel: 9,
-    category: 'developer',
-    async execute (props) {
+const Command = require('../../../lib/structures/Command');
+const Stopwatch = require('../../../lib/util/Stopwatch');
+const fs = require('fs');
+const { Message } = require('discord.js');
 
-        const { message, args } = props;
+module.exports = class extends Command {
 
-        const start = performance.now().toFixed(2);
-        if (!args.length) return message.responder.error('COMMAND_RELOAD_NOARGS');
-        const command = message.client.commands.get(args[0].toLowerCase());
-        const monitor = message.client.monitors.get(args[0].toLowerCase());
-        const lang2 = message.client.languages.get(args[0]);
+    constructor(...args) {
+        super(...args, {
+            name: 'reload',
+            aliases: ['r'],
+            description: language => language.get('COMMAND_RELOAD_DESCRIPTION'),
+            usage: 'fox reload [command|monitor|language]',
+            permissionLevel: 9,
+            category: 'admin',
+        })
+    }
 
-        if (command) return this._command(command, props, start);
-        if (monitor) return this._monitor(monitor, props, start);
-        if (lang2) return this._language(lang2, props, start);
-        return message.responder.error('COMMAND_RELOAD_NOEXIST', args[0]);
-    },
+    async run (message, [piece]) {
 
-    async _command(command, { message }, start) {
-        const commandFolders = fs.readdirSync('src/commands');
-        const folderName = commandFolders.find(folder => fs.readdirSync(`src/commands/${folder}`).includes(`${command.name}.js`));
-        delete require.cache[require.resolve(`../${folderName}/${command.name}.js`)];
+        if (!piece) return message.responder.error('COMMAND_RELOAD_NOARGS');
+        const instance = this.client.commands.get(piece) || this.client.monitors.get(piece) || this.client.languages.get(piece);
+        if (!instance) return;
+       
+        let value = await this._reload(message, instance);
+        if (value instanceof Message) return;
+        const { time, type, name } = value;
+        return message.responder.success(`COMMAND_RELOAD_${type.toUpperCase()}_SUCCESS`, name, time);
+    }
 
-        try {
-            const newCommand = require(`../${folderName}/${command.name}.js`);
-            message.client.commands.set(newCommand.name, newCommand);
-            const end = performance.now().toFixed(2);
-            message.responder.success('COMMAND_RELOAD_COMMAND_SUCCESS', command.name, (end*1000 - start*1000).toLocaleString());
-        } catch (e) {
-            console.error(e);
-            message.responder.error('COMMAND_RELOAD_COMMAND_ERROR', command.name, `${e.name} ${e.message}`);
+    async _reload(msg, piece) {
+
+        const stopwatch = new Stopwatch();
+        let folderName, newPiece, name = piece.name;
+
+        if (piece instanceof Command) {
+            const commandFolders = fs.readdirSync('src/commands');
+            folderName = commandFolders.find(folder => fs.readdirSync(`src/commands/${folder}`).includes(`${name}.js`));
+            delete require.cache[require.resolve(`../${folderName}/${name}.js`)];
+
+            newPiece = require(`../${folderName}/${name}.js`);
+            newPiece = new newPiece(msg.language);
         }
-    },
 
-    async _language(lang2, { message }, start) {
-        await delete require.cache[require.resolve(`../../languages/${lang2.name}.js`)];
-        try {
-        const reloaded = require(`../../languages/${lang2.name}`);
-        message.client.languages.set(lang2.name, reloaded);
-        const end = performance.now().toFixed(2);
-        message.responder.success('COMMAND_RELOAD_LANGUAGE_SUCCESS', lang2.name, (end*1000 - start*1000).toLocaleString());
-        } catch (e) {
-            console.error(e);
-            message.responder.error('COMMAND_RELOAD_LANGUAGE_ERROR', lang2.name, `${e.name} ${e.message}`);
-        }
-    },
+        if (msg.client.languages.get(name)) delete require.cache[require.resolve(`../../languages/${name}.js`)];
+        if (msg.client.monitors.get(name)) delete require.cache[require.resolve(`../../monitors/${name}.js`)];
 
-    async _monitor(monitor, { message }, start) {
-        await delete require.cache[require.resolve(`../../monitors/${monitor.name}.js`)];
         try {
-            const reloaded = require(`../../monitors/${monitor.name}`);
-            message.client.monitors.set(reloaded.name, reloaded);
-            const end = performance.now().toFixed(2);
-            message.responder.success('COMMAND_RELOAD_MONITOR_SUCCESS', monitor.name, (end*1000 - start*1000).toLocaleString());
+            
+            if (piece instanceof Command) {
+                msg.client.commands.set(newPiece.name, newPiece);
+                return { time: stopwatch.toString(), type: 'COMMAND', name };
+            }
+
+            if (msg.client.languages.get(name)) {
+                newPiece = require(`../../languages/${name}.js`)
+                msg.client.languages.set(newPiece.name, newPiece);
+                return { time: stopwatch.toString(), type: 'LANGUAGE', name }
+            }
+
+            if (msg.client.monitors.get(name)) {
+                newPiece = require(`../../monitors/${name}.js`)
+                msg.client.monitors.set(newPiece.name, newPiece);
+                return { time: stopwatch.toString(), type: 'MONITOR', name }
+            }
+
         } catch (e) {
-            console.error(e);
-            message.responder.error('COMMAND_RELOAD_MONITOR_ERROR', monitor.name, `${e.name} ${e.message}`);
+            return msg.responder.error('COMMAND_RELOAD_ERROR', name, `${e.name} ${e.message}`);
         }
     }
 }
