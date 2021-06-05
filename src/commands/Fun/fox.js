@@ -1,23 +1,31 @@
-const axios = require('axios') 
-const Discord = require('discord.js')
-module.exports = {
-    name: 'fox',
-    aliases: ['ruffy', 'foxy'],
-    usage: 'fox fox',
-    category: 'fun',
-    async execute ({ message, language }) {
+const axios = require('axios');
+const Discord = require('discord.js');
+const Command = require('../../../lib/structures/Command');
+module.exports = class extends Command {
 
-      let loading = await message.responder.loading();
-      const img = await axios.get(`https://randomfox.ca/floof/`);
+  constructor(...args) {
+      super(...args, {
+          name: 'fox',
+          aliases: ['ruffy', 'foxy'],
+          description: language => language.get('COMMAND_FOX_DESCRIPTION'),
+          usage: 'fox fox',
+          category: 'fun'
+      })
+  }
+
+  async run(msg) {
+
+      const loading = await msg.responder.loading();
+      const img = await axios.get(`https://randomfox.ca/floof/`).catch(() => null);
 
       const embed = new Discord.MessageEmbed()
-          .setTitle(language.get("COMMAND_FOX_TITLE"))
-          .setColor(message.guild.me.displayColor)
+          .setTitle(msg.language.get("COMMAND_FOX_TITLE"))
+          .setColor(msg.guild.me.displayColor)
           .setImage(img.data.image)
-          .setFooter(language.get("COMMAND_FOX_FOOTER"))
+          .setFooter(msg.language.get("COMMAND_FOX_FOOTER"))
           .setTimestamp()
 
-      message.channel.send(embed);
-      loading.delete();
-    }
+      msg.channel.send(embed);
+      return loading.delete();
+  }
 }

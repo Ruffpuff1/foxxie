@@ -1,23 +1,32 @@
-const axios = require('axios')
-const Discord = require('discord.js')
-module.exports = {
-    name: 'cat',
-    aliases: ['kitty', 'pussy'],
-    usage: 'fox cat',
-    category: 'fun',
-    async execute ({ message, language }) {
+const axios = require('axios');
+const { MessageEmbed } = require('discord.js');
+const Command = require('../../../lib/structures/Command');
 
-        let loading = await message.responder.loading();
+module.exports = class extends Command {
+
+    constructor(...args) {
+        super(...args, {
+            name: 'cat',
+            aliases: ['kitty', 'pussy'],
+            description: language => language.get('COMMAND_CAT_DESCRIPTION'),
+            usage: 'fox cat',
+            category: 'fun'
+        })
+    }
+
+    async run(msg) {
+
+        const loading = await msg.responder.loading();
         const img = await axios.get(`https://api.thecatapi.com/v1/images/search`).catch(() => null);
 
-        const embed = new Discord.MessageEmbed()
-            .setTitle(language.get("COMMAND_CAT_TITLE"))
-            .setColor(message.guild.me.displayColor)
+        const embed = new MessageEmbed()
+            .setTitle(msg.language.get("COMMAND_CAT_TITLE"))
+            .setColor(msg.guild.me.displayColor)
             .setImage(img.data[0].url)
-            .setFooter(language.get("COMMAND_CAT_FOOTER"))
+            .setFooter(msg.language.get("COMMAND_CAT_FOOTER"))
             .setTimestamp()
 
-        message.channel.send(embed);
-        loading.delete();
+        msg.channel.send(embed);
+        return loading.delete();
     }
 }

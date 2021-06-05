@@ -1,19 +1,27 @@
 const axios = require('axios');
-module.exports = {
-    name: 'foxfact',
-    aliases: ['ff', 'fxfact'],
-    usage: 'fox foxfact',
-    category: 'fun',
-    execute: async({ message }) => {
+const Command = require('../../../lib/structures/Command');
 
-        let loading = await message.responder.loading();
+module.exports = class extends Command {
+    
+    constructor(...args) {
+        super(...args, {
+            name: 'foxfact',
+            aliases: ['ff', 'rufffact'],
+            usage: 'fox foxfact',
+            category: 'fun'
+        })
+    }
+
+    async run(msg) {
+
+        const loading = await msg.responder.loading();
         const txt = await axios.get('https://some-random-api.ml/facts/fox').catch(() => null);
-        
+
         if (!txt) {
-            message.responder.error('COMMAND_FOXFACT_NOFACT');
+            msg.responder.error('COMMAND_FOXFACT_NOFACT');
             return loading.delete();
         }
-        message.channel.send(txt.data.fact);
-        loading.delete();
+        msg.channel.send(txt.data.fact);
+        return loading.delete();
     }
 }
