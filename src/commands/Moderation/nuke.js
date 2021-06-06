@@ -12,7 +12,7 @@ module.exports = {
         const filter = m => message.author.id === m.author.id;
 
         const messages = await message.channel.awaitMessages(filter, { time: 30000, max: 1, errors: ['time'] } );
-        if (messages.first().content.toLowerCase() !== `yes, nuke ${message.channel.name}`) return msg.edit(language.get('MESSAGE_CANCELLED'));
+        if (messages.first().content.toLowerCase() !== `yes, nuke ${message.channel.name}`) return msg.edit(language.get('MESSAGE_PROMPT_CANCELLED'));
 
         await msg.delete()
         const chn = await message.channel.clone();

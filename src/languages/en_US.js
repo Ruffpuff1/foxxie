@@ -1,6 +1,8 @@
 const Language = require('../../lib/Language');
-const { bold, code, underline, italic } = require('discord-md-tags');
+const { util } = require('foxxie');
 const { supportServer } = require('../../config/foxxie');
+const { bold, code, underline, italic } = require('discord-md-tags');
+const { emojis: { infinity } } = require('../../lib/util/constants');
 
 module.exports = class extends Language {
 
@@ -8,7 +10,7 @@ module.exports = class extends Language {
         super(...args);
         this.language = {
 
-            DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
+            DEFAULT: (key) => `${key} has not been localized for en_US yet.`,
 			DEFAULT_LANGUAGE: 'Default Language',
             PREFIX_REMINDER: (prefixes, prefix) => [
                 `${bold`Heya!`} My prefixes for this guild are ${prefixes} and **${bold`${prefix}`}**.`,
@@ -21,11 +23,15 @@ module.exports = class extends Language {
 			ACTIVITY_LISTENING: 'Listening to',
 			ACTIVITY_STREAMING: 'Streaming',
 
+            MESSAGE_LOADING: `${infinity} ${bold`Alright, I'm taking your order.**`} This may take a few seconds.`,
+            MESSAGE_PROMPT_CANCELLED: `Command ${bold`cancelled`}.`,
 			MESSAGE_PROMPT_TIMEOUT: `${bold`Sorry,`} the prompt has timed out.`,
 			MESSAGE_PROMPT_ABORT_OPTIONS: ['abort', 'stop', 'cancel'],
 
             // Admin Commands
             COMMAND_CREATEKEY_DESCRIPTION: `Creates a key that a user can redeem for a badge on their Info card using the ${code`redeem`} command.`,
+            COMMAND_CREATEKEY_NOID: `${bold`Hey,`} you didn't provide a proper Id.`,
+            COMMAND_CREATEKEY_SUCCESS: (icon, name, key) => `${bold`Success!`} here is a key for ${icon} ${name}: ${code`${key}`}.`,
             COMMAND_EVAL_DESCRIPTION: [
                 `Allows you evaluate JavaScript code straight from Discord. This command is locked to the bot owner due to the power it has.\n`,
                 `The eval command evaluates code as-in, any error thrown from it will be handled.`,
@@ -39,7 +45,13 @@ module.exports = class extends Language {
             COMMAND_EVAL_ERROR: (time, output, type) => `**Error**:${output}\n**Type**:${type}\n${time}`,
 			COMMAND_EVAL_OUTPUT: (time, output, type) => `**Output**:${output}\n**Type**:${type}\n${time}`,
             COMMAND_RELOAD_DESCRIPTION: `Reloads a Foxxie Piece without having to restart the client.`,
+            COMMAND_RELOAD_ERROR: (name, error) => `${bold`Uh oh,`} failed to reload ${name}${util.codeBlock('js', error)}`,
+            COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a piece to reload [Command | Monitor | Language ].`,
+            COMMAND_RELOAD_SUCCESS: (name, type, time) => `${bold`Successfully`} reloaded ${type}: ${bold`${name}`}. (Took ${time})`,
             COMMAND_SERVERLIST_DESCRIPTION: `Displays every guild the bot is currently in, along with their Id and membercount.`,
+            COMMAND_SERVERLIST_FOOTER: (size, page, totalPages) => `${size} total servers\nPage - ${page}/${totalPages}`,
+            COMMAND_SERVERLIST_MEMBERCOUNT: `members`,
+            COMMAND_SERVERLIST_TITLE: `Servers using Foxxie`,
 
             // Fun Commands
             COMMAND_CAT_DESCRIPTION: `Sends me to get you a random picture of a cat from https://api.thecatapi.com`,
@@ -54,8 +66,8 @@ module.exports = class extends Language {
             COMMAND_BAN_DESCRIPTION: [
                 `Bans users from the server so they can no longer join.`,
                 `Formatting time like ${code`1d`} for one day, you can temporarily ban users and have them automatically be unbanned after a specified time period.`,
-                `This command also takes advantage of my message flags feature, adding ${code`-p`} to the message with automatically clear one days worth of the user's messages.\n`,
-                `If a moderation logging channel is set in your server, this command will log there, and send a DMs to the users banned, with the provided reason.`
+                `This command also takes advantage of my message flags feature, adding ${code`-p`} to the message will automatically clear one days worth of the user's messages.\n`,
+                `If a moderation logging channel is set in your server, this command will log there, and send DMs to the users banned, with the provided reason.`
             ].join('\n'),
             COMMAND_WARN_DESCRIPTION: `Adds warnings to members that will show on their ${code`info`} profile.\nIf a moderation logging channel is set in your server, this command will log there, and send DMs to the members warned, with the provided reason.`,
 
@@ -92,6 +104,7 @@ module.exports = class extends Language {
             COMMAND_ASH_DESCRIPTION: ``,
             COMMAND_DEI_DESCRIPTION: ``,
             COMMAND_JUSTIN_DESCRIPTION: ``,
+            COMMAND_JUSTIN_NAME: (user, name) => `${bold`Here is the full name of`} ${user}:\n${italic`${name}`}`,
             COMMAND_RAIN_DESCRIPTION: ``,
             COMMAND_REESE_DESCRIPTION: ``,
             COMMAND_RUFF_DESCRIPTION: ``,

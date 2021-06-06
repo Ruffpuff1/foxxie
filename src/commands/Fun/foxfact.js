@@ -1,5 +1,5 @@
 const axios = require('axios');
-const Command = require('../../../lib/structures/Command');
+const { Command } = require('foxxie');
 
 module.exports = class extends Command {
     

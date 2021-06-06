@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const Command = require('../../../lib/structures/Command');
+const { Command } = require('foxxie');
 
 module.exports = class extends Command {
 
@@ -28,8 +28,8 @@ module.exports = class extends Command {
 
         let embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
-            .setTitle(message.language.get('COMMAND_SERVERLIST_EMBED_TITLE'))
-            .setFooter(message.language.get('COMMAND_SERVERLIST_EMBED_FOOTER', this.client.guilds.cache.size, page, Math.ceil(this.client.guilds.cache.size / 10)))
+            .setTitle(message.language.get('COMMAND_SERVERLIST_TITLE'))
+            .setFooter(message.language.get('COMMAND_SERVERLIST_FOOTER', this.client.guilds.cache.size, page, Math.ceil(this.client.guilds.cache.size / 10)))
             .setDescription(description)
 
         if (!this.client.guilds.cache.size <= 10) return message.channel.send(embed);
@@ -63,7 +63,7 @@ module.exports = class extends Command {
                     .join("\n");
 
                 embed 
-                    .setFooter(msg.language.get('COMMAND_SERVERLIST_EMBED_FOOTER', this.client.guilds.cache.size, page, Math.ceil(this.client.guilds.cache.size / 10)))
+                    .setFooter(msg.language.get('COMMAND_SERVERLIST_FOOTER', this.client.guilds.cache.size, page, Math.ceil(this.client.guilds.cache.size / 10)))
                     .setDescription(description)
 
                 msg.edit(embed);
@@ -86,7 +86,7 @@ module.exports = class extends Command {
                     .join("\n");
 
                 embed
-                    .setFooter(msg.language.get('COMMAND_SERVERLIST_EMBED_FOOTER', this.client.guilds.cache.size, page, Math.ceil(this.client.guilds.cache.size / 10)))
+                    .setFooter(msg.language.get('COMMAND_SERVERLIST_FOOTER', this.client.guilds.cache.size, page, Math.ceil(this.client.guilds.cache.size / 10)))
                     .setDescription(description);
 
                 msg.edit(embed);

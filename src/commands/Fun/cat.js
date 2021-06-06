@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { MessageEmbed } = require('discord.js');
-const Command = require('../../../lib/structures/Command');
+const { Command } = require('foxxie');
 
 module.exports = class extends Command {
 

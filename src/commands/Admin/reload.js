@@ -1,5 +1,5 @@
-const Command = require('../../../lib/structures/Command'), Language = require('../../../lib/Language');
-const Stopwatch = require('../../../lib/util/Stopwatch');
+const Language = require('../../../lib/Language');
+const { Command, Stopwatch } = require('foxxie');
 const fs = require('fs');
 const { Message } = require('discord.js');
 
@@ -18,14 +18,14 @@ module.exports = class extends Command {
 
     async run (message, [piece]) {
 
-        if (!piece) return message.responder.error('COMMAND_RELOAD_NOARGS');
+        if (!piece) return message.responder.error('COMMAND_RELOAD_NONE');
         const instance = this.client.commands.get(piece) || this.client.monitors.get(piece) || this.client.languages.get(piece);
         if (!instance) return;
        
         let value = await this._reload(message, instance, piece);
         if (value instanceof Message) return;
         const { time, type, name } = value;
-        return message.responder.success(`COMMAND_RELOAD_${type.toUpperCase()}_SUCCESS`, name, time);
+        return message.responder.success(`COMMAND_RELOAD_SUCCESS`, name, type.toLowerCase(), time);
     }
 
     async _reload(msg, piece, instance) {
@@ -49,20 +49,20 @@ module.exports = class extends Command {
             
             if (piece instanceof Command) {
                 msg.client.commands.set(newPiece.name, newPiece);
-                return { time: stopwatch.toString(), type: 'COMMAND', name };
+                return { time: stopwatch.toString(), type: 'COMMAND', name: newPiece.name };
             }
 
             if (piece instanceof Language) {
                 newPiece = require(`../../languages/${instance}.js`);
                 newPiece = new newPiece(msg);
                 msg.client.languages.set(instance, newPiece);
-                return { time: stopwatch.toString(), type: 'LANGUAGE', instance }
+                return { time: stopwatch.toString(), type: 'LANGUAGE', name: instance }
             }
 
             if (msg.client.monitors.get(name)) {
                 newPiece = require(`../../monitors/${name}.js`)
                 msg.client.monitors.set(newPiece.name, newPiece);
-                return { time: stopwatch.toString(), type: 'MONITOR', name }
+                return { time: stopwatch.toString(), type: 'MONITOR', name: newPiece.name }
             }
 
         } catch (e) {

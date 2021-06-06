@@ -1,4 +1,4 @@
-const Command = require('../../../lib/structures/Command');
+const { Command } = require('foxxie');
 const { emojis: { secretCommands: { ari } } } = require('../../../lib/util/constants');
 
 module.exports = class extends Command {

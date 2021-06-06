@@ -1,5 +1,5 @@
-const ms = require('ms');
 const Command = require('../../../lib/structures/MultiModerationCommand');
+const ms = require('ms');
 
 module.exports = class extends Command {
 

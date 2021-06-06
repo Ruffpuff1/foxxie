@@ -1,7 +1,6 @@
 const { randomBytes } = require('crypto');
-const util = require('../../../lib/util/util');
 const { badges } = require('../../../lib/util/constants');
-const Command = require('../../../lib/structures/Command');
+const { Command, util } = require('foxxie');
 
 module.exports = class extends Command {
 
@@ -17,7 +16,7 @@ module.exports = class extends Command {
     }
 
     async run(message, [id]) {
-
+        
         if (!/^(0|1|2)$/gm.test(id)) return message.responder.error('COMMAND_CREATEKEY_NOID', badges);
 
         const out = [];
@@ -26,7 +25,7 @@ module.exports = class extends Command {
             out.push(str);
         }
 
-        message.author.send(message.language.get('COMMAND_CREATEKEY_SUCCESS', badges, id, out));
+        message.author.send(message.language.get('COMMAND_CREATEKEY_SUCCESS', badges[id].icon, badges[id].name, out.join('-')));
         this.client.settings.push(`keys`, { id, key: out.join('') });
         message.responder.success();
     }

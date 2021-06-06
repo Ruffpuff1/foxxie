@@ -1,7 +1,4 @@
-const Stopwatch = require('../../../lib/util/Stopwatch'), 
-Type = require('../../../lib/util/Type'),
-util = require('../../../lib/util/util');
-const Command = require('../../../lib/structures/Command');
+const { Command, util, Type, Stopwatch } = require('foxxie');
 const { inspect } = require('util');
 
 module.exports = class extends Command {

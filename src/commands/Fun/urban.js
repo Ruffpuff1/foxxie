@@ -1,7 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
-const util = require('../../../lib/util/util');
-const Command = require('../../../lib/structures/Command');
+const { Command, util } = require('foxxie');
 
 module.exports = class extends Command {
 

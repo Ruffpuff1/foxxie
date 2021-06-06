@@ -1,4 +1,4 @@
-const Command = require('../../../lib/structures/Command'), util = require('../../../lib/util/util');
+const { Command, util } = require('foxxie');
 const { emojis } = require('../../../lib/util/constants');
 const { MessageEmbed } = require('discord.js');
 const { code, bold } = require('discord-md-tags');
