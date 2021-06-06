@@ -8,7 +8,7 @@ module.exports = {
     version,
     owners: ['486396074282450946', '749845359689465977'],
     commands: '100',
-    aliases: '206',
+    aliases: '207',
     communityServer: 'http://ruff.cafe/community',
     supportServer: 'http://foxxie.ruff.cafe/support',
     inviteURL: 'http://foxxie.ruff.cafe/invite',

@@ -8,7 +8,6 @@ module.exports = class extends Command {
             name: 'topic',
             aliases: ['conversationstarter', 'conversationstarters', 'topics'],
             description: language => language.get('COMMAND_TOPIC_DESCRIPTION'),
-            usage: `fox topic`,
             category: 'fun',
         })
     }

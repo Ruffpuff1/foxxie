@@ -10,7 +10,7 @@ module.exports = class extends Command {
             name: 'reload',
             aliases: ['r'],
             description: language => language.get('COMMAND_RELOAD_DESCRIPTION'),
-            usage: 'fox reload [command|monitor|language]',
+            usage: '[Command | Monitor | Language]',
             permissionLevel: 9,
             category: 'admin',
         })

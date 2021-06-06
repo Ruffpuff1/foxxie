@@ -11,7 +11,7 @@ module.exports = class extends Command {
             name: 'pokemon',
             aliases: ['pkm', 'poke'],
             description: language => language.get('COMMAND_POKEMON_DESCRIPTION'),
-            usage: 'fox pokemon [pokemon] (-shiny)',
+            usage: '[Pokemon] (-s)',
             category: 'fun' 
         })
     }

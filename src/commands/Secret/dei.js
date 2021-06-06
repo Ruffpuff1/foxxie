@@ -8,15 +8,12 @@ module.exports = class extends Command {
             name: 'dei',
             aliases: ['connor'],
             description: language => language.get('COMMAND_DEI_DESCRIPTION'),
-            usage: 'fox dei',
             category: 'secret'
         })
-
-        this.emoji = dei;
     }
 
     run(msg) {
         msg.delete();
-        return msg.channel.send(this.emoji)
+        return msg.channel.send(dei)
     }
 }

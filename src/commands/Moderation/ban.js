@@ -8,7 +8,7 @@ module.exports = class extends Command {
             name: 'ban',
             aliases: ['b', 'bean', '410', 'yeet', 'banish', 'begone', 'perish'],
             description: language => language.get('COMMAND_BAN_DESCRIPTION'),
-            usage: 'fox ban [users] (reason) (-p|-purge)',
+            usage: '(Time) [Users] (Reason) (-p)',
             permissions: 'BAN_MEMBERS',
             category: 'moderation'
         });

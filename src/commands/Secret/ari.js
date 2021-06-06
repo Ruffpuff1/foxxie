@@ -8,16 +8,13 @@ module.exports = class extends Command {
             name: 'ari',
             aliases: ['aria'],
             description: language => language.get('COMMAND_ARI_DESCRIPTION'),
-            usage: 'fox ari',
             category: 'secret'
         })
-
-        this.emoji = ari;
     }
 
     run(msg) {
         msg.delete();
-        return msg.channel.send(this.emoji)
+        return msg.channel.send(ari)
     }
 }
 

@@ -9,7 +9,6 @@ module.exports = class extends Command {
             name: 'cat',
             aliases: ['kitty', 'pussy'],
             description: language => language.get('COMMAND_CAT_DESCRIPTION'),
-            usage: 'fox cat',
             category: 'fun'
         })
     }

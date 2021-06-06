@@ -10,7 +10,7 @@ module.exports = class extends Command {
             name: 'createkey',
             aliases: ['crk'],
             description: language => language.get('COMMAND_CREATEKEY_DESCRIPTION'),
-            usage: 'fox createkey [id]',
+            usage: '[Id]',
             permissionLevel: 9,
             category: 'admin',
         })

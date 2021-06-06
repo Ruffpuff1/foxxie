@@ -7,7 +7,7 @@ module.exports = class extends Command {
             name: 'warn',
             aliases: ['w'],
             description: language => language.get('COMMAND_WARN_DESCRIPTION'),
-            usage: 'fox warn [users] (reason)',
+            usage: '[Members] (Reason)',
             permissions: 'MANAGE_MESSAGES',
             category: 'moderation'
         })

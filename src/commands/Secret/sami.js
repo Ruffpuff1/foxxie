@@ -6,17 +6,14 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             name: 'sami',
-            aliases: ['sug4r', 'samira'],
+            aliases: ['sug4r', 'samira', 'smallgar'],
             description: language => language.get('COMMAND_SAMI_DESCRIPTION'),
-            usage: 'fox sami',
             category: 'secret'
         })
-
-        this.emoji = sami;
     }
 
     run(msg) {
         msg.delete();
-        return msg.channel.send(this.emoji)
+        return msg.channel.send(sami);
     }
 }

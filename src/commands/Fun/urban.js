@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
-const { toUpperCaseFirst } = require('../../../lib/util/util');
+const util = require('../../../lib/util/util');
 const Command = require('../../../lib/structures/Command');
 
 module.exports = class extends Command {
@@ -10,7 +10,7 @@ module.exports = class extends Command {
             name: "urban",
             aliases: ['ud', 'slang'],
             description: language => language.get('COMMAND_URBAN_DESCRIPTION'),
-            usage: 'fox urban [term]',
+            usage: '[Term]',
             category: 'fun',
         })
     }
@@ -31,7 +31,7 @@ module.exports = class extends Command {
         result.data.list[3] ? str = result.data.list[3]['definition'] : str = msg.language.get('COMMAND_URBAN_NOEXAMPLE');
 
         const embed = new MessageEmbed()
-            .setTitle(term.toUpperCaseFirst())
+            .setTitle(util.toTitleCase(term))
             .setURL(result.data.list[3].permalink)
             .setColor(msg.guild.me.displayColor)
             .setThumbnail(`https://i.imgur.com/qNTzb3k.png`)

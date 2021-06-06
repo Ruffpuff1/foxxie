@@ -1,76 +1,98 @@
-const Discord = require('discord.js');
-module.exports = {
-    name: 'help',
-    aliases: ['commands', 'h'],
-    category: 'utility',
-    usage: 'help (command|category) (-c|-channel)',
-    async execute(props) {
+const Command = require('../../../lib/structures/Command'), util = require('../../../lib/util/util');
+const { emojis } = require('../../../lib/util/constants');
+const { MessageEmbed } = require('discord.js');
+const { code, bold } = require('discord-md-tags');
 
-        let { message, args, language } = props;
-        const channelFlag = /\-channel\s*|-c\s*/gi
-        const { commands } = message.client;
-        const blockedCmds = await message.client.settings.get('blockedCommands');
-        let cmdArr = commands.filter(c => c.permissionLevel !== 9).filter(c => c.category !== 'admin').filter(c => !c.category !== 'secret').filter(c => !blockedCmds.includes(c.name)).array();
+module.exports = class extends Command {
 
-        const embed = new Discord.MessageEmbed()
-            .setColor(message.guild.me.displayColor)
-        
-            let funCmds = [];
-            let modCmds = [];
-            let rpCmds = [];
-            let setCmds = [];
-            let utilCmds = [];
+    constructor(...args) {
+        super(...args, {
+            name: 'help',
+            aliases: ['commands', 'h'],
+            description: language => language.get('COMMAND_HELP_DESCRIPTION'),
+            usage: 'fox help (command | usage)',
+            category: 'utility',
+        })
+    }
 
-            for (let c of cmdArr) {
-                let fun = c.category === "fun"; if (fun) funCmds.push(c.name);
-                let mod = c.category === "moderation"; if (mod) modCmds.push(c.name);
-                let rp = c.category === "roleplay"; if (rp) rpCmds.push(c.name);
-                let set = c.category === "settings"; if (set) setCmds.push(c.name);
-                let util = c.category === "utility"; if (util) utilCmds.push(c.name);
-            };
+    async run(msg, [command]) {
 
-        bigMenu = () => {
+        let fullMenu = false;
+        if (/(-developer|-dev|-d)/i.test(msg.content) && this.client.owners.has(msg.author)) fullMenu = true;
+        command = command?.replace(/(-developer|-dev|-d)/i, '');
+        const prefixes = await msg.guild.settings.get('prefixes');
 
-            embed
-                .setTitle(language.get('COMMAND_HELP_EMBED_TITLE'))
-                .setThumbnail(message.client.user.avatarURL({dynamic: true}))
-                .setDescription(language.get('COMMAND_HELP_EMBED_DESCRIPTION'))
-                .addField(language.get('COMMAND_HELP_EMBED_FUN', funCmds.length), funCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_EMBED_MODERATION', modCmds.length), modCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_EMBED_ROLEPLAY', rpCmds.length), rpCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_EMBED_SETTINGS', setCmds.length), setCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_EMBED_UTILITY', utilCmds.length), utilCmds.map(a => `\`${a}\``).join(", "), false)
-                .addField(language.get('COMMAND_HELP_LINKS_TITLE'), language.get('COMMAND_HELP_LINKS_DESCRIPTION'))
+        const embed = new MessageEmbed()
+            .setColor(msg.guild ? msg.guild.me.displayColor : '')
 
-            if (channelFlag.test(message.content)) return message.channel.send(embed)
-            message.responder.success();
-            return message.author.send(embed)
-            .catch(() => message.channel.send(embed))
-        }
-
-        commandMenu = () => {
-
-            const name = args[0].toLowerCase();
-            const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
-            if (!command) return message.responder.error('COMMAND_HELP_COMMAND_NOTVALID');
-
-            if (command) {
-        
-                embed
-                    .setTitle(command.name)
-                    .setDescription(`${language.get(`COMMAND_${command.name.toUpperCase()}_DESCRIPTION`)}\n
-${command.permissions? language.get('COMMAND_HELP_PERMISSIONS', command.permissions) :''}`)
-                    .addField(language.get('COMMAND_HELP_USAGE'), `\`${command.usage}\``);
-
-                if (command.aliases) embed.setTitle(`${command.name} (${command.aliases.join(', ')})`)
-                if (channelFlag.test(message.content)) return message.channel.send(embed)
-
-                message.responder.success();
-                return message.author.send(embed)
-                .catch(() => message.channel.send(embed))
+        if (command) {
+            if (command === 'usage') {
+                return msg.channel.send(embed
+                    .setThumbnail(this.client.user.displayAvatarURL({ dynamic: true }))
+                    .setDescription(msg.language.get('COMMAND_HELP_EXPLAINER', prefixes?.length 
+                        ? prefixes[0]
+                        : this.client.user.id === '812546582531801118'
+                            ? 'fox '
+                            : 'dev '))    
+                );
             }
+
+            command = this.client.commands.get(command);
+            if (command?.category === 'admin' && !this.client.owners.has(msg.author)) command = null;
+            if (!command) return msg.responder.error('COMMAND_HELP_NOTVALID');
+
+            return msg.channel.send(embed
+                .setTitle(`${command.name} ${command.aliases?.length ? `(${command.aliases?.join(', ')})` : ''}`)
+                .setDescription(`${util.isFunction(command.description)
+                        ? command.description(msg.language)
+                        : command.description
+                    }${command.permissions
+                        ? `\n\n${bold`${msg.language.get('COMMAND_HELP_PERMISSIONS')}`}: ${code`${command.permissions}`}`
+                        : ''
+                    }`)
+                .addField(bold`${msg.language.get('COMMAND_HELP_USAGE')}${command.runIn?.includes('dm') ? '' : ` (${msg.language.get('COMMAND_HELP_SERVERONLY')})`}`, this.buildUsage(command, await msg.guild.settings.get('prefixes')))
+                .addField(bold`${msg.language.get('COMMAND_HELP_CATEGORY')}`, code`${command.category}.${command.name}`)
+                
+            );
         }
-        if (!args.length || channelFlag.test(args[0])) return bigMenu();
-        commandMenu();
+
+        let categories = this.buildHelp();
+
+        embed
+            .setTitle(msg.language.get('COMMAND_HELP_TITLE', this.client.user.username))
+            .setThumbnail(this.client.user.displayAvatarURL({ dynamic: true }))
+            .setDescription(msg.language.get('COMMAND_HELP_MENU', prefixes?.length
+                    ? prefixes[0]
+                    : this.client.user.id === '812546582531801118'
+                        ? 'fox '
+                        : 'dev '));
+            
+        if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret');
+
+        categories.forEach(c => 
+            embed.addField(`${emojis.categories[c]} ${bold`${util.toTitleCase(c)} (${this.client.commands.filter(cmd => cmd.category === c).size})`}`, 
+                this.client.commands.filter(cmd => cmd.category === c).map(cmd => code`${cmd.name}`).join(', ')))
+
+        return msg.channel.send(embed);
+    }
+
+    buildHelp() {
+
+        const categories = [];
+
+        this.client.commands
+            .forEach(cmd => categories.push(cmd.category));
+
+        return [...new Set(categories)];
+    }
+
+    buildUsage(command, prefix) {
+        const usage = command.usage;
+        return `${prefix?.length
+                ? prefix[0] 
+                : this.client.user.id === '812546582531801118'
+                    ? 'fox '
+                    : 'dev '
+            }${command.name} ${usage ? usage : ''}`
     }
 }

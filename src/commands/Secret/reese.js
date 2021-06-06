@@ -7,15 +7,12 @@ module.exports = class extends Command {
         super(...args, {
             name: 'reese',
             description: language => language.get('COMMAND_REESE_DESCRIPTION'),
-            usage: 'fox reese',
             category: 'secret'
         })
-
-        this.emoji = reese;
     }
 
     run(msg) {
         msg.delete();
-        return msg.channel.send(this.emoji[Math.floor(Math.random() * this.emoji.length)])
+        return msg.channel.send(reese[Math.floor(Math.random() * reese.length)]);
     }
 }

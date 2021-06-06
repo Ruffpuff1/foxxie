@@ -7,7 +7,6 @@ module.exports = class extends Command {
         super(...args, {
             name: 'foxfact',
             aliases: ['ff', 'rufffact'],
-            usage: 'fox foxfact',
             category: 'fun'
         })
     }

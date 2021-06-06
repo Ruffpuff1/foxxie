@@ -8,7 +8,6 @@ module.exports = class extends Command {
             name: 'ping',
             aliases: ['pong', 'latency', 'lagg', 'lag'],
             description: language => language.get('COMMAND_PING_DESCRIPTION'),
-            usage: 'fox ping',
             category: 'utility',
         })
     }
