@@ -15,8 +15,8 @@ module.exports = class extends Command {
 
     async run(msg, args) {
 
-        const members = msg.args.members() || msg.args.memberIds();
-        if (!members) return msg.responder.error('MESSAGE_MEMBERS_NONE');
+        const members = msg.members;
+        if (!members?.length || !members[0]) return msg.responder.error('MESSAGE_MEMBERS_NONE');
         const warnable = await this.getModeratable(msg.member, members, true);
         if (!warnable.length) return msg.responder.error('COMMAND_MUTE_NOPERMS', members.length > 1);
 

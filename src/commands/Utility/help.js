@@ -1,7 +1,6 @@
-const { Command, util } = require('foxxie');
+const { Command, util, code, bold } = require('foxxie');
 const { emojis } = require('../../../lib/util/constants');
 const { MessageEmbed } = require('discord.js');
-const { code, bold } = require('discord-md-tags');
 
 module.exports = class extends Command {
 

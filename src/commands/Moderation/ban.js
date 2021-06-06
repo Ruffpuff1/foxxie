@@ -1,5 +1,5 @@
 const Command = require('../../../lib/structures/MultiModerationCommand');
-const ms = require('ms');
+const { ms } = require('foxxie');
 
 module.exports = class extends Command {
 
@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
     async run(msg, args) {
 
-        const users = msg.args.users();
+        const users = msg.users;
         if (!users) return msg.responder.error('MESSAGE_USERS_NONE');
         const bannable = await this.getModeratable(msg.member, users);
         if (!bannable.length) return msg.responder.error('COMMAND_BAN_NOPERMS', users.length > 1);
@@ -29,8 +29,8 @@ module.exports = class extends Command {
         const time = duration ? Date.now() + ms(args[0]) : null;
 
         let reason = this.duration.test(args[0])
-            ? args.slice(users.length + 1).join(' ')
-            : args.slice(users.length).join(' ');
+            ? args.slice(users.length + 2).join(' ')
+            : args.slice(users.length + 1).join(' ');
 
         const action = time ? 'tempban' : 'ban';
         if (!reason) reason = msg.language.get('LOG_MODERATION_NOREASON');
@@ -51,13 +51,12 @@ module.exports = class extends Command {
 
             const bans = await this.client.schedule.fetch('bans');
             const hasban = bans?.some(b => b.userId === user.id);
-            console.log(time)
             if (duration || hasban) this.scheduleBans(msg, user, time, reason, duration, bans);
         }
     }
 
     async scheduleBans(msg, user, time, reason, duration, bans) {
-        console.log(time)
+
         if (bans?.length) await bans.filter(b => b.userId === user.id).filter(b => b.guildId === msg.guild.id).forEach(b => this.client.schedule.delete('bans', b));
         this.client.schedule.create('bans',
             { guildId: msg.guild.id, authId: msg.author.id, time, reason, channelId: msg.channel.id, userId: user.id, duration }

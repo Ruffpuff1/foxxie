@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const Language = require('../../lib/Language');
+const Language = require('foxxie');
 
 module.exports = {
     name: 'reminder',

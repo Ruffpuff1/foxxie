@@ -1,6 +1,5 @@
 const { emojis: { infinity, perms: { notSpecified, granted, denied }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } } } = require('../../lib/util/constants');
-const { topggURL, supportServer, inviteURL } = require('../../config/foxxie')
-const { toUpperCaseFirst } = require('../../lib/util/util');
+const { topggURL, supportServer, inviteURL } = require('../../config/foxxie');
 
 module.exports = {
 

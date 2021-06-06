@@ -1,4 +1,4 @@
-const ms = require('ms');
+const { ms } = require('foxxie');
 const MultiModerationCommand = require('../../../lib/structures/MultiModerationCommand');
 
 module.exports = {

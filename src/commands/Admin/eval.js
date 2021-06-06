@@ -64,7 +64,7 @@ module.exports = class extends Command {
                 depth: depth
             })
         }
-        return { success, type, time: this.formatTime(syncTime, asyncTime), result: util.clean(result) };
+        return { success, type, time: this.formatTime(syncTime, asyncTime), result };
     }
 
     formatTime(syncTime, asyncTime) {

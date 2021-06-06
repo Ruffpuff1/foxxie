@@ -1,4 +1,4 @@
-const { bold } = require('discord-md-tags');
+const { bold } = require('foxxie');
 const { prefix: { production, development } } = require('../../config/foxxie');
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
         if (message.content === `<@!${message.client.user.id}>` || message.content === `<@${message.client.user.id}>`) {
             prefixes.shift();
             prefixes.shift();
-            message.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => bold`${p}`).join(", "), prefixes.pop());
+            message.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => `${bold`${p}`}`).join(", "), prefixes.pop());
         }
 
         let uprefixes = [...new Set(prefixes)];

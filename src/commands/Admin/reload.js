@@ -1,5 +1,4 @@
-const Language = require('../../../lib/Language');
-const { Command, Stopwatch } = require('foxxie');
+const { Command, Stopwatch, Language } = require('foxxie');
 const fs = require('fs');
 const { Message } = require('discord.js');
 
