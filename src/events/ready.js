@@ -6,7 +6,7 @@ module.exports = {
 	once: true,
 	execute: async (client) => {
 		// logs "ready", runs connection to mongoDB
-		console.log(`[${client.user.username}] Ready! Logged in with ${client.commands.size} commands.`);
+		console.log(`[${client.user.username}] Ready! Logged in with ${client.commands.size} commands and ${client.aliases.size} aliases.`);
         mongoDB();
         // Botwide
         client.tasks.get('reminder').execute(client);
@@ -22,7 +22,7 @@ module.exports = {
             `v${version} | fox help`,
             `with ${commands} Commands & ${aliases} Aliases`,
             `v${version} | fox support`,
-            `Happy pride month!`];
+            `🏳️‍🌈  Happy pride month!`];
         
         client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]);
         setInterval(() => client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]), 30000);

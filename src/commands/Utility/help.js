@@ -1,4 +1,4 @@
-const { Command, util, code, bold } = require('foxxie');
+const { Command, Util, code, bold } = require('foxxie');
 const { emojis } = require('../../../lib/util/constants');
 const { MessageEmbed } = require('discord.js');
 
@@ -42,7 +42,7 @@ module.exports = class extends Command {
 
             return msg.channel.send(embed
                 .setTitle(`${command.name} ${command.aliases?.length ? `(${command.aliases?.join(', ')})` : ''}`)
-                .setDescription(`${util.isFunction(command.description)
+                .setDescription(`${Util.isFunction(command.description)
                         ? command.description(msg.language)
                         : command.description
                     }${command.permissions
@@ -69,7 +69,7 @@ module.exports = class extends Command {
         if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret');
 
         categories.forEach(c => 
-            embed.addField(`${emojis.categories[c]} ${bold`${util.toTitleCase(c)} (${this.client.commands.filter(cmd => cmd.category === c).size})`}`, 
+            embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.filter(cmd => cmd.category === c).size})`}`, 
                 this.client.commands.filter(cmd => cmd.category === c).map(cmd => code`${cmd.name}`).join(', ')))
 
         return msg.channel.send(embed);

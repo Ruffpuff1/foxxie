@@ -3,6 +3,6 @@ const RoleplayCommand = require('../../../lib/structures/RoleplayCommand');
 module.exports = class extends RoleplayCommand {
 
     constructor(...args) {
-        super('panic', ['panicattack'], true, ...args)
+        super('panic', ['panic-attack'], true, ...args)
     }
 }

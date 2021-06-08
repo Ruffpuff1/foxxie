@@ -1,4 +1,4 @@
-const Language = require('foxxie');
+const { Language } = require('foxxie');
 const MultiModerationCommand = require('../../lib/structures/MultiModerationCommand');
 
 module.exports = {

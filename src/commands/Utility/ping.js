@@ -15,14 +15,17 @@ module.exports = class extends Command {
     async run(message) {
                 
         const msg = await message.responder.success('COMMAND_PING');
-        const ping = msg.createdTimestamp - message.createdTimestamp;
+        const wsPing = Math.round(this.client.ws.ping);
+        const roundTrip = (msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp);
 
-        const embed = new Discord.MessageEmbed()
-            .setColor(message.guild.me.displayColor)
-            .setFooter(message.language.get('COMMAND_PING_FOOTER'))
-            .addField(message.language.get('COMMAND_PING_DISCORD'), `\`\`\`${ping} ms\`\`\``, true)
-            .addField(message.language.get('COMMAND_PING_NETWORK'), `\`\`\`${message.client.ws.ping} ms\`\`\``, true)
+        const discordLatency = roundTrip - wsPing > 0 ? roundTrip - wsPing : roundTrip;
 
-        return msg.edit(`:ping_pong: **Pong**`, { embed });
+        const totalLatency = discordLatency + wsPing;
+
+        return msg.edit(message.language.get('COMMAND_PINGPONG', 
+            totalLatency,
+            discordLatency, 
+            wsPing
+        ));
     }
 }

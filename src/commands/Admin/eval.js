@@ -1,4 +1,4 @@
-const { Command, util, Type, Stopwatch } = require('foxxie');
+const { Command, Util, Type, Stopwatch } = require('foxxie');
 const { inspect } = require('util');
 
 module.exports = class extends Command {
@@ -20,11 +20,11 @@ module.exports = class extends Command {
         code = depth === 0 ? code.slice(0).join(' ') : code.slice(1).join(' ');
 
         const { success, result, time, type } = await this.eval(message, code, depth);
-        const footer = util.codeBlock('ts', type);
+        const footer = Util.codeBlock('ts', type);
         let output = message.language.get(success ? 'COMMAND_EVAL_OUTPUT' : 'COMMAND_EVAL_ERROR',
-                time, util.codeBlock('js', result > 1900 ? result.substring(0, 1900) : result), footer);
+                time, Util.codeBlock('js', result.length > 1900 ? result.substring(0, 1900) : result), footer);
         if (/(-silent|-s)/gi.test(message.content)) return null;
-        if (/(-message|-m)/gi.test(message.content)) output = result > 1900 ? result.substring(0, 1900) : result
+        if (/(-message|-m)/gi.test(message.content)) output = result.length > 1900 ? result.substring(0, 1900) : result
 
         return message.channel.send(output);
     }
@@ -43,7 +43,7 @@ module.exports = class extends Command {
                 result = eval(code)
                 syncTime = stopwatch.toString();
                 type = new Type(result);
-                if (util.isThenable(result)) {
+                if (Util.isThenable(result)) {
                         thenable = true;
                         stopwatch.restart();
                         result = await result;

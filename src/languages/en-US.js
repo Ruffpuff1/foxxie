@@ -1,4 +1,4 @@
-const { util, Language, bold, code, underline, italic } = require('foxxie');
+const { Util, Language, bold, code, underline, italic } = require('foxxie');
 const { supportServer } = require('../../config/foxxie');
 const { emojis: { infinity } } = require('../../lib/util/constants');
 
@@ -21,7 +21,7 @@ module.exports = class extends Language {
 			ACTIVITY_LISTENING: 'Listening to',
 			ACTIVITY_STREAMING: 'Streaming',
 
-            MESSAGE_LOADING: `${infinity} ${bold`Alright, I'm taking your order.**`} This may take a few seconds.`,
+            MESSAGE_LOADING: `${infinity} ${bold`Alright, I'm taking your order.`} This may take a few seconds.`,
             MESSAGE_PROMPT_CANCELLED: `Command ${bold`cancelled`}.`,
 			MESSAGE_PROMPT_TIMEOUT: `${bold`Sorry,`} the prompt has timed out.`,
 			MESSAGE_PROMPT_ABORT_OPTIONS: ['abort', 'stop', 'cancel'],
@@ -43,7 +43,7 @@ module.exports = class extends Language {
             COMMAND_EVAL_ERROR: (time, output, type) => `**Error**:${output}\n**Type**:${type}\n${time}`,
 			COMMAND_EVAL_OUTPUT: (time, output, type) => `**Output**:${output}\n**Type**:${type}\n${time}`,
             COMMAND_RELOAD_DESCRIPTION: `Reloads a Foxxie Piece without having to restart the client.`,
-            COMMAND_RELOAD_ERROR: (name, error) => `${bold`Uh oh,`} failed to reload ${name}${util.codeBlock('js', error)}`,
+            COMMAND_RELOAD_ERROR: (name, error) => `${bold`Uh oh,`} failed to reload ${name}${Util.codeBlock('js', error)}`,
             COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a piece to reload [Command | Monitor | Language ].`,
             COMMAND_RELOAD_SUCCESS: (name, type, time) => `${bold`Successfully`} reloaded ${type}: ${bold`${name}`}. (Took ${time})`,
             COMMAND_SERVERLIST_DESCRIPTION: `Displays every guild the bot is currently in, along with their Id and membercount.`,
@@ -53,12 +53,38 @@ module.exports = class extends Language {
 
             // Fun Commands
             COMMAND_CAT_DESCRIPTION: `Sends me to get you a random picture of a cat from https://api.thecatapi.com`,
+            COMMAND_CAT_FOOTER: `From api.thecatapi.com`,
+            COMMAND_CAT_TITLE: `Random Cat`,
             COMMAND_DOG_DESCRIPTION: `Sends me to get you a random picture of a dog from https://dog.ceo/api`,
+            COMMAND_DOG_FOOTER: `From dog.ceo/api`,
+            COMMAND_DOG_TITLE: `Random Dog`,
             COMMAND_FOX_DESCRIPTION: `I'll go and get you a picture of one of my family members from https://randomfox.ca`,
+            COMMAND_FOX_FOOTER: `From randomfox.ca/floof`,
+            COMMAND_FOX_TITLE: `Random Fox:`,
             COMMAND_FOXFACT_DESCRIPTION: `I'll provide you with a cool fact about foxes from https://some-random-api.ml/facts/fox`,
+            COMMAND_FOXFACT_NOFACT: `${bold`Whoops,`} there was an error fetching your fact.`,
+            COMMAND_OWOIFY_DESCRIPTION: `Transforms given text into owo speak. This command also takes advantage of my message flags feature, add ${code`-d`} to your message to automatically delete it.`,
+            COMMAND_OWOIFY_NOARGS: `${bold`Hey,`} u nyeed two pwovide swomwething two owoify. :pleading_face:`,
             COMMAND_POKEMON_DESCRIPTION: `I'll provide you with some stats about a pokemon you specify. This command also takes advantage of my flags feature, add ${code`-s`} after the pokemon for me to show it's shiny sprite instead of the normal.`,
+            COMMAND_POKEMON_ATTACK: bold`Attack`,
+            COMMAND_POKEMON_BASEXP: bold`Base Exp`,
+            COMMAND_POKEMON_DEFENSE: bold`Defense`,
+            COMMAND_POKEMON_HEIGHT: bold`Height`,
+            COMMAND_POKEMON_INVALID: `${bold`Looks`} like that pokemon is invalid! How bout an actual one this time oki?`,
+            COMMAND_POKEMON_NOARGS: `${bold`Cmon,`} you gotta enter a pokemon for me to show.`,
+            COMMAND_POKEMON_SPECIALATTACK: bold`Special Atk`,
+            COMMAND_POKEMON_SPECIALDEFENSE: bold`Special Def`,
+            COMMAND_POKEMON_SPEED: bold`Speed`,
+            COMMAND_POKEMON_TYPE: bold`Type`,
+            COMMAND_POKEMON_WEIGHT: bold`Weight`,
             COMMAND_TOPIC_DESCRIPTION: `I'll get you a random conversation starter for when your chat starts to doze off. Powered by https://www.conversationstarters.com`,
             COMMAND_URBAN_DESCRIPTION: `I'll get you data from an urban dictionary word you provide, including link, upvotes, definition, and examples.`,
+            COMMAND_URBAN_EXAMPLE: bold`Example`,
+            COMMAND_URBAN_FOOTER: author => `By ${author}`,
+            COMMAND_URBAN_NODATA: `${bold`Yikes,`} sorry I couldn't find any data for that term.`,
+            COMMAND_URBAN_NODEFINITION: `No definition available.`,
+            COMMAND_URBAN_NOEXAMPLE: `No example available.`,
+            COMMAND_URBAN_NOWORD: `${bold`Okay,`} how do you expect me to define a word if you don't provide one?`,
 
             // Moderation Commands
             COMMAND_BAN_DESCRIPTION: [
@@ -125,7 +151,9 @@ module.exports = class extends Language {
             COMMAND_HELP_SERVERONLY: `Server Only`,
             COMMAND_HELP_TITLE: name => `${name}'s Commands!`,
             COMMAND_HELP_USAGE: `Usage`,
-            COMMAND_PING_DESCRIPTION: `Runs a connection test to Discord.`
+            COMMAND_PING: `Ping?`,
+            COMMAND_PING_DESCRIPTION: `Runs a connection test to Discord.`,
+            COMMAND_PINGPONG: (total, discord, ws) => `🏓 ${bold`Pong!`} Took ${bold`${total}`}ms (Discord latency: ${bold`${discord}`}ms. Network latency: ${bold`${ws}`}ms.)`,
         }
     }
 }
