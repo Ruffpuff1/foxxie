@@ -48,6 +48,7 @@ module.exports = class extends Command {
             
             if (piece instanceof Command) {
                 msg.client.commands.set(newPiece.name, newPiece);
+                newPiece.aliases?.forEach(a => this.client.aliases.set(a, newPiece))
                 return { time: stopwatch.toString(), type: 'COMMAND', name: newPiece.name };
             }
 

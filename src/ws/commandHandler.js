@@ -39,7 +39,7 @@ module.exports = {
         const args = message.content.slice(pre.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
 
-        let command = message.client.commands.get(commandName) //|| message.client.commands.find(c => c.aliases?.includes(commandName));
+        let command = message.client.commands.get(commandName) || message.client.aliases.get(commandName);//|| message.client.commands.find(c => c.aliases?.includes(commandName));
         if (!command) return;
 
         try {
@@ -48,12 +48,7 @@ module.exports = {
             if (e === true) return;
             return message.responder.error(e, command.permissions)
         }
-
-        try {
-            command.run(message, args);
-        } catch (e) {
-            console.error(e);
-            return message.responder.error('RESPONDER_ERROR_CODE')
-        }
+        try { command.run(message, args) }
+        catch (e) { message.responder.error('ERROR_GENERIC', e) }
     }
 }
