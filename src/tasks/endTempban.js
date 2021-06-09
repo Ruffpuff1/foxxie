@@ -41,6 +41,6 @@ module.exports = {
     },
 
     executeUnbans(user, guild) {
-        guild.members.unban(user.id, new Language(guild).get('TASKS_ENDTEMPBAN_REASON')).catch(() => null);
+        guild.members.unban(user.id, guild.language.get('TASKS_ENDTEMPBAN_REASON')).catch(() => null);
     }
 }

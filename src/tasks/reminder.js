@@ -14,7 +14,7 @@ module.exports = {
                 let member = client.users.cache.get(authID);
                 const guild = client.guilds.cache.get(guildId);
                 const channel = guild.channels.cache.get(channelId);
-                const language = new Language(guild);
+                const language = guild.language;
 
                 if (Date.now() > time) {
                     this._remind(client, rmdr, { member, channel, language });

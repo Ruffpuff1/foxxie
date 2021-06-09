@@ -42,6 +42,6 @@ module.exports = {
     },
 
     async executeUnmutes(member) {
-        await member.unmute(new Language(member.guild).get('TASKS_ENDTEMPMUTE_REASON'));
+        await member.unmute(member.guild.language.get('TASKS_ENDTEMPMUTE_REASON'));
     }
 }
