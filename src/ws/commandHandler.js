@@ -29,26 +29,31 @@ module.exports = {
     
         uprefixes.forEach(pfx => {
             if (message.content.toLowerCase().startsWith(pfx.toLowerCase())) {
-                return this._commandExecute(pfx, message, language);
+                return this._commandExecute(pfx, message);
             }
         });
     },
     
-    async _commandExecute(pre, message, language) {
+    async _commandExecute(pre, message) {
 
         const args = message.content.slice(pre.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
 
-        let command = message.client.commands.get(commandName) || message.client.aliases.get(commandName);//|| message.client.commands.find(c => c.aliases?.includes(commandName));
+        let command = message.client.commands.get(commandName);
         if (!command) return;
 
         try {
-            await message.client.inhibitors.get('permissions').execute(command, message);
+            message.client.inhibitors.get('permissions').execute(command, message);
         } catch (e) {
-            if (e === true) return;
-            return message.responder.error(e, command.permissions)
+            if (e == true) return null;
+            return message.responder.error(e, command.permissions?.toLowerCase()?.replace(/_/g, ' '));
         }
-        try { command.run(message, args) }
-        catch (e) { message.responder.error('ERROR_GENERIC', e) }
+        try {
+            command.run(message, args);
+        }
+        catch (e) {
+            message.responder.error('ERROR_GENERIC', e);
+            return null;
+        }
     }
 }
