@@ -9,8 +9,8 @@ module.exports = class extends Command {
             name: 'reload',
             aliases: ['r'],
             description: language => language.get('COMMAND_RELOAD_DESCRIPTION'),
-            usage: '[Command | Monitor | Language]',
-            permissionLevel: 9,
+            usage: '[Piece]',
+            permissions: 'CLIENT_OWNER',
             category: 'admin',
         })
     }
@@ -38,7 +38,7 @@ module.exports = class extends Command {
             delete require.cache[require.resolve(`../${folderName}/${name}.js`)];
 
             newPiece = require(`../${folderName}/${name}.js`);
-            newPiece = new newPiece(msg.language);
+            newPiece = new newPiece(this.client);
         }
 
         if (msg.client.languages.get(instance)) delete require.cache[require.resolve(`../../languages/${instance}.js`)];

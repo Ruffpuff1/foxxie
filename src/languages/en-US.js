@@ -1,6 +1,6 @@
 const { Util, Language, bold, code, underline, italic } = require('foxxie');
 const { supportServer } = require('../../config/foxxie');
-const { emojis: { infinity } } = require('../../lib/util/constants');
+const { emojis: { infinity, perms: { notSpecified } } } = require('../../lib/util/constants');
 
 module.exports = class extends Language {
 
@@ -22,14 +22,21 @@ module.exports = class extends Language {
 			ACTIVITY_STREAMING: 'Streaming',
 
             MESSAGE_LOADING: `${infinity} ${bold`Alright, I'm taking your order.`} This may take a few seconds.`,
+            MESSAGE_MEMBERS_NONE: `You need to specify at least ${bold`one member`}.`,
             MESSAGE_PROMPT_CANCELLED: `Command ${bold`cancelled`}.`,
 			MESSAGE_PROMPT_TIMEOUT: `${bold`Sorry,`} the prompt has timed out.`,
 			MESSAGE_PROMPT_ABORT_OPTIONS: ['abort', 'stop', 'cancel'],
+            MESSAGE_USERS_NONE: `You need to specify at least ${bold`one user`}.`,
 
             // Admin Commands
             COMMAND_CREATEKEY_DESCRIPTION: `Creates a key that a user can redeem for a badge on their Info card using the ${code`redeem`} command.`,
-            COMMAND_CREATEKEY_NOID: `${bold`Hey,`} you didn't provide a proper Id.`,
+            COMMAND_CREATEKEY_NOID: `${bold`Hey,`} you didn't provide a proper Id. This command is locked to the bot owner due to it's special nature.`,
             COMMAND_CREATEKEY_SUCCESS: (icon, name, key) => `${bold`Success!`} here is a key for ${icon} ${name}: ${code`${key}`}.`,
+            COMMAND_DISABLE_DESCRIPTION: `Disables a Foxxie piece so it can no longer be used, if specified piece is a command it will be hidden from the ${bold`help`} command. This command is locked to the bot owner due to the power it has.`,
+            COMMAND_DISABLE_NOPIECE: `${bold`Please`} specify a piece to disable.`,
+            COMMAND_DISABLE_WARN: `${bold`Hey,`} you shouldn't disable this piece because if you do, you won't be able to re-enable it.`,
+            COMMAND_ENABLE_DESCRIPTION: `Enables a Foxxie piece so it can continue being used. This command is locked to the bot owner due to the power it has.`,
+            COMMAND_ENABLE_NOPIECE: `${bold`Please`} specify a piece to enable.`,
             COMMAND_EVAL_DESCRIPTION: [
                 `Allows you evaluate JavaScript code straight from Discord. This command is locked to the bot owner due to the power it has.\n`,
                 `The eval command evaluates code as-in, any error thrown from it will be handled.`,
@@ -42,11 +49,11 @@ module.exports = class extends Language {
             ].join('\n'),
             COMMAND_EVAL_ERROR: (time, output, type) => `**Error**:${output}\n**Type**:${type}\n${time}`,
 			COMMAND_EVAL_OUTPUT: (time, output, type) => `**Output**:${output}\n**Type**:${type}\n${time}`,
-            COMMAND_RELOAD_DESCRIPTION: `Reloads a Foxxie Piece without having to restart the client.`,
+            COMMAND_RELOAD_DESCRIPTION: `Reloads a Foxxie Piece without having to restart the client. This command is locked to the bot owner due to it's special nature.`,
             COMMAND_RELOAD_ERROR: (name, error) => `${bold`Uh oh,`} failed to reload ${name}${Util.codeBlock('js', error)}`,
             COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a piece to reload [Command | Monitor | Language ].`,
             COMMAND_RELOAD_SUCCESS: (name, type, time) => `${bold`Successfully`} reloaded ${type}: ${bold`${name}`}. (Took ${time})`,
-            COMMAND_SERVERLIST_DESCRIPTION: `Displays every guild the bot is currently in, along with their Id and membercount.`,
+            COMMAND_SERVERLIST_DESCRIPTION: `Displays every guild the bot is currently in, along with their Id and membercount. This command is locked to the bot owner due to privacy concerns.`,
             COMMAND_SERVERLIST_FOOTER: (size, page, totalPages) => `${size} total servers\nPage - ${page}/${totalPages}`,
             COMMAND_SERVERLIST_MEMBERCOUNT: `members`,
             COMMAND_SERVERLIST_TITLE: `Servers using Foxxie`,
@@ -63,6 +70,8 @@ module.exports = class extends Language {
             COMMAND_FOX_TITLE: `Random Fox:`,
             COMMAND_FOXFACT_DESCRIPTION: `I'll provide you with a cool fact about foxes from https://some-random-api.ml/facts/fox`,
             COMMAND_FOXFACT_NOFACT: `${bold`Whoops,`} there was an error fetching your fact.`,
+            COMMAND_HOWGAY: (user, percent) => `:rainbow_flag: ${bold`${user}`} is ${bold`${percent}%`} gay.`,
+            COMMAND_HOWGAY_DESCRIPTION: `Truly determine how gay a user is.`,
             COMMAND_OWOIFY_DESCRIPTION: `Transforms given text into owo speak. This command also takes advantage of my message flags feature, add ${code`-d`} to your message to automatically delete it.`,
             COMMAND_OWOIFY_NOARGS: `${bold`Hey,`} u nyeed two pwovide swomwething two owoify. :pleading_face:`,
             COMMAND_POKEMON_DESCRIPTION: `I'll provide you with some stats about a pokemon you specify. This command also takes advantage of my flags feature, add ${code`-s`} after the pokemon for me to show it's shiny sprite instead of the normal.`,
@@ -93,7 +102,33 @@ module.exports = class extends Language {
                 `This command also takes advantage of my message flags feature, adding ${code`-p`} to the message will automatically clear one days worth of the user's messages.\n`,
                 `If a moderation logging channel is set in your server, this command will log there, and send DMs to the users banned, with the provided reason.`
             ].join('\n'),
+            COMMAND_BAN_ERROR: (user, issue) => `${bold`Whoops`} I couldn't ban ${bold`${user}`}:${Util.codeBlock('js', issue)}`,
+            COMMAND_BAN_NOPERMS: multiple => `${bold`Hey,`} you cannot ban ${multiple ? 'any of the specified users' : 'the specified user'}.`,
+            COMMAND_NUKE: `${bold`First hehe,`} anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`,
+            COMMAND_NUKE_DESCRIPTION: `Completely wipes a channel of all messages and clones its permissions, topic, and position. Only server owners can use this command due to the harm it may cause. Also keep in mind: mine or any other bot's settings will no longer work in that channel. If a moderation logging channel is set in your server, this command will log there.`,
+            COMMAND_NUKE_WARNING: (author, channel) => `${author}, ya sure you want to nuke this channel? This will get rid of ${bold`all messages`} in the channel and ${bold`can't be undone`}. If you're positive go ahead and type ${code`yes, nuke ${channel}`} within the next 30 seconds. If you'd like to cancel just send ${code`cancel`} or any other message. Also, gotta tell you that this simply clones the channel meaning some settings from myself or other bots won't work anymore.`,
+            COMMAND_STAFFLOG_DESCRIPTION: `Shows a list of moderation actions performed by a member of your server.`,
+            COMMAND_STAFFLOG_NONE: member => `${bold`${member}`} has not performed any moderation actions.`,
+            COMMAND_STAFFLOG_ONE: (member, ban, kick, warn, jail, mute) => [
+                underline`Moderation logs for ${bold`${member}`}:\n`,
+                ban ? `${notSpecified} Issued ${ban.toLocaleString()} ${bold`ban${ban === 1 ? '' : 's'}`}` : null,
+                kick ? `${notSpecified} Issued ${kick.toLocaleString()} ${bold`kick${kick === 1 ? '' : 's'}`}` : null,
+                warn ? `${notSpecified} Issued ${warn.toLocaleString()} ${bold`warn${warn === 1 ? '' : 's'}`}` : null,
+                jail ? `${notSpecified} Issued ${jail.toLocaleString()} ${bold`jail${jail === 1 ? '' : 's'}`}` : null,
+                mute ? `${notSpecified} Issued ${mute.toLocaleString()} ${bold`mute${mute === 1 ? '' : 's'}`}` : null,
+            ].filter(a => !!a).join('\n'),
+            COMMAND_STAFFLOG_TWO: (slow, lock, unlock, nuke, purge, total) => [
+                slow ? `${notSpecified} Performed ${slow.toLocaleString()} ${bold`slowmode${slow === 1 ? '' : 's'}`}` : null,
+                lock ? `${notSpecified} Performed ${lock.toLocaleString()} ${bold`lock${lock === 1 ? '' : 's'}`}` : null,
+                unlock ? `${notSpecified} Performed ${unlock.toLocaleString()} ${bold`unlock${unlock === 1 ? '' : 's'}`}` : null,
+                nuke ? `${notSpecified} Completed ${nuke.toLocaleString()} ${bold`nuke${nuke === 1 ? '' : 's'}`}` : null,
+                purge ? `${notSpecified} Performed ${purge.toLocaleString()} ${bold`purge${purge === 1 ? '' : 's'}`} (${bold`${total.toLocaleString()}`} message${total === 1 ? '' : 's'})` : null
+            ].filter(a => !!a).join('\n'),
+            COMMAND_VCUNMUTE_DESCRIPTION: `I will unmute the specified members if they are in a vc and server muted. If a moderation logging channel is set, this action will log there.`,
+            COMMAND_VCUNMUTE_NOPERMS: multiple => `${bold`Hey,`} you can't unmute ${multiple ? `any of the specified members` : `the specified member`} from vc.`,
+            COMMAND_VCUNMUTE_NOVOICE: multiple => `${multiple ? `${bold`None`} of the specified members are` : `${bold`Hey,`} the specified member is not`} in vc or muted.`,
             COMMAND_WARN_DESCRIPTION: `Adds warnings to members that will show on their ${code`info`} profile.\nIf a moderation logging channel is set in your server, this command will log there, and send DMs to the members warned, with the provided reason.`,
+            COMMAND_WARN_NOPERMS: multiple => `${bold`Sorry,`} you can't warn ${multiple ? 'any of the specified members' : 'the specified member'}.`,
 
             // Roleplay Commands
             COMMAND_ANGRY_DESCRIPTION: `Get angry at someone (ಠ_ಠ)`,
@@ -154,6 +189,45 @@ module.exports = class extends Language {
             COMMAND_PING: `Ping?`,
             COMMAND_PING_DESCRIPTION: `Runs a connection test to Discord.`,
             COMMAND_PINGPONG: (total, discord, ws) => `🏓 ${bold`Pong!`} Took ${bold`${total}`}ms (Discord latency: ${bold`${discord}`}ms. Network latency: ${bold`${ws}`}ms.)`,
+
+            // Inhibitors
+            INHIBITORS_PERMISSIONS_AUTHOR: perm => `${bold`You don't`} have permission to run this command, you need the ${bold`${perm}`} permission.`,
+            INHIBITORS_PERMISSIONS_GUILDOWNER: `${bold`Nope,`} due to the harm this command can cause it can only be executed by the guild owner.`,
+
+            // Logging
+            LOG_ACTION_DELETE: `Message Deleted`,
+            LOG_ACTION_EDIT: `Message Edited`,
+            LOG_ACTION_NUKE: `Channel Nuked`,
+            LOG_ACTION_TEMPBAN: multiple => `Temporarily Banned User${multiple ? 's' : ''}`,
+            LOG_ACTION_TEMPUNBAN: multiple => `Removed Temporary Ban from User${multiple ? 's' : ''}`,
+            LOG_ACTION_VCUNMUTE: multiple => `Unmuted User${multiple ? 's' : ''} in vc.`,
+            LOG_ACTION_WARN: multiple => `Warned User${multiple ? 's' : ''}`,
+
+            LOG_ARGS_ATTACHMENTS: attachments => `${bold`Attachments`}: ${attachments.join(` | `)}`,
+            LOG_ARGS_CHANNEL: (mention, id) => `${bold`Location`}: ${mention} (ID: ${id})`,
+            LOG_ARGS_DATE: date => `${bold`Date`}: ${date}`,
+            LOG_ARGS_DURATION: duration => `${bold`Duration`}: ${duration}`,
+            LOG_ARGS_IMAGES: `Image`,
+            LOG_ARGS_LINK: link => `${bold`Link`}: [Here](${link})`,
+            LOG_ARGS_MEMBER: (name, mention, id) => `${bold`Member`}: ${name} ${mention} (ID: ${id})`,
+            LOG_ARGS_MESSAGE: content => `${bold`Message`}: ${content}`,
+            LOG_ARGS_MESSAGES: (oldContent, newContent) => [
+                `${bold`Before`}: ${oldContent}`,
+                `${bold`After`}: ${newContent}`,
+            ].join(oldContent.length > 45 ? '\n\n' : '\n'),
+            LOG_ARGS_MODERATOR: (tag, mention, id) => `${bold`Moderator`}: ${tag} ${mention} (ID: ${id})`,
+            LOG_ARGS_REASON: reason => `${bold`Reason`}: ${reason}`,
+            LOG_ARGS_USER: (tag, mention, id) => `${bold`User`}: ${tag} ${mention} (ID: ${id})`,
+            LOG_ARGS_USERS: users => `${bold`Users`}:\n${users}\n`,
+            LOG_ARGS_WARN: (reason, time, tag, author, id) => `${bold`Warn`}: ${reason}\non ${time}\nBy: ${tag} ${author} (ID: ${id})`,
+            LOG_ARGS_WARNS: warns => `${bold`Warns`}: ${warns}`,
+
+            LOG_DM_TEMPBAN: `You have been temporarily banned`,
+            LOG_DM_TEMPUNBAN: `Your temporary ban has expired`,
+            LOG_DM_VCUNMUTE: `You have been unmuted in vc`,
+            LOG_DM_WARN: `You have been warned`,
+
+            LOG_MODERATION_NOREASON: `No reason specified.`
         }
     }
 }

@@ -8,6 +8,7 @@ module.exports = class extends Command {
             name: 'owoify',
             aliases: ['owo', 'uwu', 'uvu'],
             description: language => language.get('COMMAND_OWOIFY_DESCRIPTION'),
+            usage: '[Text]',
             category: 'fun'
         })
     }

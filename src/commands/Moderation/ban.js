@@ -44,10 +44,10 @@ module.exports = class extends Command {
 
         for (const user of users) {
             if (purge) msg.guild.members.ban(user.id, { reason: `${duration ? `[temp]` : ''} ${msg.author.tag} | ${reason}`, days: 1 })
-                .catch((e) => msg.responder.error('COMMAND_BAN_ERROR', user.toString(), e.message));
+                .catch((e) => msg.responder.error('COMMAND_BAN_ERROR', user.tag, e.message));
 
             if (!purge) msg.guild.members.ban(user.id, { reason: `${duration ? `[temp]` : ''} ${msg.author.tag} | ${reason}` })
-                .catch((e) => msg.responder.error('COMMAND_BAN_ERROR', user.toString(), e.message));
+                .catch((e) => msg.responder.error('COMMAND_BAN_ERROR', user.tag, e.message));
 
             const bans = await this.client.schedule.fetch('bans');
             const hasban = bans?.some(b => b.userId === user.id);

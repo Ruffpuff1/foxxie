@@ -3,7 +3,7 @@ module.exports = {
     aliases: ['lang', 'setlang', 'setlanguage'],
     category: 'settings',
     usage: 'fox language',
-    permissionLevel: 9,
+    permissions: 'CLIENT_OWNER',
     permissions: 'ADMINISTRATOR',
     execute: async(props) => {
 

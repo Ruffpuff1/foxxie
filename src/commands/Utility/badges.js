@@ -4,7 +4,7 @@ module.exports = {
     aliases: ['bd'],
     usage: 'fox badges',
     category: 'utility',
-    permissionLevel: 9,
+    permissions: 'CLIENT_OWNER',
     async execute (props) {
 
         let { message, language } = props;

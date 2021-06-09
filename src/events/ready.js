@@ -9,10 +9,7 @@ module.exports = {
 		console.log(`[${client.user.username}] Ready! Logged in with ${client.commands.size} commands and ${client.aliases.size} aliases.`);
         mongoDB();
         // Botwide
-        client.tasks.get('reminder').execute(client);
-        client.tasks.get('disboard').execute(client);
-        client.tasks.get('endTempmute').execute(client);
-        client.tasks.get('endTempban').execute(client);
+        client.tasks.filter(t => t.name !== "afkcheck").forEach(t => t.execute(client));
         // The Corner Store, memberCount & clock
         // memberCount(client);
         // clock(client);
@@ -20,7 +17,7 @@ module.exports = {
         const actvs = [
             `with ${client.guilds.cache.size.toLocaleString()} servers & ${client.users.cache.size.toLocaleString()} users.`,
             `v${version} | fox help`,
-            `with ${commands} Commands & ${aliases} Aliases`,
+            `with ${client.commands.size} Commands & ${client.aliases.size} Aliases`,
             `v${version} | fox support`,
             `🏳️‍🌈  Happy pride month!`];
         

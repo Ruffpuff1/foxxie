@@ -20,6 +20,7 @@ module.exports = class extends Command {
         if (/(-developer|-dev|-d)/i.test(msg.content) && this.client.owners.has(msg.author)) fullMenu = true;
         command = command?.replace(/(-developer|-dev|-d)/i, '');
         const prefixes = await msg.guild.settings.get('prefixes');
+        const blocked = await this.client.settings?.get('blockedPieces')
 
         const embed = new MessageEmbed()
             .setColor(msg.guild ? msg.guild.me.displayColor : '')
@@ -35,9 +36,9 @@ module.exports = class extends Command {
                             : 'dev '))    
                 );
             }
-
-            command = this.client.commands.get(command);
-            if (command?.category === 'admin' && !this.client.owners.has(msg.author)) command = null;
+        
+            command = this.client.commands?.get(command);
+            if ((blocked?.includes(command.name) && !this.client.owners.has(msg.author)) || (command?.category === 'admin' && !this.client.owners.has(msg.author))) command = null;
             if (!command) return msg.responder.error('COMMAND_HELP_NOTVALID');
 
             return msg.channel.send(embed
@@ -45,7 +46,7 @@ module.exports = class extends Command {
                 .setDescription(`${Util.isFunction(command.description)
                         ? command.description(msg.language)
                         : command.description
-                    }${command.permissions
+                    }${command.permissions && command.permissions !== 'GUILD_OWNER' && command.permissions !== 'CLIENT_OWNER'
                         ? `\n\n${bold`${msg.language.get('COMMAND_HELP_PERMISSIONS')}`}: ${code`${command.permissions}`}`
                         : ''
                     }`)
@@ -69,8 +70,8 @@ module.exports = class extends Command {
         if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret');
 
         categories.forEach(c => 
-            embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.filter(cmd => cmd.category === c).size})`}`, 
-                this.client.commands.filter(cmd => cmd.category === c).map(cmd => code`${cmd.name}`).join(', ')))
+            embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).size})`}`, 
+                this.client.commands.filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).map(cmd => code`${cmd.name}`).join(', ')))
 
         return msg.channel.send(embed);
     }
