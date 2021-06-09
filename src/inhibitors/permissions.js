@@ -7,11 +7,11 @@ module.exports = {
         // Overwrite perm level for bot owner.
         if (message.client.owners.has(message.author)) return;
         // Guild Owner Only.
-        if (command.permissions === 'GUILD_OWNER' && message.guild.ownerID !== message.author.id) throw 'INHIBITORS_PERMISSIONS_GUILDOWNER';
+        if (command.permissions === 'GUILD_OWNER' && message.guild.ownerID !== message.author.id) throw 'INHIBITOR_PERMISSIONS_GUILDOWNER';
         // Permissions checking.
         if (command.permissions) {
             const authorPerms = message.channel.permissionsFor(message.author);
-            if (!authorPerms || !authorPerms.has(command.permissions)) throw 'INHIBITORS_PERMISSIONS_AUTHOR';
+            if (!authorPerms || !authorPerms.has(command.permissions)) throw 'INHIBITOR_PERMISSIONS_AUTHOR';
         };
     }
 }

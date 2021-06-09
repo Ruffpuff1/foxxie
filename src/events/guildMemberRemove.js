@@ -12,7 +12,7 @@ module.exports = class extends Event {
     run(member) {
 
         // Returns if self
-        if (member.user.id === member.guild.me.user.id) return;
+        if (member.user.id === this.client.user.id) return;
 
         // Sets roles and nickname in db
         member.user.settings.set(`servers.${member.guild.id}.persistRoles`, member.roles.cache.keyArray());

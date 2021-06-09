@@ -190,9 +190,13 @@ module.exports = class extends Language {
             COMMAND_PING_DESCRIPTION: `Runs a connection test to Discord.`,
             COMMAND_PINGPONG: (total, discord, ws) => `🏓 ${bold`Pong!`} Took ${bold`${total}`}ms (Discord latency: ${bold`${discord}`}ms. Network latency: ${bold`${ws}`}ms.)`,
 
+            EVENT_STARCREATED_DESCRIPTION: (user, channel, link) => `A message by ${user} got starred enough to make it into the ${channel}.\nCheck it out [here](${link})`,
+            EVENT_STARCREATED_MESSAGE: 'Jump to Message',
+            EVENT_STARCREATED_TITLE: ':star: A new message made it into the starboard :star:',
+
             // Inhibitors
-            INHIBITORS_PERMISSIONS_AUTHOR: perm => `${bold`You don't`} have permission to run this command, you need the ${bold`${perm}`} permission.`,
-            INHIBITORS_PERMISSIONS_GUILDOWNER: `${bold`Nope,`} due to the harm this command can cause it can only be executed by the guild owner.`,
+            INHIBITOR_PERMISSIONS_AUTHOR: perm => `${bold`You don't`} have permission to run this command, you need the ${bold`${perm}`} permission.`,
+            INHIBITOR_PERMISSIONS_GUILDOWNER: `${bold`Nope,`} due to the harm this command can cause it can only be executed by the guild owner.`,
 
             // Logging
             LOG_ACTION_DELETE: `Message Deleted`,

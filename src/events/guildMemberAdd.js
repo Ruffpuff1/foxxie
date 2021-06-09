@@ -14,7 +14,7 @@ module.exports = class extends Event {
     async run(member) {
 
         // Returns if self
-        if (member.user.id === member.guild.me.user.id) return;
+        if (member.user.id === this.client.user.id) return;
 
         // Persisteny & botroles
         const autoroles = await member.guild.settings.get('mod.roles.auto');

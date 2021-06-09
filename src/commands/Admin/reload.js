@@ -1,4 +1,4 @@
-const { Command, Stopwatch, Language } = require('foxxie');
+const { Command, Stopwatch, Language, Event } = require('foxxie');
 const fs = require('fs');
 const { Message } = require('discord.js');
 
@@ -18,7 +18,7 @@ module.exports = class extends Command {
     async run (message, [piece]) {
 
         if (!piece) return message.responder.error('COMMAND_RELOAD_NONE');
-        const instance = this.client.commands.get(piece) || this.client.monitors.get(piece) || this.client.languages.get(piece);
+        const instance = this.client.commands.get(piece) || this.client.events.get(piece) || this.client.monitors.get(piece) || this.client.languages.get(piece);
         if (!instance) return;
        
         let value = await this._reload(message, instance, piece);
@@ -41,14 +41,15 @@ module.exports = class extends Command {
             newPiece = new newPiece(this.client);
         }
 
+        if (piece instanceof Event) delete require.cache[require.resolve(`../../events/${name}.js`)];
         if (msg.client.languages.get(instance)) delete require.cache[require.resolve(`../../languages/${instance}.js`)];
         if (msg.client.monitors.get(name)) delete require.cache[require.resolve(`../../monitors/${name}.js`)];
 
         try {
             
             if (piece instanceof Command) {
-                msg.client.commands.set(newPiece.name, newPiece);
-                newPiece.aliases?.forEach(a => this.client.aliases.set(a, newPiece))
+                msg.client.commands.set(newPiece);
+                this.client.commands.init(newPiece.name)
                 return { time: stopwatch.toString(), type: 'COMMAND', name: newPiece.name };
             }
 
@@ -57,6 +58,14 @@ module.exports = class extends Command {
                 newPiece = new newPiece(msg);
                 msg.client.languages.set(instance, newPiece);
                 return { time: stopwatch.toString(), type: 'LANGUAGE', name: instance }
+            }
+
+            if (piece instanceof Event) {
+                newPiece = require(`../../events/${name}.js`);
+                newPiece = new newPiece(this.client.events, `../../events/${name}`, `../../events`);
+                await this.client.setEvent(newPiece);
+                this.client._events[instance]?.shift();
+                return { time: stopwatch.toString(), type: 'EVENT', name: instance }
             }
 
             if (msg.client.monitors.get(name)) {
