@@ -1,8 +1,15 @@
 const commandHandler = require('../ws/commandHandler');
+const { Event } = require('foxxie');
 
-module.exports = {
-	name: 'message',
-	execute: async(message) => {
+module.exports = class extends Event {
+
+    constructor(...args) {
+        super(...args, {
+            event: 'message',
+        })
+    }
+
+    async run(message) {
 
         // prevents bot dms
         if (!message.guild) return;
@@ -22,4 +29,4 @@ module.exports = {
         // message.author.settings.inc(`servers.${message.guild.id}.messageCount`)
         // message.guild.settings.inc('messageCount');
     }
-};
+}
