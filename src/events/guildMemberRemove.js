@@ -1,8 +1,15 @@
 const moment = require('moment');
+const { Event } = require('foxxie');
 
-module.exports = {
-    name: 'guildMemberRemove',
-    async execute (member) {
+module.exports = class extends Event {
+
+    constructor(...args) {
+        super(...args, {
+            event: 'guildMemberRemove'
+        })
+    }
+
+    run(member) {
 
         // Returns if self
         if (member.user.id === member.guild.me.user.id) return;
@@ -13,7 +20,7 @@ module.exports = {
 
         // Goodbye
         this.goodbye(member);
-    },
+    }
 
     async goodbye(member) {
 
@@ -31,7 +38,7 @@ module.exports = {
 
         const parsed = await this._fillTemplate(message, member);
         channel.send(parsed).catch(e => e);
-    },
+    }
 
     _fillTemplate(template, member) {
         return template

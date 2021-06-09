@@ -11,8 +11,8 @@ module.exports = class extends Language {
             DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
 			DEFAULT_LANGUAGE: 'Default Language',
             PREFIX_REMINDER: (prefixes, prefix) => [
-                `${bold`Heya!`} My prefixes for this guild are ${prefixes} and **${bold`${prefix}`}**.`,
-                `For a list of all my commands, try out ${bold`${prefix}help`}.`
+                `${bold`Heya!`} My prefixes for this guild are ${prefixes} and **${code`${prefix}`}**.`,
+                `For a list of all my commands, try out ${code`${prefix}help`}.`
             ].join(' '),
 
             ERROR_GENERIC: (err) => `${bold`Whoops,`} an error occurred: ${Util.codeBlock('js', err)}`,

@@ -1,4 +1,3 @@
-const commandHandler = require('../ws/commandHandler');
 const { Event } = require('foxxie');
 
 module.exports = class extends Event {
@@ -15,12 +14,9 @@ module.exports = class extends Event {
         if (!message.guild) return;
 
         // Execute monitors
-        message.client.monitors.forEach(m => { if (m.type === 'message') m.execute(message) });
-
-        // Prevents bot commands.
-        if (message.author.bot) return;
         if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return;
-        commandHandler.execute(message);
+        message.client.monitors.filter(monitor => monitor.type === 'message').forEach(monitor => monitor.execute(message));
+        // message.client.monitors.forEach(m => { if (m.type === 'message') m.execute(message) });
 
         // Checks if member is AFK
         message.client.tasks.get('afkcheck').execute(message);

@@ -1,8 +1,9 @@
-const { bold } = require('foxxie');
+const { code } = require('foxxie');
 const { prefix: { production, development } } = require('../../config/foxxie');
 
 module.exports = {
     name: 'commandHandler',
+    type: 'message',
     async execute (message) {
     
         if (message.author.bot) return;
@@ -16,7 +17,7 @@ module.exports = {
         if (new RegExp(`^<@!?${message.client.user.id}>$`).test(message.content)) {
             prefixes.shift();
             prefixes.shift();
-            message.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => `${bold`${p}`}`).join(", "), prefixes.pop());
+            message.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => `${code`${p}`}`).join(", "), prefixes.pop());
         }
 
         prefixes = [...new Set(prefixes)];

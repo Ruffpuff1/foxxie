@@ -1,10 +1,18 @@
 const { starCreated } = require("./starCreated");
-module.exports = {
-    name: 'messageReactionAdd',
-    execute: async(reaction, user) => {
+const { Event } = require('foxxie');
+
+module.exports = class extends Event {
+
+    constructor(...args) {
+        super(...args, {
+            event: 'messageReactionAdd',
+        })
+    }
+
+    run(reaction, user) {
 
         if (reaction.message.channel.type === 'dm') return;
         if (reaction.emoji.name == '⭐') starCreated(reaction, user);
-        reaction.message.client.monitors.get('rero').execute(reaction, user, 'add');
+        this.client.monitors.get('rero').execute(reaction, user, 'add');
     }
 }

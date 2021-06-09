@@ -1,10 +1,17 @@
 const { tcsWelcome } = require('../../lib/util/theCornerStore');
 const moment = require('moment');
 const { FLAGS } = require('discord.js').Permissions;
+const { Event } = require('foxxie');
 
-module.exports = {
-    name: 'guildMemberAdd',
-    async execute (member) {
+module.exports = class extends Event {
+
+    constructor(...args) {
+        super(...args, {
+            event: 'guildMemberAdd'
+        })
+    }
+
+    async run(member) {
 
         // Returns if self
         if (member.user.id === member.guild.me.user.id) return;
@@ -30,21 +37,20 @@ module.exports = {
             member.roles.add(roles).catch(() => null);
         }
 
-
         // Welcoming
         this.welcome(member);
         
         // Username cleaning
         this.lowercase(member);
-    },
+    }
 
     async lowercase(member) {
         if (!await member.guild.settings.get('mod.anti.uppercase')) return member;
         member.setNickname(member.user.username.toLowerCase()).catch(e => e);
         return member;
-    },
+    }
 
-    async welcome(member) {    
+    async welcome(member) {
 
         if (member.guild.id === '761512748898844702') {
             tcsWelcome(member);
@@ -67,7 +73,7 @@ module.exports = {
 
         channel.send(parsed).catch(e => e);
         return member;
-    },
+    }
 
     _fillTemplate(template, member) {
         return template
