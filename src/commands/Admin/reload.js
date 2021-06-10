@@ -1,4 +1,4 @@
-const { Command, Stopwatch, Language, Event } = require('foxxie');
+const { Command, Stopwatch, Language, Event, Monitor } = require('foxxie');
 const fs = require('fs');
 const { Message } = require('discord.js');
 
@@ -43,7 +43,7 @@ module.exports = class extends Command {
 
         if (piece instanceof Event) delete require.cache[require.resolve(`../../events/${name}.js`)];
         if (piece instanceof Language) delete require.cache[require.resolve(`../../languages/${instance}.js`)];
-        if (msg.client.monitors.get(name)) delete require.cache[require.resolve(`../../monitors/${name}.js`)];
+        if (piece instanceof Monitor) delete require.cache[require.resolve(`../../monitors/${name}.js`)];
 
         try {
             
@@ -68,10 +68,11 @@ module.exports = class extends Command {
                 return { time: stopwatch.toString(), type: 'EVENT', name: instance }
             }
 
-            if (msg.client.monitors.get(name)) {
-                newPiece = require(`../../monitors/${name}.js`)
-                msg.client.monitors.set(newPiece.name, newPiece);
-                return { time: stopwatch.toString(), type: 'MONITOR', name: newPiece.name }
+            if (piece instanceof Monitor) {
+                newPiece = require(`../../monitors/${name}.js`);
+                newPiece = new newPiece(this.client.monitors, `../../monitors/${name}`, `../../monitors`);
+                this.client.monitors.set(newPiece);
+                return { time: stopwatch.toString(), type: 'MONITOR', name: instance }
             }
 
         } catch (e) {

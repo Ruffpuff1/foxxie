@@ -12,7 +12,7 @@ module.exports = class extends Event {
 
         if (!reaction.message.guild) return null;
 
-        this.client.monitors.get('rero').execute(reaction, user, 'add');
+        //this.client.monitors.get('rero').execute(reaction, user, 'add');
 
         this.stars(reaction, user);
     }

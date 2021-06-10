@@ -21,14 +21,14 @@ module.exports = class extends Command {
         if (!warnable.length) return msg.responder.error('COMMAND_WARN_NOPERMS', members.length > 1);
 
         const reason = args.slice(members.length).join(' ') || msg.language.get('LOG_MODERATION_NOREASON');
-        await this.executeWarns(msg, reason, warnable);
+        await this.executeWarns(msg, reason, warnable, msg.member);
         this.logActions(msg.guild, warnable.map(member => member.user), { type: 'mod', action: 'warn', reason, channel: msg.channel, dm: true, counter: 'warn', moderator: msg.member });
         return msg.responder.success();
     }
 
-    async executeWarns(msg, reason, members) {
+    async executeWarns(msg, reason, members, author) {
 
-        const warn = { author: msg.member, reason, timestamp: new Date().getTime()}
+        const warn = { author, reason, timestamp: new Date().getTime()}
 
         for (const member of members) {
             member.user.settings.push(`servers.${msg.guild.id}.warnings`, warn);

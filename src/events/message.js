@@ -15,8 +15,7 @@ module.exports = class extends Event {
 
         // Execute monitors
         if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return;
-        message.client.monitors.filter(monitor => monitor.type === 'message').forEach(monitor => monitor.execute(message));
-        // message.client.monitors.forEach(m => { if (m.type === 'message') m.execute(message) });
+        this.client.monitors.run(message);
 
         // Checks if member is AFK
         message.client.tasks.get('afkcheck').execute(message);

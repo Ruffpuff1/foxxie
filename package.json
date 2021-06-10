@@ -1,12 +1,12 @@
 {
   "name": "foxxie",
-  "version": "2.0",
+  "version": "3.0",
   "description": "Foxxie is a smort server butler suited for taking care of and managing your server.",
   "main": "src/index.js",
   "license": "ISC",
   "author": "Ruff (https://github.com/Ruffpuff1)",
   "contributors": [
-    "Ruff (https://github.com/Ruffpuff1)",
+    "Ruff (http://ruff.cafe)",
     "Raindrop (https://github.com/Raindrop-Droptop)",
     "Sug4r",
     "Ari"
@@ -16,7 +16,7 @@
     "crypto": "^1.0.1",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "foxxie": "^1.0.6",
+    "foxxie": "^0.0.6-1",
     "isgd": "^1.1.3",
     "lodash": "^4.17.21",
     "mathjs": "^9.3.2",

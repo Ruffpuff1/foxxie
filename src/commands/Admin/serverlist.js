@@ -28,7 +28,7 @@ module.exports = class extends Command {
 
         let embed = new Discord.MessageEmbed()
             .setColor(message.guild.me.displayColor)
-            .setTitle(message.language.get('COMMAND_SERVERLIST_TITLE'))
+            .setTitle(message.language.get('COMMAND_SERVERLIST_TITLE', this.client.user.username))
             .setFooter(message.language.get('COMMAND_SERVERLIST_FOOTER', this.client.guilds.cache.size, page, Math.ceil(this.client.guilds.cache.size / 10)))
             .setDescription(description)
 

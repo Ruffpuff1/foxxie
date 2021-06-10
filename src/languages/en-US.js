@@ -1,3 +1,7 @@
+/**
+ * Co-authored by Ruff (http://ruff.cafe)
+ * Co-authored by Aria
+ */
 const { Util, Language, bold, code, underline, italic } = require('foxxie');
 const { supportServer } = require('../../config/foxxie');
 const { emojis: { infinity, perms: { notSpecified } } } = require('../../lib/util/constants');
@@ -52,12 +56,12 @@ module.exports = class extends Language {
             COMMAND_REBOOT_DESCRIPTION: `Restarts my internal process while being run on process manager 2. This command is locked to the bot owner due to obvious reasons.`,
             COMMAND_RELOAD_DESCRIPTION: `Reloads a Foxxie Piece without having to restart the client. This command is locked to the bot owner due to it's special nature.`,
             COMMAND_RELOAD_ERROR: (name, error) => `${bold`Uh oh,`} failed to reload ${name}${Util.codeBlock('js', error)}`,
-            COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a piece to reload [Command | Monitor | Language ].`,
+            COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a piece to reload.`,
             COMMAND_RELOAD_SUCCESS: (name, type, time) => `${bold`Successfully`} reloaded ${type}: ${bold`${name}`}. (Took ${time})`,
             COMMAND_SERVERLIST_DESCRIPTION: `Displays every guild the bot is currently in, along with their Id and membercount. This command is locked to the bot owner due to privacy concerns.`,
             COMMAND_SERVERLIST_FOOTER: (size, page, totalPages) => `${size} total servers\nPage - ${page}/${totalPages}`,
             COMMAND_SERVERLIST_MEMBERCOUNT: `members`,
-            COMMAND_SERVERLIST_TITLE: `Servers using Foxxie`,
+            COMMAND_SERVERLIST_TITLE: name => `Servers using ${name}`,
 
             // Fun Commands
             COMMAND_CAT_DESCRIPTION: `Sends me to get you a random picture of a cat from https://api.thecatapi.com`,
@@ -237,6 +241,7 @@ module.exports = class extends Language {
             LOG_DM_VCUNMUTE: `You have been unmuted in vc`,
             LOG_DM_WARN: `You have been warned`,
 
+            LOG_MODERATION_INVITE: `Server invite link.`,
             LOG_MODERATION_NOREASON: `No reason specified.`
         }
     }
