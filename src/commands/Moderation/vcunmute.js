@@ -7,7 +7,7 @@ module.exports = class extends Command {
             name: 'vcunmute',
             aliases: ['vcum', 'letsay', 'letspeak'],
             description: language => language.get('COMMAND_VCUNMUTE_DESCRIPTION'),
-            usage: '[Members] (reason)',
+            usage: '[Members] (Reason)',
             category: 'moderation',
             permissions: 'MUTE_MEMBERS'
         })

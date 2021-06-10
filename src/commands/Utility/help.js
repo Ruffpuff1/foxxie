@@ -70,8 +70,8 @@ module.exports = class extends Command {
         if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret');
 
         categories.forEach(c => 
-            embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).size})`}`, 
-                this.client.commands.filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).map(cmd => code`${cmd.name}`).join(', ')))
+            embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).length})`}`, 
+                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).map(cmd => code`${cmd.name}`).join(', ')))
 
         return msg.channel.send(embed);
     }

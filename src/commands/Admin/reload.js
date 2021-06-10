@@ -42,7 +42,7 @@ module.exports = class extends Command {
         }
 
         if (piece instanceof Event) delete require.cache[require.resolve(`../../events/${name}.js`)];
-        if (msg.client.languages.get(instance)) delete require.cache[require.resolve(`../../languages/${instance}.js`)];
+        if (piece instanceof Language) delete require.cache[require.resolve(`../../languages/${instance}.js`)];
         if (msg.client.monitors.get(name)) delete require.cache[require.resolve(`../../monitors/${name}.js`)];
 
         try {
@@ -55,8 +55,8 @@ module.exports = class extends Command {
 
             if (piece instanceof Language) {
                 newPiece = require(`../../languages/${instance}.js`);
-                newPiece = new newPiece(msg);
-                msg.client.languages.set(instance, newPiece);
+                newPiece = new newPiece(this.client);
+                msg.client.languages.set(newPiece, instance);
                 return { time: stopwatch.toString(), type: 'LANGUAGE', name: instance }
             }
 

@@ -49,6 +49,7 @@ module.exports = class extends Language {
             ].join('\n'),
             COMMAND_EVAL_ERROR: (time, output, type) => `**Error**:${output}\n**Type**:${type}\n${time}`,
 			COMMAND_EVAL_OUTPUT: (time, output, type) => `**Output**:${output}\n**Type**:${type}\n${time}`,
+            COMMAND_REBOOT_DESCRIPTION: `Restarts my internal process while being run on process manager 2. This command is locked to the bot owner due to obvious reasons.`,
             COMMAND_RELOAD_DESCRIPTION: `Reloads a Foxxie Piece without having to restart the client. This command is locked to the bot owner due to it's special nature.`,
             COMMAND_RELOAD_ERROR: (name, error) => `${bold`Uh oh,`} failed to reload ${name}${Util.codeBlock('js', error)}`,
             COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a piece to reload [Command | Monitor | Language ].`,
@@ -124,6 +125,9 @@ module.exports = class extends Language {
                 nuke ? `${notSpecified} Completed ${nuke.toLocaleString()} ${bold`nuke${nuke === 1 ? '' : 's'}`}` : null,
                 purge ? `${notSpecified} Performed ${purge.toLocaleString()} ${bold`purge${purge === 1 ? '' : 's'}`} (${bold`${total.toLocaleString()}`} message${total === 1 ? '' : 's'})` : null
             ].filter(a => !!a).join('\n'),
+            COMMAND_VCMUTE_DESCRIPTION: `I will mute the specified members if they are in a vc and not server muted. If a moderation logging channel is set, this action will log there.`,
+            COMMAND_VCMUTE_NOPERMS: multiple => `${bold`Hey,`} you can't mute ${multiple ? `any of the specified members` : `the specified member`} in vc.`,
+            COMMAND_VCMUTE_NOVOICE: multiple => `${multiple ? `${bold`The`} specified members are not` : `${bold`Hey,`} the specified member is not`} in vc or ${multiple ? `are` : `is`} already muted.`,
             COMMAND_VCUNMUTE_DESCRIPTION: `I will unmute the specified members if they are in a vc and server muted. If a moderation logging channel is set, this action will log there.`,
             COMMAND_VCUNMUTE_NOPERMS: multiple => `${bold`Hey,`} you can't unmute ${multiple ? `any of the specified members` : `the specified member`} from vc.`,
             COMMAND_VCUNMUTE_NOVOICE: multiple => `${multiple ? `${bold`None`} of the specified members are` : `${bold`Hey,`} the specified member is not`} in vc or muted.`,
@@ -204,6 +208,7 @@ module.exports = class extends Language {
             LOG_ACTION_NUKE: `Channel Nuked`,
             LOG_ACTION_TEMPBAN: multiple => `Temporarily Banned User${multiple ? 's' : ''}`,
             LOG_ACTION_TEMPUNBAN: multiple => `Removed Temporary Ban from User${multiple ? 's' : ''}`,
+            LOG_ACTION_VCMUTE: multiple => `Muted User${multiple ? 's' : ''} in vc.`,
             LOG_ACTION_VCUNMUTE: multiple => `Unmuted User${multiple ? 's' : ''} in vc.`,
             LOG_ACTION_WARN: multiple => `Warned User${multiple ? 's' : ''}`,
 
@@ -228,6 +233,7 @@ module.exports = class extends Language {
 
             LOG_DM_TEMPBAN: `You have been temporarily banned`,
             LOG_DM_TEMPUNBAN: `Your temporary ban has expired`,
+            LOG_DM_VCMUTE: `You have been muted in vc`,
             LOG_DM_VCUNMUTE: `You have been unmuted in vc`,
             LOG_DM_WARN: `You have been warned`,
 
