@@ -1,5 +1,6 @@
 const Command = require('../../../lib/structures/MultiModerationCommand');
 const { ms } = require('foxxie');
+const { prefix } = require('../../../config/foxxie');
 
 module.exports = class extends Command {
 
@@ -8,6 +9,7 @@ module.exports = class extends Command {
             name: 'ban',
             aliases: ['b', 'bean', '410', 'yeet', 'banish', 'begone', 'perish'],
             description: language => language.get('COMMAND_BAN_DESCRIPTION'),
+            extendedDescription: (language, prefix) => language.get('COMMAND_BAN_DESCRIPTIONEXTENDED', prefix),
             usage: '(Time) [Users] (Reason) (-p)',
             permissions: 'BAN_MEMBERS',
             category: 'moderation'

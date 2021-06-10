@@ -101,12 +101,18 @@ module.exports = class extends Language {
             COMMAND_URBAN_NOWORD: `${bold`Okay,`} how do you expect me to define a word if you don't provide one?`,
 
             // Moderation Commands
-            COMMAND_BAN_DESCRIPTION: [
-                `Bans users from the server so they can no longer join.`,
-                `Formatting time like ${code`1d`} for one day, you can temporarily ban users and have them automatically be unbanned after a specified time period.`,
-                `This command also takes advantage of my message flags feature, adding ${code`-p`} to the message will automatically clear one days worth of the user's messages.\n`,
-                `If a moderation logging channel is set in your server, this command will log there, and send DMs to the users banned, with the provided reason.`
-            ].join('\n'),
+            COMMAND_BAN_DESCRIPTION: `Bans users from the server so they can no longer join with optional flags and duration. If a moderation logging channel is set in your server, this command will log there, and send DMs to the users banned, with the provided reason.`,
+            COMMAND_BAN_DESCRIPTIONEXTENDED: prefix => [
+                bold`Banning a single user:`,
+                Util.codeBlock('', `${prefix}ban @User For being rude`),
+                bold`Banning a multiple users:`,
+                Util.codeBlock('', `${prefix}ban @User @User @User For spamming`),
+                bold`Banning a user and clearing their messages:`,
+                Util.codeBlock('', `${prefix}ban @User spam -p`),
+                bold`Banning a user temporarily (2 days):`,
+                Util.codeBlock('', `${prefix}ban 2d @User rule #1`),
+                `Time is formatted like ${code`2h`} or ${code`10m`}. This command is logged to a moderation logging channel if one is set, as well as the server's audit logs with the moderator who executed the command.`
+            ],
             COMMAND_BAN_ERROR: (user, issue) => `${bold`Whoops`} I couldn't ban ${bold`${user}`}:${Util.codeBlock('js', issue)}`,
             COMMAND_BAN_NOPERMS: multiple => `${bold`Hey,`} you cannot ban ${multiple ? 'any of the specified users' : 'the specified user'}.`,
             COMMAND_NUKE: `${bold`First hehe,`} anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`,
@@ -188,6 +194,7 @@ module.exports = class extends Language {
                 `Square brackets ${code`[]`} indicate an argument is required, parenthesis ${code`()`} indicate an argument is optional, and a pipe ${code`|`} between arguements indicates that you can choose between the two.\n`,
                 `If you need any further help be sure to join my [support server](${supportServer}).`
             ].join('\n'),
+            COMMAND_HELP_FOOTER: `For other usage examples react to the 📜`,
             COMMAND_HELP_MENU: prefix => `These are my commands, for additional info on a certain one of them just do ${code`${prefix}help (command)`}.`,
             COMMAND_HELP_NOTVALID: `${bold`Sorry,`} that doesn't seem to be one of my commands.`,
             COMMAND_HELP_PERMISSIONS: `Required Permissions`,
