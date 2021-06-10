@@ -32,7 +32,7 @@ module.exports = {
         const commandName = args.shift().toLowerCase();
 
         let command = message.client.commands.get(commandName);
-        if (!command) return;
+        if (!command) return message.client.emit('commandUnknown', message, commandName)
 
         try {
             message.client.inhibitors.get('permissions').execute(command, message);
