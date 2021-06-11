@@ -13,11 +13,11 @@ module.exports = class extends Monitor {
     }
 
     async run(msg) {
-        if (!msg.guild || !await msg.guild.settings.get('mod.anti.invite')) return;
+        if (!msg.guild || !await msg.guild.settings.get('mod.anti.invite') || await msg.exempt()) return;
         if (!this.inviteRegex.test(msg.content)) return;
         //'https://discord.gg/vyVErU3UFM' - deletes any discord server invite.
         if (msg.guild.id === '761512748898844702') await this.executeWarn(msg);
-        msg.delete();
+        return msg.delete();
     }
 
     async executeWarn(msg) {

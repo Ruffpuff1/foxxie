@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
-const { Command, Util } = require('foxxie');
+const { Command, Util, MENTION_REGEX: { emoji } } = require('foxxie');
 
 module.exports = class extends Command {
 
@@ -14,8 +14,8 @@ module.exports = class extends Command {
         })
     }
 
-    async run(msg, [term]) {
-
+    async run(msg, args) {
+        let term = args.slice(0).join(' ').replace(/:[^:\s]*(?:::[^:\s]\*)*:/gm, '').replace(emoji, '').replace(/(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/gi, '');
         if (!term) return msg.responder.error('COMMAND_URBAN_NOWORD');
         const loading = await msg.responder.loading();
         const result = await axios.get(`http://api.urbandictionary.com/v0/define?term=$%7B${term}%7D`);

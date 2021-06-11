@@ -4,7 +4,7 @@
  */
 const { Util, Language, bold, code, underline, italic } = require('foxxie');
 const { supportServer } = require('../../config/foxxie');
-const { emojis: { infinity, perms: { notSpecified } } } = require('../../lib/util/constants');
+const { emojis: { infinity, perms: { notSpecified, granted } } } = require('../../lib/util/constants');
 
 module.exports = class extends Language {
 
@@ -25,6 +25,7 @@ module.exports = class extends Language {
 			ACTIVITY_LISTENING: 'Listening to',
 			ACTIVITY_STREAMING: 'Streaming',
 
+            MESSAGE_INVALID_USE: usage => `${bold`Please,`} specify a proper use case ${usage}.`,
             MESSAGE_LOADING: `${infinity} ${bold`Alright, I'm taking your order.`} This may take a few seconds.`,
             MESSAGE_MEMBERS_NONE: `You need to specify at least ${bold`one member`}.`,
             MESSAGE_PROMPT_CANCELLED: `Command ${bold`cancelled`}.`,
@@ -53,15 +54,16 @@ module.exports = class extends Language {
             ].join('\n'),
             COMMAND_EVAL_ERROR: (time, output, type) => `**Error**:${output}\n**Type**:${type}\n${time}`,
 			COMMAND_EVAL_OUTPUT: (time, output, type) => `**Output**:${output}\n**Type**:${type}\n${time}`,
+            COMMAND_REBOOT: `${bold`Okay,`} restarting.｡｡｡zzZ`,
             COMMAND_REBOOT_DESCRIPTION: `Restarts my internal process while being run on process manager 2. This command is locked to the bot owner due to obvious reasons.`,
             COMMAND_RELOAD_DESCRIPTION: `Reloads a Foxxie Piece without having to restart the client. This command is locked to the bot owner due to it's special nature.`,
             COMMAND_RELOAD_ERROR: (name, error) => `${bold`Uh oh,`} failed to reload ${name}${Util.codeBlock('js', error)}`,
-            COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a piece to reload.`,
+            COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a piece to reload [Command | Monitor | Language ].`,
             COMMAND_RELOAD_SUCCESS: (name, type, time) => `${bold`Successfully`} reloaded ${type}: ${bold`${name}`}. (Took ${time})`,
             COMMAND_SERVERLIST_DESCRIPTION: `Displays every guild the bot is currently in, along with their Id and membercount. This command is locked to the bot owner due to privacy concerns.`,
             COMMAND_SERVERLIST_FOOTER: (size, page, totalPages) => `${size} total servers\nPage - ${page}/${totalPages}`,
             COMMAND_SERVERLIST_MEMBERCOUNT: `members`,
-            COMMAND_SERVERLIST_TITLE: name => `Servers using ${name}`,
+            COMMAND_SERVERLIST_TITLE: `Servers using Foxxie`,
 
             // Fun Commands
             COMMAND_CAT_DESCRIPTION: `Sends me to get you a random picture of a cat from https://api.thecatapi.com`,
@@ -101,18 +103,12 @@ module.exports = class extends Language {
             COMMAND_URBAN_NOWORD: `${bold`Okay,`} how do you expect me to define a word if you don't provide one?`,
 
             // Moderation Commands
-            COMMAND_BAN_DESCRIPTION: `Bans users from the server so they can no longer join with optional flags and duration. If a moderation logging channel is set in your server, this command will log there, and send DMs to the users banned, with the provided reason.`,
-            COMMAND_BAN_DESCRIPTIONEXTENDED: prefix => [
-                bold`Banning a single user:`,
-                Util.codeBlock('', `${prefix}ban @User For being rude`),
-                bold`Banning a multiple users:`,
-                Util.codeBlock('', `${prefix}ban @User @User @User For spamming`),
-                bold`Banning a user and clearing their messages:`,
-                Util.codeBlock('', `${prefix}ban @User spam -p`),
-                bold`Banning a user temporarily (2 days):`,
-                Util.codeBlock('', `${prefix}ban 2d @User rule #1`),
-                `Time is formatted like ${code`2h`} or ${code`10m`}. This command is logged to a moderation logging channel if one is set, as well as the server's audit logs with the moderator who executed the command.`
-            ],
+            COMMAND_BAN_DESCRIPTION: [
+                `Bans users from the server so they can no longer join.`,
+                `Formatting time like ${code`1d`} for one day, you can temporarily ban users and have them automatically be unbanned after a specified time period.`,
+                `This command also takes advantage of my message flags feature, adding ${code`-p`} to the message will automatically clear one days worth of the user's messages.\n`,
+                `If a moderation logging channel is set in your server, this command will log there, and send DMs to the users banned, with the provided reason.`
+            ].join('\n'),
             COMMAND_BAN_ERROR: (user, issue) => `${bold`Whoops`} I couldn't ban ${bold`${user}`}:${Util.codeBlock('js', issue)}`,
             COMMAND_BAN_NOPERMS: multiple => `${bold`Hey,`} you cannot ban ${multiple ? 'any of the specified users' : 'the specified user'}.`,
             COMMAND_NUKE: `${bold`First hehe,`} anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`,
@@ -184,9 +180,25 @@ module.exports = class extends Language {
             COMMAND_SAMI_DESCRIPTION: ``,
             COMMAND_STRAX_DESCRIPTION: ``,
 
+            // Settings Commands
+            COMMAND_ANTI: (use, enabled) => `${bold`Done,`} ${enabled ? `started filtering` : `stopped filtering`} ${bold`anti-${use}${['copypasta', 'gift', 'image', 'invite', 'link'].includes(use) ? 's' : ''}`}`,
+            COMMAND_ANTI_CONFIRM: `${bold`Hey,`} are you sure you want to clear all ${bold`anti`} settings on this server?`,
+            COMMAND_ANTI_DESCRIPTION: `Configure my automod (anti) settings in your server by specifying what I should filter out for example: ${code`fox anti invites on`} will turn Discord invite filtering on.\nThe list of current antis includes: ${code`invite`}, ${code`gift`}, and ${code`uppercase`}.`,
+            COMMAND_ANTI_ENABLED1: name => `${granted} Filtering ${bold`${name}${['copypasta', 'link'].includes(name) ? `s.` : ''}`}${['profanity', 'duplicates'].includes(name) ? '.' : ['copypasta', 'link'].includes(name) ? '' : ' links.'}`,
+            COMMAND_ANTI_ENABLED2: name => `${granted} Removing ${bold`${name}`} names.`,
+            COMMAND_ANTI_GUILD: guild => underline`Foxxie's automod settings in ${bold`${guild}`}:`,
+            COMMAND_ANTI_NONE: `This server currently has no ${bold`anti settings`} configured.`,
+            COMMAND_ANTI_NOSETTING: `${bold`Whoops,`} you need to provide a proper setting [On|Off].`,
+            COMMAND_EXEMPT: (name, type) => `${notSpecified} ${bold`${name}`} is exempt as a ${bold`${type}`}.`,
+            COMMAND_EXEMPT_DESCRIPTION: `Allows you to add users, channels, or roles to be ignored by my ${code`anti`} automod features. To remove from this list try out the ${code`unexempt`} command.`,
+            COMMAND_EXEMPT_DUPLICATE: (name, type) => `${bold`${name}`} is already an exempt ${bold`${type.substring(0, type.length -1)}`}.`,
+            COMMAND_EXEMPT_GUILD: guild => underline`Foxxie's exempt settings in ${bold`${guild}`}.`,
+            COMMAND_UNEXEMPT_DESCRIPTION: `Allows you to remove users, channels, or roles from being ignored by my ${code`anti`} automod features. To add to this list try out the ${code`exempt`} command.`,
+            COMMAND_UNEXEMPT_NOEXIST: (name, type) => `${bold`${name}`} is currently not an exempt ${bold`${type.substring(0, type.length -1)}`}.`,
+
             // Util Commands
             COMMAND_HELP_CATEGORY: `Command Category`,
-            COMMAND_HELP_DESCRIPTION: ``,
+            COMMAND_HELP_DESCRIPTION: `Get example usage and descriptions of all of my commands. Run ${code`help usage`} for a further explaination on the help command.`,
             COMMAND_HELP_EXPLAINER: prefix => [
                 `With my ${code`help`} command you can get information about any of my commands straight from Discord.`,
                 `To get a short overview of any command just run ${code`${prefix}help [Command]`}\n`,
@@ -194,7 +206,6 @@ module.exports = class extends Language {
                 `Square brackets ${code`[]`} indicate an argument is required, parenthesis ${code`()`} indicate an argument is optional, and a pipe ${code`|`} between arguements indicates that you can choose between the two.\n`,
                 `If you need any further help be sure to join my [support server](${supportServer}).`
             ].join('\n'),
-            COMMAND_HELP_FOOTER: `For other usage examples react to the 📜`,
             COMMAND_HELP_MENU: prefix => `These are my commands, for additional info on a certain one of them just do ${code`${prefix}help (command)`}.`,
             COMMAND_HELP_NOTVALID: `${bold`Sorry,`} that doesn't seem to be one of my commands.`,
             COMMAND_HELP_PERMISSIONS: `Required Permissions`,

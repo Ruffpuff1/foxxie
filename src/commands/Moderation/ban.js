@@ -1,6 +1,5 @@
 const Command = require('../../../lib/structures/MultiModerationCommand');
 const { ms } = require('foxxie');
-const { prefix } = require('../../../config/foxxie');
 
 module.exports = class extends Command {
 
@@ -9,7 +8,6 @@ module.exports = class extends Command {
             name: 'ban',
             aliases: ['b', 'bean', '410', 'yeet', 'banish', 'begone', 'perish'],
             description: language => language.get('COMMAND_BAN_DESCRIPTION'),
-            extendedDescription: (language, prefix) => language.get('COMMAND_BAN_DESCRIPTIONEXTENDED', prefix),
             usage: '(Time) [Users] (Reason) (-p)',
             permissions: 'BAN_MEMBERS',
             category: 'moderation'
@@ -30,9 +28,9 @@ module.exports = class extends Command {
         const duration = this.duration.test(args[0]) ? ms(ms(args[0]), { long: true }) : null;
         const time = duration ? Date.now() + ms(args[0]) : null;
 
-        let reason = this.duration.test(args[0])
-            ? args.slice(users.length + 2).join(' ')
-            : args.slice(users.length + 1).join(' ');
+        let reason = duration
+            ? args.slice(users.length + 1).join(' ')
+            : args.slice(users.length).join(' ');
 
         const action = time ? 'tempban' : 'ban';
         if (!reason) reason = msg.language.get('LOG_MODERATION_NOREASON');
