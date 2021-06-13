@@ -1,311 +1,302 @@
-const { MessageEmbed, Permissions: { FLAGS }, Role, Emoji, Channel, User } = require('discord.js');
-const { emojis: { }, badges } = require('../../../lib/util/constants')
-const moment = require('moment')
+const { MessageEmbed, Permissions: { FLAGS }, Role, GuildMember, Emoji, Channel, User } = require('discord.js');
+const { badges, color: { BAD, VERY_BAD, SUPER_BAD } } = require('../../../lib/util/constants');
+const { Command, Duration, Timestamp, zws, Util } = require('foxxie');
 
-module.exports = {
-    name: 'info',
-	aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
-	usage: 'fox info (role|server|user|channel|emoji)',
-	//category: 'utility',
+module.exports = class extends Command {
 
-    perms: {
-        ADMINISTRATOR: 'Administrator',
-        VIEW_AUDIT_LOG: 'View Audit Log',
-        MANAGE_GUILD: 'Manage Server',
-        MANAGE_ROLES: 'Manage Roles',
-        MANAGE_CHANNELS: 'Manage Channels',
-        KICK_MEMBERS: 'Kick Members',
-        BAN_MEMBERS: 'Ban Members',
-        CREATE_INSTANT_INVITE: 'Create Instant Invite',
-        CHANGE_NICKNAME: 'Change Nickname',
-        MANAGE_NICKNAMES: 'Manage Nicknames',
-        MANAGE_EMOJIS: 'Manage Emojis',
-        MANAGE_WEBHOOKS: 'Manage Webhooks',
-        VIEW_CHANNEL: 'Read Text Channels and See Voice Channels',
-        SEND_MESSAGES: 'Send Messages',
-        SEND_TTS_MESSAGES: 'Send TTS Messages',
-        MANAGE_MESSAGES: 'Manage Messages',
-        EMBED_LINKS: 'Embed Links',
-        ATTACH_FILES: 'Attach Files',
-        READ_MESSAGE_HISTORY: 'Read Message History',
-        MENTION_EVERYONE: 'Mention Everyone',
-        USE_EXTERNAL_EMOJIS: 'Use External Emojis',
-        ADD_REACTIONS: 'Add Reactions',
-        CONNECT: 'Connect',
-        SPEAK: 'Speak',
-        MUTE_MEMBERS: 'Mute Members',
-        DEAFEN_MEMBERS: 'Deafen Members',
-        MOVE_MEMBERS: 'Move Members',
-        USE_VAD: 'Use Voice Activity',
-        STREAM: 'Go Live',
-        ROLE: 'testing role thing'
-    },
+    constructor(...args) {
+        super(...args, {
+            name: 'info',
+            aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
+            description: language => language.get('COMMAND_INFO_DESCRIPTION'),
+            usage: '(User|Role|Channel|Emoji|server)',
+            category: 'utility'
+        })
 
-    regions: {
-        'eu-central': 'Central Europe',
-        india: 'India',
-        london: 'London',
-        japan: 'Japan',
-        amsterdam: 'Amsterdam',
-        brazil: 'Brazil',
-        'us-west': 'US West',
-        hongkong: 'Hong Kong',
-        southafrica: 'South Africa',
-        sydney: 'Sydney',
-        europe: 'Europe',
-        singapore: 'Singapore',
-        'us-central': 'US Central',
-        'eu-west': 'Western Europe',
-        dubai: 'Dubai',
-        'us-south': 'US South',
-        'us-east': 'US East',
-        frankfurt: 'Frankfurt',
-        russia: 'Russia'
-    },
+        this.timestamp = new Timestamp('MMMM d YYYY');
 
-    verificationLevels: {
-        NONE: 'None',
-        LOW: 'Low',
-        MEDIUM: 'Medium',
-        HIGH: '(╯°□°）╯︵ ┻━┻',
-        VERY_HIGH: '┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻'
-    },
+        this.perms = {
+			ADMINISTRATOR: 'Administrator',
+			VIEW_AUDIT_LOG: 'View Audit Log',
+			MANAGE_GUILD: 'Manage Server',
+			MANAGE_ROLES: 'Manage Roles',
+			MANAGE_CHANNELS: 'Manage Channels',
+			KICK_MEMBERS: 'Kick Members',
+			BAN_MEMBERS: 'Ban Members',
+			CREATE_INSTANT_INVITE: 'Create Instant Invite',
+			CHANGE_NICKNAME: 'Change Nickname',
+			MANAGE_NICKNAMES: 'Manage Nicknames',
+			MANAGE_EMOJIS: 'Manage Emojis',
+			MANAGE_WEBHOOKS: 'Manage Webhooks',
+			VIEW_CHANNEL: 'Read Text Channels and See Voice Channels',
+			SEND_MESSAGES: 'Send Messages',
+			SEND_TTS_MESSAGES: 'Send TTS Messages',
+			MANAGE_MESSAGES: 'Manage Messages',
+			EMBED_LINKS: 'Embed Links',
+			ATTACH_FILES: 'Attach Files',
+			READ_MESSAGE_HISTORY: 'Read Message History',
+			MENTION_EVERYONE: 'Mention Everyone',
+			USE_EXTERNAL_EMOJIS: 'Use External Emojis',
+			ADD_REACTIONS: 'Add Reactions',
+			CONNECT: 'Connect',
+			SPEAK: 'Speak',
+			MUTE_MEMBERS: 'Mute Members',
+			DEAFEN_MEMBERS: 'Deafen Members',
+			MOVE_MEMBERS: 'Move Members',
+			USE_VAD: 'Use Voice Activity',
+			STREAM: 'Go Live'
+		};
 
-    filterLevels: {
-        DISABLED: "Don't scan any messages",
-        MEMBERS_WITHOUT_ROLES: 'Scan messages from members without a role',
-        ALL_MEMBERS: 'Scan messages by all members'
-    },
+        this.regions = {
+			'eu-central': 'Central Europe',
+			india: 'India',
+			london: 'London',
+			japan: 'Japan',
+			amsterdam: 'Amsterdam',
+			brazil: 'Brazil',
+			'us-west': 'US West',
+			hongkong: 'Hong Kong',
+			southafrica: 'South Africa',
+			sydney: 'Sydney',
+			europe: 'Europe',
+			singapore: 'Singapore',
+			'us-central': 'US Central',
+			'eu-west': 'Western Europe',
+			dubai: 'Dubai',
+			'us-south': 'US South',
+			'us-east': 'US East',
+			frankfurt: 'Frankfurt',
+			russia: 'Russia'
+		};
 
-    async execute (props) {
+		this.verificationLevels = {
+			NONE: 'None',
+			LOW: 'Low',
+			MEDIUM: 'Medium',
+			HIGH: '(╯°□°）╯︵ ┻━┻',
+			VERY_HIGH: '┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻'
+		};
 
-        let { message, args } = props;
+        this.filterLevels = {
+			DISABLED: "Don't scan any messages",
+			MEMBERS_WITHOUT_ROLES: 'Scan messages from members without a role',
+			ALL_MEMBERS: 'Scan messages by all members'
+		};
+    }
 
-        let user; let emoji;
-        channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name.toLowerCase() === args.join(' ').toLocaleLowerCase());
-        user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.client.users.cache.find(u => u.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member.user;
-        let server = message.client.guilds.cache.get(args[1]) || message.guild;
-		let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase()); 
-        if (args[0]) emoji = message.client.emojis.cache.find((emj) => emj.id === args[0].replace(/^<a?:\w+:(\d+)>$/, '$1'))
+    async run(msg, args) {
+		let arg = args[0], server = this.client.guilds.cache.get(args[1]);
+		if (arg) arg = msg.users;
+		if (!arg?.length) arg = await this.client.users.fetch(args[0]).catch(() => null);
+		if (!arg) arg = msg.channels;
+		if (!arg?.length) arg = msg.emojis;
+		if (!arg?.length) arg = msg.roles;
+		if (arg?.length) arg = arg[0];
+		if (!arg && !args[0]) arg = msg.author;
+		if (args[0] === 'server') arg = 'server';
 
-        if (channel instanceof Channel) return this.channelInfo(props, channel);
-        if (emoji instanceof Emoji) return this.emojiinfo(props, emoji,);
-        if (role instanceof Role) return this.roleinfo(props, role);
-        if (message.guild && args[0] === 'server') return this.serverinfo(props, server);
-		if (message.guild && args[0] === message.guild.id) this.serverinfo(props, server);
-        if (user instanceof User && args[0] !== 'server' && user) return this.userInfo(props, user);
+        if (arg instanceof User) return this.userInfo(msg, arg);
+        if (arg instanceof GuildMember) return this.userInfo(msg, arg.user);
+        if (arg instanceof Role) return this.roleInfo(msg, arg);
+		if (arg instanceof Channel) return this.channelInfo(msg, arg);
+		if (arg instanceof Emoji) return this.emojiInfo(msg, arg);
+        if (msg.guild && arg === 'server') return this.serverInfo(msg, server);
+		
+		msg.responder.error('COMMAND_INFO');
+		return false;
+    }
 
-    },
+	async userInfo(msg, user) {
+		const loading = await msg.responder.loading();
+		let embed = new MessageEmbed().setColor(msg.guild.me.displayColor);
+		embed = await this.addBaseData(user, embed);
+		embed = await this.addBadges(user, embed);
+		embed = await this.addMemberData(msg, user, embed);
+		embed = await this.addBans(msg, user, embed);
+		await msg.channel.send(embed);
+		return loading.delete();
+	}
 
-    async userInfo({message, language}, user) {
+	async addBaseData(user, embed) {
+		return embed
+			.setTitle(`${user.tag} (ID: ${user.id})`)
+			.setThumbnail(user.displayAvatarURL({ dynamic: true }))
+	}
 
-        const loading = await message.responder.loading();
-        let embed = new MessageEmbed();
-        embed = await this._addBaseData(embed, user);
-        embed = await this._addBadges(embed, user);
-        embed = await this._addMemberData(embed, message, user, language);
-        await loading.delete();
-        return message.channel.send(embed);
-    },
-
-    async _addBaseData(embed, user) {
-        return embed
-            .setTitle(`${user.tag} (ID: ${user.id})`)
-            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-    },
-
-    async _addBadges(embed, user) {
-        const bitfield = await user.settings.get('badges');
+	async addBadges(user, embed) {
+		const bitfield = await user.settings.get('badges');
         const out = badges.filter((_, idx) => bitfield & (1 << idx));
         if (!out.length) return embed;
+
         return embed.setDescription(out.map(badge => `${badge.icon} ${badge.name}`).join('\n'));
-    },
+	}
 
-    async _addMemberData(embed, msg, user, language) {
-
-        const member = msg.guild ? await msg.guild.members.fetch(user).catch(() => null) : null;
+	async addMemberData(msg, user, embed) {
+		const member = msg.guild ? await msg.guild.members.fetch(user).catch(() => null) : null;
 		const creator = member && (member.joinedTimestamp - msg.guild.createdTimestamp) < 3000;
 
-        const statistics = [
-            language.get('COMMAND_INFO_USER_DISCORDJOIN', moment(user.createdAt).format('MMMM Do YYYY'), moment([moment(user.createdAt).format('YYYY'), moment(user.createdAt).format('M') - 1, moment(user.createdAt).format('D')]).toNow(true))
-        ];
+		const statistics = [
+			msg.language.get('COMMAND_INFO_USER_DISCORDJOIN', this.timestamp.display(user.createdAt), Duration.toNow(user.createdAt))
+		];
 
-        if (member) {
+		if (member) {
+			
+			statistics.push(msg.language.get(
+					creator ? 'COMMAND_INFO_USER_GUILDCREATE' : 'COMMAND_INFO_USER_GUILDJOIN',
+					msg.guild.name,
+					this.timestamp.display(member.joinedAt),
+					Duration.toNow(member.joinedAt)));
+			statistics.push(msg.language.get('COMMAND_INFO_USER_MESSAGES', await member.user.settings.get(`servers.${msg.guild.id}.messageCount`) || 0));
+		}
 
-            let join = 
-            // Ari join 
-                member.user.id === '754598258742919178' && msg.guild.id === '761512748898844702'
-                ? [msg.guild.name,
-                moment(1609073125000).format('MMMM Do YYYY'),
-                moment([moment(1609073125000).format('YYYY'), moment(1609073125000).format('M') - 1, moment(1609073125000).format('D')]).toNow(true)]
-                : [msg.guild.name,
-                moment(member.joinedAt).format('MMMM Do YYYY'),
-                moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)]
+		const stars = await user.settings.get(`servers.${msg.guild.id}.starCount`);
+		embed.addField(msg.language.get('COMMAND_INFO_USER_STATISTICS', stars), statistics.join('\n'));
+		if (!member) return embed;
 
-            statistics.push(creator ? language.get('COMMAND_INFO_USER_GUILDCREATE', join) 
-                : language.get('COMMAND_INFO_USER_GUILDJOIN', join)
-            );
-            
-            let msgs = await member.user.settings.get(`servers.${msg.guild.id}.messageCount`); 
-            statistics.push(language.get('COMMAND_USER_MESSAGES_SENT', msgs || 0));
+		const roles = member.roles.cache.sort((a, b) => b.position - a.position);
+		let spacer = false;
+		const roleString = roles
+			.array()
+			.filter(role => role.id !== msg.guild.id)
+			.reduce((acc, role, idx) => {
+				if (acc.length + role.name.length < 1010) {
+					if (role.name === '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯') {
+						spacer = true;
+						return `${acc}\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n`;
+					} else {
+						const comma = (idx !== 0) && !spacer ? ', ' : '';
+						spacer = false;
+						return acc + comma + role.name;
+					}
+				} else { return acc; }
+			}, '');
 
-            const birthday = await member.user.settings.get(`birthday`);
-            let totalStar = await member.user.settings.get(`servers.${msg.guild.id}.starCount`);
-            let minimum = await msg.guild.settings.get(`starboard.minimum`) || 3;
-		    
-            if (member) embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS')} ${totalStar && totalStar >= minimum ? `:star: **${totalStar}**` : ''} ${birthday ? `:cake: **${birthday}**` : ''}`, statistics.join('\n'));
-        };
+		if (roles.size) {
+			embed.addField(
+				msg.language.get('COMMAND_INFO_USER_ROLES', roles.size > 2 ? `s (${roles.size - 1})` : roles.size === 2 ? '' : 's'),
+				roleString.length ? roleString : msg.language.get('COMMAND_INFO_USER_NOROLES')
+			);
+		}
 
-        if (!member) embed.addField(`:pencil: ${language.get('COMMAND_INFO_USER_STATISTICS')}`, statistics.join('\n'));
-		if (!member) return embed.setColor(msg.guild.me.displayColor)
-
-        const roles = member.roles.cache.sorted((a, b) => b.position - a.position);
-        let spacer = false;
-        const roleString = roles
-            .array()
-            .filter(role => role.id !== msg.guild.id)
-            .reduce((acc, role, idx) => {
-                if (acc.length + role.name.length < 1010) {
-                    if (role.name === '⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯') {
-                        spacer = true;
-                        return `${acc}\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯\n`;
-                    } else {
-                        const comma = (idx !== 0) && !spacer ? ', ' : '';
-                        spacer = false;
-                        return acc + comma + role.name;
-                    }
-                } else { return acc; }
-            }, '')
-
-        if (roles.size) {
-            embed.addField(
-                `:scroll: ${language.get('COMMAND_INFO_USER_ROLES', roles.size)}`,
-                roleString.length ? roleString : language.get('COMMAND_INFO_USER_NOROLES')
-            )
-        };
-
-        let warnings = await member.user.settings.get(`servers.${msg.guild.id}.warnings`)
+		const warnings = await member.user.settings.get(`servers.${msg.guild.id}.warnings`);
 		if (warnings?.length) {
-			for (const { author } of warnings) await msg.client.users.fetch(author);
+			for (const { author } of warnings) await this.client.users.fetch(author);
 			embed.addField(
-				`:lock: ${language.get('COMMAND_INFO_USER_WARNINGS', warnings)}`,
-				warnings.map((warn, idx) => `${idx + 1}. ${warn.active ? '~~' : ''}${warn.reason} - **${msg.client.users.cache.get(warn.author).tag}**${warn.active ? '~~' : ''}`)
-			);
+				msg.language.get('COMMAND_INFO_USER_WARNINGS', warnings.length),
+				warnings.map((warn, idx) => `${idx + 1}. ${warn.active ? '~~' : ''}${warn.reason} - **${this.client.users.cache.get(warn.author).tag}**${warn.active ? '~~' : ''}`)
+			)
 		}
-
-        const notes = await member.user.settings.get(`servers.${msg.guild.id}.notes`)
+		const notes = await member.user.settings.get(`servers.${msg.guild.id}.notes`);
 		if (notes?.length) {
-			for (const { author } of notes) await msg.client.users.fetch(author);
+			for (const { author } of notes) await this.client.users.fetch(author);
 			embed.addField(
-				`:label: ${language.get('COMMAND_INFO_USER_NOTES', notes)}`,
-				notes.map((note, idx) => `${idx + 1}. ${note.reason} - **${msg.client.users.cache.get(note.author).tag}**`)
+				msg.language.get('COMMAND_INFO_USER_NOTES', notes.length),
+				notes.map((note, idx) => `${idx + 1}. ${note.reason} - **${this.client.users.cache.get(note.author).tag}**`)
 			);
 		}
-        return embed.setColor(member.displayColor)
-    },
 
-    async emojiinfo({ message: msg, language }, emoji) {
+		return embed.setColor(member.displayColor);
+	}
 
-        let embed = new MessageEmbed()
-            .setTitle(`${emoji.name} (ID: ${emoji.id})`)
-            .setDescription(language.get('COMMAND_INFO_EMOJI_CREATED', emoji.name, moment(emoji.createdTimestamp).format('MMMM Do YYYY'), moment([moment(emoji.createdTimestamp).format('YYYY'), moment(emoji.createdTimestamp).format('M') - 1, moment(emoji.createdTimestamp).format('D')]).toNow(true)))
-            .setColor(msg.guild.me.displayColor)
-            .setImage(emoji.url)
-            .addField(`:pencil2: ${language.get('COMMAND_INFO_EMOJI_NAME_TITLE')}`, emoji.name, true)
-            .addField(`:projector: ${language.get('COMMAND_INFO_EMOJI_ANIMATED_TITLE')}`, language.get('COMMAND_INFO_EMOJI_ANIMATED_VALUE', emoji.animated), true)
-            .addField(`:link: ${language.get('COMMAND_INFO_EMOJI_LINKS_TITLE')}`, `${emoji.animated
-                ? `[PNG](${emoji.url.replace('.gif', '.png')}) | [JPEG](${emoji.url.replace('.gif', '.jpg')}) | [GIF](${emoji.url})`
-                :`[PNG](${emoji.url}) | [JPEG](${emoji.url.replace('.png', '.jpeg')})`}`, true)
+	async addBans(msg, user, embed) {
+		const bans = await user.settings.get('globalBans')
+		if (!bans?.length) return embed;
+		return embed
+		.setColor(bans.length === 1 ? BAD : bans.length === 2 ? VERY_BAD : SUPER_BAD)
+		.addField(
+			msg.language.get('COMMAND_INFO_USER_GLOBALBANS', bans.length),
+			bans.map((b, idx) => `${idx + 1}. **${this.client.guilds.cache.get(b.guild).name} (ID: ${b.guild})**:\n${b.reason}`).join('\n'))
+	}
 
-        return msg.channel.send(embed)
-    },
+	async serverInfo(msg, server) {
+		if (!server) server = msg.guild;
+		const messages = await server.settings.get('messageCount') || 0;
+		await server.members.fetch(server.ownerID);
+		const guild = server;
 
-    async channelInfo({ message }, channel) {
+		const embed = new MessageEmbed()
+			.setColor(msg.guild.me.displayColor)
+			.setTitle(`${guild.name} (ID: ${guild.id})`)
+			.setThumbnail(guild.iconURL({ format: 'png', dynamic: true}))
+			.setDescription(msg.language.get('COMMAND_INFO_SERVER_CREATED', guild.owner.user.tag, this.timestamp.display(guild.createdAt), Duration.toNow(guild.createdAt)))
+			.addField(msg.language.get('COMMAND_INFO_SERVER_OWNER'), guild.owner.user.tag, true)
+			.addField(msg.language.get('COMMAND_INFO_SERVER_MEMBERS'), msg.language.get('COMMAND_INFO_SERVER_MEMBERCOUNT', guild.memberCount, guild.members.cache.size), true)
+			.addField(msg.language.get('COMMAND_INFO_SERVER_CHANNELS', guild.channels.cache.filter(c => c.type !== 'category').size), msg.language.get('COMMAND_INFO_SERVER_CHANNELSSIZE', guild.channels.cache.filter(c => c.type !== 'category').size > 0, guild.channels.cache.filter(c => c.type === "text").size, guild.channels.cache.filter(c => c.type === "voice").size), true)
+			.addField(msg.language.get('COMMAND_INFO_SERVER_REGION'), this.regions[guild.region], true)
+			.addField(msg.language.get('COMMAND_INFO_SERVER_ROLES'), msg.language.get('COMMAND_INFO_SERVER_ROLESSIZE', guild.roles.cache.size - 1 > 0, guild.roles.cache.size - 1), true)
+			.addField(msg.language.get('COMMAND_INFO_SERVER_EMOJIS', guild.emojis.cache.size), msg.language.get('COMMAND_INFO_SERVER_EMOJISSIZE', guild.emojis.cache.size > 0, guild.emojis.cache.filter(e => !e.animated).size, guild.emojis.cache.filter(e => e.animated).size), true)
+			.addField(msg.language.get('COMMAND_INFO_SERVER_STATISTICS'), msg.language.get('COMMAND_INFO_SERVER_MESSAGES', messages.toLocaleString()))
+			.addField(msg.language.get('COMMAND_INFO_SERVER_SECURITY'), msg.language.get('COMMAND_INFO_SERVER_SECURITYARRAY', this.verificationLevels[guild.verificationLevel], this.filterLevels[guild.explicitContentFilter]))
 
-        const embed = new MessageEmbed()
-            .setTitle(`${channel.name} (ID: ${channel.id})`)
-            .setColor(message.guild.me.displayColor)
-            .setThumbnail(message.guild.iconURL({ format: 'png', dynamic: true }))
-            .setDescription(`${channel.name} was created ${moment(channel.createdAt).format('MMMM Do YYYY')} **(${moment([moment(channel.createdAt).format('YYYY'), moment(channel.createdAt).format('M') - 1, moment(channel.createdAt).format('D')]).toNow(true)} ago)**`)
+		return msg.channel.send(embed);
+	}
 
-            channel.type === 'text'
-            ? embed.addField(`**Channel Topic**`, channel.topic
-            ? channel.topic : 'No channel topic is set for this channel') : ''
+	async channelInfo(msg, channel) {
 
-            embed.addField(':dividers: **Type**', channel.type, true)
-                .addField(':scroll: **Category**', `${channel.parent?channel.parent.name:'None'}`, true)
-                .addField('\u200B', '\u200B', true)
+		let embed = new MessageEmbed()
+			.setColor(msg.guild.me.displayColor)
+			.setTitle(`${channel.name} (ID: ${channel.id})`)
+			.setThumbnail(msg.guild.iconURL({ format: 'png', dynamic: true}))
+			.setDescription(msg.language.get('COMMAND_INFO_CHANNEL_CREATED', channel.name, this.timestamp.display(channel.createdAt), Duration.toNow(channel.createdAt)))
 
-            channel.type === 'text' || channel.type === 'news'
-            ? embed.addField(':underage: **NSFW**', channel.nsfw
-            ?'Yes':'No', true) : ''
+		if (channel.type === 'voice') embed = await this._voiceChannel(msg, channel, embed);
+		else embed = await this._textChannel(msg, channel, embed);
+		msg.channel.send(embed);
+	}
 
-            channel.type === 'voice'
-            ? embed.addField(':busts_in_silhouette: **User Limit**', channel.userLimit === 0
-            ? 'Infinite' : channel.userLimit, true) : ''
+	_voiceChannel(msg, channel, embed) {
 
-            channel.type === 'text' || channel.type === 'news'
-            ? embed.addField(':alarm_clock: **Chat Cooldown**', channel.rateLimitPerUser == 0 || channel.rateLimitPerUser == null
-            ? 'None' : `${channel.rateLimitPerUser} Seconds`, true) : ''
+		return embed
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TYPE'), Util.toTitleCase(channel.type), true)
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_CATEGORY'), msg.language.get('COMMAND_INFO_CHANNEL_CATEGORYTYPE', channel.parent, channel.parent?.name), true)
+			.addField('\u200B', '\u200B', true)
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_USERLIMIT'), msg.language.get('COMMAND_INFO_CHANNEL_USERLIMITNUMBER', channel.userLimit === 0, channel.userLimit), true)
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_BITRATE'), `${channel.bitrate / 1000}KB/s`, true)
+			.addField('\u200B', '\u200B', true)
+	}
 
-            channel.type === 'voice'
-            ? embed.addField(':satellite: **Bit Rate**', `${channel.bitrate/1000} KB/s`, true) : ''
+	_textChannel(msg, channel, embed) {
 
-            channel.type === 'text' || channel.type === 'news'
-            ? embed.addField('\u200B', '\u200B', true) : ''
+		return embed
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TOPIC'), channel.topic)
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TYPE'), Util.toTitleCase(channel.type), true)
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_CATEGORY'), msg.language.get('COMMAND_INFO_CHANNEL_CATEGORYTYPE', channel.parent, channel.parent?.name), true)
+			.addField(zws, zws, true)
+			.addField(':underage: **NSFW**', msg.language.get('COMMAND_INFO_CHANNEL_ISNSFW', channel.nsfw), true)
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_COOLDOWN'), msg.language.get('COMMAND_INFO_CHANNEL_SLOWMODE', !channel.rateLimitPerUser || channel.rateLimitPerUser === 0, channel.rateLimitPerUser), true)
+			.addField(zws, zws, true)
+	}
 
-            channel.type === 'voice'
-            ? embed.addField('\u200B', '\u200B', true) : ''
+	emojiInfo(msg, emoji) {
 
-            return message.channel.send(embed)
-        },
+		const linkArray = [`[PNG](${emoji.url.substring(0, emoji.url.length - 4)}.png)`, `[JPEG](${emoji.url.substring(0, emoji.url.length - 4)}.jpeg)`]
+		if (emoji.animated) linkArray.push(`[GIF](${emoji.url})`)
 
-    async roleinfo({ message, language }, role){
-        const [bots, humans] = role.members.partition(member => member.user.bot);
+		const embed = new MessageEmbed()
+			.setThumbnail(emoji.url)
+			.setColor(msg.guild.me.displayColor)
+			.setTitle(`${emoji.name} (ID: ${emoji.id})`)
+			.setDescription(msg.language.get('COMMAND_INFO_EMOJI_CREATED', emoji.name, this.timestamp.display(emoji.createdAt), Duration.toNow(emoji.createdAt)))
+			.addField(msg.language.get('COMMAND_INFO_EMOJI_NAME'), emoji.name, true)
+			.addField(msg.language.get('COMMAND_INFO_EMOJI_ANIMATED'), msg.language.get('COMMAND_INFO_EMOJI_ANIMATEDVALUE', emoji.animated), true)
+			.addField(msg.language.get('COMMAND_INFO_EMOJI_LINKS'), linkArray.join(' | '), true)
 
-        const embed = new MessageEmbed()
-            .setTitle(`${role.name} (ID: ${role.id})`)
-            .setColor(role.color)
-            .addField(`:art: ${language.get('COMMAND_INFO_ROLE_COLOR')}`, role.color ? role.hexColor : language.get('COMMAND_INFO_ROLE_NONE'), true)
-            .addField(`:people_hugging: ${language.get('COMMAND_INFO_ROLE_MEMBERS_TITLE')}`, language.get('COMMAND_INFO_ROLE_MEMBERS_VALUE', humans.size, bots.size), true)
-            .addField(`:hammer: ${language.get('COMMAND_INFO_ROLE_PERMISSIONS_TITLE')}`, role.permissions.has(FLAGS.ADMINISTRATOR)
-                ? language.get('COMMAND_INFO_ROLE_ALLPERMS')
-                : Object.entries(role.permissions.serialize()).filter(perm => perm[1]).map(([perm]) => this.perms[perm]).join(', ') || language.get('COMMAND_INFO_ROLE_NONE'), true)
-            .addField(`:calendar: ${language.get('COMMAND_INFO_ROLE_CREATED_TITLE')}`, language.get('COMMAND_INFO_ROLE_CREATED_VALUE', moment(role.createdAt).format('MMMM Do YYYY'), moment([moment(role.createdAt).format('YYYY'), moment(role.createdAt).format('M') - 1, moment(role.createdAt).format('D')]).toNow(true)), true)
-            
-            .addField(`:bookmark_tabs: ${language.get('COMMAND_INFO_ROLE_PROPERTIES_TITLE')}`, language.get('COMMAND_INFO_ROLE_PROPERTIES_ARRAY', role.hoist, role.mentionable, !role.managed, role.toString()));
+		return msg.channel.send(embed);
+	}
 
-        return message.channel.send(embed);
-    },
+	roleInfo(msg, role) {
+		
+		const [bots, humans] = role.members.partition(member => member.user.bot);
 
-        async serverinfo({ message }, server) {
-            let messageCount = await server.settings.get('messageCount');
-                    
-            let messages = 0
-            if (messageCount) messages = messageCount;
-            const guild = server;
-            const toxicity = 0
+		const embed = new MessageEmbed()
+			.setColor(role.color)
+			.setTitle(`${role.name} (ID: ${role.id})`)
+			.addField(msg.language.get('COMMAND_INFO_ROLE_COLOR'), msg.language.get('COMMAND_INFO_ROLE_COLORHEX', role.color, role.hexColor), true)
+			.addField(msg.language.get('COMMAND_INFO_ROLE_MEMBERS', role.members.size > 0, role.members.size), msg.language.get('COMMAND_INFO_ROLE_PARTITION', role.members.size > 0, humans.size, bots.size), true)
+			.addField(msg.language.get('COMMAND_INFO_ROLE_PERMISSIONS'), msg.language.get('COMMAND_INFO_ROLE_PERMISSIONSMAP', role.permissions.has(FLAGS.ADMINISTRATOR), Object.entries(role.permissions.serialize()).filter(perm => perm[1]).map(([perm]) => this.perms[perm]).join(', ')), true)
+			.addField(msg.language.get('COMMAND_INFO_ROLE_CREATED'), msg.language.get('COMMAND_INFO_ROLE_CREATEDDATE', this.timestamp.display(role.createdAt), Duration.toNow(role.createdAt)), true)
+			.addField(msg.language.get('COMMAND_INFO_ROLE_PROPERTIES'), msg.language.get('COMMAND_INFO_ROLE_PROPERTIESARRAY', role.hoist, role.mentionable, !role.managed, role.toString()))
 
-            await message.guild.members.fetch(message.guild.ownerID);
-
-            const embed = new MessageEmbed()
-                .setTitle(`${guild.name} (ID: ${guild.id})`)
-                .setDescription(`Created by **${guild.owner.user.tag}** on ${moment(guild.createdAt).format('MMMM Do YYYY')} **(${moment([moment(guild.createdAt).format('YYYY'), moment(guild.createdAt).format('M') - 1, moment(guild.createdAt).format('D')]).toNow(true)} ago)**`)
-                .addField(':crown: **Owner**', guild.owner.user.tag, true)
-                .addField(':busts_in_silhouette: **Members**', `${guild.memberCount} (cached: ${guild.members.cache.size})`, true)
-                .addField(`:speech_balloon: **Channels (${guild.channels.cache.size})**`, guild.channels.cache.size>0?`Text: **${guild.channels.cache.filter(c => c.type === "text").size}**\nVoice: **${guild.channels.cache.filter(c => c.type === "voice").size}**`:'None', true)
-                .addField(':map: **Region**', this.regions[guild.region], true)
-                .addField(`:scroll: **Roles**`, guild.roles.cache.size > 0 ? guild.roles.cache.size : 'None', true)
-                .addField(':sunglasses: **Emojis**', guild.emojis.cache.size > 0 ? guild.emojis.cache.size : 'None', true)
-                .addField(':bar_chart: **Statistics**', `${messages.toLocaleString()} messages ${toxicity !== 0 ? `with an average toxicity of ${Math.round(toxicity * 100)}%` : ''} sent`)
-                .addField(':lock: **Security**', [
-                    `Verification level: ${this.verificationLevels[message.guild.verificationLevel]}`,
-                    `Explicit filter: ${this.filterLevels[message.guild.explicitContentFilter]}`
-                ].join('\n'));
-
-            embed.setThumbnail(guild.iconURL({ format: 'png', dynamic: true }))
-            embed.setColor(message.guild.me.displayColor)
-            return message.channel.send(embed);
-        }
-    
+		return msg.channel.send(embed);
+	}
 }
