@@ -3,8 +3,8 @@
  * Co-authored by Aria
  */
 const { Util, Language, bold, code, underline, italic } = require('foxxie');
-const { supportServer } = require('../../config/foxxie');
-const { emojis: { infinity, perms: { notSpecified, granted } } } = require('../../lib/util/constants');
+const { supportServer, communityServer, topggURL, version } = require('../../config/foxxie');
+const { emojis: { infinity, perms: { notSpecified, granted } }, credits: { developer, spanishTranslation, additionalHelp } } = require('../../lib/util/constants');
 
 module.exports = class extends Language {
 
@@ -200,6 +200,26 @@ module.exports = class extends Language {
             COMMAND_UNEXEMPT_NOEXIST: (name, type) => `${bold`${name}`} is currently not an exempt ${bold`${type.substring(0, type.length -1)}`}.`,
 
             // Util Commands
+            COMMAND_ABOUT_COMMANDS_TITLE: bold`Commands`,
+            COMMAND_ABOUT_COMMANDS_VALUE: (commands, aliases) => `• As of now, I have ${bold`${commands}`} commands and ${bold`${aliases}`} aliases.`,
+            COMMAND_ABOUT_CREATED_TITLE: bold`Created`,
+            COMMAND_ABOUT_CREATED_VALUE: (date, duration) => `• I was created on ${date}. ${bold`(${duration} ago)`}`,
+            COMMAND_ABOUT_CREDITS_TITLE: bold`Credits`,
+            COMMAND_ABOUT_CREDITS_VALUE: `• Developer: ${developer}\n• Spanish Translations: ${spanishTranslation}\n• Additional Help: ${additionalHelp}`,
+            COMMAND_ABOUT_DESCRIPTION: `Get some basic information about me, my statistics, and some of my credits.`,
+            COMMAND_ABOUT_GUILDS_TITLE: bold`Guilds`,
+            COMMAND_ABOUT_GUILDS_VALUE: guilds => `• I'm looking after ${bold`${guilds}`} servers.`,
+            COMMAND_ABOUT_SUMMARY: `I started as a developmental project by **Ruffpuff#0017** to learn basic node.js and javascript. Then I was added to his server **The Corner Store** as a way to overall reduce the amount of bots. Now I'm hoping to be added to many guilds and maybe I could be helpful to ya.`,
+            COMMAND_ABOUT_TITLE: name => `About ${name}!`,
+            COMMAND_ABOUT_USERS_TITLE: bold`Users`,
+            COMMAND_ABOUT_USERS_VALUE: users => `• Right now I'm cleaning up after ${bold`${users}`} users.`,
+            COMMAND_ABOUT_VERSION_TITLE: bold`Version`,
+            COMMAND_ABOUT_VERSION_VALUE: `• Currently I'm in version ${bold`${version}`}, pretty much always getting worked on though ;)`,
+            COMMAND_AFK_AUTHOR: author => `${author} has set an AFK`,
+            COMMAND_AFK_DESCRIPTION: `Sets an AFK for when people ping ya, I'll remember the message you set and display it when someone is trying to reach you.`,
+            COMMAND_AFK_REASON: reason => `${bold`Reason`}: ${reason}`,
+            COMMAND_AVATAR_DESCRIPTION: `Gets you an image of any user's avatar.`,
+            COMMAND_AVATAR_FOXXIE: bold`Here is my cool avatar, trust me I know I look\ngorgeous but this is all thanks to\nLunaSpyker#1247`,
             COMMAND_BADGES_BOOSTS: boosts => `Boost${boosts > 1 ? 's' : ''}`,
             COMMAND_BADGES_BALANCE: `House Balance`,
             COMMAND_BADGES_BOT: (bots, varif) => `Bot${bots - varif > 1 ? 's' : ''}`,
@@ -216,6 +236,8 @@ module.exports = class extends Language {
             COMMAND_BADGES_HYPE_EVENT: `HypeSquad Events`,
             COMMAND_BADGES_NITRO: `Nitro`,
             COMMAND_BADGES_PARTNERED: flag => `Partnered Server Owner${flag > 1 ? 's' : ''}`,
+            COMMAND_BUGREPORT_DESCRIPTION: `Allows you to report a bug to the bot developer, please describe the bug along with the command that caused it. Please note that any joke reports could lead to a user or guild blacklist.`,
+            COMMAND_BUGREPORT_NOBUG: `${bold`Hey!`} you didnt provide a bug to report. Respond with a bug in ${bold`60 seconds`} or send ${code`cancel`} to cancel.`,
             COMMAND_HELP_CATEGORY: `Command Category`,
             COMMAND_HELP_DESCRIPTION: `Get example usage and descriptions of all of my commands. Run ${code`help usage`} for a further explaination on the help command.`,
             COMMAND_HELP_EXPLAINER: prefix => [
@@ -290,9 +312,34 @@ module.exports = class extends Language {
             COMMAND_INFO_USER_ROLES: size => bold`:scroll: Role${size}`,
             COMMAND_INFO_USER_STATISTICS: stars => bold`:pencil: Statistics ${stars ? `:dizzy: ${stars.toLocaleString()}` : ''}`,
             COMMAND_INFO_USER_WARNINGS: warnings => bold`:lock: Warning${warnings === 1 ? '' : 's'} ${warnings > 1 ? `(${warnings.toLocaleString()})` : ''}`,
+            COMMAND_INVITE_DESCRIPTION: `Get the some important links, like to invite me, the invite to my support server, and the link to vote for me.`,
+            COMMAND_INVITE_LINKS: (name, link) => [
+                `[Invite ${name}](${link})`,
+                `[Support](${supportServer})`,
+                `[Community](${communityServer})`,
+                `[Vote](${topggURL})`
+            ].join(' | '),
+            COMMAND_INVITE_TITLE: `Hey hey, here's some useful links`,
             COMMAND_PING: `Ping?`,
             COMMAND_PING_DESCRIPTION: `Runs a connection test to Discord.`,
             COMMAND_PINGPONG: (total, discord, ws) => `🏓 ${bold`Pong!`} Took ${bold`${total}`}ms (Discord latency: ${bold`${discord}`}ms. Network latency: ${bold`${ws}`}ms.)`,
+            COMMAND_REMINDME_DESCRIPTION: `Set a reminder that will send straight to your dms at the specifed time. Time formatting should be like ${code`2m`} for two minutes, or ${code`90m`} for an hour and a half.`,
+            COMMAND_REMINDME_INVALIDTIME: `${bold`Please,`} specify a proper time format [2s|2m|2h|2d|2w].`,
+            COMMAND_REMINDME_NOREASON: `${bold`Please,`} give a reason for your reminder.`,
+            COMMAND_REMINDME_SUCCESS: time => `${bold`Success,`} I'll send you that reminder in ${bold`${time}`}.`,
+            COMMAND_STATS: (name, memUsage, memTotal, memPercentage, cpuUsage, cpuCount, cpuSpeed, uptime, foxxieVersion, discordVersion, processVersion, hostname, currentShard, totalShards) => [
+                `${name} is currently using`,
+                `• ${bold`${memPercentage}% of RAM`} (${memUsage} / ${memTotal} MB) and`,
+                `• ${bold`${cpuUsage}% of CPU`} (${cpuCount}c @ ${cpuSpeed}GHz).`,
+                `I've been running`,
+                `• For ${bold`${uptime}`} on ${bold`${hostname}`} (shard ${currentShard} / ${totalShards})`,
+                `• Using Node.js ${processVersion}, Discord.js v${discordVersion}, and Foxxie-Util v${foxxieVersion}.`
+            ].join('\n'),
+            COMMAND_STATS_DESCRIPTION: 'Provides some details about me and my stats.',
+            COMMAND_STEAL_DESCRIPTION: `Steals a provided emoji and automatically adds it to your server. You can also provide a name for the emoji to automatically be named.`,
+            COMMAND_STEAL_MAXEMOJI: `${bold`Uh oh,`} I can't steal anymore emojis because this server is already at the max it can have.`,
+            COMMAND_STEAL_NOEMOJI: `${bold`Hey,`} I can only steal proper emojis.`,
+            COMMAND_STEAL_SUCCESS: name => `Stole ${name}`,
 
             EVENT_STARCREATED_DESCRIPTION: (user, channel, link) => `A message by ${user} got starred enough to make it into the ${channel}.\nCheck it out [here](${link})`,
             EVENT_STARCREATED_MESSAGE: 'Jump to Message',

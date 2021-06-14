@@ -28,7 +28,7 @@ module.exports = class extends Command {
 
     async executeWarns(msg, reason, members, author) {
 
-        const warn = { author, reason, timestamp: new Date().getTime()}
+        const warn = { author, reason, timestamp: new Date().getTime() }
 
         for (const member of members) {
             member.user.settings.push(`servers.${msg.guild.id}.warnings`, warn);

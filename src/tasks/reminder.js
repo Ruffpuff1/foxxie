@@ -37,6 +37,9 @@ module.exports = {
                 .setTimestamp();
 
         if (sendIn && channel) channel.send(`<@${authID}> ${language.get('TASK_REMINDER', timeago, rmdMessage)}`);
-        if (!sendIn) user.send(embed);
+        if (!sendIn) user.send(embed).catch(() => {
+            if (channel) channel.send(`<@${authID}> ${language.get('TASK_REMINDER', timeago, rmdMessage)}`);
+            else return null;
+        });
     }
 };

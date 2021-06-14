@@ -1,38 +1,44 @@
-const { ms } = require('foxxie');
+const { ms, Command } = require('foxxie');
 
-module.exports = {
-    name: 'remindme',
-    aliases: ['rm'],
-    usage: `remindme [1s|1m|1h|1d|1w] [reason] (-c|-channel)`,
-    category: 'utility',
-    execute(props) {
+module.exports = class extends Command {
 
-        let { message, args } = props;
-        let remindTime = args[0]
-        let remindMsg = args.slice(1).join(' ');
+    constructor(...args) {
+        super(...args, {
+            name: 'remindme',
+            aliases: ['rm'],
+            description: language => language.get('COMMAND_REMINDME_DESCRIPTION'),
+            usage: `remindme [Time] [Reason] (-c)`,
+            category: 'utility',
+        })
+    }
 
-        if (!remindTime) return message.responder.error('COMMAND_REMINDME_NOTIME');
-        if (!/^\d*[s|m|h|d|w|y]$/gmi.test(remindTime)) return message.responder.error('COMMAND_REMINDME_INVALIDTIME');
-        
-        let timeFromNow = ms(ms(remindTime), { long: true } )
-        if (!remindMsg) return message.responder.error('COMMAND_REMINDME_NOREASON');
+    run(msg, args) {
+
+        const remindTime = args[0]
+        let rmdMessage = args.slice(1).join(' ');
+
+        if (!remindTime) return msg.responder.error('COMMAND_REMINDME_INVALIDTIME');
+        if (!/^\d*[s|m|h|d|w|y]$/gmi.test(remindTime)) return msg.responder.error('COMMAND_REMINDME_INVALIDTIME');
+
+        const timeago = ms(ms(remindTime), { long: true } )
+        if (!rmdMessage) return msg.responder.error('COMMAND_REMINDME_NOREASON');
 
         let sendIn = /\-channel\s*|-c\s*/gi
-        remindMsg = remindMsg.replace(sendIn, '')
+        rmdMessage = rmdMessage.replace(sendIn, '');
 
         const reminder = {
-            guild: message.guild.id,
-            authID: message.author.id,
+            guild: msg.guild.id,
+            authID: msg.author.id,
             time: Date.now() + ms(remindTime),
-            rmdMessage: remindMsg,
-            timeago: timeFromNow,
-            guildId: message.guild.id,
-            sendIn: sendIn.test(message.content),
-            color: message.guild.me.displayColor,
-            channelId: message.channel.id,
+            rmdMessage,
+            timeago,
+            guildId: msg.guild.id,
+            sendIn: sendIn.test(msg.content),
+            color: msg.guild.me.displayColor,
+            channelId: msg.channel.id,
         }
 
-        message.client.schedule.create('reminders', reminder);
-        message.responder.success('COMMAND_REMINDME_SUCCESS', timeFromNow);
+        this.client.schedule.create('reminders', reminder);
+        msg.responder.success('COMMAND_REMINDME_SUCCESS', timeago);
     }
 }

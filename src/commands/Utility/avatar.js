@@ -1,26 +1,42 @@
-const Discord = require('discord.js')
-module.exports = {
-    name: 'avatar',
-    aliases: ['av', 'icon', 'pfp', 'usericon'],
-    usage: 'avatar (user|userId)',
-    category: 'utility',
-    execute(props) {
+const { MessageEmbed } = require('discord.js');
+const { Command } = require('foxxie');
 
-        let { message, args, language} = props;
-        let user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || message.guild.members.cache.find(m => m.user.username.toLowerCase() === args[0]?.toLowerCase())?.user || message.guild.members.cache.find(m => m.displayName === args[0]?.toLowerCase())?.user || message.member.user;
+module.exports = class extends Command {
+
+    constructor(...args) {
+        super(...args, {
+            name: 'avatar',
+            aliases: ['av', 'icon', 'pfp', 'usericon'],
+            description: language => language.get('COMMAND_AVATAR_DESCRIPTION'),
+            usage: '(User)',
+            category: 'utility'
+        })
+    }
+
+    async run(msg, [id]) {
+
+        let user = msg.users.shift() || await this.client.users.fetch(id).catch(() => null) || msg.author;
         
+        const formats = [
+            `[PNG](${user.displayAvatarURL({ format: "png", dynamic: true, size: 512})})`,
+            `[JPEG](${user.displayAvatarURL({ format: "jpeg", dynamic: true, size: 512})})`,
+            `[WEBP](${user.displayAvatarURL({ format: "webp", dynamic: true, size: 512})})`,
+            user.avatar?.startsWith('a_') ? `[GIF](${user.displayAvatarURL({ format: "gif", dynamic: true, size: 512})})` : null
+        ].filter(a => !!a).join(' | ');
+
         const description = [
-            `(**ID**: ${user.id})`,
-            `[PNG](${user.displayAvatarURL({ format: "png", dynamic: true, size: 512})}) | [JPEG](${user.displayAvatarURL({ format: "jpeg", dynamic: true, size: 512})}) | [WEBP](${user.displayAvatarURL({ format: "webp", dynamic: true, size: 512})})`
-        ];
-        if (user.id === message.client.user.id) description.push("\n" + language.get('COMMAND_AVATAR_FOXXIE'))
+            `(ID: ${user.id})`,
+            formats
+        ]
 
-        const embed = new Discord.MessageEmbed()
-            .setColor(message.guild.me.displayColor)
+        if (user.id === this.client.user.id) description.push('\n' + msg.language.get('COMMAND_AVATAR_FOXXIE'))
+        
+        const embed = new MessageEmbed()
+            .setColor(msg.guild.me.displayColor)
             .setTitle(user.tag)
-            .setDescription(description.join("\n"))
-            .setImage(user.displayAvatarURL({ format: "png", dynamic: true, size: 512}))
+            .setDescription(description.join('\n'))
+            .setImage(user.displayAvatarURL({ format: 'png', dynamic: true, size: 512 }))
 
-        message.reply(embed)
+        msg.channel.send(embed);
     }
 }

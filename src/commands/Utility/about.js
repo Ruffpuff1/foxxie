@@ -1,27 +1,33 @@
-const Discord = require('discord.js');
-const moment = require('moment');
-module.exports = {
-    name: 'about',
-    aliases: ['botinfo'],
-    usage: 'fox about',
-    category: 'utility',
-    execute(props) {
+const { MessageEmbed } = require('discord.js');
+const { Command, Duration, Timestamp } = require('foxxie');
 
-        let { message, language } = props;
+module.exports = class extends Command {
 
-        const embed = new Discord.MessageEmbed()
-            .setTitle(language.get('COMMAND_ABOUT_TITLE'))
-            .setColor(message.guild.me.displayColor)
-            .setDescription(language.get('COMMAND_ABOUT_SUMMARY'))
-            .setThumbnail(message.client.user.displayAvatarURL())
-            .addField(language.get('COMMAND_ABOUT_CREATED_TITLE'), language.get('COMMAND_ABOUT_CREATED_VALUE', moment([moment('2021-02-15').format('YYYY'), moment('2021-02-15').format('M') - 1, moment('2021-02-15').format('D')]).toNow(true)))
-            .addField(language.get('COMMAND_ABOUT_VERSION_TITLE'), language.get('COMMAND_ABOUT_VERSION_VALUE'))
-            .addField(language.get('COMMAND_ABOUT_COMMANDS_TITLE'), language.get('COMMAND_ABOUT_COMMANDS_VALUE'))
-            .addField(language.get('COMMAND_ABOUT_USERS_TITLE'), language.get('COMMAND_ABOUT_USERS_VALUE', message.client.users.cache.size))
-            .addField(language.get('COMMAND_ABOUT_GUILDS_TITLE'), language.get('COMMAND_ABOUT_GUILDS_VALUE', message.client.guilds.cache.size))
-            .addField(language.get('COMMAND_ABOUT_CREDITS_TITLE'), language.get('COMMAND_ABOUT_CREDITS_VALUE'))
-            .addField(language.get('COMMAND_HELP_LINKS_TITLE'), language.get('COMMAND_HELP_LINKS_DESCRIPTION'))
+    constructor(...args) {
+        super(...args, {
+            name: 'about',
+            aliases: ['botinfo'],
+            description: language => language.get('COMMAND_ABOUT_DESCRIPTION'),
+            category: 'utility',
+        })
+    }
+
+    run(msg) {
+
+        const timestamp = new Timestamp('MMMM d YYYY');
+
+        const embed = new MessageEmbed()
+            .setTitle(msg.language.get('COMMAND_ABOUT_TITLE', this.client.user.username))
+            .setColor(msg.guild.me.displayColor)
+            .setDescription(msg.language.get('COMMAND_ABOUT_SUMMARY'))
+            .setThumbnail(this.client.user.displayAvatarURL())
+            .addField(msg.language.get('COMMAND_ABOUT_CREATED_TITLE'), msg.language.get('COMMAND_ABOUT_CREATED_VALUE', timestamp.display(this.client.user.createdAt), Duration.toNow(this.client.user.createdAt)))
+            .addField(msg.language.get('COMMAND_ABOUT_VERSION_TITLE'), msg.language.get('COMMAND_ABOUT_VERSION_VALUE'))
+            .addField(msg.language.get('COMMAND_ABOUT_COMMANDS_TITLE'), msg.language.get('COMMAND_ABOUT_COMMANDS_VALUE', this.client.commands.size.toLocaleString(), this.client.aliases.size.toLocaleString()))
+            .addField(msg.language.get('COMMAND_ABOUT_USERS_TITLE'), msg.language.get('COMMAND_ABOUT_USERS_VALUE', this.client.users.cache.size.toLocaleString()))
+            .addField(msg.language.get('COMMAND_ABOUT_GUILDS_TITLE'), msg.language.get('COMMAND_ABOUT_GUILDS_VALUE', this.client.guilds.cache.size.toLocaleString()))
+            .addField(msg.language.get('COMMAND_ABOUT_CREDITS_TITLE'), msg.language.get('COMMAND_ABOUT_CREDITS_VALUE'))
             
-        return message.channel.send(embed)
+        return msg.channel.send(embed)
     }
 }
