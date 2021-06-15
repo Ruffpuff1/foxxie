@@ -13,5 +13,8 @@ module.exports = {
     topggURL: 'http://foxxie.ruff.cafe/vote',
     shards: 'auto',
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-    typing: true
+    typing: false,
+    default: {
+        language: 'en-US'
+    }
 }

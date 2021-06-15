@@ -10,6 +10,7 @@ module.exports = class extends Command {
             description: language => language.get('COMMAND_EVAL_DESCRIPTION'),
             usage: '(-d=Number) (Code) (-a | -s | -m)',
             permissions: 'CLIENT_OWNER',
+            runIn: ['text', 'dm'],
             category: 'admin',
         })
     }

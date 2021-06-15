@@ -238,6 +238,9 @@ module.exports = class extends Language {
             COMMAND_BADGES_PARTNERED: flag => `Partnered Server Owner${flag > 1 ? 's' : ''}`,
             COMMAND_BUGREPORT_DESCRIPTION: `Allows you to report a bug to the bot developer, please describe the bug along with the command that caused it. Please note that any joke reports could lead to a user or guild blacklist.`,
             COMMAND_BUGREPORT_NOBUG: `${bold`Hey!`} you didnt provide a bug to report. Respond with a bug in ${bold`60 seconds`} or send ${code`cancel`} to cancel.`,
+            COMMAND_COLOR: color => `Preview of the color ${color}`,
+            COMMAND_COLOR_DESCRIPTION: `I'll fetch you a image preview of any hex code, for example ${code`#f5c1bf`}.`,
+            COMMAND_COLOR_NOCOLOR: `${bold`Please,`} specify a proper hex color code.`,
             COMMAND_HELP_CATEGORY: `Command Category`,
             COMMAND_HELP_DESCRIPTION: `Get example usage and descriptions of all of my commands. Run ${code`help usage`} for a further explaination on the help command.`,
             COMMAND_HELP_EXPLAINER: prefix => [
@@ -348,6 +351,11 @@ module.exports = class extends Language {
             // Inhibitors
             INHIBITOR_PERMISSIONS_AUTHOR: perm => `${bold`You don't`} have permission to run this command, you need the ${bold`${perm}`} permission.`,
             INHIBITOR_PERMISSIONS_GUILDOWNER: `${bold`Nope,`} due to the harm this command can cause it can only be executed by the guild owner.`,
+
+            // Monitors
+            MONITOR_AFK_AUTHOR: author => `${author} is set as AFK`,
+            MONITOR_AFK_DESCRIPTION: (reason, time) => `${bold`${time}`} ago with the reason: ${bold`${reason}`}`,
+            MONITOR_AFKCHECK_WELCOMEBACK: `Hey, welcome back I'll remove that afk for you.`,
 
             // Logging
             LOG_ACTION_DELETE: `Message Deleted`,

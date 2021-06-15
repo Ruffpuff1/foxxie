@@ -12,9 +12,27 @@ module.exports = class extends Event {
 
         if (!reaction.message.guild) return null;
 
-        //this.client.monitors.get('rero').execute(reaction, user, 'remove');
+        this.rero(reaction, user);
 
         this.stars(reaction, user);
+    }
+
+    async rero({ emoji, message: { guild, id } }, user) {
+        const reros = await guild.settings.get('reros')
+        if (!reros) return null;
+        await guild.members.fetch(user.id).catch(() => null);
+        reros.find(rero => {
+            if (id === rero.message && (emoji.id === rero.emoji || emoji.name === rero.emoji)) {
+                const member = guild.members.cache.get(user.id);
+                if (member?.user.bot) return false;
+                const role = guild.roles.cache.get(rero.role);
+                if (!role) return null;
+                member?.roles?.remove(role, guild.language.get('EVENT_MESSAGEREACTIONREMOVE_RERO_REASON'));
+                return true;
+            }
+            return false;
+        })
+        return false;
     }
 
     async stars(reaction, user) {

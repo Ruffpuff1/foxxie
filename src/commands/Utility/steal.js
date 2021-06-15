@@ -18,11 +18,10 @@ module.exports = class extends Command {
 
         const emoji = msg.emojis.shift();
         if (!emoji) return msg.responder.error('COMMAND_STEAL_NOEMOJI');
-        
-        const extension = emoji.animated ? '.gif' : '.png';
-        let name = args[msg.emojis.length + 1] || emoji.name;
-        const url = `https://cdn.discordapp.com/emojis/${emoji.id}${extension}?v=1`;
-
+        const extension = emoji.includes('<a:') ? '.gif' : '.png';
+        let name = args[1] || emoji.replace(/\D/g, '');
+        const url = `https://cdn.discordapp.com/emojis/${emoji.replace(/\D/g, '')}${extension}?v=1`;
+        console.log(url)
         const newEmoji = await msg.guild.emojis.create(url, name).catch(() => msg.responder.error('COMMAND_STEAL_MAXEMOJI'));
         if (newEmoji instanceof Message) return;
 

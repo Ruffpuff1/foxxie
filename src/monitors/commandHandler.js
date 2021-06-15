@@ -1,4 +1,4 @@
-const { code, Monitor } = require('foxxie');
+const { code, Monitor, Stopwatch } = require('foxxie');
 const { prefix: { production, development } } = require('../../config/foxxie');
 
 module.exports = class extends Monitor {
@@ -11,45 +11,34 @@ module.exports = class extends Monitor {
     }
 
     async run(msg) {
+        
         if (msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
-		//if (!msg.channel.postable) return undefined;
-        const settings = await msg.guild.settings.get();
-        let prefixes = [`<@!${msg.client.user.id}>`, `<@${msg.client.user.id}>`, msg.client.development ? 'dev' : 'fox'];
+        if (!msg.channel.postable) return undefined;
+        if (!msg.commandText && msg.prefix === `<@!${this.client.user.id}>`) {
+            return msg.responder.success('PREFIX_REMINDER', msg.stringPrefixes.filter(p => p !== `<@!${this.client.user.id}>`).slice(0, -1).map(p => `${code`${p}`}`).join(', '), msg.stringPrefixes.pop());
+        }
+        if (!msg.commandText) return undefined;
+        if (!msg.command) return this.client.emit('commandUnknown', msg, msg.commandName, msg.prefix, msg.prefix.length);
+        //this.client.emit('commandRun', msg, msg.command, msg.args);
 
-        if (!settings?.prefixes.length) prefixes.push(msg.client.development ? development : production);
-        else settings.prefixes.forEach(p => prefixes.push(p));
-
-        if (settings?.blockedUsers?.includes(msg.author.id)) return undefined;
-        if (new RegExp(`^<@!?${msg.client.user.id}>$`).test(msg.content)) {
-            prefixes.shift();
-            prefixes.shift();
-            msg.responder.success("PREFIX_REMINDER", prefixes.slice(0, -1).map(p => `${code`${p}`}`).join(", "), prefixes.pop());
-        };
-
-        prefixes = [...new Set(prefixes)];
-        prefixes.forEach(prefix => {
-            if (msg.content.startsWith(prefix)) return this._commandExecute(prefix, msg);
-        });
+		return this.runCommand(msg);
     }
 
-    _commandExecute(prefix, msg) {
-
+    async runCommand(msg) {
+        const timer = new Stopwatch();
+        if (this.client.options.typing) msg.channel.startTyping();
         try {
-            const args = msg.content.slice(prefix.length).trim().split(/ +/);
-            const commandName = args.shift().toLowerCase();
-            let command = msg.client.commands.get(commandName);
-            if (!command) return msg.client.emit('commandUnknown', msg, commandName);
-
+            await this.client.inhibitors.run(msg, msg.command);
             try {
-                msg.client.inhibitors.get('permissions').execute(command, msg);
+                const response = await msg.command.run(msg, msg.args);
+                timer.stop();
+                this.client.emit('commandSuccess', msg, msg.command, msg.args, response);
             } catch (error) {
-                if (error == true) return undefined;
-                else return msg.responder.error(error, command.permissions?.toLowerCase()?.replace(/_/g, ' '));
+                this.client.emit('commandError', msg, msg.command, msg.args, error);
             }
-            command.run(msg, args);
-        } catch (error) {
-            msg.responder.error('ERROR_GENERIC', error);
-            return undefined;
+        } catch (response) {
+            this.client.emit('commandInhibited', msg, msg.command, response);
         }
+        if (this.client.options.typing) msg.channel.stopTyping();
     }
 }

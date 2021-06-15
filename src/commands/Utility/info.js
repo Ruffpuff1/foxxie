@@ -85,13 +85,15 @@ module.exports = class extends Command {
     }
 
     async run(msg, args) {
+
 		let arg = args[0], server = this.client.guilds.cache.get(args[1]);
-		if (arg) arg = msg.users;
-		if (!arg?.length) arg = await this.client.users.fetch(args[0]).catch(() => null);
-		if (!arg) arg = msg.channels;
-		if (!arg?.length) arg = msg.emojis;
-		if (!arg?.length) arg = msg.roles;
-		if (arg?.length) arg = arg[0];
+		
+		if (!arg) arg = msg.users.shift();
+		if (!arg) arg = await this.client.users.fetch(args[0]).catch(() => null);
+		if (!arg) arg = msg.channels.shift();
+		if (!arg) arg = msg.emojis.shift();
+		if (!arg) arg = msg.roles.shift();
+		if (arg) arg = arg[0];
 		if (!arg && !args[0]) arg = msg.author;
 		if (args[0] === 'server') arg = 'server';
 

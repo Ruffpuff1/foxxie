@@ -17,7 +17,6 @@ module.exports = class extends Command {
         const instance = this.client.commands.get(piece) || this.client.events.get(piece);
         if (!instance) return msg.responder.error('COMMAND_DISABLE_NOPIECE');
         await this.getType(instance);
-        console.log(instance.type)
         if ((instance.type === 'command' && instance.name === 'disable') || (instance.type === 'monitor' && instance.name === 'commandHandler') || (instance.type === 'command' && instance.name === 'enable') || (instance.type === 'event' && instance.name === 'message'))
         return msg.responder.error('COMMAND_DISABLE_WARN', instance.name);
         

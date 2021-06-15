@@ -15,7 +15,7 @@ module.exports = class extends Command {
 
     async run(msg, args) {
 
-        const channel = msg.channels ? msg.channels[0] : msg.channel;
+        const channel = msg.channels.shift() || msg.channel;
 
         const reason = args.slice(!msg.channels ? 0 : 1).join(' ') || msg.language.get('LOG_MODERATION_NOREASON');
         const message = await msg.responder.success('COMMAND_NUKE_WARNING', msg.member.toString(), channel.name);

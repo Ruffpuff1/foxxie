@@ -1,4 +1,5 @@
 const { Event } = require('foxxie');
+const { Permissions: { FLAGS } } = require('discord.js')
 
 module.exports = class extends Event {
 
@@ -10,16 +11,8 @@ module.exports = class extends Event {
 
     async run(message) {
 
-        // prevents bot dms
-        if (!message.guild) return;
-
-        // Execute monitors
-        if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return;
+        message.channel.postable = !this.guild || this.permissionsFor(this.guild.me).has([FLAGS.VIEW_CHANNEL, FLAGS.SEND_MESSAGES], false);
         this.client.monitors.run(message);
-
-        // Checks if member is AFK
-        message.client.tasks.get('afkcheck').execute(message);
-
         // Counters
         // message.author.settings.inc(`servers.${message.guild.id}.messageCount`)
         // message.guild.settings.inc('messageCount');
