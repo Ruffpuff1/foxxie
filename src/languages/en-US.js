@@ -360,6 +360,8 @@ module.exports = class extends Language {
             // Logging
             LOG_ACTION_DELETE: `Message Deleted`,
             LOG_ACTION_EDIT: `Message Edited`,
+            LOG_ACTION_MEMBERJOINED: `Member Joined`,
+            LOG_ACTION_MEMBERLEFT: `Member Left`,
             LOG_ACTION_NUKE: `Channel Nuked`,
             LOG_ACTION_TEMPBAN: multiple => `Temporarily Banned User${multiple ? 's' : ''}`,
             LOG_ACTION_TEMPUNBAN: multiple => `Removed Temporary Ban from User${multiple ? 's' : ''}`,

@@ -41,7 +41,11 @@ module.exports = class extends Event {
         this.welcome(member);
         
         // Username cleaning
-        this.lowercase(member);
+        await this.lowercase(member);
+
+        await member.guild.log.send({ member, type: 'member', action: 'memberJoined' });
+
+        return member;
     }
 
     async lowercase(member) {

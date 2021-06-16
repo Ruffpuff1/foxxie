@@ -13,8 +13,5 @@ module.exports = class extends Event {
 
         message.channel.postable = !this.guild || this.permissionsFor(this.guild.me).has([FLAGS.VIEW_CHANNEL, FLAGS.SEND_MESSAGES], false);
         this.client.monitors.run(message);
-        // Counters
-        // message.author.settings.inc(`servers.${message.guild.id}.messageCount`)
-        // message.guild.settings.inc('messageCount');
     }
 }

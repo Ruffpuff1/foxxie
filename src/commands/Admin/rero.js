@@ -66,7 +66,6 @@ module.exports = class extends Command {
         } else if (action.toLowerCase() === 'remove') {
             if (!message) throw 'COMMAND_RERO_NOMESSAGEID';
             const removeReros = reros.filter(item => !filter(item));
-            console.log(removeReros.length);
 
             if (removeReros.length) {
                 removeReros?.forEach(rr => msg.guild.settings.pull('reros', rr));
@@ -96,6 +95,6 @@ module.exports = class extends Command {
 
     async notify(msg, type) {
         if (type === 'query') this.notifier = await msg.responder.info('COMMAND_RERO_QUERYEMOJI');
-        if (type === 'added') this.notifier.edit('COMMAND_RERO_ADDED')
+        if (type === 'added') this.notifier.edit(msg.language.get('COMMAND_RERO_ADDED'));
     }
 }

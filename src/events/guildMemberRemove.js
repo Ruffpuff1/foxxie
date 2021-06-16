@@ -20,6 +20,8 @@ module.exports = class extends Event {
 
         // Goodbye
         this.goodbye(member);
+
+        member.guild.log.send({ member, type: 'member', action: 'memberLeft' });
     }
 
     async goodbye(member) {

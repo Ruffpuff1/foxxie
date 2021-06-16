@@ -27,7 +27,7 @@ module.exports = class extends Event {
                 if (member?.user.bot) return false;
                 const role = guild.roles.cache.get(rero.role);
                 if (!role) return null;
-                member?.roles?.remove(role, guild.language.get('EVENT_MESSAGEREACTIONREMOVE_RERO_REASON'));
+                member?.roles?.remove(role, guild.language.get('EVENT_MESSAGEREACTIONREMOVE_RERO_REASON')).catch(() => null);
                 return true;
             }
             return false;
