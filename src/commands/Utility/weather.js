@@ -8,6 +8,7 @@ module.exports = class extends Command {
         super(...args, {
             name: 'weather',
             aliases: ['temp', 'forcast'],
+            description: language => language.get('COMMAND_WEATHER_DESCRIPTION'),
             usage: '[City]',
             category: 'utility'
         })

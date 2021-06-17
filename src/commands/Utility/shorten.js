@@ -7,6 +7,7 @@ module.exports = class extends Command {
         super(...args, {
             name: 'shorten',
             aliases: ['sl', 'tiny'],
+            description: language => language.get('COMMAND_SHORTEN_DESCRIPTION'),
             usage: '[Link] (Name)',
             category: 'utility'
         })

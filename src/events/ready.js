@@ -35,7 +35,6 @@ module.exports = class extends Event {
 
         // Botwide
         this.client.tasks.run(this.client);
-        //this.client.tasks.filter(t => t.name !== "afkcheck").forEach(t => t.execute(this.client));
         // The Corner Store, memberCount & clock
         // memberCount(client);
         // clock(client);

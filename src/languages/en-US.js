@@ -20,6 +20,7 @@ module.exports = class extends Language {
             ].join(' '),
 
             ERROR_GENERIC: (err) => `${bold`Whoops,`} an error occurred: ${Util.codeBlock('js', err)}`,
+            ERROR_SHORT: err => err,
 
 			ACTIVITY_PLAYING: 'Playing',
 			ACTIVITY_LISTENING: 'Listening to',
@@ -196,6 +197,16 @@ module.exports = class extends Language {
             COMMAND_EXEMPT_DESCRIPTION: `Allows you to add users, channels, or roles to be ignored by my ${code`anti`} automod features. To remove from this list try out the ${code`unexempt`} command.`,
             COMMAND_EXEMPT_DUPLICATE: (name, type) => `${bold`${name}`} is already an exempt ${bold`${type.substring(0, type.length -1)}`}.`,
             COMMAND_EXEMPT_GUILD: guild => underline`Foxxie's exempt settings in ${bold`${guild}`}.`,
+            COMMAND_RERO_ADDED: `${bold`Done,`} successfully added the reaction role to the message.`,
+            COMMAND_RERO_DESCRIPTION: `Allows you to configure reaction roles in your server. Specify ${code`add`} to add them, simply provide the role it should be for, then react to the message it should be attached to, I'll make a reaction role on that message with the emoji you reacted with. Specify ${code`remove`} to remove a reaction role using it's message Id and the Role attached to it.`,
+            COMMAND_RERO_EXIST: `This ${bold`role`} is already a reaction role on this message.`,
+            COMMAND_RERO_INVALIDEMOJI: `${bold`Uh oh,`} there was an issue with the given emoji.`,
+            COMMAND_RERO_NOACTION: `${bold`Please,`} specify either [add | remove].`,
+            COMMAND_RERO_NOEMOJI: `${bold`Whoops,`} you didn't react to message with an emoji.`,
+            COMMAND_RERO_NOMESSAGEID: `You need to specify a ${bold`message Id`} to remove a reaction from.`,
+            COMMAND_RERO_NOROLE: `${bold`You need`} a role for this reaction role`,
+            COMMAND_RERO_QUERYEMOJI: `${bold`Please react`} to a message with an emoji for the given role.`,
+            COMMAND_RERO_REMOVED: plural => `${bold`Done,`} removed ${plural ? 'all reaction roles' : 'the reaction role'} from the message.`,
             COMMAND_UNEXEMPT_DESCRIPTION: `Allows you to remove users, channels, or roles from being ignored by my ${code`anti`} automod features. To add to this list try out the ${code`exempt`} command.`,
             COMMAND_UNEXEMPT_NOEXIST: (name, type) => `${bold`${name}`} is currently not an exempt ${bold`${type.substring(0, type.length -1)}`}.`,
 
@@ -344,6 +355,14 @@ module.exports = class extends Language {
             COMMAND_STEAL_NOEMOJI: `${bold`Hey,`} I can only steal proper emojis.`,
             COMMAND_STEAL_SUCCESS: name => `Stole ${name}`,
 
+            // Events
+            EVENT_GUILDMEMBERADD_DEFAULT: member => `${member} just joined the server!`,
+            EVENT_GUILDMEMBERADD_UPPERCASE_REASON: `Running anti uppercase filter on member's username.`,
+            EVENT_GUILDMEMBERREMOVE_DEFAULT: member => `${bold`${member}`} just left the server :(`,
+            EVENT_GUILDMEMBERUPDATE_AUTOROLE_REASON: `Recieved set autoroles after passing member gate.`,
+            EVENT_GUILDMEMBERUPDATE_UPPERCASE_REASON: `Running anti uppercase filter on member's nickname.`,
+            EVENT_MESSAGEREACTIONADD_RERO_REASON: `Member added reaction to reaction role.`,
+            EVENT_MESSAGEREACTIONREMOVE_RERO_REASON: `Member removed reaction from reaction role.`,
             EVENT_STARCREATED_DESCRIPTION: (user, channel, link) => `A message by ${user} got starred enough to make it into the ${channel}.\nCheck it out [here](${link})`,
             EVENT_STARCREATED_MESSAGE: 'Jump to Message',
             EVENT_STARCREATED_TITLE: ':star: A new message made it into the starboard :star:',
@@ -357,6 +376,15 @@ module.exports = class extends Language {
             MONITOR_AFK_DESCRIPTION: (reason, time) => `${bold`${time}`} ago with the reason: ${bold`${reason}`}`,
             MONITOR_AFKCHECK_WELCOMEBACK: `Hey, welcome back I'll remove that afk for you.`,
 
+            // Tasks
+            TASK_DISBOARD: `Reminder to Bump`,
+            TASK_DISBOARD_DEFAULT: `It's time to bump the server on disboard. Use the command ${code`!d bump`} and I'll notify you in ${bold`two hours`}.`,
+            TASK_ENDTEMPBAN_REASON: `Temporary ban expired.`,
+            TASK_ENDTEMPMUTE_REASON: `Temporary mute expired.`,
+            TASK_REMINDER: (time, message) => `Hey there, here's that reminder you scheduled ${bold`${time}`} ago for: ${bold`${message}`}`,
+            TASK_REMINDER_AUTHOR: author => `Reminder For ${author}`,
+            TASK_REMINDER_SENDIN: (time, message) => `${bold`${time} ago`} you wanted me to remind you: ${message}`,
+
             // Logging
             LOG_ACTION_DELETE: `Message Deleted`,
             LOG_ACTION_EDIT: `Message Edited`,
@@ -365,6 +393,7 @@ module.exports = class extends Language {
             LOG_ACTION_NUKE: `Channel Nuked`,
             LOG_ACTION_TEMPBAN: multiple => `Temporarily Banned User${multiple ? 's' : ''}`,
             LOG_ACTION_TEMPUNBAN: multiple => `Removed Temporary Ban from User${multiple ? 's' : ''}`,
+            LOG_ACTION_TEMPUNMUTE: plural => `Temporary Mute${plural ? 's' : ''} Expired`,
             LOG_ACTION_VCKICK: multiple => `Kicked User${multiple ? 's' : ''} from vc.`,
             LOG_ACTION_VCMUTE: multiple => `Muted User${multiple ? 's' : ''} in vc.`,
             LOG_ACTION_VCUNMUTE: multiple => `Unmuted User${multiple ? 's' : ''} in vc.`,
@@ -391,6 +420,7 @@ module.exports = class extends Language {
 
             LOG_DM_TEMPBAN: `You have been temporarily banned`,
             LOG_DM_TEMPUNBAN: `Your temporary ban has expired`,
+            LOG_DM_TEMPUNMUTE: 'You temporary mute has expired',
             LOG_DM_VCKICK: `You have been kicked from vc`,
             LOG_DM_VCMUTE: `You have been muted in vc`,
             LOG_DM_VCUNMUTE: `You have been unmuted in vc`,

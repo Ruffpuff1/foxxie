@@ -1,29 +1,32 @@
-const axios = require('axios');
+const { get } = require('axios');
 require('dotenv').config();
+const { Command } = require('foxxie');
 
-module.exports = {
-    name: 'define',
-    aliases: ['def', 'word'],
-    usage: 'fox define [word]',
-    category: 'utility',
-    async execute(props) {
+module.exports = class extends Command {
 
-        let { args, message } = props;
+    constructor(...args) {
+        super(...args, {
+            name: 'define',
+            aliases: ['def', 'word'],
+            description: language => language.get('COMMAND_DEFINE_DESCRIPTION'),
+            usage: '[Word]',
+            category: 'utility'
+        })
+    }
 
+    async run(message, [word]) {
         let msg;
-        if (!args[0]) msg = await message.responder.error('COMMAND_DEFINE_NOARGS');
-        if (args[0]) return this._response(props, msg, args[0].toLowerCase());
-        if (msg) return message.awaitResponse(props, msg, this._response)
-        
-    },
+        if (!word) msg = await message.responder.error('COMMAND_DEFINE_NOARGS');
+        if (word) return this._response(message, msg, word.toLowerCase());
+        if (msg) return message.awaitResponse(message, msg, this._response)
+    }
 
-    async _response({ language, message }, msg, word){
-        
-        if (msg) msg = await msg.edit(language.get("MESSAGE_LOADING"));
+    async _response(message, msg, word){
+        if (msg) msg = await msg.edit(message.language.get("MESSAGE_LOADING"));
         if (!msg) msg = await message.responder.loading();
 
-        let res = await axios.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
-        if (!res || !res.data[0] || !res.data[0]['hwi']) return msg.edit(language.get('COMMAND_DEFINE_NORESULTS', word))
+        let res = await get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
+        if (!res || !res.data[0] || !res.data[0]['hwi']) return msg.edit(message.language.get('COMMAND_DEFINE_NORESULTS', word))
 
         msg.edit(`(${res.data[0]['fl']}) **${res.data[0]['hwi']['hw'].replace(/\*/gi, '\\*')}** [${res.data[0]['hwi']['prs'][0]['mw']}]
 - ${res.data[0]['shortdef'][0]}\n${res.data[0]['shortdef'][1]

@@ -31,7 +31,7 @@ module.exports = class extends Task {
                 reason = res, duration = dur;
 
                 if (Date.now() > time) {
-                    this.executeUnbans(user, guild);
+                    this.executeUnbans(user, guild, moderator);
                     client.schedule.delete('bans', ban);
                     bannable.push(user);
                 }
@@ -46,7 +46,7 @@ module.exports = class extends Task {
         }, 1000)
     }
 
-    executeUnbans(user, guild) {
-        guild.members.unban(user.id, guild.language.get('TASK_ENDTEMPBAN_REASON')).catch(() => null);
+    executeUnbans(user, guild, moderator) {
+        guild.members.unban(user.id, `${moderator.user.tag} | ${guild.language.get('TASK_ENDTEMPBAN_REASON')}`).catch(() => null);
     }
 }

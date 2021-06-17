@@ -34,7 +34,7 @@ module.exports = class extends Event {
 
         let message = await guild.settings.get('goodbye.message');
         if (!message) {
-            channel.send(guild.language.get('EVENT_GUILDMEMBERREMOVE_DEFAULT_GOODBYEMESSAGE', member)).catch(e => e);
+            channel.send(guild.language.get('EVENT_GUILDMEMBERREMOVE_DEFAULT', member.user.tag)).catch(e => e);
             return member;
         };
 

@@ -23,7 +23,7 @@ module.exports = class extends Command {
 
         const description = [
             flags[0] > 0 && `${DISCORD_EMPLOYEE} ${flags[0]} x ${msg.language.get('COMMAND_BADGES_DISCORDEMPLOYEE', flags[0])} (${employees.join(',')})`,
-            flags[1] > 0 && `${PARTNER} ${flags[1]} x ${msg.language.get('COMMAND_BADGES_PARTNERED', flags[1])}`,
+            flags[1] > 0 && `${DISCORD_PARTNER} ${flags[1]} x ${msg.language.get('COMMAND_BADGES_PARTNERED', flags[1])}`,
             flags[2] > 0 && `${HYPESQUAD_EVENTS} ${flags[2]} x ${msg.language.get('COMMAND_BADGES_HYPEEVENT')}`,
             nitros > 0 && `${NITRO} ${nitros} x ${msg.language.get('COMMAND_BADGES_NITRO')} ${(boosters > 0) || (flags[9] > 0)
                 ? `(${boosters > 0

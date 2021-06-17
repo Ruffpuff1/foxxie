@@ -9,7 +9,7 @@ module.exports = class extends Command {
             name: 'info',
             aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
             description: language => language.get('COMMAND_INFO_DESCRIPTION'),
-            usage: '(User|Role|Channel|Emoji|server)',
+            usage: '(User | Role | Channel | Emoji | server)',
             category: 'utility'
         })
 
@@ -86,15 +86,13 @@ module.exports = class extends Command {
 
     async run(msg, args) {
 
-		let arg = args[0], server = this.client.guilds.cache.get(args[1]);
-		
-		const emoji = this.client.emojis.cache.get(msg.emojis.shift().replace(/\D/g, ''));
-		if (arg) arg = msg.users.shift();
+		let arg, server = this.client.guilds.cache.get(args[1]);
+		const emoji = this.client.emojis.cache.get(msg.emojis.length ? msg.emojis.shift().replace(/\D/g, '') : null);
+		arg = msg.users.shift();
 		if (!arg) arg = await this.client.users.fetch(args[0]).catch(() => null);
 		if (!arg) arg = msg.channels.shift();
 		if (!arg && emoji) arg = emoji;
 		if (!arg) arg = msg.roles.shift();
-
 		if (!arg && !args[0]) arg = msg.author;
 		if (args[0] === 'server') arg = 'server';
 

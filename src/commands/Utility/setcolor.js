@@ -6,6 +6,7 @@ module.exports = class extends Command {
         super(...args, {
             name: 'setcolor',
             aliases: ['sc', 'setcolour'],
+            description: language => language.get('COMMAND_SETCOLOR_DESCRIPTION'),
             usage: '[Role] [Color]',
             permissions: 'MANAGE_ROLES',
             category: 'utility'

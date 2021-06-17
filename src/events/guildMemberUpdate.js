@@ -17,7 +17,7 @@ module.exports = class extends Event {
     async uppercase(member) {
         const uppercase = await member.guild.settings.get('mod.anti.uppercase');
         if (!uppercase) return;
-        member.setNickname(member.displayName.toLowerCase()).catch(() => null)
+        member.setNickname(member.displayName.toLowerCase(), member.guild.language.get('EVENT_GUILDMEMBERUPDATE_UPPERCASE_REASON')).catch(() => null)
     }
 
     async autorole(member) {
@@ -25,7 +25,7 @@ module.exports = class extends Event {
 		await member.guild.log.send({ member, type: 'member', action: 'passedGate' });
 		const autoroles = await member.guild.settings.get('mod.roles.auto');
 		if (autoroles.length && !member.user.bot) {
-			await member.roles.add(autoroles, member.guild.language.get('EVENT_AUTOROLE_REASON')).catch(() => null);
+			await member.roles.add(autoroles, member.guild.language.get('EVENT_GUILDMEMBERUPDATE_AUTOROLE_REASON')).catch(() => null);
 		}
 	}
 }

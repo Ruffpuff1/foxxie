@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const WolframAlphaAPI = require('wolfram-alpha-node');
 const { getShort } = WolframAlphaAPI(process.env.WOLFRAMAPI);
 const { Command } = require('foxxie');
@@ -9,6 +9,7 @@ module.exports = class extends Command {
         super(...args, {
             name: 'wolfram',
             aliases: ['wa'],
+            description: language => language.get('COMMAND_WOLFRAM_DESCRIPTION'),
             usage: '[Search]',
             category: 'utility'
         })

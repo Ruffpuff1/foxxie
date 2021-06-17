@@ -69,7 +69,7 @@ module.exports = class extends Event {
 
         let message = await guild.settings.get('welcome.message');
         if (!message) {
-            channel.send(guild.language.get('EVENT_GUILDMEMBERADD_DEFAULT_WELCOMEMESSAGE', member)).catch(e => e);
+            channel.send(guild.language.get('EVENT_GUILDMEMBERADD_DEFAULT', member.toString())).catch(e => e);
             return member;
         };
 

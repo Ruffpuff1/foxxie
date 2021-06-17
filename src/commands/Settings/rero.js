@@ -2,7 +2,7 @@
  * Co-Authored by Ruff (http://ruff.cafe)
  * Co-Authored-By: Ravy <ravy@aero.bot> (https://ravy.pink)
  */
-const { Command } = require('foxxie');
+const { Command, MENTION_REGEX: { role: roleRegex } } = require('foxxie');
 const { Permissions: { FLAGS }, Role } = require('discord.js');
 const GuildReactionCollector = require('../../../lib/extensions/GuildReactionCollector');
 
@@ -30,20 +30,19 @@ module.exports = class extends Command {
        const role = msg.roles.shift();
        if (!role) return msg.responder.error('COMMAND_RERO_NOROLE');
 
-       if (message instanceof Role) message = null;
+       if (roleRegex.test(message) || msg.guild.roles.cache.get(message)) message = undefined;
 
         const rero = {
             message, 
             role: role.id
         }
-        console.log('after args')
+
        const filter = item => item.message === rero.message
             && item.role === rero.role && rero.emoji === item.emoji;
 
         const reros = await msg.guild.settings.get('reros');
 
         if (action.toLowerCase() === 'add') {
-            console.log('in add')
             const { emoji, message: partialMessage } = await this.queryEmoji(msg);
             const mess = await this.client.channels.cache.get(partialMessage.channel.id).messages.fetch(partialMessage.id);
             rero.message = mess.id;
@@ -64,12 +63,12 @@ module.exports = class extends Command {
                     throw 'COMMAND_RERO_INVALIDEMOJI';
                 });
         } else if (action.toLowerCase() === 'remove') {
-            if (!message) throw 'COMMAND_RERO_NOMESSAGEID';
+            if (!message) return msg.responder.error('COMMAND_RERO_NOMESSAGEID');
             const removeReros = reros.filter(item => !filter(item));
 
             if (removeReros.length) {
                 removeReros?.forEach(rr => msg.guild.settings.pull('reros', rr));
-                msg.responder.success('COMMAND_RERO_REMOVED');
+                msg.responder.success('COMMAND_RERO_REMOVED', removeReros.length > 1);
             }
         }
 

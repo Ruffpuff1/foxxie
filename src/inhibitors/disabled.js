@@ -8,7 +8,7 @@ module.exports = class extends Inhibitor {
         })
     }
 
-	async run(message, command) {
+	async run(_, command) {
         const blocked = await this.client.settings.get('blockedPieces');
 		if (blocked?.includes(command.name)) return true;
 	}

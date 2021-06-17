@@ -71,7 +71,7 @@ module.exports = class extends Command {
 
         categories.forEach(c => 
             embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).length})`}`, 
-                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).map(cmd => code`${cmd.name}`).join(', ')))
+                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).filter(cmd => !(cmd.permissions === 'CLIENT_OWNER')).map(cmd => code`${cmd.name}`).join(', ')))
 
         return msg.channel.send(embed);
     }

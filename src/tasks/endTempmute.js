@@ -33,7 +33,7 @@ module.exports = class extends Task {
                 reason = res, duration = dur;
 
                 if (Date.now() > time) {
-                    this.executeUnmutes(member);
+                    this.executeUnmutes(member, moderator);
                     this.client.schedule.delete('mutes', mute);
                     muteable.push(member);
                 }
@@ -48,7 +48,7 @@ module.exports = class extends Task {
         }, 1000)
     }
 
-    async executeUnmutes(member) {
-        await member.unmute(member.guild.language.get('TASKS_ENDTEMPMUTE_REASON'));
+    async executeUnmutes(member, moderator) {
+        await member.unmute(`${moderator.user.tag} | ${member.guild.language.get('TASK_ENDTEMPMUTE_REASON')}`);
     }
 }

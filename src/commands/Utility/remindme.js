@@ -12,15 +12,14 @@ module.exports = class extends Command {
         })
     }
 
-    run(msg, args) {
+    run(msg, [time, ...rmdMessage]) {
 
-        const remindTime = args[0]
-        let rmdMessage = args.slice(1).join(' ');
+        rmdMessage = rmdMessage.join(' ');
 
-        if (!remindTime) return msg.responder.error('COMMAND_REMINDME_INVALIDTIME');
-        if (!/^\d*[s|m|h|d|w|y]$/gmi.test(remindTime)) return msg.responder.error('COMMAND_REMINDME_INVALIDTIME');
+        if (!time) return msg.responder.error('COMMAND_REMINDME_INVALIDTIME');
+        if (!/^\d*[s|m|h|d|w|y]$/gmi.test(time)) return msg.responder.error('COMMAND_REMINDME_INVALIDTIME');
 
-        const timeago = ms(ms(remindTime), { long: true } )
+        const timeago = ms(ms(time), { long: true } )
         if (!rmdMessage) return msg.responder.error('COMMAND_REMINDME_NOREASON');
 
         let sendIn = /\-channel\s*|-c\s*/gi
@@ -29,7 +28,7 @@ module.exports = class extends Command {
         const reminder = {
             guild: msg.guild.id,
             authID: msg.author.id,
-            time: Date.now() + ms(remindTime),
+            time: Date.now() + ms(time),
             rmdMessage,
             timeago,
             guildId: msg.guild.id,

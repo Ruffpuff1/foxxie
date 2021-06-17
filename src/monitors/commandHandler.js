@@ -1,5 +1,4 @@
 const { code, Monitor, Stopwatch } = require('foxxie');
-const { prefix: { production, development } } = require('../../config/foxxie');
 
 module.exports = class extends Monitor {
 
