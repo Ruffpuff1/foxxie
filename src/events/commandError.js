@@ -13,7 +13,7 @@ module.exports = class extends Event {
         if (error.message) msg.responder.error('ERROR_GENERIC', error.message).catch(() => null);;
 
         if (error instanceof Error) {
-            console.log(`[Command] ${command.name} | ${error.stack || error}`);
+            console.log(`[Command] ${command.name} | ${error.message}`);
         } else {
             if (typeof error === 'string' && msg.language.language[error]) error = msg.language.get(error);
             msg.responder.error('ERROR_SHORT', error);
