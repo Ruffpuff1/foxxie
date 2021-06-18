@@ -1,6 +1,6 @@
 /**
- * Co-authored by Ruff (http://ruff.cafe)
- * Co-authored by Aria
+ * Co-authored by Ruff <Ruffpuff#0017> (http://ruff.cafe)
+ * Co-authored by Aria <ArEo#1245>
  */
 const { Util, Language, bold, code, underline, italic } = require('foxxie');
 const { supportServer, communityServer, topggURL, version } = require('../../config/foxxie');
@@ -15,10 +15,11 @@ module.exports = class extends Language {
             DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
 			DEFAULT_LANGUAGE: 'Default Language',
             PREFIX_REMINDER: (prefixes, prefix) => [
-                `${bold`Heya!`} My prefixes for this guild are ${prefixes} and **${code`${prefix}`}**.`,
+                `${bold`Heya!`} My prefixes for this guild are ${prefixes} and ${code`${prefix}`}.`,
                 `For a list of all my commands, try out ${code`${prefix}help`}.`
             ].join(' '),
 
+            // Errors
             ERROR_GENERIC: (err) => `${bold`Whoops,`} an error occurred: ${Util.codeBlock('js', err)}`,
             ERROR_SHORT: err => err,
 
@@ -26,6 +27,7 @@ module.exports = class extends Language {
 			ACTIVITY_LISTENING: 'Listening to',
 			ACTIVITY_STREAMING: 'Streaming',
 
+            // Message Responses
             MESSAGE_INVALID_USE: usage => `${bold`Please,`} specify a proper use case ${usage}.`,
             MESSAGE_LOADING: `${infinity} ${bold`Alright, I'm taking your order.`} This may take a few seconds.`,
             MESSAGE_MEMBERS_NONE: `You need to specify at least ${bold`one member`}.`,
@@ -302,6 +304,9 @@ module.exports = class extends Language {
             COMMAND_RERO_QUERYEMOJI: `${bold`Please react`} to a message with an emoji for the given role.`,
             COMMAND_RERO_REMOVED: plural => `${bold`Done,`} removed ${plural ? 'all reaction roles' : 'the reaction role'} from the message.`,
             COMMAND_TAG_ADDED: (tag, content) => `${bold`Done,`} added the tag ${code`${tag}`} with the content:${Util.codeBlock('js', content)}`,
+            COMMAND_TAG_DESCRIPTION: ``,
+            COMMAND_TAG_EMPTY: `You didn't provide a ${bold`tag`}.`,
+            COMMAND_TAG_EXISTS: `This tag is already either a ${bold`tag`} or a ${bold`command`}.`,
             COMMAND_TAG_LIST: (guild, size) => `${bold`Tags in ${guild}`} (${size})`,
             COMMAND_TAG_NOTAGS: `${bold`Hmmm,`} it doesn't seem like there are any tags configured in this server`,
             COMMAND_TAGREGEX_BADREGEX: err => `${bold`Uh oh,`} you provided an invalid regular expression pattern: ${Util.codeBlock('js', err)}`,

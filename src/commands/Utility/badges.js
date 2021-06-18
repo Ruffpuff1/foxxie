@@ -40,7 +40,7 @@ module.exports = class extends Command {
             flags[3] > 0 && `${BUGHUNTER_LEVEL_1} ${flags[3]} x ${msg.language.get('COMMAND_BADGES_BUG1')}`,
             flags[14] > 0 && `${BUGHUNTER_LEVEL_2} ${flags[14]} x ${msg.language.get('COMMAND_BADGES_BUG2')}`,
             flags[6] > 0 && `${HOUSE_BRAVERY} ${flags[6]} x ${msg.language.get('COMMAND_BADGES_BRAVERY')}`,
-            flags[7] > 0 && `${HOUSE_BALANCE} ${flags[7]} x ${msg.language.get('COMMAND_BADGES_BRILLIANCE')}`,
+            flags[7] > 0 && `${HOUSE_BRILLIANCE} ${flags[7]} x ${msg.language.get('COMMAND_BADGES_BRILLIANCE')}`,
             flags[8] > 0 && `${HOUSE_BALANCE} ${flags[8]} x ${msg.language.get('COMMAND_BADGES_BALANCE')}`,
             flags[17] > 0 && `${EARLY_VERIFIED_DEVELOPER} ${flags[17]} x ${msg.language.get('COMMAND_BADGES_BOTDEV', flags[17])}`,
             bots > 0 && `${BOT} ${bots - flags[16]} x ${msg.language.get('COMMAND_BADGES_BOT', bots, flags[17])}${flags[16] > 0 ? ` (${VERIFIED_BOT} ${flags[16]} x ${msg.language.get('COMMAND_BADGES_BOTVERIFIED', flags[16])})` : ''}`

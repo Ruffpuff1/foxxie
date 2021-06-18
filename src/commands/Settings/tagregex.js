@@ -35,11 +35,11 @@ module.exports = class extends Command {
 
     async list(msg) {
         const tags = await msg.guild.settings.get('regexTags')
-        if (!tags?.length) throw msg.language.get('COMMAND_TAG_NOTAGS');
+        if (!tags?.length) return msg.responder.error('COMMAND_TAG_NOTAGS');
         const output = [msg.language.get('COMMAND_TAG_LIST', msg.guild.name, tags.length), '```asciidoc'];
         let index = 1;
         for (const tag of tags) {
-            output.push(`${index}. ${tag.tag} :: ${tag.content}`)
+            output.push(`${index}. ${tag.tag} :: ${tag.content.substring(0, 30)}`)
             index++;
         };
         output.push('```');

@@ -1,7 +1,3 @@
-/*
- * Co-Authored by Ruff (http://ruff.cafe)
- * Co-Authored-By: Ravy <ravy@aero.bot> (https://ravy.pink)
- */
 const { Command, MENTION_REGEX: { role: roleRegex } } = require('foxxie');
 const { Permissions: { FLAGS }, Role } = require('discord.js');
 const GuildReactionCollector = require('../../../lib/extensions/GuildReactionCollector');
