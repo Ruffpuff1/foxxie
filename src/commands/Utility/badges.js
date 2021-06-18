@@ -9,7 +9,7 @@ module.exports = class extends Command {
             aliases: ['bd', 'userflags'],
             description: language => language.get('COMMAND_BADGES_DESCRIPTION'),
             permissions: 'CLIENT_OWNER',
-            category: 'admin'
+            category: 'utility'
         })
     }
 

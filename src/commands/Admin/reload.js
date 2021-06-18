@@ -1,4 +1,4 @@
-const { Command, Stopwatch, Language, Event, Monitor } = require('foxxie');
+const { Command, Stopwatch, Language, Event, Monitor, Inhibitor, Task } = require('foxxie');
 const fs = require('fs');
 const { Message } = require('discord.js');
 
@@ -18,7 +18,7 @@ module.exports = class extends Command {
     async run (message, [piece]) {
 
         if (!piece) return message.responder.error('COMMAND_RELOAD_NONE');
-        const instance = this.client.commands.get(piece) || this.client.events.get(piece) || this.client.monitors.get(piece) || this.client.languages.get(piece);
+        const instance = this.client.commands.get(piece) || this.client.events.get(piece) || this.client.monitors.get(piece) || this.client.languages.get(piece) || this.client.inhibitors.get(piece) || this.client.tasks.get(piece);
         if (!instance) return;
        
         let value = await this._reload(message, instance, piece);
@@ -44,6 +44,7 @@ module.exports = class extends Command {
         if (piece instanceof Event) delete require.cache[require.resolve(`../../events/${name}.js`)];
         if (piece instanceof Language) delete require.cache[require.resolve(`../../languages/${instance}.js`)];
         if (piece instanceof Monitor) delete require.cache[require.resolve(`../../monitors/${name}.js`)];
+        if (piece instanceof Inhibitor) delete require.cache[require.resolve(`../../inhibitors/${name}.js`)];
 
         try {
             
@@ -73,6 +74,13 @@ module.exports = class extends Command {
                 newPiece = new newPiece(this.client.monitors, `../../monitors/${name}`, `../../monitors`);
                 this.client.monitors.set(newPiece);
                 return { time: stopwatch.toString(), type: 'MONITOR', name: instance }
+            }
+
+            if (piece instanceof Inhibitor) {
+                newPiece = require(`../../inhibitors/${name}.js`);
+                newPiece = new newPiece(this.client.inhibitors, `../../inhibitors/${name}`, `../../inhibitors`);
+                this.client.inhibitors.set(newPiece);
+                return { time: stopwatch.toString(), type: 'INHIBITOR', name: instance }
             }
 
         } catch (e) {

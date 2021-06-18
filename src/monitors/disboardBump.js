@@ -13,9 +13,9 @@ module.exports = class extends Monitor {
     }
 
     run(msg) {
-        if (!message.author.id === '302050872383242240') return;
-        const embed = message.embeds.length === 1 
-            ? (message.embeds[0]?.description?.endsWith(`https://disboard.org/`) ? true : false)
+        if (!msg.author.id === '302050872383242240') return;
+        const embed = msg.embeds.length === 1 
+            ? (msg.embeds[0]?.description?.endsWith(`https://disboard.org/`) ? true : false)
             : false;
 
         if (!embed) return;

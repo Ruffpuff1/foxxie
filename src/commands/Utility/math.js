@@ -1,5 +1,4 @@
-const { evaluate } = require('mathjs');
-const { Command } = require('foxxie');
+const { Command, evaluate } = require('foxxie');
 
 module.exports = class extends Command {
 

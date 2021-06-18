@@ -17,7 +17,7 @@ module.exports = class extends Command {
             usage: '[add | remove] (Message) [Role]',
             permissions: 'CLIENT_OWNER',
             requiredPermissions: FLAGS.MANAGE_ROLES,
-            category: 'admin'
+            category: 'settings'
         })
 
         this.notifier = null;
@@ -29,8 +29,7 @@ module.exports = class extends Command {
 
        const role = msg.roles.shift();
        if (!role) return msg.responder.error('COMMAND_RERO_NOROLE');
-
-       if (roleRegex.test(message) || msg.guild.roles.cache.get(message)) message = undefined;
+       if (roleRegex.test(message) && msg.guild.roles.cache.get(message)) message = undefined;
 
         const rero = {
             message, 
@@ -62,15 +61,16 @@ module.exports = class extends Command {
                 .catch(() => {
                     throw 'COMMAND_RERO_INVALIDEMOJI';
                 });
-        } else if (action.toLowerCase() === 'remove') {
-            if (!message) return msg.responder.error('COMMAND_RERO_NOMESSAGEID');
-            const removeReros = reros.filter(item => !filter(item));
-
-            if (removeReros.length) {
-                removeReros?.forEach(rr => msg.guild.settings.pull('reros', rr));
-                msg.responder.success('COMMAND_RERO_REMOVED', removeReros.length > 1);
-            }
-        }
+        }// } else if (action.toLowerCase() === 'remove') {
+        //     console.log(message);
+        //     if (!message) return msg.responder.error('COMMAND_RERO_NOMESSAGEID');
+        //     const removeReros = reros.filter(item => !filter(item));
+        //     console.log(removeReros)
+        //     if (removeReros.length) {
+        //         removeReros?.forEach(rr => msg.guild.settings.pull('reros', rr));
+        //         msg.responder.success('COMMAND_RERO_REMOVED', removeReros.length > 1);
+        //     }
+        // }
 
         return true;
     }

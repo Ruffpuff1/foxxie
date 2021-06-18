@@ -34,7 +34,7 @@ module.exports = class extends Task {
         const channel = channels.cache.get(channelId);
         if (!channel) return;
 
-        let message = await settings.get('disboard.message') || language.get('TASK_DISBOARD_DEFAULT_DISBOARDMESSAGE');
+        let message = await settings.get('disboard.message') || language.get('TASK_DISBOARD_DEFAULT');
         let role = '';
         const ping = await settings.get('disboard.ping');
         if (ping) role = `<@&${ping}>`;

@@ -22,10 +22,10 @@ module.exports = class extends Command {
         if (opt.length > 10 || opt.length < 2) return msg.responder.error('COMMAND_POLL_OPTIONS');
 
         const embed = new MessageEmbed()
-            .setTitle(title || msg.language.get('COMMAND_POLL_EMBED_TITLE', msg.author.tag))
+            .setTitle(title || msg.language.get('COMMAND_POLL_TITLE', msg.author.tag))
             .setColor(msg.guild.me.displayColor)
             .setDescription(opt.map((option, idx) => `${idx + 1}. ${option.replace(/,/g, ' ')}`).join('\n'))
-            .setFooter(msg.language.get('COMMAND_POLL_EMBED_FOOTER'))
+            .setFooter(msg.language.get('COMMAND_POLL_FOOTER'))
 
         const message = await msg.channel.send(embed);
 

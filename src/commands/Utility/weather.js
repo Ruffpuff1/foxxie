@@ -1,6 +1,5 @@
-const { find } = require('weather-js');
 const { MessageEmbed } = require('discord.js');
-const { Command, zws, Timestamp } = require('foxxie');
+const { Command, zws, Timestamp, weatherjs: { find } } = require('foxxie');
 
 module.exports = class extends Command {
 

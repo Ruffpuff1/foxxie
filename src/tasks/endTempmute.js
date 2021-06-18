@@ -20,7 +20,7 @@ module.exports = class extends Task {
 
                 const { guildId, authId, time, reason: res, channelId, memberId, duration: dur } = mute;
 
-                guild = client.guilds.cache.get(guildId);
+                guild = this.client.guilds.cache.get(guildId);
                 if (!guild) return this.client.schedule.delete('mutes', mute);
 
                 await guild.members.fetch(authId).catch(() => null);

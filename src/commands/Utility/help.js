@@ -65,13 +65,13 @@ module.exports = class extends Command {
                     ? prefixes[0]
                     : this.client.user.id === '812546582531801118'
                         ? 'fox '
-                        : 'dev '));
+                        : 'dev ', this.client.commands.size));
             
-        if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret');
+        if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret').filter(cmd => !(cmd.permissions === 'CLIENT_OWNER'));
 
         categories.forEach(c => 
             embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).length})`}`, 
-                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).filter(cmd => !(cmd.permissions === 'CLIENT_OWNER')).map(cmd => code`${cmd.name}`).join(', ')))
+                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).map(cmd => code`${cmd.name}`).join(', ')))
 
         return msg.channel.send(embed);
     }

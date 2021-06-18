@@ -18,7 +18,7 @@ module.exports = class extends Task {
             bans?.forEach(async ban => {
 
                 const { guildId, authId, time, reason: res, channelId, userId, duration: dur } = ban;
-                guild = client.guilds.cache.get(guildId);
+                guild = this.client.guilds.cache.get(guildId);
                 if (!guild) return this.client.schedule.delete('bans', ban);
 
                 await guild.members.fetch(userId).catch(() => null);
