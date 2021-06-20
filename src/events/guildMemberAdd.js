@@ -1,4 +1,3 @@
-const { tcsWelcome } = require('../../lib/util/theCornerStore');
 const moment = require('moment');
 const { FLAGS } = require('discord.js').Permissions;
 const { Event } = require('foxxie');
@@ -63,7 +62,8 @@ module.exports = class extends Event {
         if (this.client.globalBans.has(member.user)) return member;
 
         if (member.guild.id === '761512748898844702') {
-            tcsWelcome(member);
+            this.client.events.get('theCornerStore').memberCount(member);
+            this.client.events.get('theCornerStore').welcome(member);
             return member;
         };
 

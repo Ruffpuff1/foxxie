@@ -26,6 +26,8 @@ module.exports = class extends Event {
 
     async goodbye(member) {
 
+        if (member.guild.id === '761512748898844702') this.client.events.get('theCornerStore').memberCount(member);
+
         const { guild } = member;
         const channelId = await guild.settings.get('goodbye.channel');
         if (!channelId) return member;
