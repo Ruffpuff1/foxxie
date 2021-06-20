@@ -7,6 +7,7 @@ module.exports = {
     },
     version,
     owners: ['486396074282450946', '749845359689465977', '754598258742919178'],
+    bans: new Set(),
     communityServer: 'http://ruff.cafe/community',
     supportServer: 'http://foxxie.ruff.cafe/support',
     inviteURL: 'http://foxxie.ruff.cafe/invite',

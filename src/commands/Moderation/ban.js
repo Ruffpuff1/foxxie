@@ -20,7 +20,7 @@ module.exports = class extends Command {
     async run(msg, args) {
 
         const users = msg.users;
-        if (!users) return msg.responder.error('MESSAGE_USERS_NONE');
+        if (!users?.length) return msg.responder.error('MESSAGE_USERS_NONE');
         const bannable = await this.getModeratable(msg.member, users);
         if (!bannable.length) return msg.responder.error('COMMAND_BAN_NOPERMS', users.length > 1);
 

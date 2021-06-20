@@ -31,7 +31,7 @@ module.exports = class extends Command {
                     .setThumbnail(this.client.user.displayAvatarURL({ dynamic: true }))
                     .setDescription(msg.language.get('COMMAND_HELP_EXPLAINER', prefixes?.length 
                         ? prefixes[0]
-                        : this.client.user.id === '812546582531801118'
+                        : !this.client.development
                             ? 'fox '
                             : 'dev '))    
                 );
@@ -63,15 +63,15 @@ module.exports = class extends Command {
             .setThumbnail(this.client.user.displayAvatarURL({ dynamic: true }))
             .setDescription(msg.language.get('COMMAND_HELP_MENU', prefixes?.length
                     ? prefixes[0]
-                    : this.client.user.id === '812546582531801118'
+                    : !this.client.development
                         ? 'fox '
                         : 'dev ', this.client.commands.size));
             
-        if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret').filter(cmd => !(cmd.permissions === 'CLIENT_OWNER'));
+        if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret');
 
         categories.forEach(c => 
-            embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).length})`}`, 
-                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).map(cmd => code`${cmd.name}`).join(', ')))
+            embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).filter(cmd => cmd.permissions !== 'CLIENT_OWNER').length})`}`, 
+                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => cmd.permissions !== 'CLIENT_OWNER').filter(cmd => !blocked?.includes(cmd.name)).map(cmd => code`${cmd.name}`).join(', ')))
 
         return msg.channel.send(embed);
     }
@@ -90,7 +90,7 @@ module.exports = class extends Command {
         const usage = command.usage;
         return `${prefix?.length
                 ? prefix[0] 
-                : this.client.user.id === '812546582531801118'
+                : !this.client.development
                     ? 'fox '
                     : 'dev '
             }${command.name} ${usage ? usage : ''}`

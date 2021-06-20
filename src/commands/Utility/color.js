@@ -16,9 +16,9 @@ module.exports = class extends Command {
 
     async run(msg, [hex]) {
 
-        if (!hex || !/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)) return msg.responder.error('COMMAND_COLOR_NOCOLOR');
+        if (!hex || !/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)) return msg.responder.error('COMMAND_COLOR_NOCOLOR');
         const loading = await msg.responder.loading();
-        const image = await color(hex);
+        const image = await color(hex.startsWith('#') ? hex : `#${hex}`);
 
         const embed = new MessageEmbed()
             .setTitle(msg.language.get('COMMAND_COLOR', hex))

@@ -43,7 +43,11 @@ module.exports = class extends Event {
         // Username cleaning
         await this.lowercase(member);
 
+        // Logging
         await member.guild.log.send({ member, type: 'member', action: 'memberJoined' });
+
+        const globalBanned = this.client.globalBans.has(member.user);
+        if (globalBanned) this.client.emit('globalBan', member);
 
         return member;
     }
@@ -55,6 +59,8 @@ module.exports = class extends Event {
     }
 
     async welcome(member) {
+
+        if (this.client.globalBans.has(member.user)) return member;
 
         if (member.guild.id === '761512748898844702') {
             tcsWelcome(member);

@@ -5,6 +5,7 @@ module.exports = class extends Monitor {
     constructor(...args) {
         super(...args, {
             monitor: 'anti-invite',
+            ignoreBots: false,
             ignoreOwner: true,
             ignoreAdmin: true
         })

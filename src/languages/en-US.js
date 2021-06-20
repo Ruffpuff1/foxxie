@@ -3,7 +3,6 @@
  * Co-authored by Aria <ArEo#1245>
  */
 const { Util, Language, bold, code, underline, italic } = require('foxxie');
-const { supportServer, communityServer, topggURL, version } = require('../../config/foxxie');
 const { emojis: { infinity, perms: { notSpecified, granted }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('../../lib/util/constants');
 
 module.exports = class extends Language {
@@ -303,6 +302,41 @@ module.exports = class extends Language {
             COMMAND_RERO_NOROLE: `${bold`You need`} a role for this reaction role`,
             COMMAND_RERO_QUERYEMOJI: `${bold`Please react`} to a message with an emoji for the given role.`,
             COMMAND_RERO_REMOVED: plural => `${bold`Done,`} removed ${plural ? 'all reaction roles' : 'the reaction role'} from the message.`,
+            COMMAND_SETTINGS_ANTI: (anti, copy, dup, gift, image, invite, link, pro, hoist, uni, upp) => [
+                anti ? `${granted} Anti ${bold`${anti} enabled`} (${[
+                    copy ? 'copypasta' : null,
+                    dup ? 'duplicates' : null,
+                    gift ? 'gift' : null,
+                    image ? 'image' : null,
+                    invite ? 'invite' : null,
+                    link ? 'link' : null,
+                    pro ? 'profanity' : null,
+                    hoist ? 'hoisting' : null,
+                    uni ? 'unicode' : null,
+                    upp ? 'uppercase' : null
+                ].filter(a => !!a).join(', ')})` : null
+            ].filter(a => !!a).join('\n'),
+            COMMAND_SETTINGS_ARRAY: (prefix, prefixMap, welcome, goodbye, disboard, starboard, logs, mod, edit, del, member) => [
+                prefix ? `${granted} Prefix${prefix > 1 ? 'es' : ''} ${bold`enabled`} (${prefixMap})` : null,
+                welcome ? `${granted} Welcomes ${bold`enabled`} (in ${welcome.toString()})` : null,
+                goodbye ? `${granted} Goodbyes ${bold`enabled`} (in ${goodbye.toString()})` : null,
+                disboard ? `${granted} Disboard ${bold`enabled`} (in ${disboard.toString()})` : null,
+                starboard ? `${granted} Starboard ${bold`enabled`} (in ${starboard.toString()})` : null,
+                logs ? `${granted} Loggers ${bold`${logs} enabled`} (${[
+                    mod ? 'mod' : null,
+                    edit ? 'edit' : null,
+                    del ? 'delete' : null,
+                    member ? 'member' : null
+                ].filter(a => !!a).join(', ')})` : null,
+            ].filter(a => !!a).join('\n'),
+            COMMAND_SETTINGS_DESCRIPTION: `View my settings configured in your server.`,
+            COMMAND_SETTINGS_EXEMPT: (users, userMap, channels, channelMap, roles, roleMap) => [
+                users ? `${granted} Exempt ${bold`${users} user${users > 1 ? 's' : ''}`} (${userMap})` : null,
+                channels ? `${granted} Exempt ${bold`${channels} channel${channels > 1 ? 's' : ''}`} (${channelMap})` : null,
+                roles ? `${granted} Exempt ${bold`${roles} role${roles > 1 ? 's' : ''}`} (${roleMap})` : null
+            ].filter(a => !!a).join('\n'),
+            COMMAND_SETTINGS_GUILD: (name, guild) => `${underline`${name}'s settings in ${bold`${guild}`}:`}`,
+            COMMAND_SETTINGS_NONE: `This server currently has ${bold`no settings`} set.`,
             COMMAND_TAG_ADDED: (tag, content) => `${bold`Done,`} added the tag ${code`${tag}`} with the content:${Util.codeBlock('js', content)}`,
             COMMAND_TAG_DESCRIPTION: ``,
             COMMAND_TAG_EMPTY: `You didn't provide a ${bold`tag`}.`,
@@ -330,12 +364,12 @@ module.exports = class extends Language {
             COMMAND_ABOUT_USERS_TITLE: bold`Users`,
             COMMAND_ABOUT_USERS_VALUE: users => `• Right now I'm cleaning up after ${bold`${users}`} users.`,
             COMMAND_ABOUT_VERSION_TITLE: bold`Version`,
-            COMMAND_ABOUT_VERSION_VALUE: `• Currently I'm in version ${bold`${version}`}, pretty much always getting worked on though ;)`,
+            COMMAND_ABOUT_VERSION_VALUE: `• Currently I'm in version ${bold`${this.client.options.version}`}, pretty much always getting worked on though ;)`,
             COMMAND_AFK_AUTHOR: author => `${author} has set an AFK`,
             COMMAND_AFK_DESCRIPTION: `Sets an AFK for when people ping ya, I'll remember the message you set and display it when someone is trying to reach you.`,
             COMMAND_AFK_REASON: reason => `${bold`Reason`}: ${reason}`,
             COMMAND_AVATAR_DESCRIPTION: `Gets you an image of any user's avatar.`,
-            COMMAND_AVATAR_FOXXIE: bold`Here is my cool avatar, trust me I know I look\ngorgeous but this is all thanks to\nLunaSpyker#1247`,
+            COMMAND_AVATAR_FOXXIE: luna => bold`Here is my cool avatar, trust me I know I look\ngorgeous but this is all thanks to\n${luna}`,
             COMMAND_BADGES_BOOSTS: boosts => `Boost${boosts > 1 ? 's' : ''}`,
             COMMAND_BADGES_BALANCE: `House Balance`,
             COMMAND_BADGES_BOT: (bots, varif) => `Bot${bots - varif > 1 ? 's' : ''}`,
@@ -382,7 +416,7 @@ module.exports = class extends Language {
                 `To get a short overview of any command just run ${code`${prefix}help [Command]`}\n`,
                 `The syntax for usage is very simple aswell:`,
                 `Square brackets ${code`[]`} indicate an argument is required, parenthesis ${code`()`} indicate an argument is optional, and a pipe ${code`|`} between arguements indicates that you can choose between the two.\n`,
-                `If you need any further help be sure to join my [support server](${supportServer}).`
+                `If you need any further help be sure to join my [support server](${this.client.options.supportServer}).`
             ].join('\n'),
             COMMAND_HELP_MENU: (prefix, count) => `These are all of my commands, right now I have ${count}. For additional info on a certain one of them just do ${code`${prefix}help (command)`}.`,
             COMMAND_HELP_NOTVALID: `${bold`Sorry,`} that doesn't seem to be one of my commands.`,
@@ -452,12 +486,14 @@ module.exports = class extends Language {
             COMMAND_INVITE_DESCRIPTION: `Get the some important links, like to invite me, the invite to my support server, and the link to vote for me.`,
             COMMAND_INVITE_LINKS: (name, link) => [
                 `[Invite ${name}](${link})`,
-                `[Support](${supportServer})`,
-                `[Community](${communityServer})`,
-                `[Vote](${topggURL})`
+                `[Support](${this.client.options.supportServer})`,
+                `[Community](${this.client.options.communityServer})`,
+                `[Vote](${this.client.options.topggURL})`
             ].join(' | '),
             COMMAND_INVITE_TITLE: `Hey hey, here's some useful links`,
-            // math
+            COMMAND_MATH_DESCRIPTION: `Allows me to calculate a query using mathjs. Examples of queries include the following: ${code`sqrt(3^2 + 4^2)`} to calculate the square root of the given input. ${code`cos(45 deg)`} calculating complex expressions like cos, sin, tan. ${code`2 inch to cm`} for basic unit conversion. ${code`50 + 100`} for basic mathematical expressions (using  ${code`+, -, *, /`}).`,
+            COMMAND_MATH_INVALID: prefix => `${bold`Sorry,`} I can't calculate that expression, for examples of valid expressions try ${code`${prefix}help math`}.`,
+            COMMAND_MATH_NOARGS: `${bold`Hey,`} you need to enter something to calculate.`,
             COMMAND_PING: `Ping?`,
             COMMAND_PING_DESCRIPTION: `Runs a connection test to Discord.`,
             COMMAND_PINGPONG: (total, discord, ws) => `🏓 ${bold`Pong!`} Took ${bold`${total}`}ms (Discord latency: ${bold`${discord}`}ms. Network latency: ${bold`${ws}`}ms.)`,
@@ -510,6 +546,7 @@ module.exports = class extends Language {
             COMMAND_WOLFRAM_NODATA: `${bold`Sorry,`} I couldn't find any data for that search term.`,
 
             // Events
+            EVENT_GLOBALBAN_REASON: `This member has been globally banned by staff of Foxxie.`,
             EVENT_GUILDMEMBERADD_DEFAULT: member => `${member} just joined the server!`,
             EVENT_GUILDMEMBERADD_UPPERCASE_REASON: `Running anti uppercase filter on member's username.`,
             EVENT_GUILDMEMBERREMOVE_DEFAULT: member => `${bold`${member}`} just left the server :(`,
@@ -540,14 +577,27 @@ module.exports = class extends Language {
             TASK_REMINDER_SENDIN: (time, message) => `${bold`${time} ago`} you wanted me to remind you: ${message}`,
 
             // Logging
+            LOG_ACTION_BAN: `Banned User`,
+            LOG_ACTION_CLEARWARN: `Removed Warning From User`,
+            LOG_ACTION_CLEARWARNS: `Cleared Warnings From User`,
             LOG_ACTION_DELETE: `Message Deleted`,
             LOG_ACTION_EDIT: `Message Edited`,
+            LOG_ACTION_GLOBALBAN: `Removed Globally Banned User`,
+            LOG_ACTION_KICK: `Kicked User`,
+            LOG_ACTION_LOCK: `Locked Channel`,
             LOG_ACTION_MEMBERJOINED: `Member Joined`,
             LOG_ACTION_MEMBERLEFT: `Member Left`,
+            LOG_ACTION_MUTE: plural => `Muted User${plural ? 's' : ''}`,
             LOG_ACTION_NUKE: `Channel Nuked`,
+            LOG_ACTION_PURGE: total => `Purged ${total} Messages`,
+            LOG_ACTION_SLOWMODE: `Slowmode Set`,
             LOG_ACTION_TEMPBAN: multiple => `Temporarily Banned User${multiple ? 's' : ''}`,
+            LOG_ACTION_TEMPMUTE: plural => `Temporarily Muted User${plural ? 's' : ''}`,
             LOG_ACTION_TEMPUNBAN: multiple => `Removed Temporary Ban from User${multiple ? 's' : ''}`,
             LOG_ACTION_TEMPUNMUTE: plural => `Temporary Mute${plural ? 's' : ''} Expired`,
+            LOG_ACTION_UNBAN: `Unbanned User`,
+            LOG_ACTION_UNLOCK: `Unlocked Channel`,
+            LOG_ACTION_UNMUTE: plural => `Unmuted User${plural ? 's' : ''}`,
             LOG_ACTION_VCKICK: multiple => `Kicked User${multiple ? 's' : ''} from vc.`,
             LOG_ACTION_VCMUTE: multiple => `Muted User${multiple ? 's' : ''} in vc.`,
             LOG_ACTION_VCUNMUTE: multiple => `Unmuted User${multiple ? 's' : ''} in vc.`,
@@ -572,9 +622,18 @@ module.exports = class extends Language {
             LOG_ARGS_WARN: (reason, time, tag, author, id) => `${bold`Warn`}: ${reason}\non ${time}\nBy: ${tag} ${author} (ID: ${id})`,
             LOG_ARGS_WARNS: warns => `${bold`Warns`}: ${warns}`,
 
+            LOG_DM_BAN: `You have been banned`,
+            LOG_DM_CLEARWARN: `Your warning has been removed`,
+            LOG_DM_CLEARWARNS: `Your warnings have been cleared`,
+            LOG_DM_GLOBALBAN: `Due to being globally banned, you have been removed`,
+            LOG_DM_KICK: `You have been kicked`,
+            LOG_DM_MUTE: 'You have been muted',
             LOG_DM_TEMPBAN: `You have been temporarily banned`,
+            LOG_DM_TEMPMUTE: 'You have been temporarily muted',
             LOG_DM_TEMPUNBAN: `Your temporary ban has expired`,
             LOG_DM_TEMPUNMUTE: 'You temporary mute has expired',
+            LOG_DM_UNBAN: `You have been unbanned`,
+            LOG_DM_UNMUTE: `You have been unmuted`,
             LOG_DM_VCKICK: `You have been kicked from vc`,
             LOG_DM_VCMUTE: `You have been muted in vc`,
             LOG_DM_VCUNMUTE: `You have been unmuted in vc`,

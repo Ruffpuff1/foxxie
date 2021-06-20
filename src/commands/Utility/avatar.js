@@ -29,7 +29,9 @@ module.exports = class extends Command {
             formats
         ]
 
-        if (user.id === this.client.user.id) description.push('\n' + msg.language.get('COMMAND_AVATAR_FOXXIE'))
+        const luna = await this.client.users.fetch('232597078650519553').catch(() => null);
+
+        if (user.id === this.client.user.id) description.push('\n' + msg.language.get('COMMAND_AVATAR_FOXXIE', luna?.tag))
         
         const embed = new MessageEmbed()
             .setColor(msg.guild.me.displayColor)

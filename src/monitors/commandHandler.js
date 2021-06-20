@@ -14,7 +14,7 @@ module.exports = class extends Monitor {
         if (msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
         if (!msg.channel.postable) return undefined;
         if (!msg.commandText && msg.prefix === `<@!${this.client.user.id}>`) {
-            return msg.responder.success('PREFIX_REMINDER', msg.stringPrefixes.filter(p => p !== `<@!${this.client.user.id}>`).slice(0, -1).map(p => `${code`${p}`}`).join(', '), msg.stringPrefixes.pop());
+            return msg.responder.success('PREFIX_REMINDER', msg.stringPrefixes.filter(p => p !== `<@!${this.client.user.id}>`).slice(0, -1).map(p => `${code`${p.replace(' ', '')}`}`).join(', '), msg.stringPrefixes.pop());
         }
         if (!msg.commandText) return undefined;
         if (!msg.command) return this.client.emit('commandUnknown', msg, msg.commandName, msg.prefix, msg.prefix.length);

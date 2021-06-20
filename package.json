@@ -4,12 +4,12 @@
   "description": "Foxxie is a smort server butler suited for taking care of and managing your server.",
   "main": "src/index.js",
   "license": "ISC",
-  "author": "Ruff (https://github.com/Ruffpuff1)",
+  "author": "Ruff <Ruffpuff#0017> (https://github.com/Ruffpuff1)",
   "contributors": [
-    "Ruff (http://ruff.cafe)",
-    "Raindrop (https://github.com/Raindrop-Droptop)",
-    "Sug4r",
-    "Ari"
+    "Ruff <Ruffpuff#0017> (http://ruff.cafe)",
+    "Raindrop <Waindrop | ᓚᘏᗢ#7799> (https://github.com/Raindrop-Droptop)",
+    "Sug4r <sug4r#1312>",
+    "Aria <ArEo#1245>"
   ],
   "dependencies": {
     "@aero/tags": "^3.0.10",

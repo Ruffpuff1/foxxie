@@ -19,7 +19,7 @@ module.exports = class extends Command {
             let result = evaluate(query.join(" ").replace(/[,]/gi, '').replace(/[x]/gi, "*").replace(/[÷]/gi, "/"));
             message.channel.send(`${query.join("").replace(/[x]/gi, "*").replace(/[÷]/gi, "/").replace('to', " => ")} = ${result}`);
         } catch {
-            return message.responder.error('COMMAND_MATH_INVALID');
+            return message.responder.error('COMMAND_MATH_INVALID', message.prefix);
         }
     }
 }

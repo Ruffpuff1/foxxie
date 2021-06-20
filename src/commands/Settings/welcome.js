@@ -7,7 +7,7 @@ module.exports = class extends Command {
             name: 'welcome',
             aliases: ['ws', 'welcome-settings'],
             description: language => language.get('COMMAND_WELCOME_DESCRIPTION'),
-            usage: '[Channel | Message] (Channel | Message | none)',
+            usage: '[channel | message] (Channel | Message | none)',
             permissions: 'ADMINISTRATOR',
             category: 'settings'
         })
@@ -17,6 +17,7 @@ module.exports = class extends Command {
 
         if (/(channel|location|c)/i.test(args[0])) return this.channel(msg, args);
         if (/(message|text|m)/i.test(args[0])) return this.message(msg, args);
+        return msg.responder.error('COMMAND_WELCOME_INVALID');
     } 
 
     async channel(msg, [_, arg]) {
