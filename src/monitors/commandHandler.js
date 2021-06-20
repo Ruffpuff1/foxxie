@@ -10,9 +10,9 @@ module.exports = class extends Monitor {
     }
 
     async run(msg) {
-        
         if (msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
         if (!msg.channel.postable) return undefined;
+        msg.prefix = await msg.prefix;
         if (!msg.commandText && msg.prefix === `<@!${this.client.user.id}>`) {
             return msg.responder.success('PREFIX_REMINDER', msg.stringPrefixes.filter(p => p !== `<@!${this.client.user.id}>`).slice(0, -1).map(p => `${code`${p.replace(' ', '')}`}`).join(', '), msg.stringPrefixes.pop());
         }

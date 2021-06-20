@@ -28,6 +28,9 @@ module.exports = class extends Command {
             },
             `${message.author.tag} | ${reason}`
         )
+        
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        await delay(700);
 
         message.responder.lock();
         msg.edit(message.language.get('COMMAND_LOCK_SUCCESS'));

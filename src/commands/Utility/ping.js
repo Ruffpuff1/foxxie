@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const { Command } = require('foxxie');
 
 module.exports = class extends Command {
@@ -18,9 +17,12 @@ module.exports = class extends Command {
         const wsPing = Math.round(this.client.ws.ping);
         const roundTrip = (msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp);
 
-        const discordLatency = roundTrip - wsPing > 0 ? roundTrip - wsPing : roundTrip;
+        const discordLatency = roundTrip;
 
         const totalLatency = discordLatency + wsPing;
+
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        await delay(700);
 
         return msg.edit(message.language.get('COMMAND_PINGPONG', 
             totalLatency,

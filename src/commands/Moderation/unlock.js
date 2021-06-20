@@ -4,7 +4,7 @@ module.exports = class extends Command {
 
     constructor(...args) {
         super(...args, {
-            name: 'lock',
+            name: 'unlock',
             aliases: ['ul', 'release'],
             description: language => language.get('COMMAND_UNLOCK_DESCRIPTION'),
             usage: '(Channel) (...Reason)',
@@ -19,7 +19,7 @@ module.exports = class extends Command {
 
         const channel = message.channels.shift() || message.channel;
         let reason = args.slice(message.channels.length).join(' ') || message.language.get('LOG_MODERATION_NOREASON');
-        let msg = await message.responder.success('COMMAND_UNLOCK_LOCKING');
+        let msg = await message.responder.success('COMMAND_UNLOCK_UNLOCKING');
 
         await channel.updateOverwrite(
             message.guild.id,
@@ -29,7 +29,10 @@ module.exports = class extends Command {
             `${message.author.tag} | ${reason}`
         )
 
-        message.responder.lock();
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        await delay(700);
+
+        message.responder.unlock();
         msg.edit(message.language.get('COMMAND_UNLOCK_SUCCESS'));
         message.guild.log.send({ type: 'mod', action: 'unlock', moderator: message.member, reason, channel, counter: 'unlock' });
     }

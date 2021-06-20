@@ -9,6 +9,6 @@ module.exports = class extends Event {
     }
 
     run(_, monitor, error) {
-        this.client.emit('wtf', `[MONITOR] ${monitor.name} | ${error ? error.message : 'Unknown Error'}`);
+        this.client.emit('wtf', `[MONITOR] ${monitor.name} | ${error ? error.stack : 'Unknown Error'}`);
     }
 }
