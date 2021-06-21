@@ -50,12 +50,12 @@ module.exports = class extends Event {
                     : tier3;
     }
 
-    _notification(reaction, guild, channel, user) {
+    _notification(reaction, guild, channel) {
         const { language } = guild;
 
         const embed = new MessageEmbed()
             .setTitle(language.get('EVENT_STARCREATED_TITLE'))
-            .setDescription(language.get('EVENT_STARCREATED_DESCRIPTION', user, channel, reaction.message.url))
+            .setDescription(language.get('EVENT_STARCREATED_DESCRIPTION', reaction.message.author, channel, reaction.message.url))
             .setColor(reaction.message.member.displayColor)
             .setThumbnail(reaction.message.author.displayAvatarURL({ dynamic: true }))
 
