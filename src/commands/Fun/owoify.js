@@ -1,5 +1,4 @@
-const { Command } = require('foxxie');
-const { default: owoify } = require('owoify-js');
+const { Command, owoify } = require('foxxie');
 
 module.exports = class extends Command {
 

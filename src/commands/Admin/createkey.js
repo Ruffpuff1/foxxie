@@ -1,6 +1,5 @@
-const { randomBytes } = require('crypto');
 const { badges } = require('../../../lib/util/constants');
-const { Command, Util } = require('foxxie');
+const { Command, Util, randomBytes } = require('foxxie');
 
 module.exports = class extends Command {
 

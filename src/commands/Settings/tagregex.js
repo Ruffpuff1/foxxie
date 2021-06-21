@@ -16,6 +16,8 @@ module.exports = class extends Command {
 
     run(msg, args) {
         if (args[0]?.toLowerCase() === 'add') return this.add(msg, args);
+        if (args[0]?.toLowerCase() === 'remove') return this.remove(msg, args);
+        if (args[0]?.toLowerCase() === 'view') return this.view(msg, args);
         this.list(msg);
     }
 
@@ -31,6 +33,22 @@ module.exports = class extends Command {
 		}
         await msg.guild.settings.push('regexTags', {tag, content})
         return msg.responder.success('COMMAND_TAG_ADDED', tag, djsUtil.escapeMarkdown(content))
+    }
+
+    async remove(msg, [_, name]) {
+        const tags = await msg.guild.settings.get('regexTags');
+        if (!tags) return msg.responder.error('COMMAND_TAG_NOTAGS');
+        const filtered = tags.filter(({tag}) => tag.toString().toLowerCase() !== name?.toLowerCase());
+        if (tags.length === filtered.length) throw msg.language.get('COMMAND_TAG_NOEXIST', name);
+        await msg.guild.settings.set('regexTags', filtered);
+        return msg.channel.send(msg.language.get('COMMAND_TAG_REMOVED', name));
+    }
+
+    async view(msg, [_, name]) {
+        if (!name) throw msg.language.get('COMMAND_TAG_UNSPECIFIED');
+        const content = await msg.guild.settings.get('regexTags').then(tags => tags?.find(({tag}) => tag.toString().toLowerCase() === name?.toLowerCase()));
+        if (!content) throw msg.language.get('COMMAND_TAG_NOEXIST', name);
+        return msg.channel.send(Util.codeBlock('js', content.content));
     }
 
     async list(msg) {
