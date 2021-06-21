@@ -8,7 +8,7 @@ module.exports = class extends Event {
             event: 'theCornerStore'
         })
 
-        this.clockFormat = new Timestamp('HH mm');
+        this.clockFormat = new Timestamp('HH:mm');
         this.timeStamp = new Timestamp('MMMM d YYYY');
         this.hourFormat = new Timestamp('H:mm a');
     }
@@ -51,6 +51,7 @@ module.exports = class extends Event {
         this.client.setInterval(() => {
             channel.setName(`🏪 ┋𝐒𝐭𝐨𝐫𝐞 𝐓𝐢𝐦𝐞・${this.clockFormat.displayUTC(Date.now() - 25200000)}`).catch(() => null); 
         }, 600000)
+        return;
     }
 
     memberCount(member) {

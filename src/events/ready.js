@@ -1,5 +1,4 @@
 const { mongoDB } = require('../../lib/Database');
-const { memberCount, clock } = require('../../lib/util/theCornerStore');
 const { Team } = require('discord.js');
 let retries = 0;
 const { Event, Util } = require('foxxie');
@@ -28,16 +27,9 @@ module.exports = class extends Event {
 			if (this.client.application.owner instanceof Team) this.client.options.owners.push(...this.client.application.owner.members.keys());
 			else this.client.options.owners.push(this.client.application.owner.id);
 		}
-
-        this.client.mentionPrefix = new RegExp(`^<@!?${this.client.user.id}>`);
-        this.client.development = this.client.user.id === '825130284382289920' ? true : false;
         mongoDB();
-
-        // Botwide
         this.client.tasks.run(this.client);
-        // The Corner Store, memberCount & clock
-        // memberCount(client);
-        // clock(client);
+        this.client.events.get('theCornerStore').clock();
 
         const actvs = [
             `with ${this.client.guilds.cache.size.toLocaleString()} servers & ${this.client.users.cache.size.toLocaleString()} users.`,
@@ -50,6 +42,7 @@ module.exports = class extends Event {
         this.client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]);
         setInterval(() => this.client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]), 30000);
 
+        this.client.ready = true;
         console.log(`[${this.client.user.username}] Ready! Logged in with ${this.client.commands.size} commands and ${this.client.aliases.size} aliases.`);
     }
 }
