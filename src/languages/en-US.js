@@ -113,11 +113,30 @@ module.exports = class extends Language {
             ].join('\n'),
             COMMAND_BAN_ERROR: (user, issue) => `${bold`Whoops`} I couldn't ban ${bold`${user}`}:${Util.codeBlock('js', issue)}`,
             COMMAND_BAN_NOPERMS: multiple => `${bold`Hey,`} you cannot ban ${multiple ? 'any of the specified users' : 'the specified user'}.`,
+            // clearnote
+            // clearwarn
+            COMMAND_KICK_DESCRIPTION: `Kick a member from the server. This will send a DM to the member telling them why they got kicked, along with logging to a moderation channel if one is set.`,
+            COMMAND_KICK_ERROR: (user, issue) => `${bold`Whoops`} I couldn't kick ${bold`${user}`}:${Util.codeBlock('js', issue)}`,
+            COMMAND_KICK_NOPERMS: multiple => `${bold`Hey,`} you cannot kick ${multiple ? 'any of the specified members' : 'the specified member'}.`,
+            COMMAND_LOCK_ALREADY: channel => `${bold`Whoops,`} ${channel} is already locked.`,
+            COMMAND_LOCK_DESCRIPTION: `Lets you lock a channel in the event of a raid or downtime. Although this command only updates the @everyone permission, so if you have a role that grants permissions to ${code`SEND_MESSAGES`} users with that role will still be able to speak.`,
+            COMMAND_LOCK_LOCKING: `${bold`Locking up the channel`}...`,
+            COMMAND_LOCK_SUCCESS: channel => `${bold`Successfully`} locked ${channel}.`,
             COMMAND_MUTE_ROLE_DEFAULT: `Silenced`,
             COMMAND_MUTE_ROLE_REASON: `Setting up the mute settings.`,
+            // mute
+            // note
             COMMAND_NUKE: `${bold`First hehe,`} anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`,
             COMMAND_NUKE_DESCRIPTION: `Completely wipes a channel of all messages and clones its permissions, topic, and position. Only server owners can use this command due to the harm it may cause. Also keep in mind: mine or any other bot's settings will no longer work in that channel. If a moderation logging channel is set in your server, this command will log there.`,
             COMMAND_NUKE_WARNING: (author, channel) => `${author}, ya sure you want to nuke this channel? This will get rid of ${bold`all messages`} in the channel and ${bold`can't be undone`}. If you're positive go ahead and type ${code`yes, nuke ${channel}`} within the next 30 seconds. If you'd like to cancel just send ${code`cancel`} or any other message. Also, gotta tell you that this simply clones the channel meaning some settings from myself or other bots won't work anymore.`,
+            COMMAND_PURGE_DESCRIPTION: `Clears out messages with optional filters, by default I won't clear important pinned messages.\n${code`link`} will only clear links.\n${code`invite`} will only clear discord invites.\n${code`bots`} will only clear messages sent by bots.\n${code`you`} will only clear messages sent by me.\n${code`me`} will only clear messages sent by you.\n${code`upload`} will only clear file uploads, like images and videos.\n${code`text`} will only clear text, avoiding any images.\n${code`user`} lets you specify a user to clear messages from, this can be their @mention or their user Id.`,
+            COMMAND_PURGE_NOLIMIT: `${bold`Please,`} provide a valid number [1 - 100] to purge.`,
+            COMMAND_PURGE_SUCCESS: number => `${bold`Successfully`} cleared out ${bold`${number}`} messages.`,
+            COMMAND_PURGE_USER: `You need to specify ${bold`one user`} to purge messages from.`,
+            COMMAND_SLOWMODE_DESCRIPTION: `Set a slowmode in a channel so theres a wait between members sending messages. I can set a slowmode anytime between 21,600 seconds and 0 seconds. Alternatively you can specify ${code`none`} to remove any slowmode in a channel.`,
+            COMMAND_SLOWMODE_INVALIDTIME: `Invalid time, I can only set a slowmode between ${bold`21,600`} and ${bold`0`} seconds.`,
+            COMMAND_SLOWMODE_NOARGS: `${bold`Please,`} specify the amount of seconds to set the slowmode for.`,
+            COMMAND_SLOWMODE_NOTANUMBER: `That doesn't look like a proper ${bold`number`}.`,
             COMMAND_STAFFLOG_DESCRIPTION: `Shows a list of moderation actions performed by a member of your server.`,
             COMMAND_STAFFLOG_NONE: member => `${bold`${member}`} has not performed any moderation actions.`,
             COMMAND_STAFFLOG_ONE: (member, ban, kick, warn, jail, mute) => [
@@ -135,6 +154,12 @@ module.exports = class extends Language {
                 nuke ? `${notSpecified} Completed ${nuke.toLocaleString()} ${bold`nuke${nuke === 1 ? '' : 's'}`}` : null,
                 purge ? `${notSpecified} Performed ${purge.toLocaleString()} ${bold`purge${purge === 1 ? '' : 's'}`} (${bold`${total.toLocaleString()}`} message${total === 1 ? '' : 's'})` : null
             ].filter(a => !!a).join('\n'),
+            // unban
+            COMMAND_UNLOCK_ALREADY: channel => `${bold`Whoops,`} ${channel} isn't even locked.`,
+            COMMAND_UNLOCK_DESCRIPTION: `Will unlock a channel if locked. This action will log to a moderation channel if one is set. Also note that this command only updates permissions for the @everyone permission, so any other roles with the ${code`SEND_MESSAGES`} permission will not be affected.`,
+            COMMAND_UNLOCK_UNLOCKING: `${bold`Finding the keys`}...`,
+            COMMAND_UNLOCK_SUCCESS: channel => `${bold`Successfully`} unlocked ${channel}.`,
+            // unmute
             COMMAND_VCKICK_DESCRIPTION: ``,
             COMMAND_VCKICK_NOPERMS: multiple => `${bold`Hey,`} you can't kick ${multiple ? `any of the specified members` : `the specified member`} from vc.`,
             COMMAND_VCKICK_NOVOICE: multiple => `${multiple ? `${bold`None`} of the specified members are` : `${bold`Hey,`} the specified member is not`} in vc.`,
@@ -288,10 +313,21 @@ module.exports = class extends Language {
             COMMAND_ANTI_GUILD: guild => underline`Foxxie's automod settings in ${bold`${guild}`}:`,
             COMMAND_ANTI_NONE: `This server currently has no ${bold`anti settings`} configured.`,
             COMMAND_ANTI_NOSETTING: `${bold`Whoops,`} you need to provide a proper setting [On|Off].`,
+            // disboard
             COMMAND_EXEMPT: (name, type) => `${notSpecified} ${bold`${name}`} is exempt as a ${bold`${type}`}.`,
             COMMAND_EXEMPT_DESCRIPTION: `Allows you to add users, channels, or roles to be ignored by my ${code`anti`} automod features. To remove from this list try out the ${code`unexempt`} command.`,
             COMMAND_EXEMPT_DUPLICATE: (name, type) => `${bold`${name}`} is already an exempt ${bold`${type.substring(0, type.length -1)}`}.`,
             COMMAND_EXEMPT_GUILD: guild => underline`Foxxie's exempt settings in ${bold`${guild}`}.`,
+            // goodbye
+            COMMAND_LANGUAGE_ARRAY: [
+                `${underline`Foxxie's Supported Languages`}:\n`,
+                `:flag_us: ${bold`en-US`} (English)`,
+                `:flag_mx: ${bold`es-MX`} (Spanish)`
+            ].join('\n'),
+            COMMAND_LANGUAGE_DESCRIPTION: `Set the server's language or view my list of supported languages. By default I'll be set to ${code`en-US`} or United States English.`,
+            COMMAND_LANGUAGE_SUCCESS: `${bold`Successfully`} set guild language to ${bold`en-US`}.`,
+            // log
+            // prefix
             COMMAND_RERO_ADDED: `${bold`Done,`} successfully added the reaction role to the message.`,
             COMMAND_RERO_DESCRIPTION: `Allows you to configure reaction roles in your server. Specify ${code`add`} to add them, simply provide the role it should be for, then react to the message it should be attached to, I'll make a reaction role on that message with the emoji you reacted with. Specify ${code`remove`} to remove a reaction role using it's message Id and the Role attached to it.`,
             COMMAND_RERO_EXIST: `This ${bold`role`} is already a reaction role on this message.`,
@@ -337,6 +373,7 @@ module.exports = class extends Language {
             ].filter(a => !!a).join('\n'),
             COMMAND_SETTINGS_GUILD: (name, guild) => `${underline`${name}'s settings in ${bold`${guild}`}:`}`,
             COMMAND_SETTINGS_NONE: `This server currently has ${bold`no settings`} set.`,
+            // starboard
             COMMAND_TAG_ADDED: (tag, content) => `${bold`Done,`} added the tag ${code`${tag}`} with the content:${Util.codeBlock('js', content)}`,
             COMMAND_TAG_DESCRIPTION: ``,
             COMMAND_TAG_EMPTY: `You didn't provide a ${bold`tag`}.`,
@@ -346,8 +383,25 @@ module.exports = class extends Language {
             COMMAND_TAGREGEX_BADREGEX: err => `${bold`Uh oh,`} you provided an invalid regular expression pattern: ${Util.codeBlock('js', err)}`,
             COMMAND_TAGREGEX_DESCRIPTION: `Create regular expression tags for me to respond to in certain guilds. This command is locked to the bot owner due to the power it holds.`,
             COMMAND_TAGREGEX_EMPTY: `You didn't provide any ${bold`regular expression`} to make a tag of.`,
+            COMMAND_TESTDISBOARD_DESCRIPTION: `Tests the bump reminder embed, sending a reminder to the set Disboard channel.`,
+            COMMAND_TESTJOIN_DESCRIPTION: `Simulates what would happen if a new member joined the server, sending a message to your specified welcome channel.`,
+            COMMAND_TESTLEAVE_DESCRIPTION: `Simulates what would happen if a member left the server, sending a goodbye message to your specified goodbye channel.`,
             COMMAND_UNEXEMPT_DESCRIPTION: `Allows you to remove users, channels, or roles from being ignored by my ${code`anti`} automod features. To add to this list try out the ${code`exempt`} command.`,
             COMMAND_UNEXEMPT_NOEXIST: (name, type) => `${bold`${name}`} is currently not an exempt ${bold`${type.substring(0, type.length -1)}`}.`,
+            COMMAND_WELCOME_CHANNEL_NOCHANNEL: `${bold`Whoops,`} there isn't a welcome channel set right now.`,
+            COMMAND_WELCOME_CHANNEL_NOW: channel => `${bold`Hey,`} right now the welcome channel is set as ${channel}.`,
+            COMMAND_WELCOME_CHANNEL_REMOVED: `${bold`Alrighty`} I removed the welcome channel for you.`,
+            COMMAND_WELCOME_CHANNEL_SET: channel => `${bold`Done,`} set the welcome channel as ${channel}.`,
+            COMMAND_WELCOME_DESCRIPTION: [
+                `Configure my welcome settings for your server using different arguments. If you want to test out the settings you can use the ${code`testjoin`} command.`,
+                `Specify ${code`channel`} to set the channel where I should send welcome messages, for example: ${code`fox welcome channel #general`}.`,
+                `Specify ${code`message`} to set the message I'll send in the set welcome channel. In your message you can also use the variables: ${code`{member}`}, ${code`{name}`}, ${code`{tag}`} (ex: ArEo#1245), ${code`{discrim}`}, ${code`{created}`}, ${code`{server}`}, and ${code`{count}`} for the server's membercount.`
+            ].join('\n\n'),
+            COMMAND_WELCOME_INVALID: `${bold`Please,`} specify a proper use case [channel | message].`,
+            COMMAND_WELCOME_MESSAGE_NOMESSAGE: `${bold`Right now,`} there isn't a welcome message set. For now I'll use my default: ${Util.codeBlock('', '{member} just joined the server!')}`,
+            COMMAND_WELCOME_MESSAGE_NOW: message => `${bold`Heya,`} right now the welcome message is set to: ${Util.codeBlock('', message)}`,
+            COMMAND_WELCOME_MESSAGE_REMOVED: `${bold`Done,`} I removed the welcome message.`,
+            COMMAND_WELCOME_MESSAGE_SET: message => `${bold`Alrighty,`} set the welcome message to: ${Util.codeBlock('', message)}`,
 
             // Util Commands
             COMMAND_ABOUT_COMMANDS_TITLE: bold`Commands`,

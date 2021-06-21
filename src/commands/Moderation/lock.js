@@ -15,9 +15,8 @@ module.exports = class extends Command {
 
     async run(message, args) {
 
-        if (!message.channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return message.responder.error('COMMAND_LOCK_ALREADY');
-
         const channel = message.channels.shift() || message.channel;
+        if (!channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return message.responder.error('COMMAND_LOCK_ALREADY', channel.toString());
         let reason = args.slice(message.channels.length).join(' ') || message.language.get('LOG_MODERATION_NOREASON');
         let msg = await message.responder.success('COMMAND_LOCK_LOCKING');
 
@@ -33,7 +32,7 @@ module.exports = class extends Command {
         await delay(700);
 
         message.responder.lock();
-        msg.edit(message.language.get('COMMAND_LOCK_SUCCESS'));
+        msg.edit(message.language.get('COMMAND_LOCK_SUCCESS', channel.toString()));
         message.guild.log.send({ type: 'mod', action: 'lock', moderator: message.member, reason, channel, counter: 'lock' });
     }
 }

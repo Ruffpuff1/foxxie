@@ -28,7 +28,8 @@ module.exports = class extends Command {
 
     async executeKicks(msg, reason, members) {
         for (const member of members) {
-            member.kick(`${msg.author.tag} | ${reason}`).catch(() => null);
+            member.kick(`${msg.author.tag} | ${reason}`)
+                .catch((e) => msg.responder.error('COMMAND_KICK_ERROR', member.user.tag, e.message));
         }
     }
 }
