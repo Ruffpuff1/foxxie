@@ -141,13 +141,14 @@ module.exports = class extends Command {
 		];
 
 		if (member) {
-			
+			const serverMsgs = await member.guild.settings.get('messageCount');
+			const memberMsgs = await member.user.settings.get(`servers.${msg.guild.id}.messageCount`) || 0;
 			statistics.push(msg.language.get(
 					creator ? 'COMMAND_INFO_USER_GUILDCREATE' : 'COMMAND_INFO_USER_GUILDJOIN',
 					msg.guild.name,
 					this.timestamp.display(member.joinedAt),
 					Duration.toNow(member.joinedAt)));
-			statistics.push(msg.language.get('COMMAND_INFO_USER_MESSAGES', await member.user.settings.get(`servers.${msg.guild.id}.messageCount`) || 0));
+			statistics.push(msg.language.get('COMMAND_INFO_USER_MESSAGES', memberMsgs, ((memberMsgs/serverMsgs)*100).toFixed(0)));
 		}
 
 		const stars = await user.settings.get(`servers.${msg.guild.id}.starCount`);

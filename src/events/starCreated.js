@@ -27,7 +27,6 @@ module.exports = class extends Event {
 
         let edited = await reaction.message.client.events.get('starUpdated').run(reaction, channel, embed);
         if (edited) return reaction.message.author.settings.inc(`servers.${guild.id}.starCount`);
-        if (notification !== false) this._notification(reaction, guild, channel, user);
 
         if (ruff.images.test(reaction.message.content) || imgur.image.test(reaction.message.content) || discord.cdn.test(reaction.message.content))
             embed
@@ -37,6 +36,7 @@ module.exports = class extends Event {
 
         let sent = await channel.send(embed).catch(() => null);
         if (sent) sent.react('⭐');
+        if (notification !== false) this._notification(reaction, guild, channel, sent);
         return reaction.message.author.settings.inc(`servers.${guild.id}.starCount`, minimum);
     }
 
@@ -50,12 +50,12 @@ module.exports = class extends Event {
                     : tier3;
     }
 
-    _notification(reaction, guild, channel) {
+    _notification(reaction, guild, channel, { url }) {
         const { language } = guild;
 
         const embed = new MessageEmbed()
             .setTitle(language.get('EVENT_STARCREATED_TITLE'))
-            .setDescription(language.get('EVENT_STARCREATED_DESCRIPTION', reaction.message.author, channel, reaction.message.url))
+            .setDescription(language.get('EVENT_STARCREATED_DESCRIPTION', reaction.message.author, channel, url))
             .setColor(reaction.message.member.displayColor)
             .setThumbnail(reaction.message.author.displayAvatarURL({ dynamic: true }))
 

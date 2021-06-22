@@ -3,10 +3,11 @@ const { version } = require('../package.json')
 module.exports = {
     prefix: {
         production: '\\.',
-        development: 'd\\.'
+        development: 'a\\.'
     },
     version,
     development: true,
+    language: 'en-US',
     owners: ['486396074282450946', '749845359689465977', '754598258742919178'],
     contributors: new Set(),
     bans: new Set(),
@@ -17,7 +18,8 @@ module.exports = {
     shards: 'auto',
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
     typing: false,
-    default: {
-        language: 'en-US'
-    }
+    status: [
+        { name: `🏳️‍🌈  Happy pride month!`, type: 'PLAYING' },
+        { name: `with trans rights!`, type: 'PLAYING' }
+    ]
 }
