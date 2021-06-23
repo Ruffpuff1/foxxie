@@ -3,7 +3,7 @@
   "version": "3.0",
   "description": "Foxxie is a smort server butler suited for taking care of and managing your server.",
   "main": "src/index.js",
-  "license": "ISC",
+  "license": "BSD",
   "author": "Ruff <Ruffpuff#0017> (https://github.com/Ruffpuff1)",
   "contributors": [
     "Ruff <Ruffpuff#0017> (http://ruff.cafe)",
