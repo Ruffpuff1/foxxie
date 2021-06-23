@@ -1,91 +1,105 @@
-module.exports = {
-    name: 'starboard',
-    aliases: ['sb', 'star', 'starboardsettings'],
-    usage: 'fox starboard [channel|minimum|self|notifs] (setting)',
-    permissions: 'ADMINISTRATOR',
-    category: 'settings',
-    async execute (props) {
+const { Command } = require('foxxie');
 
-        const { message, args } = props;
-        const loading = await message.responder.loading();
-        const starboard = await message.guild.settings.get('starboard');
+module.exports = class extends Command {
 
-        if (/(channel|location|c)/i.test(args[0])) return this._channel(props, starboard, loading);
-        if (/(minimum|number|min|m)/i.test(args[0])) return this._minimum(props, starboard, loading);
-        if (/(notifs|n)/i.test(args[0])) return this._notifications(props, starboard, loading);
-        if (/(selfstar|self|s)/i.test(args[0])) return this._self(props, starboard, loading);
-        message.responder.error('COMMAND_STARBOARD_INVALIDUSE');
-        return loading.delete();
-    },
+    constructor(...args) {
+        super(...args, {
+            name: 'starboard', 
+            aliases: ['sb', 'star', 'starboard-settings'], 
+            description: language => language.get('COMMAND_STARBOARD_DESCRIPTION'),
+            usage: '[channel | minimum | self | notifs] (Setting)',
+            permissions: 'ADMINISTRATOR',
+            category: 'settings'
+        })
+    }
 
-    async _channel({ message, args }, starboard, loading) {
+    async run(msg, args) {
+        const use = args.shift();
+        if (/(channel|location|c)/i.test(use)) return this.channel(msg, args);
+        if (/(minimum|number|min|m)/i.test(use)) return this.minimum(msg, args);
+        if (/(notifs|n)/i.test(use)) return this.notifications(msg, args);
+        if (/(selfstar|self|s)/i.test(use)) return this.self(msg, args);
+        return msg.responder.error('COMMAND_STARBOARD_INVALID');
+    }
 
-        if (/(none|reset)/i.test(args[1])) {
-            message.responder.success('COMMAND_STARBOARD_CHANNEL_REMOVED');
-            loading.delete();
-            return message.guild.settings.unset('starboard.channel');
+    async channel(msg, [use]) {
+        const loading = await msg.responder.loading();
+        const channel = msg.channels.shift();
+        const starChannel = await msg.guild.settings.get('starboard.channel');
+
+        if (/(none|reset)/i.test(use)) {
+            msg.guild.settings.unset('starboard.channel');
+            msg.responder.success('COMMAND_STARBOARD_REMOVED');
+            return loading.delete();
         }
-        const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name === args[1]);
         if (!channel) {
-
-            if (!starboard?.channel) {
-                message.responder.error('COMMAND_STARBOARD_CHANNEL_NOCHANNEL');
+            if (!starChannel) {
+                msg.responder.error('COMMAND_STARBOARD_NOTSET');
+                return loading.delete();
+            } else {
+                msg.responder.info('COMMAND_STARBOARD_CHANNEL', msg.guild.channels.cache.get(starChannel)?.toString());
                 return loading.delete();
             }
-            message.responder.success('COMMAND_STARBOARD_CHANNEL_NOW', starboard.channel);
+        } else {
+            await msg.guild.settings.set('starboard.channel', channel.id);
+            msg.responder.success('COMMAND_STARBOARD_CHANNELSET', channel.toString());
             return loading.delete();
         }
-        await message.guild.settings.set('starboard.channel', channel);
-        message.responder.success('COMMAND_STARBOARD_CHANNEL_SET', channel);
-        return loading.delete();
-    },
+    }
 
-    async _minimum({ message, args }, starboard, loading) {
+    async minimum(msg, [minimum]) {
+        const loading = await msg.responder.loading();
+        const starboardMinimum = await msg.guild.settings.get('starboard.minimum');
 
-        if (/(none|reset)/i.test(args[1])) {
-            message.responder.success('COMMAND_STARBOARD_MINIMUM_REMOVED');
-            loading.delete();
-            return message.guild.settings.unset('starboard.minimum');
+        if (/(none|reset)/i.test(minimum)) {
+            msg.guild.settings.unset('starboard.minimum');
+            msg.responder.success('COMMAND_STARBOARD_MINIMUMSET', 3);
+            return loading.delete();
+        } else {
+            if (!minimum || !/^\d+$/.test(minimum)) {
+                msg.responder.info('COMMAND_STARBOARD_MINIMUM', starboardMinimum || 3);
+                return loading.delete();
+            } else {
+                await msg.guild.settings.set('starboard.minimum', parseInt(minimum));
+                msg.responder.success('COMMAND_STARBOARD_MINIMUMSET', parseInt(minimum));
+                return loading.delete();
+            }
         }
-        const minimum = args[1];
-        if (!minimum || !/^\d+$/.test(minimum)) {
+    }
 
-            message.responder.success('COMMAND_STARBOARD_MINIMUM_NOW', starboard?.minimum || 3);
+    async self(msg, [arg]) {
+        const starboardSelf = await msg.guild.settings.get('starboard.self');
+        const loading = await msg.responder.loading();
+
+        if (/(none|reset|on|true|allow|yes)/i.test(arg)) {
+            await msg.guild.settings.unset('starboard.self');
+            msg.responder.success('COMMAND_STARBOARD_SELF', true);
+            return loading.delete();
+        } else if (/(false|off|deny|no)/i.test(arg)) {
+            await msg.guild.settings.set('starboard.self', false);
+            msg.responder.success('COMMAND_STARBOARD_SELF', false);
+            return loading.delete();
+        } else {
+            msg.responder.info('COMMAND_STARBOARD_SELFNOW', starboardSelf);
+            return loading.delete();
+        };
+    }
+
+    async notifications(msg, [arg]) {
+        const loading = await msg.responder.loading();
+        const starboardNotifications = await msg.guild.settings.get('starboard.notifications');
+
+        if (/(none|reset|on|true|allow|yes)/i.test(arg)) {
+            await msg.guild.settings.unset('starboard.notifications');
+            msg.responder.success('COMMAND_STARBOARD_NOTIFICATIONS', true);
+            return loading.delete();
+        } else if (/false|off|deny|no/i.test(arg)) {
+            await msg.guild.settings.set('starboard.notifications', false);
+            msg.responder.success('COMMAND_STARBOARD_NOTIFICATIONS', false);
+            return loading.delete();
+        } else {
+            msg.responder.info('COMMAND_STARBOARD_NOTIFICATIONNOW', starboardNotifications);
             return loading.delete();
         }
-        await message.guild.settings.set('starboard.minimum', parseInt(minimum));
-        message.responder.success('COMMAND_STARBOARD_MINIMUM_SET', parseInt(minimum));
-        return loading.delete();
-    },
-
-    async _self({ message, args }, starboard, loading) {
-
-        if (/(none|reset|on|true|allow|yes)/i.test(args[1])) {
-            message.responder.success('COMMAND_STARBOARD_SELF_REMOVED');
-            loading.delete();
-            return message.guild.settings.unset('starboard.self');
-        }
-        if (/(false|off|deny|no)/i.test(args[1])) {
-            message.guild.settings.set('starboard.self', false);
-            message.responder.error('COMMAND_STARBOARD_SELF_DENIED');
-            return loading.delete();
-        }
-        message.responder.success('COMMAND_STARBOARD_SELF_NOW', starboard?.self);
-        return loading.delete();
-    },
-
-    async _notifications({ message, args }, starboard, loading) {
-        if (/(none|reset|on|true|allow|yes)/i.test(args[1])) {
-            message.responder.success('COMMAND_STARBOARD_NOTIFICATIONS_REMOVED');
-            loading.delete();
-            return message.guild.settings.unset('starboard.notifications');
-        }
-        if (/(false|off|deny|no)/i.test(args[1])) {
-            message.guild.settings.set('starboard.notifications', false);
-            message.responder.error('COMMAND_STARBOARD_NOTIFICATIONS_DENIED');
-            return loading.delete();
-        }
-        message.responder.success('COMMAND_STARBOARD_NOTIFICATIONS_NOW', starboard?.notifications);
-        return loading.delete();
     }
 }
