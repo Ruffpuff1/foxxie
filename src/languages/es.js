@@ -1,4 +1,3 @@
-const moment = require('moment')
 const { credits: { developer, spanishTranslation, additionalHelp }, emojis: { infinity } } = require('../../lib/util/constants')
 const { topggURL, supportServer, inviteURL, commands, aliases, version } = require('../../config/foxxie')
 module.exports = {

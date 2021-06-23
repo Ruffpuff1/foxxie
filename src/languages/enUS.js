@@ -1,6 +1,5 @@
 const { emojis: { infinity, perms: { notSpecified, granted, denied }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('../../lib/util/constants');
 const { topggURL, supportServer, inviteURL, version, commands, aliases } = require('../../config/foxxie');
-const moment = require('moment');
 
 module.exports = {
 

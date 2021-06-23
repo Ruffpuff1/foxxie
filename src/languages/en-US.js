@@ -113,8 +113,16 @@ module.exports = class extends Language {
             ].join('\n'),
             COMMAND_BAN_ERROR: (user, issue) => `${bold`Whoops`} I couldn't ban ${bold`${user}`}:${Util.codeBlock('js', issue)}`,
             COMMAND_BAN_NOPERMS: multiple => `${bold`Hey,`} you cannot ban ${multiple ? 'any of the specified users' : 'the specified user'}.`,
-            // clearnote
-            // clearwarn
+            COMMAND_CLEARNOTE_CONFIRM: `${bold`Hey,`} are you sure you want to clear ${bold`all notes`} from this member?`,
+            COMMAND_CLEARNOTE_DESCRIPTION: `Remove or clear notes from the specified member. Specify a note Id to clear that specific note, or specify ${code`all`} to clear all notes from that member.\nNotes and their Id's can be seen with the ${code`info`} command.`,
+            COMMAND_CLEARNOTE_NOEXIST: `${bold`Whoops,`} that isn't a valid note Id.`,
+            COMMAND_CLEARNOTE_NONE: `${bold`Sorry,`} this member currently has ${bold`no notes`} to clear.`,
+            COMMAND_CLEARNOTE_NOPERMS: `${bold`Hey,`} you cannot clear notes from the specified member.`,
+            COMMAND_CLEARWARN_CONFIRM: `${bold`Hey,`} are you sure you want to clear ${bold`all warnings`} from this member?`,
+            COMMAND_CLEARWARN_DESCRIPTION: `Remove or clear warnings for the specified member. Specify a warn Id to clear that specific warning, or specify ${code`all`} to clear all warnings for that user.\nWarnings and their Id's can be seen with the ${code`info`} command.`,
+            COMMAND_CLEARWARN_NOEXIST: `${bold`Whoops,`} that isn't a valid warn Id.`,
+            COMMAND_CLEARWARN_NONE: `${bold`Sorry,`} this member currently has ${bold`no warnings`} to clear.`,
+            COMMAND_CLEARWARN_NOPERMS: `${bold`Hey,`} you cannot clear warnings from the specified member.`,
             COMMAND_KICK_DESCRIPTION: `Kick a member from the server. This will send a DM to the member telling them why they got kicked, along with logging to a moderation channel if one is set.`,
             COMMAND_KICK_ERROR: (user, issue) => `${bold`Whoops`} I couldn't kick ${bold`${user}`}:${Util.codeBlock('js', issue)}`,
             COMMAND_KICK_NOPERMS: multiple => `${bold`Hey,`} you cannot kick ${multiple ? 'any of the specified members' : 'the specified member'}.`,
@@ -727,7 +735,7 @@ module.exports = class extends Language {
             LOG_ARGS_USER: (tag, mention, id) => `${bold`User`}: ${tag} ${mention} (ID: ${id})`,
             LOG_ARGS_USERS: users => `${bold`Users`}:\n${users}\n`,
             LOG_ARGS_WARN: (reason, time, tag, author, id) => `${bold`Warn`}: ${reason}\non ${time}\nBy: ${tag} ${author} (ID: ${id})`,
-            LOG_ARGS_WARNS: warns => `${bold`Warns`}: ${warns}`,
+            LOG_ARGS_WARNS: warns => `${bold`Warns`}:\n${warns}`,
 
             LOG_DM_BAN: `You have been banned`,
             LOG_DM_CLEARWARN: `Your warning has been removed`,

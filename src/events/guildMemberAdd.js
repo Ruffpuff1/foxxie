@@ -1,6 +1,5 @@
-const moment = require('moment');
 const { FLAGS } = require('discord.js').Permissions;
-const { Event } = require('foxxie');
+const { Event, Timestamp } = require('foxxie');
 
 module.exports = class extends Event {
 
@@ -8,6 +7,8 @@ module.exports = class extends Event {
         super(...args, {
             event: 'guildMemberAdd'
         })
+
+        this.timestamp = new Timestamp('MMMM d YYYY');
     }
 
     async run(member) {
@@ -93,6 +94,6 @@ module.exports = class extends Event {
             .replace(/{(discrim|discriminator)}/gi, member.user.discriminator)
             .replace(/{(guild|server)}/gi, member.guild.name)
             .replace(/{(membercount|count)}/gi, member.guild.memberCount)
-            .replace(/{(created|createdat)}/gi, moment(member.user.createdAt).format('MMMM Do YYYY'));
+            .replace(/{(created|createdat)}/gi, this.timestamp.display(member.user.createdAt));
     }
 }

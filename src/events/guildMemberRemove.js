@@ -1,5 +1,4 @@
-const moment = require('moment');
-const { Event } = require('foxxie');
+const { Event, Timestamp } = require('foxxie');
 
 module.exports = class extends Event {
 
@@ -7,6 +6,8 @@ module.exports = class extends Event {
         super(...args, {
             event: 'guildMemberRemove'
         })
+
+        this.timestamp = new Timestamp('MMMM d YYYY');
     }
 
     run(member) {
@@ -51,6 +52,6 @@ module.exports = class extends Event {
             .replace(/{(discrim|discriminator)}/gi, member.user.discriminator)
             .replace(/{(guild|server)}/gi, member.guild.name)
             .replace(/{(membercount|count)}/gi, member.guild.memberCount)
-            .replace(/{(joined|joinedat)}/gi, moment(member.joinedAt).format('MMMM Do YYYY'));
+            .replace(/{(joined|joinedat)}/gi, this.timestamp.display(member.joinedAt));
     }
 }

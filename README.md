@@ -22,9 +22,7 @@ If you have any questions regarding the project you can join his [support server
 Foxxie has many dependencies and tools that he uses to function properly. A full list can be viewed in the package.json file however here are some of the most important:
 - [Discord.js](https://discord.js.org) - A powerful and easy to use wrapper around the Discord API
 - [MongoDB](https://www.mongodb.com/) - A general purpose, document-based, distributed NoSQL database paired with [mongoose](https://mongoosejs.com).
-- [Moment](https://momentjs.com) - Parse, validate, manipulate,
-and display dates and times in JavaScript
-- [Axios](https://www.npmjs.com/package/axios) - Promise based HTTP client for the browser and node.js
+- [Axios](https://www.npmjs.com/package/axios) - Promise based HTTP client for the browser and node.js.
 
 ### Inspiration and credit.
 
@@ -37,4 +35,5 @@ and display dates and times in JavaScript
 
 Below is all contributors who helped work on Foxxie, you can also find this in the package.json file.
 - [Ruff](https://github.com/Ruffpuff1) (Project Developer)
+- Aria (English Script)
 - [Raindrop](https://github.com/Raindrop-Droptop) (Spanish Translations)
