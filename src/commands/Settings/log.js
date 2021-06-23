@@ -7,7 +7,7 @@ module.exports = class extends Command {
             name: 'log',
             aliases: ['log-channel', 'lc'],
             description: language => language.get('COMMAND_LOG_DESCRIPTION'),
-            usage: '[mod | edit | delete | reset] (Channel | none)',
+            usage: '[mod | edit | delete | member | reset] (Channel | none)',
             permissions: 'ADMINISTRATOR',
             category: 'settings'
         })

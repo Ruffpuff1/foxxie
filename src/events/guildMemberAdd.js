@@ -25,7 +25,7 @@ module.exports = class extends Event {
         if (persistnick) await member.setNickname(persistnick).catch(() => null);
 
         if (member.guild.me.permissions.has(FLAGS.MANAGE_ROLES)) {
-            let roles = persistroles?.filter(id => !autoroles.includes(id)).filter(id => botsHighestRole.comparePositionTo(id) > 0);
+            let roles = persistroles?.filter(id => !autoroles?.includes(id)).filter(id => botsHighestRole.comparePositionTo(id) > 0);
             
             if (autoroles && !member.user.bot && !member.pending) {
                 roles = roles ? roles.concat(autoroles) : autoroles;

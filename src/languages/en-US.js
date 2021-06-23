@@ -154,13 +154,15 @@ module.exports = class extends Language {
                 nuke ? `${notSpecified} Completed ${nuke.toLocaleString()} ${bold`nuke${nuke === 1 ? '' : 's'}`}` : null,
                 purge ? `${notSpecified} Performed ${purge.toLocaleString()} ${bold`purge${purge === 1 ? '' : 's'}`} (${bold`${total.toLocaleString()}`} message${total === 1 ? '' : 's'})` : null
             ].filter(a => !!a).join('\n'),
-            // unban
+            COMMAND_UNBAN_DESCRIPTION: `Unbans users from the server. If possible will send a DM to the users notifying them that they have been unbanned. If a moderation logging channel is set, this action will log there.`,
+            COMMAND_UNBAN_NOPERMS: multiple => `${bold`Hey,`} you can't unban ${multiple ? `any of the specified users` : 'the specified user'}.`,
             COMMAND_UNLOCK_ALREADY: channel => `${bold`Whoops,`} ${channel} isn't even locked.`,
             COMMAND_UNLOCK_DESCRIPTION: `Will unlock a channel if locked. This action will log to a moderation channel if one is set. Also note that this command only updates permissions for the @everyone permission, so any other roles with the ${code`SEND_MESSAGES`} permission will not be affected.`,
             COMMAND_UNLOCK_UNLOCKING: `${bold`Finding the keys`}...`,
             COMMAND_UNLOCK_SUCCESS: channel => `${bold`Successfully`} unlocked ${channel}.`,
-            // unmute
-            COMMAND_VCKICK_DESCRIPTION: ``,
+            COMMAND_UNMUTE_DESCRIPTION: `Unmutes members in the server if they are muted. This action will also log to a moderation channel if one is set.`,
+            COMMAND_UNMUTE_NOPERMS: multiple => `${bold`Hey,`} you cannot mute ${multiple ? `any of the specified members` : 'the specified member.'}`,
+            COMMAND_VCKICK_DESCRIPTION: `Disconnects the specified user from a voice channel if they are in one. If a moderation logging channel is set, this action will log there.`,
             COMMAND_VCKICK_NOPERMS: multiple => `${bold`Hey,`} you can't kick ${multiple ? `any of the specified members` : `the specified member`} from vc.`,
             COMMAND_VCKICK_NOVOICE: multiple => `${multiple ? `${bold`None`} of the specified members are` : `${bold`Hey,`} the specified member is not`} in vc.`,
             COMMAND_VCMUTE_DESCRIPTION: `I will mute the specified members if they are in a vc and not server muted. If a moderation logging channel is set, this action will log there.`,
@@ -331,7 +333,20 @@ module.exports = class extends Language {
             COMMAND_EXEMPT_DESCRIPTION: `Allows you to add users, channels, or roles to be ignored by my ${code`anti`} automod features. To remove from this list try out the ${code`unexempt`} command.`,
             COMMAND_EXEMPT_DUPLICATE: (name, type) => `${bold`${name}`} is already an exempt ${bold`${type.substring(0, type.length -1)}`}.`,
             COMMAND_EXEMPT_GUILD: guild => underline`Foxxie's exempt settings in ${bold`${guild}`}.`,
-            // goodbye
+            COMMAND_GOODBYE_CHANNEL_NOCHANNEL: `${bold`Whoops,`} there isn't a goodbye channel set right now.`,
+            COMMAND_GOODBYE_CHANNEL_NOW: channel => `${bold`Hey,`} right now the goodbye channel is set as ${channel}.`,
+            COMMAND_GOODBYE_CHANNEL_REMOVED: `${bold`Alrighty`} I removed the goodbye channel for you.`,
+            COMMAND_GOODBYE_CHANNEL_SET: channel => `${bold`Done,`} set the goodbye channel as ${channel}.`,
+            COMMAND_GOODBYE_DESCRIPTION: [
+                `Configure my goodbye settings for your server using different arguments. If you want to test out the settings you can use the ${code`testleave`} command.`,
+                `Specify ${code`channel`} to set the channel where I should send goodbye messages, for example: ${code`fox goodbye channel #general`}.`,
+                `Specify ${code`message`} to set the message I'll send in the set goodbye channel. In your message you can also use the variables: ${code`{name}`}, ${code`{tag}`} (ex: ArEo#1245), ${code`{discrim}`}, ${code`{joined}`}, ${code`{server}`}, and ${code`{count}`} for the server's membercount.`
+            ].join('\n\n'),
+            COMMAND_GOODBYE_INVALID: `${bold`Please,`} specify a proper use case [channel | message].`,
+            COMMAND_GOODBYE_MESSAGE_NOMESSAGE: `${bold`Right now,`} there isn't a goodbye message set. For now I'll use my default: ${Util.codeBlock('', '**{tag}** just left the server :(')}`,
+            COMMAND_GOODBYE_MESSAGE_NOW: message => `${bold`Heya,`} right now the goodbye message is set to: ${Util.codeBlock('', message)}`,
+            COMMAND_GOODBYE_MESSAGE_REMOVED: `${bold`Done,`} I removed the goodbye message.`,
+            COMMAND_GOODBYE_MESSAGE_SET: message => `${bold`Alrighty,`} set the goodbye message to: ${Util.codeBlock('', message)}`,
             COMMAND_LANGUAGE_ARRAY: [
                 `${underline`Foxxie's Supported Languages`}:\n`,
                 `:flag_us: ${bold`en-US`} (English)`,
@@ -339,8 +354,15 @@ module.exports = class extends Language {
             ].join('\n'),
             COMMAND_LANGUAGE_DESCRIPTION: `Set the server's language or view my list of supported languages. By default I'll be set to ${code`en-US`} or United States English.`,
             COMMAND_LANGUAGE_SUCCESS: `${bold`Successfully`} set guild language to ${bold`en-US`}.`,
-            COMMAND_LOG_DESCRIPTION: `Configures logging settings in the server with specific use cases. Case ${code`mod`} logs all moderation actions to the specified channel. Case ${code`edit`} logs message edits to a channel. Case ${code`delete`} logs message deletion to a channel. Case ${code`member`} logs all member joins and leaves to a specific channel. If you want to disable this logging put ${code`none`} after the use case. If no channel is specified I will show the current channel set.`,
-            COMMAND_LOG_INVALID: `${bold`Please,`} specify a proper use case [mod | edit | delete | member].`,
+            COMMAND_LOG_DESCRIPTION: [
+                `Configures logging settings in the server with specific use cases.\n`,
+                `Case ${code`mod`} logs all moderation actions to the specified channel.`,
+                `Case ${code`edit`} logs message edits to a channel.`,
+                `Case ${code`delete`} logs message deletion to a channel.`,
+                `Case ${code`member`} logs all member joins and leaves to a specific channel.`,
+                `\nIf you want to disable this logging put ${code`none`} after the use case. If no channel is specified I will show the current channel set.`
+            ].join('\n'),
+            COMMAND_LOG_INVALID: `${bold`Please,`} specify a proper use case [mod | edit | delete | member | reset].`,
             COMMAND_LOG_NOCHANNEL: type => type === 'mod' ? `${bold`Right now,`} there is no moderation logging channel.` : `${bold`Right now,`} there is no ${type} logging channel.`,
             COMMAND_LOG_NOW: (type, channel) => type === 'mod' ? `Currently logging ${bold`moderation`} in ${channel}.` : `Currently logging ${bold`${type}s`} in ${channel}.`,
             COMMAND_LOG_REMOVED: type => type === 'mod' ? `${bold`Done,`} stopped logging ${bold`moderation actions`}.` : `${bold`Done,`} stopped logging ${bold`${type}s`}.`,

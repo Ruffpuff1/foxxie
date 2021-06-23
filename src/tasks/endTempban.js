@@ -21,10 +21,10 @@ module.exports = class extends Task {
                 guild = this.client.guilds.cache.get(guildId);
                 if (!guild) return this.client.schedule.delete('bans', ban);
 
-                await guild.members.fetch(userId).catch(() => null);
                 await guild.members.fetch(authId).catch(() => null);
+                await this.client.users.fetch(userId).catch(() => null);
 
-                const user = guild.members.cache.get(userId).user;
+                const user = this.client.users.cache.get(userId)?.user;
                 if (!user) return this.client.schedule.delete('bans', ban);
                 moderator = guild.members.cache.get(authId);
                 channel = guild.channels.cache.get(channelId);
@@ -32,7 +32,7 @@ module.exports = class extends Task {
 
                 if (Date.now() > time) {
                     this.executeUnbans(user, guild, moderator);
-                    client.schedule.delete('bans', ban);
+                    this.client.schedule.delete('bans', ban);
                     bannable.push(user);
                 }
             })

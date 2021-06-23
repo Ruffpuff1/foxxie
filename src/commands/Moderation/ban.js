@@ -29,8 +29,8 @@ module.exports = class extends Command {
         const time = duration ? Date.now() + ms(args[0]) : null;
 
         let reason = duration
-            ? args.slice(users.length + 1).join(' ')
-            : args.slice(users.length).join(' ');
+            ? args.slice(users.length+1).join(' ')
+            : args.slice(users.length+2).join(' ');
 
         const action = time ? 'tempban' : 'ban';
         if (!reason) reason = msg.language.get('LOG_MODERATION_NOREASON');
