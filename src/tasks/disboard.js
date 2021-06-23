@@ -1,49 +1,51 @@
-const Discord = require('discord.js')
+const { MessageEmbed } = require('discord.js');
+const { Task } = require('foxxie');
 
-module.exports = {
-    name: 'disboard',
-    async execute(client) {
+module.exports = class extends Task {
 
-        client.setInterval(async () => {
+    constructor(...args) {
+        super(...args, {
+            name: 'disboard'
+        })
+    }
 
-            const disboard = await client.schedule.fetch('disboard');
+    async run() {
 
-            disboard?.forEach(async dsb => {
+        this.client.setInterval(async () => {
+            const disboard = await this.client.schedule.fetch('disboard');
+            disboard?.forEach(async bump => {
 
-                const { guildId, time } = dsb;
-                let guild = client.guilds.cache.get(guildId);
+                const { guildId, time } = bump;
+                const guild = this.client.guilds.cache.get(guildId);
                 if (!guild) return;
 
                 if (Date.now() > time) {
-
-                    await this.message(client, guild);
-                    return client.schedule.delete('disboard', dsb);
+                    this.message(guild);
+                    return this.client.schedule.delete('disboard', bump);
                 }
             })
         }, 1000)
-    },
+    }
 
-    async message(client, guild) {
+    async message({ settings, channels, language, name, id, me }) {
 
-        let channelId = await guild.settings.get('disboard.channel');
+        const channelId = await settings.get('disboard.channel');
         if (!channelId) return;
-        let channel = guild.channels.cache.get(channelId);
+        const channel = channels.cache.get(channelId);
         if (!channel) return;
 
-        let message = await guild.settings.get('disboard.message');
-        if (!message) message = guild.language.get('TASK_DISBOARD_DEFAULT_DISBOARDMESSAGE');
-
+        let message = await settings.get('disboard.message') || language.get('TASK_DISBOARD_DEFAULT');
         let role = '';
-        let ping = await guild.settings.get('disboard.ping');
+        const ping = await settings.get('disboard.ping');
         if (ping) role = `<@&${ping}>`;
-        if (guild.id === '761512748898844702') role = '**Heya <@&774339676487548969> it\'s time to bump the server.**';
+        if (id === '761512748898844702') role = '**Heya <@&774339676487548969> it\'s time to bump the server.**';
 
-        const embed = new Discord.MessageEmbed()
-            .setColor(guild.me.displayColor)
-            .setTitle(guild.language.get('TASK_DISBOARD_EMBED_TITLE'))
-            .setThumbnail(client.user.displayAvatarURL({dynamic: true}))
-            .setDescription(message.replace(/{(server|guild)}/gi, guild.name));
+        const embed = new MessageEmbed()
+            .setColor(me.displayColor)
+            .setTitle(language.get('TASK_DISBOARD'))
+            .setThumbnail(this.client.user.displayAvatarURL({ dynamic: true }))
+            .setDescription(message.replace(/{(server|guild)}/gi, name));
 
-        await channel.send(role, embed);
+        channel.send(role, embed);
     }
 }

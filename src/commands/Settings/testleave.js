@@ -1,17 +1,21 @@
-const guildMemberRemove = require('../../events/guildMemberRemove');
+const { Command } = require('foxxie');
 
-module.exports = {
-    name: 'testleave',
-    aliases: ['testgoodbye', 'testbye', 'tl'],
-    usage: 'fox testleave (member|userId)',
-    category: 'settings',
-    guildOnly: true,
-    execute: async(props) => {
+module.exports = class extends Command {
 
-        let { message, args } = props
-        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
+    constructor(...args) {
+        super(...args, {
+            name: 'testleave',
+            aliases: ['testbye', 'tl'],
+            description: language => language.get('COMMAND_TESTLEAVE_DESCRIPTION'),
+            usage: '[Member]',
+            permissions: 'MANAGE_MESSAGES',
+            category: 'settings'
+        })
+    }
 
-        guildMemberRemove.execute(member);
-        message.responder.success();
+    run(msg) {
+        const member = msg.members.shift() || msg.member;
+        this.client.emit('guildMemberRemove', member);
+        msg.responder.success();
     }
 }

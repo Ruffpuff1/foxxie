@@ -1,24 +1,48 @@
-// this one hasnt been added to config
+const Command = require('../../../lib/structures/ModerationCommand');
 
-module.exports = {
-    name: 'clearnote',
-    aliases: ['un', 'ncl'],
-    usage: 'fox clearnote [member] [all]',
-    // category: 'moderation',
-    permissions: 'ADMINISTRATOR',
-    execute(lang, message, args) {
-        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+module.exports = class extends Command {
 
-        if (member.roles.highest.position > message.member.roles.highest.position) return message.channel.send("Higher roles")
-        if (member.roles.highest.position > message.guild.me.roles.highest.position) return message.channel.send("Higher roles")
-        
-        if (!member) return message.channel.send(`You need to provide a **member** to clear notes from.`)
-        if (!args[1]) return message.channel.send(`You need to specify **all** to delete notes.`)
+    constructor(...args) {
+        super(...args, {
+            name: 'clearnote',
+            aliases: ['un', 'ncl'],
+            description: language => language.get('COMMAND_CLEARNOTE_DESCRIPTION'),
+            usage: '[Member] [Note | all] (...Reason)',
+            permissions: 'BAN_MEMBERS',
+            category: 'moderation'
+        })
+    }
 
-        if (args[1].toLowerCase() === 'all') {
-            message.react('✅')
-            return db.delete(`Guilds.${message.guild.id}.Users.${member.user.id}.Notes`)
-        }
-        message.channel.send(`You need to specify **all** to delete notes.`)
+    async run(msg, [_, id, ...reason]) {
+        const member = msg.members.shift();
+        if (!member) return msg.responder.error('MESSAGE_MEMBERS_NONE');
+
+        const clearable = await this.comparePermissions(msg.member, member);
+        if (!clearable) return msg.responder.error('COMMAND_CLEARNOTE_NOPERMS');
+
+        reason = reason.join(' ') || msg.language.get('LOG_MODERATION_NOREASON');
+        if (/all/i.test(id)) return this.clear(msg, member);
+
+        const note = await member.user.settings.get(`servers.${msg.guild.id}.notes[${id - 1}]`);
+        if (!note) return msg.responder.error('COMMAND_CLEARNOTE_NOEXIST');
+
+        await member.user.settings.pull(`servers.${msg.guild.id}.notes`, note);
+        return msg.responder.success();
+    }
+
+    async clear(msg, member) {
+        const loading = await msg.responder.loading();
+        const notes = await member.user.settings.get(`servers.${msg.guild.id}.notes`);
+        if (!notes?.length) {
+            msg.responder.error('COMMAND_CLEARNOTE_NONE');
+            return loading.delete();
+        };
+
+        const confirmed = async () => {
+            member.user.settings.unset(`servers.${msg.guild.id}.notes`);
+            msg.responder.success();
+            return loading.delete();
+        };
+        return loading.confirm(loading, 'COMMAND_CLEARNOTE_CONFIRM', msg, confirmed);
     }
 }

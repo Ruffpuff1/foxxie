@@ -1,61 +1,68 @@
-let { emojis: { discordBadges: { discordStaff, discordPartner, discordHypesquad, discordNitro, discordBooster, discordEarly, discordBug1, discordBug2, discordBravery, discordBrilliance, discordBalance, discordBot, discordVerified, discordEarlyDev } }, discrims } = require('../../../lib/util/constants');
-module.exports = {
-    name: 'badges',
-    aliases: ['bd'],
-    usage: 'fox badges',
-    category: 'utility',
-    permissionLevel: 9,
-    async execute (props) {
+let { DISCORD_EMPLOYEE, DISCORD_PARTNER, HYPESQUAD_EVENTS, NITRO, BOOSTER, EARLY_SUPPORTER, BUGHUNTER_LEVEL_2, BUGHUNTER_LEVEL_1, HOUSE_BRAVERY, HOUSE_BRILLIANCE, HOUSE_BALANCE, BOT, VERIFIED_BOT, EARLY_VERIFIED_DEVELOPER } = require('../../../lib/util/constants').emojis.discordBadges;
+const { Command, nitroDiscriminators } = require('foxxie');
 
-        let { message, language } = props;
-        const members = message.guild.members.cache.array();
-        if (message.guild.memberCount > 1000) return message.responder.error('COMMAND_BADGES_GUILDSIZE', message.guild.memberCount);
+module.exports = class extends Command {
 
-        const loading = await message.responder.loading();
-        const [flags, bots, nitros, employees] = await this._getBadgeCounts(members)
-        const boosters = await message.guild.premiumSubscriptionCount
+    constructor(...args) {
+        super(...args, {
+            name: 'badges',
+            aliases: ['bd', 'userflags'],
+            description: language => language.get('COMMAND_BADGES_DESCRIPTION'),
+            permissions: 'CLIENT_OWNER',
+            category: 'utility'
+        })
+    }
+
+    async run(msg) {
+        if (msg.guild.memberCount > 1000) return msg.responder.error('COMMAND_BADGES_GUILDSIZE', msg.guild.memberCount);
+        const members = msg.guild.members.fetch().then(m => m.array());
+        
+        const loading = await msg.responder.loading();
+        const [flags, bots, nitros, employees] = await this._getBadgeCounts(await members);
+        const boosters = await msg.guild.premiumSubscriptionCount;
+
         const description = [
-            flags[0] > 0 && `${discordStaff} ${flags[0]} x ${language.get('COMMAND_BADGES_DISCORD_EMPLOYEE', flags[0])} (${employees.join(',')})`,
-            flags[1] > 0 && `${discordPartner} ${flags[1]} x ${language.get('COMMAND_BADGES_PARTNERED', flags[1])}`,
-            flags[2] > 0 && `${discordHypesquad} ${flags[2]} x ${language.get('COMMAND_BADGES_HYPE_EVENT')}`,
-            nitros > 0 && `${discordNitro} ${nitros} x ${language.get('COMMAND_BADGES_NITRO')} ${(boosters > 0) || (flags[9] > 0)
-                    ? `(${boosters > 0
-                            ? `${discordBooster} ${boosters} x ${language.get('COMMAND_BADGES_BOOSTS', boosters)}`
-                            : ''
-                    }${(boosters > 0) && (flags[9] > 0)
-                            ? ', '
-                            : ')'
-                    }${flags[9] > 0
-                            ? `${discordEarly} ${flags[9]} x ${language.get('COMMAND_BADGES_EARLY', flags[9])})` 
-                            : ''
-                        }`
-                        : ''}`,
-            flags[3] > 0 && `${discordBug1} ${flags[3]} x ${language.get('COMMAND_BADGES_BUG1')}`,
-            flags[14] > 0 && `${discordBug2} ${flags[14]} x ${language.get('COMMAND_BADGES_BUG2')}`,
-            flags[6] > 0 && `${discordBravery} ${flags[6]} x ${language.get('COMMAND_BADGES_BRAVERY')}`,
-            flags[7] > 0 && `${discordBrilliance} ${flags[7]} x ${language.get('COMMAND_BADGES_BRILLIANCE')}`,
-            flags[8] > 0 && `${discordBalance} ${flags[8]} x ${language.get('COMMAND_BADGES_BALANCE')}`,
-            flags[17] > 0 && `${discordEarlyDev} ${flags[17]} x ${language.get('COMMAND_BADGES_BOTDEV', flags[17])}`,
-            bots > 0 && `${discordBot} ${bots - flags[16]} x ${language.get('COMMAND_BADGES_BOT', bots, flags[17])}${flags[16] > 0 ? ` (${discordVerified} ${flags[16]} x ${language.get('COMMAND_BADGES_BOTVERIFIED', flags[16])})` : ''}`
-		].filter(i => !!i).join('\n');
+            flags[0] > 0 && `${DISCORD_EMPLOYEE} ${flags[0]} x ${msg.language.get('COMMAND_BADGES_DISCORDEMPLOYEE', flags[0])} (${employees.join(',')})`,
+            flags[1] > 0 && `${DISCORD_PARTNER} ${flags[1]} x ${msg.language.get('COMMAND_BADGES_PARTNERED', flags[1])}`,
+            flags[2] > 0 && `${HYPESQUAD_EVENTS} ${flags[2]} x ${msg.language.get('COMMAND_BADGES_HYPEEVENT')}`,
+            nitros > 0 && `${NITRO} ${nitros} x ${msg.language.get('COMMAND_BADGES_NITRO')} ${(boosters > 0) || (flags[9] > 0)
+                ? `(${boosters > 0
+                        ? `${BOOSTER} ${boosters} x ${msg.language.get('COMMAND_BADGES_BOOSTS', boosters)}`
+                        : ''
+                }${(boosters > 0) && (flags[9] > 0)
+                        ? ', '
+                        : ')'
+                }${flags[9] > 0
+                        ? `${EARLY_SUPPORTER} ${flags[9]} x ${msg.language.get('COMMAND_BADGES_EARLY', flags[9])})` 
+                        : ''
+                    }`
+                    : ''}`,
+            flags[3] > 0 && `${BUGHUNTER_LEVEL_1} ${flags[3]} x ${msg.language.get('COMMAND_BADGES_BUG1')}`,
+            flags[14] > 0 && `${BUGHUNTER_LEVEL_2} ${flags[14]} x ${msg.language.get('COMMAND_BADGES_BUG2')}`,
+            flags[6] > 0 && `${HOUSE_BRAVERY} ${flags[6]} x ${msg.language.get('COMMAND_BADGES_BRAVERY')}`,
+            flags[7] > 0 && `${HOUSE_BRILLIANCE} ${flags[7]} x ${msg.language.get('COMMAND_BADGES_BRILLIANCE')}`,
+            flags[8] > 0 && `${HOUSE_BALANCE} ${flags[8]} x ${msg.language.get('COMMAND_BADGES_BALANCE')}`,
+            flags[17] > 0 && `${EARLY_VERIFIED_DEVELOPER} ${flags[17]} x ${msg.language.get('COMMAND_BADGES_BOTDEV', flags[17])}`,
+            bots > 0 && `${BOT} ${bots - flags[16]} x ${msg.language.get('COMMAND_BADGES_BOT', bots, flags[17])}${flags[16] > 0 ? ` (${VERIFIED_BOT} ${flags[16]} x ${msg.language.get('COMMAND_BADGES_BOTVERIFIED', flags[16])})` : ''}`
+        ].filter(i => !!i).join('\n');
 
-        await message.channel.send(description)
+        await msg.channel.send(description)
         return loading.delete()
-    },
+    }
 
     async _getBadgeCounts(members) {
-            
+
         let bots = 0;
         let nitros = 0;
         const employees = [];
         const flags = Array(18).fill(0);
 
         for (let member of members) {
-            for (let i = 0; i < 18; i++) if (((member.user.flags && member.user.flags.bitfield ? member.user.flags.bitfield : 0) & (1 << i)) === 1 << i) flags[i]++;
-            if (((member.user.flags && member.user.flags.bitfield ? member.user.flags.bitfield : 0) & 1) === 1) employees.push(`**${member.user.tag}**`);
+            for (let i = 0; i < 18; i++) if (((member.user.flags?.bitfield ?? 0) & (1 << i)) === 1 << i) flags[i]++;
+            if (((member.user.flags?.bitfield) & 1) === 1) employees.push(`**${member.user.tag}**`);
 
             if (member.user.bot) bots++;
-            if (member.user.avatar && member.user.avatar.startsWith('a_') || discrims.includes(member.user.discriminator)) nitros++;
+            if (member.user.avatar?.startsWith('a_') || nitroDiscriminators.includes(member.user.discriminator)) nitros++;
             member = null;
         }
         return [flags, bots, nitros, employees]

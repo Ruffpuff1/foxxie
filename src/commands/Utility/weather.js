@@ -1,44 +1,49 @@
-const weather = require('weather-js');
-const Discord = require('discord.js');
-const moment = require('moment');
-const { zws } = require('../../../lib/util/constants')
+const { MessageEmbed } = require('discord.js');
+const { Command, zws, Timestamp, weatherjs: { find } } = require('foxxie');
 
-module.exports = {
-    name: 'weather',
-    aliases: ['temp', 'forcast'],
-    usage: 'fox weather [city]',
-    category: 'utility',
-    execute: async (props) => {
+module.exports = class extends Command {
 
-        let { message, args, language } = props;
+    constructor(...args) {
+        super(...args, {
+            name: 'weather',
+            aliases: ['temp', 'forcast'],
+            description: language => language.get('COMMAND_WEATHER_DESCRIPTION'),
+            usage: '[City]',
+            category: 'utility'
+        })
 
-        if (!args[0]) return message.responder.error('COMMAND_WEATHER_ERROR');
-        let loading = await message.responder.loading();
-        weather.find({ search: args.join(" "), degreeType: 'F' }, function(err, result) {
-            if (err) message.channel.send(err.message)
-            if (result.length === 0) return message.responder.error('COMMAND_WEATHER_ERROR');
-             
-            var current = result[0].current;
-            var location = result[0].location;
-            const day = moment(current.date).format('MMM Do YYYY');
+        this.timestamp = new Timestamp('MMM d YYYY');
+    }
 
-            const embed = new Discord.MessageEmbed()
-                .setTitle(language.get('COMMAND_WEATHER_TITLE', current.observationpoint, current.skytext))
-                .setThumbnail(current.imageUrl)
-                .setColor(message.guild.me.displayColor)
+    async run(msg, args) {
+
+        if (!args[0]) return msg.responder.error('COMMAND_WEATHER_ERROR');
+        const loading = await msg.responder.loading();
+
+        find({ search: args.slice(0).join(' '), degreeType: 'F' }, (err, result) => {
+            if (err) msg.responder.error('ERROR_GENERIC', err.message);
+            if (result.length === 0) return msg.responder.error('COMMAND_WEATHER_ERROR');
+
+            const { date, observationpoint, skytext, imageUrl, temperature, feelslike, winddisplay, humidity, day } = result[0].current;
+            const { timezone } = result[0].location;
+
+            const embed = new MessageEmbed()
+                .setTitle(msg.language.get('COMMAND_WEATHER_TITLE', observationpoint, skytext))
+                .setThumbnail(imageUrl)
+                .setColor(msg.guild.me.displayColor)
                 .setTimestamp()
-                .addField(language.get('COMMAND_WEATHER_TIMEZONE'), `UTC ${location.timezone}`, true)
+                .addField(msg.language.get('COMMAND_WEATHER_TIMEZONE'), `UTC ${timezone}`, true)
                 .addField(zws, zws, true)
                 .addField(zws, zws, true)
-                .addField(language.get('COMMAND_WEATHER_TEMPERATURE'), language.get('COMMAND_WEATHER_DEGREES_F', current.temperature), true)
-                .addField(language.get('COMMAND_WEATHER_FEELS'), language.get('COMMAND_WEATHER_DEGREES_F', current.feelslike), true)
-                .addField(language.get('COMMAND_WEATHER_WINDS'), `${current.winddisplay}`, true)
-                .addField(language.get('COMMAND_WEATHER_HUMID'), `${current.humidity}%`, true)
-                .addField(language.get('COMMAND_WEATHER_DATE'), `${day}`, true)
-                .addField(language.get('COMMAND_WEATHER_DAY'), `${current.day}`, true)
+                .addField(msg.language.get('COMMAND_WEATHER_TEMPERATURE'), msg.language.get('COMMAND_WEATHER_DEGREES_F', temperature), true)
+                .addField(msg.language.get('COMMAND_WEATHER_FEELS'), msg.language.get('COMMAND_WEATHER_DEGREES_F', feelslike), true)
+                .addField(msg.language.get('COMMAND_WEATHER_WINDS'), `${winddisplay}`, true)
+                .addField(msg.language.get('COMMAND_WEATHER_HUMID'), `${humidity}%`, true)
+                .addField(msg.language.get('COMMAND_WEATHER_DATE'), `${this.timestamp.display(date)}`, true)
+                .addField(msg.language.get('COMMAND_WEATHER_DAY'), `${day}`, true)
 
-            loading.delete();
-            message.channel.send(embed)
-       })
+            msg.channel.send(embed);
+            return loading.delete();
+        })
     }
 }

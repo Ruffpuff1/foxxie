@@ -1,15 +1,21 @@
-module.exports = {
-    name: 'say',
-    aliases: ['speak', 'message'],
-    usage: 'fox say [message]',
-    category: 'utility',
-    permissions: 'MANAGE_MESSAGES',
-    execute(props) {
+const { Command } = require('foxxie');
 
-        let { message, args } = props;
-        message.delete()
-        let text = args.slice(0).join(' ')
-        if (!text) return
-        message.channel.send(text)
+module.exports = class extends Command {
+
+    constructor(...args) {
+        super(...args, {
+            name: 'say',
+            aliases: ['speak', 'message'],
+            description: language => language.get('COMMAND_SAY_DESCRIPTION'),
+            usage: '[Message]',
+            permissions: 'MANAGE_MESSAGES',
+            category: 'utility'
+        });
+    }
+
+    run(msg, [...text]) {
+        msg.delete();
+        if (!text.length) return msg;
+        msg.channel.send(text.join(' '))
     }
 }

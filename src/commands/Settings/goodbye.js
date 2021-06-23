@@ -1,62 +1,72 @@
-module.exports = {
-    name: 'goodbye',
-    aliases: ['gs', 'goodbyesettings'],
-    usage: 'fox goodbye [channel|message] (none|#channel|message)',
-    category: 'settings',
-    permissions: 'ADMINISTRATOR',
-    async execute(props) {
+const { Command } = require('foxxie');
 
-        let { message, args} = props;
+module.exports = class extends Command {
 
-        const loading = await message.responder.loading();
-        const goodbye = await message.guild.settings.get('goodbye');
-        if (/(channel|location|c)/i.test(args[0])) return this._channel(props, loading, goodbye);
-        if (/(message|text|m)/i.test(args[0])) return this._message(props, loading, goodbye);
-        message.responder.error('COMMAND_GOODBYE_INVALIDUSE');
-        loading.delete();
-    },
+    constructor(...args) {
+        super(...args, {
+            name: 'goodbye',
+            aliases: ['gs', 'goodbye-settings'],
+            description: language => language.get('COMMAND_GOODBYE_DESCRIPTION'),
+            usage: '[channel | message] (Channel | Message | none)',
+            permissions: 'ADMINISTRATOR',
+            category: 'settings'
+        })
+    }
 
-    async _message({ message, args }, loading, goodbye) {
+    run(msg, args) {
 
-        if (/(none|reset)/i.test(args[1])) {
-            message.responder.success('COMMAND_GOODBYE_MESSAGE_REMOVED');
-            loading.delete();
-            return message.guild.settings.unset('goodbye.message');
-        }
-        const msg = args.slice(1).join(" ");
-        if (!msg) {
+        if (/(channel|location|c)/i.test(args[0])) return this.channel(msg, args);
+        if (/(message|text|m)/i.test(args[0])) return this.message(msg, args);
+        return msg.responder.error('COMMAND_GOODBYE_INVALID');
+    } 
 
-            if (!goodbye.message) {
-                message.responder.error('COMMAND_GOODBYE_MESSAGE_NOMESSAGE');
-                return loading.delete();
-            }
-            message.responder.success('COMMAND_GOODBYE_MESSAGE_NOW', goodbye.message);
+    async channel(msg, [_, arg]) {
+        const loading = await msg.responder.loading();
+
+        if (/(none|reset)/i.test(arg)) {
+            msg.guild.settings.unset('goodbye.channel');
+            msg.responder.success('COMMAND_GOODBYE_CHANNEL_REMOVED');
             return loading.delete();
         }
-        await message.guild.settings.set('goodbye.message', msg);
-        message.responder.success('COMMAND_GOODBYE_MESSAGE_SET', msg);
-        return loading.delete();
-    },
-
-    async _channel({ message, args }, loading, goodbye) {
-
-        if (/(none|reset)/i.test(args[1])) {
-            message.responder.success('COMMAND_GOODBYE_CHANNEL_REMOVED');
-            loading.delete();
-            return message.guild.settings.unset('goodbye.channel');
-        }
-        const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name === args[1]);
-        if (!channel) {
-
-            if (!goodbye.channel) {
-                message.responder.error('COMMAND_GOODBYE_CHANNEL_NOCHANNEL');
-                return loading.delete();
-            }
-            message.responder.success('COMMAND_GOODBYE_CHANNEL_NOW', goodbye.channel);
+        const channel = msg.channels.shift();
+        if (!channel && !await msg.guild.settings.get('goodbye.channel')) {
+            msg.responder.error('COMMAND_GOODBYE_CHANNEL_NOCHANNEL');
             return loading.delete();
         }
-        await message.guild.settings.set('goodbye.channel', channel);
-        message.responder.success('COMMAND_GOODBYE_CHANNEL_SET', channel);
-        return loading.delete();
+        else if (!channel) {
+            const chn = await msg.guild.settings.get('goodbye.channel');
+            msg.responder.info('COMMAND_GOODBYE_CHANNEL_NOW', msg.guild.channels.cache.get(chn)?.toString());
+            return loading.delete();
+        }
+        else {
+            await msg.guild.settings.set('goodbye.channel', channel.id);
+            msg.responder.success('COMMAND_GOODBYE_CHANNEL_SET', channel.toString());
+            return loading.delete();
+        }
+    }
+
+    async message(msg, [_, ...message]) {
+        const loading = await msg.responder.loading();
+
+        if (/(none|reset)/i.test(message[0])) {
+            msg.guild.settings.unset('goodbye.message');
+            msg.responder.success('COMMAND_GOODBYE_MESSAGE_REMOVED');
+            return loading.delete();
+        }
+        message = message.join(' ');
+        if (!message && !await msg.guild.settings.get('goodbye.message')) {
+            msg.responder.error('COMMAND_GOODBYE_MESSAGE_NOMESSAGE');
+            return loading.delete();
+        }
+        else if (!message) {
+            const mess = await msg.guild.settings.get('goodbye.message');
+            msg.responder.info('COMMAND_GOODBYE_MESSAGE_NOW', mess);
+            return loading.delete()
+        } 
+        else {
+            await msg.guild.settings.set('goodbye.message', message);
+            msg.responder.success('COMMAND_GOODBYE_MESSAGE_SET', message);
+            return loading.delete();
+        }
     }
 }

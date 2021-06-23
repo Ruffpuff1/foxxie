@@ -1,11 +1,19 @@
-const moment = require('moment');
+const { Event, Timestamp } = require('foxxie');
 
-module.exports = {
-    name: 'guildMemberRemove',
-    async execute (member) {
+module.exports = class extends Event {
+
+    constructor(...args) {
+        super(...args, {
+            event: 'guildMemberRemove'
+        })
+
+        this.timestamp = new Timestamp('MMMM d YYYY');
+    }
+
+    run(member) {
 
         // Returns if self
-        if (member.user.id === member.guild.me.user.id) return;
+        if (member.user.id === this.client.user.id) return;
 
         // Sets roles and nickname in db
         member.user.settings.set(`servers.${member.guild.id}.persistRoles`, member.roles.cache.keyArray());
@@ -13,9 +21,13 @@ module.exports = {
 
         // Goodbye
         this.goodbye(member);
-    },
+
+        member.guild.log.send({ member, type: 'member', action: 'memberLeft' });
+    }
 
     async goodbye(member) {
+
+        if (member.guild.id === '761512748898844702') this.client.events.get('theCornerStore').memberCount(member);
 
         const { guild } = member;
         const channelId = await guild.settings.get('goodbye.channel');
@@ -25,13 +37,13 @@ module.exports = {
 
         let message = await guild.settings.get('goodbye.message');
         if (!message) {
-            channel.send(guild.language.get('EVENT_GUILDMEMBERREMOVE_DEFAULT_GOODBYEMESSAGE', member)).catch(e => e);
+            channel.send(guild.language.get('EVENT_GUILDMEMBERREMOVE_DEFAULT', member.user.tag)).catch(e => e);
             return member;
         };
 
         const parsed = await this._fillTemplate(message, member);
         channel.send(parsed).catch(e => e);
-    },
+    }
 
     _fillTemplate(template, member) {
         return template
@@ -40,6 +52,6 @@ module.exports = {
             .replace(/{(discrim|discriminator)}/gi, member.user.discriminator)
             .replace(/{(guild|server)}/gi, member.guild.name)
             .replace(/{(membercount|count)}/gi, member.guild.memberCount)
-            .replace(/{(joined|joinedat)}/gi, moment(member.joinedAt).format('MMMM Do YYYY'));
+            .replace(/{(joined|joinedat)}/gi, this.timestamp.display(member.joinedAt));
     }
 }

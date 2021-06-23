@@ -1,26 +1,41 @@
-module.exports = {
-    name: 'nuke',
-    aliases: ['snap'],
-    usage: 'fox nuke (reason)',
-    category: 'moderation',
-    permissionLevel: 7,
-    async execute (props) {
+const { Command, Util } = require('foxxie');
 
-        let { message, args, language } = props;
-        let reason = args[0] || language.get('LOG_MODERATION_NOREASON');
-        const msg = await message.responder.success('COMMAND_NUKE_WARNING', message.member.toString(), message.channel.name);
-        const filter = m => message.author.id === m.author.id;
+module.exports = class extends Command {
+    
+    constructor(...args) {
+        super(...args, {
+            name: 'nuke',
+            aliases: ['snap'],
+            description: language => language.get('COMMAND_NUKE_DESCRIPTION'),
+            usage: '(Channel) (Reason)',
+            permissions: 'GUILD_OWNER',
+            category: 'moderation'
+        })
+    }
 
-        const messages = await message.channel.awaitMessages(filter, { time: 30000, max: 1, errors: ['time'] } );
-        if (messages.first().content.toLowerCase() !== `yes, nuke ${message.channel.name}`) return msg.edit(language.get('MESSAGE_CANCELLED'));
+    async run(msg, args) {
 
-        await msg.delete()
-        const chn = await message.channel.clone();
-        await chn.setPosition(message.channel.position);
-        await chn.setTopic(message.channel.topic);
-        await chn.send(language.get('COMMAND_NUKE_FIRST'));
+        const channel = msg.channels.shift() || msg.channel;
 
-        await message.guild.log.send({ type: 'mod', action: 'nuke', moderator: message.member, reason, channel: chn, msg: message, counter: 'nuke' });
-        message.channel.delete();
+        const reason = args.slice(!msg.channels ? 0 : 1).join(' ') || msg.language.get('LOG_MODERATION_NOREASON');
+        const message = await msg.responder.success('COMMAND_NUKE_WARNING', msg.member.toString(), channel.name);
+
+        const filter = m => msg.author.id === m.author.id;
+        const messages = await msg.channel.awaitMessages(filter, { time: 30000, max: 1, errors: ['time'] }).catch(() => message.edit(msg.language.get('MESSAGE_PROMPT_TIMEOUT')));
+        if (!Util.isFunction(messages.first)) return;
+        if (messages.first().content.toLowerCase() !== `yes, nuke ${channel.name}`) return message.edit(msg.language.get('MESSAGE_PROMPT_CANCELLED'));
+
+        const newChannel = await this.cloneChannel(channel);
+        await message.delete();
+        await msg.guild.log.send({ type: 'mod', action: 'nuke', moderator: msg.member, reason, channel: newChannel, counter: 'nuke' });
+        channel.delete(`${msg.author.tag} | ${reason}`).catch(() => null);
+    }
+
+    async cloneChannel(channel) {
+        const newChannel = await channel.clone();
+        await newChannel.setTopic(channel.topic);
+        await newChannel.setPosition(channel.position);
+        await newChannel.send(channel.guild.language.get('COMMAND_NUKE'));
+        return newChannel;
     }
 }

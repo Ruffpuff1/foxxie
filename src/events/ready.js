@@ -1,29 +1,55 @@
 const { mongoDB } = require('../../lib/Database');
-const { memberCount, clock } = require('../../lib/util/theCornerStore');
-const { version, commands, aliases } = require('../../config/foxxie');
-module.exports = {
-	name: 'ready',
-	once: true,
-	execute: async (client) => {
-		// logs "ready", runs connection to mongoDB
-		console.log(`[${client.user.username}] Ready! Logged in with ${client.commands.size} commands.`);
-        mongoDB();
-        // Botwide
-        client.tasks.get('reminder').execute(client);
-        client.tasks.get('disboard').execute(client);
-        client.tasks.get('endTempmute').execute(client);
-        // The Corner Store, memberCount & clock
-        // memberCount(client);
-        // clock(client);
+const { Team } = require('discord.js');
+let retries = 0;
+const { Event, Util } = require('foxxie');
 
-        const actvs = [
-            `with ${client.guilds.cache.size.toLocaleString()} servers & ${client.users.cache.size.toLocaleString()} users.`,
-            `v${version} | fox help`,
-            `with ${commands} Commands & ${aliases} Aliases`,
-            `v${version} | fox support`,
-            `Happy pride month!`];
-        
-        client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]);
-        setInterval(() => client.user.setActivity(actvs[Math.floor(Math.random() * (actvs.length - 1) + 1)]), 30000);
-	},
-};
+module.exports = class extends Event {
+
+    constructor(...args) {
+        super(...args, {
+            event: 'ready',
+            once: true
+        })
+    }
+
+    async run() {
+
+        try {
+			await this.client.fetchApplication();
+		} catch (err) {
+			if (++retries === 3) return process.exit();
+			console.log(`[Foxxie-Util] Unable to fetchApplication at this time, waiting 5 seconds and retrying. Retries left: ${retries - 3}`);
+			await Util.sleep(5000);
+			return this.run();
+		}
+
+        if (!this.client.options.owners.length) {
+			if (this.client.application.owner instanceof Team) this.client.options.owners.push(...this.client.application.owner.members.keys());
+			else this.client.options.owners.push(this.client.application.owner.id);
+		}
+        mongoDB();
+        this.status();
+        this.client.tasks.run(this.client);
+        this.client.events.get('theCornerStore').clock();
+
+        this.client.ready = true;
+        console.log(`[${this.client.user.username}] Ready! Logged in with ${this.client.commands.size} commands and ${this.client.aliases.size} aliases.`);
+    }
+
+    status() {
+        this.client.options.status = [
+            { name: `${this.client.guilds.cache.size.toLocaleString()} servers & ${this.client.users.cache.size.toLocaleString()} users.`, type: 'WATCHING' },
+            { name: `v${this.client.options.version} | fox help`, type: 'LISTENING' },
+            { name: `with ${this.client.commands.size} Commands & ${this.client.aliases.size} Aliases`, type: 'PLAYING' },
+            { name: `to v${this.client.options.version} | fox support`, type: 'LISTENING' },
+        ].concat(this.client.options.status);
+
+        this.client.options.status.length 
+            ? this.client.user.setPresence({ activity: this.client.options.status[Math.floor(Math.random() * (this.client.options.status.length - 1) + 1)] }) 
+            : this.client.user.setPresence({ name: null, type: null });
+
+        setInterval(() => this.client.options.status.length 
+            ? this.client.user.setPresence({ activity: this.client.options.status[Math.floor(Math.random() * (this.client.options.status.length - 1) + 1)] }) 
+            : this.client.user.setPresence({ name: null, type: null }), 30000);
+    }
+}

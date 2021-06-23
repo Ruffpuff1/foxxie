@@ -1,37 +1,36 @@
-const Discord = require('discord.js')
-module.exports = {
-    name: 'steal',
-    aliases: ['se', 'yoink', 'take'],
-    usage: 'fox steal [emoji] (name)',
-    category: 'utility',
-    permissions: 'MANAGE_EMOJIS',
-    execute: async (props) => {
+const { MessageEmbed, Message } = require('discord.js');
+const { Command } = require('foxxie')
 
-        let { message, args, language} = props;
-        if (!args[0]) return message.responder.error('COMMAND_STEAL_NOARGS');
-        if (!/<a:.+?:\d+>|<:.+?:\d+>/.test(args[0])) return message.responder.error('COMMAND_STEAL_NOTEMOJI');
+module.exports = class extends Command {
 
-        let ext = '.png';
-        if (args[0].includes('<a:')) ext = '.gif';
-        let name = args[1]
+    constructor(...args) {
+        super(...args, {
+            name: 'steal',
+            aliases: ['se', 'yoink', 'take'],
+            description: language => language.get('COMMAND_STEAL_DESCRIPTION'),
+            usage: '[Emoji] (Name)',
+            permissions: 'MANAGE_EMOJIS',
+            category: 'utility'
+        })
+    }
 
-        const regex = args[0].replace(/^<a?:\w+:(\d+)>$/, '$1');
-        if (!name) name = regex
+    async run(msg, args) {
 
-        let url = `https://cdn.discordapp.com/emojis/${regex}${ext}?v=1`;
+        const emoji = msg.emojis.shift();
+        if (!emoji) return msg.responder.error('COMMAND_STEAL_NOEMOJI');
+        const extension = emoji.includes('<a:') ? '.gif' : '.png';
+        let name = args[1] || emoji.replace(/\D/g, '');
+        const url = `https://cdn.discordapp.com/emojis/${emoji.replace(/\D/g, '')}${extension}?v=1`;
+        console.log(url)
+        const newEmoji = await msg.guild.emojis.create(url, name).catch(() => msg.responder.error('COMMAND_STEAL_MAXEMOJI'));
+        if (newEmoji instanceof Message) return;
 
-        try {
-            message.guild.emojis.create(url, name);
-        } catch (e) {
-            message.responder.error('COMMAND_STEAL_MAXEMOJI');
-        };
+        const embed = new MessageEmbed()
+            .setTitle(msg.language.get('COMMAND_STEAL_SUCCESS', name))
+            .setColor(msg.guild.me.displayColor)
+            .setDescription(`**ID:** \`${newEmoji.id}\`\n**Raw:** \`<${extension === '.gif' ? 'a' : ''}:${newEmoji.name}:${newEmoji.id}>\``)
+            .setThumbnail(url);
 
-        const embed = new Discord.MessageEmbed()
-            .setTitle(language.get('COMMAND_STEAL_SUCCESS', name))
-            .setColor(message.guild.me.displayColor)
-            .setDescription(`**ID:** \`${regex}\`\n**Raw:** \`<${ext = '.gif'?'a':''}:${name}:${regex}>\``)
-            .setImage(url);
-
-        message.channel.send(embed);
+        msg.channel.send(embed);
     }
 }

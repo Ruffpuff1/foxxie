@@ -1,67 +1,77 @@
-module.exports = {
-    name: "disboard",
-    aliases: ['ds', 'disboardsettings'],
-    usage: `fox disboard [message|channel] (none|#channel|message)`,
-    category: 'settings',
-    permissions: 'ADMINISTRATOR',
-    async execute (props) {
+const { Command } = require('foxxie');
 
-        let { message, args} = props;
-        const loading = await message.responder.loading();
-        const disboard = await message.guild.settings.get('disboard');
-        if (/(channel|location|c)/i.test(args[0])) return this._channel(props, disboard, loading);
-        if (/(message|text|m)/i.test(args[0])) return this._message(props, disboard, loading);
-        message.responder.error('COMMAND_DISBOARD_INVALIDUSE');
-        return loading.delete();
+module.exports = class extends Command {
 
-    },
+    constructor(...args) {
+        super(...args, {
+            name: 'disboard',
+            aliases: ['ds', 'disboard-settings'],
+            description: language => language.get('COMMAND_DISBOARD_DESCRIPTION'),
+            usage: '[channel | message] (Channel | Message | none)',
+            permissions: 'ADMINISTRATOR',
+            category: 'settings'
+        })
+    }
 
-    async _channel({ message, args }, disboard, loading) {
+    run(msg, args) {
 
-        if (/(none|reset)/i.test(args[1])) {
-            message.responder.success('COMMAND_DISBOARD_CHANNEL_REMOVED');
-            loading.delete();
-            return message.guild.settings.unset('disboard.channel');
-        }
-        const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name === args[1]);
-        if (!channel) {
+        if (/(channel|location|c)/i.test(args[0])) return this.channel(msg, args);
+        if (/(message|text|m)/i.test(args[0])) return this.message(msg, args);
+        return msg.responder.error('COMMAND_DISBOARD_INVALID');
+    } 
 
-            if (!disboard.channel) {
-                message.responder.error('COMMAND_DISBOARD_CHANNEL_NOCHANNEL');
-                return loading.delete();
-            }
-            message.responder.success('COMMAND_DISBOARD_CHANNEL_NOW', disboard.channel);
+    async channel(msg, [_, arg]) {
+        const loading = await msg.responder.loading();
+
+        if (/(none|reset)/i.test(arg)) {
+            msg.guild.settings.unset('disboard.channel');
+            msg.responder.success('COMMAND_DISBOARD_CHANNEL_REMOVED');
             return loading.delete();
         }
-        await message.guild.settings.set('disboard.channel', channel);
-        message.responder.success('COMMAND_DISBOARD_CHANNEL_SET', channel);
-        return loading.delete();
-    },
-
-    async _message({ message, args}, disboard, loading) {
-
-        if (/(none|reset)/i.test(args[1])) {
-            message.responder.success('COMMAND_DISBOARD_MESSAGE_REMOVED');
-            loading.delete();
-            message.guild.settings.unset('disboard.ping');
-            return message.guild.settings.unset('disboard.message');
-        }
-        const msg = args.slice(1).join(" ");
-        if (!msg) {
-
-            if (!disboard.message) {
-                message.responder.error('COMMAND_DISBOARD_MESSAGE_NOMESSAGE');
-                return loading.delete();
-            }
-            message.responder.success('COMMAND_DISBOARD_MESSAGE_NOW', disboard.message);
+        const channel = msg.channels.shift();
+        if (!channel && !await msg.guild.settings.get('disboard.channel')) {
+            msg.responder.error('COMMAND_DISBOARD_CHANNEL_NOCHANNEL');
             return loading.delete();
         }
+        else if (!channel) {
+            const chn = await msg.guild.settings.get('disboard.channel');
+            msg.responder.info('COMMAND_DISBOARD_CHANNEL_NOW', msg.guild.channels.cache.get(chn)?.toString());
+            return loading.delete();
+        }
+        else {
+            await msg.guild.settings.set('disboard.channel', channel.id);
+            msg.responder.success('COMMAND_DISBOARD_CHANNEL_SET', channel.toString());
+            return loading.delete();
+        }
+    }
 
-        const ping = message.mentions.roles.first();
-        if (!ping) message.guild.settings.unset('disboard.ping');
-        if (ping) message.guild.settings.set('disboard.ping', ping);
-        await message.guild.settings.set('disboard.message', msg);
-        message.responder.success('COMMAND_DISBOARD_MESSAGE_SET', msg);
-        return loading.delete();
-    }   
+    async message(msg, [_, ...message]) {
+        const loading = await msg.responder.loading();
+
+        if (/(none|reset)/i.test(message[0])) {
+            msg.guild.settings.unset('disboard.message');
+            msg.responder.success('COMMAND_DISBOARD_MESSAGE_REMOVED');
+            return loading.delete();
+        }
+        message = message.join(' ');
+        if (!message && !await msg.guild.settings.get('disboard.message')) {
+            msg.responder.error('COMMAND_DISBOARD_MESSAGE_NOMESSAGE');
+            return loading.delete();
+        }
+        else if (!message) {
+            const mess = await msg.guild.settings.get('disboard.message');
+            msg.responder.info('COMMAND_DISBOARD_MESSAGE_NOW', mess);
+            return loading.delete()
+        } 
+        else {
+            const ping = msg.roles.shift();
+
+            if (!ping) await msg.guild.settings.unset('disboard.ping');
+            else await msg.guild.settings.set('disboard.ping', ping);
+
+            await msg.guild.settings.set('disboard.message', message);
+            msg.responder.success('COMMAND_DISBOARD_MESSAGE_SET', message);
+            return loading.delete();
+        }
+    }
 }

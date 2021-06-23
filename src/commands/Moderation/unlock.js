@@ -1,24 +1,38 @@
-module.exports = {
-    name: 'unlock',
-    aliases: ['ul', 'release'],
-    permissions: 'MANAGE_CHANNELS',
-    category: 'moderation',
-    usage: 'fox unlock (reason)',
-    async execute ({ message, args, language }) {
+const { Command } = require('foxxie');
 
-        if (message.channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return message.responder.error('COMMAND_UNLOCK_CHANNELNOTLOCKED');
-        let reason = args.slice(0).join(' ') || language.get('LOG_MODERATION_NOREASON');
+module.exports = class extends Command {
+
+    constructor(...args) {
+        super(...args, {
+            name: 'unlock',
+            aliases: ['ul', 'release'],
+            description: language => language.get('COMMAND_UNLOCK_DESCRIPTION'),
+            usage: '(Channel) (...Reason)',
+            permissions: 'MANAGE_CHANNELS',
+            category: 'moderation',
+        })
+    }
+
+    async run(message, args) {
+
+        const channel = message.channels.shift() || message.channel;
+        if (channel.permissionsFor(message.guild.roles.everyone).has('SEND_MESSAGES')) return message.responder.error('COMMAND_UNLOCK_ALREADY', channel.toString());
+        let reason = args.slice(message.channels.length).join(' ') || message.language.get('LOG_MODERATION_NOREASON');
         let msg = await message.responder.success('COMMAND_UNLOCK_UNLOCKING');
 
-        await message.channel.updateOverwrite(
+        await channel.updateOverwrite(
             message.guild.id,
             { 
-                SEND_MESSAGES : null 
+                SEND_MESSAGES : null
             },
-            reason
+            `${message.author.tag} | ${reason}`
         )
+
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        await delay(700);
+
         message.responder.unlock();
-        message.guild.log.send({ channel: message.channel, moderator: message.member, reason, type: 'mod', action: 'unlock', counter: 'unlock' });
-        msg.edit(language.get('COMMAND_UNLOCK_SUCCESS'));
+        msg.edit(message.language.get('COMMAND_UNLOCK_SUCCESS', channel.toString()));
+        message.guild.log.send({ type: 'mod', action: 'unlock', moderator: message.member, reason, channel, counter: 'unlock' });
     }
 }

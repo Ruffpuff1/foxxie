@@ -1,13 +1,8 @@
 const RoleplayCommand = require('../../../lib/structures/RoleplayCommand');
-module.exports = {
-    name: 'shoot',
-    aliases: ['snipe', 'longshot', 'quickscope', 'driveby'],
-    usage: `fox shoot [user] (reason)`,
-    category: 'roleplay',
-    execute(props) {
 
-        let { message, args } = props
-        
-        return new RoleplayCommand(message).execute("shoot", args, false)
+module.exports = class extends RoleplayCommand {
+
+    constructor(...args) {
+        super('shoot', ['snipe', 'long-shot', 'quick-scope', 'driveby'], false, ...args)
     }
 }

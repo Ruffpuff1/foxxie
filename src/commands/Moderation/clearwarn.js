@@ -1,47 +1,50 @@
-module.exports = {
-    name: 'clearwarn',
-    aliases: ['clearwarns', 'cw', 'pardon'],
-    usage: 'fox clearwarn [user|userId] [warnid|all] (reason)',
-    category: 'moderation',
-    permissions: 'MANAGE_MESSAGES',
-    async execute (props) { 
+const Command = require('../../../lib/structures/ModerationCommand');
 
-        const { language, message, args } = props;
+module.exports = class extends Command {
 
-        const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        if (!target) return message.responder.error('COMMAND_CLEARWARN_NOMEMBER');
+    constructor(...args) {
+        super(...args, {
+            name: 'clearwarn',
+            aliases: ['clearwarns', 'cw', 'pardon'],
+            description: language => language.get('COMMAND_CLEARWARN_DESCRIPTION'),
+            usage: '[Member] [Warn | all] (...Reason)',
+            permissions: 'BAN_MEMBERS',
+            category: 'moderation'
+        })
+    }
 
-        if (/all/.test(args[1])) return this._clearWarns(props, target);
+    async run(msg, [_, id, ...reason]) {
+        const member = msg.members.shift();
+        if (!member) return msg.responder.error('MESSAGE_MEMBERS_NONE');
 
-        let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON');
-        let set = await target.user.settings.get(`servers.${message.guild.id}.warnings[${args[1] - 1}]`);
-        if (!set) return message.responder.error('COMMAND_CLEARWARN_INVALIDWARNID');
-        
-        target.user.settings.pull(`servers.${message.guild.id}.warnings`, set);
+        const warnable = await this.comparePermissions(msg.member, member);
+        if (!warnable) return msg.responder.error('COMMAND_CLEARWARN_NOPERMS');
 
-        await message.guild.log.send({ type: 'mod', action: 'clearwarn', member: target, moderator: message.member, reason, channel: message.channel, dm: true, warn: set, msg: message })
-        return message.responder.success();
+        reason = reason.join(' ') || msg.language.get('LOG_MODERATION_NOREASON');
+        if (/all/i.test(id)) return this.clear(msg, member, reason);
 
-    }, 
+        const warn = await member.user.settings.get(`servers.${msg.guild.id}.warnings[${id - 1}]`);
+        if (!warn) return msg.responder.error('COMMAND_CLEARWARN_NOEXIST');
 
-    async _clearWarns({ message, args, language }, target ) {
+        await member.user.settings.pull(`servers.${msg.guild.id}.warnings`, warn);
+        await this.logActions(msg.guild, [member], { type: 'mod', action: 'clearwarn', moderator: msg.member, reason, channel: msg.channel, dm: true, warn });
+        return msg.responder.success();
+    }
 
-        const loading = await message.responder.loading();
-        let set = await target.user.settings.get(`servers.${message.guild.id}.warnings`);
-        if (!set?.length) {
-            message.responder.error('COMMAND_CLEARWARN_NOWARNINGS');
+    async clear(msg, member, reason) {
+        const loading = await msg.responder.loading();
+        const warns = await member.user.settings.get(`servers.${msg.guild.id}.warnings`);
+        if (!warns?.length) {
+            msg.responder.error('COMMAND_CLEARWARN_NONE');
             return loading.delete();
-        }
-        
-        async function confirmed() {
-
-            target.user.settings.unset(`servers.${message.guild.id}.warnings`);
-            await message.guild.log.send({ type: 'mod', action: 'clearwarns', member: target, moderator: message.member, reason, channel: message.channel, dm: true, warns: set, msg: message })
-            loading.delete();
-            return message.responder.success();
         };
 
-        let reason = args.slice(2).join(' ') || language.get('LOG_MODERATION_NOREASON');
-        return loading.confirm(loading, 'COMMAND_CLEARWARN_CONFIRM', message, confirmed);
+        const confirmed = async () => {
+            member.user.settings.unset(`servers.${msg.guild.id}.warnings`);
+            await this.logActions(msg.guild, [member], { type: 'mod', action: 'clearwarns', moderator: msg.member, reason, channel: msg.channel, dm: true, warns });
+            msg.responder.success();
+            return loading.delete();
+        };
+        return loading.confirm(loading, 'COMMAND_CLEARWARN_CONFIRM', msg, confirmed);
     }
 }

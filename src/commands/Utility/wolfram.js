@@ -1,21 +1,27 @@
-require('dotenv').config()
+require('dotenv').config();
 const WolframAlphaAPI = require('wolfram-alpha-node');
-const waApi = WolframAlphaAPI(process.env.WOLFRAMAPI);
+const { getShort } = WolframAlphaAPI(process.env.WOLFRAMAPI);
+const { Command } = require('foxxie');
 
-module.exports = {
-    name: 'wolfram',
-    aliases: ['wa'],
-    usage: 'fox wolfram [search]',
-    category: 'utility',
-    execute: async(props) => {
+module.exports = class extends Command {
 
-        let { message, args } = props;
-        if (!args[0]) return message.responder.error('COMMAND_WOLFRAM_NO_ARGS');
+    constructor(...args) {
+        super(...args, {
+            name: 'wolfram',
+            aliases: ['wa'],
+            description: language => language.get('COMMAND_WOLFRAM_DESCRIPTION'),
+            usage: '[Search]',
+            category: 'utility'
+        })
+    }
+
+    async run(msg, args) {
+        if (!args[0]) return msg.responder.error('COMMAND_WOLFRAM_NOARGS');
 
         try {
-            message.channel.send(await waApi.getShort(args.slice(0).join(' ')))
+            msg.channel.send(await getShort(args.slice(0).join(' ')));
         } catch(e) {
-            message.responder.error('COMMAND_WOLFRAM_NO_DATA');
+            msg.responder.error('COMMAND_WOLFRAM_NODATA')
         }
     }
 }

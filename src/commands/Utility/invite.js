@@ -1,19 +1,27 @@
-const Discord = require('discord.js');
+const { MessageEmbed } = require('discord.js');
+const { Command } = require('foxxie');
 
-module.exports = {
-    name: 'invite',
-    aliases: ['botinvite', 'support', 'vote'],
-    category: 'utility',
-    usage: 'fox invite',
-    execute({ message, language }) {
+module.exports = class extends Command {
 
-        const chnFlag = /\-channel\s*|-c\s*/gi;
-        const embed = new Discord.MessageEmbed()
-            .setColor(message.guild.me.displayColor)
-            .setTitle(language.get('COMMAND_INVITE_EMBED_TITLE'))
-            .setDescription(language.get('COMMAND_INVITE_EMBED_DESCRIPTION'))
+    constructor(...args) {
+        super(...args, {
+            name: 'invite',
+            aliases: ['botinvite', 'support', 'vote'],
+            description: language => language.get('COMMAND_INVITE_DESCRIPTION'),
+            category: 'utility'
+        })
+    }
 
-        chnFlag.test(message.content) ? message.channel.send(embed) : message.author.send(embed).catch(() => null);
-        message.responder.success();
+    run(msg) {
+
+        const flag = /\-channel\s*|-c\s*/gi;
+
+        const embed = new MessageEmbed()
+            .setColor(msg.guild.me.displayColor)
+            .setAuthor(msg.language.get('COMMAND_INVITE_TITLE'), this.client.user.displayAvatarURL({ dynamic: true }))
+            .setDescription(msg.language.get('COMMAND_INVITE_LINKS', this.client.user.username, this.client.invite))
+
+        flag.test(msg.content) ? msg.channel.send(embed) : msg.author.send(embed).catch(() => msg.channel.send(embed));
+        msg.responder.success();
     }
 }

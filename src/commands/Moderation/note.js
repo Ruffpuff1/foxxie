@@ -1,16 +1,24 @@
-module.exports = {
-    name: 'note',
-    aliases: ['n'],
-    usage: 'fox note [member|userId] [note]',
-    category: 'moderation',
-    permissions: 'MANAGE_MESSAGES',
-    async execute ({ message, args, language }) {
+const { Command } = require('foxxie');
 
-        const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        if (!member) return message.responder.error('COMMAND_NOTE_NOMEMBER')
-        let reason = args.slice(1).join(' ') || language.get('COMMAND_NOTE_NONOTE');
+module.exports = class extends Command {
 
-        await member.user.settings.push(`servers.${message.guild.id}.notes`, { author: message.member.user.id, reason })
-        message.responder.success();
+    constructor(...args) {
+        super(...args, {
+            name: 'note',
+            aliases: ['n'],
+            description: language => language.get('COMMAND_NOTE_DESCRIPTION'),
+            usage: '[Member] [...Note]',
+            permissions: 'MANAGE_MESSAGES',
+            category: 'moderation'
+        })
+    }
+
+    async run(msg, [_, ...note]) {
+        const member = msg.members.shift();
+        if (!member) return msg.responder.error('MESSAGE_MEMBERS_NONE');
+        note = note.join(' ') || msg.language.get('COMMAND_NOTE_NONOTE');
+
+        await member.user.settings.push(`servers.${msg.guild.id}.notes`, { author: msg.member.id, reason: note });
+        return msg.responder.success();
     }
 }

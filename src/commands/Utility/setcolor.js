@@ -1,22 +1,27 @@
-const tc = require('tinycolor2');
-module.exports = {
-    name: 'setcolor',
-    aliases: ['sc', 'setcolour'],
-    usage: 'fox setcolor [role] [color]',
-    category: 'utility',
-    permissions: 'MANAGE_ROLES',
-    execute(props) {
+const { Command } = require('foxxie');
 
-        let { message, args} = props;
-        let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
-        if (!role) return message.responder.error('COMMAND_SETCOLOR_NOROLE');
-        let color = args[1];
+module.exports = class extends Command {
 
-        const colorData = tc(color);
+    constructor(...args) {
+        super(...args, {
+            name: 'setcolor',
+            aliases: ['sc', 'setcolour'],
+            description: language => language.get('COMMAND_SETCOLOR_DESCRIPTION'),
+            usage: '[Role] [Color]',
+            permissions: 'MANAGE_ROLES',
+            category: 'utility'
+        })
+    }
 
-		if (colorData._format === false) return message.responder.error('COMMAND_SETCOLOR_INVALIDCOLOR');
-		role.setColor(colorData.toHex()).catch(() => message.responder.error('COMMAND_SETCOLOR_NOPERMS'));
+    run(msg, args) {
 
-		message.responder.success();
+        const role = msg.roles.shift();
+        if (!role) return msg.responder.error('COMMAND_SETCOLOR_NOROLE');
+        const color = args[1];
+
+        if (!/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color)) return msg.responder.error('COMMAND_SETCOLOR_INVALIDCOLOR');
+        role.setColor(color).catch(() => msg.responder.error('COMMAND_SETCOLOR_NOPERMS'));
+
+        msg.responder.success();
     }
 }

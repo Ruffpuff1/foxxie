@@ -1,40 +1,41 @@
-const { emojis: { } } = require('../../../lib/util/constants')
-module.exports = {
-    name: 'stafflog',
-    aliases: ['stafflogs'],
-    usage: 'fox stafflog (member|userId)',
-    permissions: 'MANAGE_MESSAGES',
-    category: 'moderation',
-    execute: async(props) => {
+const { Command } = require('foxxie');
 
-        let { message, args, language } = props
+module.exports = class extends Command {
 
-        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-        const loading = await message.responder.loading();
+    constructor(...args) {
+        super(...args, {
+            name: 'stafflog',
+            aliases: ['modcounts', 'stafflogs'],
+            description: language => language.get('COMMAND_STAFFLOG_DESCRIPTION'),
+            usage: '(Member)',
+            permissions: 'MANAGE_MESSAGES',
+            category: 'moderation'
+        })
+    }
 
-        let desc1 = []
-        let desc2 = []
-        let modCounts = await member.user.settings.get(`servers.${message.guild.id}.modStats`)
-        if (!modCounts) { loading.delete(); return message.responder.error('COMMAND_STAFFLOG_NONE')}
+    async run(msg) {
 
-        if (modCounts.ban) desc1.push(language.get('COMMAND_STAFFLOG_BAN', modCounts.ban))
-        if (modCounts.kick) desc1.push(language.get('COMMAND_STAFFLOG_KICK', modCounts.kick))
-        if (modCounts.warn) desc1.push(language.get('COMMAND_STAFFLOG_WARN', modCounts.warn))
-        if (modCounts.jail) desc1.push(language.get('COMMAND_STAFFLOG_JAIL', modCounts.jail))
-        if (modCounts.mute) desc1.push(language.get('COMMAND_STAFFLOG_MUTE', modCounts.mute))
+        const member = msg.members ? msg.members[0] : msg.member;
+        const loading = await msg.responder.loading();
+        const stats = await member.user.settings.get(`servers.${msg.guild.id}.modStats`);
 
-        if (modCounts.slowmode) desc2.push(language.get('COMMAND_STAFFLOG_SLOWMODE', modCounts.slowmode))
-        if (modCounts.lock) desc2.push(language.get('COMMAND_STAFFLOG_LOCK', modCounts.lock))
-        if (modCounts.unlock) desc2.push(language.get('COMMAND_STAFFLOG_UNLOCK', modCounts.unlock))
-        if (modCounts.nuke) desc2.push(language.get('COMMAND_STAFFLOG_NUKE', modCounts.nuke))
-        if (modCounts.purge) desc2.push(language.get('COMMAND_STAFFLOG_PURGE', modCounts.purge, modCounts.purgeTotal))
-       
-        let arr = [
-            desc1.filter(i => !!i).join('\n'),
-            desc2.filter(i => !!i).join('\n')
-        ].filter(i => !!i).join('\n\n');
+        if (!stats) {
+            msg.responder.error('COMMAND_STAFFLOG_NONE', member.user.tag);
+            return loading.delete();
+        }
 
-        loading.delete()
-        message.channel.send(`${arr.length ? language.get('COMMAND_STAFFLOG_TITLE', member.user.tag) : language.get('COMMAND_STAFFLOG_NONE') }${arr}`)
-    } 
+        const { ban, kick, warn, jail, mute, slowmode, lock, unlock, nuke, purge, purgeTotal } = stats;
+
+        const arr = [
+            msg.language.get('COMMAND_STAFFLOG_ONE', member.user.tag,
+                ban, kick, warn, jail, mute
+            ),
+            msg.language.get('COMMAND_STAFFLOG_TWO',
+                slowmode, lock, unlock, nuke, purge, purgeTotal
+            )
+        ];
+        
+        msg.channel.send(arr.filter(a => !!a).join('\n\n'));
+        return loading.delete();
+    }
 }

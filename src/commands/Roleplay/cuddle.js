@@ -1,12 +1,8 @@
 const RoleplayCommand = require('../../../lib/structures/RoleplayCommand');
-module.exports = {
-    name: 'cuddle',
-    usage: `fox cuddle [user] (reason)`,
-    category: 'roleplay',
-    execute(props) {
 
-        let { message, args } = props
-        
-        return new RoleplayCommand(message).execute("cuddle", args, false)
+module.exports = class extends RoleplayCommand {
+
+    constructor(...args) {
+        super('cuddle', null, false, ...args)
     }
 }

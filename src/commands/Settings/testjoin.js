@@ -1,18 +1,22 @@
 const guildMemberAdd = require('../../events/guildMemberAdd');
+const { Command } = require('foxxie');
 
-module.exports = {
-    name: 'testjoin',
-    aliases: ['testwelcome', 'tw'],
-    usage: 'fox testjoin (member|userId)',
-    category: 'settings',
-    guildOnly: true,
-    execute: async(props) => {
+module.exports = class extends Command {
 
-        let { message, args } = props
+    constructor(...args) {
+        super(...args, {
+            name: 'testjoin',
+            aliases: ['testwelcome', 'tw'],
+            description: language => language.get('COMMAND_TESTJOIN_DESCRIPTION'),
+            usage: '[Member]',
+            permissions: 'MANAGE_MESSAGES',
+            category: 'settings'
+        })
+    }
 
-        let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-
-        guildMemberAdd.execute(member);
-        message.responder.success();
+    run(msg) {
+        const member = msg.members.shift() || msg.member;
+        this.client.emit('guildMemberAdd', member);
+        msg.responder.success();
     }
 }

@@ -1,11 +1,19 @@
-const { emojis: { secretCommands: { ashlee } } } = require('../../../lib/util/constants')
-module.exports = {
-    name: 'ash',
-    aliases: ['ashlee'],
-    category: 'secret',
-    execute({ message }) {
+const { Command } = require('foxxie');
+const { emojis: { secretCommands: { ashlee } } } = require('../../../lib/util/constants');
 
-        message.delete()
-        message.channel.send(ashlee)
+module.exports = class extends Command {
+
+    constructor(...args) {
+        super(...args, {
+            name: 'ash',
+            aliases: ['ashlee'],
+            description: language => language.get('COMMAND_ASH_DESCRIPTION'),
+            category: 'secret'
+        })
+    }
+
+    run(msg) {
+        msg.delete();
+        return msg.channel.send(ashlee);
     }
 }

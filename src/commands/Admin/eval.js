@@ -1,47 +1,77 @@
-const { performance } = require('perf_hooks');
-const { flags: { async, depth, silent } } = require('../../../lib/util/constants');
+const { Command, Util, Type, Stopwatch } = require('foxxie');
+const { inspect } = require('util');
 
-module.exports = {
-    name: 'eval',
-    aliases: ['ev'],
-    usage: 'fox eval [code] (-async|-a) (-silent|-s) (-message|-m)',
-    category: 'admin',
-    permissionLevel: 9,
-    async execute ({ message, args, language }) {
+module.exports = class extends Command {
+    
+    constructor(...args) {
+        super(...args, {
+            name: 'eval',
+            aliases: ['ev'],
+            description: language => language.get('COMMAND_EVAL_DESCRIPTION'),
+            usage: '(-d=Number) (Code) (-a | -s | -m)',
+            permissions: 'CLIENT_OWNER',
+            runIn: ['text', 'dm'],
+            category: 'admin',
+        })
+    }
 
-        let client = message.client;
-        const start = performance.now().toFixed(2);
-        const depth = /d=\d/i.test(args[0]) ? args[0].slice(2, 3) : 0;
-        let arg = /d=\d/i.test(args[0]) ? args.slice(1).join(" ") : args.slice(0).join(" ");
-        let silent = /(-silent|-s)/gi.test(arg);
-        let async = /(-async|-a)/gi.test(arg);
-        let msg = /(-message|-m)/gi.test(arg);
+    async run(message, code) {
+        const depth = /(-depth|-d)=\d/i.test(code[0]) ? parseInt(code[0].slice(2, 3)) : 0;
+        code = depth === 0 ? code.slice(0).join(' ') : code.slice(1).join(' ');
+
+        const { success, result, time, type } = await this.eval(message, code, depth);
+        const footer = Util.codeBlock('ts', type.is);
+        let output = message.language.get(success ? 'COMMAND_EVAL_OUTPUT' : 'COMMAND_EVAL_ERROR',
+                time, Util.codeBlock('js', result.length > 1900 ? result.substring(0, 1900) : result), footer);
+        if (/(-silent|-s)/gi.test(message.content)) return null;
+        if (/(-message|-m)/gi.test(message.content)) output = result.length > 1900 ? result.substring(0, 1900) : result
+        return message.channel.send(output);
+    }
+
+    async eval(message, code, depth) {
+
+        const msg = message, client = this.client;
+        code = code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
+        code = await this.codeReplace(code);
+        const stopwatch = new Stopwatch();
+        let success, syncTime, asyncTime, result;
+        let thenable = false, type;
 
         try {
-
-            let code = await this.codeReplace(arg);
-            if (async) code = `(async () => {\n${code}\n})();`;
-            let result = async ? eval(code) : await eval(code);
-            let type = typeof result;
-
-            if (result?.length < 1 && result) return message.channel.send(`${language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`javascript\n${language.get('COMMAND_EVAL_UNDEFINED')}\n\`\`\``);
-            if (typeof result !== "string") result = require("util").inspect(result, { depth : depth } );
-            const end = performance.now().toFixed(2);
-            let time = (end*1000) - (start*1000);
-
-            if (!msg && !silent) message.channel.send(`\n${language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`javascript\n${result.length > 1900 ? result.substring(0, 1900) : result}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE')}\n\`\`\`javascript\n${type}\n\`\`\`\n:stopwatch: ${Math.floor(time)}μs`);
-            if (msg) message.channel.send('output: ' + result?.length > 1900 ? result.substring(0, 1900) : result);
-        } catch(e) {
-
-            let err = typeof e;
-            const end = performance.now().toFixed(2);
-            let time = (end*1000) - (start*1000);
-            message.channel.send(`\n${language.get('COMMAND_EVAL_OUTPUT')}\n\`\`\`javascript\n${e?.length > 1900 ? e.substring(0, 1900) : e}\n\`\`\`\n${language.get('COMMAND_EVAL_TYPE')}\n\`\`\`javascript\n${err}\n\`\`\`\n:stopwatch: ${Math.floor(time)}μs`)
+                if (/(-async|-a)/gi.test(message.content)) code = `(async () => {\n${code}\n})();`;
+                result = eval(code)
+                syncTime = stopwatch.toString();
+                type = new Type(result);
+                if (Util.isThenable(result)) {
+                        thenable = true;
+                        stopwatch.restart();
+                        result = await result;
+                        asyncTime = stopwatch.toString();
+                }
+                success = true;
+        } catch (error) {
+            if (!syncTime) syncTime = stopwatch.toString();
+            if (!type) type = new Type(error);
+            if (thenable && !asyncTime) asyncTime = stopwatch.toString();
+            result = error;
+            success = false;
         }
-    },
 
-    codeReplace(arg) {
-        return arg
+        stopwatch.stop();
+        if (typeof result !== 'string') {
+            result = inspect(result, {
+                depth: depth
+            })
+        }
+        return { success, type, time: this.formatTime(syncTime, asyncTime), result };
+    }
+
+    formatTime(syncTime, asyncTime) {
+        return asyncTime ? `⏱ ${asyncTime} (${syncTime})` : `⏱ ${syncTime}`;
+    }
+
+    codeReplace(code) {
+        return code
             .replace(/(-silent|-s)/gi, '')
             .replace(/(-async|-a)/gi, '')
             .replace(/(-message|-m)/gi, '');

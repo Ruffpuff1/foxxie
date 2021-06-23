@@ -1,25 +1,17 @@
-const commandHandler = require('../ws/commandHandler');
+const { Event } = require('foxxie');
+const { Permissions: { FLAGS } } = require('discord.js')
 
-module.exports = {
-	name: 'message',
-	execute: async(message) => {
+module.exports = class extends Event {
 
-        // prevents bot dms
-        if (!message.guild) return;
-
-        // Execute monitors
-        message.client.monitors.forEach(m => { if (m.type === 'message') m.execute(message) });
-
-        // Prevents bot commands.
-        if (message.author.bot) return;
-        if (!message.channel.permissionsFor(message.guild.me).has('SEND_MESSAGES')) return;
-        commandHandler.execute(message);
-
-        // Checks if member is AFK
-        message.client.tasks.get('afkcheck').execute(message);
-
-        // Counters
-        // message.author.settings.inc(`servers.${message.guild.id}.messageCount`)
-        // message.guild.settings.inc('messageCount');
+    constructor(...args) {
+        super(...args, {
+            event: 'message',
+        })
     }
-};
+
+    async run(message) {
+
+        message.channel.postable = !this.guild || this.permissionsFor(this.guild.me).has([FLAGS.VIEW_CHANNEL, FLAGS.SEND_MESSAGES], false);
+        this.client.monitors.run(message);
+    }
+}

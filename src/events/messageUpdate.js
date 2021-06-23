@@ -1,12 +1,18 @@
-const commandHandler = require('../ws/commandHandler');
+const { Event } = require('foxxie');
 
-module.exports = {
-    name: 'messageUpdate',
-    execute: async(oldMessage, newMessage) => {
+module.exports = class extends Event {
 
-        if (oldMessage.partial || newMessage.partial || !newMessage?.guild?.available || !newMessage?.guild?.log || oldMessage.author.bot) return false;
-		if ((oldMessage.content === newMessage.content) && (oldMessage.attachments.size === newMessage.attachments.size)) return false;
-        await commandHandler.execute(newMessage);
-        return newMessage.guild.log.send({ oldMessage, newMessage, user: oldMessage.author, channel: oldMessage.channel, type: 'edit' });
+    constructor(...args) {
+        super(...args, {
+            event: 'messageUpdate',
+        });
+    }
+
+    run(old, message) {
+
+        if (old.partial || message.partial || !message?.guild?.available || !message?.guild?.log || old.author.bot) return false;
+        if ((old.content === message.content) && (old.attachments.size === message.attachments.size)) return false;
+        this.client.monitors.run(message);
+        return message.guild.log.send({ oldMessage: old, newMessage: message, user: old.author, channel: old.channel, type: 'edit' });
     }
 }

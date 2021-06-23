@@ -1,24 +1,37 @@
-const Discord = require('discord.js');
-module.exports = {
-    name: 'afk',
-    aliases: ['away', 'idle'],
-    usage: `fox afk (reason)`,
-    category: 'utility',
-    execute: async(props) => {
+const { MessageEmbed } = require('discord.js');
+const { Command } = require('foxxie');
 
-        let { message, args, language } = props;
+module.exports = class extends Command {
+    
+    constructor(...args) {
+        super(...args, {
+            name: 'afk',
+            aliases: ['away', 'idle'],
+            description: language => language.get('COMMAND_AFK_DESCRIPTION'),
+            usage: '(Reason)',
+            category: 'utility'
+        })
+    }
 
-        let reason = args.slice(0).join(' ') || 'AFK';
-        message.author.settings.set(`servers.${message.guild.id}.afk`, { nickname: message.member.displayName, reason, status: true, lastMessage: message.content });
+    async run(msg, args) {
 
-        const embed = new Discord.MessageEmbed()
-            .setColor(message.guild.me.displayColor)
-            .setAuthor(language.get('COMMAND_AFK_EMBED_AUTHOR', message.author.tag), message.member.user.avatarURL( { dynamic: true } ))
-            .setDescription(language.get('COMMAND_AFK_EMBED_DESCRIPTION', reason));
+        const reason = args.slice(0).join(' ') || 'AFK';
+        msg.author.settings.set(`servers.${msg.guild.id}.afk`, {
+            nickname: msg.member.displayName,
+            reason,
+            status: true,
+            lastMessage: msg.content,
+            timeStamp: new Date().getTime()
+        })
 
-        message.member.setNickname(`[AFK] ${message.member.displayName}`).catch(e => e);
-        message.responder.success();
-        const msg = await message.channel.send(embed);
-        msg.delete({ timeout: 10000 });
+        const embed = new MessageEmbed()
+            .setColor(msg.guild.me.displayColor)
+            .setAuthor(msg.language.get('COMMAND_AFK_AUTHOR', msg.author.tag), msg.author.avatarURL({ dynamic: true }))
+            .setDescription(msg.language.get('COMMAND_AFK_REASON', reason))
+
+        msg.member.setNickname(`[AFK] ${msg.member.displayName}`).catch(() => null);
+        msg.responder.success();
+        const message = await msg.channel.send(embed);
+        message.delete({ timeout: 10000 })
     }
 }

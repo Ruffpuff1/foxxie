@@ -1,44 +1,67 @@
-module.exports = {
-    name: 'anti',
-    aliases: ['auto', 'am', 'automod'],
-    usage: 'fox anti (invite) (on|off|clear)',
-    category: 'settings',
-    permissions: 'ADMINISTRATOR',
-    async execute (props) {
+const { Command } = require('foxxie');
 
-        let { args, message } = props
-        const loading = await message.responder.loading();
+module.exports = class extends Command {
 
-        if (/(reset|clear)/i.test(args[0])) return this._clearAnti(props, loading);
-        if (/(invite|invites)/i.test(args[0])) return this._Anti(props, loading, 'invite');
-        message.responder.error('COMMAND_ANTI_INVALIDUSE'); return loading.delete();
-    },
+    constructor(...args) {
+        super(...args, {
+            name: 'anti',
+            aliases: ['auto', 'am', 'auto-mod'],
+            description: language => language.get('COMMAND_ANTI_DESCRIPTION'),
+            usage: '(Anti | clear) (on | off)',
+            permissions: 'ADMINISTRATOR',
+            category: 'settings'
+        })
+    }
 
-    async _Anti({ message, args }, loading, setting) {
+    async run(msg, [anti, setting]) {
+        const loading = await msg.responder.loading();
+        let use = /(invite|uppercase|gift|clear)/i.test(anti) ? anti.toLowerCase() : 'list';
+        let set = /(on|off|enable|disable)/i.test(setting) ? setting.toLowerCase() : null;
+        
+        if (use === 'list' && !set) return this._antiList(msg, loading);
+        if (use === 'clear') return this._antiClear(msg, loading);
 
-        if (/(on|enable)/i.test(args[1])) {
-            message.responder.success('COMMAND_ANTI_ENABLED', setting);
-            loading.delete();
-            return message.guild.settings.set(`mod.anti.${setting}`, true);
+        if (set === 'on' || set === 'enable') {
+            await msg.guild.settings.set(`mod.anti.${use}`, true);
+            msg.responder.success(`COMMAND_ANTI`, use, true);
+            return loading.delete();
         }
-        if (/(off|disable)/i.test(args[1])) {
-            message.responder.success('COMMAND_ANTI_DISABLED', setting);
-            loading.delete();
-            return message.guild.settings.unset(`mod.anti.${setting}`);
+        if (set === 'off' || set === 'disable') {
+            await msg.guild.settings.unset(`mod.anti.${use}`);
+            msg.responder.success(`COMMAND_ANTI`, use, false);
+            return loading.delete();
         }
-        state = await message.guild.settings.get(`mod.anti.${setting}`);
-        message.responder.success('COMMAND_ANTI_CURRENT', setting, state);
+        msg.responder.error('COMMAND_ANTI_NOSETTING');
         return loading.delete();
-    },
+    }
 
-    async _clearAnti({ message }, loading) {
+    async _antiList(msg, loading) {
 
-        function confirmed() {
+        const antiChat = [], antiName = [];
 
-            message.guild.settings.unset("mod.anti");
-            loading.delete();
-            return message.responder.success();
+        for (const anti of ['copypasta', 'duplicates', 'gift', 'image', 'invite', 'link', 'profanity']) {
+            const enabled = await msg.guild.settings.get(`mod.anti.${anti}`);
+            if (enabled) antiChat.push(msg.language.get('COMMAND_ANTI_ENABLED1', anti));
         }
-        loading.confirm(loading, 'COMMAND_ANTI_CONFIRM', message, confirmed);                         
+        for (const anti of ['hoisting', 'profanity', 'unicode', 'uppercase']) {
+            const enabled = await msg.guild.settings.get(`mod.anti.${anti}`);
+            if (enabled) antiName.push(msg.language.get('COMMAND_ANTI_ENABLED2', anti));
+        }
+
+        const list = [ msg.language.get('COMMAND_ANTI_GUILD', msg.guild.name), antiChat.filter(a => !!a).join('\n'), antiName.filter(a => !!a).join('\n') ];
+        msg.channel.send(list.filter(a => !!a).length === 1 
+                ? msg.language.get('COMMAND_ANTI_NONE')
+                : list.filter(a => !!a).join('\n\n'));
+
+        return loading.delete();
+    }
+
+    async _antiClear(msg, loading) {
+        function confirmed() {
+            msg.guild.settings.unset("mod.anti");
+            loading.delete();
+            return msg.responder.success();
+        }
+        loading.confirm(loading, 'COMMAND_ANTI_CONFIRM', msg, confirmed);  
     }
 }

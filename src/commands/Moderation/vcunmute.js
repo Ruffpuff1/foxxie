@@ -1,19 +1,38 @@
-module.exports = {
-    name: 'vcunmute',
-    aliases: ['vcum', 'letsay', 'letspeak'],
-    usage: 'fox vcunmute [member] (reason)',
-    category: 'moderation',
-    permissions: 'MUTE_MEMBERS',
-    async execute({ message, args, language }) {
+const Command = require('../../../lib/structures/MultiModerationCommand');
 
-        const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        const reason = args[1] || language.get('LOG_MODERATION_NOREASON');
+module.exports = class extends Command {
+    
+    constructor(...args) {
+        super(...args, {
+            name: 'vcunmute',
+            aliases: ['vcum', 'letsay', 'letspeak'],
+            description: language => language.get('COMMAND_VCUNMUTE_DESCRIPTION'),
+            usage: '[Members] (Reason)',
+            category: 'moderation',
+            permissions: 'MUTE_MEMBERS'
+        })
+    }
 
-        if (!member) return message.responder.error('COMMAND_VCUNMUTE_NOMEMBER');
-        if (!member.voice.channelID) return message.responder.error('COMMAND_VCUNMUTE_NOVOICE');
-        if (!member.voice.serverMute) return message.responder.error('COMMAND_VCUNMUTE_NOTMUTED');
-        await member.voice.setMute(false, reason).catch(() => null);
-        message.guild.log.send({ type: 'mod', action: 'vcunmute', dm: true, channel: message.channel, moderator: message.member, member, reason });
-        message.responder.success();
+    async run(msg, args) {
+
+        const members = msg.members;
+        if (!members) return msg.responder.error('MESSAGE_MEMBERS_NONE');
+        let muteable = await this.getModeratable(msg.member, members, true);
+        
+        if (!muteable.length) return msg.responder.error('COMMAND_VCUNMUTE_NOPERMS', members.length > 1);
+        muteable = muteable.filter(m => m.voice.channelID).filter(m => m.voice.serverMute);
+        if (!muteable.length) return msg.responder.error('COMMAND_VCUNMUTE_NOVOICE', members.length > 1);
+
+        let reason = args.slice(members.length).join(' ') || msg.language.get('LOG_MODERATION_NOREASON');
+        await this.executeUnmutes(msg, reason, muteable);
+        this.logActions(msg.guild, muteable.map(m => m.user), { type: 'mod', action: 'vcunmute', reason, channel: msg.channel, dm: true, moderator: msg.member });
+        return msg.responder.success();
+    }
+
+    async executeMutes(msg, reason, members) {
+
+        for (const member of members) {
+            await member.voice.setMute(false, `${msg.author.tag} | ${reason}`).catch(() => null);
+        }
     }
 }

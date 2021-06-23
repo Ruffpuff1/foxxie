@@ -1,34 +1,38 @@
-module.exports = {
-    name: 'language',
-    aliases: ['lang', 'setlang', 'setlanguage'],
-    category: 'settings',
-    usage: 'fox language',
-    permissionLevel: 9,
-    permissions: 'ADMINISTRATOR',
-    execute: async(props) => {
+const { Command } = require('foxxie');
+const { language } = require('../../../lib/util/constants').emojis;
 
-        const { message, language } = props;
+module.exports = class extends Command {
 
-        let sent = await message.channel.send(language.get('COMMAND_LANGUAGE_ARRAY'));
+    constructor(...args) {
+        super(...args, {
+            name: 'language',
+            aliases: ['lang', 'setlang', 'setlanguage'],
+            description: language => language.get('COMMAND_LANGUAGE_DESCRIPTION'),
+            permissions: 'CLIENT_OWNER',
+            category: 'settings'
+        })
+    }
 
-        await sent.react("🇺🇸");
-        await sent.react("🇲🇽");
+    async run(msg) {
+        const message = await msg.channel.send(msg.language.get('COMMAND_LANGUAGE_ARRAY'));
+        await message.react('🇺🇸');
+        await message.react('🇲🇽');
 
-        let collector = sent.createReactionCollector(user => user.id === message.author.id);
+        let collector = message.createReactionCollector((_, user) => user.id === msg.author.id, { time: 30000, max: 1 });
 
         collector.on("collect", async reaction => {
 
-            if (reaction._emoji.name === "🇺🇸") {
+            if (reaction._emoji.name === '🇺🇸') {
 
-                message.guild.settings.set('language', 'en-US');
-                sent.edit(language.get('COMMAND_LANGUAGE_SUCCESS'));
-                return sent.reactions.removeAll().catch(e => e);
+                msg.guild.settings.set('language', 'en-US');
+                message.edit(this.client.languages.get('en-US').language['COMMAND_LANGUAGE_SUCCESS']);
+                return message.reactions.removeAll().catch(() => null);
             }
-            if (reaction._emoji.name === "🇲🇽") {
+            if (reaction._emoji.name === '🇲🇽') {
 
-                message.guild.settings.set('language', 'es-MX');
-                sent.edit(language.get('COMMAND_LANGUAGE_SUCCESS'));
-                return sent.reactions.removeAll().catch(e => e);
+                msg.guild.settings.set('language', 'es-MX');
+                message.edit(this.client.languages.get('es-MX').language['COMMAND_LANGUAGE_SUCCESS']);
+                return message.reactions.removeAll().catch(() => null);
             }
         })
     }

@@ -1,32 +1,46 @@
-module.exports = {
-    name: 'warn',
-    aliases: ['w'],
-    usage: 'fox warn [user|userId] (reason)',
-    category: 'moderation',
-    permissions: 'MANAGE_MESSAGES',
-    async execute (props) {
+const Command = require('../../../lib/structures/MultiModerationCommand');
 
-        let { message, args, language } = props
+module.exports = class extends Command {
 
-        const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-        if (!target) return message.responder.error('COMMAND_WARN_NOMEMBER')
+    constructor(...args) {
+        super(...args, {
+            name: 'warn',
+            aliases: ['w'],
+            description: language => language.get('COMMAND_WARN_DESCRIPTION'),
+            usage: '[Members] (Reason)',
+            permissions: 'MANAGE_MESSAGES',
+            category: 'moderation'
+        })
+    }
 
-        const reason = args.slice(1).join(' ') || language.get('LOG_MODERATION_NOREASON');
-        const moderator = message.member;
-        const channel = message.channel;
-        await this.executeWarn({ message, reason, target, moderator, channel });
-        message.responder.success();
-    },
+    async run(msg, args) {
 
-    async executeWarn({ message, reason, target, moderator, channel }) {
+        const members = msg.members;
+        if (!members?.length || !members[0]) return msg.responder.error('MESSAGE_MEMBERS_NONE');
+        const warnable = await this.getModeratable(msg.member, members, true);
+        if (!warnable.length) return msg.responder.error('COMMAND_WARN_NOPERMS', members.length > 1);
 
-        await target.user.settings.push(`servers.${message.guild.id}.warnings`, { author: moderator, timestamp: new Date().getTime(), reason })
-        if (message.guild.id === '761512748898844702') {
-            let warns = await target.user.settings.get(`servers.${message.guild.id}.warnings`);
-            const staffChn = message.guild.channels.cache.get('817006909492166656');
-            if (warns?.length >= 3 && staffChn) staffChn.send(`${target.user.tag} (ID: ${target.user.id}) now has **${warns?.length}** warnings.`)
+        const reason = args.slice(members.length).join(' ') || msg.language.get('LOG_MODERATION_NOREASON');
+        await this.executeWarns(msg, reason, warnable, msg.member);
+        this.logActions(msg.guild, warnable.map(member => member.user), { type: 'mod', action: 'warn', reason, channel: msg.channel, dm: true, counter: 'warn', moderator: msg.member });
+        return msg.responder.success();
+    }
+
+    async executeWarns(msg, reason, members, author) {
+
+        const warn = { author, reason, timestamp: new Date().getTime() }
+
+        for (const member of members) {
+            member.user.settings.push(`servers.${msg.guild.id}.warnings`, warn);
+
+            const warns = await member.user.settings.get(`servers.${msg.guild.id}.warnings`);
+            if (warns?.length >= 3 && msg.guild.id === '761512748898844702') await this.tcsWarn(msg, member, warns.length);
         }
+    }
 
-        message.guild.log.send({ type: 'mod', action: 'warn', member: target, moderator, reason, channel, dm: true, counter: 'warn', msg: message });
+    tcsWarn(msg, member, count) {
+        const channel = msg.guild.channels.cache.get('817006909492166656');
+        if (!channel) return member;
+        return channel.send(`${member.user.tag} (ID: ${member.user.id}) now has **${count}** warnings.`)
     }
 }

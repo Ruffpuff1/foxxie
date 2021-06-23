@@ -1,62 +1,72 @@
-module.exports = {
-    name: 'welcome',
-    aliases: ['ws', 'welcomesettings'],
-    usage: 'fox welcome [channel|message] (none|#channel|message)',
-    category: 'settings',
-    permissions: 'ADMINISTRATOR',
-    async execute (props) {
+const { Command } = require('foxxie');
 
-        let { message, args } = props
+module.exports = class extends Command {
 
-        const loading = await message.responder.loading();
-        const welcome = await message.guild.settings.get('welcome');
-        if (/(channel|location|c)/i.test(args[0])) return this._channel(props, welcome, loading);
-        if (/(message|text|m)/i.test(args[0])) return this._message(props, welcome, loading);
-        message.responder.error('COMMAND_WELCOME_INVALIDUSE');
-        loading.delete();
-    }, 
+    constructor(...args) {
+        super(...args, {
+            name: 'welcome',
+            aliases: ['ws', 'welcome-settings'],
+            description: language => language.get('COMMAND_WELCOME_DESCRIPTION'),
+            usage: '[channel | message] (Channel | Message | none)',
+            permissions: 'ADMINISTRATOR',
+            category: 'settings'
+        })
+    }
 
-    async _channel({ message, args }, welcome, loading) {
+    run(msg, args) {
 
-        if (/(none|reset)/i.test(args[1])) {
-            message.responder.success('COMMAND_WELCOME_CHANNEL_REMOVED');
-            loading.delete();
-            return message.guild.settings.unset('welcome.channel');
-        }
-        const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name === args[1]);
-        if (!channel) {
+        if (/(channel|location|c)/i.test(args[0])) return this.channel(msg, args);
+        if (/(message|text|m)/i.test(args[0])) return this.message(msg, args);
+        return msg.responder.error('COMMAND_WELCOME_INVALID');
+    } 
 
-            if (!welcome.channel) {
-                message.responder.error('COMMAND_WELCOME_CHANNEL_NOCHANNEL');
-                return loading.delete();
-            }
-            message.responder.success('COMMAND_WELCOME_CHANNEL_NOW', welcome.channel);
+    async channel(msg, [_, arg]) {
+        const loading = await msg.responder.loading();
+
+        if (/(none|reset)/i.test(arg)) {
+            msg.guild.settings.unset('welcome.channel');
+            msg.responder.success('COMMAND_WELCOME_CHANNEL_REMOVED');
             return loading.delete();
         }
-        await message.guild.settings.set('welcome.channel', channel);
-        message.responder.success('COMMAND_WELCOME_CHANNEL_SET', channel);
-        return loading.delete();
-    },
-
-    async _message({ message, args }, welcome, loading) {
-
-        if (/(none|reset)/i.test(args[1])) {
-            message.responder.success('COMMAND_WELCOME_MESSAGE_REMOVED');
-            loading.delete();
-            return message.guild.settings.unset('welcome.message');
-        }
-        const msg = args.slice(1).join(" ");
-        if (!msg) {
-
-            if (!welcome.message) {
-                message.responder.error('COMMAND_WELCOME_MESSAGE_NOMESSAGE');
-                return loading.delete();
-            }
-            message.responder.success('COMMAND_WELCOME_MESSAGE_NOW', welcome.message);
+        const channel = msg.channels.shift();
+        if (!channel && !await msg.guild.settings.get('welcome.channel')) {
+            msg.responder.error('COMMAND_WELCOME_CHANNEL_NOCHANNEL');
             return loading.delete();
         }
-        await message.guild.settings.set('welcome.message', msg);
-        message.responder.success('COMMAND_WELCOME_MESSAGE_SET', msg);
-        return loading.delete();
+        else if (!channel) {
+            const chn = await msg.guild.settings.get('welcome.channel');
+            msg.responder.info('COMMAND_WELCOME_CHANNEL_NOW', msg.guild.channels.cache.get(chn)?.toString());
+            return loading.delete();
+        }
+        else {
+            await msg.guild.settings.set('welcome.channel', channel.id);
+            msg.responder.success('COMMAND_WELCOME_CHANNEL_SET', channel.toString());
+            return loading.delete();
+        }
+    }
+
+    async message(msg, [_, ...message]) {
+        const loading = await msg.responder.loading();
+
+        if (/(none|reset)/i.test(message[0])) {
+            msg.guild.settings.unset('welcome.message');
+            msg.responder.success('COMMAND_WELCOME_MESSAGE_REMOVED');
+            return loading.delete();
+        }
+        message = message.join(' ');
+        if (!message && !await msg.guild.settings.get('welcome.message')) {
+            msg.responder.error('COMMAND_WELCOME_MESSAGE_NOMESSAGE');
+            return loading.delete();
+        }
+        else if (!message) {
+            const mess = await msg.guild.settings.get('welcome.message');
+            msg.responder.info('COMMAND_WELCOME_MESSAGE_NOW', mess);
+            return loading.delete()
+        } 
+        else {
+            await msg.guild.settings.set('welcome.message', message);
+            msg.responder.success('COMMAND_WELCOME_MESSAGE_SET', message);
+            return loading.delete();
+        }
     }
 }

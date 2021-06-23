@@ -1,33 +1,26 @@
 {
   "name": "foxxie",
-  "version": "2.0",
+  "version": "3.0",
   "description": "Foxxie is a smort server butler suited for taking care of and managing your server.",
   "main": "src/index.js",
   "license": "ISC",
-  "author": "Ruff (https://github.com/Ruffpuff1)",
+  "author": "Ruff <Ruffpuff#0017> (https://github.com/Ruffpuff1)",
   "contributors": [
-    "Ruff (https://github.com/Ruffpuff1)",
-    "Raindrop (https://github.com/Raindrop-Droptop)",
-    "Sug4r",
-    "Ari"
+    "Ruff <Ruffpuff#0017> (http://ruff.cafe)",
+    "Raindrop <Waindrop | ᓚᘏᗢ#7799> (https://github.com/Raindrop-Droptop)",
+    "Sug4r <sug4r#1312>",
+    "Aria <ArEo#1245>"
   ],
   "dependencies": {
+    "@aero/tags": "^3.0.10",
     "axios": "^0.21.1",
-    "crypto": "^1.0.1",
+    "canvacord": "^5.2.1",
     "discord.js": "^12.5.1",
-    "discord.js-docs": "^0.1.2",
     "dotenv": "^8.2.0",
-    "isgd": "^1.1.3",
+    "foxxie": "^0.0.7-1",
     "lodash": "^4.17.21",
-    "mathjs": "^9.3.2",
-    "moment": "^2.29.1",
-    "moment-timezone": "^0.5.33",
     "mongoose": "^5.12.3",
-    "ms": "^2.1.3",
     "novelcovid": "^3.0.0",
-    "perf_hooks": "^0.0.1",
-    "tinycolor2": "^1.4.2",
-    "weather-js": "^2.0.0",
     "wolfram-alpha-node": "^0.0.3"
   }
 }
