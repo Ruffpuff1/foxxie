@@ -15,7 +15,7 @@ module.exports = class extends Task {
             const muteable = [];
             const mutes = await this.client.schedule.fetch('mutes');
             let moderator = null, channel = null, guild = null, duration = null, reason = null;
-            
+
             mutes?.forEach(async mute => {
 
                 const { guildId, authId, time, reason: res, channelId, memberId, duration: dur } = mute;
@@ -40,6 +40,7 @@ module.exports = class extends Task {
             })
 
             this.client.setTimeout(() => {
+                
                 if (muteable.length) new MultiModerationCommand().logActions(guild, muteable.map(member => member.user), {
                     type: 'mod', reason, channel, dm: true, moderator, action: 'tempunmute', duration
                 })

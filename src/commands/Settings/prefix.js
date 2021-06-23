@@ -1,55 +1,69 @@
-module.exports = {
-    name: 'prefix',
-    aliases: ['setprefix', 'prefixes'],
-    usage: 'fox prefix (none|remove|prefix)',
-    category: 'settings',
-    permissions: 'ADMINISTRATOR',
-    async execute ({ message, args }) {
+const { Command } = require('foxxie');
 
-        const loading = await message.responder.loading();
+module.exports = class extends Command {
+
+    constructor(...args) {
+        super(...args, {
+            name: 'prefix',
+            aliases: ['setprefix', 'prefixes'],
+            description: language => language.get('COMMAND_PREFIX_DESCRIPTION'),
+            usage: '(Prefix | none | remove) (Prefix)',
+            permissions: 'ADMINISTRATOR',
+            category: 'settings'
+        });
+    }
+
+    async run(msg, args) {
+
+        const loading = await msg.responder.loading();
 
         if (/(none|reset|clear)/i.test(args[0])) {
-
-            function confirmed() {
-
-                message.guild.settings.unset('prefixes');
-                loading.delete();
-                return message.responder.success();
+            async function confirmed() {
+                msg.guild.settings.unset('prefixes');
+                msg.responder.success();
+                return loading.delete();
             }
-            return loading.confirm(loading, 'COMMAND_PREFIX_CONFIRM', message, confirmed);
-        }
+            return loading.confirm(loading, 'COMMAND_PREFIX_CONFIRM', msg, confirmed);
+        };
 
-        if (/(remove)/i.test(args[0])) {
-            let prefix = args[1];
+        if (/remove/i.test(args[0])) {
+            const prefix = args[1];
+            const prefixes = await msg.guild.settings.get('prefixes');
+
             if (!prefix) {
-                message.responder.error('COMMAND_PREFIX_REMOVE_NOARGS');
+                msg.responder.error('COMMAND_PREFIX_NOPREFIX');
                 return loading.delete();
             }
-            const prefixes = await message.guild.settings.get('prefixes');
-            if (!prefixes?.some(prfx => prfx === prefix)) {
-                message.responder.error('COMMAND_PREFIX_REMOVE_NOEXIST', prefix);
-                return loading.delete();
-            }
-            await message.guild.settings.pull('prefixes', prefix);
-            message.responder.success('COMMAND_PREFIX_REMOVE_SUCCESS', prefix);
-            return loading.delete();
-        }
 
-        let prefix = args[0]
+            if (!prefixes?.some(prfx => prfx === prefix)) {
+                msg.responder.error('COMMAND_PREFIX_NOEXIST', prefix);
+                return loading.delete();
+            }
+
+            await msg.guild.settings.pull('prefixes', prefix);
+            msg.responder.success('COMMAND_PREFIX_REMOVED', prefix);
+            return loading.delete();
+        };
+
+        const prefix = args[0];
+        let prefixes = await msg.guild.settings.get('prefixes');
         if (!prefix) {
-            let prefixes = await message.guild.settings.get('prefixes')
 
             if (!prefixes?.length) {
-                message.responder.error('COMMAND_PREFIX_NONE');
+                msg.responder.error('COMMAND_PREFIX_NONE');
                 return loading.delete();
             }
-
-            message.responder.success('COMMAND_PREFIX_NOW', prefixes, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "));
+            msg.responder.info('COMMAND_PREFIX_DISPLAY', prefixes, prefixes.slice(0, -1).map(p => `\`${p}\``).join(", "));
+            return loading.delete();
+        }
+        
+        if (prefixes?.length >= 4) {
+            msg.responder.error('COMMAND_PREFEX_MANY');
             return loading.delete();
         }
 
-        message.guild.settings.push('prefixes', prefix)
-        message.responder.success('COMMAND_PREFIX_ADDED', prefix);
+        msg.guild.settings.push('prefixes', prefix);
+        msg.responder.success('COMMAND_PREFIX_ADDED', prefix);
         return loading.delete();
     }
 }

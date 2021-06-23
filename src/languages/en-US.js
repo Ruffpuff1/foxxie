@@ -124,7 +124,8 @@ module.exports = class extends Language {
             COMMAND_LOCK_SUCCESS: channel => `${bold`Successfully`} locked ${channel}.`,
             COMMAND_MUTE_ROLE_DEFAULT: `Silenced`,
             COMMAND_MUTE_ROLE_REASON: `Setting up the mute settings.`,
-            // mute
+            COMMAND_MUTE_DESCRIPTION: `Allows you to mute members of the server to prevent them from talking, this command will use a premade mute role by the bot and log to the moderation channel if set. You can also specify a time for the mute to automatically expire at such as ${code`1d`} for one day.`,
+            COMMAND_MUTE_NOPERMS: multiple => `${bold`Whoops,`} you can't mute ${multiple ? 'any of the specified members' : 'the specified member'}.`,
             // note
             COMMAND_NUKE: `${bold`First hehe,`} anyways this channel was nuked by the owner of the server. All previous messages have been cleared out.`,
             COMMAND_NUKE_DESCRIPTION: `Completely wipes a channel of all messages and clones its permissions, topic, and position. Only server owners can use this command due to the harm it may cause. Also keep in mind: mine or any other bot's settings will no longer work in that channel. If a moderation logging channel is set in your server, this command will log there.`,
@@ -368,7 +369,15 @@ module.exports = class extends Language {
             COMMAND_LOG_REMOVED: type => type === 'mod' ? `${bold`Done,`} stopped logging ${bold`moderation actions`}.` : `${bold`Done,`} stopped logging ${bold`${type}s`}.`,
             COMMAND_LOG_SET: (type, channel) => `${bold`Alright,`} now I'll log ${bold`${type === 'mod' ? 'moderation actions' : `${type}s`}`} in ${channel}.`,
             COMMAND_LOG_RESET: `${bold`Hey,`} are you sure you want to delete ${bold`all logging`} settings on this server.`,
-            // prefix
+            COMMAND_PREFIX_ADDED: prefix => `${bold`Alright,`} I added ${code`${prefix}`} to the list of this server's custom prefixes.`,
+            COMMAND_PREFIX_CONFIRM: `${bold`Hey,`} are you sure you want to reset ${bold`all prefixes`} on this server?`,
+            COMMAND_PREFIX_DESCRIPTION: `Lets you add custom per-server prefixes that I will listen to for commands and tags. To clear all custom prefixes just specify ${code`none`}. To remove a specific prefix specify ${code`remove`} and the prefix you want to remove.`,
+            COMMAND_PREFIX_DISPLAY: (prefixes, list) => `Right now, this server's prefix${prefixes.length > 1 ? 'es are' : ' is'} set to ${prefixes.length > 1 ?  `${list} and \`${prefixes.pop()}\`` : `\`${prefixes[0]}\``}`,
+            COMMAND_PREFEX_MANY: `This server has too many custom prefixes, you can only have up to ${bold`4`}.`,
+            COMMAND_PREFIX_NOEXIST: prefix => `${bold`Hey,`} the prefix ${code`${prefix}`} isn't a server prefix right now.`,
+            COMMAND_PREFIX_NONE: `${bold`Whoops,`} this server doesn't have any custom prefixes right now.`,
+            COMMAND_PREFIX_NOPREFIX: `${bold`Please,`} specify a prefix to remove.`,
+            COMMAND_PREFIX_REMOVED: prefix => `${bold`Done,`} removed the prefix ${code`${prefix}`}.`,
             COMMAND_RERO_ADDED: `${bold`Done,`} successfully added the reaction role to the message.`,
             COMMAND_RERO_DESCRIPTION: `Allows you to configure reaction roles in your server. Specify ${code`add`} to add them, simply provide the role it should be for, then react to the message it should be attached to, I'll make a reaction role on that message with the emoji you reacted with. Specify ${code`remove`} to remove a reaction role using it's message Id and the Role attached to it.`,
             COMMAND_RERO_EXIST: `This ${bold`role`} is already a reaction role on this message.`,

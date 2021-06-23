@@ -313,6 +313,7 @@ module.exports = {
         COMMAND_PERMISSION_DESCRIPTION: `Allows you to enable or disable certain users from using my commands in your server.`,
         COMMAND_PERMISSION_INVALIDUSE: `**Hey,** you need to specify a proper user case [allow|deny|reset].`,
         COMMAND_PERMISSION_NOMEMBER: `**Sorry,** you need to provide either a user @mention or user Id.`,
+        
         COMMAND_PREFIX_DESCRIPTION: `Lets you add custom per-server prefixes that I will listen to for commands and tags. To clear all custom prefixes just specify \`none\`. To remove a specific prefix specify \`remove\` and the prefix you want to remove.`,
         COMMAND_PREFIX_CONFIRM: `**Hey,** are you sure you want to reset **all prefixes** on this server?`,
         COMMAND_PREFIX_NONE: `**Whoops,** there isn't any custom prefixes set right now. You can add one with \`fox prefix (prefix)\`.`,
@@ -321,6 +322,7 @@ module.exports = {
         COMMAND_PREFIX_REMOVE_NOEXIST: prefix => `**Whoops,** \`${prefix}\` isn't set as a prefix in this server.`,
         COMMAND_PREFIX_REMOVE_SUCCESS: prefix => `**Done,** I removed \`${prefix}\` from the list of this server's prefixes.`,
         COMMAND_PREFIX_ADDED: prefix => `**Alright,** I added \`${prefix}\` to the list of this server's custom prefixes.`,
+
         COMMAND_SETTINGS_AUTOMOD: `automod`,
         COMMAND_SETTINGS_AUTOMOD_GIFTS: `└─ ${granted} Gifts **filtered**`,
         COMMAND_SETTINGS_AUTOMOD_IMAGES: `└─ ${granted} Images **filtered**`,
