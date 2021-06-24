@@ -1,3 +1,7 @@
+/**
+ * Co-authored by Ruff <Ruffpuff#0017> (http://ruff.cafe)
+ * Co-authored by ravy (https://ravy.pink)
+ */
 require('dotenv').config();
 const req = require('@aero/centra');
 const { Command } = require('foxxie');
@@ -9,7 +13,7 @@ module.exports = class extends Command {
             name: 'wolfram',
             aliases: ['wa'],
             description: language => language.get('COMMAND_WOLFRAM_DESCRIPTION'),
-            usage: '[Search] (-graph)',
+            usage: '[...Search] (-graph)',
             category: 'utility'
         })
 
@@ -20,7 +24,7 @@ module.exports = class extends Command {
         query = query.join(' ');
         if (!query?.length) return msg.responder.error('COMMAND_WOLFRAM_NOARGS');
 
-        if ([/\bip\b/i, /location/i, /geoip/i, /where am i/i]
+        if ([/\bip\b/i, /location/i, /geoip/i, /where am i/i, /penis/i]
 			.some(reg => reg.test(query))) return msg.responder.error('COMMAND_WOLFRAM_ERROR');
         
         if (/(-graph|-g)/i.test(msg.content)) return this.graphical(msg, query.replace(/(-graph|-g)/i, ''));

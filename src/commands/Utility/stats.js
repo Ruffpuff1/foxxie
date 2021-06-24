@@ -1,4 +1,8 @@
-const { ms, Command, Duration, version: foxxieVersion } = require('foxxie');
+/**
+ * Co-authored by Ruff <Ruffpuff#0017> (http://ruff.cafe)
+ * Co-authored by ravy (https://ravy.pink)
+ */
+const { ms, Command, version: foxxieVersion } = require('foxxie');
 const { hostname, totalmem, cpus, loadavg } = require('os');
 const { version: discordVersion, MessageEmbed } = require('discord.js');
 

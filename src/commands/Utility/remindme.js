@@ -7,7 +7,7 @@ module.exports = class extends Command {
             name: 'remindme',
             aliases: ['rm'],
             description: language => language.get('COMMAND_REMINDME_DESCRIPTION'),
-            usage: `remindme [Time] [Reason] (-c)`,
+            usage: `remindme [Time] [...Reason] (-c)`,
             category: 'utility',
         })
     }
