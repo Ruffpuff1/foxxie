@@ -10,7 +10,7 @@ module.exports = class extends Command {
             aliases: ['ud', 'slang', 'urban-dictionaray'],
             description: language => language.get('COMMAND_URBAN_DESCRIPTION'),
             usage: '[Term] [Number]',
-            //nsfw: true,
+            nsfw: true,
             category: 'fun',
         })
 
@@ -23,8 +23,13 @@ module.exports = class extends Command {
         return str.substring(0, pos);
     }
 
-    async run(msg, [term, resultNum = 0]) {
-        term = await this.cleanEmotes(term);
+    async run(msg, args) {
+
+        let resultNum = args.find(arg => /\d+/.test(arg));
+        if (resultNum) args.splice(args.indexOf(resultNum), 1);
+        else resultNum = 0;
+        
+        const term = await this.cleanEmotes(args.join(' '));
 
         if (!term) return msg.responder.error('COMMAND_URBAN_NOWORD');
         const loading = await msg.responder.loading();
@@ -37,7 +42,6 @@ module.exports = class extends Command {
         if (resultNum > 1) resultNum--;
 
         const result = body.list[resultNum];
-    
         if (!result) {
             msg.responder.error('COMMAND_URBAN_MAX', body.list.length);
             return loading.delete();

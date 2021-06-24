@@ -9,7 +9,7 @@ module.exports = class extends Inhibitor {
     }
 
     async run(message, command) {
-        await message.guild.members.fetch(message.guild.ownerID).catch(() => null);
+        await message.guild?.members.fetch(message.guild.ownerID).catch(() => null);
         // Secure commands for bot owner, will fail silently.
         if (command.permissionLevel >= 10 && !message.client.owners.has(message.author)) throw true;
         // Overwrite perm level for bot owner.

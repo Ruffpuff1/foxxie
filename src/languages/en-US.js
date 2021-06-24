@@ -693,8 +693,11 @@ module.exports = class extends Language {
             EVENT_STARCREATED_TITLE: ':star: A new message made it into the starboard :star:',
 
             // Inhibitors
+            INHIBITOR_NSFW: `${bold`Hehe,`} due to the potential risqué nature of this command it can only be run in ${bold`nsfw channels`}.`,
             INHIBITOR_PERMISSIONS_AUTHOR: perm => `${bold`You don't`} have permission to run this command, you need the ${bold`${perm}`} permission.`,
             INHIBITOR_PERMISSIONS_GUILDOWNER: `${bold`Nope,`} due to the harm this command can cause it can only be executed by the guild owner.`,
+            INHIBITOR_RUNIN: type => `${bold`Whoops,`} this command can only be run in ${bold`${type}`} channels.`,
+            INHIBITOR_RUNIN_NONE: name => `${bold`Uhh,`} the ${bold`${name}`} command isn't configured to run in any channels.`,
 
             // Monitors
             MONITOR_AFK_AUTHOR: author => `${author} is set as AFK`,
