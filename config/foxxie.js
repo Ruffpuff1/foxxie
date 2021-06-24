@@ -6,7 +6,6 @@ module.exports = {
         development: 'a\\.'
     },
     version,
-    development: true,
     language: 'en-US',
     owners: ['486396074282450946', '749845359689465977', '754598258742919178'],
     contributors: new Set(),
@@ -15,6 +14,7 @@ module.exports = {
     supportServer: 'http://foxxie.ruff.cafe/support',
     inviteURL: 'http://foxxie.ruff.cafe/invite',
     topggURL: 'http://foxxie.ruff.cafe/vote',
+    lgbtURL: 'https://api.ravy.lgbt',
     shards: 'auto',
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
     typing: false,

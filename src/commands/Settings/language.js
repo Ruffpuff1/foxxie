@@ -8,7 +8,8 @@ module.exports = class extends Command {
             name: 'language',
             aliases: ['lang', 'setlang', 'setlanguage'],
             description: language => language.get('COMMAND_LANGUAGE_DESCRIPTION'),
-            permissions: 'CLIENT_OWNER',
+            permissions: 'ADMINISTRATOR',
+            permissionLevel: 10,
             category: 'settings'
         })
     }

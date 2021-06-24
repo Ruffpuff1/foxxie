@@ -11,7 +11,7 @@ module.exports = class extends Command {
             description: language => language.get('COMMAND_RERO_DESCRIPTION'),
             runIn: ['text', 'news'],
             usage: '[add | remove] (Message) [Role]',
-            permissions: 'CLIENT_OWNER',
+            permissionLevel: 10,
             requiredPermissions: FLAGS.MANAGE_ROLES,
             category: 'settings'
         })

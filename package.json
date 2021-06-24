@@ -12,15 +12,14 @@
     "Aria <ArEo#1245>"
   ],
   "dependencies": {
+    "@aero/centra": "^1.0.6",
     "@aero/tags": "^3.0.10",
-    "axios": "^0.21.1",
     "canvacord": "^5.2.1",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "foxxie": "^0.0.7-1",
+    "foxxie": "^0.0.7-2",
     "lodash": "^4.17.21",
     "mongoose": "^5.12.3",
-    "novelcovid": "^3.0.0",
-    "wolfram-alpha-node": "^0.0.3"
+    "novelcovid": "^3.0.0"
   }
 }

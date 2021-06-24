@@ -1,4 +1,4 @@
-const axios = require('axios');
+const req = require('@aero/centra');
 const Discord = require('discord.js');
 const { Command } = require('foxxie');
 
@@ -16,12 +16,15 @@ module.exports = class extends Command {
   async run(msg) {
 
       const loading = await msg.responder.loading();
-      const img = await axios.get(`https://randomfox.ca/floof/`).catch(() => null);
+      const { image } = await req(`https://randomfox.ca/floof/`)
+            .header('Accept', 'application/json')
+            .json()
+            .catch(() => null);
 
       const embed = new Discord.MessageEmbed()
           .setTitle(msg.language.get("COMMAND_FOX_TITLE"))
           .setColor(msg.guild.me.displayColor)
-          .setImage(img.data.image)
+          .setImage(image)
           .setFooter(msg.language.get("COMMAND_FOX_FOOTER"))
           .setTimestamp()
 

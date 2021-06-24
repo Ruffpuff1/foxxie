@@ -1,4 +1,4 @@
-const axios = require("axios");
+const req = require('@aero/centra'); 
 const { Command } = require('foxxie');
 
 module.exports = class extends Command {
@@ -10,12 +10,19 @@ module.exports = class extends Command {
             description: language => language.get('COMMAND_TOPIC_DESCRIPTION'),
             category: 'fun',
         })
+
+        this.baseURL = 'https://www.conversationstarters.com/random.php';
     }
 
     async run(msg) {
+        const text = await req(this.baseURL)
+            .text()
+            .then(this.process);
+        
+        msg.channel.send(text);
+    }
 
-        const result = await axios.get(`https://www.conversationstarters.com/random.php`)
-        if (!result) return msg.responder.error();
-        msg.channel.send(result.data.slice(39));
+    process(text) {
+        return text.slice(39);
     }
 }

@@ -1,4 +1,4 @@
-const axios = require('axios');
+const req = require('@aero/centra');
 const { Command } = require('foxxie');
 
 module.exports = class extends Command {
@@ -14,13 +14,13 @@ module.exports = class extends Command {
     async run(msg) {
 
         const loading = await msg.responder.loading();
-        const txt = await axios.get('https://some-random-api.ml/facts/fox').catch(() => null);
+        const { fact } = await req('https://some-random-api.ml/facts/fox').json().catch(() => null);
 
-        if (!txt) {
+        if (!fact) {
             msg.responder.error('COMMAND_FOXFACT_NOFACT');
             return loading.delete();
         }
-        msg.channel.send(txt.data.fact);
+        msg.channel.send(fact);
         return loading.delete();
     }
 }

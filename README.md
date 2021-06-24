@@ -13,7 +13,7 @@ If you have any questions regarding the project you can join his [support server
 
 ## Features
 
-* Over 100 commands and 190 aliases.
+* Over 100 commands and 220 aliases.
 * Fully scripted in English and partially scripted in Spanish.
 * Utility, roleplay, reminders, moderation.
 
@@ -22,7 +22,6 @@ If you have any questions regarding the project you can join his [support server
 Foxxie has many dependencies and tools that he uses to function properly. A full list can be viewed in the package.json file however here are some of the most important:
 - [Discord.js](https://discord.js.org) - A powerful and easy to use wrapper around the Discord API
 - [MongoDB](https://www.mongodb.com/) - A general purpose, document-based, distributed NoSQL database paired with [mongoose](https://mongoosejs.com).
-- [Axios](https://www.npmjs.com/package/axios) - Promise based HTTP client for the browser and node.js.
 
 ### Inspiration and credit.
 

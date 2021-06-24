@@ -10,7 +10,7 @@ module.exports = class extends Command {
             aliases: ['r'],
             description: language => language.get('COMMAND_RELOAD_DESCRIPTION'),
             usage: '[Piece]',
-            permissions: 'CLIENT_OWNER',
+            permissionLevel: 10,
             category: 'admin',
         })
     }

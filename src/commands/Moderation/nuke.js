@@ -8,7 +8,7 @@ module.exports = class extends Command {
             aliases: ['snap'],
             description: language => language.get('COMMAND_NUKE_DESCRIPTION'),
             usage: '(Channel) (Reason)',
-            permissions: 'GUILD_OWNER',
+            permissionLevel: 6,
             category: 'moderation'
         })
     }

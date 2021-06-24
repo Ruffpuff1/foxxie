@@ -7,7 +7,7 @@ module.exports = class extends Command {
             name: 'reboot',
             aliases: ['restart'],
             description: language => language.get('COMMAND_REBOOT_DESCRIPTION'),
-            permissions: 'CLIENT_OWNER',
+            permissionLevel: 10,
             category: 'admin'
         })
     }

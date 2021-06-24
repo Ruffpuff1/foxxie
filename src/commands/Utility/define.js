@@ -1,4 +1,4 @@
-const { get } = require('axios');
+const req = require('@aero/centra');
 require('dotenv').config();
 const { Command } = require('foxxie');
 
@@ -12,24 +12,43 @@ module.exports = class extends Command {
             usage: '[Word]',
             category: 'utility'
         })
+
+        this.baseURL = 'https://www.dictionaryapi.com/api/v3/references/collegiate/json/';
     }
 
-    async run(message, [word]) {
-        let msg;
-        if (!word) msg = await message.responder.error('COMMAND_DEFINE_NOARGS');
-        if (word) return this._response(message, msg, word.toLowerCase());
-        if (msg) return message.awaitResponse(message, msg, this._response)
-    }
+    async run(msg, [word]) {
+        const loading = await msg.responder.loading();
+        const res = await req(this.baseURL).path(word).query('key', process.env.WEBSTERAPI).json();
 
-    async _response(message, msg, word){
-        if (msg) msg = await msg.edit(message.language.get("MESSAGE_LOADING"));
-        if (!msg) msg = await message.responder.loading();
+        const definition = res[0];
+		if (!definition) {
+            msg.responder.error('COMMAND_DEFINE_NOTFOUND');
+            return loading.delete();
+        }
 
-        let res = await get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${process.env.WEBSTERAPI}`)
-        if (!res || !res.data[0] || !res.data[0]['hwi']) return msg.edit(message.language.get('COMMAND_DEFINE_NORESULTS', word))
+        msg.channel.send([
+            `(${[definition.fl, ...(definition?.lbs || [])].join(', ')}) **${definition.hwi.hw}** [${definition.hwi.prs[0].mw}]`,
+            definition.def
+                .map(def => def.sseq.flat(1)
+                    .map(sseq => sseq[1])
+                    .filter(sense => sense.dt)
+                    .map(sense => {
+                        const output = [];
 
-        msg.edit(`(${res.data[0]['fl']}) **${res.data[0]['hwi']['hw'].replace(/\*/gi, '\\*')}** [${res.data[0]['hwi']['prs'][0]['mw']}]
-- ${res.data[0]['shortdef'][0]}\n${res.data[0]['shortdef'][1]
-?`- ${res.data[0]['shortdef'][1]}`:''}`)
+                        const definitions = sense.dt.find(t => t[0] === 'text');
+                        if (definitions) {
+                            const parsed = definitions[1].replace(/{.+?}/g, '');
+                            if (parsed.replace(/\W+/g, '').length === 0) return false;
+                            output.push(`- ${parsed}`);
+                        }
+                        return output.join('\n');
+                    })
+                    .filter(i => !!i)
+                    .slice(0, 3)
+                    .join('\n')
+                ).join('\n')
+        ].join('\n'));
+        
+        return loading.delete();
     }
 }

@@ -7,7 +7,7 @@ module.exports = class extends Command {
             name: 'enable',
             description: language => language.get('COMMAND_ENABLE_DESCRIPTION'),
             usage: '[Piece]',
-            permissions: 'CLIENT_OWNER',
+            permissionLevel: 10,
             category: 'admin'
         })
     }

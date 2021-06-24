@@ -1,4 +1,4 @@
-const axios = require('axios');
+const req = require('@aero/centra');
 const { MessageEmbed } = require('discord.js');
 const { Command } = require('foxxie');
 
@@ -16,12 +16,15 @@ module.exports = class extends Command {
     async run(msg) {
 
         const loading = await msg.responder.loading();
-        const img = await axios.get(`https://api.thecatapi.com/v1/images/search`).catch(() => null);
+        const [{ url }] = await req(`https://api.thecatapi.com/v1/images/search`)
+            .header('Accept', 'application/json')
+            .json()
+            .catch(() => null);
 
         const embed = new MessageEmbed()
             .setTitle(msg.language.get("COMMAND_CAT_TITLE"))
             .setColor(msg.guild.me.displayColor)
-            .setImage(img.data[0].url)
+            .setImage(url)
             .setFooter(msg.language.get("COMMAND_CAT_FOOTER"))
             .setTimestamp()
 

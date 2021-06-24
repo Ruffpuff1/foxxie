@@ -9,7 +9,7 @@ module.exports = class extends Command {
             aliases: ['ev'],
             description: language => language.get('COMMAND_EVAL_DESCRIPTION'),
             usage: '(-d=Number) (Code) (-a | -s | -m)',
-            permissions: 'CLIENT_OWNER',
+            permissionLevel: 10,
             runIn: ['text', 'dm'],
             category: 'admin',
         })

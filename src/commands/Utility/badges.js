@@ -8,7 +8,7 @@ module.exports = class extends Command {
             name: 'badges',
             aliases: ['bd', 'userflags'],
             description: language => language.get('COMMAND_BADGES_DESCRIPTION'),
-            permissions: 'CLIENT_OWNER',
+            permissionLevel: 10,
             category: 'utility'
         })
     }

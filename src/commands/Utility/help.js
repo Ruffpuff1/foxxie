@@ -38,7 +38,7 @@ module.exports = class extends Command {
             }
         
             command = this.client.commands?.get(command);
-            if ((blocked?.includes(command?.name) && !this.client.owners.has(msg.author)) || (command?.category === 'admin' && !this.client.owners.has(msg.author))) command = null;
+            if ((blocked?.includes(command?.name) && !this.client.owners.has(msg.author)) || (command?.permissionLevel >= 7 && !this.client.owners.has(msg.author))) command = null;
             if (!command) return msg.responder.error('COMMAND_HELP_NOTVALID');
 
             return msg.channel.send(embed
@@ -46,7 +46,7 @@ module.exports = class extends Command {
                 .setDescription(`${Util.isFunction(command.description)
                         ? command.description(msg.language)
                         : command.description
-                    }${command.permissions && command.permissions !== 'GUILD_OWNER' && command.permissions !== 'CLIENT_OWNER'
+                    }${command.permissions
                         ? `\n\n${bold`${msg.language.get('COMMAND_HELP_PERMISSIONS')}`}: ${code`${command.permissions}`}`
                         : ''
                     }`)
@@ -70,8 +70,8 @@ module.exports = class extends Command {
         if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret');
 
         categories.forEach(c => 
-            embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).filter(cmd => !fullMenu ? (cmd.permissions !== 'CLIENT_OWNER') : cmd).length})`}`, 
-                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).filter(cmd => !fullMenu ? (cmd.permissions !== 'CLIENT_OWNER') : cmd).map(cmd => code`${cmd.name}`).join(', ')))
+            embed.addField(`${emojis.categories[c]} ${bold`${Util.toTitleCase(c)} (${this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).filter(cmd => !fullMenu ? !(cmd.permissionLevel >= 7) : cmd).length})`}`, 
+                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).filter(cmd => !fullMenu ? !(cmd.permissionLevel >= 7) : cmd).map(cmd => code`${cmd.name}`).join(', ')))
 
         return msg.channel.send(embed);
     }

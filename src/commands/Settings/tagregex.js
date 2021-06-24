@@ -9,7 +9,7 @@ module.exports = class extends Command {
             aliases: ['rt'],
             description: language => language.get('COMMAND_TAGREGEX_DESCRIPTION'),
             usage: '[add | remove] [Tag] [...Content]',
-            permissions: 'CLIENT_OWNER',
+            permissionLevel: 10,
             category: 'settings'
         })
     }
