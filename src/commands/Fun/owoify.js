@@ -14,15 +14,13 @@ module.exports = class extends Command {
 
     async run(msg, args) {
 
-        let remove = false;
         const text = args.slice(0).join(' ') || msg.language.get('COMMAND_OWOIFY_NOARGS');
-        if (/-delete|-d/i.test(msg.content)) remove = true;
 
-        const content = owoify(text.replace(/-delete|-d/i, '').slice(0, 2000))
+        const content = owoify(text).slice(0, 2000)
 			.replace(/`/g, '\\`')
             .replace(/:pweading_face:/gi, '🥺');
 
-        if (remove) msg.delete()
+        msg.delete()
 		return msg.channel.send(content);
     }
 }

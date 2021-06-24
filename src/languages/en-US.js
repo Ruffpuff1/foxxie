@@ -227,7 +227,7 @@ module.exports = class extends Language {
             COMMAND_HUG_FOOTER: (sender, reciever, authNum, recNum) => `${reciever} has been hugged ${recNum} times and ${sender} hugged others ${authNum} times`,
             COMMAND_HUG_MULTIPLE: (sender, reciever) => `${bold`${sender}`} gives hugs to ${bold`${reciever}`}`,
             COMMAND_HUG_SINGLE: (sender, reciever) => `${bold`${sender}`} is hugging ${bold`${reciever}`}`,
-            COMMAND_KILL_DESCRIPTION: `Kill someone (dont worry the cops won't see you).`,
+            COMMAND_KILL_DESCRIPTION: `Kill someone (dont worry the cops won't find you).`,
             COMMAND_KILL_FOOTER: (sender, reciever, authNum, recNum) => `${sender} killed others ${authNum} times and ${reciever} got killed ${recNum} times (how is that possible?)`,
             COMMAND_KILL_MULTIPLE: (sender, reciever) => `${bold`${sender}`} murders ${bold`${reciever}`}`,
             COMMAND_KILL_SINGLE: (sender, reciever) => `${bold`${sender}`} is trying to kill ${bold`${reciever}`}`,

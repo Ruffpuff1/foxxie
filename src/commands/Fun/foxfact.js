@@ -6,6 +6,7 @@ module.exports = class extends Command {
     constructor(...args) {
         super(...args, {
             name: 'foxfact',
+            description: language => language.get('COMMAND_FOXFACT_DESCRIPTION'),
             aliases: ['ff', 'rufffact'],
             category: 'fun'
         })
