@@ -624,9 +624,6 @@ module.exports = class extends Language {
                 `[Vote](${this.client.options.topggURL})`
             ].join(' | '),
             COMMAND_INVITE_TITLE: `Hey hey, here's some useful links`,
-            COMMAND_MATH_DESCRIPTION: `Allows me to calculate a query using mathjs. Examples of queries include the following: ${code`sqrt(3^2 + 4^2)`} to calculate the square root of the given input. ${code`cos(45 deg)`} calculating complex expressions like cos, sin, tan. ${code`2 inch to cm`} for basic unit conversion. ${code`50 + 100`} for basic mathematical expressions (using  ${code`+, -, *, /`}).`,
-            COMMAND_MATH_INVALID: prefix => `${bold`Sorry,`} I can't calculate that expression, for examples of valid expressions try ${code`${prefix}help math`}.`,
-            COMMAND_MATH_NOARGS: `${bold`Hey,`} you need to enter something to calculate.`,
             COMMAND_PING: `Ping?`,
             COMMAND_PING_DESCRIPTION: `Runs a connection test to Discord.`,
             COMMAND_PINGPONG: (total, discord, ws) => `🏓 ${bold`Pong!`} Took ${bold`${total}`}ms (Discord latency: ${bold`${discord}`}ms. Network latency: ${bold`${ws}`}ms.)`,
