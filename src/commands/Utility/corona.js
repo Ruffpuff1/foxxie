@@ -33,7 +33,7 @@ module.exports = class extends Command {
         if (stats.message) { loading.delete(); return message.responder.error('COMMAND_CORONA_NO_DATA', search) }
 
         embed
-            .setTitle(message.language.get('COMMAND_CORONA_EMBED_TITLE', search || 'Global'))
+            .setTitle(message.language.get('COMMAND_CORONA_TITLE', search || 'Global'))
             .addField(message.language.get('COMMAND_CORONA_CASES_TITLE'), message.language.get('COMMAND_CORONA_CASES_VALUE', stats))
             .addField(message.language.get('COMMAND_CORONA_DEATHS_TITLE'), message.language.get('COMMAND_CORONA_DEATHS_VALUE', stats))
             .addField(message.language.get('COMMAND_CORONA_RECOVERIES_TITLE'), message.language.get('COMMAND_CORONA_RECOVERIES_VALUE', stats))
@@ -49,7 +49,7 @@ module.exports = class extends Command {
         if (stats.message) { loading.delete(); return message.responder.error('COMMAND_CORONA_NO_DATA', search) }
 
         embed
-            .setTitle(message.language.get('COMMAND_CORONA_EMBED_TITLE', search))
+            .setTitle(message.language.get('COMMAND_CORONA_TITLE', search))
             .addField(message.language.get('COMMAND_CORONA_CASES_TITLE'), message.language.get('COMMAND_CORONA_CASES_VALUE', stats))
             .addField(message.language.get('COMMAND_CORONA_DEATHS_TITLE'), message.language.get('COMMAND_CORONA_DEATHS_VALUE', stats))
             .addField(message.language.get('COMMAND_CORONA_RECOVERIES_TITLE'), message.language.get('COMMAND_CORONA_RECOVERIES_VALUE', stats))
@@ -65,7 +65,7 @@ module.exports = class extends Command {
         if (stats.message) { loading.delete(); return message.responder.error('COMMAND_CORONA_NO_DATA', search) }
 
         embed
-            .setTitle(message.language.get('COMMAND_CORONA_EMBED_TITLE', search))
+            .setTitle(message.language.get('COMMAND_CORONA_TITLE', search))
             .addField(message.language.get('COMMAND_CORONA_CASES_TITLE'), message.language.get('COMMAND_CORONA_CASES_VALUE', stats))
             .addField(message.language.get('COMMAND_CORONA_DEATHS_TITLE'), message.language.get('COMMAND_CORONA_DEATHS_VALUE', stats))
             .addField(message.language.get('COMMAND_CORONA_RECOVERIES_TITLE'), message.language.get('COMMAND_CORONA_RECOVERIES_VALUE', stats))

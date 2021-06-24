@@ -260,7 +260,7 @@ module.exports = class extends Command {
 	_textChannel(msg, channel, embed) {
 
 		return embed
-			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TOPIC'), channel.topic)
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TOPIC'), msg.language.get('COMMAND_INFO_CHANNEL_CATEGORYTYPE', channel.topic, channel.topic))
 			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TYPE'), Util.toTitleCase(channel.type), true)
 			.addField(msg.language.get('COMMAND_INFO_CHANNEL_CATEGORY'), msg.language.get('COMMAND_INFO_CHANNEL_CATEGORYTYPE', channel.parent, channel.parent?.name), true)
 			.addField(zws, zws, true)

@@ -7,7 +7,7 @@ module.exports = class extends Command {
             name: 'embed',
             aliases: ['broadcast', 'bc', 'announce'],
             description: language => language.get('COMMAND_EMBED_DESCRIPTION'),
-            usage: '(Channel) [JSON]',
+            usage: '(Channel) [...JSON]',
             permissions: 'ADMINISTRATOR',
             category: 'utility'
         })

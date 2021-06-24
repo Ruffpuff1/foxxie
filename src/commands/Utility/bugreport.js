@@ -1,4 +1,3 @@
-const { owner } = require('../../../config/foxxie');
 const { Command } = require('foxxie');
 
 module.exports = class extends Command {
@@ -8,7 +7,7 @@ module.exports = class extends Command {
             name: 'bugreport',
             aliases: ['bug'],
             description: language => language.get('COMMAND_BUGREPORT_DESCRIPTION'),
-            usage: '[Bug]',
+            usage: '[...Bug]',
             category: 'utility'
         }) 
     }
@@ -24,7 +23,7 @@ module.exports = class extends Command {
     async _response(message, msg, bug) {
 
         if (msg) msg.delete();
-        await message.client.owners.forEach(o => o.send(`Sent by **${message.author.tag}** (ID: ${message.author.id})\n**Guild**: ${message.guild.name} (ID: ${message.guild.id})\n\`\`\`${bug}\`\`\``).catch(() => null));
+        await this.client.owners.forEach(o => o.send(`Sent by **${message.author.tag}** (ID: ${message.author.id})\n**Guild**: ${message.guild.name} (ID: ${message.guild.id})\n\`\`\`${bug}\`\`\``).catch(() => null));
         return message.responder.success();
     }
 }

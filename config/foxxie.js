@@ -13,7 +13,7 @@ module.exports = {
     communityServer: 'http://ruff.cafe/community',
     supportServer: 'http://foxxie.ruff.cafe/support',
     inviteURL: 'http://foxxie.ruff.cafe/invite',
-    topggURL: 'http://foxxie.ruff.cafe/vote',
+    topggURL: 'https://is.gd/foxxie_topgg',
     lgbtURL: 'https://api.ravy.lgbt',
     shards: 'auto',
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],

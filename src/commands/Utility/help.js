@@ -9,7 +9,7 @@ module.exports = class extends Command {
             name: 'help',
             aliases: ['commands', 'h'],
             description: language => language.get('COMMAND_HELP_DESCRIPTION'),
-            usage: 'fox help (Command | usage)',
+            usage: '(Command | usage)',
             category: 'utility',
         })
     }

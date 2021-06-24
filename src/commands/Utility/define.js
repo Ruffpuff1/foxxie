@@ -21,21 +21,21 @@ module.exports = class extends Command {
         const res = await req(this.baseURL).path(word).query('key', process.env.WEBSTERAPI).json();
 
         const definition = res[0];
-		if (!definition) {
+		if (!definition || !definition.def || !definition.fl || !definition.hwi) {
             msg.responder.error('COMMAND_DEFINE_NOTFOUND');
             return loading.delete();
         }
 
         msg.channel.send([
-            `(${[definition.fl, ...(definition?.lbs || [])].join(', ')}) **${definition.hwi.hw}** [${definition.hwi.prs[0].mw}]`,
-            definition.def
-                .map(def => def.sseq.flat(1)
+            `(${[definition.fl, ...(definition?.lbs || [])].join(', ')}) **${definition.hwi?.hw}** [${definition.hwi?.prs[0]?.mw}]`,
+            definition?.def
+                .map(def => def?.sseq.flat(1)
                     .map(sseq => sseq[1])
                     .filter(sense => sense.dt)
                     .map(sense => {
                         const output = [];
 
-                        const definitions = sense.dt.find(t => t[0] === 'text');
+                        const definitions = sense?.dt.find(t => t[0] === 'text');
                         if (definitions) {
                             const parsed = definitions[1].replace(/{.+?}/g, '');
                             if (parsed.replace(/\W+/g, '').length === 0) return false;
@@ -46,7 +46,7 @@ module.exports = class extends Command {
                     .filter(i => !!i)
                     .slice(0, 3)
                     .join('\n')
-                ).join('\n')
+                ).slice(0, 3).join('\n')
         ].join('\n'));
         
         return loading.delete();
