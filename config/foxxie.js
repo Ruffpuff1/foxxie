@@ -1,9 +1,10 @@
-const { version } = require('~/package.json')
+const { version } = require('~/package.json');
+const host = require('os').hostname();
 
 module.exports = {
     prefix: {
         production: '\\.',
-        development: 'a\\.'
+        development: host === 'Foxxie' ? 'd\\.' : 'a\\.'
     },
     version,
     language: 'en-US',
