@@ -2,8 +2,9 @@
  * Co-authored by Ruff <Ruffpuff#0017> (http://ruff.cafe)
  * Co-authored by Aria <ArEo#1245>
  */
-const { Util, Language, bold, code, underline, italic } = require('foxxie');
-const { emojis: { infinity, perms: { notSpecified, granted }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('../../lib/util/constants');
+ const { Util, Language } = require('foxxie');
+ const { italic, underline, bold, code } = require('@foxxie/md-tags');
+ const { emojis: { infinity, perms: { notSpecified, granted }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('../../lib/util/constants');
 
 module.exports = class extends Language {
 

@@ -15,7 +15,7 @@ module.exports = class extends Command {
 
     async run(msg) {
 
-        const member = msg.members ? msg.members[0] : msg.member;
+        const member = msg.members.shift() || msg.member;
         const loading = await msg.responder.loading();
         const stats = await member.user.settings.get(`servers.${msg.guild.id}.modStats`);
 
