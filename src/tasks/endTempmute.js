@@ -1,5 +1,5 @@
 const { Task } = require('foxxie');
-const MultiModerationCommand = require('../../lib/structures/MultiModerationCommand');
+const MultiModerationCommand = require('~/lib/structures/MultiModerationCommand');
 
 module.exports = class extends Task {
 

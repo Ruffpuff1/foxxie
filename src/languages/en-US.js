@@ -4,7 +4,7 @@
  */
  const { Util, Language } = require('foxxie');
  const { italic, underline, bold, code } = require('@foxxie/md-tags');
- const { emojis: { infinity, perms: { notSpecified, granted }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('../../lib/util/constants');
+ const { emojis: { infinity, perms: { notSpecified, granted }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('~/lib/util/constants');
 
 module.exports = class extends Language {
 

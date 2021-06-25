@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "@aero/centra": "^1.0.6",
+    "@aero/require": "^1.0.3",
     "@aero/tags": "^3.0.10",
     "@foxxie/md-tags": "^1.0.1",
     "canvacord": "^5.2.1",

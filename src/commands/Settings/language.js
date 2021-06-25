@@ -1,5 +1,5 @@
 const { Command } = require('foxxie');
-const { language } = require('../../../lib/util/constants').emojis;
+const { language } = require('~/lib/util/constants').emojis;
 
 module.exports = class extends Command {
 

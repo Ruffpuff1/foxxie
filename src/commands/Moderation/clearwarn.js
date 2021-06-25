@@ -1,4 +1,4 @@
-const Command = require('../../../lib/structures/ModerationCommand');
+const Command = require('~/lib/structures/ModerationCommand');
 
 module.exports = class extends Command {
 

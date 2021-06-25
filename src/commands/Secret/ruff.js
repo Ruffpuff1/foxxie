@@ -1,5 +1,5 @@
 const { Command } = require('foxxie');
-const { emojis: { secretCommands: { ruff } } } = require('../../../lib/util/constants');
+const { emojis: { secretCommands: { ruff } } } = require('~/lib/util/constants');
 
 module.exports = class extends Command {
 

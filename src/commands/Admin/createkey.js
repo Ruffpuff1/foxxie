@@ -1,4 +1,4 @@
-const { badges } = require('../../../lib/util/constants');
+const { badges } = require('~/lib/util/constants');
 const { Command, Util, randomBytes } = require('foxxie');
 
 module.exports = class extends Command {

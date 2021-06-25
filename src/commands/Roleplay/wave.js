@@ -1,4 +1,4 @@
-const RoleplayCommand = require('../../../lib/structures/RoleplayCommand');
+const RoleplayCommand = require('~/lib/structures/RoleplayCommand');
 
 module.exports = class extends RoleplayCommand {
 

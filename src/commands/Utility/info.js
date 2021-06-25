@@ -1,5 +1,5 @@
 const { MessageEmbed, Permissions: { FLAGS }, Role, GuildMember, Emoji, Channel, User } = require('discord.js');
-const { badges, color: { BAD, VERY_BAD, SUPER_BAD } } = require('../../../lib/util/constants');
+const { badges, color: { BAD, VERY_BAD, SUPER_BAD } } = require('~/lib/util/constants');
 const { Command, Duration, Timestamp, zws, Util } = require('foxxie');
 
 module.exports = class extends Command {

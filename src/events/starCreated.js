@@ -1,6 +1,6 @@
-const { Event, bold, LINK_REGEX: { ruff, imgur, discord } } = require('foxxie');
+const { Event, LINK_REGEX: { ruff, imgur, discord } } = require('foxxie');
 const { MessageEmbed } = require('discord.js');
-const { emojis: { starboard: { tier0, tier1, tier2, tier3 } }, color: { TCS_STARBOARD } } = require('../../lib/util/constants');
+const { emojis: { starboard: { tier0, tier1, tier2, tier3 } }, color: { TCS_STARBOARD } } = require('~/lib/util/constants');
 
 module.exports = class extends Event {
 
@@ -22,7 +22,7 @@ module.exports = class extends Event {
                 .setImage(reaction.message.attachments.size > 0  ? reaction.message.attachments.array()[0].url : '')
                 .setDescription(`\n${reaction.message.content ? reaction.message.content : ''}\n\n${
                     embedEmoji
-                } ${bold`${reaction.count}`} | ${reaction.message.channel} | [${language.get('EVENT_STARCREATED_MESSAGE')
+                } **${reaction.count}** | ${reaction.message.channel} | [${language.get('EVENT_STARCREATED_MESSAGE')
                 }](${reaction.message.url})`)
 
         let edited = await reaction.message.client.events.get('starUpdated').run(reaction, channel, embed);
@@ -31,7 +31,7 @@ module.exports = class extends Event {
         if (ruff.images.test(reaction.message.content) || imgur.image.test(reaction.message.content) || discord.cdn.test(reaction.message.content))
             embed
                 .setImage(reaction.message.content)
-                .setDescription(`\n${embedEmoji} ${bold`${reaction.count}`} | ${reaction.message.channel 
+                .setDescription(`\n${embedEmoji} **${reaction.count}** | ${reaction.message.channel 
                 } | [${language.get('EVENT_STARCREATED_MESSAGE')}](${reaction.message.url})`)
 
         let sent = await channel.send(embed).catch(() => null);

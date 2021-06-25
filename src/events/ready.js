@@ -1,4 +1,4 @@
-const { mongoDB } = require('../../lib/Database');
+const { mongoDB } = require('~/lib/Database');
 const { Team } = require('discord.js');
 let retries = 0;
 const { Event, Util } = require('foxxie');

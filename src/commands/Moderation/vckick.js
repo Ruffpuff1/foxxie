@@ -1,4 +1,4 @@
-const Command = require('../../../lib/structures/MultiModerationCommand');
+const Command = require('~/lib/structures/MultiModerationCommand');
 
 module.exports = class extends Command {
 

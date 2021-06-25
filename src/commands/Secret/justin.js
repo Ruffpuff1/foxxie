@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { Command } = require('foxxie');
-const { justinName } = require('../../../lib/util/constants');
+const { justinName } = require('~/lib/util/constants');
 
 module.exports = class extends Command {
 

@@ -1,4 +1,4 @@
-const { emojis: { starboard: { tier0, tier1, tier2, tier3 } } } = require('../../lib/util/constants');
+const { emojis: { starboard: { tier0, tier1, tier2, tier3 } } } = require('~/lib/util/constants');
 const { Event, LINK_REGEX: { ruff, imgur, discord } } = require('foxxie');
 let edited = false;
 

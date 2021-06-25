@@ -2,7 +2,6 @@
  * Co-authored by Ruff <Ruffpuff#0017> (http://ruff.cafe)
  * Co-authored by ravy (https://ravy.pink)
  */
-require('dotenv').config();
 const req = require('@aero/centra');
 const { Command } = require('foxxie');
 
