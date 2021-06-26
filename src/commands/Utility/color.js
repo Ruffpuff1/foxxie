@@ -1,5 +1,5 @@
 const { Command } = require('@foxxie/tails');
-const { color } = require('canvacord').Canvas;
+const req = require('@aero/centra');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 
 module.exports = class extends Command {
@@ -18,7 +18,10 @@ module.exports = class extends Command {
 
         if (!hex || !/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex)) return msg.responder.error('COMMAND_COLOR_NOCOLOR');
         const loading = await msg.responder.loading();
-        const image = await color(hex.startsWith('#') ? hex : `#${hex}`);
+        const image = await req(this.client.options.colorURL)
+            .path('color')
+            .query('color', hex.startsWith('#') ? hex : `#${hex}`)
+            .raw();
 
         const embed = new MessageEmbed()
             .setTitle(msg.language.get('COMMAND_COLOR', hex))

@@ -17,7 +17,6 @@
     "@aero/tags": "^3.0.10",
     "@foxxie/md-tags": "^1.0.1",
     "@foxxie/tails": "^0.0.3-2",
-    "canvacord": "^5.2.1",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "foxxie": "^0.0.7-2",

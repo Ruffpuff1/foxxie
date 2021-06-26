@@ -16,6 +16,7 @@ module.exports = {
     inviteURL: 'http://foxxie.ruff.cafe/invite',
     topggURL: 'https://is.gd/foxxie_topgg',
     lgbtURL: 'https://api.ravy.lgbt',
+    colorURL: 'https://color.aero.bot',
     shards: 'auto',
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
     typing: true,
