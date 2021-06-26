@@ -52,7 +52,7 @@ module.exports = class extends Command {
                         : ''
                     }`)
                 .addField(bold`${msg.language.get('COMMAND_HELP_USAGE')}${command.runIn?.includes('dm') ? '' : ` (${msg.language.get('COMMAND_HELP_SERVERONLY')})`}`, this.buildUsage(command, await msg.guild.settings.get('prefixes')))
-                .addField(bold`${msg.language.get('COMMAND_HELP_CATEGORY')}`, code`${command.category}.${command.name}`)
+                .addField(bold`${msg.language.get('COMMAND_HELP_CATEGORY')}`, code`${command.fullCategory.join('.')}.${command.name}`.toLowerCase())
                 
             );
         }
