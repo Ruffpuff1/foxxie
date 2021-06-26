@@ -1,6 +1,7 @@
 const { MessageEmbed, Permissions: { FLAGS }, Role, GuildMember, Emoji, Channel, User } = require('discord.js');
 const { badges, color: { BAD, VERY_BAD, SUPER_BAD } } = require('~/lib/util/constants');
-const { Command, Duration, Timestamp, zws, Util } = require('foxxie');
+const { Command, util } = require('@foxxie/tails');
+const { Timestamp, zws, Duration } = require('foxxie');
 
 module.exports = class extends Command {
 
@@ -249,7 +250,7 @@ module.exports = class extends Command {
 	_voiceChannel(msg, channel, embed) {
 
 		return embed
-			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TYPE'), Util.toTitleCase(channel.type), true)
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TYPE'), util.toTitleCase(channel.type), true)
 			.addField(msg.language.get('COMMAND_INFO_CHANNEL_CATEGORY'), msg.language.get('COMMAND_INFO_CHANNEL_CATEGORYTYPE', channel.parent, channel.parent?.name), true)
 			.addField('\u200B', '\u200B', true)
 			.addField(msg.language.get('COMMAND_INFO_CHANNEL_USERLIMIT'), msg.language.get('COMMAND_INFO_CHANNEL_USERLIMITNUMBER', channel.userLimit === 0, channel.userLimit), true)
@@ -261,7 +262,7 @@ module.exports = class extends Command {
 
 		return embed
 			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TOPIC'), msg.language.get('COMMAND_INFO_CHANNEL_CATEGORYTYPE', channel.topic, channel.topic))
-			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TYPE'), Util.toTitleCase(channel.type), true)
+			.addField(msg.language.get('COMMAND_INFO_CHANNEL_TYPE'), util.toTitleCase(channel.type), true)
 			.addField(msg.language.get('COMMAND_INFO_CHANNEL_CATEGORY'), msg.language.get('COMMAND_INFO_CHANNEL_CATEGORYTYPE', channel.parent, channel.parent?.name), true)
 			.addField(zws, zws, true)
 			.addField(':underage: **NSFW**', msg.language.get('COMMAND_INFO_CHANNEL_ISNSFW', channel.nsfw), true)

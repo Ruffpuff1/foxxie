@@ -2,7 +2,7 @@
  * Co-authored by Ruff <Ruffpuff#0017> (http://ruff.cafe)
  * Co-authored by ravy (https://ravy.pink)
  */
-const { ms, Command, version: foxxieVersion } = require('foxxie');
+const { ms, Command, version: foxxieVersion } = require('@foxxie/tails');
 const { hostname, totalmem, cpus, loadavg } = require('os');
 const { version: discordVersion, MessageEmbed } = require('discord.js');
 

@@ -1,4 +1,4 @@
-const { Event } = require('foxxie');
+const { Event } = require('@foxxie/tails');
 const { Permissions: { FLAGS } } = require('discord.js')
 
 module.exports = class extends Event {

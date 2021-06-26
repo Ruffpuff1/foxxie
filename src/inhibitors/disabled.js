@@ -1,4 +1,4 @@
-const { Inhibitor } = require('foxxie');
+const { Inhibitor } = require('@foxxie/tails');
 
 module.exports = class extends Inhibitor {
 
@@ -11,5 +11,6 @@ module.exports = class extends Inhibitor {
 	async run(_, command) {
         const blocked = await this.client.settings.get('blockedPieces');
 		if (blocked?.includes(command.name)) return true;
+        if (command.disabled) return true;
 	}
 };

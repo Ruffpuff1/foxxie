@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { Task } = require('foxxie');
+const { Task } = require('@foxxie/tails');
 
 module.exports = class extends Task {
 

@@ -1,4 +1,5 @@
-const { Event, LINK_REGEX: { ruff, imgur, discord } } = require('foxxie');
+const { Event } = require('@foxxie/tails');
+const { LINK_REGEX: { ruff, imgur, discord } } = require('foxxie');
 const { MessageEmbed } = require('discord.js');
 const { emojis: { starboard: { tier0, tier1, tier2, tier3 } }, color: { TCS_STARBOARD } } = require('~/lib/util/constants');
 

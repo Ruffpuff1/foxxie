@@ -1,4 +1,4 @@
-const { Command, shorten, custom } = require('foxxie');
+const { Command, shorten, custom } = require('@foxxie/tails');
 
 module.exports = class extends Command {
 

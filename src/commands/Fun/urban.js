@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const req = require('@aero/centra');
-const { Command, Util, MENTION_REGEX: { emoji } } = require('foxxie');
+const { Command, util, MENTION_REGEX: { emoji } } = require('@foxxie/tails');
 
 module.exports = class extends Command {
 
@@ -54,7 +54,7 @@ module.exports = class extends Command {
 			? `${this.splitText(result.example, 1000)}...`
 			: result.example;
 
-        const name = Util.toTitleCase(result.word);
+        const name = util.toTitleCase(result.word);
         
         const embed = new MessageEmbed()
             .setTitle(name)

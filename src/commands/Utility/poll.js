@@ -1,4 +1,5 @@
-const { Command, number } = require('foxxie');
+const { Command } = require('@foxxie/tails');
+const { number } = require('foxxie');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {

@@ -1,5 +1,6 @@
 const { FLAGS } = require('discord.js').Permissions;
-const { Event, Timestamp } = require('foxxie');
+const { Event } = require('@foxxie/tails');
+const { Timestamp } = require('foxxie');
 
 module.exports = class extends Event {
 

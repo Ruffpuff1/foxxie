@@ -1,4 +1,4 @@
-const { Inhibitor } = require('foxxie');
+const { Inhibitor } = require('@foxxie/tails');
 
 module.exports = class extends Inhibitor {
 

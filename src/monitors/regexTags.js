@@ -1,13 +1,11 @@
-const { Monitor } = require('foxxie');
+const { Monitor } = require('@foxxie/tails');
 const Parser = require('@aero/tags');
 
 module.exports = class extends Monitor {
 
     constructor(...args) {
         super(...args, {
-            monitor: 'regextags',
-            ignoreBots: true, 
-            ignoreSelf: true, 
+            ignoreOthers: false,
             ignoreEdits: false,
         })
 

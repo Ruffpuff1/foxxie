@@ -1,4 +1,4 @@
-const { Command } = require('foxxie');
+const { Command } = require('@foxxie/tails');
 const { User, Role } = require('discord.js')
 
 module.exports = class extends Command {

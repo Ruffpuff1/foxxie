@@ -1,3 +1,20 @@
+/**
+ * Co-authored by Ruff <Ruffpuff#0017> (http://ruff.cafe)
+ * Co-authored by Raindrop <Waindrop | ᓚᘏᗢ#7799>
+ */
+ const { util, Language } = require('@foxxie/tails');
+ const { italic, underline, bold, code } = require('@foxxie/md-tags');
+ const { emojis: { infinity, perms: { notSpecified, granted }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('~/lib/util/constants');
+
+module.exports = class extends Language {
+
+    constructor(...args) {
+        super(...args);
+        this.language = {
+            
+        }
+    }
+}
 // const { credits: { developer, spanishTranslation, additionalHelp }, emojis: { infinity } } = require('../../lib/util/constants')
 // const { topggURL, supportServer, inviteURL, commands, aliases, version } = require('../../config/foxxie')
 // module.exports = {

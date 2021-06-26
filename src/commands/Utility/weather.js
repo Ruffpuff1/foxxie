@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
-const { Command, zws, Timestamp, weatherjs: { find } } = require('foxxie');
+const { Command, weatherjs: { find } } = require('@foxxie/tails');
+const { zws, Timestamp } = require('foxxie');
 
 module.exports = class extends Command {
 

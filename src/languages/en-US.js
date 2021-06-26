@@ -2,7 +2,7 @@
  * Co-authored by Ruff <Ruffpuff#0017> (http://ruff.cafe)
  * Co-authored by Aria <ArEo#1245>
  */
- const { Util, Language } = require('foxxie');
+ const { util, Language } = require('@foxxie/tails');
  const { italic, underline, bold, code } = require('@foxxie/md-tags');
  const { emojis: { infinity, perms: { notSpecified, granted }, covid: { cases, tests, deaths, recoveries }, weather: { temperature, date, humidity, winds, feels, timezone, dayCurrent } }, credits: { developer, spanishTranslation, additionalHelp } } = require('~/lib/util/constants');
 
@@ -20,7 +20,7 @@ module.exports = class extends Language {
             ].join(' '),
 
             // Errors
-            ERROR_GENERIC: (err) => `${bold`Whoops,`} an error occurred: ${Util.codeBlock('js', err)}`,
+            ERROR_GENERIC: (err) => `${bold`Whoops,`} an error occurred: ${util.codeBlock('js', err)}`,
             ERROR_SHORT: err => err,
 
 			ACTIVITY_PLAYING: 'Playing',
@@ -60,8 +60,9 @@ module.exports = class extends Language {
             COMMAND_REBOOT: `${bold`Okay,`} restarting.｡｡｡zzZ`,
             COMMAND_REBOOT_DESCRIPTION: `Restarts my internal process while being run on process manager 2. This command is locked to the bot owner due to obvious reasons.`,
             COMMAND_RELOAD_DESCRIPTION: `Reloads a Foxxie Piece without having to restart the client. This command is locked to the bot owner due to it's special nature.`,
-            COMMAND_RELOAD_ERROR: (name, error) => `${bold`Uh oh,`} failed to reload ${name}${Util.codeBlock('js', error)}`,
-            COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a piece to reload [Command | Monitor | Language ].`,
+            COMMAND_RELOAD_ERROR: (name, error) => `${bold`Uh oh,`} failed to reload ${name}${util.codeBlock('js', error)}`,
+            COMMAND_RELOAD_EVERYTHING: time => `${bold`Successfully`} reloaded ${bold`everything`}. (Took ${time})`,
+            COMMAND_RELOAD_NONE: `${bold`Whoops,`} please specify a something to reload [Store | Piece | everything].`,
             COMMAND_RELOAD_SUCCESS: (name, type, time) => `${bold`Successfully`} reloaded ${type}: ${bold`${name}`}. (Took ${time})`,
             COMMAND_SERVERLIST_DESCRIPTION: `Displays every guild the bot is currently in, along with their Id and membercount. This command is locked to the bot owner due to privacy concerns.`,
             COMMAND_SERVERLIST_FOOTER: (size, page, totalPages) => `${size} total servers\nPage - ${page}/${totalPages}`,
@@ -113,7 +114,7 @@ module.exports = class extends Language {
                 `This command also takes advantage of my message flags feature, adding ${code`-p`} to the message will automatically clear one days worth of the user's messages.\n`,
                 `If a moderation logging channel is set in your server, this command will log there, and send DMs to the users banned, with the provided reason.`
             ].join('\n'),
-            COMMAND_BAN_ERROR: (user, issue) => `${bold`Whoops`} I couldn't ban ${bold`${user}`}:${Util.codeBlock('js', issue)}`,
+            COMMAND_BAN_ERROR: (user, issue) => `${bold`Whoops`} I couldn't ban ${bold`${user}`}:${util.codeBlock('js', issue)}`,
             COMMAND_BAN_NOPERMS: multiple => `${bold`Hey,`} you cannot ban ${multiple ? 'any of the specified users' : 'the specified user'}.`,
             COMMAND_CLEARNOTE_CONFIRM: `${bold`Hey,`} are you sure you want to clear ${bold`all notes`} from this member?`,
             COMMAND_CLEARNOTE_DESCRIPTION: `Remove or clear notes from the specified member. Specify a note Id to clear that specific note, or specify ${code`all`} to clear all notes from that member.\nNotes and their Id's can be seen with the ${code`info`} command.`,
@@ -126,7 +127,7 @@ module.exports = class extends Language {
             COMMAND_CLEARWARN_NONE: `${bold`Sorry,`} this member currently has ${bold`no warnings`} to clear.`,
             COMMAND_CLEARWARN_NOPERMS: `${bold`Hey,`} you cannot clear warnings from the specified member.`,
             COMMAND_KICK_DESCRIPTION: `Kick a member from the server. This will send a DM to the member telling them why they got kicked, along with logging to a moderation channel if one is set.`,
-            COMMAND_KICK_ERROR: (user, issue) => `${bold`Whoops`} I couldn't kick ${bold`${user}`}:${Util.codeBlock('js', issue)}`,
+            COMMAND_KICK_ERROR: (user, issue) => `${bold`Whoops`} I couldn't kick ${bold`${user}`}:${util.codeBlock('js', issue)}`,
             COMMAND_KICK_NOPERMS: multiple => `${bold`Hey,`} you cannot kick ${multiple ? 'any of the specified members' : 'the specified member'}.`,
             COMMAND_LOCK_ALREADY: channel => `${bold`Whoops,`} ${channel} is already locked.`,
             COMMAND_LOCK_DESCRIPTION: `Lets you lock a channel in the event of a raid or downtime. Although this command only updates the @everyone permission, so if you have a role that grants permissions to ${code`SEND_MESSAGES`} users with that role will still be able to speak.`,
@@ -337,10 +338,10 @@ module.exports = class extends Language {
                 `Specify ${code`message`} to set the message I'll send with the disboard reminder. In your message you can also use the variable: ${code`{server}`} for your server's name.`
             ].join('\n\n'),
             COMMAND_DISBOARD_INVALID: `${bold`Please,`} specify a proper use case [channel | message].`,
-            COMMAND_DISBOARD_MESSAGE_NOMESSAGE: `${bold`Right now,`} there isn't a disboard message set. For now I'll use my default: ${Util.codeBlock('', 'Time to bump the server on disboard. Use the command `!d bump` and I\'ll notify you in **two hours**.')}`,
-            COMMAND_DISBOARD_MESSAGE_NOW: message => `${bold`Heya,`} right now the disboard message is set to: ${Util.codeBlock('', message)}`,
+            COMMAND_DISBOARD_MESSAGE_NOMESSAGE: `${bold`Right now,`} there isn't a disboard message set. For now I'll use my default: ${util.codeBlock('', 'Time to bump the server on disboard. Use the command `!d bump` and I\'ll notify you in **two hours**.')}`,
+            COMMAND_DISBOARD_MESSAGE_NOW: message => `${bold`Heya,`} right now the disboard message is set to: ${util.codeBlock('', message)}`,
             COMMAND_DISBOARD_MESSAGE_REMOVED: `${bold`Done,`} I removed the disboard message.`,
-            COMMAND_DISBOARD_MESSAGE_SET: message => `${bold`Alrighty,`} set the disboard message to: ${Util.codeBlock('', message)}`,
+            COMMAND_DISBOARD_MESSAGE_SET: message => `${bold`Alrighty,`} set the disboard message to: ${util.codeBlock('', message)}`,
             COMMAND_EXEMPT: (name, type) => `${notSpecified} ${bold`${name}`} is exempt as a ${bold`${type}`}.`,
             COMMAND_EXEMPT_DESCRIPTION: `Allows you to add users, channels, or roles to be ignored by my ${code`anti`} automod features. To remove from this list try out the ${code`unexempt`} command.`,
             COMMAND_EXEMPT_DUPLICATE: (name, type) => `${bold`${name}`} is already an exempt ${bold`${type.substring(0, type.length -1)}`}.`,
@@ -355,10 +356,10 @@ module.exports = class extends Language {
                 `Specify ${code`message`} to set the message I'll send in the set goodbye channel. In your message you can also use the variables: ${code`{name}`}, ${code`{tag}`} (ex: ArEo#1245), ${code`{discrim}`}, ${code`{joined}`}, ${code`{server}`}, and ${code`{count}`} for the server's membercount.`
             ].join('\n\n'),
             COMMAND_GOODBYE_INVALID: `${bold`Please,`} specify a proper use case [channel | message].`,
-            COMMAND_GOODBYE_MESSAGE_NOMESSAGE: `${bold`Right now,`} there isn't a goodbye message set. For now I'll use my default: ${Util.codeBlock('', '**{tag}** just left the server :(')}`,
-            COMMAND_GOODBYE_MESSAGE_NOW: message => `${bold`Heya,`} right now the goodbye message is set to: ${Util.codeBlock('', message)}`,
+            COMMAND_GOODBYE_MESSAGE_NOMESSAGE: `${bold`Right now,`} there isn't a goodbye message set. For now I'll use my default: ${util.codeBlock('', '**{tag}** just left the server :(')}`,
+            COMMAND_GOODBYE_MESSAGE_NOW: message => `${bold`Heya,`} right now the goodbye message is set to: ${util.codeBlock('', message)}`,
             COMMAND_GOODBYE_MESSAGE_REMOVED: `${bold`Done,`} I removed the goodbye message.`,
-            COMMAND_GOODBYE_MESSAGE_SET: message => `${bold`Alrighty,`} set the goodbye message to: ${Util.codeBlock('', message)}`,
+            COMMAND_GOODBYE_MESSAGE_SET: message => `${bold`Alrighty,`} set the goodbye message to: ${util.codeBlock('', message)}`,
             COMMAND_LANGUAGE_ARRAY: [
                 `${underline`Foxxie's Supported Languages`}:\n`,
                 `:flag_us: ${bold`en-US`} (English)`,
@@ -452,7 +453,7 @@ module.exports = class extends Language {
             COMMAND_STARBOARD_REMOVED: `${bold`Done,`} removed the starboard channel in this server.`,
             COMMAND_STARBOARD_SELF: allowed => `${bold`Done,`} ${allowed === true ? 'enabled' : 'disabled'} self starring in this server.`,
             COMMAND_STARBOARD_SELFNOW: allowed => `${bold`Right now,`} self starring is ${bold`${allowed !== false ? '' : 'not '}enabled`} in this server.`,
-            COMMAND_TAG_ADDED: (tag, content) => `${bold`Done,`} added the tag ${code`${tag}`} with the content:${Util.codeBlock('js', content)}`,
+            COMMAND_TAG_ADDED: (tag, content) => `${bold`Done,`} added the tag ${code`${tag}`} with the content:${util.codeBlock('js', content)}`,
             COMMAND_TAG_DESCRIPTION: ``,
             COMMAND_TAG_EMPTY: `You didn't provide a ${bold`tag`}.`,
             COMMAND_TAG_EXISTS: `This tag is already either a ${bold`tag`} or a ${bold`command`}.`,
@@ -461,7 +462,7 @@ module.exports = class extends Language {
             COMMAND_TAG_NOTAGS: `${bold`Hmmm,`} it doesn't seem like there are any tags configured in this server`,
             COMMAND_TAG_REMOVED: tag => `${bold`Done,`} removed the tag ${code`${tag}`}`,
             COMMAND_TAG_UNSPECIFIED: `${bold`Please,`} specify a tag to view.`,
-            COMMAND_TAGREGEX_BADREGEX: err => `${bold`Uh oh,`} you provided an invalid regular expression pattern: ${Util.codeBlock('js', err)}`,
+            COMMAND_TAGREGEX_BADREGEX: err => `${bold`Uh oh,`} you provided an invalid regular expression pattern: ${util.codeBlock('js', err)}`,
             COMMAND_TAGREGEX_DESCRIPTION: `Create regular expression tags for me to respond to in certain guilds. This command is locked to the bot owner due to the power it holds.`,
             COMMAND_TAGREGEX_EMPTY: `You didn't provide any ${bold`regular expression`} to make a tag of.`,
             COMMAND_TESTDISBOARD_DESCRIPTION: `Tests the bump reminder embed, sending a reminder to the set Disboard channel.`,
@@ -479,12 +480,12 @@ module.exports = class extends Language {
                 `Specify ${code`message`} to set the message I'll send in the set welcome channel. In your message you can also use the variables: ${code`{member}`}, ${code`{name}`}, ${code`{tag}`} (ex: ArEo#1245), ${code`{discrim}`}, ${code`{created}`}, ${code`{server}`}, and ${code`{count}`} for the server's membercount.`
             ].join('\n\n'),
             COMMAND_WELCOME_INVALID: `${bold`Please,`} specify a proper use case [channel | message].`,
-            COMMAND_WELCOME_MESSAGE_NOMESSAGE: `${bold`Right now,`} there isn't a welcome message set. For now I'll use my default: ${Util.codeBlock('', '{member} just joined the server!')}`,
-            COMMAND_WELCOME_MESSAGE_NOW: message => `${bold`Heya,`} right now the welcome message is set to: ${Util.codeBlock('', message)}`,
+            COMMAND_WELCOME_MESSAGE_NOMESSAGE: `${bold`Right now,`} there isn't a welcome message set. For now I'll use my default: ${util.codeBlock('', '{member} just joined the server!')}`,
+            COMMAND_WELCOME_MESSAGE_NOW: message => `${bold`Heya,`} right now the welcome message is set to: ${util.codeBlock('', message)}`,
             COMMAND_WELCOME_MESSAGE_REMOVED: `${bold`Done,`} I removed the welcome message.`,
-            COMMAND_WELCOME_MESSAGE_SET: message => `${bold`Alrighty,`} set the welcome message to: ${Util.codeBlock('', message)}`,
+            COMMAND_WELCOME_MESSAGE_SET: message => `${bold`Alrighty,`} set the welcome message to: ${util.codeBlock('', message)}`,
 
-            // Util Commands
+            // util Commands
             COMMAND_ABOUT_COMMANDS_TITLE: bold`Commands`,
             COMMAND_ABOUT_COMMANDS_VALUE: (commands, aliases) => `• As of now, I have ${bold`${commands}`} commands and ${bold`${aliases}`} aliases.`,
             COMMAND_ABOUT_CREATED_TITLE: bold`Created`,
@@ -499,7 +500,7 @@ module.exports = class extends Language {
             COMMAND_ABOUT_USERS_TITLE: bold`Users`,
             COMMAND_ABOUT_USERS_VALUE: users => `• Right now I'm cleaning up after ${bold`${users}`} users.`,
             COMMAND_ABOUT_VERSION_TITLE: bold`Version`,
-            COMMAND_ABOUT_VERSION_VALUE: `• Currently I'm in version ${bold`${this.client.options.version}`}, pretty much always getting worked on though ;)`,
+            COMMAND_ABOUT_VERSION_VALUE: version => `• Currently I'm in version ${bold`${version}`}, pretty much always getting worked on though ;)`,
             COMMAND_AFK_AUTHOR: author => `${author} has set an AFK`,
             COMMAND_AFK_DESCRIPTION: `Sets an AFK for when people ping ya, I'll remember the message you set and display it when someone is trying to reach you.`,
             COMMAND_AFK_REASON: reason => `${bold`Reason`}: ${reason}`,
@@ -531,7 +532,7 @@ module.exports = class extends Language {
             COMMAND_CORONA_DEATHS_TITLE: bold`${deaths} Deaths`,
             COMMAND_CORONA_DEATHS_VALUE: stats => `${bold`${stats.deaths ? stats.deaths.toLocaleString() : 'N/A'}`} ${stats.todayDeaths ? `(+${stats.todayDeaths.toLocaleString()} today)` : ''}\n${stats.cases && stats.deaths ? `${((stats.deaths / stats.cases) * 100).toFixed(2)}%` : 'N/A'}% case fatality rate\n${stats.deathsPerOneMillion ? `${(stats.deathsPerOneMillion / 10000).toFixed(2)}%` : 'N/A'}% absolute fatality rate`,
             COMMAND_CORONA_DESCRIPTION: `Get the current statistics of the Covid-19 pandemic. You can enter a country name, US-state name, or \`global\` for statistics of the whole world.`,
-            COMMAND_CORONA_TITLE: search => `COVID-19 stats / ${Util.toTitleCase(search)}`,
+            COMMAND_CORONA_TITLE: search => `COVID-19 stats / ${util.toTitleCase(search)}`,
             COMMAND_CORONA_FOOTER: `Gotta tell ya that these stats may not necessarily comprehensive, complete, or up to date.\nDon't go tryna use this as medical advise or anything.`,
             COMMAND_CORONA_NO_DATA: search => `${bold`Sorry,`} I couldn't find any data for \`${search}\`.`,
             COMMAND_CORONA_RECOVERIES_TITLE: bold`${recoveries} Recoveries`,
@@ -655,7 +656,7 @@ module.exports = class extends Language {
                 `• ${bold`${cpuUsage}% of CPU`} (${cpuCount}c @ ${cpuSpeed}GHz).`,
                 `I've been running`,
                 `• For ${bold`${uptime}`} on ${bold`${hostname}`} (shard ${currentShard} / ${totalShards})`,
-                `• Using Node.js ${processVersion}, Discord.js v${discordVersion}, and Foxxie-Util v${foxxieVersion}.`
+                `• Using Node.js ${processVersion}, Discord.js v${discordVersion}, and Foxxie-util v${foxxieVersion}.`
             ].join('\n'),
             COMMAND_STATS_DESCRIPTION: 'Provides some details about me and my stats.',
             COMMAND_STEAL_DESCRIPTION: `Steals a provided emoji and automatically adds it to your server. You can also provide a name for the emoji to automatically be named.`,

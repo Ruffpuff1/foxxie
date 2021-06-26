@@ -1,7 +1,7 @@
 const { mongoDB } = require('~/lib/Database');
 const { Team } = require('discord.js');
 let retries = 0;
-const { Event, Util } = require('foxxie');
+const { Event, util, EventStore,  } = require('@foxxie/tails');
 
 module.exports = class extends Event {
 
@@ -18,8 +18,8 @@ module.exports = class extends Event {
 			await this.client.fetchApplication();
 		} catch (err) {
 			if (++retries === 3) return process.exit();
-			console.log(`[Foxxie-Util] Unable to fetchApplication at this time, waiting 5 seconds and retrying. Retries left: ${retries - 3}`);
-			await Util.sleep(5000);
+			console.log(`[${this.client.user.username}] Unable to fetchApplication at this time, waiting 5 seconds and retrying. Retries left: ${retries - 3}`);
+			await util.sleep(5000);
 			return this.run();
 		}
 
@@ -29,18 +29,19 @@ module.exports = class extends Event {
 		}
         mongoDB();
         this.status();
-        this.client.tasks.run(this.client);
-        this.client.events.get('theCornerStore').clock();
 
+        // this.client.tasks.run(this.client);
+        // this.client.events.get('theCornerStore').clock();
         this.client.ready = true;
-        console.log(`[${this.client.user.username}] Ready! Logged in with ${this.client.commands.size} commands and ${this.client.aliases.size} aliases.`);
+        
+        console.log(this.client.options.readyMessage(this.client));
     }
 
     status() {
         this.client.options.status = [
             { name: `${this.client.guilds.cache.size.toLocaleString()} servers & ${this.client.users.cache.size.toLocaleString()} users.`, type: 'WATCHING' },
             { name: `v${this.client.options.version} | fox help`, type: 'LISTENING' },
-            { name: `with ${this.client.commands.size} Commands & ${this.client.aliases.size} Aliases`, type: 'PLAYING' },
+            { name: `with ${this.client.commands.size} Commands & ${this.client.commands.aliases.size} Aliases`, type: 'PLAYING' },
             { name: `to v${this.client.options.version} | fox support`, type: 'LISTENING' },
         ].concat(this.client.options.status);
 

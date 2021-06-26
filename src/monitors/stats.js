@@ -1,13 +1,13 @@
-const { Monitor } = require('foxxie');
+const { Monitor } = require('@foxxie/tails');
 
 module.exports = class extends Monitor {
 
     constructor(...args) {
         super(...args, {
-            monitor: 'stats',
             enabled: false,
             ignoreBots: false,
             ignoreSelf: false,
+            ignoreOthers: false,
             ignoreEdits: true
         })
     }

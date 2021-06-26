@@ -1,14 +1,12 @@
-const { ms, Monitor } = require('foxxie');
+const { ms, Monitor } = require('@foxxie/tails');
 
 module.exports = class extends Monitor {
 
     constructor(...args) {
         super(...args, {
-            monitor: 'disboardBump',
             ignoreBots: false,
-            ignoreEdits: true,
-            ignoreOwner: true,
-            ignoreBlacklistedUsers: true
+            ignoreOthers: false,
+            ignoreOwner: true
         })
     }
 
