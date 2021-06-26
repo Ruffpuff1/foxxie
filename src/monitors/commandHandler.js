@@ -1,11 +1,12 @@
-const { code, Monitor, Stopwatch } = require('foxxie');
+const { Monitor, Stopwatch } = require('@foxxie/tails');
+const { code } = require('@foxxie/md-tags');
 
 module.exports = class extends Monitor {
 
     constructor(...args) {
         super(...args, {
-            monitor: 'commandHandler',
-            ignoreBlacklistedUsers: true
+            ignoreOthers: false,
+            ignoreEdits: false
         })
     }
 

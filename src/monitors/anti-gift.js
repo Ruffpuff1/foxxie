@@ -1,10 +1,11 @@
-const { Monitor } = require('foxxie');
+const { Monitor } = require('@foxxie/tails');
 
 module.exports = class extends Monitor {
 
     constructor(...args) {
         super(...args, {
-            monitor: 'anti-gift',
+            ignoreOthers: false,
+            ignoreEdits: false,
             ignoreOwner: true,
             ignoreAdmin: true
         })

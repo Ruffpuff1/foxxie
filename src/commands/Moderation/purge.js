@@ -1,5 +1,6 @@
 const { User } = require('discord.js');
-const { Type, Command, LINK_REGEX: { discord: { invite } } } = require('foxxie');
+const { LINK_REGEX: { discord: { invite } } } = require('foxxie');
+const { Command } = require('@foxxie/tails')
 
 module.exports = class extends Command {
 

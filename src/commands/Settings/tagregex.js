@@ -1,4 +1,4 @@
-const { Command, Util } = require('foxxie');
+const { Command } = require('@foxxie/tails');
 const { Util: djsUtil, Permissions: { FLAGS } } = require('discord.js');
 
 module.exports = class extends Command {

@@ -1,4 +1,4 @@
-const { ms, Command } = require('foxxie');
+const { ms, Command } = require('@foxxie/tails');
 
 module.exports = class extends Command {
 

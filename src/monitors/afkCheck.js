@@ -1,11 +1,11 @@
 const { MessageEmbed } = require('discord.js');
-const { Monitor, ms } = require('foxxie');
+const { Monitor, ms } = require('@foxxie/tails');
 
 module.exports = class extends Monitor {
 
     constructor(...args) {
         super(...args, {
-            monitor: 'afkCheck'
+            ignoreOthers: false,
         })
     }
 

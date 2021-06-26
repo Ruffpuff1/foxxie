@@ -18,7 +18,7 @@ module.exports = {
     lgbtURL: 'https://api.ravy.lgbt',
     shards: 'auto',
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-    typing: false,
+    typing: true,
     status: [
         { name: `🏳️‍🌈  Happy pride month!`, type: 'PLAYING' },
         { name: `with trans rights!`, type: 'PLAYING' }

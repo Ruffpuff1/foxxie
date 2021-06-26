@@ -1,6 +1,7 @@
 const { all, states, countries } = require('novelcovid');
 const { MessageEmbed } = require('discord.js');
-const { Command, LOCATION_REGEX: { usStates } } = require('foxxie');
+const { Command } = require('@foxxie/tails');
+const { LOCATION_REGEX: { usStates } } = require('foxxie');
 
 module.exports = class extends Command {
 

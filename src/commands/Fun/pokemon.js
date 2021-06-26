@@ -1,6 +1,7 @@
 const req = require('@aero/centra');
 const { MessageEmbed } = require('discord.js');
-const { Command, Util, zws } = require('foxxie');
+const { zws } = require('foxxie');
+const { Command, util } = require('@foxxie/tails');
 
 module.exports = class extends Command {
 
@@ -31,7 +32,7 @@ module.exports = class extends Command {
                 })
 
         const embed = new MessageEmbed()
-            .setTitle(`${Util.toTitleCase(results.name || pokemon)} (ID: ${results.id})`)
+            .setTitle(`${util.toTitleCase(results.name || pokemon)} (ID: ${results.id})`)
             .setThumbnail(results.sprites[`${shiny ? 'front_shiny' : 'front_default'}`])
             .setColor(msg.guild.me.displayColor)
             .addField(`:scroll: ${msg.language.get('COMMAND_POKEMON_TYPE')}`, results.types.map(t => t.type.name).join('-'), true)

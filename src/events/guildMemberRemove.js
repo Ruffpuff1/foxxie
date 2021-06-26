@@ -1,4 +1,5 @@
-const { Event, Timestamp } = require('foxxie');
+const { Event } = require('@foxxie/tails');
+const { Timestamp } = require('foxxie');
 
 module.exports = class extends Event {
 

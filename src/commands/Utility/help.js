@@ -1,5 +1,5 @@
 const { code, bold } = require('@foxxie/md-tags');
-const { Command, Util: { toTitleCase, isFunction } } = require('foxxie');
+const { Command, util: { toTitleCase, isFunction } } = require('@foxxie/tails');
 const { emojis } = require('~/lib/util/constants');
 const { MessageEmbed } = require('discord.js');
 
@@ -70,9 +70,15 @@ module.exports = class extends Command {
             
         if (!fullMenu) categories = categories.filter(c => c !== 'admin').filter(c => c !== 'secret');
 
-        categories.forEach(c => 
+        categories.sort((a, b) => a.localeCompare(b)).forEach(c => 
             embed.addField(`${emojis.categories[c]} ${bold`${toTitleCase(c)} (${this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).filter(cmd => !fullMenu ? !(cmd.permissionLevel >= 7) : cmd).length})`}`, 
-                this.client.commands.array().filter(cmd => cmd.category === c).filter(cmd => !blocked?.includes(cmd.name)).filter(cmd => !fullMenu ? !(cmd.permissionLevel >= 7) : cmd).map(cmd => code`${cmd.name}`).join(', ')))
+                this.client.commands
+                    .array()
+                    .filter(cmd => cmd.category === c)
+                    .filter(cmd => !blocked?.includes(cmd.name))
+                    .filter(cmd => !fullMenu ? !(cmd.permissionLevel >= 7) : cmd)
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map(cmd => code`${cmd.name}`).join(', ')))
 
         return msg.channel.send(embed);
     }

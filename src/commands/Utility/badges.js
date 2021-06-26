@@ -1,5 +1,6 @@
 let { DISCORD_EMPLOYEE, DISCORD_PARTNER, HYPESQUAD_EVENTS, NITRO, BOOSTER, EARLY_SUPPORTER, BUGHUNTER_LEVEL_2, BUGHUNTER_LEVEL_1, HOUSE_BRAVERY, HOUSE_BRILLIANCE, HOUSE_BALANCE, BOT, VERIFIED_BOT, EARLY_VERIFIED_DEVELOPER } = require('~/lib/util/constants').emojis.discordBadges;
-const { Command, nitroDiscriminators } = require('foxxie');
+const { Command } = require('@foxxie/tails');
+const { nitroDiscriminators } = require('foxxie');
 
 module.exports = class extends Command {
 

@@ -1,11 +1,12 @@
-const { Monitor, LINK_REGEX: { discord: { invite } } } = require('foxxie');
+const { LINK_REGEX: { discord: { invite } } } = require('foxxie');
+const { Monitor } = require('@foxxie/tails');
 
 module.exports = class extends Monitor {
 
     constructor(...args) {
         super(...args, {
-            monitor: 'anti-invite',
-            ignoreBots: false,
+            ignoreOthers: false,
+            ignoreEdits: false,
             ignoreOwner: true,
             ignoreAdmin: true
         })

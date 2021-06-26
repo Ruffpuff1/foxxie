@@ -3,6 +3,6 @@ const LGBTCommand = require('~/lib/structures/LGBTCommand');
 module.exports = class extends LGBTCommand {
 
     constructor(...args) {
-        super('genderfluid', null, ...args)
+        super('agender', [], ...args)
     }
 }

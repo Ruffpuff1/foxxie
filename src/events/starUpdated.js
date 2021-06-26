@@ -1,5 +1,6 @@
 const { emojis: { starboard: { tier0, tier1, tier2, tier3 } } } = require('~/lib/util/constants');
-const { Event, LINK_REGEX: { ruff, imgur, discord } } = require('foxxie');
+const { Event } = require('@foxxie/tails');
+const { LINK_REGEX: { ruff, imgur, discord } } = require('foxxie');
 let edited = false;
 
 module.exports = class extends Event {

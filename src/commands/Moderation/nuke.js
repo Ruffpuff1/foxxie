@@ -1,4 +1,4 @@
-const { Command, Util } = require('foxxie');
+const { Command, util } = require('@foxxie/tails');
 
 module.exports = class extends Command {
     
@@ -22,7 +22,7 @@ module.exports = class extends Command {
 
         const filter = m => msg.author.id === m.author.id;
         const messages = await msg.channel.awaitMessages(filter, { time: 30000, max: 1, errors: ['time'] }).catch(() => message.edit(msg.language.get('MESSAGE_PROMPT_TIMEOUT')));
-        if (!Util.isFunction(messages.first)) return;
+        if (!util.isFunction(messages.first)) return;
         if (messages.first().content.toLowerCase() !== `yes, nuke ${channel.name}`) return message.edit(msg.language.get('MESSAGE_PROMPT_CANCELLED'));
 
         const newChannel = await this.cloneChannel(channel);

@@ -1,4 +1,4 @@
-const { Command } = require('foxxie');
+const { Command } = require('@foxxie/tails');
 const { color } = require('canvacord').Canvas;
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 
