@@ -3,47 +3,30 @@ const { Task } = require('@foxxie/tails');
 
 module.exports = class extends Task {
 
-    constructor(...args) {
-        super(...args, {
-            name: 'reminder'
-        })
-    }
+    async run({ channel, user, text, guild, sendIn, color, timeago }) {
 
-    run() {
+        user = await this.client.users.fetch(user).catch(() => null);
+        if (!user) return false;
 
-        this.client.setInterval(async () => {
-            const reminders = await this.client.schedule.fetch('reminders');
-            reminders?.forEach(async reminder => {
+        guild = this.client.guilds.cache.get(guild)
+        if (!guild) return false;
 
-                const { time, authID, guildId, channelId } = reminder;
-                let member = this.client.users.cache.get(authID);
-                const guild = this.client.guilds.cache.get(guildId);
-                const channel = guild.channels.cache.get(channelId);
-                const language = guild.language;
-
-                if (Date.now() > time) {
-                    if (member) this._remind(reminder, member, channel, language);
-                    this.client.schedule.delete('reminders', reminder)
-                }
-            })
-        }, 1000)
-    }
-
-    _remind({ rmdMessage, timeago, sendIn, color, authID }, user, channel, language) {
+        if (sendIn) return this.sendIn({ channel, user, text, guild, timeago });
 
         const embed = new MessageEmbed()
-            .setAuthor(language.get('TASK_REMINDER_AUTHOR', user.username), this.client.user.displayAvatarURL())
-            .setColor(color)
-            .setDescription(language.get('TASK_REMINDER', timeago, rmdMessage))
+            .setAuthor(guild.language.get('TASK_REMINDER_AUTHOR', user.username), this.client.user.displayAvatarURL({ dynamic: true }))
+            .setDescription(guild.language.get('TASK_REMINDER', timeago, text))
             .setTimestamp()
+            .setColor(color)
 
-        // handles send in reminders
-        if (sendIn && channel) channel.send(`<@${authID}> ${language.get('TASK_REMINDER_SENDIN', timeago, rmdMessage)}`);
-        if (!sendIn && this.client.users.cache.get(authID)) user.send(embed).catch(() => {
+        return user.send(embed).catch(() => this.sendIn({ channel, user, text, guild, timeago }));
+    }
 
-            // handles when a user's dms are closed
-            if (channel) channel.send(`<@${authID}> ${language.get('TASK_REMINDER_SENDIN', timeago, rmdMessage)}`);
-            else return null;
-        })
+    sendIn({ channel, user, text, guild, timeago }) {
+        
+        channel = guild.channels.cache.get(channel);
+        if (!channel) return false;
+
+        return channel.send(`${user.toString()} ${guild.language.get('TASK_REMINDER_SENDIN', timeago, text)}`).catch(() => null);
     }
 }

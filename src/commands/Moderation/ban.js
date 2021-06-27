@@ -1,5 +1,5 @@
 const Command = require('~/lib/structures/MultiModerationCommand');
-const { ms } = require('foxxie');
+const { ms, Duration } = require('foxxie');
 
 module.exports = class extends Command {
 
@@ -25,41 +25,39 @@ module.exports = class extends Command {
         if (!bannable.length) return msg.responder.error('COMMAND_BAN_NOPERMS', users.length > 1);
 
         const purge = this.purge.test(msg.content);
-        const duration = this.duration.test(args[0]) ? ms(ms(args[0]), { long: true }) : null;
-        const time = duration ? Date.now() + ms(args[0]) : null;
+        const duration = this.duration.test(args[0]) ? new Duration(args[0]).fromNow : null;
+        const timeLong = duration ? ms(ms(args[0]), { long: true }) : null;
 
         let reason = duration
-            ? args.slice(users.length+1).join(' ')
-            : args.slice(users.length+2).join(' ');
+            ? args.slice(users.length + 1).join(' ')
+            : args.slice(users.length).join(' ') || msg.language.get('LOG_MODERATION_NOREASON');
 
-        const action = time ? 'tempban' : 'ban';
-        if (!reason) reason = msg.language.get('LOG_MODERATION_NOREASON');
+        const action = duration ? 'tempban' : 'ban';
 
-        await this.executeBans(msg, reason.replace(this.purge, ''), bannable, purge, time, duration);
-        this.logActions(msg.guild, bannable.map(user => user), { type: 'mod', action, reason: reason.replace(this.purge, ''), channel: msg.channel, dm: true, counter: 'ban', moderator: msg.member, duration });
+        await this.executeBans(msg, reason.replace(this.purge, ''), bannable, purge, duration, timeLong);
+        this.logActions(msg.guild, bannable.map(user => user), { type: 'mod', action, reason: reason.replace(this.purge, ''), channel: msg.channel, dm: true, counter: 'ban', moderator: msg.member, duration: timeLong });
         return msg.responder.success();
     }
 
-    async executeBans(msg, reason, users, purge, time, duration) {
+    async executeBans(msg, reason, users, purge, duration, timeLong) {
 
         for (const user of users) {
-            if (purge) msg.guild.members.ban(user.id, { reason: `${duration ? `[temp]` : ''} ${msg.author.tag} | ${reason}`, days: 1 })
-                .catch((e) => msg.responder.error('COMMAND_BAN_ERROR', user.tag, e.message));
+            if (!duration) this.updateSchedule(user, msg);
 
-            if (!purge) msg.guild.members.ban(user.id, { reason: `${duration ? `[temp]` : ''} ${msg.author.tag} | ${reason}` })
+            msg.guild.members.ban(user.id, { reason: `${duration ? `[temp]` : ''} ${msg.author.tag} | ${reason}`, days: purge ? 1 : 0 })
                 .catch((e) => msg.responder.error('COMMAND_BAN_ERROR', user.tag, e.message));
-
-            const bans = await this.client.schedule.fetch('bans');
-            const hasban = bans?.some(b => b.userId === user.id);
-            if (duration || hasban) this.scheduleBans(msg, user, time, reason, duration, bans);
         }
+        if (duration) this.client.schedule.create('endTempban', duration, { data: 
+            { users: users.map(user => user.id), guild: msg.guild.id, moderator: msg.member.id, channel: msg.channel.id, timeLong, reason } 
+        })
     }
 
-    async scheduleBans(msg, user, time, reason, duration, bans) {
-
-        if (bans?.length) await bans.filter(b => b.userId === user.id).filter(b => b.guildId === msg.guild.id).forEach(b => this.client.schedule.delete('bans', b));
-        this.client.schedule.create('bans',
-            { guildId: msg.guild.id, authId: msg.author.id, time, reason, channelId: msg.channel.id, userId: user.id, duration }
-        )
-    }
+    updateSchedule(user, msg) {
+		const unbanTask = this.client.schedule.tasks.find(task => task.taskName === 'endTempban' && task.data.users.includes(user.id) && task.data.guild === msg.guild.id);
+		if (!unbanTask) return;
+		const { time, data } = unbanTask;
+		this.client.schedule.delete(unbanTask.id);
+		data.users = data.users.filter(id => id !== user.id);
+		if (data.users.length !== 0) { this.client.schedule.create('endTempban', time, { data }); }
+	}
 }

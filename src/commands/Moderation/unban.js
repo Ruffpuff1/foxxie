@@ -28,15 +28,16 @@ module.exports = class extends Command {
     async executeUnbans(msg, users, reason) {
         for (const user of users) {
             msg.guild.members.unban(user, `${msg.author.tag} | ${reason}`).catch(() => null);
-            const bans = await this.client.schedule.fetch('bans');
-            const hasban = bans?.some(b => b.userId === user.id);
-            if (hasban) this.updateSchedule(msg, user, bans);
+            this.updateSchedule(msg, user);
         }
     }
 
-    async updateSchedule(msg, user, bans) {
-        await bans.filter(b => b.guildId === msg.guild.id).filter(b => b.userId === user.id).forEach(b => 
-            this.client.schedule.delete('bans', b)    
-        )
+    async updateSchedule(msg, user) {
+        const unbanTask = this.client.schedule.tasks.find(task => task.taskName === 'endTempban' && task.data.users.includes(user.id) && task.data.guild === msg.guild.id);
+		if (!unbanTask) return;
+		const { time, data } = unbanTask;
+		this.client.schedule.delete(unbanTask.id);
+		data.users = data.users.filter(id => id !== user.id);
+		if (data.users.length !== 0) { this.client.schedule.create('endTempban', time, { data }); }
     }
 }

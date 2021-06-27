@@ -664,7 +664,7 @@ module.exports = class extends Language {
                 `• ${bold`${cpuUsage}% of CPU`} (${cpuCount}c @ ${cpuSpeed}GHz).`,
                 `I've been running`,
                 `• For ${bold`${uptime}`} on ${bold`${hostname}`} (shard ${currentShard} / ${totalShards})`,
-                `• Using Node.js ${processVersion}, Discord.js v${discordVersion}, and Foxxie-util v${foxxieVersion}.`
+                `• Using Node.js ${processVersion}, Discord.js v${discordVersion}, and @Foxxie/Tails v${foxxieVersion}.`
             ].join('\n'),
             COMMAND_STATS_DESCRIPTION: 'Provides some details about me and my stats.',
             COMMAND_STEAL_DESCRIPTION: `Steals a provided emoji and automatically adds it to your server. You can also provide a name for the emoji to automatically be named.`,

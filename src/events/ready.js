@@ -1,7 +1,7 @@
 const { mongoDB } = require('~/lib/Database');
 const { Team } = require('discord.js');
 let retries = 0;
-const { Event, util, EventStore,  } = require('@foxxie/tails');
+const { Event, util } = require('@foxxie/tails');
 
 module.exports = class extends Event {
 
@@ -28,29 +28,23 @@ module.exports = class extends Event {
 			else this.client.options.owners.push(this.client.application.owner.id);
 		}
         mongoDB();
-        this.status();
+        this.status()
 
-        // this.client.tasks.run(this.client);
-        // this.client.events.get('theCornerStore').clock();
+        this.client.schedule.init();
+        this.client.events.get('theCornerStore').clock();
         this.client.ready = true;
         
         console.log(this.client.options.readyMessage(this.client));
     }
 
     status() {
-        this.client.options.status = [
-            { name: `${this.client.guilds.cache.size.toLocaleString()} servers & ${this.client.users.cache.size.toLocaleString()} users.`, type: 'WATCHING' },
-            { name: `v${this.client.options.version} | fox help`, type: 'LISTENING' },
-            { name: `with ${this.client.commands.size} Commands & ${this.client.commands.aliases.size} Aliases`, type: 'PLAYING' },
-            { name: `to v${this.client.options.version} | fox support`, type: 'LISTENING' },
-        ].concat(this.client.options.status);
 
-        this.client.options.status.length 
-            ? this.client.user.setPresence({ activity: this.client.options.status[Math.floor(Math.random() * (this.client.options.status.length - 1) + 1)] }) 
-            : this.client.user.setPresence({ name: null, type: null });
+        const status = this.client.options.status(this.client);
+        if (this.client.options.enableStatus) this.client.user.setActivity(status[Math.floor(Math.random() * (status.length - 1) + 1)]);
 
-        setInterval(() => this.client.options.status.length 
-            ? this.client.user.setPresence({ activity: this.client.options.status[Math.floor(Math.random() * (this.client.options.status.length - 1) + 1)] }) 
-            : this.client.user.setPresence({ name: null, type: null }), 30000);
+        setInterval(() => {
+            if (!this.client.options.enableStatus) return null;
+            else this.client.user.setActivity(status[Math.floor(Math.random() * (status.length - 1) + 1)]);
+        }, 25000)
     }
 }

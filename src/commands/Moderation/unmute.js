@@ -28,15 +28,16 @@ module.exports = class extends Command {
     async executeUnmutes(msg, members, reason) {
         for (const member of members) {
             member.unmute(`${msg.author.tag} | ${reason}`);
-            const mutes = await this.client.schedule.fetch('mutes');
-            const hasmute = mutes?.some(m => m.memberId === member.id);
-            if (hasmute) this.updateSchedule(msg, member, mutes);
+            this.updateSchedule(msg, member);
         }
     }
 
-    async updateSchedule(msg, member, mutes) {
-        await mutes.filter(m => m.guildId === msg.guild.id).filter(m => m.memberId === member.id).forEach(m => 
-            this.client.schedule.delete('mutes', m)
-        );
+    async updateSchedule(msg, member) {
+        const unmuteTask = this.client.schedule.tasks.find(task => task.taskName === 'endTempmute' && task.data.users.includes(member.id) && task.data.guild === msg.guild.id);
+		if (!unmuteTask) return;
+		const { time, data } = unmuteTask;
+		this.client.schedule.delete(unmuteTask.id);
+		data.users = data.users.filter(id => id !== member.id);
+		if (data.users.length !== 0) { this.client.schedule.create('endTempmute', time, { data }); }
     }
 }

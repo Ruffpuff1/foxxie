@@ -1,52 +1,23 @@
 const { Task } = require('@foxxie/tails');
-const MultiModerationCommand = require('~/lib/structures/MultiModerationCommand');
 
 module.exports = class extends Task {
-
-    constructor(...args) {
-        super(...args, {
-            name: 'endTempban'
-        })
-    }
     
-    async run() {
+    async run({ users, guild, moderator, channel, timeLong, reason }) {
         
-        this.client.setInterval(async () => {
-            const bannable = [];
-            const bans = await this.client.schedule.fetch('bans');
-            let moderator = null, channel = null, guild = null, duration = null, reason = null;
-            bans?.forEach(async ban => {
+        const _guild = this.client.guilds.cache.get(guild);
+        if (!_guild) return false;
+        const _moderator = await _guild.members.fetch(moderator).catch(() => null);
+        if (!_moderator) return false;
+        const _channel = _guild.channels.cache.get(channel);
 
-                const { guildId, authId, time, reason: res, channelId, userId, duration: dur } = ban;
-                guild = this.client.guilds.cache.get(guildId);
-                if (!guild) return this.client.schedule.delete('bans', ban);
+        users.forEach(async user => {
+            const _user = await this.client.users.fetch(user).catch(() => null);
+            if (!_user) return false;
+            _guild.members.unban(user, `${_moderator.user.tag} | ${_guild.language.get('TASK_ENDTEMPBAN_REASON')}`).catch(() => null);
+        })
 
-                await guild.members.fetch(authId).catch(() => null);
-                await this.client.users.fetch(userId).catch(() => null);
-
-                const user = this.client.users.cache.get(userId)?.user;
-                if (!user) return this.client.schedule.delete('bans', ban);
-                moderator = guild.members.cache.get(authId);
-                channel = guild.channels.cache.get(channelId);
-                reason = res, duration = dur;
-
-                if (Date.now() > time) {
-                    this.executeUnbans(user, guild, moderator);
-                    this.client.schedule.delete('bans', ban);
-                    bannable.push(user);
-                }
-            })
-
-            this.client.setTimeout(() => {
-                if (bannable.length) new MultiModerationCommand().logActions(guild, bannable.map(user => user), {
-                    type: 'mod', reason, channel, dm: true, moderator, action: 'tempunban', duration
-                })
-                if (bannable.length) bannable.forEach(user => bannable.splice(bannable.indexOf(user), 1));
-            }, 3000)
-        }, 1000)
-    }
-
-    executeUnbans(user, guild, moderator) {
-        guild.members.unban(user.id, `${moderator.user.tag} | ${guild.language.get('TASK_ENDTEMPBAN_REASON')}`).catch(() => null);
+        return this.client.commands.get('ban').logActions(_guild, users.map(id => this.client.users.cache.get(id)), {
+            type: 'mod', reason, channel: _channel, dm: true, moderator: _moderator, action: 'tempunban', duration: timeLong
+        })
     }
 }

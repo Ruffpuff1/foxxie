@@ -1,55 +1,23 @@
 const { Task } = require('@foxxie/tails');
-const MultiModerationCommand = require('~/lib/structures/MultiModerationCommand');
 
 module.exports = class extends Task {
+    
+    async run({ users, guild, moderator, channel, timeLong, reason }) {
+        
+        const _guild = this.client.guilds.cache.get(guild);
+        if (!_guild) return false;
+        const _moderator = await _guild.members.fetch(moderator).catch(() => null);
+        if (!_moderator) return false;
+        const _channel = _guild.channels.cache.get(channel);
 
-    constructor(...args) {
-        super(...args, {
-            name: 'endTempmute'
+        users.forEach(async user => {
+            const _member = await _guild.members.fetch(user).catch(() => null);
+            if (!_member) return false;
+            _member.unmute(`${_moderator.user.tag} | ${_guild.language.get('TASK_ENDTEMPMUTE_REASON')}`);
         })
-    }
 
-    async run() {
-
-        this.client.setInterval(async () => {
-            const muteable = [];
-            const mutes = await this.client.schedule.fetch('mutes');
-            let moderator = null, channel = null, guild = null, duration = null, reason = null;
-
-            mutes?.forEach(async mute => {
-
-                const { guildId, authId, time, reason: res, channelId, memberId, duration: dur } = mute;
-
-                guild = this.client.guilds.cache.get(guildId);
-                if (!guild) return this.client.schedule.delete('mutes', mute);
-
-                await guild.members.fetch(authId).catch(() => null);
-                await guild.members.fetch(memberId).catch(() => null);
-
-                const member = guild.members.cache.get(memberId);
-                if (!member) return client.schedule.delete('mutes', mute);
-                moderator = guild.members.cache.get(authId);
-                channel = guild.channels.cache.get(channelId);
-                reason = res, duration = dur;
-
-                if (Date.now() > time) {
-                    this.executeUnmutes(member, moderator);
-                    this.client.schedule.delete('mutes', mute);
-                    muteable.push(member);
-                }
-            })
-
-            this.client.setTimeout(() => {
-                
-                if (muteable.length) new MultiModerationCommand().logActions(guild, muteable.map(member => member.user), {
-                    type: 'mod', reason, channel, dm: true, moderator, action: 'tempunmute', duration
-                })
-                if (muteable.length) muteable.forEach(member => muteable.splice(muteable.indexOf(member), 1));
-            }, 3000)
-        }, 1000)
-    }
-
-    async executeUnmutes(member, moderator) {
-        await member.unmute(`${moderator.user.tag} | ${member.guild.language.get('TASK_ENDTEMPMUTE_REASON')}`);
+        return this.client.commands.get('mute').logActions(_guild, users.map(id => this.client.users.cache.get(id)), {
+            type: 'mod', reason, channel: _channel, dm: true, moderator: _moderator, action: 'tempunmute', duration: timeLong
+        })
     }
 }

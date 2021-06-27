@@ -20,8 +20,11 @@ module.exports = {
     shards: 'auto',
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
     typing: true,
-    status: [
-        { name: `🏳️‍🌈  Happy pride month!`, type: 'PLAYING' },
-        { name: `with trans rights!`, type: 'PLAYING' }
+    enableStatus: true,
+    status: client => [
+        `${client.guilds.cache.size.toLocaleString()} servers & ${client.users.cache.size.toLocaleString()} users.`,
+        `v${client.options.version} | fox help`,
+        `with ${client.commands.size} Commands & ${client.commands.aliases.size} Aliases`,
+        `to v${client.options.version} | fox support`,
     ]
 }

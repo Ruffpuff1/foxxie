@@ -3,28 +3,11 @@ const { Task } = require('@foxxie/tails');
 
 module.exports = class extends Task {
 
-    constructor(...args) {
-        super(...args, {
-            name: 'disboard'
-        })
-    }
+    async run({ guild }) {
 
-    async run() {
-
-        this.client.setInterval(async () => {
-            const disboard = await this.client.schedule.fetch('disboard');
-            disboard?.forEach(async bump => {
-
-                const { guildId, time } = bump;
-                const guild = this.client.guilds.cache.get(guildId);
-                if (!guild) return;
-
-                if (Date.now() > time) {
-                    this.message(guild);
-                    return this.client.schedule.delete('disboard', bump);
-                }
-            })
-        }, 1000)
+        const _guild = this.client.guilds.cache.get(guild);
+        if (!_guild) return false;
+        return this.message(_guild);
     }
 
     async message({ settings, channels, language, name, id, me }) {
@@ -35,9 +18,9 @@ module.exports = class extends Task {
         if (!channel) return;
 
         let message = await settings.get('disboard.message') || language.get('TASK_DISBOARD_DEFAULT');
-        let role = '';
         const ping = await settings.get('disboard.ping');
-        if (ping) role = `<@&${ping}>`;
+
+        let role = ping ? `<@&${ping}>` : '';
         if (id === '761512748898844702') role = '**Heya <@&774339676487548969> it\'s time to bump the server.**';
 
         const embed = new MessageEmbed()

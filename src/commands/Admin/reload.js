@@ -18,7 +18,7 @@ module.exports = class extends Command {
         else piece = this.client.pieceStores.get(piece) || this.client.events.get(piece) || this.client.commands.get(piece) || this.client.monitors.get(piece) || this.client.languages.get(piece) || this.client.inhibitors.get(piece) || this.client.tasks.get(piece);
         if (!piece) return message.responder.error('COMMAND_RELOAD_NONE');
         if (piece instanceof Store) {
-            const timer = new Stopwatch();
+            const timer = new Stopwatch(0);
             const loading = await message.responder.loading();
             await piece.loadAll();
             await piece.init();
@@ -28,16 +28,16 @@ module.exports = class extends Command {
 
         try {
             const itm = await piece.reload();
-            const timer = new Stopwatch();
+            const timer = new Stopwatch(0);
             message.responder.success(`COMMAND_RELOAD_SUCCESS`, itm.name, itm.type, timer.toString());
         } catch (err) {
             piece.store.set(piece);
-            return msg.responder.error('COMMAND_RELOAD_ERROR', piece.type, piece.name, `${e.name} ${e.message}`);
+            return message.responder.error('COMMAND_RELOAD_ERROR', piece.type, err.stack);
         }
     }
 
     async everything(message) {
-            const timer = new Stopwatch();
+            const timer = new Stopwatch(0);
             const loading = await message.responder.loading();
             await Promise.all(
                     this.client.pieceStores.map(async (store) => {

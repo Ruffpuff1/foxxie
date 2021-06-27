@@ -1,4 +1,5 @@
-const { ms, Monitor } = require('@foxxie/tails');
+const { Monitor } = require('@foxxie/tails');
+const { Duration } = require('foxxie');
 
 module.exports = class extends Monitor {
 
@@ -17,6 +18,8 @@ module.exports = class extends Monitor {
             : false;
 
         if (!embed) return;
-        return this.client.schedule.create('disboard', { guildId: msg.guild.id, time: Date.now() + ms('2h') })
+        return this.client.schedule.create('disboard', new Duration('2h').fromNow, {
+            data: { guild: msg.guild.id }
+        })
     } 
 }
