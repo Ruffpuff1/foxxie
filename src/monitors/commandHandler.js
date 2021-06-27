@@ -18,7 +18,7 @@ module.exports = class extends Monitor {
 
         const stringPrefixes = msg.prefixes.slice(0, -1).map(p => `\`${p.toString().replace(/(\\s|\\|\/i|\/|\^)/g, '')}\``).join(', ');
 
-        if (!msg.commandText && msg.prefix === `<@!${this.client.user.id}>`) {
+        if (!msg.commandText && (msg.prefix === `<@!${this.client.user.id}>` || msg.prefix === `<@${this.client.user.id}>`)) {
             return msg.responder.success('PREFIX_REMINDER', stringPrefixes, msg.prefixes.pop().toString().replace(/(\\s|\\|\/i|\/|\^)/g, ''));
         }
         if (!msg.commandText) return undefined;
