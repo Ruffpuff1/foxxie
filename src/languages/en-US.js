@@ -14,8 +14,8 @@ module.exports = class extends Language {
 
             DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
 			DEFAULT_LANGUAGE: 'Default Language',
-            PREFIX_REMINDER: (prefixes, prefix) => [
-                `${bold`Heya!`} My prefixes for this guild are ${prefixes} and ${code`${prefix}`}.`,
+            PREFIX_REMINDER: (prefix) => [
+                `${bold`Heya!`} My prefix for this guild is ${code`${prefix}`}.`,
                 `For a list of all my commands, try out ${code`${prefix}help`}.`
             ].join(' '),
 

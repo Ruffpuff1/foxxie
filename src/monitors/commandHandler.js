@@ -15,7 +15,7 @@ module.exports = class extends Monitor {
         if (!msg.channel.postable) return undefined;
         msg.prefix = await msg.prefix;
         if (!msg.commandText && msg.prefix === `<@!${this.client.user.id}>`) {
-            return msg.responder.success('PREFIX_REMINDER', msg.stringPrefixes.filter(p => p !== `<@!${this.client.user.id}>`).slice(0, -1).map(p => `${code`${p.replace(' ', '')}`}`).join(', '), msg.stringPrefixes.pop());
+            return msg.responder.success('PREFIX_REMINDER', this.client.development ? 'dev ' : 'fox ');
         }
         if (!msg.commandText) return undefined;
         if (!msg.command) return this.client.emit('commandUnknown', msg, msg.commandName, msg.prefix, msg.prefix.length);
