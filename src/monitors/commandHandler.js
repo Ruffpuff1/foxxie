@@ -1,5 +1,4 @@
 const { Monitor, Stopwatch } = require('@foxxie/tails');
-const { code } = require('@foxxie/md-tags');
 
 module.exports = class extends Monitor {
 
@@ -14,8 +13,13 @@ module.exports = class extends Monitor {
         if (msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
         if (!msg.channel.postable) return undefined;
         msg.prefix = await msg.prefix;
+        msg.prefixes = await msg.getPrefix();
+        msg.prefixes.shift();
+
+        const stringPrefixes = msg.prefixes.slice(0, -1).map(p => `\`${p.toString().replace(/(\\s|\\|\/i|\/|\^)/g, '')}\``).join(', ');
+
         if (!msg.commandText && msg.prefix === `<@!${this.client.user.id}>`) {
-            return msg.responder.success('PREFIX_REMINDER', this.client.development ? 'dev ' : 'fox ');
+            return msg.responder.success('PREFIX_REMINDER', stringPrefixes, msg.prefixes.pop().toString().replace(/(\\s|\\|\/i|\/|\^)/g, ''));
         }
         if (!msg.commandText) return undefined;
         if (!msg.command) return this.client.emit('commandUnknown', msg, msg.commandName, msg.prefix, msg.prefix.length);
