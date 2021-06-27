@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'clearnote',
             aliases: ['un', 'ncl'],
             description: language => language.get('COMMAND_CLEARNOTE_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS'],
             usage: '[Member] [Note | all] (...Reason)',
-            permissions: 'BAN_MEMBERS',
             category: 'moderation'
         })
+
+        this.permissions = 'BAN_MEMBERS'
     }
 
     async run(msg, [_, id, ...reason]) {

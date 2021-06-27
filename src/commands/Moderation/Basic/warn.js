@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'warn',
             aliases: ['w'],
             description: language => language.get('COMMAND_WARN_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS'],
             usage: '[Members] (Reason)',
-            permissions: 'MANAGE_MESSAGES',
             category: 'moderation'
         })
+
+        this.permissions = 'MANAGE_MESSAGES';
     }
 
     async run(msg, args) {

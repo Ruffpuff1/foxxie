@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'unlock',
             aliases: ['ul', 'release'],
             description: language => language.get('COMMAND_UNLOCK_DESCRIPTION'),
+            requiredPermissions: ['MANAGE_CHANNELS', 'ADD_REACTIONS'],
             usage: '(Channel) (...Reason)',
-            permissions: 'MANAGE_CHANNELS',
             category: 'moderation',
         })
+
+        this.permissions = 'MANAGE_CHANNELS';
     }
 
     async run(message, args) {

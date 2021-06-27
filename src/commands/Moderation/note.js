@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'note',
             aliases: ['n'],
             description: language => language.get('COMMAND_NOTE_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS'],
             usage: '[Member] [...Note]',
-            permissions: 'MANAGE_MESSAGES',
             category: 'moderation'
         })
+
+        this.permissions = 'MANAGE_MESSAGES'
     }
 
     async run(msg, [_, ...note]) {

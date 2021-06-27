@@ -10,6 +10,7 @@ module.exports = class extends Command {
             name: 'help',
             aliases: ['commands', 'h'],
             description: language => language.get('COMMAND_HELP_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '(Command | usage)',
             category: 'utility',
         })

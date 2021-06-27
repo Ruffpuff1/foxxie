@@ -10,6 +10,7 @@ module.exports = class extends Command {
             name: 'corona',
             aliases: ['cv', 'covid'],
             description: language => language.get('COMMAND_CORONA_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '[Country | State | global]',
             category: 'utility'
         })

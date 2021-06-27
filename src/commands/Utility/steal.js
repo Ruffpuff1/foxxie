@@ -8,10 +8,12 @@ module.exports = class extends Command {
             name: 'steal',
             aliases: ['se', 'yoink', 'take'],
             description: language => language.get('COMMAND_STEAL_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS', 'MANAGE_EMOJIS'],
             usage: '[Emoji] (Name)',
-            permissions: 'MANAGE_EMOJIS',
             category: 'utility'
         })
+
+        this.permissions = 'MANAGE_EMOJIS';
     }
 
     async run(msg, args) {

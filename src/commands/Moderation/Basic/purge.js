@@ -9,10 +9,12 @@ module.exports = class extends Command {
             name: 'purge',
             aliases: ['prune', 'clear', 'clean', 'delete', 'p'],
             description: language => language.get('COMMAND_PURGE_DESCRIPTION'),
+            requiredPermissions: ['MANAGE_MESSAGES'],
             usage: '[Number] (Filter) (...Reason)',
-            permissions: 'MANAGE_MESSAGES',
             category: 'moderation',
         })
+
+        this.permissions = 'MANAGE_MESSAGES';
     }
 
     async run(msg, args) {

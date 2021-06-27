@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'vckick',
             aliases: ['vck', 'disconnect'],
             description: language => language.get('COMMAND_VCKICK_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS', 'MOVE_MEMBERS'],
             usage: '[Members] (reason)',
-            permissions: 'MOVE_MEMBERS',
             category: 'moderation'
         })
+
+        this.permissions = 'MOVE_MEMBERS'
     }
 
     async run(msg, args) {

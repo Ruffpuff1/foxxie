@@ -9,6 +9,7 @@ module.exports = class extends Command {
           name: 'fox',
           aliases: ['ruffy', 'foxy'],
           description: language => language.get('COMMAND_FOX_DESCRIPTION'),
+          requiredPermissions: ['EMBED_LINKS'],
           category: 'fun'
       })
   }

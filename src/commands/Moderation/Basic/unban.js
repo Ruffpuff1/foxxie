@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'unban',
             aliases: ['ub', 'unbean'],
             description: language => language.get('COMMAND_UNBAN_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS', 'BAN_MEMBERS'],
             usage: '[Users] (Reason)',
-            permissions: 'BAN_MEMBERS',
             category: 'moderation'
         })
+
+        this.permissions = 'BAN_MEMBERS';
     }
 
     async run(msg, reason) {

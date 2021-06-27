@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'embed',
             aliases: ['broadcast', 'bc', 'announce'],
             description: language => language.get('COMMAND_EMBED_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '(Channel) [...JSON]',
-            permissions: 'ADMINISTRATOR',
             category: 'utility'
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     async run(msg, args) {

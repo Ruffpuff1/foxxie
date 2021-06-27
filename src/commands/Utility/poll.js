@@ -9,6 +9,7 @@ module.exports = class extends Command {
             name: 'poll',
             aliases: ['strawpoll'],
             description: language => language.get('COMMAND_POLL_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '(title=Title) [...Options]',
             category: 'utility'
         })

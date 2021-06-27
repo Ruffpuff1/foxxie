@@ -10,6 +10,7 @@ module.exports = class extends Command {
             name: 'pokemon',
             aliases: ['pkm', 'poke'],
             description: language => language.get('COMMAND_POKEMON_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '[Pokemon] (-s)',
             category: 'fun' 
         })

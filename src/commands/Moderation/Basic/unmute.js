@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'unmute',
             aliases: ['um', 'unzip', 'noise'],
             description: language => language.get('COMMAND_UNMUTE_DESCRIPTION'),
-            permissions: 'BAN_MEMBERS',
+            requiredPermissions: ['ADD_REACTIONS', 'MANAGE_ROLES'],
             usage: '[Members] (Reason)',
             category: 'moderation',
         })
+
+        this.permissions = 'BAN_MEMBERS';
     }
 
     async run(msg, reason) {

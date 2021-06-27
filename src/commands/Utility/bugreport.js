@@ -7,6 +7,7 @@ module.exports = class extends Command {
             name: 'bugreport',
             aliases: ['bug'],
             description: language => language.get('COMMAND_BUGREPORT_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS'],
             usage: '[...Bug]',
             category: 'utility'
         }) 

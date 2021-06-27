@@ -10,6 +10,7 @@ module.exports = class extends Command {
             name: 'info',
             aliases: ['i', 'user', 'whois', 'role', 'channel', 'emoji', 'emote', 'warns', 'warnings', 'notes'],
             description: language => language.get('COMMAND_INFO_DESCRIPTION'),
+			requiredPermissions: ['EMBED_LINKS'],
             usage: '(User | Role | Channel | Emoji | server)',
             category: 'utility'
         })

@@ -8,6 +8,7 @@ module.exports = class extends Command {
             name: 'serverlist',
             aliases: ['sl'],
             description: language => language.get('COMMAND_SERVERLIST_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             permissionLevel: 10,
             category: 'admin',
         })

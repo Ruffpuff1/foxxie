@@ -8,10 +8,12 @@ module.exports = class extends Command {
             name: 'ban',
             aliases: ['b', 'bean', '410', 'yeet', 'banish', 'begone', 'perish'],
             description: language => language.get('COMMAND_BAN_DESCRIPTION'),
+            requiredPermissions: ['BAN_MEMBERS', 'ADD_REACTIONS'],
             usage: '(Time) [Users] (Reason) (-p)',
-            permissions: 'BAN_MEMBERS',
             category: 'moderation'
         });
+
+        this.permissions = 'BAN_MEMBERS';
 
         this.purge = /\-purge\s*|-p\s*/gi;
         this.duration = /^\d*[s|m|h|d|w|y]$/gmi;

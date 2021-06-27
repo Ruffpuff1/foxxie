@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'testleave',
             aliases: ['testbye', 'tl'],
             description: language => language.get('COMMAND_TESTLEAVE_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS'],
             usage: '[Member]',
-            permissions: 'MANAGE_MESSAGES',
             category: 'settings'
         })
+
+        this.permissions = 'MANAGE_MESSAGES';
     }
 
     run(msg) {

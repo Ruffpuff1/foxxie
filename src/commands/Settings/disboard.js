@@ -8,9 +8,10 @@ module.exports = class extends Command {
             aliases: ['ds', 'disboard-settings'],
             description: language => language.get('COMMAND_DISBOARD_DESCRIPTION'),
             usage: '[channel | message] (Channel | Message | none)',
-            permissions: 'ADMINISTRATOR',
             category: 'settings'
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     run(msg, args) {

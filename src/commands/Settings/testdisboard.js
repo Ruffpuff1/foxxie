@@ -7,9 +7,11 @@ module.exports = class extends Command {
             name: 'testdisboard',
             aliases: ['testbump', 'td'],
             description: language => language.get('COMMAND_DESCRIPTION_TESTDISBOARD'),
-            permissions: 'MANAGE_MESSAGES',
+            requiredPermissions: ['EMBED_LINKS', 'ADD_REACTIONS'],
             category: 'settings'
         })
+
+        this.permissions = 'MANAGE_MESSAGES';
     }
 
     run(msg) {

@@ -8,10 +8,12 @@ module.exports = class extends Command {
             name: 'unexempt',
             aliases: ['unignore'],
             description: language => language.get('COMMAND_UNEXEMPT_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS'],
             usage: '[Member | Channel | Role]',
-            permissions: 'ADMINISTRATOR',
             category: 'settings'
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     async run(msg) {

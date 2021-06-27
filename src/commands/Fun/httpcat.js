@@ -9,6 +9,7 @@ module.exports = class extends Command {
             name: 'httpcat',
             aliases: ['hcat', 'http'],
             description: language => language.get('COMMAND_HTTPCAT_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '[Number]',
             category: 'fun'
         })

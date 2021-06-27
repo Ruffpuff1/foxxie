@@ -1,5 +1,4 @@
 const { Command, MENTION_REGEX: { role: roleRegex } } = require('@foxxie/tails');
-const { Permissions: { FLAGS }, Role } = require('discord.js');
 const GuildReactionCollector = require('~/lib/extensions/GuildReactionCollector');
 
 module.exports = class extends Command {
@@ -12,10 +11,11 @@ module.exports = class extends Command {
             runIn: ['text', 'news'],
             usage: '[add | remove] (Message) [Role]',
             permissionLevel: 10,
-            requiredPermissions: FLAGS.MANAGE_ROLES,
+            requiredPermissions: ['ADD_REACTIONS', 'MANAGE_ROLES'],
             category: 'settings'
         })
 
+        this.permissions = 'ADMINISTRATOR';
         this.notifier = null;
     }
 

@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'setcolor',
             aliases: ['sc', 'setcolour'],
             description: language => language.get('COMMAND_SETCOLOR_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS', 'MANAGE_ROLES'],
             usage: '[Role] [Color]',
-            permissions: 'MANAGE_ROLES',
             category: 'utility'
         })
+
+        this.permissions = 'MANAGE_ROLES';
     }
 
     run(msg, args) {

@@ -8,9 +8,10 @@ module.exports = class extends Command {
             aliases: ['modcounts', 'stafflogs'],
             description: language => language.get('COMMAND_STAFFLOG_DESCRIPTION'),
             usage: '(Member)',
-            permissions: 'MANAGE_MESSAGES',
             category: 'moderation'
         })
+
+        this.permissions = 'MANAGE_MESSAGES'
     }
 
     async run(msg) {

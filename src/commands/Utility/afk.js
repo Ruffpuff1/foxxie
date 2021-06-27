@@ -8,6 +8,7 @@ module.exports = class extends Command {
             name: 'afk',
             aliases: ['away', 'idle'],
             description: language => language.get('COMMAND_AFK_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '(...Reason)',
             category: 'utility'
         })

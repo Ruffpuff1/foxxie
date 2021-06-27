@@ -7,6 +7,7 @@ module.exports = class extends Command {
             name: 'nuke',
             aliases: ['snap'],
             description: language => language.get('COMMAND_NUKE_DESCRIPTION'),
+            requiredPermissions: ['MANAGE_CHANNELS'],
             usage: '(Channel) (Reason)',
             permissionLevel: 6,
             category: 'moderation'

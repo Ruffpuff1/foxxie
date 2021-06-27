@@ -19,7 +19,7 @@ module.exports = {
     colorURL: 'https://color.aero.bot',
     shards: 'auto',
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-    typing: true,
+    typing: false,
     enableStatus: true,
     status: client => [
         `${client.guilds.cache.size.toLocaleString()} servers & ${client.users.cache.size.toLocaleString()} users.`,

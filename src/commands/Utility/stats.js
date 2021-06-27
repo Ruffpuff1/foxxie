@@ -13,6 +13,7 @@ module.exports = class extends Command {
             name: 'stats',
             aliases: ["up", 'uptime', 'shards'],
             description: language => language.get('COMMAND_STATS_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             category: 'utility'
         })
     }

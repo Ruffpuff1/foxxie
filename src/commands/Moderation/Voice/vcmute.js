@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'vcmute',
             aliases: ['vcm'],
             description: language => language.get('COMMAND_VCMUTE_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS', 'MUTE_MEMBERS'],
             usage: '[Members] (Reason)',
-            category: 'moderation',
-            permissions: 'MUTE_MEMBERS'
+            category: 'moderation'
         })
+
+        this.permissions = 'MUTE_MEMBERS'
     }
 
     async run(msg, args) {

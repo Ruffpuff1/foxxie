@@ -8,9 +8,10 @@ module.exports = class extends Command {
             aliases: ['setprefix', 'prefixes'],
             description: language => language.get('COMMAND_PREFIX_DESCRIPTION'),
             usage: '(Prefix | none | remove) (Prefix)',
-            permissions: 'ADMINISTRATOR',
             category: 'settings'
         });
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     async run(msg, args) {

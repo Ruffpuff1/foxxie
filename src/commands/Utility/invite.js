@@ -8,6 +8,7 @@ module.exports = class extends Command {
             name: 'invite',
             aliases: ['botinvite', 'support', 'vote'],
             description: language => language.get('COMMAND_INVITE_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             category: 'utility'
         })
     }

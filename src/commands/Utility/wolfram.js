@@ -12,6 +12,7 @@ module.exports = class extends Command {
             name: 'wolfram',
             aliases: ['wa'],
             description: language => language.get('COMMAND_WOLFRAM_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS', 'ATTACH_FILES'],
             usage: '[...Search] (-graph)',
             category: 'utility'
         })

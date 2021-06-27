@@ -7,10 +7,13 @@ module.exports = class extends Command {
             name: 'kick',
             aliases: ['k', 'boot', '409'],
             description: language => language.get('COMMAND_KICK_DESCRIPTION'),
+            requiredPermissions: ['KICK_MEMBERS', 'ADD_REACTIONS'],
             usage: '[Members] (...Reason)',
             permissions: 'KICK_MEMBERS',
             category: 'moderation'
         })
+
+        this.permissions = 'KICK_MEMBERS';
     }
 
     async run(msg, args) {

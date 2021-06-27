@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'clearwarn',
             aliases: ['clearwarns', 'cw', 'pardon'],
             description: language => language.get('COMMAND_CLEARWARN_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS'],
             usage: '[Member] [Warn | all] (...Reason)',
-            permissions: 'BAN_MEMBERS',
             category: 'moderation'
         })
+
+        this.permissions = 'BAN_MEMBERS';
     }
 
     async run(msg, [_, id, ...reason]) {

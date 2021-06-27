@@ -8,9 +8,10 @@ module.exports = class extends Command {
             aliases: ['ws', 'welcome-settings'],
             description: language => language.get('COMMAND_WELCOME_DESCRIPTION'),
             usage: '[channel | message] (Channel | Message | none)',
-            permissions: 'ADMINISTRATOR',
             category: 'settings'
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     run(msg, args) {

@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'testjoin',
             aliases: ['testwelcome', 'tw'],
             description: language => language.get('COMMAND_TESTJOIN_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS'],
             usage: '[Member]',
-            permissions: 'MANAGE_MESSAGES',
             category: 'settings'
         })
+
+        this.permissions = 'MANAGE_MESSAGES';
     }
 
     run(msg) {

@@ -9,6 +9,7 @@ module.exports = class extends Command {
             name: "urban",
             aliases: ['ud', 'slang', 'urban-dictionaray'],
             description: language => language.get('COMMAND_URBAN_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '[Term] [Number]',
             nsfw: true,
             category: 'fun',

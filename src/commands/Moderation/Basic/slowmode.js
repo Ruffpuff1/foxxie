@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'slowmode',
             aliases: ['slowchat', 'slow', 'freeze', 's', 'sm'],
             description: language => language.get('COMMAND_SLOWMODE_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS', 'MANAGE_CHANNELS'],
             usage: '[Number | none] (...Reason)',
-            permissions: 'MANAGE_CHANNELS',
             category: 'moderation'
         })
+
+        this.permissions = 'MANAGE_CHANNELS';
     }
 
     async run(message, args) {

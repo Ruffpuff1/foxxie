@@ -8,9 +8,10 @@ module.exports = class extends Command {
             aliases: ['gs', 'goodbye-settings'],
             description: language => language.get('COMMAND_GOODBYE_DESCRIPTION'),
             usage: '[channel | message] (Channel | Message | none)',
-            permissions: 'ADMINISTRATOR',
             category: 'settings'
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     run(msg, args) {

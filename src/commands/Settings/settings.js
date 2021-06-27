@@ -7,9 +7,10 @@ module.exports = class extends Command {
             name: 'settings',
             aliases: ['setting'],
             description: language => language.get('COMMAND_SETTINGS_DESCRIPTION'),
-            permissions: 'MANAGE_MESSAGES',
             category: 'settings',
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     async run(msg) {

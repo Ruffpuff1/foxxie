@@ -9,6 +9,7 @@ module.exports = class extends Command {
             name: 'color',
             aliases: ['colour', 'c'],
             description: language => language.get('COMMAND_COLOR_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '[Hexcode]',
             category: 'utility'
         })

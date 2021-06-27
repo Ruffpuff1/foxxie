@@ -8,6 +8,7 @@ module.exports = class extends Command {
             name: 'avatar',
             aliases: ['av', 'icon', 'pfp', 'usericon'],
             description: language => language.get('COMMAND_AVATAR_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             usage: '(User)',
             category: 'utility'
         })

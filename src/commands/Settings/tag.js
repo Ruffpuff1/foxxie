@@ -8,9 +8,10 @@ module.exports = class extends Command {
             aliases: ['t', 'tags'],
             description: language => language.get('COMMAND_TAG_DESCRIPTION'),
             usage: '(add | remove) (tag) (text)',
-            permissions: 'MANAGE_MESSAGES',
             category: 'settings'
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     run(_, args) {

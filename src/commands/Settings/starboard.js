@@ -8,9 +8,10 @@ module.exports = class extends Command {
             aliases: ['sb', 'star', 'starboard-settings'], 
             description: language => language.get('COMMAND_STARBOARD_DESCRIPTION'),
             usage: '[channel | minimum | self | notifs] (Setting)',
-            permissions: 'ADMINISTRATOR',
             category: 'settings'
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     async run(msg, args) {

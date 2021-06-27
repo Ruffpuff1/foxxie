@@ -8,11 +8,12 @@ module.exports = class extends Command {
             name: 'mute',
             aliases: ['m', 'silence', 'shush', 'quiet', '403', 'zip'],
             description: language => language.get('COMMAND_MUTE_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS', 'MANAGE_ROLES'],
             usage: '(Time) [Users] (...Reason)',
-            permissions: 'BAN_MEMBERS',
             category: 'moderation',
         });
 
+        this.permissions = 'BAN_MEMBERS';
         this.duration = /^\d*[s|m|h|d|w|y]$/gmi;
     }
 
@@ -29,7 +30,7 @@ module.exports = class extends Command {
         let reason = duration
             ? args.slice(members.length + 1).join(' ')
             : args.slice(members.length).join(' ') || msg.language.get('LOG_MODERATION_NOREASON');
-
+        reason;
         const muterole = await msg.guild.settings.get('mod.roles.mute');
         if (!msg.guild.roles.cache.get(muterole)) muterole = await msg.guild.createMuteRole();
 
@@ -44,7 +45,7 @@ module.exports = class extends Command {
             member.mute(`${msg.author.tag} | ${reason}`, muterole);
         }
         if (duration) this.client.schedule.create('endTempmute', duration, { data: 
-            { users: members.map(member => member.user.id), guild: msg.guild.id, moderator: msg.member.id, channel: msg.channel.id, timeLong, reason } 
+            { users: members.map(member => member.user.id), guild: msg.guild.id, moderator: msg.member.id, channel: msg.channel.id, timeLong, reason: reason } 
         })
     }
 

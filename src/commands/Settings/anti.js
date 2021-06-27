@@ -7,10 +7,12 @@ module.exports = class extends Command {
             name: 'anti',
             aliases: ['auto', 'am', 'auto-mod'],
             description: language => language.get('COMMAND_ANTI_DESCRIPTION'),
+            requiredPermissions: ['ADD_REACTIONS'],
             usage: '(Anti | clear) (on | off)',
-            permissions: 'ADMINISTRATOR',
             category: 'settings'
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     async run(msg, [anti, setting]) {

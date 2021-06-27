@@ -7,6 +7,7 @@ module.exports = class extends Command {
             name: 'say',
             aliases: ['speak', 'message'],
             description: language => language.get('COMMAND_SAY_DESCRIPTION'),
+            requiredPermissions: ['MANAGE_MESSAGES'],
             usage: '[...Message]',
             permissions: 'MANAGE_MESSAGES',
             category: 'utility'

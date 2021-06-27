@@ -703,6 +703,7 @@ module.exports = class extends Language {
             // Inhibitors
             INHIBITOR_NSFW: `${bold`Hehe,`} due to the potential risqué nature of this command it can only be run in ${bold`nsfw channels`}.`,
             INHIBITOR_PERMISSIONS_AUTHOR: perm => `${bold`You don't`} have permission to run this command, you need the ${bold`${perm}`} permission.`,
+            INHIBITOR_PERMISSIONS_BOT: perms => `${bold`Uhhh,`} I don't have permissions to properly run this command, I need the ${bold`${perms}`} permission.`,
             INHIBITOR_PERMISSIONS_GUILDOWNER: `${bold`Nope,`} due to the harm this command can cause it can only be executed by the guild owner.`,
             INHIBITOR_RUNIN: type => `${bold`Whoops,`} this command can only be run in ${bold`${type}`} channels.`,
             INHIBITOR_RUNIN_NONE: name => `${bold`Uhh,`} the ${bold`${name}`} command isn't configured to run in any channels.`,

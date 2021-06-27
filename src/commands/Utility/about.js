@@ -9,6 +9,7 @@ module.exports = class extends Command {
             name: 'about',
             aliases: ['botinfo'],
             description: language => language.get('COMMAND_ABOUT_DESCRIPTION'),
+            requiredPermissions: ['EMBED_LINKS'],
             category: 'utility',
         })
     }

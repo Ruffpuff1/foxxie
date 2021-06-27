@@ -8,10 +8,12 @@ module.exports = class extends Command {
             name: 'language',
             aliases: ['lang', 'setlang', 'setlanguage'],
             description: language => language.get('COMMAND_LANGUAGE_DESCRIPTION'),
-            permissions: 'ADMINISTRATOR',
+            requiredPermissions: ['ADD_REACTIONS'],
             permissionLevel: 10,
             category: 'settings'
         })
+
+        this.permissions = 'ADMINISTRATOR';
     }
 
     async run(msg) {
