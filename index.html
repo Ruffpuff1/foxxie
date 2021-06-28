@@ -1,196 +1,71 @@
 <!DOCTYPE html>
-<html style="background-color: #eaeaea; overflow-y: auto;">
+<html lang="en">
 	<head>
-  		<meta charset="UTF-8">
-  		<meta name="description" content="Foxxie | A smort butler for your community server. Foxxie includes a wide variety of features including utility, moderation, roleplay, and reminders. Foxxie is built using nodejs and Discord.js.">
-  		<!-- <meta name="keywords" content="Discord, Discord bots, Discord bot, Foxxie, Foxxie Discord, ruff, ruffpuff"> -->
-  		<meta name="author" content="Foxxie">
-		<title>Foxxie - Discord</title>
-		<link rel="icon" href="/cdn/images/foxxie.png">
-		<!-- <link rel="stylesheet" href="/cdn/css/bulma.css"> -->
-		<link rel="stylesheet" href="/cdn/css/styles.css">
-        <meta property="og:url" content="http//foxxie.ruff.cafe">
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="A smort server butler.">
-        <meta property="og:description" content="Foxxie includes a wide variety of features including utility, moderation, roleplay, and reminders. Foxxie is built using nodejs and Discord.js.">
-        <meta property="og:image" content="/cdn/images/foxxie.png">
-        <meta property="og:image:secure_url" content="/cdn/images/foxxie.png">
-		<meta name="viewport" content="width=device-width, initial-scale=0.8">
+		<title>Foxxie - Invite</title>
+		<meta
+			name="Invite the Foxxie Bot"
+			content="Invite the Foxxie Bot, a smort server butler."
+		/>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width">
+		<meta name = "robots" content="index, follow"/>
+		<link rel="icon" href="./cdn/images/circle-cropped-7.png">
 	</head>
+
 	<body>
-		<section class="hero is-info is-fullheight" style=" background-size: cover; background-color: #151517;">
-			<div class="hero-head">
-				<header class="nav">
-					<div class="container">
-						<div class="nav-right">
-							<a href="/" class="nav-item is-active">Foxxie</a>
-							<a href="commands" class="nav-item ">Commands</a>
-							<a href="support" class="nav-item">Support</a>
-							<a href="./invite/index.html" class="nav-item " style="color: #ffffff;">
-								<span>Invite Foxxie</span>
-							</a>						
-						</div>
-					</div>
-				</header>
+		<div class="container">
+			<div class="item">
+				<img class="logo" src="./cdn/images/foxxie.png" alt="Image of Foxxie's Discord Avatar">
+				<h1 class="logo">Foxxie</h1>
+				<p id="tagline">A smort server butler (Who's dev can't make websites)</p>
 			</div>
-			<div id="particles-js"></div>
-			<div class="hero-body">
-				<div class="container has-text-centered">
-					<h1 class="title">
-						<img src="/cdn/images/foxxie.png" height="200" width="200">
-					</h1>
-				<div class="info">
-					<nav class="level" style="margin-top: 2em;">
-						<div class="level-item has-text-centered">
-							<div>
-								<p class="heading">A smort server butler with over 100 commands.</p>
-								<p class="title">Foxxie</p>
-							</div>
-						</div>
-					</nav>
-				</div>
-				</h2>
-				<div style="margin-top:3em;">
-					<a href="./invite/index.html" class=" button is-info is-inverted " style="background-color: #ffbebb00; color: #ffffff; border-color: white;">
-						<span>Invite Foxxie</span>
-					</a>
-				</div>
-				<div class="examples">
-					<nav><br><br><br><br><br><br><br><br><br><br><br><br><br>
-						<div class="starboard">
-							<h1 class="title">Moderation</h1>
-							<p>Extensive moderation commands, with logging.</p><br>
-							<h1 class="title">
-								<img src="http://cdn.ruff.cafe/images/ash-ban.png" alt="">
-								<img src="http://cdn.ruff.cafe/images/ash-ban-log.png" alt="">
-							</h1>
-						</div>
-					</nav>
-					<nav>
-						<div class="starboard"><br><br><br><br>
-							<h1 class="title">Starboard</h1>
-							<p>A democratic pinboard, awarded with ⭐️</p><br>
-							<h1 class="title">
-								<img src="http://cdn.ruff.cafe/images/boxxie.png" alt="">
-							</h1>
-						</div>
-					</nav>
-				</div>
+			<div class="item">
+				<a class="button"
+				href="https://discord.com/api/oauth2/authorize?client_id=812546582531801118&permissions=8&scope=bot">
+				Invite Foxxie
+			</a>
+			<a class="button"
+				href="https://discord.gg/jMernA8hD9">
+				Support Server
+			</a>
 			</div>
-			</div>
-		</section>
+			<img class="duck" src="https://c.tenor.com/S9BVMZq1Vq8AAAAM/duck-duck-dance.gif" alt="">
+		</div>
+		<style>
+			html,
+			body
+			.container {
+				height: 100%;
+				background-color: #151517;
+				color: #d6dcee;
+			}
+
+			a {
+				color: #d6dcee;
+			}
+
+			a:hover {
+				color: #a7b6e0;
+			}
+
+			img,
+			h1 {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+			img.logo {
+				height: 1.2em;
+				font-size: 6em;
+				padding-right: .3em;
+				line-height: 1em;
+			}
+
+			img.duck {
+				height: 12em;
+				padding-top: 3em;
+			}
+
+		</style>
 	</body>
-	<script src="/cdn/js/particles.min.js"></script>
-	<script>
-		particlesJS('particles-js', {
-			"particles": {
-				"number": {
-				"value": 50,
-				"density": {
-					"enable": true,
-					"value_area": 800
-				}
-				},
-				"color": {
-				"value": "#323337"
-				},
-				"shape": {
-				"type": "star",
-				"stroke": {
-					"width": 1,
-					"color": "#323337"
-				},
-				"polygon": {
-					"nb_sides": 5
-				},
-				"image": {
-					"src": "img/github.svg",
-					"width": 100,
-					"height": 100
-				}
-				},
-				"opacity": {
-				"value": 0.5,
-				"random": false,
-				"anim": {
-					"enable": false,
-					"speed": 10,
-					"opacity_min": 0.1,
-					"sync": false
-				}
-				},
-				"size": {
-				"value": 3,
-				"random": true,
-				"anim": {
-					"enable": false,
-					"speed": 40,
-					"size_min": 0.1,
-					"sync": false
-				}
-				},
-				"line_linked": {
-				"enable": true,
-				"distance": 150,
-				"color": "#ffffff",
-				"opacity": 0.4,
-				"width": 0.9469771699587272
-				},
-				"move": {
-				"enable": true,
-				"speed": 1.5782952832645452,
-				"direction": "none",
-				"random": false,
-				"straight": false,
-				"out_mode": "out",
-				"bounce": false,
-				"attract": {
-					"enable": false,
-					"rotateX": 600,
-					"rotateY": 1200
-				}
-				}
-			},
-			"interactivity": {
-				"detect_on": "canvas",
-				"events": {
-				"onhover": {
-					"enable": false,
-					"mode": "repulse"
-				},
-				"onclick": {
-					"enable": false,
-					"mode": "push"
-				},
-				"resize": true
-				},
-				"modes": {
-				"grab": {
-					"distance": 400,
-					"line_linked": {
-					"opacity": 1
-					}
-				},
-				"bubble": {
-					"distance": 400,
-					"size": 40,
-					"duration": 2,
-					"opacity": 8,
-					"speed": 3
-				},
-				"repulse": {
-					"distance": 200,
-					"duration": 0.4
-				},
-				"push": {
-					"particles_nb": 4
-				},
-				"remove": {
-					"particles_nb": 2
-				}
-				}
-			},
-			"retina_detect": true
-			});
-	</script>
 </html>
