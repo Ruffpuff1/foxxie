@@ -33,7 +33,7 @@ module.exports = class extends Command {
             .setFooter(message.language.get('COMMAND_SERVERLIST_FOOTER', this.client.guilds.cache.size, page, Math.ceil(this.client.guilds.cache.size / 10)))
             .setDescription(description)
 
-        if (!this.client.guilds.cache.size <= 10) return message.channel.send(embed);
+        if (this.client.guilds.cache.size <= 10) return message.channel.send(embed);
         let msg = await message.channel.send(embed);
         this.menuReactions(msg, { i0, i1, page });
     }
