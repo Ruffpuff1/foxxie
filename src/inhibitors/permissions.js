@@ -9,7 +9,6 @@ module.exports = class extends Inhibitor {
     }
 
     async run(message, command) {
-        if (!message.channel.permissionsFor(message.guild.me).has(command.requiredPermissions.bitfield)) throw message.language.get('INHIBITOR_PERMISSIONS_BOT', command.requiredPermissions.toArray().map(perm => perm.toLowerCase()?.replace(/_/g, ' ')).join(', '))
 
         await message.guild?.members.fetch(message.guild.ownerID).catch(() => null);
         // Secure commands for bot owner, will fail silently.
@@ -31,5 +30,7 @@ module.exports = class extends Inhibitor {
             const authorPerms = message.channel.permissionsFor(message.author);
             if (!authorPerms || !authorPerms.has(command.permissions)) throw message.language.get('INHIBITOR_PERMISSIONS_AUTHOR', command.permissions?.toLowerCase()?.replace(/_/g, ' '));
         };
+
+        if (!message.channel.permissionsFor(message.guild.me).has(command.requiredPermissions.bitfield)) throw message.language.get('INHIBITOR_PERMISSIONS_BOT', command.requiredPermissions.toArray().map(perm => perm.toLowerCase()?.replace(/_/g, ' ')).join(', '))
     }
 }
