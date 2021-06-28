@@ -14,4 +14,4 @@ require('~/lib/extensions/TextChannel');
 const client = new Foxxie(options);
 require('dotenv').config();
 
-client.login(process.env['DEV']);
+client.login(process.env['TOKEN']);

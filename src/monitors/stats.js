@@ -4,7 +4,7 @@ module.exports = class extends Monitor {
 
     constructor(...args) {
         super(...args, {
-            enabled: false,
+            enabled: true,
             ignoreBots: false,
             ignoreSelf: false,
             ignoreOthers: false,
