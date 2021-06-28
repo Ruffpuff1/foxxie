@@ -24,7 +24,7 @@ module.exports = class extends Command {
             .setDescription(msg.language.get('COMMAND_ABOUT_SUMMARY'))
             .setThumbnail(this.client.user.displayAvatarURL())
             .addField(msg.language.get('COMMAND_ABOUT_CREATED_TITLE'), msg.language.get('COMMAND_ABOUT_CREATED_VALUE', timestamp.display(this.client.user.createdAt), Duration.toNow(this.client.user.createdAt)))
-            .addField(msg.language.get('COMMAND_ABOUT_VERSION_TITLE'), msg.language.get('COMMAND_ABOUT_VERSION_VALUE'))
+            .addField(msg.language.get('COMMAND_ABOUT_VERSION_TITLE'), msg.language.get('COMMAND_ABOUT_VERSION_VALUE', this.client.options.version))
             .addField(msg.language.get('COMMAND_ABOUT_COMMANDS_TITLE'), msg.language.get('COMMAND_ABOUT_COMMANDS_VALUE', this.client.commands.size.toLocaleString(), this.client.commands.aliases.size.toLocaleString()))
             .addField(msg.language.get('COMMAND_ABOUT_USERS_TITLE'), msg.language.get('COMMAND_ABOUT_USERS_VALUE', this.client.users.cache.size.toLocaleString()))
             .addField(msg.language.get('COMMAND_ABOUT_GUILDS_TITLE'), msg.language.get('COMMAND_ABOUT_GUILDS_VALUE', this.client.guilds.cache.size.toLocaleString()))
