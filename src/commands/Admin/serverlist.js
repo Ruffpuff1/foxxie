@@ -35,15 +35,15 @@ module.exports = class extends Command {
 
         if (this.client.guilds.cache.size <= 10) return message.channel.send(embed);
         let msg = await message.channel.send(embed);
-        this.menuReactions(msg, { i0, i1, page });
+        this.menuReactions(message, msg, { i0, i1, page });
     }
 
-    async menuReactions(msg, { i0, i1, page }) {
+    async menuReactions(message, msg, { i0, i1, page }) {
 
         await msg.react("⬅");
         await msg.react("➡");
 
-        let collector = msg.createReactionCollector((reaction, user) => user.id === msg.author.id)
+        let collector = msg.createReactionCollector((reaction, user) => user.id === message.author.id)
 
         collector.on('collect', async reaction => {
 
