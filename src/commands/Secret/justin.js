@@ -25,6 +25,6 @@ module.exports = class extends Command {
             .setDescription(msg.language.get('COMMAND_JUSTIN_NAME', user.toString(), justinName))
 
         const message = await msg.channel.send(embed);
-        return message.delete({ timeout: 300000 });
+        return message.delete({ timeout: 300000 }).catch(() => null);
     }
 }
