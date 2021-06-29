@@ -21,6 +21,11 @@ module.exports = {
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
     typing: false,
     enableStatus: true,
+    pieceDefaults: {
+        commands: {
+            runIn: ['text', 'nsfw'],
+        }
+    },
     status: client => [
         `${client.guilds.cache.size.toLocaleString()} servers & ${client.users.cache.size.toLocaleString()} users.`,
         `v${client.options.version} | fox help`,
