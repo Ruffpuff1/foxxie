@@ -35,26 +35,28 @@ module.exports = class extends Command {
 
         if (this.client.guilds.cache.size <= 10) return message.channel.send(embed);
         let msg = await message.channel.send(embed);
-        this.menuReactions(message, msg, { i0, i1, page });
+        this.menuReactions(message, msg, { i0, i1, page, description, embed });
     }
 
-    async menuReactions(message, msg, { i0, i1, page }) {
+    async menuReactions(message, msg, { i0, i1, page, description, embed }) {
 
         await msg.react("⬅");
         await msg.react("➡");
 
-        let collector = msg.createReactionCollector((reaction, user) => user.id === message.author.id)
+        let collector = msg.createReactionCollector((reaction, user) => user.id === message.author.id, { time: 90000 })
 
         collector.on('collect', async reaction => {
 
             if (reaction._emoji.name === "⬅") {
 
-                i0 = i0 - 10;
-                i1 = i1 - 10;
-                page = page - 1;
+                msg.reactions.resolve(reaction._emoji.name).users.remove(message.author);
 
-                if (i0 + 1 < 0) return msg;
-                if (!i0 || !i1) return msg;
+                i0 = i0 - 10; 
+                i1 = i1 - 10; 
+                page = page - 1; 
+
+                if (i0 + 1 < 0) return msg.reactions.removeAll()
+                if (i0 < 0 || !i1) return msg.reactions.removeAll()
 
                 description = this.client.guilds.cache
                     .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
@@ -71,14 +73,16 @@ module.exports = class extends Command {
             }
 
             if (reaction._emoji.name === "➡") {
+                
+                msg.reactions.resolve(reaction._emoji.name).users.remove(message.author);
 
                 i0 = i0 + 10;
                 i1 = i1 + 10;
                 page = page + 1;
-
-                if (i1 > this.client.guilds.cache.size + 10) return msg;
-                if (!i0 || i1) return msg;
-
+                
+                if (i1 > this.client.guilds.cache.size + 10) return msg.reactions.removeAll()
+                if (!i0 || !i1) return msg.reactions.removeAll()
+                
                 description = this.client.guilds.cache
                     .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
                     .map(r => r)
@@ -92,6 +96,10 @@ module.exports = class extends Command {
 
                 msg.edit(embed);
             }
+        })
+
+        collector.on('end', () => {
+            msg.reactions.removeAll()
         })
     }
 }
