@@ -627,6 +627,7 @@ module.exports = class extends Language {
             COMMAND_INFO_USER_GUILDCREATE: (server, date, duration) => `Created ${server} on ${date} ${bold`(${duration} ago)`}`,
             COMMAND_INFO_USER_GUILDJOIN: (server, date, duration) => `Joined ${server} on ${date} ${bold`(${duration} ago)`}`,
             COMMAND_INFO_USER_MESSAGES: (messages, percent) => `${messages.toLocaleString()} message${messages === 1 ? '' : 's'} sent${messages > 0 ? `, ${bold`${percent}%`} of all server messages.` : '.'}`,
+            COMMAND_INFO_USER_NOROLES: `No Roles`,
             COMMAND_INFO_USER_NOTES: notes => bold`:label: Note${notes === 1 ? '' : 's'} ${notes > 1 ? `(${notes.toLocaleString()})` : ''}`,
             COMMAND_INFO_USER_ROLES: size => bold`:scroll: Role${size}`,
             COMMAND_INFO_USER_STATISTICS: stars => bold`:pencil: Statistics ${stars ? `:dizzy: ${stars.toLocaleString()}` : ''}`,
