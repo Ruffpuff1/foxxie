@@ -5,3 +5,7 @@
 'packages:lock-queue':
   - packages/lock-queue/*
   - packages/lock-queue/**/*
+  
+'packages:eslint-config':
+  - packages/eslint-config/*
+  - packages/eslint-config/**/*
