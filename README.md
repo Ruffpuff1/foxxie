@@ -1,6 +1,6 @@
 <div align='center'>
   <img src='https://avatars.githubusercontent.com/u/84743025?s=200&v=4' width='140' height='140' />
-  <h1>Packages 🦊</h1>
+  <h1>packages ⚡️</h1>
   <blockquote>node packages for collective use in Foxxie Discord bots</blockquote>
 
   <br />
