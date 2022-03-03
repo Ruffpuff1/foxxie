@@ -1,0 +1,5 @@
+{
+  "additionalBranchPrefix": "{{parentDir}} -",
+  "assigneesFromCodeOwners": true,
+  "extends": ["config:base"]
+}
