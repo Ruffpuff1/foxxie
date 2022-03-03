@@ -1,3 +1,11 @@
+'bot:foxxie':
+  - apps/foxxie/*
+  - apps/foxxie/**/*
+
+'bot:kettu':
+  - apps/kettu/*
+  - apps/kettu/**/*
+
 'packages:fetch':
   - packages/fetch/*
   - packages/fetch/**/*
