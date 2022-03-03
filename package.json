@@ -1,0 +1,41 @@
+{
+  "name": "@foxxie/packages",
+  "version": "0.0.0",
+  "description": "node packages for collective use in Foxxie Discord bots",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "changelog": "turbo run changelog"
+  },
+  "contributors": [
+    "Ruffpuff1 <reeseharlak5@gmail.com>"
+  ],
+  "keywords": [
+    "bot",
+    "npm",
+    "turbo",
+    "packages",
+    "monorepo",
+    "yarn",
+    "discord",
+    "foxxie"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FoxxieBot/packages.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FoxxieBot/packages/issues"
+  },
+  "homepage": "https://github.com/FoxxieBot/packages",
+  "devDependencies": {
+    "turbo": "^1.1.4"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@3.1.1"
+}

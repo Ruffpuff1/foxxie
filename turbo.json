@@ -1,0 +1,24 @@
+{
+	"baseBranch": "origin/main",
+	"pipeline": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist/**"]
+		},
+		"test": {
+			"dependsOn": ["^build"],
+			"outputs": []
+		},
+		"lint": {
+			"dependsOn": ["^build"],
+			"outputs": []
+		},
+		"format": {
+			"outputs": []
+		},
+		"changelog": {
+			"dependsOn": ["^build"],
+			"outputs": ["CHANGELOG.md"]
+		}
+	}
+}
