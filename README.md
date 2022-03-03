@@ -8,7 +8,7 @@
 [![Typescript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![GitHub](https://img.shields.io/github/license/FoxxieBot/packages?logo=github&style=flat-square)](https://github.com/FoxxieBot/packages/blob/main/LICENSE)
   
-[![npm](https://img.shields.io/npm/v/@foxxie/eslint-config?color=crimson&label=lock-queue%20version&logo=npm&style=flat-square)](https://www.npmjs.com/package/@foxxie/eslint-config)
+[![npm](https://img.shields.io/npm/v/@foxxie/eslint-config?color=crimson&label=eslint-config%20version&logo=npm&style=flat-square)](https://www.npmjs.com/package/@foxxie/eslint-config)
 [![npm](https://img.shields.io/npm/v/@foxxie/fetch?color=crimson&label=fetch%20version&logo=npm&style=flat-square)](https://www.npmjs.com/package/@foxxie/fetch)
 [![npm](https://img.shields.io/npm/v/@foxxie/lock-queue?color=crimson&label=lock-queue%20version&logo=npm&style=flat-square)](https://www.npmjs.com/package/@foxxie/lock-queue)
   
