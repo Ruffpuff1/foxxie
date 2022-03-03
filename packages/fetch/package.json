@@ -2,10 +2,23 @@
   "name": "@foxxie/fetch",
   "version": "0.0.0",
   "description": "A centra inspired http client for Foxxie bots",
-  "main": "./dist/index.js",
   "scripts": {
+    "build": "tsup",
+    "lint": "prettier --check . && eslint src --ext mjs,js,ts",
+    "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
     "test": "jest --pass-with-no-tests --collect-coverage",
     "changelog": "git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'packages/fetch/*'"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
   },
   "repository": {
     "type": "git",
@@ -15,6 +28,9 @@
   "bugs": {
     "url": "https://github.com/FoxxieBot/packages/issues"
   },
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "keywords": [
     "foxxie",
@@ -30,7 +46,13 @@
     "@typescript-eslint/parser": "^5.13.0",
     "eslint": "^8.10.0",
     "jest": "^27.5.1",
+    "nock": "^13.2.4",
     "prettier": "^2.5.1",
+    "tsup": "^5.11.13",
     "typescript": "^4.6.2"
+  },
+  "dependencies": {
+    "@ruffpuff/utilities": "^4.0.0",
+    "undici": "^4.14.1"
   }
 }
