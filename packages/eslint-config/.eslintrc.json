@@ -1,0 +1,6 @@
+{
+    "extends": "@ruffpuff",
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    }
+}
