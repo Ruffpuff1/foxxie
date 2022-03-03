@@ -62,7 +62,7 @@ turbo-windows-64@1.1.4:
   resolved "https://registry.yarnpkg.com/turbo-windows-64/-/turbo-windows-64-1.1.4.tgz#a11e1cc8fc9867066f2863da506179373b39e6bd"
   integrity sha512-DMitFYd5eIhZ2CyPUeds3JXDB/onXBdA2DEj9cxVXY7q2ZBE4rpoV0Ft/mh15LsQZhwap9ipgddbCn16OGFvzw==
 
-turbo@^1.1.4:
+turbo@1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/turbo/-/turbo-1.1.4.tgz#c42db7d5b5eaad5714bff7c5babf11ba97a17244"
   integrity sha512-kz08AV61hJeY9xuL4yQ27G2qks5LMAdvbd36GpcKvrh4Za+m0t+r2ijMjDvATp8uj4i6IlSV0t/G0/OMwkm6HA==
