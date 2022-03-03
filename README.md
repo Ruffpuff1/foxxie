@@ -1,7 +1,4 @@
 <div align='center'>
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
   <img src='https://avatars.githubusercontent.com/u/84743025?s=200&v=4' width='140' height='140' />
   <h1>packages ⚡️</h1>
   <blockquote>node packages for collective use in Foxxie Discord bots</blockquote>
