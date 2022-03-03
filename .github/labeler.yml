@@ -1,0 +1,3 @@
+'packages:fetch':
+  - packages/fetch/*
+  - packages/fetch/**/*
