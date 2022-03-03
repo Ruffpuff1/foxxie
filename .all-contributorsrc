@@ -1,0 +1,26 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Ruffpuff1",
+      "name": "Ruff",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73779441?v=4",
+      "profile": "https://github.com/Ruffpuff1",
+      "contributions": [
+        "code",
+        "ideas",
+        "content"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "packages",
+  "projectOwner": "FoxxieBot",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
