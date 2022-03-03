@@ -1,5 +1,6 @@
 {
   "additionalBranchPrefix": "{{parentDir}} -",
   "assigneesFromCodeOwners": true,
-  "extends": ["config:base"]
+  "extends": ["config:base", "group:allNonMajor"],
+  "schedule": ["before 12pm on Sunday"]
 }
