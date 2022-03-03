@@ -1,3 +1,7 @@
 'packages:fetch':
   - packages/fetch/*
   - packages/fetch/**/*
+
+'packages:lock-queue'
+  - packages/lock-queue/*
+  - packages/lock-queue/**/*

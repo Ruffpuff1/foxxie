@@ -1,2 +1,4 @@
 - name: 'packages:fetch'
   color: 'fbca04'
+- name: 'packages:lock-queue'
+  color: '19fffe'

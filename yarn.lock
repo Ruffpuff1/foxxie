@@ -960,6 +960,11 @@ arrify@^1.0.1:
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=
 
+async-rwlock@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/async-rwlock/-/async-rwlock-1.1.1.tgz#6662c732aa2950969b5bdc085ef568fa7adfb97a"
+  integrity sha512-K4ecpHLAc0Jul4dMb1KLpukblQmHxD5/HNgkTuO3sQ9oLLtVENCJVk7+b0wMj1K89cqnjGkTsAvOb83lCfoKwA==
+
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
