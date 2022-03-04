@@ -15,4 +15,6 @@ ENV NODE_ENV="production"
 
 COPY .env .env
 
+LABEL org.opencontainers.image.source = &quot;https://github.com/FoxxieBot/packages&quot;
+
 CMD [ "yarn", "start" ]
