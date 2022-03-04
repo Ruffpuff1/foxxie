@@ -1,0 +1,5 @@
+commit_message: 'chore(i18n/%locale%): Update translations for %original_file_name%'
+append_commit_message: false
+files:
+  - source: /apps/kettu/src/languages/en-US/**/*.json
+    translation: /apps/kettu/src/languages/%locale%/**/%original_file_name%
