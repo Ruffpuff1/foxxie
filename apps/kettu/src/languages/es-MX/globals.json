@@ -1,10 +1,4 @@
 {
-    "and": "{{value, and}}",
-    "codeand": "{{value, codeand}}",
-    "dateFormat": "{{value, dateFormat}}",
-    "duration": "{{value, duration}}",
-    "no": "No",
     "none": "Ninguno",
-    "number": "{{value, number}}",
     "yes": "Sí"
 }
