@@ -8,6 +8,7 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "format": "turbo run format",
+    "dev": "turbo run dev",
     "changelog": "turbo run changelog"
   },
   "contributors": [

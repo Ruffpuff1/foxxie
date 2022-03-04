@@ -1,6 +1,9 @@
 {
 	"baseBranch": "origin/main",
 	"pipeline": {
+		"dev": {
+			"dependsOn": ["^build"]
+		},
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": ["dist/**"]

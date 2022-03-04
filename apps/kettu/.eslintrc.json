@@ -1,7 +1,7 @@
 {
     "extends": "@foxxie",
     "parserOptions": {
-        "project": "tsconfig.base.json"
+        "project": "./apps/kettu/tsconfig.base.json"
     },
     "rules": {
         "@typescript-eslint/member-ordering": [
