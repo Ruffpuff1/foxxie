@@ -27,10 +27,3 @@ declare module 'i18next' {
         <K extends string, TArgs extends O, TReturn>(key: CustomFunctionGet<K, TArgs, TReturn>, defaultValue: TReturn, options?: TOptions<TArgs>): TReturn;
     }
 }
-
-// TODO remove later
-declare module '@foxxie/types' {
-    export namespace Github {
-        export type Repo = Endpoints['GET /repos/{owner}/{repo}']['response']['data'];
-    }
-}
