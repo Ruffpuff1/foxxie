@@ -22,11 +22,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FoxxieBot/packages.git",
+    "url": "https://github.com/FoxxieBot/foxxie.git",
     "directory": "packages/fetch"
   },
   "bugs": {
-    "url": "https://github.com/FoxxieBot/packages/issues"
+    "url": "https://github.com/FoxxieBot/foxxie/issues"
   },
   "files": [
     "dist"
