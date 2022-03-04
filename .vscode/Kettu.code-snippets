@@ -1,0 +1,22 @@
+{
+    "Listener": {
+        "prefix": "listener",
+        "description": "Create a default listener",
+        "body": [
+            "import { Events } from '#types/Events';",
+            "import type { EventArgs } from '#types/Utils';",
+            "import { Listener, ListenerOptions } from '@sapphire/framework';",
+            "import { ApplyOptions } from '@sapphire/decorators';",
+            "",
+            "@ApplyOptions<ListenerOptions>({",
+            "\tevent: Events.$1",
+            "})",
+            "export class UserListener extends Listener<Events.$1> {",
+            "\tpublic async run(...[$2]: EventArgs<Events.$1>) {",
+            "",
+            "\t}",
+            "}",
+            ""
+        ]
+    }
+}
