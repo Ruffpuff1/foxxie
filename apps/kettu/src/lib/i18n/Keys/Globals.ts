@@ -6,5 +6,5 @@ export const DateFormat = FT<{ value: Date | number | string }>('globals:dateFor
 export const Duration = FT<{ value: Date | number | string }>('globals:duration');
 export const No = T('globals:no');
 export const None = T('globals:none');
-export const Number = FT<{ value: string | number }>('globals:number');
+export const Number = FT<{ value: string | number }, string>('globals:number');
 export const Yes = T('globals:yes');
