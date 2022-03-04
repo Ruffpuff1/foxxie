@@ -4,6 +4,8 @@
   color: 'fbca04'
 - name: 'packages:eslint-config'
   color: 'fbca04'
+  - name: 'packages:types'
+  color: 'fbca04'
 - name: 'bot:kettu'
   color: '80c042'
 - name: 'bot:foxxie'
