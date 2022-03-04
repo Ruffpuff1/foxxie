@@ -6,6 +6,7 @@ export interface KettuEnv {
     DISCORD_TOKEN: string;
     GUILD_IDS: string;
 
+    CELESTIA_ENABLED: BooleanString;
     SAELEM_ENABLED: BooleanString;
 
     CRYPTOCOMPARE_TOKEN: string;
