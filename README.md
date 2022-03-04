@@ -6,7 +6,7 @@
   <br />
 
 [![Typescript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![GitHub](https://img.shields.io/github/license/FoxxieBot/packages?logo=github&style=flat-rounded)](https://github.com/FoxxieBot/packages/blob/main/LICENSE)
+[![GitHub](https://img.shields.io/github/license/FoxxieBot/foxxie?logo=github&style=flat-rounded)](https://github.com/FoxxieBot/foxxie/blob/main/LICENSE)
 [![Crowdin](https://badges.crowdin.net/kettu/localized.svg)](https://crowdin.com/project/kettu)
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/foxxie?label=foxxie%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/foxxie)

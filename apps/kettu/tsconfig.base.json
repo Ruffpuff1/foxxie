@@ -1,5 +1,5 @@
 {
-    "extends": "@sapphire/ts-config",
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "lib": [
             "ESNext",

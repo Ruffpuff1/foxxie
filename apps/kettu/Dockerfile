@@ -15,6 +15,6 @@ ENV NODE_ENV="production"
 
 COPY .env .env
 
-LABEL org.opencontainers.image.source = "https://github.com/FoxxieBot/packages/apps/kettu"
+LABEL org.opencontainers.image.source = "https://github.com/FoxxieBot/foxxie/apps/kettu"
 
 CMD [ "yarn", "start" ]
