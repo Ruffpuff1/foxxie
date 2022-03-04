@@ -15,10 +15,21 @@
         "ideas",
         "content"
       ]
+    },
+    {
+      "login": "Raindrop-Droptop",
+      "name": "Raindrop-Droptop",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81828616?v=4",
+      "profile": "https://github.com/Raindrop-Droptop",
+      "contributions": [
+        "ideas",
+        "financial",
+        "translation"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "projectName": "packages",
+  "projectName": "foxxie",
   "projectOwner": "FoxxieBot",
   "repoType": "github",
   "repoHost": "https://github.com",
