@@ -97,8 +97,8 @@ export class UserCommand extends Command {
 
         const embed = new MessageEmbed()
             .setColor(Colors.Default)
-            .setAuthor({ name: user.name ? `${user.name} [${user.login}]` : user.login, iconURL: user.avatar_url, url: user.html_url })
-            .setThumbnail(user.avatar_url)
+            .setAuthor({ name: user.name ? `${user.name} [${user.login}]` : (user.login as string), iconURL: user.avatar_url as string, url: user.html_url as string })
+            .setThumbnail(user.avatar_url as string)
             .setDescription(
                 [
                     t(LanguageKeys.Commands.Websearch.GithubUserCreated, { date: user.created_at }),
@@ -106,12 +106,12 @@ export class UserCommand extends Command {
                 ].join('\n')
             );
 
-        if (user.bio) embed.addField(titles.bio, user.bio);
+        if (user.bio) embed.addField(titles.bio, user.bio as string);
 
         return embed
-            .addField(titles.occupation, user.company || none, true)
-            .addField(titles.location, user.location || none, true)
-            .addField(titles.website, user.blog || none, true);
+            .addField(titles.occupation, (user.company as string) || none, true)
+            .addField(titles.location, (user.location as string) || none, true)
+            .addField(titles.website, (user.blog as string) || none, true);
     }
 
     private buildRepoEmbed(t: TFunction, repo: Github.Repo) {

@@ -20,7 +20,7 @@ export class UserInteractionHandler extends InteractionHandler {
             case GithubOptionType.User:
             case GithubOptionType.Owner: {
                 const fuzzyResult = await fetchFuzzyUser(option.value as string);
-                return this.some(fuzzyResult.map(entry => ({ value: entry.login, name: (entry as unknown as Label).label ?? entry.login })));
+                return this.some(fuzzyResult.map(entry => ({ value: entry.login as string, name: (entry as unknown as Label).label ?? (entry.login as string) })));
             }
             case GithubOptionType.Repo: {
                 const fuzzyResult = await fetchFuzzyRepo(interaction.options.getString(GithubOptionType.Owner, true), option.value as string);

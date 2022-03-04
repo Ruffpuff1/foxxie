@@ -1,5 +1,5 @@
 import { Events } from '#types/Events';
-import type { EventArgs } from '#types/Utils';
+import type { EventArgs } from '@foxxie/types';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions, UserError } from '@sapphire/framework';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';

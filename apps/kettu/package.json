@@ -1,18 +1,18 @@
 {
-    "name": "kettu",
-    "main": "./dist/Kettu.js",
-    "version": "1.0.0",
-    "license": "MIT",
-    "scripts": {
-        "build": "tsc -b src",
-        "lint": "prettier --check . && eslint src --ext mjs,js,ts",
-        "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
-        "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'apps/kettu/*'",
-        "dev": "yarn build && yarn start",
-        "start": "node .",
-        "prod": "NODE_ENV=production node ."
-    },
-    "imports": {
+  "name": "kettu",
+  "main": "./dist/Kettu.js",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -b src",
+    "lint": "prettier --check . && eslint src --ext mjs,js,ts",
+    "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
+    "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'apps/kettu/*'",
+    "dev": "yarn build && yarn start",
+    "start": "node .",
+    "prod": "NODE_ENV=production node ."
+  },
+  "imports": {
     "#root/*": "./dist/*.js",
     "#lib/util": "./dist/lib/util/index.js",
     "#lib/env": "./dist/lib/env/index.js",
@@ -25,6 +25,7 @@
   "dependencies": {
     "@discordjs/builders": "^0.12.0",
     "@foxxie/fetch": "0.0.0",
+    "@foxxie/types": "^0.0.0",
     "@ruffpuff/utilities": "^4.0.0",
     "@sapphire/decorators": "^4.2.5",
     "@sapphire/discord.js-utilities": "^4.8.1-next.f24894c.0",
@@ -35,9 +36,8 @@
   },
   "devDependencies": {
     "@favware/graphql-pokemon": "6.4.0",
-    "@foxxie/types": "1.1.0",
-    "@octokit/types": "6.34.0",
     "@foxxie/eslint-config": "0.0.0",
+    "@octokit/types": "^6.34.0",
     "@sapphire/framework": "next",
     "@sapphire/plugin-i18next": "2.2.3",
     "@sapphire/plugin-logger": "2.1.3",
