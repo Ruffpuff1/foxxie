@@ -2,14 +2,14 @@ import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { RegisterChatInputCommand } from '#utils/decorators';
 import { fetch } from '@foxxie/fetch';
 import { GithubUserRegex } from '@ruffpuff/utilities';
-import { AutocompleteCommand, Command, fromAsync, isErr } from '@sapphire/framework';
+import { Command, fromAsync, isErr } from '@sapphire/framework';
 import type { Github } from '@foxxie/types';
 import { Colors } from '#utils/constants';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { MessageEmbed } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
-import { GithubOptionType, Label, fetchFuzzyRepo, fetchFuzzyUser } from '#utils/APIs';
+import { GithubOptionType } from '#utils/APIs';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 
 @RegisterChatInputCommand(
@@ -89,22 +89,6 @@ export class UserCommand extends Command {
         const display = this.buildRepoEmbed(args.t, result.value);
 
         return display.run(interaction, interaction.user);
-    }
-
-    public async autocompleteRun(...[interaction]: Parameters<AutocompleteCommand['autocompleteRun']>) {
-        const option = interaction.options.getFocused(true);
-
-        switch (option.name) {
-            case GithubOptionType.User:
-            case GithubOptionType.Owner: {
-                const fuzzyResult = await fetchFuzzyUser(option.value as string);
-                return interaction.respond(fuzzyResult.map(entry => ({ value: entry.login, name: (entry as unknown as Label).label ?? entry.login })));
-            }
-            case GithubOptionType.Repo: {
-                const fuzzyResult = await fetchFuzzyRepo(interaction.options.getString(GithubOptionType.Owner, true), option.value as string);
-                return interaction.respond(fuzzyResult.map(entry => ({ value: entry.name, name: entry.name })));
-            }
-        }
     }
 
     private buildUserEmbed(t: TFunction, user: Github.User) {
