@@ -1,7 +1,7 @@
 <div align='center'>
   <img src='https://avatars.githubusercontent.com/u/84743025?s=200&v=4' width='140' height='140' />
-  <h1>packages ⚡️</h1>
-  <blockquote>node packages for collective use in Foxxie Discord bots</blockquote>
+  <h1>foxxie project ⚡️</h1>
+  <blockquote>monorepository containing all the source code for the foxxie project</blockquote>
 
   <br />
 
@@ -9,6 +9,7 @@
 [![GitHub](https://img.shields.io/github/license/FoxxieBot/packages?logo=github&style=flat-square)](https://github.com/FoxxieBot/packages/blob/main/LICENSE)
 [![Crowdin](https://badges.crowdin.net/kettu/localized.svg)](https://crowdin.com/project/kettu)
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/foxxie?label=foxxie%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/foxxie)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/kettu?label=kettu%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/kettu)
   
 [![npm](https://img.shields.io/npm/v/@foxxie/eslint-config?color=crimson&label=eslint-config%20version&logo=npm&style=flat-square)](https://www.npmjs.com/package/@foxxie/eslint-config)
