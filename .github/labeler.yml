@@ -17,3 +17,7 @@
 'packages:eslint-config':
   - packages/eslint-config/*
   - packages/eslint-config/**/*
+
+'packages:types':
+  - packages/types/*
+  - packages/types/**/*
