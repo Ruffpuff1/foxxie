@@ -1,0 +1,5 @@
+{
+    "colorDescription": "Preview an image of a colour using its hex or rgb code.",
+    "colorNotFound": "{{ERROR}} I couldn't parse `{{color}}` to a valid colour.",
+    "colorOptionColor": "The colour you want to preview, in hex or rgb format."
+}
