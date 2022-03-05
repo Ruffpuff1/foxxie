@@ -1,0 +1,7 @@
+{
+    "abort": "{{ERROR}} I couldn't reach Discord in time to run this command, go ahead and try again.",
+    "string": "{{ERROR}} Hey {{mention}}, {{message}}",
+    "tooManyRoles": "{{ERROR}} I could not create a new role because this server already has 250 roles!",
+    "unexpected": "{{ERROR}} Whoops, I ran into an unexpected error, please report the steps you've taken to my developers.",
+    "unexpectedWithCode": "$t(listeners/errors:unexpected) You may also send them `{{report}}` so they can look up what triggered the error."
+}

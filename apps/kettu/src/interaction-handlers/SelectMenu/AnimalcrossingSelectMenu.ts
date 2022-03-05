@@ -38,4 +38,3 @@ export class UserInteractionHandler extends InteractionHandler {
         return this.some({ data, type: type as 'villager' });
     }
 }
-

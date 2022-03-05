@@ -1,0 +1,24 @@
+import { FT, HelpDisplayData, T } from '#lib/types';
+
+export const BirthdayDescription = T('commands/social:birthdayDescription');
+export const BirthdayDetailedDescription = T<HelpDisplayData>('commands/social:birthdayDetailedDescription');
+export const BirthdaySetSuccess = FT<{ birthday: Date }>('commands/social:birthdaySetSuccess');
+export const CooldownDaily = FT<{ remaining: string }>('commands/social:cooldownDaily');
+export const CooldownDescription = T('commands/social:cooldownDescription');
+export const CooldownDetailedDescription = T<HelpDisplayData>('commands/social:cooldownDetailedDescription');
+export const CooldownGiven = FT<{ value: string }>('commands/social:cooldownGiven');
+export const CooldownRep = FT<{ remaining: string }>('commands/social:cooldownRep');
+export const CooldownRepGiven = FT<{ count: number; users: string[] }>('commands/social:cooldownRepGiven');
+export const CooldownTitle = FT<{ name: string }>('commands/social:cooldownTitle');
+export const Level = T('commands/social:level');
+export const LevelDescription = T('commands/social:levelDescription');
+export const LevelDetailedDescription = T('commands/social:levelDetailedDescription');
+export const LevelRanked = FT<{ position: number }>('commands/social:levelRanked');
+export const LevelRemaining = FT<{ remaining: number }>('commands/social:levelRemaining');
+export const ReputationAlreadyExists = FT<{ user: string }>('commands/social:reputationAlreadyExists');
+export const ReputationDescription = T('commands/social:reputationDescription');
+export const ReputationDetailedDescription = T<HelpDisplayData>('commands/social:reputationDetailedDescription');
+export const ReputationGive = FT<{ author: string; target: string }>('commands/social:reputationGive');
+export const ReputationRemind = T('commands/social:reputationRemind');
+export const ReputationSelf = T('commands/social:reputationSelf');
+export const ReputationTime = FT<{ remaining: number }>('commands/social:reputationTime');

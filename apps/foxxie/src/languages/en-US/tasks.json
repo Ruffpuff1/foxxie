@@ -1,0 +1,10 @@
+{
+    "birthdayMessageAge": "Lets all wish {member} a very happy birthday. They're turning {age} today! :cake:",
+    "birthdayMessage": "Everyone wish {member} a very happy birthday! :cake:",
+    "birthdayYearOlder": "a year older",
+    "checkStatusPageTitle": "Discord Status Update",
+    "disboardDefault": "Time to bump the server on disboard. Use the command `!d bump` and I'll notify you in **two hours**.",
+    "reminderToChannelWithUser": "Hey {{user}}! On **{{time, fulldatetime}}** you wanted me to remind you:\n> *{{text}}*",
+    "reminderToDM": ":mailbox_with_mail: You got mail!\nOn **{{time, fulldatetime}}** you wanted me to remind you:\n> *{{text}}*",
+    "updateClockChannelReason": "`[Clock]` Updating clock channel for {{time}}"
+}

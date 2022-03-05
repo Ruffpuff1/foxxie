@@ -1,0 +1,81 @@
+{
+    "confDescription": "Manage your per-server settings.",
+    "confDetailedDescription": {
+        "usages": [
+            "show Key",
+            "set Key Value",
+            "reset Key",
+            "remove Key Value"
+        ],
+        "extendedHelp": "The conf command allows you to quickly change your per-server settings, as an alternative to individual commands.",
+        "examples": [
+            "show events",
+            "set roles.muted Shut",
+            "reset roles.auto",
+            "remove words darn"
+        ]
+    },
+    "confGet": "The value for the key **{{key}}** is: `{{value}}`",
+    "confGetNoExt": "The key **{{key}}** does not seem to exist.",
+    "confMenuInvalidAction": "Invalid Action, please try again with any of the following setting keys.",
+    "confMenuInvalidKey": "Invalid Key, please try again with any of the following setting keys.",
+    "confMenuNoChange": "The value for **{{key}}** was already set as that value.",
+    "confMenuRenderAtFolder": "Currently at:  📁 {{path}}",
+    "confMenuRenderAtPiece": "Currently at:  ⚙️ {{path}}",
+    "confMenuRenderBack": "Press on the ◀ to go back",
+    "confMenuRenderCValue": "Current Value: **`{{value}}`**",
+    "confMenuRenderNokeys": "There are no settings keys for this folder.",
+    "confMenuRenderRemove": "• Remove Value → `remove <value>`",
+	"confMenuRenderReset": "• Reset Value → `reset`",
+    "confMenuRenderSelect": "Please send any of the following setting keys.",
+	"confMenuRenderUndo": "• Undo Update → `undo`",
+    "confMenuRenderUpdate": "• Update Value → `set <value>`",
+    "confMenuSaved": "{{SUCCESS}} I saved all of your changes.",
+    "confMissingValue": "The value for **{{key}}** was never set.",
+    "confNotSet": "Not Set",
+    "confReset": "{{SUCCESS}} The key **{{key}}** has been reset to: `{{value}}`",
+    "confServer": "**Server Setting {{key}}**\n{{list}}",
+    "confUpdated": "{{SUCCESS}} Successfully updated the key **{{key}}**: `{{response}}`",
+    "confValidationChooseKey": "{{ERROR}} You can't configure a group, please choose one of the following keys: {{keys, and}}.",
+    "evalConsole": "**Output**:\nWas sent to the console on **{{name}}**...\n\n**Type**:{{footer}}\n{{time}}",
+    "evalDescription": "Allows you evaluate JavaScript code straight from Discord.",
+    "evalDetailedDescription": {
+        "usages": [
+            "Code",
+            "Code --output=console/haste",
+            "Code --depth=Number",
+            "Code --msg",
+            "Code --async"
+        ],
+        "extendedHelp": "The eval command evaluates code as-in, any error thrown from it will be handled.\nIt also uses the flags feature. Write `--silent`, `--depth=number`, `--output=console/haste`, `--message` or `--async` to customize the output.\n\n• The --silent flag will make it output nothing.\n• The --depth flag accepts a number, for example, --depth=2, to customize util.inspect's depth.\n• The --async flag will wrap the code into an async function where you can enjoy the use of await, however, if you want to return something, you will need the return keyword.\n• The `--message` flag will output the result in a message instead of a codeblock.\n• The `--showHidden` flag will enable the showHidden option in util.inspect.\n• The `--output=` option can be used to specify where to output the result `console` or `paste`.\n\nBy default if the output is too large, it'll send the output to paste.",
+        "examples": [
+            "console.log('Hello World');",
+            "console.log(await promiseThatTakesAWhileToComplete()) --async"
+        ]
+    },
+    "evalError": "**Error**:{{output}}\n**Type**:{{type}}\n{{time}}",
+    "evalHaste": "**Output**:\nWas too long... sent the result to paste: <{{output}}>\n\n**Type**:{{footer}}\n{{time}}",
+    "evalOutput": "**Output**:{{output}}\n**Type**:{{type}}\n{{time}}",
+    "reload": "{{SUCCESS}} Reloaded {{type}}: {{name}}. (Took: {{time}})",
+    "reloadAll": "{{SUCCESS}} Reloaded all {{type}}. (Took: {{time}})",
+    "reloadDescription": "Hot-reload a piece.",
+    "reloadDetailedDescription": {
+        "usages": [
+			"Piece/language/everything"
+		],
+		"extendedHelp": "Reload a piece of mine, or an i18n language.",
+		"explainedUsage": [
+			[
+				"Piece/language/everything",
+				"The piece or language to reload, or \"everything\" to reload everything."
+			]
+		]
+    },
+    "reloadEverything": "{{SUCCESS}} Reloaded everything. (Took: {{time}})",
+    "reloadLanguage": "{{SUCCESS}} Reloaded language resource: {{language}}. (Took: {{time}})",
+    "serverlistDescription": "Show a list of my servers.",
+    "serverlistDetailedDescription": "Displays every guild the bot is currently in, along with their id and membercount.",
+    "serverlistFooter": "{{size}} total servers\nPage -",
+    "serverlistMembers": "members",
+    "serverlistTitle": "Servers using {{name}}"
+}

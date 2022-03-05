@@ -1,0 +1,64 @@
+{
+    "birthdayDescription": "Manage the birthdays of the members of your server.",
+    "birthdayDetailedDescription": {
+        "usages": [
+            "set Month/Day/Year",
+            "list"
+        ],
+        "extendedHelp": "With the birthday command you can manage your birthday and the birthdays of the members of your server.",
+        "explainedUsage": [
+            [
+                "set/list",
+                [
+                    "Set your birthday, with the year being optional.",
+                    "List the birthdays of the members of your server."
+                ]
+            ]
+        ],
+        "examples": [
+            "set 08/29/2005",
+            "list"
+        ]
+    },
+    "birthdaySetSuccess": "{{SUCCESS}} Done! I'll wish you a happy birthday on **{{birthday, fulldate}}**.",
+    "cooldownDaily": "**Daily** - {{remaining}}",
+    "cooldownDescription": "View your personal cooldowns.",
+    "cooldownDetailedDescription": {
+        "usages": [""],
+        "extendedHelp": "The cooldown command will show any active cooldowns you may have, including the `daily`, and `reputation` commands. If your cooldowns are expired it will show \"None\".",
+        "examples": [""]
+    },
+    "cooldownGiven": "**Reputations given** - {{value}}",
+    "cooldownRep": "**Reputation** - {{remaining}}",
+    "cooldownRepGiven": "{{count, number}} ({{users, and}})",
+    "cooldownTitle": "{{name}} - Cooldowns",
+    "level": "Level",
+    "levelDescription": "Check your server level and the amount of experience you have.",
+    "levelDetailedDescription": {
+        "usages": [
+            "User",
+            ""
+        ],
+        "extendedHelp": "The level command will show your server leveling card. This card will have your current level and the amount of experience you have to earn in order to make it to the next level.",
+        "explainedUsage": [
+            [
+                "User",
+                "(Optional) The user's level to show, defaults to the message author."
+            ]
+        ],
+        "examples": ["Ruffpuff"]
+    },
+    "levelRanked": "Ranked #{{position, number}}",
+    "levelRemaining": "Remaining",
+    "reputationAlreadyExists": "{{ERROR}} You've already given a reputation point to **{{user}}** in the past day.",
+    "reputationDescription": "Upvote your friends and good users.",
+    "reputationDetailedDescription": {
+        "usages": ["User", "User --remind"],
+        "extendedHelp": "The reputation command allows you to \"upvote\" users to increase their reputation points that are show on their `profile` card. Include the `--remind` flag to be reminded when it's time to give reputation again.",
+        "examples": ["Ruffpuff", "Ruffpuff --remind"]
+    },
+    "reputationGive": "{{SUCCESS}} **{{author}}** gave a reputation point to **{{target}}**.",
+    "reputationRemind": "Time to give out reputation points.",
+    "reputationSelf": "{{ERROR}} You cannot give reputation to yourself.",
+    "reputationTime": "{{ERROR}} You must wait **{{remaining, remaining}}** before giving another reputation point."
+}
