@@ -1,0 +1,91 @@
+{
+    "disconnectDescription": "",
+    "disconnectDetailedDescription": {
+        "usages": [
+            ""
+        ],
+        "extendedHelp": "",
+        "examples": [
+            ""
+        ]
+    },
+    "disconnectSuccess": "",
+    "playAlreadyPlaying": "",
+    "playDescription": "",
+    "playDetailedDescription": {
+        "usages": [
+            "",
+            "",
+            ""
+        ],
+        "extendedHelp": "",
+        "examples": [
+            "",
+            "",
+            ""
+        ]
+    },
+    "playNoSongs": "",
+    "playQueueEmpty": "",
+    "joinDescription": "",
+    "joinDetailedDescription": {
+        "extendedHelp": ""
+    },
+    "joinFailed": "",
+    "joinSuccess": "",
+    "joinVoiceChannelFull": "",
+    "joinVoiceChannelNoConnect": "",
+    "joinVoiceChannelNoSpeak": "",
+    "joinVoiceDifferent": "",
+    "joinVoiceSame": "",
+    "savequeueAlreadyExists": "",
+    "savequeueDescription": "",
+    "savequeueDetailedDescription": {
+        "usages": [
+            "",
+            ""
+        ],
+        "explainedUsage": [
+            [
+                "",
+                [
+                    "",
+                    ""
+                ]
+            ],
+            [
+                "",
+                ""
+            ]
+        ],
+        "exampes": [
+            "",
+            ""
+        ]
+    },
+    "savequeueListNone": "",
+    "savequeueSuccess": "",
+    "shuffleDescription": "",
+    "shuffleDetailedDescription": {
+        "usages": [
+            ""
+        ],
+        "extendedHelp": "",
+        "examples": [
+            ""
+        ]
+    },
+    "shuffleSuccess": "",
+    "shuffleSuccess_other": "",
+    "skipDescription": "",
+    "skipDetailedDescription": {
+        "usages": [
+            ""
+        ],
+        "extendedHelp": "",
+        "examples": [
+            ""
+        ]
+    },
+    "skipSuccess": ""
+}
