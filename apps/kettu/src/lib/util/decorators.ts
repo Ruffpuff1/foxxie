@@ -4,7 +4,7 @@ import { createClassDecorator, createProxy } from '@sapphire/decorators';
 import { Command, container, RegisterBehavior } from '@sapphire/framework';
 import type { Ctor } from '@sapphire/utilities';
 import { Locale } from 'discord-api-types/v10';
-import type { CommandInteraction, CommandInteractionOption, SelectMenuInteraction } from 'discord.js';
+import type { AutocompleteInteraction, CommandInteraction, CommandInteractionOption, SelectMenuInteraction } from 'discord.js';
 import { getGuildIds } from './util';
 
 export function RegisterChatInputCommand<N extends CommandName>(
@@ -89,8 +89,8 @@ function parseArgs(options: CommandInteractionOption[], raw: Record<string, any>
     return raw;
 }
 
-export function getLocale(interaction: CommandInteraction | SelectMenuInteraction) {
-    const string = ('en-US' ?? interaction.locale ?? interaction.guildLocale) as Locale;
+export function getLocale(interaction: CommandInteraction | SelectMenuInteraction | AutocompleteInteraction) {
+    const string = (interaction.locale ?? interaction.guildLocale) as Locale;
     let loc: string;
 
     switch (string) {

@@ -1,10 +1,9 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
 import { fetch } from '@foxxie/fetch';
 import tinycolor from 'tinycolor2';
-import { Emojis } from '#utils/constants';
 import { FuzzySearch } from '#utils/FuzzySearch';
 import { Collection } from 'discord.js';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { getLocale, RegisterChatInputCommand } from '#utils/decorators';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
@@ -13,11 +12,11 @@ import { enUS } from '#utils/util';
     CommandName.Color,
     builder =>
         builder //
-            .setDescription("Preview an image of a color using it's hex or rgb code.")
+            .setDescription(enUS(LanguageKeys.Commands.Tools.ColorDescription))
             .addStringOption(option =>
                 option //
                     .setName('color')
-                    .setDescription('The color you want to preview, in hex or rgb format.')
+                    .setDescription(enUS(LanguageKeys.Commands.Tools.ColorOptionColor))
                     .setRequired(true)
                     .setAutocomplete(true)
             )
@@ -31,21 +30,26 @@ import { enUS } from '#utils/util';
 )
 export class UserCommand extends Command {
     public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Color>): Promise<unknown> {
-        const { ephemeral, color: colorArg } = args!;
+        const { ephemeral, color: colorArg, t } = args!;
 
         await interaction.deferReply({ ephemeral });
         let color: tinycolor.Instance;
+        const random = t(LanguageKeys.Commands.Tools.ColorRandom);
+        const dominant = t(LanguageKeys.Commands.Tools.ColorDominant);
 
-        if (colorArg.toLowerCase() === 'random') color = tinycolor.random();
-        else if (colorArg.toLowerCase() === 'dominant') {
-            const dom = await fetch('https://color.aero.bot').path('dominant').query('image', interaction.user.avatarURL()!).text();
+        if (colorArg.toLowerCase() === random) color = tinycolor.random();
+        else if (colorArg.toLowerCase() === dominant) {
+            const dom = await fetch('https://color.aero.bot') //
+                .path('dominant') //
+                .query('image', interaction.user.avatarURL()!) //
+                .text();
 
             color = tinycolor(dom);
         } else {
             color = tinycolor(colorArg);
         }
         // @ts-expect-error using private prop
-        if (color._format === false) return interaction.editReply(`${Emojis.Error} I couldn't parse \`${colorArg}\` to a valid color.`);
+        if (color._format === false) return interaction.editReply(t(LanguageKeys.Commands.Tools.ColorNotFound, { color: colorArg }));
 
         const attachment = await this.draw(color);
 
@@ -65,13 +69,16 @@ export class UserCommand extends Command {
 
         const arg = interaction.options.getString('color', true);
         const result = fuzz.runFuzzy(arg);
+        const t = getLocale(interaction);
 
         const hasOpt = Boolean(tinycolor.names[arg as keyof typeof tinycolor.names]);
+        const random = t(LanguageKeys.Commands.Tools.ColorRandom);
+        const dominant = t(LanguageKeys.Commands.Tools.ColorDominant);
 
         if (!result.length)
             return interaction.respond([
-                { name: 'random', value: 'random' },
-                { name: 'dominant', value: 'dominant' }
+                { name: random, value: random },
+                { name: dominant, value: dominant }
             ]);
 
         const options = [];
