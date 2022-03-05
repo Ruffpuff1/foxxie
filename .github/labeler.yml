@@ -21,3 +21,15 @@
 'packages:types':
   - packages/types/*
   - packages/types/**/*
+
+'i18n:en-US':
+  - apps/kettu/src/languages/en-US/*
+  - apps/kettu/src/languages/en-US/**/*
+  
+'i18n:en-GB':
+  - apps/kettu/src/languages/en-GB/*
+  - apps/kettu/src/languages/en-GB/**/*
+  
+'i18n:es-MX':
+  - apps/kettu/src/languages/es-MX/*
+  - apps/kettu/src/languages/es-MX/**/*
