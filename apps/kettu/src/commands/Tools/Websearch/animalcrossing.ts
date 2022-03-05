@@ -3,25 +3,26 @@ import { RegisterChatInputCommand } from '#utils/decorators';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { envParseBoolean } from '#lib/env';
 import type { VillagersEnum } from '@ruffpuff/celestia';
-import { buildVillagerDisplay, fetchVillager, fetchVillagers } from '#utils/APIs';
-import { seconds } from '@ruffpuff/utilities';
+import { buildVillagerDisplay, fetchVillager, fetchVillagers, fuzzySearchVillagers } from '#utils/APIs';
+import { seconds, toTitleCase } from '@ruffpuff/utilities';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { FuzzySearch } from '#utils/FuzzySearch';
-import { Collection } from 'discord.js';
+import { enUS } from '#utils/util';
+import { LanguageKeys } from '#lib/i18n';
+import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 
 @RegisterChatInputCommand(
     CommandName.AnimalCrossing,
     builder =>
         builder //
-            .setDescription('fetch animal crossing data from celestia')
+            .setDescription(enUS(LanguageKeys.Commands.Websearch.AnimalcrossingDescription))
             .addSubcommand(command =>
                 command //
                     .setName('villager')
-                    .setDescription('fetch data about an animal crossing villager')
+                    .setDescription(enUS(LanguageKeys.Commands.Websearch.AnimalcrossingDescriptionVillager))
                     .addStringOption(option =>
                         option //
                             .setName('villager')
-                            .setDescription('the villager to search for')
+                            .setDescription(enUS(LanguageKeys.Commands.Websearch.AnimalcrossingOptionVillager))
                             .setAutocomplete(true)
                             .setRequired(true)
                     )
@@ -34,7 +35,7 @@ import { Collection } from 'discord.js';
 export class UserCommand extends Command {
     private villagers: VillagersEnum[] = [];
 
-    public chatInputRun(...[interaction, c, args]: ChatInputArgs<CommandName.AnimalCrossing>) {
+    public chatInputRun(...[interaction, c, args]: ChatInputArgs<CommandName.AnimalCrossing>): Promise<any> {
         const subcommand = interaction.options.getSubcommand(true);
 
         switch (subcommand) {
@@ -47,11 +48,8 @@ export class UserCommand extends Command {
 
     public async autocompleteRun(...[interaction]: Parameters<AutocompleteCommand['autocompleteRun']>) {
         const opt = interaction.options.getFocused(true);
-
-        const fuzz = new FuzzySearch(new Collection(this.villagers.map(k => [k, { key: k }])), ['key']);
-        const result = fuzz.runFuzzy(opt.value as string);
-
-        return interaction.respond(result.slice(0, 20).map(r => ({ name: r.key, value: r.key })));
+        const data = await fuzzySearchVillagers(opt.value as string, 20, this.villagers);
+        return interaction.respond(data.map(r => ({ name: r.key, value: r.key })));
     }
 
     public async onLoad() {
@@ -61,8 +59,6 @@ export class UserCommand extends Command {
         for (const key of data.data.getVillagers) {
             this.villagers.push(key);
         }
-
-        console.log(this);
     }
 
     private async villager(...[interaction, , args]: Required<ChatInputArgs<CommandName.AnimalCrossing>>) {
@@ -70,7 +66,28 @@ export class UserCommand extends Command {
         const { villager } = args.villager;
 
         const villagerData = await fetchVillager(villager as VillagersEnum);
-        if (!villagerData) return null;
+
+        if (!villagerData) {
+            const fuzz = await fuzzySearchVillagers(villager, 25);
+            const opts = fuzz.map<MessageSelectOptionData>(entry => ({
+                label: toTitleCase(entry.key),
+                value: entry.key
+            }));
+
+            const actionRow = new MessageActionRow() //
+                .setComponents(
+                    new MessageSelectMenu() //
+                        .setCustomId(`animalcrossing|villager`)
+                        .setOptions(opts)
+                );
+
+            await interaction.deleteReply();
+            return interaction.followUp({
+                content: args.t(LanguageKeys.Commands.Websearch.AnimalcrossingNoVillager, { villager }),
+                components: [actionRow],
+                ephemeral: true
+            });
+        }
 
         const display = buildVillagerDisplay(villagerData, args.t);
 

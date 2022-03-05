@@ -3,11 +3,12 @@ import { CoffeeBeansEnum, CoffeeMilkEnum, CoffeeSugarEnum, GamesEnum, KkSliderSo
 import type { Query, QueryGetCardByNameArgs, QueryGetVillagerByNameArgs } from '@ruffpuff/celestia';
 import { fetch } from '@foxxie/fetch';
 import { fromAsync, isErr, UserError } from '@sapphire/framework';
-import { MessageEmbed } from 'discord.js';
+import { Collection, MessageEmbed } from 'discord.js';
 import { cast, gql, toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { Colors } from '../constants';
+import { FuzzySearch } from '#utils/FuzzySearch';
 
 export async function fetchGraphQLAnimalCrossing<R extends AnimalCrossingReturnTypes>(
     query: string,
@@ -36,43 +37,63 @@ export async function fetchVillager(villager: VillagersEnum): Promise<Omit<Villa
     return result.value.data.getVillagerByName;
 }
 
+export async function fuzzySearchVillagers(query: string, take = 20, cache?: VillagersEnum[]) {
+    if (!cache) {
+        cache = [];
+        const data = await fetchVillagers();
+
+        for (const key of data.data.getVillagers) {
+            cache.push(key);
+        }
+    }
+
+    const fuzz = new FuzzySearch(new Collection(cache.map(k => [k, { key: k }])), ['key']);
+    const result = fuzz.runFuzzy(query);
+
+    return result.slice(0, take);
+}
+
 export function buildVillagerDisplay(data: Omit<Villager, '__typename'>, t: TFunction) {
     const none = t(LanguageKeys.Globals.None);
+    const titles = t(LanguageKeys.Commands.Websearch.AnimalcrossingTitles);
 
     const template = new MessageEmbed() //
         .setThumbnail(data.art) //
         .setAuthor({ name: `${toTitleCase(data.key)} [${data.keyJp}]` })
-        .setFooter({ text: 'Powered by celestia' })
+        .setFooter({ text: t(LanguageKeys.Commands.Websearch.AnimalcrossingFooter) })
         .setColor(Colors.Default);
 
     const display = new PaginatedMessage({ template }) //
         .addPageEmbed(embed =>
             embed //
-                .addField('personality', data.personality || none, true)
-                .addField('species', data.species ? toTitleCase(data.species) : none, true)
-                .addField('gender', data.gender, true)
-                .addField('games', t(LanguageKeys.Globals.And, { value: formatGames(data.games) }))
-                .addField('catchphrase', data.catchphrase || none, true)
-                .addField('fav saying', data.favoriteSaying || none, true)
+                .addField(titles.personality, data.personality || none, true)
+                .addField(titles.species, data.species ? toTitleCase(data.species) : none, true)
+                .addField(titles.gender, data.gender, true)
+                .addField(
+                    t(`${LanguageKeys.Commands.Websearch.AnimalcrossingTitles}.game`, { count: data.games.length }),
+                    t(LanguageKeys.Globals.And, { value: formatGames(data.games) })
+                )
+                .addField(titles.catchphrase, data.catchphrase || none, true)
+                .addField(titles.saying, data.favoriteSaying || none, true)
         );
 
     if (data.coffeeRequest || data.siblings || data.skill || data.goal || data.song) {
         display.addPageEmbed(embed =>
             embed //
-                .addField('siblings', data.siblings || none, true)
-                .addField('skill', data.skill || none, true)
-                .addField('goal', data.goal || none, true)
+                .addField(titles.siblings, data.siblings || none, true)
+                .addField(titles.skill, data.skill || none, true)
+                .addField(titles.goal, data.goal || none, true)
                 .addField(
-                    'coffee',
+                    titles.coffee,
                     data.coffeeRequest
-                        ? t('bopp', {
+                        ? t(LanguageKeys.Commands.Websearch.AnimalcrossingCoffee, {
                               beans: coffeeBeansEnumToString(data.coffeeRequest!.beans),
                               milk: coffeeMilkEnumToString(data.coffeeRequest!.milk),
                               sugar: coffeeSugarEnumToString(data.coffeeRequest!.sugar)
                           })
                         : none
                 )
-                .addField('song', kKSliderSongEnumToString(data.song!) || none)
+                .addField(titles.song, kKSliderSongEnumToString(data.song!) || none)
         );
     }
 
@@ -80,9 +101,9 @@ export function buildVillagerDisplay(data: Omit<Villager, '__typename'>, t: TFun
         for (const card of data.amiiboCard) {
             display.addPageEmbed(embed =>
                 embed //
-                    .addField('birthday', card.birthday, true)
-                    .addField(`**${getZodiacEmoji(card.starSign as StarSignEnum)} ${'zodiac'}**`, card.starSign, true)
-                    .addField('series', `${card.series}`, true)
+                    .addField(titles.birthday, card.birthday, true)
+                    .addField(`**${getZodiacEmoji(card.starSign as StarSignEnum)} ${titles.zodiac}**`, card.starSign, true)
+                    .addField(titles.series, `${card.series}`, true)
                     .setImage(card.art)
             );
         }
