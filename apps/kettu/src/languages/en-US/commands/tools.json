@@ -1,0 +1,7 @@
+{
+    "colorDescription": "Preview an image of a color using it's hex or rgb code.",
+    "colorDominant": "dominant",
+    "colorNotFound": "{{ERROR}} I couldn't parse `{{color}}` to a valid color.",
+    "colorOptionColor": "The color you want to preview, in hex or rgb format.",
+    "colorRandom": "random"
+}

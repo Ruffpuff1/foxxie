@@ -37,6 +37,7 @@ export function loadT(lang: string) {
 
 export const enUS = loadT('en-US');
 export const esMX = loadT('es-MX');
+export const enGB = loadT('en-GB');
 
 export const duration = (value: Date) => time(value, TimestampStyles.RelativeTime);
 
