@@ -7,6 +7,7 @@ import type { CommandInteraction } from 'discord.js';
 export type ChatInputArgs<T = unknown> = [interaction: CommandInteraction, context: ChatInputCommandContext, args?: T extends CommandName ? CommandArgs<T> : unknown];
 
 export enum CommandName {
+    AnimalCrossing = 'animalcrossing',
     Color = 'color',
     Currency = 'currency',
     Donate = 'donate',
@@ -60,6 +61,12 @@ export interface GithubArgs extends BaseArgs {
     };
 }
 
+export interface AnimalCrossingArgs extends BaseArgs {
+    villager: {
+        villager: string;
+    };
+}
+
 export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     ? EphemeralArgs
     : T extends CommandName.Invite
@@ -80,4 +87,6 @@ export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     ? EphemeralArgs & { amount?: number; from: string; to: string }
     : T extends CommandName.Github
     ? GithubArgs
+    : T extends CommandName.AnimalCrossing
+    ? AnimalCrossingArgs
     : never;

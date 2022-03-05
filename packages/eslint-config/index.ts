@@ -1,6 +1,11 @@
 const config = {
     root: true,
     extends: ['@ruffpuff'],
+    parserOptions: {
+        project: '../tsconfig.json',
+        sourceType: 'module',
+        ecmaVersion: 2020
+    },
     rules: {
         '@typescript-eslint/no-empty-interface': 'off',
         '@typescript-eslint/no-explicit-any': 'off',

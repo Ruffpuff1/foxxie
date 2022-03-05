@@ -1,5 +1,27 @@
 import { FT, T } from '#types/Utils';
 
+export const AnimalcrossingCoffee = FT<{ beans: string; milk: string; sugar: string }>('commands/websearch:animalcrossingCoffee');
+export const AnimalcrossingDescription = T('commands/websearch:animalcrossingDescription');
+export const AnimalcrossingDescriptionVillager = T('commands/websearch:animalcrossingDescriptionVillager');
+export const AnimalcrossingFooter = T('commands/websearch:animalcrossingFooter');
+export const AnimalcrossingNoVillager = FT<{ villager: string }>('commands/websearch:animalcrossingNoVillager');
+export const AnimalcrossingOptionVillager = T('commands/websearch:animalcrossingOptionVillager');
+export const AnimalcrossingTitles = T<{
+    birthday: string;
+    catchphrase: string;
+    coffee: string;
+    game: string;
+    gender: string;
+    goal: string;
+    personality: string;
+    saying: string;
+    series: string;
+    siblings: string;
+    skill: string;
+    song: string;
+    species: string;
+    zodiac: string;
+}>('commands/websearch:animalcrossingTitles');
 export const CurrencyDescription = T('commands/websearch:currencyDescription');
 export const CurrencyMessage = FT<{ amount: string; from: string; value: string; to: string }>('commands/websearch:currencyMessage');
 export const CurrencyNotCurrency = FT<{ from: string; to: string }>('commands/websearch:currencyNotCurrency');
