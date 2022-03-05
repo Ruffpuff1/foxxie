@@ -1,8 +1,8 @@
 {
-    "ban": "Usuario Baneado",
+    "ban": "",
     "dm": {
         "Ban": "",
-        "Kick": "Has sido expulsado de **{{guild}}** por **{{tag}}**:",
+        "Kick": "",
         "Mute": "",
         "Nickname": "",
         "RestrictEmbed": "",
@@ -18,7 +18,7 @@
         "Unwarn": "",
         "Warn": ""
     },
-    "fillReason": "Por favor uso `{{prefix}}reason {{count}} [razón]` para establecer el razón.",
+    "fillReason": "",
     "kick": "",
     "lock": "",
     "mute": "",
@@ -30,22 +30,22 @@
         "name": "",
         "reason": "",
         "init": ""
-      },
-      "roleSetupMute": {
+    },
+    "roleSetupMute": {
         "name": "",
         "reason": "",
         "init": ""
-      },
+    },
     "softBan": "",
-    "tempBan": "Usuario Temporalmente Prohibido",
-    "tempMute": "Miembro Temporalmente Silenciado",
+    "tempBan": "",
+    "tempMute": "",
     "tempNickname": "",
     "tempRestrictEmbed": "",
     "unlock": "",
     "unban": "",
-    "unban_reason": "`[Prohibir temp]` Liberado después de {{duration, duration}}",
+    "unban_reason": "",
     "unmute": "",
-    "unmute_reason": "`[Silencio Temp]` Liberado después de {{duration, duration}}",
+    "unmute_reason": "",
     "unrestrictembed": "",
     "unrestrictembed_reason": "",
     "unwarn": "",
