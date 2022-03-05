@@ -1,0 +1,20 @@
+{
+    "administrator": "{{ERROR}} You must be a server **administrator** to run the {{name, code}} command.",
+    "clientPermissions": "I seem to be missing the {{missing, permissionarray}} permissions, which are required to run this command.",
+    "commandDisabled": "{{ERROR}} This command has been globally disabled by my owner, find out why at <{{TCS}}>.",
+    "commandDisabled_chatinput": "{{ERROR}} This command has been globally disabled by my owner, find out why at (The Corner Store)[{{TCS}}].",
+    "commandDisabledGuild": "{{ERROR}} The {{name, code}} command has been disabled by an administrator of this server.",
+    "cooldown": "{{ERROR}} Looks like you just used this command, try again in **{{remaining, remaining}}**.",
+    "leveling": "{{ERROR}} This command requires the leveling system to be enabled in this server.",
+    "moderator": "{{ERROR}} You must be a **moderator** of this server to run the {{name, code}} command.",
+    "musicFoxxieVoiceChannel": "{{ERROR}} I must be in a voice channel for this command to work.",
+    "musicNothingPlayling": "{{ERROR}} There isn't a song playing currently.",
+    "musicNotPaused": "{{ERROR}} The queue currently is not paused.",
+    "musicNotPlaying": "{{ERROR}} The queue currently is not playing.",
+    "musicQueueNotEmpty": "{{ERROR}} Before running this command make sure there's some songs in the queue.",
+    "musicSameVoiceChannel": "{{ERROR}} You must be in the same voice channel as me to run this command.",
+    "musicUserVoiceChannel": "{{ERROR}} You must be in a voice channel to run this command!",
+    "nsfw": "{{ERROR}} Ahem, due to it's potential risqué nature, the command {{name, code}} can only be used in **nsfw** type channels.",
+    "permNodes": "{{ERROR}} This command requires the **{{node}}** permission node, of which you have been denied.",
+    "starboard": "{{ERROR}} This command requires a starboard channel to be set up in this server."
+}

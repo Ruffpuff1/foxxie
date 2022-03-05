@@ -53,6 +53,7 @@ export class UserCommand extends Command {
     }
 
     public async onLoad() {
+        if (!this.enabled) return;
         await sleep(seconds(10));
         const data = await fetchVillagers();
 

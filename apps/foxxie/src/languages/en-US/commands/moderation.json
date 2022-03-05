@@ -1,0 +1,15 @@
+{
+    "caseDescription": "View a moderation case from your server.",
+    "caseDetailedDescription": {
+        "usages": [
+            "CaseId",
+            "latest"
+        ],
+        "extendedHelp": "With the case command you can retrieve the case embed of a desired moderation case. You can use `latest` to retrieve the latest posted case.",
+        "examples": [
+            "5",
+            "latest"
+        ]
+    },
+    "caseNoExist": "{{ERROR}} The case {{caseId}} doesn't seem to exist."
+}
