@@ -3,5 +3,8 @@
     "colorDominant": "dominant",
     "colorNotFound": "{{ERROR}} I couldn't parse `{{color}}` to a valid color.",
     "colorOptionColor": "The color you want to preview, in hex or rgb format.",
-    "colorRandom": "random"
+    "colorRandom": "random",
+    "prideDescription": "Overlay your profile picture with a pride flag image.",
+    "prideOptionFlag": "The pride flag to overlay the profile picture with.",
+    "prideOptionGuildAvatar": "Whether I should use your guild avatar or user avatar, default to user."
 }

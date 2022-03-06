@@ -94,6 +94,7 @@ export const clientOptions: ClientOptions = {
     },
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages],
     partials: ['CHANNEL'],
+    shards: 'auto',
     logger: {
         level: LogLevel.Debug
     }
