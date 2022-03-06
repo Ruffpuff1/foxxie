@@ -22,7 +22,7 @@
   - packages/types/*
   - packages/types/**/*
   
-'Docker Images: ravy.lgbt'
+'Docker Images: ravy.lgbt':
   - docker/ravy.lgbt/*
   - docker/ravy.lgbt/**/*
 
