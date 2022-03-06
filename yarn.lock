@@ -651,7 +651,7 @@
   resolved "https://registry.yarnpkg.com/@octokit/openapi-types/-/openapi-types-11.2.0.tgz#b38d7fc3736d52a1e96b230c1ccd4a58a2f400a6"
   integrity sha512-PBsVO+15KSlGmiI8QAzaqvsNlZlrDlyAJYcrXBCvVUxCp7VnXjkwPoFHgjEJXx3WF9BAwkA6nfCUA7i9sODzKA==
 
-"@octokit/types@^6.34.0":
+"@octokit/types@6.34.0", "@octokit/types@^6.34.0":
   version "6.34.0"
   resolved "https://registry.yarnpkg.com/@octokit/types/-/types-6.34.0.tgz#c6021333334d1ecfb5d370a8798162ddf1ae8218"
   integrity sha512-s1zLBjWhdEI2zwaoSgyOFoKSl109CUcVBCc7biPJ3aAf6LGLU6szDvi31JPU7bxfla2lqfhjbbg/5DdFNxOwHw==
@@ -666,7 +666,7 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
-"@ruffpuff/celestia@^1.2.3":
+"@ruffpuff/celestia@1.2.3":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@ruffpuff/celestia/-/celestia-1.2.3.tgz#6c2ae3c85528563a8398d2d5871327707aecffbb"
   integrity sha512-G7qvrNrBKRM26+eeAf4syF8DfmJcBn4gmrUgSR8gqD3Fkv6+HDLEA6feCdyNDQSJVNFs5UzudcjYDvUKU6yTGA==
