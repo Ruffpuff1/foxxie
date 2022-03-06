@@ -9,7 +9,7 @@ export namespace Github {
 
     export type Repo = Endpoints['GET /repos/{owner}/{repo}']['response']['data'];
 
-    interface UserNotFound {
+    export interface UserNotFound {
         message: string;
         documentation_url: string;
     }
@@ -27,7 +27,7 @@ export namespace Kitsu {
         links: Links;
     }
 
-    interface Anime {
+    export interface Anime {
         id: string;
         type: 'anime';
         links: { self: string };
@@ -35,7 +35,7 @@ export namespace Kitsu {
         relationships: AnimeRelationships;
     }
 
-    interface AnimeAttributes {
+    export interface AnimeAttributes {
         createdAt: ISO8601DateTime;
         updatedAt: ISO8601DateTime;
         slug: string;
@@ -69,7 +69,7 @@ export namespace Kitsu {
         nsfw: boolean;
     }
 
-    interface AnimeRelationships {
+    export interface AnimeRelationships {
         genres: RelationshipsLinks;
         categories: RelationshipsLinks;
         castings: RelationshipsLinks;
@@ -88,14 +88,14 @@ export namespace Kitsu {
         animeStaff: RelationshipsLinks;
     }
 
-    interface RelationshipsLinks {
+    export interface RelationshipsLinks {
         links: {
             self?: string;
             related?: string;
         };
     }
 
-    interface PosterImage {
+    export interface PosterImage {
         tiny: string;
         large: string;
         small: string;
@@ -111,23 +111,23 @@ export namespace Kitsu {
         };
     }
 
-    interface ImageDimensions {
+    export interface ImageDimensions {
         width: number;
         height: number;
     }
 
-    interface Titles {
+    export interface Titles {
         en?: string;
         en_jp?: string;
         en_us?: string;
         ja_jp?: string;
     }
 
-    interface Meta {
+    export interface Meta {
         count: number;
     }
 
-    interface Links {
+    export interface Links {
         first: string;
         next?: string;
         last: string;
@@ -153,13 +153,13 @@ export namespace Npm {
         code?: string;
     }
 
-    interface Time {
+    export interface Time {
         created: string;
         modified: string;
         [key: string]: string;
     }
 
-    interface Package {
+    export interface Package {
         name: string;
         version: string;
         description: string;
@@ -180,11 +180,11 @@ export namespace Npm {
         _hasShrinkwrap: boolean;
     }
 
-    interface Author {
+    export interface Author {
         name: string;
     }
 
-    interface User {
+    export interface User {
         name: string;
         email: string;
     }
@@ -208,7 +208,7 @@ export namespace Webster {
         shortdef: string[];
     }
 
-    interface Metadata {
+    export interface Metadata {
         id: string;
         uuid: string;
         sort: string;
@@ -218,13 +218,13 @@ export namespace Webster {
         offensive: boolean;
     }
 
-    interface Vrs {
+    export interface Vrs {
         vl: string;
         va: string;
         prs?: Prs[];
     }
 
-    interface Prs {
+    export interface Prs {
         mw: string;
         l: string;
         l2: string;
@@ -236,18 +236,18 @@ export namespace Webster {
         };
     }
 
-    interface Definition {
+    export interface Definition {
         sseq: Sense[][];
     }
 
-    type Sense = SenseDataModel[];
+    export type Sense = SenseDataModel[];
 
-    interface SenseDataModel {
+    export interface SenseDataModel {
         sn?: string;
         dt: (string | Vis[])[];
     }
 
-    interface Vis {
+    export interface Vis {
         t: string;
     }
 }
@@ -262,7 +262,7 @@ export namespace Webtoon {
         total: string;
     }
 
-    interface Info {
+    export interface Info {
         writingAuthorName: string;
         genreInfo: {
             name: string;
@@ -284,7 +284,7 @@ export namespace Webtoon {
             };
         };
     }
-    interface CodeQResult {
+    export interface CodeQResult {
         titleNo?: number;
         thumbnail: string;
     }
@@ -322,7 +322,7 @@ export namespace WttrIn {
         request: Request[];
         weather: WeatherElement[];
     }
-    interface CurrentCondition {
+    export interface CurrentCondition {
         FeelsLikeC: IntegerString;
         FeelsLikeF: IntegerString;
         cloudcover: IntegerString;
@@ -346,7 +346,7 @@ export namespace WttrIn {
         windspeedKmph: IntegerString;
         windspeedMiles: IntegerString;
     }
-    const enum WeatherCode {
+    export const enum WeatherCode {
         ClearOrSunny = '113',
         PartlyCloudy = '116',
         Cloudy = '119',
@@ -396,10 +396,10 @@ export namespace WttrIn {
         PatchyLightSnowInAreaWithThunder = '392',
         ModerateOrHeavySnowInAreaWithThunder = '395'
     }
-    interface WeatherDescription {
+    export interface WeatherDescription {
         value: WeatherName;
     }
-    type WeatherName =
+    export type WeatherName =
         | 'Cloudy'
         | 'Fog'
         | 'HeavyRain'
@@ -418,7 +418,7 @@ export namespace WttrIn {
         | 'ThunderyShowers'
         | 'ThunderySnowShowers'
         | 'VeryCloudy';
-    interface NearestArea {
+    export interface NearestArea {
         areaName: ValueWrapper[];
         country: ValueWrapper[];
         latitude: FloatString;
@@ -427,17 +427,17 @@ export namespace WttrIn {
         region: ValueWrapper[];
         weatherUrl: Url[];
     }
-    interface ValueWrapper {
+    export interface ValueWrapper {
         value: string;
     }
-    interface Url {
+    export interface Url {
         value: string;
     }
-    interface Request {
+    export interface Request {
         query: string;
         type: 'LatLon';
     }
-    interface WeatherElement {
+    export interface WeatherElement {
         astronomy: Astronomy[];
         avgtempC: IntegerString;
         avgtempF: IntegerString;
@@ -451,7 +451,7 @@ export namespace WttrIn {
         totalSnow_cm: FloatString;
         uvIndex: IntegerString;
     }
-    interface Astronomy {
+    export interface Astronomy {
         moon_illumination: IntegerString;
         moon_phase: MoonPhase;
         moonrise: Hour;
@@ -459,10 +459,10 @@ export namespace WttrIn {
         sunrise: Hour;
         sunset: Hour;
     }
-    type MoonPhase = 'New Moon' | 'Waxing Crescent' | 'First Quarter' | 'Waxing Gibbous' | 'Full Moon' | 'Waning Gibbous' | 'Last Quarter' | 'Waning Crescent';
-    type Hour = `${bigint}:${bigint} ${'AM' | 'PM'}`;
+    export type MoonPhase = 'New Moon' | 'Waxing Crescent' | 'First Quarter' | 'Waxing Gibbous' | 'Full Moon' | 'Waning Gibbous' | 'Last Quarter' | 'Waning Crescent';
+    export type Hour = `${bigint}:${bigint} ${'AM' | 'PM'}`;
 
-    interface Hourly {
+    export interface Hourly {
         DewPointC: IntegerString;
         DewPointF: IntegerString;
         FeelsLikeC: IntegerString;
@@ -504,15 +504,15 @@ export namespace WttrIn {
         windspeedMiles: IntegerString;
     }
 
-    type WindDirectionNorth = 'N' | 'NNE';
-    type WindDirectionNorthEast = 'NE' | 'ENE';
-    type WindDirectionEast = 'E' | 'ESE';
-    type WindDirectionSouthEast = 'SE' | 'SSE';
-    type WindDirectionSouth = 'S' | 'SSW';
-    type WindDirectionSouthWest = 'SW' | 'WSW';
-    type WindDirectionWest = 'W' | 'WNW';
-    type WindDirectionNorthWest = 'NW' | 'NNW';
-    type WindDirection =
+    export type WindDirectionNorth = 'N' | 'NNE';
+    export type WindDirectionNorthEast = 'NE' | 'ENE';
+    export type WindDirectionEast = 'E' | 'ESE';
+    export type WindDirectionSouthEast = 'SE' | 'SSE';
+    export type WindDirectionSouth = 'S' | 'SSW';
+    export type WindDirectionSouthWest = 'SW' | 'WSW';
+    export type WindDirectionWest = 'W' | 'WNW';
+    export type WindDirectionNorthWest = 'NW' | 'NNW';
+    export type WindDirection =
         | WindDirectionNorth
         | WindDirectionNorthEast
         | WindDirectionEast
@@ -537,7 +537,7 @@ export namespace StatusPage {
         incidents: Incident[];
     }
 
-    interface Incident {
+    export interface Incident {
         id: string;
         name: string;
         status: 'investigating' | 'identified' | 'monitoring' | 'resolved' | 'postmortem';
@@ -553,7 +553,7 @@ export namespace StatusPage {
         components: Component[];
     }
 
-    interface IncidentUpdate {
+    export interface IncidentUpdate {
         id: string;
         status: string;
         body: string;
@@ -567,7 +567,7 @@ export namespace StatusPage {
         tweet_id: string | null;
     }
 
-    interface Component {
+    export interface Component {
         id: string;
         name: string;
         status: string;
@@ -583,14 +583,14 @@ export namespace StatusPage {
         only_show_if_degraded: boolean;
     }
 
-    interface ComponentAffected {
+    export interface ComponentAffected {
         code: string;
         name: string;
         old_status: string;
         new_status: string;
     }
 
-    interface Info {
+    export interface Info {
         id: string;
         name: string;
         url: string;
