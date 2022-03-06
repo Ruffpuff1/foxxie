@@ -53,6 +53,6 @@
   },
   "dependencies": {
     "@ruffpuff/utilities": "^4.0.0",
-    "undici": "^4.14.1"
+    "undici": "^4.15.0"
   }
 }
