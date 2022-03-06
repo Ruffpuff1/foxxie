@@ -376,6 +376,26 @@
   dependencies:
     graphql "^15.8.0"
 
+"@foxxie/fetch@0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@foxxie/fetch/-/fetch-0.0.0.tgz#1e5a16701832af1151c6603a4411c88aea25ef0b"
+  integrity sha512-Omd1tFG9jgnpLjaQG+m9wqwD3q/LkgZPX/7TO3/MmzKp6XAHvrpgk0npe1z3gbu65w3gc9regsizGZkEw6KnSw==
+  dependencies:
+    "@ruffpuff/utilities" "^4.0.0"
+    undici "^4.14.1"
+
+"@foxxie/lock-queue@0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@foxxie/lock-queue/-/lock-queue-0.0.0.tgz#6c3b7f5b7e6d81e0a54cc0a561b3e5352a037f99"
+  integrity sha512-xR2cnzVwya5dbiKYh6WXzNkE+dFZdLNAN7kEnT5Lb1xotrW19/Fi2XFUV4ECv5UMGHg3a9jCaCviXlRcCvb0jg==
+  dependencies:
+    async-rwlock "^1.1.1"
+
+"@foxxie/types@0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@foxxie/types/-/types-0.0.0.tgz#d91be0c32a300751801b17ca38869c3ceab81b41"
+  integrity sha512-Hfp4S6yRT0LmLxXnVRJZyJ+kM7y7LAqhMjrQ5Lh39gnJ7rqm8k11yBm6hs3NnF7yo5a2XOeLubb2CBFx4EZS4w==
+
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.5"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.9.5.tgz#2cbaf9a89460da24b5ca6531b8bbfc23e1df50c7"
@@ -5596,6 +5616,11 @@ undici@^4.14.1:
   version "4.14.1"
   resolved "https://registry.yarnpkg.com/undici/-/undici-4.14.1.tgz#7633b143a8a10d6d63335e00511d071e8d52a1d9"
   integrity sha512-WJ+g+XqiZcATcBaUeluCajqy4pEDcQfK1vy+Fo+bC4/mqXI9IIQD/XWHLS70fkGUT6P52Drm7IFslO651OdLPQ==
+
+undici@^4.15.0:
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-4.15.0.tgz#507ec94bce46bec5c76e934938c50b825eda8258"
+  integrity sha512-kHppwh/y49FLEXl/zYCCbGB0D3nrcWNBczNYCsDdNYzWPs80aQgfKic1PVkJEIc2YlR7m0Lf5i559zbr0AA7FQ==
 
 unidecode@^0.1.8:
   version "0.1.8"
