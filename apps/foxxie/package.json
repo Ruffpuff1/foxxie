@@ -102,7 +102,7 @@
         "js-yaml": "^4.1.0",
         "lexure": "^0.17.0",
         "moment-timezone": "^0.5.34",
-        "mongodb": "^3.7.3",
+        "mongodb": "^4.4.1",
         "skia-canvas": "^0.9.29",
         "typeorm": "^0.2.45"
     },
