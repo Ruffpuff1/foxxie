@@ -15,7 +15,7 @@ export class UserInteractionHandler extends InteractionHandler {
 
         switch (result.type) {
             case 'villager':
-                display = buildVillagerDisplay(result.data as Omit<Villager, '__typename'>, getLocale(interaction));
+                display = buildVillagerDisplay(result.data as Omit<Villager, '__typename'>, getLocale(interaction), interaction.guild?.me?.displayColor);
                 break;
         }
 

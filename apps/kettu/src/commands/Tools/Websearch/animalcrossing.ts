@@ -90,7 +90,7 @@ export class UserCommand extends Command {
             });
         }
 
-        const display = buildVillagerDisplay(villagerData, args.t);
+        const display = buildVillagerDisplay(villagerData, args.t, interaction.guild?.me?.displayColor);
 
         await display.run(interaction, interaction.user);
         return null;

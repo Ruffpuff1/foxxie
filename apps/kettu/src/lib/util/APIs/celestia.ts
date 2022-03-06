@@ -53,7 +53,7 @@ export async function fuzzySearchVillagers(query: string, take = 20, cache?: Vil
     return result.slice(0, take);
 }
 
-export function buildVillagerDisplay(data: Omit<Villager, '__typename'>, t: TFunction) {
+export function buildVillagerDisplay(data: Omit<Villager, '__typename'>, t: TFunction, color?: number) {
     const none = t(LanguageKeys.Globals.None);
     const titles = t(LanguageKeys.Commands.Websearch.AnimalcrossingTitles);
 
@@ -61,7 +61,7 @@ export function buildVillagerDisplay(data: Omit<Villager, '__typename'>, t: TFun
         .setThumbnail(data.art) //
         .setAuthor({ name: `${toTitleCase(data.key)} [${data.keyJp}]` })
         .setFooter({ text: t(LanguageKeys.Commands.Websearch.AnimalcrossingFooter) })
-        .setColor(Colors.Default);
+        .setColor(color || Colors.Default);
 
     const display = new PaginatedMessage({ template }) //
         .addPageEmbed(embed =>

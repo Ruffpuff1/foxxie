@@ -379,13 +379,13 @@ export function parseBulbapediaURL(url: string) {
     return url.replace(/[ ]/g, '_').replace(/\(/g, '%28').replace(/\)/g, '%29');
 }
 
-export function moveDisplayBuilder(move: Omit<Move, '__typename'>, t: TFunction) {
+export function moveDisplayBuilder(move: Omit<Move, '__typename'>, t: TFunction, color?: number) {
     const externalSources = [`[Bulbapedia](${parseBulbapediaURL(move.bulbapediaPage)} )`, `[Serebii](${move.serebiiPage})`, `[Smogon](${move.smogonPage})`].join(' | ');
     const MovePageLabels = t(LanguageKeys.Commands.Websearch.PokemonMoveSelectPages);
 
     const display = new PaginatedMessage({
         template: new MessageEmbed()
-            .setColor(Colors.Default)
+            .setColor(color || Colors.Default)
             .setAuthor({ name: `Move - ${toTitleCase(move.name)}` })
             .setDescription(move.desc || move.shortDesc)
     })

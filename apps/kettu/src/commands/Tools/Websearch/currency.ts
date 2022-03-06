@@ -64,7 +64,7 @@ export class UserCommand extends Command {
         const value = ((result as CryptoCompareResultOk)[to] * amount).toFixed(2);
 
         const embed = new MessageEmbed() //
-            .setColor(Colors.Default) //
+            .setColor(interaction.guild?.me?.displayColor || Colors.Default) //
             .setDescription(t(LanguageKeys.Commands.Websearch.CurrencyMessage, { amount: amount.toFixed(2), from, value, to }));
 
         return interaction.editReply({ embeds: [embed] });

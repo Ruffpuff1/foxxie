@@ -64,7 +64,7 @@ export class UserCommand extends Command {
             .addField('**:dart: Intensity**', data.getHoroscope.intensity, true)
             .addField('**:label: Keywords**', data.getHoroscope.keywords.join(', '), true)
             .addField('**:revolving_hearts: Mood**', data.getHoroscope.mood, true)
-            .setColor(Colors.Default)
+            .setColor(interaction?.guild?.me?.displayColor || Colors.Default)
             .setFooter({ text: 'Powered by Saelem' });
 
         return interaction.editReply({

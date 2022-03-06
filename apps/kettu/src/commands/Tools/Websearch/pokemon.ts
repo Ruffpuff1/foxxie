@@ -131,7 +131,7 @@ export class UserCommand extends Command {
             });
         }
 
-        const display = moveDisplayBuilder(data, args.t);
+        const display = moveDisplayBuilder(data, args.t, interaction.guild?.me?.displayColor);
         return display.run(interaction);
     }
 

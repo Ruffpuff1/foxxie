@@ -73,7 +73,7 @@ export class UserCommand extends Command {
         const result = await fromAsync(this.fetchUserResult(user));
 
         if (isErr(result) || !result.value) return interaction.editReply(args.t(LanguageKeys.Commands.Websearch.GithubUserNotFound, { user }));
-        const embed = this.buildUserEmbed(args.t, result.value!);
+        const embed = this.buildUserEmbed(args.t, result.value!, interaction.guild?.me?.displayColor);
 
         return interaction.editReply({ embeds: [embed] });
     }
@@ -86,17 +86,17 @@ export class UserCommand extends Command {
 
         const result = await fromAsync(this.fetchRepoResult(user, repo));
         if (isErr(result) || !result.value) return interaction.editReply(args.t(LanguageKeys.Commands.Websearch.GithubRepoNotFound, { repo, user }));
-        const display = this.buildRepoEmbed(args.t, result.value);
+        const display = this.buildRepoEmbed(args.t, result.value, interaction.guild?.me?.displayColor);
 
         return display.run(interaction, interaction.user);
     }
 
-    private buildUserEmbed(t: TFunction, user: Github.User) {
-        const none = 'None';
+    private buildUserEmbed(t: TFunction, user: Github.User, color: number | undefined) {
+        const none = t(LanguageKeys.Globals.None);
         const titles = t(LanguageKeys.Commands.Websearch.GithubTitles);
 
         const embed = new MessageEmbed()
-            .setColor(Colors.Default)
+            .setColor(color || Colors.Default)
             .setAuthor({ name: user.name ? `${user.name} [${user.login}]` : (user.login as string), iconURL: user.avatar_url as string, url: user.html_url as string })
             .setThumbnail(user.avatar_url as string)
             .setDescription(
@@ -114,12 +114,12 @@ export class UserCommand extends Command {
             .addField(titles.website, (user.blog as string) || none, true);
     }
 
-    private buildRepoEmbed(t: TFunction, repo: Github.Repo) {
+    private buildRepoEmbed(t: TFunction, repo: Github.Repo, color: number | undefined) {
         const [none, yes, no] = [t(LanguageKeys.Globals.None), t(LanguageKeys.Globals.Yes), t(LanguageKeys.Globals.No)];
         const titles = t(LanguageKeys.Commands.Websearch.GithubTitles);
 
         const template = new MessageEmbed()
-            .setColor(Colors.Default)
+            .setColor(color || Colors.Default)
             .setAuthor({ name: `${repo.owner.login}/${repo.name}`, iconURL: repo.owner.avatar_url, url: repo.html_url })
             .setThumbnail(repo.owner.avatar_url);
 

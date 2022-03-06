@@ -18,7 +18,7 @@ export class UserInteractionHandler extends InteractionHandler {
                 display = pokemonDisplayBuilder(result.data as Omit<Pokemon, '__typename'>, result.spriteToGet as PokemonSpriteTypes, getLocale(interaction));
                 break;
             case 'move':
-                display = moveDisplayBuilder(result.data as Omit<Move, '__typename'>, getLocale(interaction));
+                display = moveDisplayBuilder(result.data as Omit<Move, '__typename'>, getLocale(interaction), interaction.guild?.me?.displayColor);
                 break;
         }
 
