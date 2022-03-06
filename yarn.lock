@@ -697,7 +697,7 @@
   resolved "https://registry.yarnpkg.com/@sapphire/async-queue/-/async-queue-1.2.0.tgz#7a56afd318101d338433d7180ebd6af349243268"
   integrity sha512-O5ND5Ljpef86X5oy8zXorQ754TMjWALcPSAgPBu4+76HLtDTrNoDyzU2uGE2G4A8Wv51u0MXHzGQ0WZ4GMtpIw==
 
-"@sapphire/decorators@^4.0.0", "@sapphire/decorators@^4.2.5":
+"@sapphire/decorators@^4.2.5", "@sapphire/decorators@^4.2.6":
   version "4.2.6"
   resolved "https://registry.yarnpkg.com/@sapphire/decorators/-/decorators-4.2.6.tgz#c576b3e328dfbbe52b682adf14d7ad643a5559d6"
   integrity sha512-Z6pifh2yx0h6mdnKdMvcUUdhK8QvqpW4JkoTNVWcb8hPPM2LZt9dbQM+qHPRrRqMJF4jAgF0LMHGsunc8JLh2Q==
@@ -810,7 +810,7 @@
   dependencies:
     tslib "^2.3.1"
 
-"@sapphire/ratelimits@^2.1.11", "@sapphire/ratelimits@^2.3.1":
+"@sapphire/ratelimits@^2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@sapphire/ratelimits/-/ratelimits-2.3.1.tgz#5ed5d1cbf722434c6ff11ba501793424a934f07f"
   integrity sha512-zA57XI0s9AYVqiAKmNwy+lHzBvtcW72hZcXUAVr98cicfhChcHDdk/LZ1s1TP9eKRlYFQC0dynTNh+BTGKyJTQ==
@@ -844,7 +844,7 @@
     tslib "^2.3.1"
     typescript "^4.5.5"
 
-"@sapphire/utilities@^3.1.0", "@sapphire/utilities@^3.2.0", "@sapphire/utilities@^3.2.1", "@sapphire/utilities@^3.3.0":
+"@sapphire/utilities@^3.1.0", "@sapphire/utilities@^3.2.1", "@sapphire/utilities@^3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@sapphire/utilities/-/utilities-3.3.0.tgz#62ff0a52cd86bd6169a94b2f217d72da6772a3cd"
   integrity sha512-wWESfB03elALhci3GjcacRh8pnK89Qe5AEKCQplKyTCKabWl64SAFw52hQBth2fMmJStgK1fr87aGhRZAB8DNA==
