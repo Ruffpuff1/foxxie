@@ -3,6 +3,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import type { SelectMenuInteraction } from 'discord.js';
 import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
+import { getLocale } from '#utils/decorators';
 
 @ApplyOptions<InteractionHandler.Options>({
     interactionHandlerType: InteractionHandlerTypes.SelectMenu
@@ -35,7 +36,7 @@ export class UserInteractionHandler extends InteractionHandler {
 
         switch (type) {
             case 'repo':
-                data = await fetchIssuesAndPrs({ repository, owner, number: parseInt(value, 10) });
+                data = await fetchIssuesAndPrs({ repository, owner, number: parseInt(value, 10) }, getLocale(interaction));
                 break;
         }
 
