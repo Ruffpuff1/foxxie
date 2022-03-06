@@ -52,12 +52,11 @@ export interface PokemonArgs extends BaseArgs {
 export interface GithubArgs extends BaseArgs {
     user: {
         user: string;
-        ephemeral?: boolean;
     };
     repo: {
         owner: string;
         repo: string;
-        ephemeral?: boolean;
+        number?: number;
     };
 }
 

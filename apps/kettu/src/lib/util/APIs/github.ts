@@ -2,10 +2,17 @@
  * @license MIT
  * @Copyright The Sapphire Community 2021
  */
+import { time, TimestampStyles } from '@discordjs/builders';
 import { fetch } from '@foxxie/fetch';
 import type { Github } from '@foxxie/types';
 import { cast, gql } from '@ruffpuff/utilities';
 import { fromAsync, isErr } from '@sapphire/framework';
+import { Emojis } from '..';
+import { cutText, isNullish, isNullishOrEmpty } from '@sapphire/utilities';
+import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
+import { AutoCompleteLimits } from '@sapphire/discord.js-utilities';
+import type { TFunction } from '@sapphire/plugin-i18next';
+import { LanguageKeys } from '#lib/i18n';
 
 export type PullRequestState =
     /** A pull request that has been closed without being merged. */
@@ -216,6 +223,68 @@ export const userSearch = gql`
     }
 `;
 
+const issuesAndPrQuery = gql`
+    query ($repository: String!, $owner: String!, $number: Int!) {
+        repository(owner: $owner, name: $repository) {
+            name
+            owner {
+                login
+            }
+            issue(number: $number) {
+                number
+                title
+                author {
+                    login
+                    url
+                }
+                state
+                url
+                createdAt
+                closedAt
+            }
+            pullRequest(number: $number) {
+                number
+                title
+                author {
+                    login
+                    url
+                }
+                isDraft
+                state
+                url
+                createdAt
+                closedAt
+                mergedAt
+            }
+        }
+    }
+`;
+
+const issuesAndPrSearch = gql`
+    query ($repository: String!, $owner: String!) {
+        repository(owner: $owner, name: $repository) {
+            pullRequests(first: 100, orderBy: { field: UPDATED_AT, direction: DESC }) {
+                nodes {
+                    ... on PullRequest {
+                        number
+                        title
+                        state
+                    }
+                }
+            }
+            issues(first: 100, orderBy: { field: UPDATED_AT, direction: DESC }) {
+                nodes {
+                    ... on Issue {
+                        number
+                        title
+                        state
+                    }
+                }
+            }
+        }
+    }
+`;
+
 export const GithubUserDefaults: Label[] = [
     {
         login: 'Ruffpuff1',
@@ -268,6 +337,238 @@ export async function fetchFuzzyRepo(owner: string, repository: string) {
     }
 
     return result.value!.data.search!.nodes.filter(repo => cast<Github.Repo>(repo).visibility === 'PUBLIC');
+}
+
+export async function fetchIssuesAndPrs({ repository, owner, number }: FetchIssuesAndPrsParameters, t: TFunction): Promise<IssueOrPrDetails> {
+    const result = await fromAsync(async () => {
+        const response = await fetch(graphQLBaseURL)
+            .header({
+                'User-Agent': '@kettu',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
+            })
+            .body({
+                query: issuesAndPrQuery,
+                variables: { repository, owner, number }
+            })
+            .post()
+            .json<GraphQLResponse<'data'>>();
+
+        return response.data;
+    });
+
+    if (isErr(result) || isNullish(result.value.repository?.pullRequest) && isNullish(result.value.repository?.issue)) {
+        throw new Error('no-data');
+    }
+
+    if (result.value.repository?.pullRequest) {
+        return getDataForPullRequest(result.value.repository, t);
+    } else if (result.value.repository?.issue) {
+        return getDataForIssue(result.value.repository, t);
+    }
+
+    // This gets handled into a response in the githubSearch command
+    throw new Error('no-data');
+}
+
+export async function fuzzilySearchForIssuesAndPullRequests({
+    repository,
+    owner,
+    number
+}: GhSearchIssuesAndPullRequestsParameters): Promise<APIApplicationCommandOptionChoice[]> {
+    const result = await fromAsync(async () => {
+        const response = await fetch(graphQLBaseURL)
+            .header({
+                'User-Agent': '@kettu',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
+            })
+            .body({
+                query: issuesAndPrSearch,
+                variables: { repository, owner }
+            })
+            .post()
+            .json<GraphQLResponse<'searchIssuesAndPrs'>>();
+
+        return response.data;
+    });
+
+    // If there are no results or there was an error then return an empty array
+    if (isErr(result) || isNullishOrEmpty(result.value.repository?.pullRequests) && isNullishOrEmpty(result.value.repository?.issues)) {
+        return [];
+    }
+
+    return getDataForIssuesAndPrSearch(number, result.value.repository?.pullRequests?.nodes, result.value.repository?.issues?.nodes);
+}
+
+function getDataForIssuesAndPrSearch(number: string, pullRequests: PullRequest[] | undefined, issues: Issue[] | undefined): APIApplicationCommandOptionChoice[] {
+    const numberParsedNumber = isNullishOrEmpty(number) ? NaN : Number(number);
+    const issuesHasExactNumber = issues?.find(issue => issue.number === numberParsedNumber);
+
+    if (issuesHasExactNumber) {
+        const parsedIssueState = issuesHasExactNumber?.state === 'OPEN' ? 'Open Issue' : 'Closed Issue';
+
+        return [
+            {
+                name: cutText(`(${parsedIssueState}) - ${issuesHasExactNumber.number} - ${issuesHasExactNumber.title}`, AutoCompleteLimits.MaximumLengthOfNameOfOption),
+                value: issuesHasExactNumber.number
+            }
+        ];
+    }
+
+    const pullRequestsHaveExactNumber = pullRequests?.find(pullRequest => pullRequest.number === numberParsedNumber);
+
+    if (pullRequestsHaveExactNumber) {
+        const parsedPullRequestState =
+            pullRequestsHaveExactNumber?.state === 'CLOSED'
+                ? 'Closed Pull Request'
+                : pullRequestsHaveExactNumber?.state === 'OPEN'
+                ? 'Open Pull Request'
+                : 'Merged Pull Request';
+
+        return [
+            {
+                name: cutText(
+                    `(${parsedPullRequestState}) - ${pullRequestsHaveExactNumber.number} - ${pullRequestsHaveExactNumber.title}`,
+                    AutoCompleteLimits.MaximumLengthOfNameOfOption
+                ),
+                value: pullRequestsHaveExactNumber.number
+            }
+        ];
+    }
+
+    const issueResults: APIApplicationCommandOptionChoice[] = [];
+    const pullRequestResults: APIApplicationCommandOptionChoice[] = [];
+
+    if (!isNullishOrEmpty(issues)) {
+        for (const issue of issues) {
+            const parsedIssueState = issue?.state === 'OPEN' ? 'Open Issue' : 'Closed Issue';
+
+            if (!Number.isNaN(numberParsedNumber)) {
+                if (!issue.number.toString().charAt(0).startsWith(numberParsedNumber.toString().charAt(0))) {
+                    continue;
+                }
+            }
+
+            issueResults.push({
+                name: cutText(`(${parsedIssueState}) - ${issue.number} - ${issue.title}`, AutoCompleteLimits.MaximumLengthOfNameOfOption),
+                value: issue.number
+            });
+        }
+
+        if (!issueResults.length) {
+            const [is] = issues;
+
+            const parsedIssueState = is?.state === 'OPEN' ? 'Open Issue' : 'Closed Issue';
+
+            issueResults.push({
+                name: cutText(`(${parsedIssueState}) - ${is.number} - ${is.title}`, AutoCompleteLimits.MaximumLengthOfNameOfOption),
+                value: is.number
+            });
+        }
+    }
+
+    if (!isNullishOrEmpty(pullRequests)) {
+        for (const pullRequest of pullRequests) {
+            const parsedPullRequestState =
+                pullRequest?.state === 'CLOSED' ? 'Closed Pull Request' : pullRequest?.state === 'OPEN' ? 'Open Pull Request' : 'Merged Pull Request';
+
+            if (!Number.isNaN(numberParsedNumber)) {
+                if (!pullRequest.number.toString().charAt(0).startsWith(numberParsedNumber.toString().charAt(0))) {
+                    continue;
+                }
+            }
+
+            pullRequestResults.push({
+                name: cutText(`(${parsedPullRequestState}) - ${pullRequest.number} - ${pullRequest.title}`, AutoCompleteLimits.MaximumLengthOfNameOfOption),
+                value: pullRequest.number
+            });
+        }
+
+        if (!pullRequestResults.length) {
+            const [req] = pullRequests;
+
+            const parsedPullRequestState =
+                req?.state === 'CLOSED' ? 'Closed Pull Request' : req?.state === 'OPEN' ? 'Open Pull Request' : 'Merged Pull Request';
+
+            pullRequestResults.push({
+                name: cutText(`(${parsedPullRequestState}) - ${req.number} - ${req.title}`, AutoCompleteLimits.MaximumLengthOfNameOfOption),
+                value: req.number
+            });
+        }
+    }
+
+    return [...issueResults.slice(0, 9), ...pullRequestResults.slice(0, 9)];
+}
+
+function getDataForIssue({ issue, ...repository }: Repository, t: TFunction): IssueOrPrDetails {
+    const dateToUse = issue?.state === 'CLOSED' ? new Date(issue?.closedAt) : new Date(issue?.createdAt);
+    const dateOffset = time(dateToUse, TimestampStyles.RelativeTime);
+    const dateStringPrefix = issue?.state === 'CLOSED' ? t(LanguageKeys.Commands.Websearch.GithubLabelClosed) : t(LanguageKeys.Commands.Websearch.GithubLabelOpen);
+    const dateString = `${dateStringPrefix} ${dateOffset}`;
+
+    return {
+        author: {
+            login: issue?.author?.login,
+            url: issue?.author?.url
+        },
+        dateString,
+        emoji: issue?.state === 'OPEN' ? Emojis.GithubIssueOpen : Emojis.GithubIssueClosed,
+        issueOrPr: 'ISSUE',
+        number: issue?.number,
+        owner: repository.owner.login,
+        repository: repository.name,
+        state: issue?.state,
+        title: issue?.title,
+        url: issue?.url
+    };
+}
+
+function getDataForPullRequest({ pullRequest, ...repository }: Repository, t: TFunction): IssueOrPrDetails {
+    const dateToUse =
+        pullRequest?.state === 'CLOSED'
+            ? new Date(pullRequest?.closedAt)
+            : pullRequest?.state === 'OPEN'
+            ? new Date(pullRequest?.createdAt)
+            : new Date(pullRequest?.mergedAt);
+    const dateOffset = time(dateToUse, TimestampStyles.RelativeTime);
+    const dateStringPrefix =
+        pullRequest?.state === 'CLOSED'
+            ? t(LanguageKeys.Commands.Websearch.GithubLabelClosed)
+            : pullRequest?.state === 'OPEN'
+            ? t(LanguageKeys.Commands.Websearch.GithubLabelOpen)
+            : t(LanguageKeys.Commands.Websearch.GithubLabelMerged);
+    const dateString = `${dateStringPrefix} ${dateOffset}`;
+
+    const getEmoji = () => {
+        if (pullRequest?.state === 'CLOSED') return Emojis.GithubPRClosed;
+
+        if (pullRequest?.state === 'OPEN') {
+            if (pullRequest?.isDraft) {
+                return '';
+            }
+
+            return Emojis.GithubPROpen;
+        }
+
+        return Emojis.GithubPRMerged;
+    };
+
+    return {
+        author: {
+            login: pullRequest?.author?.login,
+            url: pullRequest?.author?.url
+        },
+        dateString,
+        emoji: getEmoji(),
+        issueOrPr: 'PR',
+        number: pullRequest?.number,
+        owner: repository.owner.login,
+        repository: repository.name,
+        state: pullRequest?.state,
+        title: pullRequest?.title,
+        url: pullRequest?.url
+    };
 }
 
 export async function fetchFuzzyUser(user: string) {
