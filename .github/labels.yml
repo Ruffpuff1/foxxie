@@ -16,3 +16,5 @@
   color: '80c042'
 - name: 'I18n: es-MX'
   color: '80c042'
+- name: 'Docker Images: ravy.lgbt'
+  color: '2491E6'
