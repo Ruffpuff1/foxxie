@@ -1,31 +1,46 @@
 {
-  "additionalBranchPrefix": "{{parentDir}} -",
-  "assigneesFromCodeOwners": true,
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-"extends": ["config:base", "helpers:pinGitHubActionDigests", "group:allNonMajor"],
-"labels": ["Meta: Dependencies"],
-  "schedule": ["at any time"],
-  "labels": ["Meta: Dependencies"],
-  "npm": {
+	"additionalBranchPrefix": "{{parentDir}} -",
+	"assigneesFromCodeOwners": true,
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": [
+		"config:base",
+		"helpers:pinGitHubActionDigests",
+		"group:allNonMajor"
+	],
+	"schedule": [
+		"at any time"
+	],
+	"labels": [
+		"Meta: Dependencies"
+	],
+	"npm": {
 		"packageRules": [
 			{
-      "extends": "packages:apollographql",
-      "groupName": "Apollo GraphQL packages"
-    },
+				"extends": "packages:apollographql",
+				"groupName": "Apollo GraphQL packages"
+			},
 			{
-				"matchPackagePatterns": ["@sapphire"],
+				"matchPackagePatterns": [
+					"@sapphire"
+				],
 				"groupName": "Sapphire Dependencies"
 			},
 			{
-				"matchPackagePatterns": ["@influxdata"],
+				"matchPackagePatterns": [
+					"@influxdata"
+				],
 				"groupName": "InfluxDB Dependencies"
 			},
-      {
-				"matchPackagePatterns": ["@ruffpuff"],
+			{
+				"matchPackagePatterns": [
+					"@ruffpuff"
+				],
 				"groupName": "Ruffpuff Dependencies"
 			},
-      {
-				"matchPackagePatterns": ["@foxxie"],
+			{
+				"matchPackagePatterns": [
+					"@foxxie"
+				],
 				"groupName": "Foxxie Dependencies"
 			}
 		]
