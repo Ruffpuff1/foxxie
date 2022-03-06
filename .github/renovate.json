@@ -1,11 +1,21 @@
 {
   "additionalBranchPrefix": "{{parentDir}} -",
   "assigneesFromCodeOwners": true,
-  "extends": ["github>sapphiredev/readme:sapphire-renovate"],
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+"extends": ["config:base", "helpers:pinGitHubActionDigests", "group:allNonMajor"],
+"labels": ["Meta: Dependencies"],
   "schedule": ["at any time"],
   "labels": ["Meta: Dependencies"],
   "npm": {
 		"packageRules": [
+			{
+      "extends": "packages:apollographql",
+      "groupName": "Apollo GraphQL packages"
+    },
+			{
+				"matchPackagePatterns": ["@sapphire"],
+				"groupName": "Sapphire Dependencies"
+			},
 			{
 				"matchPackagePatterns": ["@influxdata"],
 				"groupName": "InfluxDB Dependencies"
