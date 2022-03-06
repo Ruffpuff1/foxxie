@@ -1,6 +1,6 @@
 name: Bug report
 description: Request a new feature
-title: 'request:'
+title: 'bug:'
 labels: ["Type: Bug", "Bug: Confirmed"]
 assignees: [Ruffpuff1]
 body:
