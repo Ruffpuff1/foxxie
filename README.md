@@ -37,6 +37,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/Ruffpuff1"><img src="https://avatars.githubusercontent.com/u/73779441?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ruff</b></sub></a><br /><a href="https://github.com/FoxxieBot/foxxie/commits?author=Ruffpuff1" title="Code">💻</a> <a href="#ideas-Ruffpuff1" title="Ideas, Planning, & Feedback">🤔</a> <a href="#content-Ruffpuff1" title="Content">🖋</a></td>
     <td align="center"><a href="https://github.com/Raindrop-Droptop"><img src="https://avatars.githubusercontent.com/u/81828616?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Raindrop-Droptop</b></sub></a><br /><a href="#ideas-Raindrop-Droptop" title="Ideas, Planning, & Feedback">🤔</a> <a href="#financial-Raindrop-Droptop" title="Financial">💵</a> <a href="#translation-Raindrop-Droptop" title="Translation">🌍</a></td>
+    <td align="center"><a href="https://github.com/orihuu"><img src="https://avatars.githubusercontent.com/u/81810945?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ori</b></sub></a><br /><a href="#content-orihuu" title="Content">🖋</a> <a href="https://github.com/FoxxieBot/foxxie/commits?author=orihuu" title="Tests">⚠️</a> <a href="https://github.com/FoxxieBot/foxxie/issues?q=author%3Aorihuu" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
