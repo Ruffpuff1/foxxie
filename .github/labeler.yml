@@ -21,6 +21,10 @@
 'Packages: types':
   - packages/types/*
   - packages/types/**/*
+  
+'Docker Images: ravy.lgbt'
+  - docker/ravy.lgbt/*
+  - docker/ravy.lgbt/**/*
 
 'I18n: en-US':
   - apps/foxxie/src/languages/en-US/*
