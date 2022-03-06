@@ -104,3 +104,5 @@ dist
 
 .turbo
 build/**
+
+.DS_Store
