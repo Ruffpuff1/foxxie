@@ -690,7 +690,7 @@
   resolved "https://registry.yarnpkg.com/@sapphire/async-queue/-/async-queue-1.2.0.tgz#7a56afd318101d338433d7180ebd6af349243268"
   integrity sha512-O5ND5Ljpef86X5oy8zXorQ754TMjWALcPSAgPBu4+76HLtDTrNoDyzU2uGE2G4A8Wv51u0MXHzGQ0WZ4GMtpIw==
 
-"@sapphire/decorators@^4.2.5", "@sapphire/decorators@^4.2.6":
+"@sapphire/decorators@^4.2.6":
   version "4.2.6"
   resolved "https://registry.yarnpkg.com/@sapphire/decorators/-/decorators-4.2.6.tgz#c576b3e328dfbbe52b682adf14d7ad643a5559d6"
   integrity sha512-Z6pifh2yx0h6mdnKdMvcUUdhK8QvqpW4JkoTNVWcb8hPPM2LZt9dbQM+qHPRrRqMJF4jAgF0LMHGsunc8JLh2Q==
@@ -704,7 +704,7 @@
   dependencies:
     twemoji-parser "^13.1.0"
 
-"@sapphire/discord.js-utilities@^4.8.1", "@sapphire/discord.js-utilities@^4.8.1-next.f24894c.0":
+"@sapphire/discord.js-utilities@^4.8.1", "@sapphire/discord.js-utilities@^4.8.2":
   version "4.8.2"
   resolved "https://registry.yarnpkg.com/@sapphire/discord.js-utilities/-/discord.js-utilities-4.8.2.tgz#13226eecb710c8dce3ef4d2dc66a93fb1beae2be"
   integrity sha512-VYr6IVd+lKsnYCxhY1pTxjCW+vLYFMcxw1PY0U5ryTyWkgA0FP06Ay1VRZVhl6bYIAOTudlnmzwmItGK0xfOUw==
