@@ -1,6 +1,8 @@
 name: Feature request
 description: Request a new feature
-labels: [feature]
+title: request:
+labels: [request]
+assignees: [Ruffpuff1]
 body:
   - type: dropdown
     id: package
