@@ -1,14 +1,8 @@
 {
 	"additionalBranchPrefix": "{{parentDir}} -",
 	"assigneesFromCodeOwners": true,
-	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": [
-		"config:base",
-		"helpers:pinGitHubActionDigests",
-		"group:allNonMajor"
-	],
-	"schedule": [
-		"at any time"
+		"config:base"
 	],
 	"labels": [
 		"Meta: Dependencies"
