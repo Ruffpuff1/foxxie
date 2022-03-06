@@ -402,7 +402,7 @@
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
-"@influxdata/influxdb-client@^1.21.0":
+"@influxdata/influxdb-client@^1.23.0":
   version "1.23.0"
   resolved "https://registry.yarnpkg.com/@influxdata/influxdb-client/-/influxdb-client-1.23.0.tgz#d1472eca049cef613cfa109de9a3ee3eaa6d4d42"
   integrity sha512-0bRb60PSQO1OxfYVJ5MKDMqMPuBE3qlN9C6o6Jmnx8cMj/MO1eEBfc6vNdO8Cudvhn0K+SKEUs2KCrM+kjynqw==
