@@ -35,6 +35,6 @@ export class UserCommand extends Command {
     }
 
     private invite(clientId: string, permissions?: `${bigint}`) {
-        return `https://discord.com/oauth2/authorize?client_id=${clientId}${permissions ? `&permissions=${permissions}` : ''}&scope=applications.commands&scope=bot`;
+        return `https://discord.com/oauth2/authorize?client_id=${clientId}${permissions ? `&permissions=${permissions}` : ''}&scope=bot%20applications.commands`;
     }
 }
