@@ -1,6 +1,6 @@
 import RWLock from 'async-rwlock';
 
-export class LockQueue extends Map<string, RWLock> {
+class LockQueue extends Map<string, RWLock> {
     public get(key: string, force = false) {
         const previous = super.get(key);
         if (!previous && force) return this.acquire(key);
@@ -18,3 +18,5 @@ export class LockQueue extends Map<string, RWLock> {
         return lock;
     }
 }
+
+export { LockQueue, RWLock };
