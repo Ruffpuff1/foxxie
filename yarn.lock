@@ -369,13 +369,6 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@favware/graphql-pokemon@6.4.0":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@favware/graphql-pokemon/-/graphql-pokemon-6.4.0.tgz#a00adcabce3d7dfc16c666eed7eeaaa4deca1cbf"
-  integrity sha512-MZPagBacZyEVw49fleNzKMdqeALIi4xOjbEhsyXMx7PxHDNH3AO/dUKDdUGQgisw4QB6wf4coXCrsVecOSNMXQ==
-  dependencies:
-    graphql "^15.8.0"
-
 "@favware/graphql-pokemon@6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@favware/graphql-pokemon/-/graphql-pokemon-6.5.0.tgz#0218e7dd34122487022a4d0fa2c7ecb0b789e932"
