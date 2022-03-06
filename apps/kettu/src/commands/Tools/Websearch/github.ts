@@ -6,11 +6,12 @@ import { Command, fromAsync, isErr } from '@sapphire/framework';
 import type { Github } from '@foxxie/types';
 import { Colors } from '#utils/constants';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import { MessageEmbed } from 'discord.js';
+import { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
-import { GithubOptionType } from '#utils/APIs';
+import { fetchIssuesAndPrs, fuzzilySearchForIssuesAndPullRequests, GithubOptionType } from '#utils/APIs';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
 
 @RegisterChatInputCommand(
     CommandName.Github,
@@ -48,6 +49,13 @@ import { PaginatedMessage } from '@sapphire/discord.js-utilities';
                             .setRequired(true)
                             .setAutocomplete(true)
                     )
+                    .addNumberOption(option =>
+                        option //
+                            .setName('number')
+                            .setDescription(enUS(LanguageKeys.Commands.Websearch.GithubOptionNumber))
+                            .setRequired(false)
+                            .setAutocomplete(true)
+                    )
             ),
     ['947857986594959390', '947873927873593364']
 )
@@ -67,7 +75,7 @@ export class UserCommand extends Command {
     }
 
     public async user(...[interaction, , args]: Required<ChatInputArgs<CommandName.Github>>): Promise<any> {
-        await interaction.deferReply({ ephemeral: args.user.ephemeral });
+        await interaction.deferReply();
 
         const user = this.parseUser(args.user.user);
         const result = await fromAsync(this.fetchUserResult(user));
@@ -79,10 +87,46 @@ export class UserCommand extends Command {
     }
 
     public async repo(...[interaction, , args]: Required<ChatInputArgs<CommandName.Github>>): Promise<any> {
-        await interaction.deferReply({ ephemeral: args.repo.ephemeral });
+        await interaction.deferReply();
 
         const user = this.parseUser(args.repo.owner);
-        const { repo } = args.repo;
+        const { repo, number } = args.repo;
+
+        if (number) {
+            try {
+                const data = await fetchIssuesAndPrs({ repository: repo, owner: user, number }, args.t);
+
+                if (!data.author.login || !data.author.url || !data.number || !data.state || !data.title) throw new Error('Invalid');
+
+                const parts = [
+                    `${data.emoji} ${hyperlink(
+                        `#${data.number} ${args.t(LanguageKeys.Globals.In).toLowerCase()} ${data.owner}/${data.repository}`,
+                        hideLinkEmbed(data.url)
+                    )} ${args.t(LanguageKeys.Globals.By).toLowerCase()} ${hyperlink(data.author.login, hideLinkEmbed(data.author.url))} ${data.dateString}`,
+                    data.title
+                ];
+
+                return interaction.editReply(parts.join('\n'));
+            } catch {
+                const data = await fuzzilySearchForIssuesAndPullRequests({ repository: repo, owner: user, number: `${number}` });
+
+                if (!data.length) return interaction.editReply(args.t(LanguageKeys.Commands.Websearch.GithubIssuePRNotFound, { number }));
+
+                const actionRow = new MessageActionRow() //
+                    .setComponents(
+                        new MessageSelectMenu() //
+                            .setCustomId(`github|repo|${repo}|${user}`)
+                            .setOptions(data.map<MessageSelectOptionData>(choice => ({ label: choice.name, value: choice.value.toString() })))
+                    );
+
+                await interaction.deleteReply();
+                return interaction.followUp({
+                    content: args.t(LanguageKeys.Commands.Websearch.GithubIssuePRNotFoundWithSelectMenuData, { number }),
+                    components: [actionRow],
+                    ephemeral: true
+                });
+            }
+        }
 
         const result = await fromAsync(this.fetchRepoResult(user, repo));
         if (isErr(result) || !result.value) return interaction.editReply(args.t(LanguageKeys.Commands.Websearch.GithubRepoNotFound, { repo, user }));

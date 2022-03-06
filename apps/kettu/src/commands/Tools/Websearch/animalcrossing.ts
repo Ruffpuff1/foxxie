@@ -3,9 +3,8 @@ import { RegisterChatInputCommand } from '#utils/decorators';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { envParseBoolean } from '#lib/env';
 import type { VillagersEnum } from '@ruffpuff/celestia';
-import { buildVillagerDisplay, fetchVillager, fetchVillagers, fuzzySearchVillagers } from '#utils/APIs';
-import { seconds, toTitleCase } from '@ruffpuff/utilities';
-import { setTimeout as sleep } from 'node:timers/promises';
+import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#utils/APIs';
+import { toTitleCase } from '@ruffpuff/utilities';
 import { enUS } from '#utils/util';
 import { LanguageKeys } from '#lib/i18n';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
@@ -33,7 +32,7 @@ import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'di
     }
 )
 export class UserCommand extends Command {
-    private villagers: VillagersEnum[] = [];
+    private villagers!: VillagersEnum[];
 
     public chatInputRun(...[interaction, c, args]: ChatInputArgs<CommandName.AnimalCrossing>): Promise<any> {
         const subcommand = interaction.options.getSubcommand(true);
@@ -50,16 +49,6 @@ export class UserCommand extends Command {
         const opt = interaction.options.getFocused(true);
         const data = await fuzzySearchVillagers(opt.value as string, 20, this.villagers);
         return interaction.respond(data.map(r => ({ name: r.key, value: r.key })));
-    }
-
-    public async onLoad() {
-        if (!this.enabled) return;
-        await sleep(seconds(10));
-        const data = await fetchVillagers();
-
-        for (const key of data.data.getVillagers) {
-            this.villagers.push(key);
-        }
     }
 
     private async villager(...[interaction, , args]: Required<ChatInputArgs<CommandName.AnimalCrossing>>) {

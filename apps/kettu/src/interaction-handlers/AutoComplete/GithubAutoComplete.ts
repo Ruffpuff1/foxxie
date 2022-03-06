@@ -1,5 +1,5 @@
 import { CommandName } from '#types/Interactions';
-import { fetchFuzzyRepo, fetchFuzzyUser, GithubOptionType, Label } from '#utils/APIs';
+import { fetchFuzzyRepo, fetchFuzzyUser, fuzzilySearchForIssuesAndPullRequests, GithubOptionType, Label } from '#utils/APIs';
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import type { AutocompleteInteraction } from 'discord.js';
@@ -25,6 +25,14 @@ export class UserInteractionHandler extends InteractionHandler {
             case GithubOptionType.Repo: {
                 const fuzzyResult = await fetchFuzzyRepo(interaction.options.getString(GithubOptionType.Owner, true), option.value as string);
                 return this.some(fuzzyResult.map(entry => ({ value: entry.name, name: entry.name })));
+            }
+            case 'number': {
+                const data = await fuzzilySearchForIssuesAndPullRequests({
+                    repository: interaction.options.getString(GithubOptionType.Repo, true),
+                    owner: interaction.options.getString(GithubOptionType.Owner, true),
+                    number: option.value.toString()
+                });
+                return this.some(data);
             }
             default:
                 return this.none();
