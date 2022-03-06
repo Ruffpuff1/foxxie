@@ -39,7 +39,7 @@
     "CREATE_PRIVATE_THREADS": "Crear hilos privados",
     "START_EMBEDDED_ACTIVITIES": "Iniciar actividades incrustadas",
     "MODERATE_MEMBERS": "Moderar Miembros",
-
+    "MANAGE_EVENTS": "Administrar Eventos",
     "USE_PUBLIC_THREADS": "Crear Hilos Públicos",
     "USE_PRIVATE_THREADS": "Crear Hilos Privados"
 }

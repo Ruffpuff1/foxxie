@@ -15,5 +15,6 @@
     "prefixReminder": "¡Hola! Mi prefijo para este servidor es: {{prefixes, codeand}}",
     "prefixReminder_other": "¡Qué tal! Mis prefijos para este servidor son: {{prefixes, codeand}}",
     "reactionHandlerPrompt": "¿A cual página quisieras ir?",
+    "selectMenuWrongUser": "",
     "textPromptTimeout": "{{ERROR}} Lo siento, este inmediato de ha expirado."
 }

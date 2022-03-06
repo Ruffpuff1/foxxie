@@ -1,0 +1,76 @@
+{
+    "birthdayDescription": "",
+    "birthdayDetailedDescription": {
+        "usages": [
+            "",
+            ""
+        ],
+        "extendedHelp": "",
+        "explainedUsage": [
+            [
+                "",
+                [
+                    "",
+                    ""
+                ]
+            ]
+        ],
+        "examples": [
+            "",
+            ""
+        ]
+    },
+    "birthdaySetSuccess": "",
+    "cooldownDaily": "",
+    "cooldownDescription": "",
+    "cooldownDetailedDescription": {
+        "usages": [
+            ""
+        ],
+        "extendedHelp": "",
+        "examples": [
+            ""
+        ]
+    },
+    "cooldownGiven": "",
+    "cooldownRep": "",
+    "cooldownRepGiven": "",
+    "cooldownTitle": "",
+    "level": "",
+    "levelDescription": "",
+    "levelDetailedDescription": {
+        "usages": [
+            "",
+            ""
+        ],
+        "extendedHelp": "",
+        "explainedUsage": [
+            [
+                "",
+                ""
+            ]
+        ],
+        "examples": [
+            ""
+        ]
+    },
+    "levelRanked": "",
+    "levelRemaining": "",
+    "reputationAlreadyExists": "",
+    "reputationDescription": "",
+    "reputationDetailedDescription": {
+        "usages": [
+            "",
+            ""
+        ],
+        "extendedHelp": "",
+        "examples": [
+            "",
+            ""
+        ]
+    },
+    "reputationGive": "",
+    "reputationRemind": "",
+    "reputationSelf": "",
+    "reputationTime": ""
+}

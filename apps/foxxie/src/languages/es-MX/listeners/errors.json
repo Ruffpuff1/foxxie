@@ -1,5 +1,4 @@
 {
     "string": "{{ERROR}} Hola {{mention}}, {{message}}",
-    "tooManyRoles": "{{ERROR}} ¡Este servidor tiene demasiados roles para crear otro!",
     "unexpectedWithCode": "$t(listeners/errors:unexpected) También puedes enviarles `{{report}}` para que puedan consultar lo que desencadenó el error."
 }
