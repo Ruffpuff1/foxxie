@@ -98,7 +98,7 @@ export class Request {
         this.streamEnabled = false;
 
         this.compressionEnabled = false;
-        this.ua = `@foxxie/fetch/0.0.0`;
+        this.ua = `@foxxie/fetch/0.0.1`;
 
         this.coreOptions = {};
 
@@ -167,7 +167,7 @@ export class Request {
                 this.reqHeaders[k.toLowerCase()] = key[k];
             });
         } else {
-            this.coreOptions[key.toLowerCase()] = value;
+            this.reqHeaders[key.toLowerCase()] = value!;
         }
 
         return this;
@@ -250,7 +250,7 @@ export class Request {
             }
         }
 
-        this.header('user-agent', this.ua);
+        this.header('User-Agent', this.ua);
 
         const options = {
             body: this.data,
