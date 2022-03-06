@@ -1,0 +1,25 @@
+name: Feature request
+description: Request a new feature
+labels: [feature]
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Which package is the feature request for?
+      options:
+        - foxxie
+        - kettu
+        - eslint-config
+        - fetch
+        - lock-queue
+        - types
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature
+      description: A clear and concise description of what the feature is.
+      placeholder: Using this...Would be a good idea because...
+    validations:
+      required: true
