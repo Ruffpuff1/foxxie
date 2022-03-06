@@ -3,7 +3,7 @@
     "version": "5.0.0",
     "description": "A utility and moderation centered discord bot, to provide orginazation to your server.",
     "main": "./dist/Foxxie.js",
-    "homepage": "https://github.com/FoxxieBot/Foxxie",
+    "homepage": "https://github.com/FoxxieBot/foxxie",
     "repository": {
         "type": "git",
         "url": "https://github.com/FoxxieBot/foxxie",
@@ -71,6 +71,7 @@
     "license": "MIT",
     "dependencies": {
         "@aero/sanitizer": "^1.2.0",
+        "@favware/graphql-pokemon": "6.5.0",
         "@foxxie/fetch": "0.0.0",
         "@foxxie/lock-queue": "0.0.0",
         "@influxdata/influxdb-client": "^1.21.0",
