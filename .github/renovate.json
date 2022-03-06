@@ -4,7 +4,6 @@
   "extends": ["github>sapphiredev/readme:sapphire-renovate"],
   "schedule": ["at any time"],
   "labels": ["Meta: Dependencies"],
-  "prHourlyLimit": 5,
   "npm": {
 		"packageRules": [
 			{
