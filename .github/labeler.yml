@@ -1,41 +1,50 @@
-'bot:foxxie':
+'Bot: Foxxie':
   - apps/foxxie/*
   - apps/foxxie/**/*
 
-'bot:kettu':
+'Bot: Kettu':
   - apps/kettu/*
   - apps/kettu/**/*
 
-'packages:fetch':
+'Packages: fetch':
   - packages/fetch/*
   - packages/fetch/**/*
 
-'packages:lock-queue':
+'Packages: lock-queue':
   - packages/lock-queue/*
   - packages/lock-queue/**/*
 
-'packages:eslint-config':
+'Packages: eslint-config':
   - packages/eslint-config/*
   - packages/eslint-config/**/*
 
-'packages:types':
+'Packages: types':
   - packages/types/*
   - packages/types/**/*
 
-'i18n:en-US':
+'I18n: en-US':
   - apps/foxxie/src/languages/en-US/*
   - apps/foxxie/src/languages/en-US/**/*
   - apps/kettu/src/languages/en-US/*
   - apps/kettu/src/languages/en-US/**/*
 
-'i18n:en-GB':
+'I18n: en-GB':
   - apps/foxxie/src/languages/en-GB/*
   - apps/foxxie/src/languages/en-GB/**/*
   - apps/kettu/src/languages/en-GB/*
   - apps/kettu/src/languages/en-GB/**/*
 
-'i18n:es-MX':
+'I18n: es-MX':
   - apps/foxxie/src/languages/es-MX/*
   - apps/foxxie/src/languages/es-MX/**/*
   - apps/kettu/src/languages/es-MX/*
   - apps/kettu/src/languages/es-MX/**/*
+  
+'Meta: Documentation':
+  - README.md
+  - LICENSE
+  - **/*/CHANGELOG
+  
+'Meta: Github':
+  - .github/*
+  - .github/**/*
