@@ -1,6 +1,24 @@
 {
   "additionalBranchPrefix": "{{parentDir}} -",
   "assigneesFromCodeOwners": true,
-  "extends": ["config:base", "group:allNonMajor"],
-  "schedule": ["before 12pm on Sunday"]
+  "extends": ["github>sapphiredev/readme:sapphire-renovate"],
+  "schedule": ["at any time"],
+  "labels": ["Meta: Dependencies"],
+  "prHourlyLimit": 5,
+  "npm": {
+		"packageRules": [
+			{
+				"matchPackagePatterns": ["@influxdata"],
+				"groupName": "InfluxDB Dependencies"
+			},
+      {
+				"matchPackagePatterns": ["@ruffpuff"],
+				"groupName": "Ruffpuff Dependencies"
+			},
+      {
+				"matchPackagePatterns": ["@foxxie"],
+				"groupName": "Foxxie Dependencies"
+			}
+		]
+	}
 }
