@@ -43,7 +43,8 @@
 'Meta: Documentation':
   - README.md
   - LICENSE
-  - **/*/CHANGELOG
+  - apps/**/CHANGELOG.md
+  - packages/**/CHANGELOG.md
   
 'Meta: Github':
   - .github/*
