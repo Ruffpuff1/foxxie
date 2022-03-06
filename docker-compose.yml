@@ -25,9 +25,18 @@ services:
     depends_on:
       - celestia
       - saelem
+      - ravy.lgbt
       - redis
     env_file:
       - .env.kettu
+    restart: always
+    networks:
+      - kettu
+
+  ravy.lgbt:
+    build:
+      context: ./docker/ravy.lgbt
+    container_name: ravy.lgbt
     restart: always
     networks:
       - kettu

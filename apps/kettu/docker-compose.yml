@@ -43,12 +43,23 @@ services:
       - '8284:8284'
     restart: always
 
+  ravy.lgbt:
+    build:
+      context: ../../docker/ravy.lgbt
+    container_name: ravy.lgbt
+    networks:
+      - kettu
+    ports:
+      - '7125:7125'
+    restart: always
+
   kettu:
     build:
       context: .
     container_name: kettu
     depends_on:
       - celestia
+      - ravy.lgbt
       - redis
       - saelem
     networks:

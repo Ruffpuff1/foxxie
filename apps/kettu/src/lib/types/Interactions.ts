@@ -15,6 +15,7 @@ export enum CommandName {
     Github = 'github',
     Invite = 'invite',
     Pokemon = 'pokemon',
+    Pride = 'pride',
     Support = 'support',
     Wolfram = 'wolfram',
     Zodiac = 'zodiac'
@@ -66,6 +67,11 @@ export interface AnimalCrossingArgs extends BaseArgs {
     };
 }
 
+export interface PrideArgs extends EphemeralArgs {
+    flag: 'agender' | 'asexual' | 'bisexual' | 'genderfluid' | 'lesbian' | 'nonbinary' | 'pansexual' | 'pride' | 'transgender';
+    'guild-avatar'?: boolean;
+}
+
 export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     ? EphemeralArgs
     : T extends CommandName.Invite
@@ -88,4 +94,6 @@ export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     ? GithubArgs
     : T extends CommandName.AnimalCrossing
     ? AnimalCrossingArgs
+    : T extends CommandName.Pride
+    ? PrideArgs
     : never;
