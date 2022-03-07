@@ -10,12 +10,12 @@ import type { CommandInteraction } from 'discord.js';
     event: Events.ChatInputCommandDenied
 })
 export class UserListener extends Listener<Events.ChatInputCommandDenied> {
-    public run(...[error, ctx]: EventArgs<Events.ChatInputCommandDenied>) {
+    public run(...[error, ctx]: EventArgs<Events.ChatInputCommandDenied>): Promise<any> {
         const { interaction } = ctx;
         return this.handleMessage(interaction, error);
     }
 
-    public handleMessage(interaction: CommandInteraction, error: UserError) {
+    public handleMessage(interaction: CommandInteraction, error: UserError): Promise<any> {
         const t = getLocale(interaction);
 
         const content = error.identifier //
