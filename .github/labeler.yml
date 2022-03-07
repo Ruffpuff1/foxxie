@@ -47,6 +47,12 @@
 'Meta: Documentation':
   - README.md
   - LICENSE
+  - apps/**/README.md
+  - packages/**/README.md
+  - docker/**/README.md
+  - apps/README.md
+  - packages/README.md
+  - docker/README.md
   - apps/**/CHANGELOG.md
   - packages/**/CHANGELOG.md
   
