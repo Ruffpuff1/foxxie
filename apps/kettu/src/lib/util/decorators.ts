@@ -19,13 +19,12 @@ export function RegisterChatInputCommand<N extends CommandName>(
               | SlashCommandOptionsOnlyBuilder
               | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>),
     idHints: string[],
-    options?: Command.Options
+    options: Command.Options = {}
 ) {
     const registry = container.applicationCommandRegistries.acquire(name);
 
     const build = typeof builder === 'function' ? builder(new SlashCommandBuilder()) : new SlashCommandBuilder();
     if (!build.name) build.setName(name);
-
     const json = build.toJSON();
 
     registry.registerChatInputCommand(build, {
@@ -35,18 +34,6 @@ export function RegisterChatInputCommand<N extends CommandName>(
     });
 
     return createClassDecorator((command: Ctor) => {
-        createProxy(command, {
-            construct: (ctor, [context, base = {}]) =>
-                new ctor(context, {
-                    ...base,
-                    ...{
-                        description: build.description,
-                        name: build.name,
-                        ...options
-                    }
-                })
-        });
-
         const subcommands = json.options?.filter(opt => opt.type === 1);
 
         if (subcommands?.length) {
@@ -56,6 +43,18 @@ export function RegisterChatInputCommand<N extends CommandName>(
         } else {
             applyWrapperToMethod(command, 'chatInputRun');
         }
+
+        return createProxy(command, {
+            construct: (ctor, [context, base = {}]) =>
+                new ctor(context, {
+                    ...base,
+                    ...{
+                        description: build.description,
+                        name: build.name,
+                        requiredClientPermissions: options.requiredClientPermissions ?? 0
+                    }
+                })
+        });
     });
 }
 
@@ -89,7 +88,7 @@ function parseArgs(options: CommandInteractionOption[], raw: Record<string, any>
                 break;
             case 'ROLE':
                 raw[arg.name] = arg.role;
-                break
+                break;
             default:
                 raw[arg.name] = arg.value;
         }

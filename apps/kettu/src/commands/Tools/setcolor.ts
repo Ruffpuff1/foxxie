@@ -5,7 +5,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
 import { resolveColorArgument } from '#utils/resolvers';
 import { Collection, ColorResolvable, DiscordAPIError, GuildMember } from 'discord.js';
-import { RESTJSONErrorCodes } from 'discord-api-types/v10';
+import { PermissionFlagsBits, RESTJSONErrorCodes } from 'discord-api-types/v10';
 import tinycolor from 'tinycolor2';
 import { FuzzySearch } from '#utils/FuzzySearch';
 
@@ -33,7 +33,10 @@ import { FuzzySearch } from '#utils/FuzzySearch';
                     .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorOptionReason))
                     .setRequired(false)
             ),
-    []
+    ['950400529970888707'],
+    {
+        requiredClientPermissions: PermissionFlagsBits.ManageRoles
+    }
 )
 export class UserCommand extends Command {
     public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Setcolor>): Promise<unknown> {

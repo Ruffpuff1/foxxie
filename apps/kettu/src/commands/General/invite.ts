@@ -20,7 +20,7 @@ import { enUS } from '#utils/util';
 export class UserCommand extends Command {
     private readonly urls = [
         bold(`• ${hyperlink('Foxxie', this.invite('825130284382289920', '103079267392'))} (Moderation)`),
-        bold(`• ${hyperlink('Kettu', this.invite('945242473683353600'))} (Tools)`)
+        bold(`• ${hyperlink('Kettu', this.invite('945242473683353600', '268435456'))} (Tools)`)
     ];
 
     public chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Invite>) {
