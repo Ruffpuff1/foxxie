@@ -1,54 +1,61 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
-import { fetch } from '@foxxie/fetch';
-import tinycolor from 'tinycolor2';
-import { FuzzySearch } from '#utils/FuzzySearch';
-import { Collection } from 'discord.js';
 import { getLocale, RegisterChatInputCommand } from '#utils/decorators';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
 import { resolveColorArgument } from '#utils/resolvers';
+import { Collection, ColorResolvable, DiscordAPIError, GuildMember } from 'discord.js';
+import { RESTJSONErrorCodes } from 'discord-api-types/v10';
+import tinycolor from 'tinycolor2';
+import { FuzzySearch } from '#utils/FuzzySearch';
 
 @RegisterChatInputCommand(
-    CommandName.Color,
+    CommandName.Setcolor,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Tools.ColorDescription))
+            .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorDescription))
+            .addRoleOption(option =>
+                option //
+                    .setName('role')
+                    .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorOptionRole))
+                    .setRequired(true)
+            )
             .addStringOption(option =>
                 option //
                     .setName('color')
-                    .setDescription(enUS(LanguageKeys.Commands.Tools.ColorOptionColor))
+                    .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorOptionColor))
                     .setRequired(true)
                     .setAutocomplete(true)
             )
-            .addBooleanOption(option =>
+            .addStringOption(option =>
                 option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
+                    .setName('reason')
+                    .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorOptionReason))
                     .setRequired(false)
             ),
-    ['946619789583978496', '946619789583978496']
+    []
 )
 export class UserCommand extends Command {
-    public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Color>): Promise<unknown> {
-        const { ephemeral, color: colorArg, t } = args!;
+    public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Setcolor>): Promise<unknown> {
+        const { color: colorArg, t, role, reason } = args!;
 
-        await interaction.deferReply({ ephemeral });
+        await interaction.deferReply();
         const color = await resolveColorArgument(colorArg, t, interaction);
         // @ts-expect-error using private prop
         if (color._format === false) return interaction.editReply(t(LanguageKeys.Commands.Tools.ColorNotFound, { color: colorArg }));
 
-        const attachment = await this.draw(color);
+        try {
+            await role.setColor(color.toHexString() as ColorResolvable, reason || t(LanguageKeys.Commands.Tools.SetcolorReason));
+        } catch (error) {
+            if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.MissingPermissions) {
+                const myRole = interaction.guild?.roles.botRoleFor(interaction.guild?.me as GuildMember);
+                return interaction.editReply(t(LanguageKeys.Commands.Tools.SetcolorNoPerms, { context: myRole?.id === role.id ? 'mine' : '', role: role.name }));
+            }
 
-        const content = [
-            `**${await this.getName(color.toHex())}**`,
-            `Hex: ${color.toHexString()}`,
-            `RGB: ${color.toRgbString()}`,
-            `HSV: ${color.toHsvString()}`,
-            `HSL: ${color.toHslString()}`
-        ].join('\n');
+            return interaction.editReply(t(LanguageKeys.Commands.Tools.SetcolorError, { role: role.name }));
+        }
 
-        return interaction.editReply({ files: [{ attachment, name: 'color.png' }], content });
+        return interaction.editReply(t(LanguageKeys.Commands.Tools.SetcolorSuccess, { role: role.name, color: color.toHexString() }));
     }
 
     public override autocompleteRun(...[interaction]: Parameters<AutocompleteCommand['autocompleteRun']>) {
@@ -73,19 +80,5 @@ export class UserCommand extends Command {
         options.push(...result.slice(0, hasOpt ? 19 : 20).map(r => ({ name: r.color, value: r.color })));
 
         return interaction.respond(options);
-    }
-
-    private async getName(color: string) {
-        const { name } = await fetch('https://colornames.org/search/json/') //
-            .query('hex', color) //
-            .json<{ name?: string }>();
-        return name || 'Unnamed';
-    }
-
-    private async draw(color: tinycolor.Instance): Promise<Buffer> {
-        return fetch('https://color.aero.bot') //
-            .path('color') //
-            .query({ color: color.toHexString() }) //
-            .raw();
     }
 }
