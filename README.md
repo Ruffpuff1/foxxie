@@ -6,6 +6,7 @@
   <br />
 
 [![Typescript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/FoxxieBot/foxxie.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FoxxieBot/foxxie/context:javascript)
 [![GitHub](https://img.shields.io/github/license/FoxxieBot/foxxie?logo=github&style=flat-rounded)](https://github.com/FoxxieBot/foxxie/blob/main/LICENSE)
 [![Crowdin](https://badges.crowdin.net/kettu/localized.svg)](https://crowdin.com/project/kettu)
 
