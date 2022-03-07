@@ -1161,10 +1161,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/spotify-api@0.0.13":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@types/spotify-api/-/spotify-api-0.0.13.tgz#66adb9123ad1a7365b31408422bd171d0fedf60c"
-  integrity sha512-rHmG4soR13N3jDCu0QL9cv6q3jMM/AU/0w5w7ukTt89e23rv5Vz86BNqXP/34wEzYWgiTNSG+f+xGT1rjABj4g==
+"@types/spotify-api@0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@types/spotify-api/-/spotify-api-0.0.14.tgz#daaa5357d16163d290c52ae47bb0f4a7c8edb865"
+  integrity sha512-CxZsv+qHO0e0rfRKSKGpgQtDRBkam+kp0tCuo1t2HDW8dz2aU/AmR2/7ddIHfqdz9BW+wRQbadxkKhHXmZD/QA==
 
 "@types/stack-utils@^2.0.0":
   version "2.0.1"
