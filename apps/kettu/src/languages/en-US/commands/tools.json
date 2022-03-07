@@ -6,5 +6,14 @@
     "colorRandom": "random",
     "prideDescription": "Overlay your profile picture with a pride flag image.",
     "prideOptionFlag": "The pride flag to overlay the profile picture with.",
-    "prideOptionGuildAvatar": "Whether I should use your guild avatar or user avatar, default to user."
+    "prideOptionGuildAvatar": "Whether I should use your guild avatar or user avatar, default to user.",
+    "setcolorDescription": "Set the color of a role in the server.",
+    "setcolorError": "{{ERROR}} I couldn't set the color of **{{role}}**.",
+    "setcolorNoPerms": "{{ERROR}} I couldn't set the color of **{{role}}**, make sure my highest role is above it.",
+    "setcolorNoPerms_mine": "{{ERROR}} I couldn't set the color of **{{role}}**, I am unable to set the color of my own role.",
+    "setcolorOptionColor": "The color you want to set, in hex or rgb format.",
+    "setcolorOptionReason": "The reason for setting the color that will be displayed in the audit logs.",
+    "setcolorOptionRole": "The role you want to set the color of.",
+    "setcolorReason": "`[Setcolor]` Role color set using command.",
+    "setcolorSuccess": "Alrighy, I set the color of **{{role}}** to `{{color}}`."
 }

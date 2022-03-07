@@ -81,6 +81,15 @@ function parseArgs(options: CommandInteractionOption[], raw: Record<string, any>
             case 'SUB_COMMAND_GROUP':
                 raw[arg.name] = parseArgs(arg.options ? [...arg.options] : [], {});
                 break;
+            case 'USER':
+                raw[arg.name] = { user: arg.user, member: arg.member };
+                break;
+            case 'CHANNEL':
+                raw[arg.name] = arg.channel;
+                break;
+            case 'ROLE':
+                raw[arg.name] = arg.role;
+                break
             default:
                 raw[arg.name] = arg.value;
         }

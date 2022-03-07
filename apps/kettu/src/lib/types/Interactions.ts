@@ -2,7 +2,7 @@ import type { PokemonSpriteTypes } from '#utils/APIs';
 import type { ChatInputCommandContext } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import type { Days, Sunsigns } from '@skyra/saelem';
-import type { CommandInteraction } from 'discord.js';
+import type { CommandInteraction, Role } from 'discord.js';
 
 export type ChatInputArgs<T = unknown> = [interaction: CommandInteraction, context: ChatInputCommandContext, args?: T extends CommandName ? CommandArgs<T> : unknown];
 
@@ -16,6 +16,7 @@ export enum CommandName {
     Invite = 'invite',
     Pokemon = 'pokemon',
     Pride = 'pride',
+    Setcolor = 'setcolor',
     Support = 'support',
     Wolfram = 'wolfram',
     Zodiac = 'zodiac'
@@ -96,4 +97,6 @@ export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     ? AnimalCrossingArgs
     : T extends CommandName.Pride
     ? PrideArgs
+    : T extends CommandName.Setcolor
+    ? BaseArgs & { role: Role, color: string, reason?: string }
     : never;

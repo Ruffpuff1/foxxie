@@ -30,7 +30,7 @@ import type { GuildMember } from 'discord.js';
                     .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
                     .setRequired(false)
             ),
-    []
+    ['950369662179344414']
 )
 export class UserCommand extends Command {
     public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Pride>): Promise<any> {
