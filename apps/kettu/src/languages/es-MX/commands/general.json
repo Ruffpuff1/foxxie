@@ -1,13 +1,13 @@
 {
     "donateDescription": "Donar para ayudar a continuar mi desarrollo.",
     "donateHeader": "Enlaces de donación",
-    "statsDescription": "",
-    "statsGeneral": "",
+    "statsDescription": "Muestra mis estadísticas y tiempo de actividad.",
+    "statsGeneral": "• **Canales**: {{channels, number}}\n• **Servidor**: {{guilds, number}}\n• **Usuarios**: {{users, number}}\n• **Node.js**: {{nodeJs}}\n• **Discord.js**: {{version}}",
     "statsTitles": {
-        "stats": "",
-        "uptime": "",
-        "usage": ""
+        "stats": "**:chart_with_upwards_trend: Estadísticas**",
+        "uptime": "**:timer: Tiempo de Actividad**",
+        "usage": "**:battery: Uso**"
     },
-    "statsUptime": "",
-    "statsUsage": ""
+    "statsUptime": "• **Cliente**: {{client}}\n• **Anfitrión**: {{host}}\n• **Proceso**: {{process}}",
+    "statsUsage": "• **Carga de CPU**: {{cpuLoad}}\n• **Heap**: {{ramUsed, number}}MB (Total {{ramTotal, number}}MB)"
 }
