@@ -1,5 +1,5 @@
 <div align='center'>
-  <img src='https://avatars.githubusercontent.com/u/84743025?s=200&v=4' width='140' height='140' />
+  <img src='https://cdn.ruffpuff.dev/foxxie.png' width='140' height='140' />
   <h1>Foxxie ⚡️</h1>
   <blockquote>Monorepository containing all the source code for the Foxxie Project</blockquote>
 
