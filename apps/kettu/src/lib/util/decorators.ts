@@ -51,7 +51,7 @@ export function RegisterChatInputCommand<N extends CommandName>(
                     ...{
                         description: build.description,
                         name: build.name,
-                        requiredClientPermissions: options.requiredClientPermissions ?? 0
+                        ...options
                     }
                 })
         });

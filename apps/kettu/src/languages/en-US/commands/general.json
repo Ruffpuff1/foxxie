@@ -1,4 +1,13 @@
 {
     "donateDescription": "Donate to help further my development.",
-    "donateHeader": "Donation links"
+    "donateHeader": "Donation links",
+    "statsDescription": "Shows my stats and uptime.",
+    "statsGeneral": "• **Channels**: {{channels, number}}\n• **Servers**: {{guilds, number}}\n• **Users**: {{users, number}}\n• **Node.js**: {{nodeJs}}\n• **Discord.js**: {{version}}",
+    "statsTitles": {
+        "stats": "**:chart_with_upwards_trend: Statistics**",
+        "uptime": "**:timer: Uptime**",
+        "usage": "**:battery: Usage**"
+    },
+    "statsUptime": "• **Client**: {{client}}\n• **Host**: {{host}}\n• **Process**: {{process}}",
+    "statsUsage": "• **CPU Load**: {{cpuLoad}}\n• **Heap**: {{ramUsed, number}}MB (Total {{ramTotal, number}}MB)"
 }

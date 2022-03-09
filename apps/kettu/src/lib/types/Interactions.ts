@@ -17,6 +17,7 @@ export enum CommandName {
     Pokemon = 'pokemon',
     Pride = 'pride',
     Setcolor = 'setcolor',
+    Stats = 'stats',
     Support = 'support',
     Wolfram = 'wolfram',
     Zodiac = 'zodiac'
@@ -99,4 +100,6 @@ export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     ? PrideArgs
     : T extends CommandName.Setcolor
     ? BaseArgs & { role: Role, color: string, reason?: string }
+    : T extends CommandName.Stats
+    ? EphemeralArgs
     : never;
