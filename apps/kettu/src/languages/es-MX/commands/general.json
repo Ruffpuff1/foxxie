@@ -1,4 +1,13 @@
 {
     "donateDescription": "Donar para ayudar a continuar mi desarrollo.",
-    "donateHeader": "Enlaces de donación"
+    "donateHeader": "Enlaces de donación",
+    "statsDescription": "",
+    "statsGeneral": "",
+    "statsTitles": {
+        "stats": "",
+        "uptime": "",
+        "usage": ""
+    },
+    "statsUptime": "",
+    "statsUsage": ""
 }
