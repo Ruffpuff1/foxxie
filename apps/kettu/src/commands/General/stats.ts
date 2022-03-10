@@ -19,7 +19,7 @@ import { MessageEmbed, version } from 'discord.js';
                     .setName('ephemeral')
                     .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
             ),
-    []
+    ['951268274887327744']
 )
 export class UserCommand extends Command {
     public chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Stats>) {

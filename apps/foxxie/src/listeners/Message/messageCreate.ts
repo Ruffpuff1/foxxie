@@ -5,7 +5,7 @@ import { isNullish } from '@sapphire/utilities';
 
 export class UserListener extends Listener<Events.MessageCreate> {
     public run(...[message]: EventArgs<Events.MessageCreate>): void {
-        if (!isNullish(message.webhookId) || isNullish(message.guild) || isNullish(message.member)) return;
+        if (isNullish(message.guild) || isNullish(message.member)) return;
 
         if (message.system) {
             this.container.client.emit(Events.SystemMessage, cast<GuildMessage>(message));
