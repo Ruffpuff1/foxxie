@@ -22,6 +22,10 @@
   - packages/types/*
   - packages/types/**/*
   
+'GraphQL: stardrop':
+  - graphql/stardrop/*
+  - graphql/stardrop/**/*
+  
 'Docker Images: ravy.lgbt':
   - docker/ravy.lgbt/*
   - docker/ravy.lgbt/**/*
