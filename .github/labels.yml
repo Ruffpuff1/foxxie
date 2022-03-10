@@ -2,6 +2,8 @@
   color: 'fbca04'
 - name: 'Packages: lock-queue'
   color: 'fbca04'
+- name: 'Packages: fuzzysearch'
+  color: 'fbca04'
 - name: 'Packages: eslint-config'
   color: 'fbca04'
 - name: 'Packages: types'
