@@ -119,7 +119,7 @@
         "@types/tinycolor2": "1.4.3",
         "@typescript-eslint/eslint-plugin": "5.14.0",
         "@typescript-eslint/parser": "5.14.0",
-        "discord-api-types": "0.28.0",
+        "discord-api-types": "0.29.0",
         "eslint": "8.10.0",
         "tsc-watch": "4.6.1"
     }
