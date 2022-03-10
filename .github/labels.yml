@@ -18,3 +18,5 @@
   color: '80c042'
 - name: 'Docker Images: ravy.lgbt'
   color: '2491E6'
+- name: 'GraphQL: stardrop'
+  color: 'FFFFFF'
