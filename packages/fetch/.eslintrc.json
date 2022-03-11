@@ -1,5 +1,5 @@
 {
-    "extends": "@ruffpuff",
+    "extends": "@foxxie",
     "parserOptions": {
         "project": "./tsconfig.json"
     }
