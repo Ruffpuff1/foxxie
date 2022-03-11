@@ -4778,10 +4778,10 @@ tsscmp@1.0.6:
   resolved "https://registry.yarnpkg.com/tsscmp/-/tsscmp-1.0.6.tgz#85b99583ac3589ec4bfef825b5000aa911d605eb"
   integrity sha512-LxhtAkPDTkVCMQjt2h6eBVY28KCjikZqZfMcC15YBeNjkgUpdCfBu5HoiOTDu86v6smE8yOjyEktJ8hlbANHQA==
 
-tsup@5.12.0:
-  version "5.12.0"
-  resolved "https://registry.yarnpkg.com/tsup/-/tsup-5.12.0.tgz#d01853a17b459e2de188c1fec811d3cbbe514202"
-  integrity sha512-FGZZNikQYGlEPtKEnz04hEniEO9ctP0rfWOdDeJCpFY4sqQe+TE90YNsv/1g0FshXoGYAOTFDYAVHg6Ovh003Q==
+tsup@5.12.1:
+  version "5.12.1"
+  resolved "https://registry.yarnpkg.com/tsup/-/tsup-5.12.1.tgz#1dc9a2ca1a6540ca21e1732f9cb5aa944dca0fb7"
+  integrity sha512-vI7E4T6+6n5guQ9UKUOkQmzd1n4V9abGK71lbnzJMLJspbkNby5zlwWvgvHafLdYCb1WXpjFuqqmNLjBA0Wz3g==
   dependencies:
     bundle-require "^3.0.2"
     cac "^6.7.12"
