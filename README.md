@@ -6,6 +6,7 @@
   <br />
 
 [![Typescript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![wakatime](https://wakatime.com/badge/user/72bf611d-9557-4a85-aa1d-46f6a3346744/project/018a4c3a-54f9-47c0-a210-95bbd2c3d355.svg)](https://wakatime.com/badge/user/72bf611d-9557-4a85-aa1d-46f6a3346744/project/018a4c3a-54f9-47c0-a210-95bbd2c3d355)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/FoxxieBot/foxxie.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FoxxieBot/foxxie/context:javascript)
 [![GitHub](https://img.shields.io/github/license/FoxxieBot/foxxie?logo=github&style=flat-rounded)](https://github.com/FoxxieBot/foxxie/blob/main/LICENSE)
 [![Crowdin](https://badges.crowdin.net/kettu/localized.svg)](https://crowdin.com/project/kettu)
