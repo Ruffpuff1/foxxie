@@ -1,5 +1,5 @@
 {
-  "name": "@foxxiebot/stardrop",
+  "name": "@foxxie/stardrop",
   "version": "0.0.0",
   "license": "MIT",
   "main": "generated/stardrop.cjs",
@@ -23,8 +23,5 @@
   },
   "files": [
     "generated"
-  ],
-  "publishConfig": {
-  "registry":"https://npm.pkg.github.com"
-}
+  ]
 }
