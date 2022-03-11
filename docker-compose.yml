@@ -1,3 +1,6 @@
+# docker-compose to run the entire foxxie environment at the same time.
+# usually only used for absolute hosting.
+# for testing each service refer to their own Dockerfile or docker-compose.yml.
 version: '3'
 services:
 

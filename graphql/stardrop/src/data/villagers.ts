@@ -52,6 +52,84 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
         }
     ],
     [
+        'caroline',
+        {
+            key: 'caroline',
+            birthday: `${SeasonEnum.Winter} 7`,
+            livesIn: LivesInEnum.PelicanTown,
+            address: "Pierre's General Store",
+            family: [
+                {
+                    key: 'pierre',
+                    relation: 'Husband'
+                },
+                {
+                    key: 'abigail',
+                    relation: 'Daughter'
+                }
+            ],
+            friends: ['jodi'],
+            marriage: false,
+            bestGifts: ['Fish Taco', 'Green Tea', 'Summer Spangle', 'Tropical Curry'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/8/87/Caroline.png'
+        }
+    ],
+    [
+        'clint',
+        {
+            key: 'clint',
+            birthday: `${SeasonEnum.Winter} 26`,
+            livesIn: LivesInEnum.PelicanTown,
+            address: 'Blacksmith',
+            family: [],
+            friends: ['emily'],
+            marriage: false,
+            bestGifts: ['Amethyst', 'Aquamarine', 'Artichoke Dip', 'Emerald', 'Fiddlehead Risotto', 'Gold Bar', 'Iridium Bar', 'Jade', 'Omni Geode', 'Ruby', 'Topaz'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/3/31/Clint.png'
+        }
+    ],
+    [
+        'demetrius',
+        {
+            key: 'demetrius',
+            birthday: `${SeasonEnum.Summer} 19`,
+            livesIn: LivesInEnum.TheMountain,
+            address: '24 Mountain Road',
+            family: [
+                {
+                    key: 'robin',
+                    relation: 'Wife'
+                },
+                {
+                    key: 'maru',
+                    relation: 'Daughter'
+                },
+                {
+                    key: 'sebastian',
+                    relation: 'Step-son'
+                }
+            ],
+            friends: [],
+            marriage: false,
+            bestGifts: ['Bean Hotpot', 'Ice Cream', 'Rice Pudding', 'Strawberry'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/f/f9/Demetrius.png'
+        }
+    ],
+    [
+        'dwarf',
+        {
+            key: 'dwarf',
+            birthday: `${SeasonEnum.Summer} 22`,
+            livesIn: LivesInEnum.TheMines,
+            address: 'Eastern Cave',
+            family: [],
+            friends: [],
+            marriage: false,
+            bestGifts: ['Amethyst', 'Aquamarine', 'Emerald', 'Jade', 'Lemon Stone', 'Omni Geode', 'Ruby', 'Topaz'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/e/ed/Dwarf.png'
+        }
+    ],
+    [
         'elliott',
         {
             key: 'elliott',
@@ -133,6 +211,20 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
         }
     ],
     [
+        'gus',
+        {
+            key: 'gus',
+            birthday: `${SeasonEnum.Summer} 8`,
+            livesIn: LivesInEnum.PelicanTown,
+            address: 'The Stardrop Saloon',
+            family: [],
+            friends: ['pam'],
+            marriage: false,
+            bestGifts: ['Diamond', 'Escargot', 'Fish Taco', 'Orange', 'Tropical Curry'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/5/52/Gus.png'
+        }
+    ],
+    [
         'haley',
         {
             key: 'haley',
@@ -168,6 +260,97 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
         }
     ],
     [
+        'jas',
+        {
+            key: 'jas',
+            birthday: `${SeasonEnum.Summer} 4`,
+            livesIn: LivesInEnum.CindersapForest,
+            address: "Marnie's Ranch",
+            family: [
+                {
+                    key: 'marnie',
+                    relation: 'Aunt'
+                },
+                {
+                    key: 'shane',
+                    relation: 'Godfather'
+                }
+            ],
+            friends: ['leo', 'vincent'],
+            marriage: false,
+            bestGifts: ['Fairy Rose', 'Pink Cake', 'Plum Pudding'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/5/55/Jas.png'
+        }
+    ],
+    [
+        'jodi',
+        {
+            key: 'jodi',
+            birthday: `${SeasonEnum.Fall} 11`,
+            livesIn: LivesInEnum.PelicanTown,
+            address: '1 Willow Lane',
+            family: [
+                {
+                    key: 'kent',
+                    relation: 'Husband'
+                },
+                {
+                    key: 'sam',
+                    relation: 'Son'
+                },
+                {
+                    key: 'vincent',
+                    relation: 'Son'
+                }
+            ],
+            friends: ['caroline'],
+            marriage: false,
+            bestGifts: ['Chocolate Cake', 'Crispy Bass', 'Diamond', 'Eggplant Parmesan', 'Fried Eel', 'Pancakes', 'Rhubarb Pie', 'Vegetable Medley'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/4/41/Jodi.png'
+        }
+    ],
+    [
+        'kent',
+        {
+            key: 'kent',
+            birthday: `${SeasonEnum.Spring} 4`,
+            livesIn: LivesInEnum.PelicanTown,
+            address: '1 Willow Lane',
+            family: [
+                {
+                    key: 'jodi',
+                    relation: 'Wife'
+                },
+                {
+                    key: 'sam',
+                    relation: 'Son'
+                },
+                {
+                    key: 'vincent',
+                    relation: 'Son'
+                }
+            ],
+            friends: [],
+            marriage: false,
+            bestGifts: ['Fiddlehead Risotto', 'Roasted Hazelnuts'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/9/99/Kent.png'
+        }
+    ],
+    [
+        'krobus',
+        {
+            key: 'krobus',
+            birthday: `${SeasonEnum.Winter} 1`,
+            livesIn: LivesInEnum.TheSewers,
+            address: "Krobus's Shop",
+            family: [],
+            friends: [],
+            marriage: false,
+            bestGifts: ['Diamond', 'Iridium Bar', 'Pumpkin', 'Void Egg', 'Void Mayonnaise', 'Wild Horseradish'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/7/71/Krobus.png'
+        }
+    ],
+    [
         'leah',
         {
             key: 'leah',
@@ -179,6 +362,71 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
             marriage: true,
             bestGifts: ['Goat Cheese', 'Poppyseed Muffin', 'Salad', 'Stir Fry', 'Truffle', 'Vegetable Medley', 'Wine'],
             portrait: 'https://stardewvalleywiki.com/mediawiki/images/e/e6/Leah.png'
+        }
+    ],
+    [
+        'leo',
+        {
+            key: 'leo',
+            birthday: `${SeasonEnum.Summer} 26`,
+            livesIn: LivesInEnum.GingerIsland,
+            address: 'Hut, Treehouse',
+            family: [],
+            friends: ['jas', 'linus', 'vincent'],
+            marriage: false,
+            bestGifts: ['Duck Feather', 'Mango', 'Ostrich Egg', 'Poi'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/1/1d/Leo.png'
+        }
+    ],
+    [
+        'lewis',
+        {
+            key: 'lewis',
+            birthday: `${SeasonEnum.Spring} 7`,
+            livesIn: LivesInEnum.PelicanTown,
+            address: "Mayor's Manor",
+            family: [],
+            friends: ['marnie'],
+            marriage: false,
+            bestGifts: ["Autumn's Bounty", 'Glazed Yams', 'Green Tea', 'Hot Pepper', 'Vegetable Medley'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/2/2b/Lewis.png'
+        }
+    ],
+    [
+        'linus',
+        {
+            key: 'linus',
+            birthday: `${SeasonEnum.Winter} 3`,
+            livesIn: LivesInEnum.TheMountain,
+            address: 'Tent',
+            family: [],
+            friends: ['wizard', 'leo'],
+            marriage: false,
+            bestGifts: ['Blueberry Tart', 'Cactus Fruit', 'Coconut', "Dish O' The Sea", 'Yam'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/3/31/Linus.png'
+        }
+    ],
+    [
+        'marnie',
+        {
+            key: 'marnie',
+            birthday: `${SeasonEnum.Fall} 18`,
+            livesIn: LivesInEnum.CindersapForest,
+            address: "Marnie's Ranch",
+            family: [
+                {
+                    key: 'jas',
+                    relation: 'Niece'
+                },
+                {
+                    key: 'shane',
+                    relation: 'Nephew'
+                }
+            ],
+            friends: ['lewis'],
+            marriage: false,
+            bestGifts: ['Diamond', "Farmer's Lunch", 'Pink Cake', 'Pumpkin Pie'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/5/52/Marnie.png'
         }
     ],
     [
@@ -194,7 +442,7 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
                     relation: 'Father'
                 },
                 {
-                    key: 'Robin',
+                    key: 'robin',
                     relation: 'Mother'
                 },
                 {
@@ -223,6 +471,25 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
         }
     ],
     [
+        'pam',
+        {
+            key: 'pam',
+            birthday: `${SeasonEnum.Spring} 18`,
+            livesIn: LivesInEnum.PelicanTown,
+            address: 'Trailer',
+            family: [
+                {
+                    key: 'penny',
+                    relation: 'Daughter'
+                }
+            ],
+            friends: ['gus'],
+            marriage: false,
+            bestGifts: [],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/d/da/Pam.png'
+        }
+    ],
+    [
         'penny',
         {
             key: 'penny',
@@ -241,6 +508,56 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
             description:
                 'Penny lives with her mom, Pam, in a little trailer by the river. While Pam is out carousing at the saloon, Penny quietly tends to her chores in the dim, stuffy room she is forced to call home. She is shy and modest, without any grand ambitions for life other than settling in and starting a family. She likes to cook (although her skills are questionable) and read books from the local library.',
             portrait: 'https://stardewvalleywiki.com/mediawiki/images/a/ab/Penny.png'
+        }
+    ],
+    [
+        'pierre',
+        {
+            key: 'pierre',
+            birthday: `${SeasonEnum.Spring} 26`,
+            livesIn: LivesInEnum.PelicanTown,
+            address: "Pierre's General Store",
+            family: [
+                {
+                    key: 'caroline',
+                    relation: 'Wife'
+                },
+                {
+                    key: 'Abigail',
+                    relation: 'Daughter'
+                }
+            ],
+            friends: [],
+            marriage: false,
+            bestGifts: ['Fried Calamari'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/7/7e/Pierre.png'
+        }
+    ],
+    [
+        'robin',
+        {
+            key: 'robin',
+            birthday: `${SeasonEnum.Fall} 21`,
+            livesIn: LivesInEnum.TheMountain,
+            address: '24 Mountain Road',
+            family: [
+                {
+                    key: 'demetrius',
+                    relation: 'Husband'
+                },
+                {
+                    key: 'maru',
+                    relation: 'Daughter'
+                },
+                {
+                    key: 'sebastian',
+                    relation: 'Son'
+                }
+            ],
+            friends: [],
+            marriage: false,
+            bestGifts: ['Goat Cheese', 'Peach', 'Spaghetti'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/1/1b/Robin.png'
         }
     ],
     [
@@ -336,6 +653,63 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
             marriage: true,
             bestGifts: ['Beer', 'Hot Pepper', 'Pepper Poppers', 'Pizza'],
             portrait: 'https://stardewvalleywiki.com/mediawiki/images/8/8b/Shane.png'
+        }
+    ],
+    [
+        'vincent',
+        {
+            key: 'vincent',
+            birthday: `${SeasonEnum.Spring} 10`,
+            livesIn: LivesInEnum.PelicanTown,
+            address: '1 Willow Lane',
+            family: [
+                {
+                    key: 'jodi',
+                    relation: 'Mother'
+                },
+                {
+                    key: 'kent',
+                    relation: 'Father'
+                },
+                {
+                    key: 'sam',
+                    relation: 'Brother'
+                }
+            ],
+            friends: ['jas', 'leo'],
+            marriage: false,
+            bestGifts: ['Cranberry Candy', 'Ginger Ale', 'Grape', 'Pink Cake', 'Snail'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/f/f1/Vincent.png'
+        }
+    ],
+    [
+        'willy',
+        {
+            key: 'willy',
+            birthday: `${SeasonEnum.Summer} 24`,
+            livesIn: LivesInEnum.TheBeach,
+            address: 'Fish Shop',
+            family: [],
+            friends: ['elliott'],
+            marriage: false,
+            bestGifts: ['Catfish', 'Diamond', 'Iridium Bar', 'Mead', 'Octopus', 'Pumpkin', 'Sea Cucumber', 'Sturgeon'],
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/8/82/Willy.png'
+        }
+    ],
+    [
+        'wizard',
+        {
+            key: 'wizard',
+            aliases: ['mrasmodius'],
+            birthday: `${SeasonEnum.Winter} 17`,
+            livesIn: LivesInEnum.CindersapForest,
+            address: 'Wizard\'s Tower',
+            family: [],
+            friends: ['linus'],
+            marriage: false,
+            bestGifts: ['Purple Mushroom', 'Solar Essence', 'Super Cucumber', 'Void Essence'],
+            description: 'Wizard studies the spirit world from his tower in cindersap forest. He is fluent in many elemental languages.',
+            portrait: 'https://stardewvalleywiki.com/mediawiki/images/c/c7/Wizard.png'
         }
     ]
 ]);

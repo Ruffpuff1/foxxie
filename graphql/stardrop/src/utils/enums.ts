@@ -9,11 +9,19 @@ export enum SeasonEnum {
 
 export enum LivesInEnum {
     CindersapForest = 'Cindersap Forest',
+    GingerIsland = 'Ginger Island',
     PelicanTown = 'Pelican Town',
     TheBeach = 'The Beach',
     TheDesert = 'The Desert',
-    TheMountain = 'The Mountain'
+    TheMines = 'The Mines',
+    TheMountain = 'The Mountain',
+    TheSewers = 'The Sewers'
 }
+
+registerEnumType(SeasonEnum, {
+    name: 'SeasonEnum',
+    description: 'The four seasons of the game.'
+});
 
 registerEnumType(LivesInEnum, {
     name: 'LivesInEnum',

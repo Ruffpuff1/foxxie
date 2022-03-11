@@ -1,11 +1,10 @@
 import { villagers } from '#root/data';
-import { FuzzySearch } from '#utils/FuzzySearch';
+import { FuzzySearch } from '@foxxie/fuzzysearch';
 import { Args, Query, Resolver } from 'type-graphql';
 import { VillagerArgs } from '../arguments/VillagerArgs';
 import { VillagerService } from '../services/VillagerService';
 import { Villager } from '../structures/Villager';
 import { getRequestedFields } from '../utils';
-import Collection from '@discordjs/collection';
 
 @Resolver()
 export class VillagerResolver {
@@ -37,7 +36,7 @@ export class VillagerResolver {
     public getFuzzyVillagerByName(@Args(() => VillagerArgs) args: VillagerArgs, @getRequestedFields() requestedFields: Set<keyof Villager>): Villager[] {
         const keys = [...villagers.keys()];
 
-        const fuzzy = new FuzzySearch(new Collection(keys.map(k => [k, { key: k }])), ['key']);
+        const fuzzy = new FuzzySearch(keys, ['key']);
         const result = fuzzy.runFuzzy(args.villager);
 
         const objects = result.map(({ key }) => {
@@ -51,6 +50,6 @@ export class VillagerResolver {
 
         if (!objects || !objects.length) return [];
 
-        return objects;
+        return args.take ? objects.slice(0, args.take) : objects;
     }
 }
