@@ -9,6 +9,10 @@
 'Packages: fetch':
   - packages/fetch/*
   - packages/fetch/**/*
+  
+'Packages: fuzzysearch':
+  - packages/fuzzysearch/*
+  - packages/fuzzysearch/**/*
 
 'Packages: lock-queue':
   - packages/lock-queue/*
@@ -21,6 +25,10 @@
 'Packages: types':
   - packages/types/*
   - packages/types/**/*
+  
+'GraphQL: stardrop':
+  - graphql/stardrop/*
+  - graphql/stardrop/**/*
   
 'Docker Images: ravy.lgbt':
   - docker/ravy.lgbt/*
