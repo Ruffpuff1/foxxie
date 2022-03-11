@@ -21,6 +21,10 @@
 'Packages: eslint-config':
   - packages/eslint-config/*
   - packages/eslint-config/**/*
+  
+'Packages: stardrop':
+  - packages/stardrop/*
+  - packages/stardrop/**/*
 
 'Packages: types':
   - packages/types/*
