@@ -13,12 +13,14 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/foxxie?label=foxxie%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/foxxie)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/kettu?label=kettu%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/kettu)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/ravy.lgbt?label=ravy.lgbt%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/ravy.lgbt)
-  
+[![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/stardrop?label=stardrop%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/stardrop)
+
 [![npm](https://img.shields.io/npm/v/@foxxie/eslint-config?color=crimson&label=eslint-config%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/eslint-config)
 [![npm](https://img.shields.io/npm/v/@foxxie/fetch?color=crimson&label=fetch%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/fetch)
 [![npm](https://img.shields.io/npm/v/@foxxie/lock-queue?color=crimson&label=lock-queue%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/lock-queue)
+[![npm](https://img.shields.io/npm/v/@foxxie/stardrop?color=crimson&label=stardrop%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/stardrop)
 [![npm](https://img.shields.io/npm/v/@foxxie/types?color=crimson&label=types%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/types)
-  
+
 [![Discord server](https://img.shields.io/discord/761512748898844702?color=5865F2&logo=discord&logoColor=white)](https://ruff.cafe/community)
 [![Twitter Follow](https://img.shields.io/twitter/follow/ruffpuff29?label=Follow%20@ruffpuff29&logo=twitter&colorB=1DA1F2&style=flat-rounded)](https://twitter.com/ruffpuff29)
 [![Ko-fi Donate](https://img.shields.io/badge/kofi-donate-brightgreen.svg?label=Donate%20with%20Ko-fi&logo=ko-fi&colorB=F16061&link=https://ko-fi.com/ruffpuff&logoColor=FFFFFF)](https://ko-fi.com/ruffpuff)

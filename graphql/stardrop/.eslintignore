@@ -1,2 +1,3 @@
-dist/
+/dist
 tsup.config.ts
+/generated

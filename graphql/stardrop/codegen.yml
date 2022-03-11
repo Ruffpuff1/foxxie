@@ -1,0 +1,24 @@
+overwrite: true
+schema: http://localhost:4000
+generates:
+  ../../packages/stardrop/generated/stardrop.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      scalars:
+        JSONObject: 'Record<PropertyKey, any>'
+      immutableTypes: true
+  ../../packages/stardrop/generated/stardrop.d.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      scalars:
+        JSONObject: 'Record<PropertyKey, any>'
+      immutableTypes: true
+  ../../packages/stardrop/generated/stardrop.graphql:
+    plugins:
+      - schema-ast
+    config:
+      commentDescriptions: true

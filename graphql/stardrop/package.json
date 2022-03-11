@@ -1,17 +1,22 @@
 {
   "name": "stardrop",
   "version": "1.0.0",
-  "main": "dist/index.js",
   "license": "MIT",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsup",
-    "dev": "node .",
+    "start": "node dist/index.js",
+    "dev": "yarn build && yarn start",
+    "gen": "graphql-codegen",
     "lint": "prettier --check . && eslint . --ext mjs,js,ts",
     "format": "prettier --write . && eslint . --ext mjs,js,ts --fix",
     "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'graphql/stardrop/*'"
   },
   "devDependencies": {
     "@foxxie/eslint-config": "^0.0.0",
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/typescript": "^2.4.7",
+    "@graphql-codegen/typescript-resolvers": "^2.5.4",
     "@types/koa": "^2.13.4",
     "eslint": "^8.10.0",
     "prettier": "^2.5.1",
