@@ -693,7 +693,7 @@
     graphql "^15.3.0"
     rollup-plugin-typescript2 "^0.31.2"
 
-"@ruffpuff/eslint-config@1.0.1", "@ruffpuff/eslint-config@^1.0.1":
+"@ruffpuff/eslint-config@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@ruffpuff/eslint-config/-/eslint-config-1.0.1.tgz#5cd92f166aab915d55e5eefbca278bfe06705d1b"
   integrity sha512-rbwpw2ag/N3bM8uu0wjK+AhgDUtU3n2dk4i2+nxx8KjQJpgPWJgFFuFWP2ydBaSz4WHyWLUUG31YhRql/0B8Ww==
@@ -1205,7 +1205,7 @@
   resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.8.3.tgz#781d360c282436494b32fe7d9f7f8e64b3118aa3"
   integrity sha512-fbF6oTd4sGGy0xjHPKAt+eS2CrxJ3+6gQ3FGcBoIJR2TLAyCkCyI8JqZNy+FeON0AhVgNJoUumVoZQjBFUqHkw==
 
-"@typescript-eslint/eslint-plugin@5.14.0":
+"@typescript-eslint/eslint-plugin@5.14.0", "@typescript-eslint/eslint-plugin@^5.10.2":
   version "5.14.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.14.0.tgz#5119b67152356231a0e24b998035288a9cd21335"
   integrity sha512-ir0wYI4FfFUDfLcuwKzIH7sMVA+db7WYen47iRSaCGl+HMAZI9fpBwfDo45ZALD3A45ZGyHWDNLhbg8tZrMX4w==
@@ -1235,7 +1235,7 @@
     semver "^7.3.5"
     tsutils "^3.21.0"
 
-"@typescript-eslint/parser@5.14.0":
+"@typescript-eslint/parser@5.14.0", "@typescript-eslint/parser@^5.10.2":
   version "5.14.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.14.0.tgz#7c79f898aa3cff0ceee6f1d34eeed0f034fb9ef3"
   integrity sha512-aHJN8/FuIy1Zvqk4U/gcO/fxeMKyoSv/rS46UXMXOJKVsLQ+iYPuXNbpbH7cBLcpSbmyyFbwrniLx5+kutu1pw==
@@ -2545,7 +2545,7 @@ eslint-visitor-keys@^3.0.0, eslint-visitor-keys@^3.3.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-3.3.0.tgz#f6480fa6b1f30efe2d1968aa8ac745b862469826"
   integrity sha512-mQ+suqKJVyeuwGYHAdjMFqjCyfl8+Ldnxuyp3ldiMBFKkvytrXUZWaiPCEav8qDHKty44bD+qV1IP4T+w+xXRA==
 
-eslint@8.10.0, eslint@^8.10.0, eslint@^8.9.0:
+eslint@8.10.0, eslint@^8.10.0, eslint@^8.8.0, eslint@^8.9.0:
   version "8.10.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.10.0.tgz#931be395eb60f900c01658b278e05b6dae47199d"
   integrity sha512-tcI1D9lfVec+R4LE1mNDnzoJ/f71Kl/9Cv4nG47jOueCMBrCCKYXr4AUVS7go6mWYGFD4+EoN6+eXSrEbRzXVw==

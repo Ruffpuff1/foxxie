@@ -106,7 +106,6 @@
     "devDependencies": {
         "@foxxie/eslint-config": "0.0.0",
         "@foxxie/types": "0.0.0",
-        "@ruffpuff/eslint-config": "1.0.1",
         "@types/aero__sanitizer": "1.2.0",
         "@types/bull": "3.15.8",
         "@types/ioredis": "4.28.8",
