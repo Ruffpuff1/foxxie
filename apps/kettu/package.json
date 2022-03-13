@@ -38,6 +38,7 @@
   "devDependencies": {
     "@favware/graphql-pokemon": "6.5.0",
     "@foxxie/eslint-config": "0.0.0",
+    "@foxxie/stardrop": "^0.0.0",
     "@foxxie/types": "0.0.0",
     "@octokit/types": "6.34.0",
     "@ruffpuff/celestia": "1.2.3",

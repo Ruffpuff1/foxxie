@@ -47,7 +47,8 @@ services:
     container_name: stardrop
     depends_on:
       - redis
-    image: 'ruffpuff/stardrop:latest'
+    build:
+      context: '../../graphql/stardrop'
     networks:
       - kettu
     ports:
@@ -74,6 +75,7 @@ services:
       - ravy.lgbt
       - redis
       - saelem
+      - stardrop
     networks:
       - kettu
     ports:
