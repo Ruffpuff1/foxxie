@@ -77,7 +77,8 @@ export async function fuzzySearchStardewVillagers(query: string, take = 20) {
 
 export function buildStardewVillagerDisplay(data: Omit<Villager, '__typename'>, t: TFunction, color?: number) {
     const none = t(LanguageKeys.Globals.None);
-    console.log(none)
+
+    const VillagerPageLabels = ['General', 'Relationship Data'];
 
     const template = new MessageEmbed() //
         .setThumbnail(data.portrait!) //
@@ -85,47 +86,26 @@ export function buildStardewVillagerDisplay(data: Omit<Villager, '__typename'>, 
         .setColor(color || Colors.Default);
 
     const display = new PaginatedMessage({ template }) //
+        .setSelectMenuOptions(pageIndex => ({ label: VillagerPageLabels[pageIndex - 1] }))
         .addPageEmbed(embed => {
             embed //
-                .addField('personality', data.address, true)
-                .addField('species', data.livesIn, true)
-                .addField('birthday', data.birthday, true);
+                .addField('**Address**', data.address, true)
+                .addField('**Lives in**', data.livesIn, true)
+                .addField('**Birthday**', data.birthday, true)
+                .addField('**Best gifts**', t(LanguageKeys.Globals.And, { value: data.bestGifts }));
 
-            if (data.description) embed.setDescription(data.description)
+            if (data.description) embed.setDescription(data.description);
             return embed;
-        });
-
-    // if (data.coffeeRequest || data.siblings || data.skill || data.goal || data.song) {
-    //     display.addPageEmbed(embed =>
-    //         embed //
-    //             .addField(titles.siblings, data.siblings || none, true)
-    //             .addField(titles.skill, data.skill || none, true)
-    //             .addField(titles.goal, data.goal || none, true)
-    //             .addField(
-    //                 titles.coffee,
-    //                 data.coffeeRequest
-    //                     ? t(LanguageKeys.Commands.Websearch.AnimalcrossingCoffee, {
-    //                           beans: coffeeBeansEnumToString(data.coffeeRequest!.beans),
-    //                           milk: coffeeMilkEnumToString(data.coffeeRequest!.milk),
-    //                           sugar: coffeeSugarEnumToString(data.coffeeRequest!.sugar)
-    //                       })
-    //                     : none
-    //             )
-    //             .addField(titles.song, kKSliderSongEnumToString(data.song!) || none)
-    //     );
-    // }
-
-    // if (data.amiiboCard?.length) {
-    //     for (const card of data.amiiboCard) {
-    //         display.addPageEmbed(embed =>
-    //             embed //
-    //                 .addField(titles.birthday, card.birthday, true)
-    //                 .addField(`**${getZodiacEmoji(card.starSign as StarSignEnum)} ${titles.zodiac}**`, card.starSign, true)
-    //                 .addField(titles.series, `${card.series}`, true)
-    //                 .setImage(card.art)
-    //         );
-    //     }
-    // }
+        })
+        .addPageEmbed(embed =>
+            embed //
+                .addField('**Marryable**', data.marriage ? t(LanguageKeys.Globals.Yes) : t(LanguageKeys.Globals.No))
+                .addField(
+                    '**Family**',
+                    data.family.length ? t(LanguageKeys.Globals.And, { value: data.family.map(member => `**${toTitleCase(member.key)}** (${member.relation})`) }) : none
+                )
+                .addField('**Friends**', data.friends.length ? t(LanguageKeys.Globals.And, { value: data.friends.map(toTitleCase) }) : none)
+        );
 
     return display;
 }
