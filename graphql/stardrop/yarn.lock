@@ -548,10 +548,10 @@
     "@typescript-eslint/parser" "^5.10.2"
     eslint "^8.8.0"
 
-"@foxxie/fuzzysearch@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@foxxie/fuzzysearch/-/fuzzysearch-0.0.1.tgz#abcf629d04c42cd30e22f6fa113a331dfd666c90"
-  integrity sha512-WSgr7bLqXqXZC/9JP9PIHeSbDXVAnXJCYuMEuC/JlyBiE0hEBAsdjcLeoGi87vFXznlEhfEJfdaLAAznKxGAIw==
+"@foxxie/fuzzysearch@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@foxxie/fuzzysearch/-/fuzzysearch-0.0.2.tgz#57a784db1fe8d9c702ed054be2e153ccf530a5ec"
+  integrity sha512-TKk/bZalfi8vkYN+SH7mgzEW87PvN6ElUrOc3piNZjqHLVQEDtbc5m3eSbKEWcn3n9Ynlml0C6rwitcCNVdtEw==
   dependencies:
     "@discordjs/collection" "^0.5.0"
     "@skyra/jaro-winkler" "^1.0.0"
