@@ -44,6 +44,15 @@ services:
     networks:
       - kettu
 
+  stardrop:
+    container_name: stardrop
+    restart: always
+    image: 'ruffpuff/stardrop:latest'
+    networks:
+      - kettu
+    ports:
+      - '4000:4000'
+
   redis:
     command: 'redis-server --bind redis --port 8287 --requirepass redis'
     container_name: redis
