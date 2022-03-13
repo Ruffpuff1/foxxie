@@ -548,10 +548,10 @@
     "@typescript-eslint/parser" "^5.10.2"
     eslint "^8.8.0"
 
-"@foxxie/fuzzysearch@^0.0.0":
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/@foxxie/fuzzysearch/-/fuzzysearch-0.0.0.tgz#e9e4d4c011d5ccd37047497e40288da31c036d5a"
-  integrity sha512-O3yM30eT2zHCq6qJjqEKm+kdBVBTxTAdZgcM6KaqXV2FZp9H+GqS/H9JY/xIAgA4NgcrH7US188aediAmg/aQA==
+"@foxxie/fuzzysearch@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@foxxie/fuzzysearch/-/fuzzysearch-0.0.1.tgz#abcf629d04c42cd30e22f6fa113a331dfd666c90"
+  integrity sha512-WSgr7bLqXqXZC/9JP9PIHeSbDXVAnXJCYuMEuC/JlyBiE0hEBAsdjcLeoGi87vFXznlEhfEJfdaLAAznKxGAIw==
   dependencies:
     "@discordjs/collection" "^0.5.0"
     "@skyra/jaro-winkler" "^1.0.0"
@@ -4263,6 +4263,11 @@ readdirp@~3.6.0:
   integrity sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==
   dependencies:
     picomatch "^2.2.1"
+
+reflect-metadata@^0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
+  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
 
 regenerator-runtime@^0.13.4:
   version "0.13.9"
