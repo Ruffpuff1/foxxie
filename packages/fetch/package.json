@@ -6,7 +6,7 @@
     "build": "tsup",
     "lint": "prettier --check . && eslint src --ext mjs,js,ts",
     "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
-    "test": "jest --pass-with-no-tests --collect-coverage",
+    "test": "jest --pass-with-no-tests --collect-coverage --verbose",
     "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'packages/fetch/*'"
   },
   "main": "./dist/index.js",
