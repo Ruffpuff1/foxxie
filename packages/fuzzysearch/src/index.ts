@@ -1,5 +1,5 @@
 import { jaroWinkler } from '@skyra/jaro-winkler';
-import { Collection } from 'discord.js';
+import { Collection } from '@discordjs/collection';
 
 /**
  * @license MIT
