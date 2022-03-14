@@ -2,7 +2,7 @@ import { GuildEntity } from '../entities/GuildEntity';
 import { container } from '@sapphire/framework';
 import { Collection } from 'discord.js';
 import type RWLock from 'async-rwlock';
-import { LockQueue } from '@foxxie/lock-queue'
+import { LockQueue } from '@foxxie/lock-queue';
 
 export interface SettingsCollectionCallback<T extends GuildEntity, R> {
     (entity: T): Promise<R> | R;
@@ -14,7 +14,7 @@ export class GuildSettingsManager<T extends GuildEntity> extends Collection<stri
     private readonly locks = new LockQueue();
 
     public delete(key: string) {
-        this.locks.delete(key);
+        this.locks.shift(key);
         return super.delete(key);
     }
 
@@ -87,7 +87,7 @@ export class GuildSettingsManager<T extends GuildEntity> extends Collection<stri
 
             return settings[list as keyof T];
         } finally {
-            lock.unlock();
+            this.locks.shift(key);
         }
     }
 
@@ -159,7 +159,7 @@ export class GuildSettingsManager<T extends GuildEntity> extends Collection<stri
             await found.reload();
             throw err;
         } finally {
-            lock.unlock();
+            this.locks.shift(key);
         }
     }
 
