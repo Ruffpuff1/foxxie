@@ -16,7 +16,7 @@
     "dateFull": "",
     "dateTime": "",
     "dateShort": "",
-    "default": "",
+    "default": "{{key}} has not been localized for en-GB yet.",
     "defaultLanguage": "",
     "duration": "",
     "fullDateTime": "",
