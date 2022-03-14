@@ -37,6 +37,16 @@
         "test",
         "bug"
       ]
+    },
+    {
+      "login": "foxxiedev[bot]",
+      "name": "foxxiedev[bot]",
+      "avatar_url": "https://avatars.githubusercontent.com/in/180135?v=4",
+      "profile": "https://github.com/apps/foxxiedev",
+      "contributions": [
+        "content",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
