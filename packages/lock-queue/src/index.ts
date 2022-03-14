@@ -1,14 +1,6 @@
 import RWLock from 'async-rwlock';
 
 class LockQueue extends Map<string, RWLock> {
-    public get(key: string, force = false) {
-        const previous = super.get(key);
-        if (!previous && force) return this.acquire(key);
-
-        if (!previous) return undefined;
-        return previous;
-    }
-
     public acquire(key: string) {
         const previous = super.get(key);
         if (previous) return previous;
@@ -16,6 +8,20 @@ class LockQueue extends Map<string, RWLock> {
         const lock = new RWLock();
         this.set(key, lock);
         return lock;
+    }
+
+    public shift(k?: string) {
+        const [key] = k ? [k] : [...this.keys()];
+
+        const lock = this.get(key)!;
+        lock.unlock();
+
+        this.delete(key);
+    }
+
+    public async write(key: string) {
+        const lock = this.acquire(key);
+        await lock.writeLock();
     }
 }
 
