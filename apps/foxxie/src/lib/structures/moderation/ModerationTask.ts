@@ -15,15 +15,14 @@ export abstract class ModerationTask<T = unknown> extends ScheduledTask {
             return;
         }
 
-        const lock = this.locks.acquire(data.guildId);
-        await lock.writeLock();
+        await this.locks.write(data.guildId);
 
         try {
             await this.handle(guild, data);
             // eslint-disable-next-line no-empty
         } catch {
         } finally {
-            lock.unlock();
+            this.locks.shift(data.guildId);
         }
     }
 
