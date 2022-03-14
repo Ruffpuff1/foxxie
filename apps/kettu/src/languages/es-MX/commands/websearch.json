@@ -1,5 +1,5 @@
 {
-    "animalcrossingCoffee": "",
+    "animalcrossingCoffee": "• Judías → {{beans}}\n• Leche → {{milk}}\n• Agarrado → {{sugar}}",
     "animalcrossingDescription": "",
     "animalcrossingDescriptionVillager": "",
     "animalcrossingFooter": "",
@@ -13,13 +13,13 @@
         "game_other": "**:video_game: Juegos**",
         "gender": "**:restroom: Género**",
         "goal": "**:goal: Objeto**",
-        "personality": "",
+        "personality": "**:magic_wand: Personalidad**",
         "saying": "",
         "series": "",
         "siblings": "**:evergreen_tree: Hermanos**",
-        "skill": "",
+        "skill": "**:magic_wand:  Habilidad**",
         "song": "**:saxophone: Canción Favorita**",
-        "species": "",
+        "species": "**:books: Especies**",
         "zodiac": "Zodíaco"
     },
     "currencyDescription": "",
@@ -33,22 +33,22 @@
     "githubDescriptionUser": "",
     "githubIssuePRNotFound": "",
     "githubIssuePRNotFoundWithSelectMenuData": "",
-    "githubLabelClosed": "",
-    "githubLabelMerged": "",
-    "githubLabelOpen": "",
+    "githubLabelClosed": "cerrado",
+    "githubLabelMerged": "fusionado",
+    "githubLabelOpen": "abierto",
     "githubOptionNumber": "",
     "githubOptionOwner": "",
     "githubOptionRepo": "",
     "githubOptionUser": "",
     "githubRepoNotFound": "",
     "githubSelectPages": [
-        "",
-        ""
+        "General",
+        "Datos del colaborador"
     ],
     "githubTitles": {
         "archived": "",
         "bio": "**:brain: Biografía**",
-        "contributors": "",
+        "contributors": "**:people_hugging: Colaboradores**",
         "description": "**:scroll: Descripción**",
         "forks": "",
         "language": "**:computer: Idioma**",
@@ -68,7 +68,7 @@
     "pokemonDexNone": "",
     "pokemonDexSelect": "",
     "pokemonDexSelectPages": [
-        "",
+        "General",
         "",
         "",
         "Entradas Dex",
@@ -78,7 +78,7 @@
     "pokemonMoveNone": "",
     "pokemonMoveSelect": "",
     "pokemonMoveSelectPages": [
-        "",
+        "General",
         "Categorías",
         "",
         "Disponibilidad"
