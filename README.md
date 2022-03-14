@@ -6,24 +6,12 @@
   <br />
 
 [![Typescript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![wakatime](https://wakatime.com/badge/user/72bf611d-9557-4a85-aa1d-46f6a3346744/project/018a4c3a-54f9-47c0-a210-95bbd2c3d355.svg)](https://wakatime.com/badge/user/72bf611d-9557-4a85-aa1d-46f6a3346744/project/018a4c3a-54f9-47c0-a210-95bbd2c3d355)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/FoxxieBot/foxxie.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FoxxieBot/foxxie/context:javascript)
 [![GitHub](https://img.shields.io/github/license/FoxxieBot/foxxie?logo=github&style=flat-rounded)](https://github.com/FoxxieBot/foxxie/blob/main/LICENSE)
 [![Crowdin](https://badges.crowdin.net/kettu/localized.svg)](https://crowdin.com/project/kettu)
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/foxxie?label=foxxie%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/foxxie)
-[![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/kettu?label=kettu%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/kettu)
-[![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/ravy.lgbt?label=ravy.lgbt%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/ravy.lgbt)
-[![Docker Pulls](https://img.shields.io/docker/pulls/ruffpuff/stardrop?label=stardrop%20docker%20pulls&logo=docker)](https://hub.docker.com/r/ruffpuff/stardrop)
-
-[![npm](https://img.shields.io/npm/v/@foxxie/eslint-config?color=crimson&label=eslint-config%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/eslint-config)
-[![npm](https://img.shields.io/npm/v/@foxxie/fetch?color=crimson&label=fetch%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/fetch)
-[![npm](https://img.shields.io/npm/v/@foxxie/fuzzysearch?color=crimson&label=fuzzysearch%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/fuzzysearch)
-[![npm](https://img.shields.io/npm/v/@foxxie/lock-queue?color=crimson&label=lock-queue%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/lock-queue)
-[![npm](https://img.shields.io/npm/v/@foxxie/stardrop?color=crimson&label=stardrop%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/stardrop)
-[![npm](https://img.shields.io/npm/v/@foxxie/types?color=crimson&label=types%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/types)
-
 [![Discord server](https://img.shields.io/discord/761512748898844702?color=5865F2&logo=discord&logoColor=white)](https://ruff.cafe/community)
+[![wakatime](https://wakatime.com/badge/user/72bf611d-9557-4a85-aa1d-46f6a3346744/project/018a4c3a-54f9-47c0-a210-95bbd2c3d355.svg)](https://wakatime.com/badge/user/72bf611d-9557-4a85-aa1d-46f6a3346744/project/018a4c3a-54f9-47c0-a210-95bbd2c3d355)
 [![Twitter Follow](https://img.shields.io/twitter/follow/ruffpuff29?label=Follow%20@ruffpuff29&logo=twitter&colorB=1DA1F2&style=flat-rounded)](https://twitter.com/ruffpuff29)
 [![Ko-fi Donate](https://img.shields.io/badge/kofi-donate-brightgreen.svg?label=Donate%20with%20Ko-fi&logo=ko-fi&colorB=F16061&link=https://ko-fi.com/ruffpuff&logoColor=FFFFFF)](https://ko-fi.com/ruffpuff)
 [![PayPal Donate](https://img.shields.io/badge/paypal-donate-brightgreen.svg?label=Donate%20with%20Paypal&logo=paypal&colorB=00457C&style=flat-rounded&link=https://www.paypal.com/donate/?business=HGFBP7UD695CC&no_recurring=0&currency_code=USD)](https://www.paypal.com/donate/?business=HGFBP7UD695CC&no_recurring=0&currency_code=USD)
