@@ -3,11 +3,13 @@ All notable changes to this project will be documented in this file.
 
 # [unreleased]
 
-## Documentation
+## Bug Fixes
 
-- Update changelogs (#10) ([41f2384](https://github.com/FoxxieBot/foxxie/commit/41f238468d78db354d0418f3e975e2922c49836e))
+- **deps:** Update dependency undici to ^4.15.0 (#48) ([8c15809](https://github.com/FoxxieBot/foxxie/commit/8c15809afa2ce5c2b9e4169ca75b1b467d1cd1e5))
 
-## Features
+# [@foxxie/fetch@0.0.1](https://github.com/FoxxieBot/foxxie/compare/@foxxie/types@0.0.1...@foxxie/fetch@0.0.1) - (2022-03-06)
 
-- **apps:** Add kettu (#14) ([79777ba](https://github.com/FoxxieBot/foxxie/commit/79777ba14309fae7ca949b5fea9f50f9069f296a))
+## Bug Fixes
+
+- **fetch:** Include user agent by default (#46) ([7672e36](https://github.com/FoxxieBot/foxxie/commit/7672e363c88749016457fa7e8d91865c7749b767))
 
