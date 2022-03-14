@@ -21,6 +21,17 @@ body:
         - types
     validations:
       required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: What type does this request pertain to?
+      options:
+        - 'new command'
+        - 'infrastructure'
+        - 'meta feature'
+        - 'documentation'
+    validations:
+      required: true
   - type: textarea
     id: description
     attributes:
