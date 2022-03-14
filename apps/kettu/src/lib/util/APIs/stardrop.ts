@@ -1,12 +1,7 @@
 import { LanguageKeys } from '#lib/i18n';
-import { Query, QueryGetVillagerByNameArgs, VillagersEnum, Villager } from '@foxxie/stardrop';
+import type { Query, QueryGetVillagerByNameArgs, VillagersEnum, Villager } from '@foxxie/stardrop';
 import { fromAsync, isErr, UserError } from '@sapphire/framework';
 import { fetch } from '@foxxie/fetch';
-import type { TFunction } from '@sapphire/plugin-i18next';
-import { MessageEmbed } from 'discord.js';
-import { toTitleCase } from '@ruffpuff/utilities';
-import { Colors } from '#utils/constants';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 
 export async function fetchGraphQLStardewValley<R extends StardewValleyReturnTypes>(
     query: string,
@@ -35,79 +30,11 @@ export async function fetchStardewVillager(villager: VillagersEnum): Promise<Omi
     return result.value.data.getVillagerByName;
 }
 
-interface DefaultEntry<T> {
-    key: T;
-    name: `⭐ ${string}`;
-}
-
-const DefaultStardewVillagers: DefaultEntry<VillagersEnum>[] = [
-    {
-        key: VillagersEnum.Alex,
-        name: '⭐ Alex'
-    },
-    {
-        key: VillagersEnum.Leah,
-        name: '⭐ Leah'
-    },
-    {
-        key: VillagersEnum.Shane,
-        name: '⭐ Shane'
-    },
-    {
-        key: VillagersEnum.Penny,
-        name: '⭐ Penny'
-    },
-    {
-        key: VillagersEnum.Lewis,
-        name: '⭐ Lewis'
-    },
-    {
-        key: VillagersEnum.Wizard,
-        name: '⭐ Wizard'
-    }
-];
-
 export async function fuzzySearchStardewVillagers(query: string, take = 20) {
     const result = await fromAsync(() => fetchGraphQLStardewValley<'getFuzzyVillagerByName'>(getFuzzyStardewVillagerByName(), { villager: query, take }));
-
-    if (isErr(result) || !result.value.data?.getFuzzyVillagerByName?.length) return DefaultStardewVillagers;
+    if (isErr(result) || !result.value.data?.getFuzzyVillagerByName?.length) return [];
 
     return result.value.data.getFuzzyVillagerByName;
-}
-
-export function buildStardewVillagerDisplay(data: Omit<Villager, '__typename'>, t: TFunction, color?: number) {
-    const none = t(LanguageKeys.Globals.None);
-
-    const VillagerPageLabels = ['General', 'Relationship Data'];
-
-    const template = new MessageEmbed() //
-        .setThumbnail(data.portrait!) //
-        .setAuthor({ name: toTitleCase(data.key) })
-        .setColor(color || Colors.Default);
-
-    const display = new PaginatedMessage({ template }) //
-        .setSelectMenuOptions(pageIndex => ({ label: VillagerPageLabels[pageIndex - 1] }))
-        .addPageEmbed(embed => {
-            embed //
-                .addField('**Address**', data.address, true)
-                .addField('**Lives in**', data.livesIn, true)
-                .addField('**Birthday**', data.birthday, true)
-                .addField('**Best gifts**', t(LanguageKeys.Globals.And, { value: data.bestGifts }));
-
-            if (data.description) embed.setDescription(data.description);
-            return embed;
-        })
-        .addPageEmbed(embed =>
-            embed //
-                .addField('**Marryable**', data.marriage ? t(LanguageKeys.Globals.Yes) : t(LanguageKeys.Globals.No))
-                .addField(
-                    '**Family**',
-                    data.family.length ? t(LanguageKeys.Globals.And, { value: data.family.map(member => `**${toTitleCase(member.key)}** (${member.relation})`) }) : none
-                )
-                .addField('**Friends**', data.friends.length ? t(LanguageKeys.Globals.And, { value: data.friends.map(toTitleCase) }) : none)
-        );
-
-    return display;
 }
 
 export interface StardewValleyResponse<K extends keyof Omit<Query, '__typename'>> {
@@ -123,29 +50,37 @@ type StardewValleyQueryVariables<R extends StardewValleyReturnTypes> = R extends
     : never;
 
 export const getStardewVillagerByName = () => `
-    query($villager: String!) {
+    query($villager: VillagersEnum!) {
         getVillagerByName(villager: $villager) {
             key
             birthday
             livesIn
             address
-            family {
-                key
-                relation
-            }
+            family
             friends
             marriage
             bestGifts
             description
+            room
             portrait
         }
     }
 `;
 
 export const getFuzzyStardewVillagerByName = () => `
-    query($villager: String! $take: Float!) {
-        getFuzzyVillagerByName(villager: $villager take: $take) {
+    query($villager: VillagersEnum! $take: Number!) {
+        getVillagerByName(villager: $villager take: $take) {
             key
+            birthday
+            livesIn
+            address
+            family
+            friends
+            marriage
+            bestGifts
+            description
+            room
+            portrait
         }
     }
 `;
