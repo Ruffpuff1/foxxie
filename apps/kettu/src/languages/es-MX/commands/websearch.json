@@ -2,19 +2,19 @@
     "animalcrossingCoffee": "• Judías → {{beans}}\n• Leche → {{milk}}\n• Agarrado → {{sugar}}",
     "animalcrossingDescription": "",
     "animalcrossingDescriptionVillager": "Obtener datos sobre un aldeano de Animal Crossing.",
-    "animalcrossingFooter": "",
-    "animalcrossingNoVillager": "",
-    "animalcrossingOptionVillager": "",
+    "animalcrossingFooter": "Desarrollado por la celestia",
+    "animalcrossingNoVillager": "{{ERROR}} No pude encontrar un aldeano llamado `{{villager}}`. ¿Quizás quería decir uno de estos?",
+    "animalcrossingOptionVillager": "El aldeano para buscar.",
     "animalcrossingTitles": {
         "birthday": "**:cake: Cumpleaños**",
-        "catchphrase": "",
-        "coffee": "",
+        "catchphrase": "**:loudspeaker: Catchphrase**",
+        "coffee": "**:coffee: Solicitud de Café**",
         "game": "**:video_game: Juego**",
         "game_other": "**:video_game: Juegos**",
         "gender": "**:restroom: Género**",
         "goal": "**:goal: Objeto**",
         "personality": "**:magic_wand: Personalidad**",
-        "saying": "",
+        "saying": "**:speech_balloon: Dicho Favorito**",
         "series": "**:black_joker: Serie**",
         "siblings": "**:evergreen_tree: Hermanos**",
         "skill": "**:magic_wand:  Habilidad**",
@@ -22,7 +22,7 @@
         "species": "**:books: Especies**",
         "zodiac": "Zodíaco"
     },
-    "currencyDescription": "",
+    "currencyDescription": "Utilice Crypto Compare para comparar los valores de la moneda.",
     "currencyMessage": "**{{amount}} {{from}}** es igual a **{{value}} {{to}}**.",
     "currencyNotCurrency": "¡{{ERROR}} No pude resolver correctamente {{from}} y {{to}} de las monedas!",
     "currencyOptionAmount": "La cantidad de dinero a convertir.",
@@ -50,7 +50,7 @@
         "bio": "**:brain: Biografía**",
         "contributors": "**:people_hugging: Colaboradores**",
         "description": "**:scroll: Descripción**",
-        "forks": "",
+        "forks": "**:fork_and_knife: Forks**",
         "language": "**:computer: Idioma**",
         "license": "**:page_with_curl: Licencia**",
         "location": "**:map: Ubicación**",
@@ -109,21 +109,21 @@
         "type_other": "**:scroll: Tipos**",
         "weight": "**:scales: Peso**"
     },
-    "stardewvalleyDescription": "",
-    "stardewvalleyDescriptionCharacter": "",
-    "stardewvalleyNoVillager": "",
-    "stardewvalleyOptionVillager": "",
+    "stardewvalleyDescription": "Busca datos de Stardew Valley usando Stardrop.",
+    "stardewvalleyDescriptionCharacter": "Busca un personaje específico en el valle de Stardew.",
+    "stardewvalleyNoVillager": "{{ERROR}} Ups, no pude resolver {{villager}} a un personaje de Stardew, ¿quizás querías decir uno de estos?",
+    "stardewvalleyOptionVillager": "El nombre del aldeano para buscar.",
     "stardewvalleyTitles": {
-        "address": "",
-        "bestGifts": "",
+        "address": "**:house: Dirección**",
+        "bestGifts": "**:gift: Mejores regalos**",
         "birthday": "**:balloon: Cumpleaños**",
         "family": "**:deciduous_tree: Familia**",
         "friends": "**:heart: Amigos**",
-        "livesIn": "",
-        "marryable": ""
+        "livesIn": "**:map: Vive en**",
+        "marryable": "**:ring: Soltero**"
     },
     "stardewvalleyVillagerPageLabels": [
         "General",
-        ""
+        "Datos de relación"
     ]
 }
