@@ -43,6 +43,18 @@ services:
       - '8284:8284'
     restart: always
 
+  stardrop:
+    container_name: stardrop
+    depends_on:
+      - redis
+    build:
+      context: '../../graphql/stardrop'
+    networks:
+      - kettu
+    ports:
+      - '4000:4000'
+    restart: always
+
   ravy.lgbt:
     build:
       context: ../../docker/ravy.lgbt
@@ -57,11 +69,13 @@ services:
     build:
       context: .
     container_name: kettu
+    env_file: '.env.development'
     depends_on:
       - celestia
       - ravy.lgbt
       - redis
       - saelem
+      - stardrop
     networks:
       - kettu
     ports:

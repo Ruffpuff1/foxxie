@@ -93,3 +93,14 @@ export const PokemonTitles = T<{
     types: string;
     weight: string;
 }>('commands/websearch:pokemonTitles');
+export const StardewvalleyDescription = T('commands/websearch:stardewvalleyDescription');
+export const StardewvalleyTitles = T<{
+    address: string;
+    bestGifts: string;
+    birthday: string;
+    family: string;
+    friends: string;
+    livesIn: string;
+    marryable: string;
+}>('commands/websearch:stardewvalleyTitles');
+export const StardewvalleyVillagerPageLabels = T<[string, string]>('commands/websearch:stardewvalleyVillagerPageLabel');
