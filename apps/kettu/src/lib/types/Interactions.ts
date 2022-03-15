@@ -17,6 +17,7 @@ export enum CommandName {
     Pokemon = 'pokemon',
     Pride = 'pride',
     Setcolor = 'setcolor',
+    StardewValley = 'stardewvalley',
     Stats = 'stats',
     Support = 'support',
     Wolfram = 'wolfram',
@@ -69,6 +70,12 @@ export interface AnimalCrossingArgs extends BaseArgs {
     };
 }
 
+export interface StardewValleyArgs extends BaseArgs {
+    character: {
+        villager: string;
+    }
+}
+
 export interface PrideArgs extends EphemeralArgs {
     flag: 'agender' | 'asexual' | 'bisexual' | 'genderfluid' | 'lesbian' | 'nonbinary' | 'pansexual' | 'pride' | 'transgender';
     'guild-avatar'?: boolean;
@@ -102,4 +109,6 @@ export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     ? BaseArgs & { role: Role, color: string, reason?: string }
     : T extends CommandName.Stats
     ? EphemeralArgs
+    : T extends CommandName.StardewValley
+    ? StardewValleyArgs
     : never;

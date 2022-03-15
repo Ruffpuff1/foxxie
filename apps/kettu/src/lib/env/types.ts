@@ -8,6 +8,7 @@ export interface KettuEnv {
 
     CELESTIA_ENABLED: BooleanString;
     SAELEM_ENABLED: BooleanString;
+    STARDROP_ENABLED: BooleanString;
 
     CRYPTOCOMPARE_TOKEN: string;
     GITHUB_TOKEN: string;

@@ -14,7 +14,7 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
                     relation: 'Father'
                 },
                 {
-                    key: 'Caroline',
+                    key: 'caroline',
                     relation: 'Mother'
                 }
             ],
@@ -446,7 +446,7 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
                     relation: 'Mother'
                 },
                 {
-                    key: 'Sebastian',
+                    key: 'sebastian',
                     relation: 'Half-Brother'
                 }
             ],
@@ -523,7 +523,7 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
                     relation: 'Wife'
                 },
                 {
-                    key: 'Abigail',
+                    key: 'qbigail',
                     relation: 'Daughter'
                 }
             ],
@@ -577,7 +577,7 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
                     relation: 'Mother'
                 },
                 {
-                    key: 'Vincent',
+                    key: 'vincent',
                     relation: 'Brother'
                 }
             ],
@@ -620,7 +620,7 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
                     relation: 'Half-Sister'
                 },
                 {
-                    key: 'Demetrius',
+                    key: 'demetrius',
                     relation: 'Step-Father'
                 }
             ],
