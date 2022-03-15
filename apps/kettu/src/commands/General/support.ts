@@ -9,7 +9,7 @@ import { Command } from '@sapphire/framework';
     CommandName.Support,
     builder =>
         builder //
-            .setDescription('Get an invite link to my server if you need help.')
+            .setDescription(enUS(LanguageKeys.Commands.General.SupportDescription))
             .addBooleanOption(option =>
                 option //
                     .setName('ephemeral')
@@ -21,8 +21,9 @@ export class UserCommand extends Command {
     private readonly url = bold(hyperlink('The Corner Store', '<https://discord.gg/ZAZ4yRezC7>'));
 
     public chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Support>) {
+        const { url } = this;
         return interaction.reply({
-            content: `Need some help? Try coming and asking at ${this.url}.`,
+            content: args!.t(LanguageKeys.Commands.General.SupportMessage, { url }),
             ephemeral: args!.ephemeral ?? true
         });
     }

@@ -9,7 +9,7 @@ import { enUS } from '#utils/util';
     CommandName.Invite,
     builder =>
         builder //
-            .setDescription('Invite me or my friends to join your server.') //
+            .setDescription(enUS(LanguageKeys.Commands.General.InviteDescription)) //
             .addBooleanOption(option =>
                 option //
                     .setName('ephemeral')
@@ -24,8 +24,9 @@ export class UserCommand extends Command {
     ];
 
     public chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Invite>) {
-        const content = `${italic(bold(underscore('Bot invite links')))}\n\n${this.urls.join('\n')}\n\n${italic(
-            'Heres some invite links for me and my fellow bots,\nyou can also invite me by clicking the "add to server" button on my profile.'
+        const { t } = args!;
+        const content = `${italic(bold(underscore(t(LanguageKeys.Commands.General.InviteHeader))))}\n\n${this.urls.join('\n')}\n\n${italic(
+            t(LanguageKeys.Commands.General.InviteBody)
         )}`;
 
         return interaction.reply({
