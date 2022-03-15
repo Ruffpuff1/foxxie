@@ -1,0 +1,85 @@
+{
+    "avatarDescription": "",
+    "avatarDetailedDescription": {
+        "usages": [
+            "",
+            ""
+        ],
+        "extendedHelp": "",
+        "explainedUsage": [
+            [
+                "",
+                ""
+            ]
+        ],
+        "examples": [
+            "",
+            ""
+        ]
+    },
+    "reminderCreateSuccess": "",
+    "reminderDefault": "",
+    "reminderDeleteNone": "",
+    "reminderDeleteSuccess": "",
+    "reminderDescription": "",
+    "reminderDetailedDescription": {
+        "usages": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "extendedHelp": "",
+        "explainedUsage": [
+            [
+                "",
+                [
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ]
+            ],
+            [
+                "",
+                ""
+            ],
+            [
+                "",
+                ""
+            ],
+            [
+                "",
+                ""
+            ],
+            [
+                "",
+                ""
+            ],
+            [
+                "",
+                ""
+            ],
+            [
+                "",
+                ""
+            ]
+        ],
+        "examples": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
+    },
+    "reminderDMWarn": "",
+    "reminderEditSuccess": "",
+    "reminderList": "",
+    "reminderNone": "",
+    "reminderShow": ""
+}
