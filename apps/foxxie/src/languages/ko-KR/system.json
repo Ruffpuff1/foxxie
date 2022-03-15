@@ -1,0 +1,20 @@
+{
+    "dmWarn": "",
+    "footer": "",
+    "messageLoading": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "messageMembersNone": "",
+    "messageNoMatch": "",
+    "messageUsersNone": "",
+    "missingRequired": "",
+    "prefixReminder": "",
+    "prefixReminder_other": "",
+    "reactionHandlerPrompt": "",
+    "selectMenuWrongUser": "",
+    "textPromptTimeout": ""
+}
