@@ -113,9 +113,9 @@
     "stardewvalleyTitles": {
         "address": "",
         "bestGifts": "",
-        "birthday": "",
-        "family": "",
-        "friends": "",
+        "birthday": "**:balloon: Cumpleaños**",
+        "family": "**:deciduous_tree: Familia**",
+        "friends": "**:heart: Amigos**",
         "livesIn": "",
         "marryable": ""
     },

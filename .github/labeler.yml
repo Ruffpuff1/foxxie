@@ -44,29 +44,11 @@
   - apps/kettu/src/languages/en-US/*
   - apps/kettu/src/languages/en-US/**/*
 
-'I18n: en-GB':
-  - apps/foxxie/src/languages/en-GB/*
-  - apps/foxxie/src/languages/en-GB/**/*
-  - apps/kettu/src/languages/en-GB/*
-  - apps/kettu/src/languages/en-GB/**/*
-
 'I18n: es-MX':
   - apps/foxxie/src/languages/es-MX/*
   - apps/foxxie/src/languages/es-MX/**/*
   - apps/kettu/src/languages/es-MX/*
   - apps/kettu/src/languages/es-MX/**/*
-
-'I18n: fr-FR':
-  - apps/foxxie/src/languages/fr-FR/*
-  - apps/foxxie/src/languages/fr-FR/**/*
-  - apps/kettu/src/languages/fr-FR/*
-  - apps/kettu/src/languages/fr-FR/**/*
-
-'I18n: ja-JP':
-  - apps/foxxie/src/languages/ja-JP/*
-  - apps/foxxie/src/languages/ja-JP/**/*
-  - apps/kettu/src/languages/ja-JP/*
-  - apps/kettu/src/languages/ja-JP/**/*
 
 'Meta: Documentation':
   - README.md
