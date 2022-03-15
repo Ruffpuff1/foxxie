@@ -1,7 +1,7 @@
 {
-  "name": "@foxxie/packages",
+  "name": "@foxxie/foxxie",
   "version": "0.0.0",
-  "description": "node packages for collective use in Foxxie Discord bots",
+  "description": "Monorepository containing all the source code for the Foxxie Project.",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -12,7 +12,8 @@
     "changelog": "turbo run changelog"
   },
   "contributors": [
-    "Ruffpuff1 <reeseharlak5@gmail.com>"
+    "Ruffpuff1 <contact@ruffpuff.dev>",
+    "Raindrop-Droptop"
   ],
   "keywords": [
     "bot",

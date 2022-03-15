@@ -6872,6 +6872,11 @@ os-tmpdir@~1.0.2:
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
 
+owoify-js@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/owoify-js/-/owoify-js-1.0.7.tgz#5fc042f07224e02bc8159e4791466e28cac16926"
+  integrity sha512-bjTMxJP+8iAv7jAFmSY0JDaiCjz2Zf83MqX6O4PS2lg+qPxF/Svyud7C76zNVpp299QvGOv+cJiFKx8KWK6ngw==
+
 p-cancelable@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-1.1.0.tgz#d078d15a3af409220c886f1d9a0ca2e441ab26cc"
