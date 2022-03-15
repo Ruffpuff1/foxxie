@@ -106,6 +106,16 @@
         "type_other": "**:scroll: Types**",
         "weight": "**:scales: Weight**"
     },
+    "npmDescription": "Fetch data from the npm package registry about any node package.",
+    "npmNoDependencies": "No Dependancies 🎊",
+    "npmNoResults": "{{ERROR}} I couldn't find results for the package `{{package}}`.",
+    "npmOptionPackage": "The package to search for.",
+    "npmTitles": {
+        "author": ":pen_ballpoint: **Author**",
+        "dependencies": ":card_box: **Dependancies**",
+        "main": ":mag_right: **Main Entry**",
+        "maintainers": ":card_index: **Maintainers**"
+    },
     "stardewvalleyDescription": "Search for Stardew Valley data using Stardrop.",
     "stardewvalleyDescriptionCharacter": "Search for a specific character in Stardew Valley.",
     "stardewvalleyNoVillager": "{{ERROR}} Whoops I couldn't resolve {{villager}} to a Stardew character, maybe you meant one of these?",

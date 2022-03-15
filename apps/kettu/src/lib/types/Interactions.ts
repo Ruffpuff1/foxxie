@@ -15,6 +15,7 @@ export enum CommandName {
     Github = 'github',
     Invite = 'invite',
     Owoify = 'owoify',
+    Npm = 'npm',
     Pokemon = 'pokemon',
     Pride = 'pride',
     Setcolor = 'setcolor',
@@ -63,6 +64,10 @@ export interface GithubArgs extends BaseArgs {
         repo: string;
         number?: number;
     };
+}
+
+export interface NpmArgs extends EphemeralArgs {
+    package: string;
 }
 
 export interface AnimalCrossingArgs extends BaseArgs {
@@ -119,4 +124,6 @@ export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     ? StardewValleyArgs
     : T extends CommandName.Owoify
     ? OwoifyArgs
+    : T extends CommandName.Npm
+    ? NpmArgs
     : never;
