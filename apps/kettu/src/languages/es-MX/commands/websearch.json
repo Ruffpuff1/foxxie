@@ -110,6 +110,9 @@
         "weight": "**:scales: Peso**"
     },
     "stardewvalleyDescription": "",
+    "stardewvalleyDescriptionCharacter": "",
+    "stardewvalleyNoVillager": "",
+    "stardewvalleyOptionVillager": "",
     "stardewvalleyTitles": {
         "address": "",
         "bestGifts": "",
