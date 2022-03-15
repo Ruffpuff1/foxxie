@@ -135,11 +135,15 @@ export namespace Kitsu {
 }
 
 export namespace Npm {
+    interface DistTags {
+        latest: string;
+    }
+
     export interface Result {
         _id: string;
         _rev: string;
         name: string;
-        'dist-tags': { latest: string };
+        'dist-tags': DistTags;
         versions: Record<string, Package>;
         time: Time;
         maintainers: User[];
