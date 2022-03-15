@@ -1,0 +1,59 @@
+{
+    "birthday": "",
+    "birthdayDay": "",
+    "birthdayMonth": "",
+    "birthdayMonths": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "birthdayYear": "",
+    "birthdayYearFuture": "",
+    "birthdayYearOld": "",
+    "boolean": "",
+    "booleanFalses": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "booleanTruths": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "command": "",
+    "duration": "",
+    "guild": "",
+    "language": "",
+    "moderationEntryLatest": [
+        "",
+        "",
+        ""
+    ],
+    "moderationEntryNone": "",
+    "piece": "",
+    "reminder": "",
+    "song": "",
+    "snowflake": "",
+    "store": "",
+    "timespanTooLarge": "",
+    "timespanTooSmall": "",
+    "user": ""
+}
