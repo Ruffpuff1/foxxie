@@ -108,5 +108,19 @@
         "type": "",
         "type_other": "",
         "weight": ""
-    }
+    },
+    "stardewvalleyDescription": "",
+    "stardewvalleyTitles": {
+        "address": "",
+        "bestGifts": "",
+        "birthday": "",
+        "family": "",
+        "friends": "",
+        "livesIn": "",
+        "marryable": ""
+    },
+    "stardewvalleyVillagerPageLabels": [
+        "",
+        ""
+    ]
 }
