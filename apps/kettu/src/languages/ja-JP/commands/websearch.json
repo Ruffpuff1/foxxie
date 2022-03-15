@@ -59,9 +59,9 @@
         "stars": "",
         "website": ""
     },
-    "githubUserCreated": "",
+    "githubUserCreated": "作成日 {{date, dateFormat}} ({{date, duration}})",
     "githubUserNotFound": "",
-    "githubUserUpdated": "",
+    "githubUserUpdated": "更新日 {{date, dateFormat}} ({{date, duration}})",
     "pokemonDescription": "",
     "pokemonDescriptionDex": "",
     "pokemonDescriptionMove": "",
