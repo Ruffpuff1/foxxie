@@ -4,7 +4,7 @@
     "highlightJumpTo": "",
     "highlightContentWord": "",
     "highlightEmbed": "",
-    "highlightSize": "",
+    "highlightSize": "El contenido del mensaje es muy largo. Oprime **[here]({{url}})** para verlo.",
     "goodbyeDefault": "",
     "pointsMessages": [
         "",
