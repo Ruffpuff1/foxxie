@@ -14,6 +14,7 @@ export enum CommandName {
     Eval = 'eval',
     Github = 'github',
     Invite = 'invite',
+    Owoify = 'owoify',
     Pokemon = 'pokemon',
     Pride = 'pride',
     Setcolor = 'setcolor',
@@ -73,12 +74,17 @@ export interface AnimalCrossingArgs extends BaseArgs {
 export interface StardewValleyArgs extends BaseArgs {
     character: {
         villager: string;
-    }
+    };
 }
 
 export interface PrideArgs extends EphemeralArgs {
     flag: 'agender' | 'asexual' | 'bisexual' | 'genderfluid' | 'lesbian' | 'nonbinary' | 'pansexual' | 'pride' | 'transgender';
     'guild-avatar'?: boolean;
+}
+
+export interface OwoifyArgs extends EphemeralArgs {
+    text: string;
+    mode?: 'owo' | 'uwu' | 'uvu';
 }
 
 export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
@@ -106,9 +112,11 @@ export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     : T extends CommandName.Pride
     ? PrideArgs
     : T extends CommandName.Setcolor
-    ? BaseArgs & { role: Role, color: string, reason?: string }
+    ? BaseArgs & { role: Role; color: string; reason?: string }
     : T extends CommandName.Stats
     ? EphemeralArgs
     : T extends CommandName.StardewValley
     ? StardewValleyArgs
+    : T extends CommandName.Owoify
+    ? OwoifyArgs
     : never;
