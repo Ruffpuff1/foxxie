@@ -1,0 +1,24 @@
+{
+    "boostMessageDefault": "",
+    "highlightAttachment": "",
+    "highlightJumpTo": "",
+    "highlightContentWord": "",
+    "highlightEmbed": "",
+    "highlightSize": "",
+    "goodbyeDefault": "",
+    "pointsMessages": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "pointsRoleMessages": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "welcomeDefault": ""
+}
