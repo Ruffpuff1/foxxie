@@ -59,6 +59,16 @@ export const GithubTitles = T<{
 export const GithubUserCreated = FT<{ date: string }>('commands/websearch:githubUserCreated');
 export const GithubUserNotFound = FT<{ user: string }>('commands/websearch:githubUserNotFound');
 export const GithubUserUpdated = FT<{ date: string }>('commands/websearch:githubUserUpdated');
+export const NpmDescription = T('commands/websearch:npmDescription');
+export const NpmNoDependencies = T('commands/websearch:npmNoDependencies');
+export const NpmNoResults = FT<{ package: string }>('commands/websearch:npmNoResults');
+export const NpmOptionPackage = T('commands/websearch:npmOptionPackage');
+export const NpmTitles = T<{
+    author: string;
+    dependencies: string;
+    main: string;
+    maintainers: string;
+}>('commands/websearch:npmTitles');
 export const PokemonDescription = T('commands/websearch:pokemonDescription');
 export const PokemonDescriptionDex = T('commands/websearch:pokemonDescriptionDex');
 export const PokemonDescriptionMove = T('commands/websearch:pokemonDescriptionMove');

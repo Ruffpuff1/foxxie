@@ -187,7 +187,7 @@ export class UserCommand extends Command {
                     );
             })
             .addAsyncPageEmbed(async embed => {
-                const contributors = await this.fetchContributors(repo.contributors_url);
+                const contributors = await this.fetchContributors(repo.contributors_url, t);
 
                 return embed //
                     .addField(titles.openIssues, repo.open_issues ? t(LanguageKeys.Globals.Number, { value: repo.open_issues }) : none, true)
@@ -219,7 +219,7 @@ export class UserCommand extends Command {
         return result;
     }
 
-    private async fetchContributors(url: string) {
+    private async fetchContributors(url: string, t: TFunction) {
         const result = await fromAsync(async () =>
             fetch(url) //
                 .json<Github.User[]>()
@@ -243,7 +243,7 @@ export class UserCommand extends Command {
         const more = list.length - newList.length;
         if (more === 0) return newList;
 
-        return [...newList, `${more} more.`];
+        return [...newList, t(LanguageKeys.System.AndMore, { count: more })];
     }
 
     private parseUser(user: string) {
