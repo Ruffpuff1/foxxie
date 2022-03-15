@@ -1,1 +1,3 @@
-{}
+{
+    "nsfw": "{{ERROR}} Ahem, due to its potential naughty nature, the command {{name, code}} can only be used in **NSFW** type channels."
+}
