@@ -5,12 +5,14 @@ import { envParseBoolean } from '#lib/env';
 import { buildStardewVillagerDisplay, fetchStardewVillager, fuzzySearchStardewVillagers } from '#utils/APIs';
 import { toTitleCase } from '@ruffpuff/utilities';
 import type { VillagersEnum } from '@foxxie/stardrop';
+import { enUS } from '#utils/util';
+import { LanguageKeys } from '#lib/i18n';
 
 @RegisterChatInputCommand(
     CommandName.StardewValley,
     builder =>
         builder //
-            .setDescription('stardew')
+            .setDescription(enUS(LanguageKeys.Commands.Websearch.StardewvalleyDescription))
             .addSubcommand(command =>
                 command //
                     .setName('character')
@@ -52,7 +54,7 @@ export class UserCommand extends Command {
 
         const villagerData = await fetchStardewVillager(villager as VillagersEnum);
 
-        const display = buildStardewVillagerDisplay(villagerData!, args.t)
+        const display = buildStardewVillagerDisplay(villagerData!, args.t);
 
         return display.run(interaction, interaction.user);
     }

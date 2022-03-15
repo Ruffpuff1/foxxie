@@ -78,7 +78,8 @@ export async function fuzzySearchStardewVillagers(query: string, take = 20) {
 export function buildStardewVillagerDisplay(data: Omit<Villager, '__typename'>, t: TFunction, color?: number) {
     const none = t(LanguageKeys.Globals.None);
 
-    const VillagerPageLabels = ['General', 'Relationship Data'];
+    const VillagerPageLabels = t(LanguageKeys.Commands.Websearch.StardewvalleyVillagerPageLabels);
+    const titles = t(LanguageKeys.Commands.Websearch.StardewvalleyTitles);
 
     const template = new MessageEmbed() //
         .setThumbnail(data.portrait!) //
@@ -89,22 +90,22 @@ export function buildStardewVillagerDisplay(data: Omit<Villager, '__typename'>, 
         .setSelectMenuOptions(pageIndex => ({ label: VillagerPageLabels[pageIndex - 1] }))
         .addPageEmbed(embed => {
             embed //
-                .addField('**Address**', data.address, true)
-                .addField('**Lives in**', data.livesIn, true)
-                .addField('**Birthday**', data.birthday, true)
-                .addField('**Best gifts**', t(LanguageKeys.Globals.And, { value: data.bestGifts }));
+                .addField(titles.address, data.address, true)
+                .addField(titles.livesIn, data.livesIn, true)
+                .addField(titles.birthday, data.birthday, true)
+                .addField(titles.bestGifts, t(LanguageKeys.Globals.And, { value: data.bestGifts }));
 
             if (data.description) embed.setDescription(data.description);
             return embed;
         })
         .addPageEmbed(embed =>
             embed //
-                .addField('**Marryable**', data.marriage ? t(LanguageKeys.Globals.Yes) : t(LanguageKeys.Globals.No))
+                .addField(titles.marryable, data.marriage ? t(LanguageKeys.Globals.Yes) : t(LanguageKeys.Globals.No))
                 .addField(
-                    '**Family**',
+                    titles.family,
                     data.family.length ? t(LanguageKeys.Globals.And, { value: data.family.map(member => `**${toTitleCase(member.key)}** (${member.relation})`) }) : none
                 )
-                .addField('**Friends**', data.friends.length ? t(LanguageKeys.Globals.And, { value: data.friends.map(toTitleCase) }) : none)
+                .addField(titles.friends, data.friends.length ? t(LanguageKeys.Globals.And, { value: data.friends.map(toTitleCase) }) : none)
         );
 
     return display;
