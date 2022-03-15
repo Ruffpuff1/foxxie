@@ -1,6 +1,6 @@
 {
     "animalcrossingCoffee": "• Judías → {{beans}}\n• Leche → {{milk}}\n• Agarrado → {{sugar}}",
-    "animalcrossingDescription": "",
+    "animalcrossingDescription": "Obtener datos de Crossing Animal de la celestia.",
     "animalcrossingDescriptionVillager": "Obtener datos sobre un aldeano de Animal Crossing.",
     "animalcrossingFooter": "Desarrollado por la celestia",
     "animalcrossingNoVillager": "{{ERROR}} No pude encontrar un aldeano llamado `{{villager}}`. ¿Quizás quería decir uno de estos?",
