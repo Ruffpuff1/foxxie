@@ -50,8 +50,10 @@ services:
       context: '../../graphql/stardrop'
     networks:
       - kettu
+    environment:
+      - PORT: 5060
     ports:
-      - '4000:4000'
+      - '5060:5060'
     restart: always
 
   redis:

@@ -107,6 +107,9 @@
         "weight": "**:scales: Weight**"
     },
     "stardewvalleyDescription": "Search for Stardew Valley data using Stardrop.",
+    "stardewvalleyDescriptionCharacter": "Search for a specific character in Stardew Valley.",
+    "stardewvalleyNoVillager": "{{ERROR}} Whoops I couldn't resolve {{villager}} to a Stardew character, maybe you meant one of these?",
+    "stardewvalleyOptionVillager": "The name of the villager to search for.",
     "stardewvalleyTitles": {
         "address": "**:house: Address**",
         "bestGifts": "**:gift: Best gifts**",

@@ -94,6 +94,9 @@ export const PokemonTitles = T<{
     weight: string;
 }>('commands/websearch:pokemonTitles');
 export const StardewvalleyDescription = T('commands/websearch:stardewvalleyDescription');
+export const StardewvalleyDescriptionCharacter = T('commands/websearch:stardewvalleyDescriptionCharacter');
+export const StardewvalleyNoVillager = FT<{ villager: string }>('commands/websearch:stardewvalleyNoVillager');
+export const StardewvalleyOptionVillager = T('commands/websearch:stardewvalleyOptionVillager');
 export const StardewvalleyTitles = T<{
     address: string;
     bestGifts: string;

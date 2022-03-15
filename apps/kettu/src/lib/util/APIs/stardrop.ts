@@ -13,7 +13,7 @@ export async function fetchGraphQLStardewValley<R extends StardewValleyReturnTyp
     variables: StardewValleyQueryVariables<R>
 ): Promise<StardewValleyResponse<R>> {
     try {
-        return fetch('http://stardrop:4000')
+        return fetch('http://stardrop:5060')
             .body(
                 {
                     query,

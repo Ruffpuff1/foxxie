@@ -6,6 +6,8 @@ import { buildStardewVillagerDisplay, fetchStardewVillager, fuzzySearchStardewVi
 import type { VillagersEnum } from '@foxxie/stardrop';
 import { enUS } from '#utils/util';
 import { LanguageKeys } from '#lib/i18n';
+import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
+import { toTitleCase } from '@ruffpuff/utilities';
 
 @RegisterChatInputCommand(
     CommandName.StardewValley,
@@ -15,18 +17,18 @@ import { LanguageKeys } from '#lib/i18n';
             .addSubcommand(command =>
                 command //
                     .setName('character')
-                    .setDescription('stardew character')
+                    .setDescription(enUS(LanguageKeys.Commands.Websearch.StardewvalleyDescriptionCharacter))
                     .addStringOption(option =>
                         option //
                             .setName('villager')
-                            .setDescription('villager')
+                            .setDescription(enUS(LanguageKeys.Commands.Websearch.StardewvalleyOptionVillager))
                             .setAutocomplete(true)
                             .setRequired(true)
                     )
             ),
     ['953151326844518430'],
     {
-        enabled: envParseBoolean('STARDROP_ENABLED', true)
+        enabled: envParseBoolean('STARDROP_ENABLED', false)
     }
 )
 export class UserCommand extends Command {
@@ -53,6 +55,27 @@ export class UserCommand extends Command {
         const { villager } = args.character;
 
         const villagerData = await fetchStardewVillager(villager as VillagersEnum);
+        if (!villagerData) {
+            const fuzz = await fuzzySearchStardewVillagers(villager, 25);
+            const opts = fuzz.map<MessageSelectOptionData>(entry => ({
+                label: toTitleCase(entry.key),
+                value: entry.key
+            }));
+
+            const actionRow = new MessageActionRow() //
+                .setComponents(
+                    new MessageSelectMenu() //
+                        .setCustomId(`stardewvalley|villager`)
+                        .setOptions(opts)
+                );
+
+            await interaction.deleteReply();
+            return interaction.followUp({
+                content: args.t(LanguageKeys.Commands.Websearch.StardewvalleyNoVillager, { villager }),
+                components: [actionRow],
+                ephemeral: true
+            });
+        }
 
         const display = buildStardewVillagerDisplay(villagerData!, args.t);
 
