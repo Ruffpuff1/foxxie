@@ -105,6 +105,12 @@ export function getLocale(interaction: CommandInteraction | SelectMenuInteractio
         case Locale.SpanishES:
             loc = 'es-MX';
             break;
+        case Locale.Japanese:
+            loc = 'ja-JP';
+            break;
+        case Locale.French:
+            loc = 'fr-FR';
+            break;
         default:
             loc = string;
             break;
