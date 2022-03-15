@@ -56,6 +56,12 @@
   - apps/kettu/src/languages/es-MX/*
   - apps/kettu/src/languages/es-MX/**/*
   
+'I18n: ja-JP':
+  - apps/foxxie/src/languages/ja-JP/*
+  - apps/foxxie/src/languages/ja-JP/**/*
+  - apps/kettu/src/languages/ja-JP/*
+  - apps/kettu/src/languages/ja-JP/**/*
+  
 'Meta: Documentation':
   - README.md
   - LICENSE
