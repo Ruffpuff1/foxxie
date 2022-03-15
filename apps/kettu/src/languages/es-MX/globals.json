@@ -1,7 +1,12 @@
 {
+    "and": "{{value, and}}",
     "by": "Por",
+    "codeand": "{{value, codeand}}",
+    "dateFormat": "{{value, dateFormat}}",
+    "duration": "{{value, duration}}",
     "in": "En",
     "no": "No",
     "none": "Ninguno",
+    "number": "{{value, number}}",
     "yes": "Sí"
 }

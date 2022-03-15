@@ -6,7 +6,7 @@
         "fin",
         "listo"
     ],
-    "and": "",
+    "and": "{{value, and}}",
     "any": "alguno",
     "case": "caso",
     "dateValue": "",
@@ -26,7 +26,7 @@
     "no": "no",
     "none": "ninguno",
     "numberCompact": "",
-    "numberFormat": "",
+    "numberFormat": "{{value, number}}",
     "numberOrdinal": "",
     "other": "otro",
     "remaining": "",
