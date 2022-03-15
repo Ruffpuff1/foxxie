@@ -45,8 +45,6 @@ services:
 
   stardrop:
     container_name: stardrop
-    depends_on:
-      - redis
     build:
       context: '../../graphql/stardrop'
     networks:

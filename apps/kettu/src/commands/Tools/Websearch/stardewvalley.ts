@@ -24,7 +24,7 @@ import { LanguageKeys } from '#lib/i18n';
                             .setRequired(true)
                     )
             ),
-    [],
+    ['953151326844518430'],
     {
         enabled: envParseBoolean('STARDROP_ENABLED', true)
     }

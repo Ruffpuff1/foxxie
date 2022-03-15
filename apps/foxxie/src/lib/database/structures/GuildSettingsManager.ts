@@ -14,7 +14,7 @@ export class GuildSettingsManager<T extends GuildEntity> extends Collection<stri
     private readonly locks = new LockQueue();
 
     public delete(key: string) {
-        this.locks.shift(key);
+        this.locks.delete(key);
         return super.delete(key);
     }
 
@@ -87,7 +87,7 @@ export class GuildSettingsManager<T extends GuildEntity> extends Collection<stri
 
             return settings[list as keyof T];
         } finally {
-            this.locks.shift(key);
+            this.locks.delete(key);
         }
     }
 
@@ -159,7 +159,7 @@ export class GuildSettingsManager<T extends GuildEntity> extends Collection<stri
             await found.reload();
             throw err;
         } finally {
-            this.locks.shift(key);
+            this.locks.delete(key);
         }
     }
 

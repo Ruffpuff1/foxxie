@@ -22,7 +22,7 @@ export abstract class ModerationTask<T = unknown> extends ScheduledTask {
             // eslint-disable-next-line no-empty
         } catch {
         } finally {
-            this.locks.shift(data.guildId);
+            this.locks.delete(data.guildId);
         }
     }
 
