@@ -1,12 +1,12 @@
 import { LanguageKeys } from '#lib/i18n';
-import { Query, QueryGetVillagerByNameArgs, VillagersEnum, Villager } from '@foxxie/stardrop';
+import type { Query, QueryGetVillagerByNameArgs, VillagersEnum, Villager } from '@foxxie/stardrop';
 import { fromAsync, isErr, UserError } from '@sapphire/framework';
 import { fetch } from '@foxxie/fetch';
-import type { TFunction } from '@sapphire/plugin-i18next';
 import { MessageEmbed } from 'discord.js';
 import { toTitleCase } from '@ruffpuff/utilities';
-import { Colors } from '#utils/constants';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import type { TFunction } from '@sapphire/plugin-i18next';
+import { Colors } from '#utils/constants';
 
 export async function fetchGraphQLStardewValley<R extends StardewValleyReturnTypes>(
     query: string,
@@ -35,42 +35,9 @@ export async function fetchStardewVillager(villager: VillagersEnum): Promise<Omi
     return result.value.data.getVillagerByName;
 }
 
-interface DefaultEntry<T> {
-    key: T;
-    name: `⭐ ${string}`;
-}
-
-const DefaultStardewVillagers: DefaultEntry<VillagersEnum>[] = [
-    {
-        key: VillagersEnum.Alex,
-        name: '⭐ Alex'
-    },
-    {
-        key: VillagersEnum.Leah,
-        name: '⭐ Leah'
-    },
-    {
-        key: VillagersEnum.Shane,
-        name: '⭐ Shane'
-    },
-    {
-        key: VillagersEnum.Penny,
-        name: '⭐ Penny'
-    },
-    {
-        key: VillagersEnum.Lewis,
-        name: '⭐ Lewis'
-    },
-    {
-        key: VillagersEnum.Wizard,
-        name: '⭐ Wizard'
-    }
-];
-
 export async function fuzzySearchStardewVillagers(query: string, take = 20) {
     const result = await fromAsync(() => fetchGraphQLStardewValley<'getFuzzyVillagerByName'>(getFuzzyStardewVillagerByName(), { villager: query, take }));
-
-    if (isErr(result) || !result.value.data?.getFuzzyVillagerByName?.length) return DefaultStardewVillagers;
+    if (isErr(result) || !result.value.data?.getFuzzyVillagerByName?.length) return [];
 
     return result.value.data.getFuzzyVillagerByName;
 }
@@ -110,7 +77,6 @@ export function buildStardewVillagerDisplay(data: Omit<Villager, '__typename'>, 
 
     return display;
 }
-
 export interface StardewValleyResponse<K extends keyof Omit<Query, '__typename'>> {
     data: Record<K, Omit<Query[K], '__typename'>>;
 }
@@ -124,29 +90,37 @@ type StardewValleyQueryVariables<R extends StardewValleyReturnTypes> = R extends
     : never;
 
 export const getStardewVillagerByName = () => `
-    query($villager: String!) {
+    query($villager: VillagersEnum!) {
         getVillagerByName(villager: $villager) {
             key
             birthday
             livesIn
             address
-            family {
-                key
-                relation
-            }
+            family
             friends
             marriage
             bestGifts
             description
+            room
             portrait
         }
     }
 `;
 
 export const getFuzzyStardewVillagerByName = () => `
-    query($villager: String! $take: Float!) {
-        getFuzzyVillagerByName(villager: $villager take: $take) {
+    query($villager: VillagersEnum! $take: Number!) {
+        getVillagerByName(villager: $villager take: $take) {
             key
+            birthday
+            livesIn
+            address
+            family
+            friends
+            marriage
+            bestGifts
+            description
+            room
+            portrait
         }
     }
 `;
