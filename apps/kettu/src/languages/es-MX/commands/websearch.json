@@ -70,22 +70,22 @@
     "pokemonDexSelectPages": [
         "General",
         "Información sobre el crecimiento",
-        "",
+        "Información de Batalla Competitiva",
         "Entradas Dex",
-        ""
+        "Información de variante"
     ],
-    "pokemonDexSmogonUnknown": "",
-    "pokemonMoveNone": "",
-    "pokemonMoveSelect": "",
+    "pokemonDexSmogonUnknown": "Formulario desconocido / Alt",
+    "pokemonMoveNone": "{{ERROR}} Ups, no pude resolver {{move}} a un ataque de Pokémon, ¿tal vez querías decir uno de estos?",
+    "pokemonMoveSelect": "Elige el ataque de Pokémon sobre el que quieres obtener información.",
     "pokemonMoveSelectPages": [
         "General",
         "Categorías",
-        "",
+        "Información de Poder Optimizado",
         "Disponibilidad"
     ],
-    "pokemonOptionPokemon": "",
-    "pokemonOptionSprite": "",
-    "pokemonOptionMove": "",
+    "pokemonOptionPokemon": "El nombre del pokémon que quieres buscar",
+    "pokemonOptionSprite": "Cómo debe mostrarse el sprite del pokémon.",
+    "pokemonOptionMove": "El ataque de Pokemon que quieres obtener datos de.",
     "pokemonTitles": {
         "abilities": "**:crystal_ball: Habilidades**",
         "baseStats": "**:scales: Estadísticas básicas**",
