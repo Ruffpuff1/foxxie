@@ -109,6 +109,16 @@
         "type_other": "**:scroll: Tipos**",
         "weight": "**:scales: Peso**"
     },
+    "npmDescription": "",
+    "npmNoDependencies": "",
+    "npmNoResults": "",
+    "npmOptionPackage": "",
+    "npmTitles": {
+        "author": "",
+        "dependencies": "",
+        "main": "",
+        "maintainers": ""
+    },
     "stardewvalleyDescription": "Busca datos de Stardew Valley usando Stardrop.",
     "stardewvalleyDescriptionCharacter": "Busca un personaje específico en el valle de Stardew.",
     "stardewvalleyNoVillager": "{{ERROR}} Ups, no pude resolver {{villager}} a un personaje de Stardew, ¿quizás querías decir uno de estos?",
