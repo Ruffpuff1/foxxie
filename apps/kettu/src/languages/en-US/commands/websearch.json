@@ -105,5 +105,19 @@
         "type": "**:scroll: Type**",
         "type_other": "**:scroll: Types**",
         "weight": "**:scales: Weight**"
-    }
+    },
+    "stardewvalleyDescription": "Search for Stardew Valley data using Stardrop.",
+    "stardewvalleyTitles": {
+        "address": "**Address**",
+        "bestGifts": "**Best gifts**",
+        "birthday": "**Birthday**",
+        "family": "**Family**",
+        "friends": "**Friends**",
+        "livesIn": "**Lives in**",
+        "marryable": "**Marryable**"
+    },
+    "stardewvalleyVillagerPageLabels": [
+        "General",
+        "Relationship Data"
+    ]
 }
