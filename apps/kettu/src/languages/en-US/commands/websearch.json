@@ -108,13 +108,13 @@
     },
     "stardewvalleyDescription": "Search for Stardew Valley data using Stardrop.",
     "stardewvalleyTitles": {
-        "address": "**Address**",
-        "bestGifts": "**Best gifts**",
-        "birthday": "**Birthday**",
-        "family": "**Family**",
-        "friends": "**Friends**",
-        "livesIn": "**Lives in**",
-        "marryable": "**Marryable**"
+        "address": "**:house: Address**",
+        "bestGifts": "**:gift: Best gifts**",
+        "birthday": "**:balloon: Birthday**",
+        "family": "**:deciduous_tree: Family**",
+        "friends": "**:heart: Friends**",
+        "livesIn": "**:map: Lives in**",
+        "marryable": "**:ring: Marryable**"
     },
     "stardewvalleyVillagerPageLabels": [
         "General",
