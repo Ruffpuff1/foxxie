@@ -108,5 +108,19 @@
         "type": "**:scroll: Tipo**",
         "type_other": "**:scroll: Tipos**",
         "weight": "**:scales: Peso**"
-    }
+    },
+    "stardewvalleyDescription": "",
+    "stardewvalleyTitles": {
+        "address": "",
+        "bestGifts": "",
+        "birthday": "",
+        "family": "",
+        "friends": "",
+        "livesIn": "",
+        "marryable": ""
+    },
+    "stardewvalleyVillagerPageLabels": [
+        "General",
+        ""
+    ]
 }
