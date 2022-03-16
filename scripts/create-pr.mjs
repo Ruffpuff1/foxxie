@@ -10,17 +10,14 @@ if (!arg) throw new Error('Argument must be provided');
 const [, packageName] = arg.split('=');
 if (!packageName) throw new Error('Couldnt read packageName');
 
-const arg2 = process.argv[3];
-if (!arg) throw new Error('Argument must be provided');
-
-const [, version] = arg2.split('=');
-if (!packageName) throw new Error('Couldnt read packageName');
-
 console.log('👀 Getting the previous release version');
 const previousReleases = await octokit.repos.listReleases({
     owner: OWNER,
     repo: REPOSITORY
 });
+
+const newVersion = JSON.parse(execSync(`cd packages/${packageName} && npm version --json`, { encoding: 'utf8' }));
+const version = newVersion[`@foxxie/${packageName}`];
 
 // Releases are sorted from newest to oldest, this should work™️
 const previousRelease = previousReleases.data.find(release => !release.draft);

@@ -51,6 +51,6 @@ jobs:
           git commit -m "chore(release): $(jq --raw-output '.version' package.json) 🎉" -m "Build ran for ${GITHUB_SHA}"
           git push -u -f origin "chore/release/$(jq --raw-output '.version' package.json)"
       - name: Create Pull Request
-        run: node ./scripts/create-pr.mjs --package=${{ github.event.inputs.package }} --version=$(jq --raw-output '.version' package.json)"
+        run: node ./scripts/create-pr.mjs --package=${{ github.event.inputs.package }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
