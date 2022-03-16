@@ -47,7 +47,6 @@ jobs:
       - name: Create branch for changes, add all changes and push
         run: |
           git checkout -b "chore/release/$(jq --raw-output '.version' package.json)"
-          yarn changelog
           git add --all .
           git commit -m "chore(release): $(jq --raw-output '.version' package.json) 🎉" -m "Build ran for ${GITHUB_SHA}"
           git push -u origin "chore/release/$(jq --raw-output '.version' package.json)"
