@@ -11,7 +11,7 @@ if (!arg) throw new Error('Argument must be provided');
 const [, packageName] = arg.split('=');
 if (!packageName) throw new Error('Couldnt read packageName');
 
-const packageJson = JSON.parse(await readFile(new URL(`../../packages/${packageName}package.json`, import.meta.url), { encoding: 'utf8' }));
+const packageJson = JSON.parse(await readFile(new URL(`../../packages/${packageName}/package.json`, import.meta.url), { encoding: 'utf8' }));
 
 console.log('👀 Getting the previous release version');
 const previousReleases = await octokit.repos.listReleases({
