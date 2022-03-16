@@ -32,7 +32,7 @@ if (!expectedBumpType) {
 
 console.info(`ℹ️ Bumping the ${expectedBumpType} version: ${result.reason}`);
 
-execSync(`cd packages/${packageName} && npm version ${expectedBumpType} && yarn changelog`);
+execSync(`cd packages/${packageName} && npm version ${expectedBumpType}`);
 
 const newVersion = JSON.parse(execSync(`cd packages/${packageName} && npm version --json`, { encoding: 'utf8' }));
 
