@@ -49,7 +49,7 @@ jobs:
           git checkout -b "chore/release/$(jq --raw-output '.version' package.json)"
           git add --all .
           git commit -m "chore(release): $(jq --raw-output '.version' package.json) 🎉" -m "Build ran for ${GITHUB_SHA}"
-          git pull
+          git pull origin main
           git push -u origin "chore/release/$(jq --raw-output '.version' package.json)"
       - name: Create Pull Request
         run: node ./scripts/create-pr.mjs --package=${{ github.event.inputs.package }}
