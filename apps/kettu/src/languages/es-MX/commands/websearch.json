@@ -1,6 +1,6 @@
 {
     "animalcrossingCoffee": "• Judías → {{beans}}\n• Leche → {{milk}}\n• Agarrado → {{sugar}}",
-    "animalcrossingDescription": "",
+    "animalcrossingDescription": "Obtener datos de Crossing Animal de la celestia.",
     "animalcrossingDescriptionVillager": "Obtener datos sobre un aldeano de Animal Crossing.",
     "animalcrossingFooter": "Desarrollado por la celestia",
     "animalcrossingNoVillager": "{{ERROR}} No pude encontrar un aldeano llamado `{{villager}}`. ¿Quizás quería decir uno de estos?",
@@ -108,6 +108,16 @@
         "type": "**:scroll: Tipo**",
         "type_other": "**:scroll: Tipos**",
         "weight": "**:scales: Peso**"
+    },
+    "npmDescription": "",
+    "npmNoDependencies": "",
+    "npmNoResults": "",
+    "npmOptionPackage": "",
+    "npmTitles": {
+        "author": "",
+        "dependencies": "",
+        "main": "",
+        "maintainers": ""
     },
     "stardewvalleyDescription": "Busca datos de Stardew Valley usando Stardrop.",
     "stardewvalleyDescriptionCharacter": "Busca un personaje específico en el valle de Stardew.",
