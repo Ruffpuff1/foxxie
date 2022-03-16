@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/fetch",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A centra inspired http client for Foxxie bots",
   "scripts": {
     "build": "tsup",
