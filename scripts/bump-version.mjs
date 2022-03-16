@@ -81,7 +81,7 @@ if (previousPullRequest) {
     await octokit.request('DELETE /repos/{owner}/{repo}/git/refs/{ref}', {
         owner: OWNER,
         repo: REPOSITORY,
-        ref: `heads/chore/release/${newVersion[packageName]}`
+        ref: `heads/chore/release-${packageName}-${newVersion[`@foxxie/${packageName}`]}`
     });
 
     console.log(`✅ Done. Pull request ${previousPullRequest.number} was closed and will be recreated.`);

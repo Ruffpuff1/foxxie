@@ -15,9 +15,7 @@ const newVersion = JSON.parse(execSync(`cd packages/${packageName} && npm versio
 const version = newVersion[`@foxxie/${packageName}`];
 
 const pullRequestBody = [
-    '**Please describe the changes this PR makes and why it should be merged:**',
-    '',
-    `This pull request bumps ${packageName} from to **${version}**.`,
+    `This pull request bumps ${packageName} to **${version}**.`,
     '',
     '⚠️ **Do not change the commit message when merging. It must stay in the format `chore(release): ...`!**',
     '⚠️ Maintainers, make sure everything is alright in this PR before merging it. This is still a beta test, so things may break.'
@@ -28,7 +26,7 @@ console.log(`🎉 Creating pull request for ${packageName} ${version}`);
 const pullRequest = await octokit.pulls.create({
     base: 'main',
     // The format must stay in sync with the one in create-pr-for-release-and-publish.yml
-    head: `chore/release/${version}`,
+    head: `chore/release-${packageName}-${version}`,
     owner: OWNER,
     repo: REPOSITORY,
     maintainer_can_modify: true,
