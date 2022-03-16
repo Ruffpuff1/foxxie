@@ -47,6 +47,6 @@ jobs:
       - name: Create branch for changes, add all changes and push
         run: node ./scripts/update-git.mjs --package=${{ github.event.inputs.package }}
       - name: Create Pull Request
-        run: node ./scripts/create-pr.mjs --package=${{ github.event.inputs.package }}
+        run: GITHUB_SHA=${GITHUB_SHA} node ./scripts/create-pr.mjs --package=${{ github.event.inputs.package }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
