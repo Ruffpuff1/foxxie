@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/eslint-config",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Strict, shared eslint configuration used within Foxxie's projects. With Typescript support.",
   "scripts": {
     "build": "tsup",
