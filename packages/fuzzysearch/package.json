@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/fuzzysearch",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A tool for returning fuzzyily searched results.",
   "scripts": {
     "build": "tsup",

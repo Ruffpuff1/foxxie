@@ -786,6 +786,14 @@
     "@ruffpuff/utilities" "^4.0.0"
     undici "^4.14.1"
 
+"@foxxie/fetch@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@foxxie/fetch/-/fetch-0.0.1.tgz#12324d51b55de74548be0b329e4ec3fe2f28a297"
+  integrity sha512-qt886aJRsshqoOdF6Dq4VHgbX3564GQikeFKWYhmK7uWEuxnD00w/OQE1IPP/ubw/hYj/DGNx4SuuJkjmHSg2A==
+  dependencies:
+    "@ruffpuff/utilities" "^4.0.0"
+    undici "^4.14.1"
+
 "@foxxie/lock-queue@0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@foxxie/lock-queue/-/lock-queue-0.1.0.tgz#af596a186dca3a2c9b2113bda65dbd56a7f5119f"
