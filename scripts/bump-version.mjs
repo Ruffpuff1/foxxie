@@ -35,7 +35,7 @@ if (!expectedBumpType) {
 console.info(`ℹ️ Bumping the ${expectedBumpType} version: ${result.reason}`);
 
 execSync(`npm version ${expectedBumpType}`);
-console.log(expectedBumpType);
+console.log(execSync('ls'));
 
 const newVersion = JSON.parse(execSync('npm version --json', { encoding: 'utf8' }));
 
