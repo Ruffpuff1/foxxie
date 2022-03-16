@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/restrict-template-expressions */
 import { Octokit } from '@octokit/action';
+import { execSync } from 'node:child_process';
 
 const octokit = new Octokit();
 const [OWNER, REPOSITORY] = process.env.GITHUB_REPOSITORY.split('/');
