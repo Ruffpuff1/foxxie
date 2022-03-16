@@ -35,10 +35,11 @@ if (!expectedBumpType) {
 console.info(`ℹ️ Bumping the ${expectedBumpType} version: ${result.reason}`);
 
 execSync(`npm version ${expectedBumpType}`);
+console.log(expectedBumpType);
 
 const newVersion = JSON.parse(execSync('npm version --json', { encoding: 'utf8' }));
 
-console.info(`✅ Done! ${packageName} was bumped to ${newVersion[packageName]}`);
+console.info(`✅ Done! ${packageName} was bumped to ${newVersion[`@foxxie/${packageName}`]}`);
 
 if (!process.env.GITHUB_TOKEN) {
     console.info('🙉 Skipping the pull request checks as no GITHUB_TOKEN was provided.');
