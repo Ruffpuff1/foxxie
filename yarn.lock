@@ -786,6 +786,14 @@
     "@ruffpuff/utilities" "^4.0.0"
     undici "^4.14.1"
 
+"@foxxie/lock-queue@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@foxxie/lock-queue/-/lock-queue-0.1.0.tgz#af596a186dca3a2c9b2113bda65dbd56a7f5119f"
+  integrity sha512-mkDMF17VMHGJjcxnreLRY9wPU4+3QamrdZjg5npLcBByqlwgiaSKOIdD10UdnlG7/oIeQFT0QLTWusKtA+LfXA==
+  dependencies:
+    "@foxxie/eslint-config" "^0.0.0"
+    async-rwlock "^1.1.1"
+
 "@foxxie/types@0.0.0":
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/@foxxie/types/-/types-0.0.0.tgz#d91be0c32a300751801b17ca38869c3ceab81b41"
