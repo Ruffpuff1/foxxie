@@ -9,8 +9,6 @@ if (!arg) throw new Error('Argument must be provided');
 const [, packageName] = arg.split('=');
 if (!packageName) throw new Error('Couldnt read packageName');
 
-execSync(`cd packages/${packageName}`);
-
 const conventionalReleaseTypesTo0Ver = new Map([
     ['major', 'minor'],
     ['minor', 'patch'],
@@ -20,7 +18,7 @@ const conventionalReleaseTypesTo0Ver = new Map([
 /** @type {(options: import('conventional-recommended-bump').Options) => Promise<import('conventional-recommended-bump').Callback.Recommendation>} */
 const asyncConventionalRecommendBump = promisify(conventionalRecommendedBump);
 
-const result = await asyncConventionalRecommendBump({ preset: 'angular' });
+const result = await asyncConventionalRecommendBump({ preset: 'angular', path: `packages/${packageName}` });
 
 if (!result.releaseType) {
     throw new Error('No recommended bump level found');
@@ -34,10 +32,9 @@ if (!expectedBumpType) {
 
 console.info(`ℹ️ Bumping the ${expectedBumpType} version: ${result.reason}`);
 
-execSync(`npm version ${expectedBumpType}`);
-console.log(execSync('ls'));
+execSync(`cd packages/${packageName} && npm version ${expectedBumpType}`);
 
-const newVersion = JSON.parse(execSync('npm version --json', { encoding: 'utf8' }));
+const newVersion = JSON.parse(execSync(`cd packages/${packageName} && npm version --json`, { encoding: 'utf8' }));
 
 console.info(`✅ Done! ${packageName} was bumped to ${newVersion[`@foxxie/${packageName}`]}`);
 
