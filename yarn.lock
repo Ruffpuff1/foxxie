@@ -794,6 +794,14 @@
     "@ruffpuff/utilities" "^4.0.0"
     undici "^4.14.1"
 
+"@foxxie/fuzzysearch@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@foxxie/fuzzysearch/-/fuzzysearch-0.0.2.tgz#57a784db1fe8d9c702ed054be2e153ccf530a5ec"
+  integrity sha512-TKk/bZalfi8vkYN+SH7mgzEW87PvN6ElUrOc3piNZjqHLVQEDtbc5m3eSbKEWcn3n9Ynlml0C6rwitcCNVdtEw==
+  dependencies:
+    "@discordjs/collection" "^0.5.0"
+    "@skyra/jaro-winkler" "^1.0.0"
+
 "@foxxie/lock-queue@0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@foxxie/lock-queue/-/lock-queue-0.1.0.tgz#af596a186dca3a2c9b2113bda65dbd56a7f5119f"
@@ -801,6 +809,11 @@
   dependencies:
     "@foxxie/eslint-config" "^0.0.0"
     async-rwlock "^1.1.1"
+
+"@foxxie/stardrop@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@foxxie/stardrop/-/stardrop-0.0.0.tgz#a035f26aa669854e518ef4d7ea31083c84f296b1"
+  integrity sha512-D+NK8SF8sH+14eKm9dtZwW0RU6wBM9KwML7lLyQXNWX89r/TBDbp4Mc3+09nCRc5rqAuFyfd8XYTLIw4W66Fqw==
 
 "@foxxie/types@0.0.0":
   version "0.0.0"
@@ -7214,6 +7227,11 @@ prettier@2.5.1, prettier@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.5.1.tgz#fff75fa9d519c54cf0fce328c1017d94546bc56a"
   integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
+
+prettier@2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.0.tgz#12f8f504c4d8ddb76475f441337542fa799207d4"
+  integrity sha512-m2FgJibYrBGGgQXNzfd0PuDGShJgRavjUoRCw1mZERIWVSXF0iLzLm+aOqTAbLnC3n6JzUhAA8uZnFVghHJ86A==
 
 pretty-format@^27.0.0, pretty-format@^27.5.1:
   version "27.5.1"
