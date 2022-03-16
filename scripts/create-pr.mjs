@@ -11,23 +11,13 @@ if (!arg) throw new Error('Argument must be provided');
 const [, packageName] = arg.split('=');
 if (!packageName) throw new Error('Couldnt read packageName');
 
-console.log('👀 Getting the previous release version');
-const previousReleases = await octokit.repos.listReleases({
-    owner: OWNER,
-    repo: REPOSITORY
-});
-
 const newVersion = JSON.parse(execSync(`cd packages/${packageName} && npm version --json`, { encoding: 'utf8' }));
 const version = newVersion[`@foxxie/${packageName}`];
-
-// Releases are sorted from newest to oldest, this should work™️
-const previousRelease = previousReleases.data.find(release => !release.draft);
-console.log('👀 Previous release version:', previousRelease?.tag_name);
 
 const pullRequestBody = [
     '**Please describe the changes this PR makes and why it should be merged:**',
     '',
-    `This pull request bumps ${packageName} from **${previousRelease?.tag_name ?? 'unknown'}** to **${version}**.`,
+    `This pull request bumps ${packageName} from to **${version}**.`,
     '',
     '⚠️ **Do not change the commit message when merging. It must stay in the format `chore(release): ...`!**',
     '⚠️ Maintainers, make sure everything is alright in this PR before merging it. This is still a beta test, so things may break.'

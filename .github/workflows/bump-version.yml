@@ -45,11 +45,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create branch for changes, add all changes and push
-        run: |
-          git checkout -b "chore/release/$(jq --raw-output '.version' package.json)"
-          git add --all .
-          git commit -m "chore(release): $(jq --raw-output '.version' package.json) 🎉" -m "Build ran for ${GITHUB_SHA}"
-          git push -u -f origin "chore/release/$(jq --raw-output '.version' package.json)"
+        run: node ./scripts/update-git.mjs --package=${{ github.event.inputs.package }}
       - name: Create Pull Request
         run: node ./scripts/create-pr.mjs --package=${{ github.event.inputs.package }}
         env:
