@@ -69,16 +69,16 @@ services:
       - redis_data:/data
     restart: always
 
-  # lavalink:
-  #   container_name: lavalink
-  #   depends_on:
-  #     - redis
-  #   image: 'skyrabot/lavalink:latest'
-  #   networks:
-  #     - foxxie
-  #   ports:
-  #     - '2333:2333'
-  #   restart: always
+  lavalink:
+    container_name: lavalink
+    depends_on:
+      - redis
+    image: 'skyrabot/lavalink:latest'
+    networks:
+      - foxxie
+    ports:
+      - '2333:2333'
+    restart: always
 
   celestia:
     container_name: celestia
