@@ -46,8 +46,7 @@ services:
 
   stardrop:
     container_name: stardrop
-    build:
-      context: '../../graphql/stardrop'
+    image: ruffpuff/stardrop:latest
     networks:
       - kettu
     environment:
