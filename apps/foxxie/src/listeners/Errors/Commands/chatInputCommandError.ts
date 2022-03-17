@@ -20,7 +20,7 @@ export class UserListener extends Listener<Events.ChatInputCommandError> {
         const t = getLocale(interaction);
         const error = cast<Error>(e);
         // if the error is something that the user should be aware of, send them a message.
-        if (typeof error === 'string') return this.stringError(interaction, t, error);
+        if (typeof error === 'string') return this.stringError(interaction, error);
         if (error instanceof ArgumentError) return this.argumentError(interaction, t, error);
         if (error instanceof UserError) return this.userError(interaction, t, error);
 
@@ -79,14 +79,8 @@ export class UserListener extends Listener<Events.ChatInputCommandError> {
         return error.path === `/channels/${interaction.channel!.id}/messages`;
     }
 
-    private stringError(interaction: CommandInteraction, t: TFunction, error: string) {
-        return this.send(
-            interaction,
-            t(LanguageKeys.Listeners.Errors.String, {
-                mention: interaction.user.toString(),
-                message: error
-            })
-        );
+    private stringError(interaction: CommandInteraction, error: string) {
+        return this.send(interaction, error);
     }
 
     private async argumentError(interaction: CommandInteraction, t: TFunction, error: ArgumentError<unknown>) {
@@ -171,7 +165,7 @@ export class UserListener extends Listener<Events.ChatInputCommandError> {
     }
 
     private send(interaction: CommandInteraction, content: string) {
-        return interaction.replied ? interaction.editReply({ content }) : interaction.reply({ content, ephemeral: true });
+        return interaction.replied || interaction.deferred ? interaction.editReply({ content }) : interaction.reply({ content, ephemeral: true });
     }
 
     private getWarning(interaction: CommandInteraction) {

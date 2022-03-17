@@ -1,4 +1,12 @@
 {
+    "banDescription": "Ban a member from your server so they can no longer return.",
+    "banOptionDays": "The amount of days worth of messages to delete from the user.",
+    "banOptionDuration": "How long to ban the user for, if not included the ban will be permanent.",
+    "banOptionReason": "The reason for the ban.",
+    "banOptionRefrence": "The prior case to refrence in the moderation log.",
+    "banOptionTarget": "The user to ban.",
+    "banSuccess": "{{SUCCESS}} Successfully banned {{targets, and}} → `{{reason}}`.",
+    "banSuccess_cases": "{{SUCCESS}} Successfully banned {{targets, and}}, created case [#{{cases}}](<{{url}}>) → `{{reason}}`.",
     "caseDescription": "View a moderation case from your server.",
     "caseNoExist": "{{ERROR}} The case {{caseId}} doesn't seem to exist.",
     "caseOptionCaseId": "The id of the case to display."
