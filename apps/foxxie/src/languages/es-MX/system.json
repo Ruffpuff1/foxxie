@@ -1,5 +1,5 @@
 {
-    "commandCancel": "",
+    "commandCancel": "{{SUCCESS}} Entendido, canceló ese comando.",
     "dmWarn": "Tus DMs están cerrados por el momento esto significa que no va funcionar.",
     "footer": "Pagina -",
     "messageLoading": [
