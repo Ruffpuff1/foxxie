@@ -76,7 +76,7 @@ export class UserCommand extends Command {
         return interaction.respond([{ name: option.value as string, value: option.value }]);
     }
 
-    private formatDeps(latest: Npm.Result['versions'][keyof Npm.Result['versions']], t: TFunction) {
+    private formatDeps(latest: Npm.Package, t: TFunction) {
         if (!latest.dependencies) return t(LanguageKeys.Commands.Websearch.NpmNoDependencies);
         const keys = Object.keys(latest.dependencies);
 
