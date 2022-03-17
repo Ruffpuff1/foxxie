@@ -1,1 +1,13 @@
-{}
+{
+    "banDescription": "Bloquea a un miembro de tu servidor para que ya no pueda regresar.",
+    "banOptionDays": "La cantidad de días de mensajes a eliminar del usuario.",
+    "banOptionDuration": "Cuánto tiempo de banear al usuario, si no se incluye el baneo será permanente.",
+    "banOptionReason": "La razón de la prohibición.",
+    "banOptionRefrence": "El caso anterior a la autenticidad en el registro de moderación.",
+    "banOptionTarget": "El usuario a bloquear.",
+    "banSuccess": "{{SUCCESS}} Exitosamente ha baneado {{targets, and}} → `{{reason}}`.",
+    "banSuccess_cases": "{{SUCCESS}} Exitosamente baneado {{targets, and}}, creado caso [#{{cases}}](<{{url}}>) → `{{reason}}`.",
+    "caseDescription": "Ver un caso de moderación de su servidor.",
+    "caseNoExist": "{{ERROR}} El caso {{caseId}} parece no existir.",
+    "caseOptionCaseId": "El id del caso para mostrar."
+}
