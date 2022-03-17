@@ -1,4 +1,5 @@
 {
+    "commandCancel": "{{SUCCESS}} Got it, cancelled that command.",
     "dmWarn": "Your DMs are closed right now, meaning this will not function properly.",
     "footer": "Page -",
     "messageLoading": [

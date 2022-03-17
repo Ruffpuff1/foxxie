@@ -2,7 +2,9 @@ import { FT, T } from '#lib/types';
 import type { UserMention } from 'discord.js';
 
 export const Abort = T('listeners/errors:abort');
+export const ModerationBannable = T('listeners/errors:moderationBannable');
 export const ModerationFoxxie = FT('listeners/errors:moderationFoxxie');
+export const ModerationKickable = T('listeners/errors:moderationKickable');
 export const ModerationMember = FT<{ target: string }>('listeners/errors:moderationMember');
 export const ModerationRole = FT<{ target: string }>('listeners/errors:moderationRole');
 export const ModerationRoleBot = FT<{ target: string }>('listeners/errors:moderationRoleBot');

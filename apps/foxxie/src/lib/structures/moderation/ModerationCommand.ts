@@ -1,8 +1,11 @@
-import { acquireSettings, GuildSettings } from '#lib/database';
+import * as GuildSettings from '#database/Keys';
+import { acquireSettings } from '#database/functions';
+import type { ModerationEntity } from '#database/entities/ModerationEntity';
 import { LanguageKeys } from '#lib/i18n';
 import { GuildInteraction, PermissionLevels } from '#lib/types';
 import { isGuildOwner } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
+import { channelLink } from '#utils/transformers';
 import { minutes, years } from '@ruffpuff/utilities';
 import { CommandOptionsRunTypeEnum, PieceContext, Result, UserError } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
@@ -81,6 +84,27 @@ export class ModerationCommand extends FoxxieCommand {
         return {
             send: await acquireSettings(interaction.guild, GuildSettings.Moderation.Dm)
         };
+    }
+
+    protected async respond(interaction: GuildInteraction, log: ModerationEntity, target: User): Promise<void> {
+        const [modChannelId, t] = await acquireSettings(interaction.guildId!, settings => [settings[GuildSettings.Channels.Logs.Moderation], settings.getLanguage()]);
+
+        const content = modChannelId
+            ? t(this.successKey, {
+                  context: 'cases',
+                  cases: log.caseId.toString(),
+                  targets: [`**${target.tag}**`],
+                  count: 1,
+                  url: channelLink(interaction.guildId!, modChannelId),
+                  reason: log.reason || t(LanguageKeys.Moderation.NoReason)
+              })
+            : t(this.successKey, {
+                  targets: [`**${target.tag}**`],
+                  count: 1,
+                  reason: log.reason || t(LanguageKeys.Moderation.NoReason)
+              });
+
+        await interaction.editReply({ content, components: [] });
     }
 }
 

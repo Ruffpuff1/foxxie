@@ -23,8 +23,8 @@
     "infinite": "infinite",
     "input": "the input",
     "me": "me",
-    "no": "no",
-    "none": "none",
+    "no": "No",
+    "none": "None",
     "numberCompact": "{{value, numbercompact}}",
     "numberFormat": "{{value, number}}",
     "numberOrdinal": "{{value, ordinal}}",
@@ -38,6 +38,6 @@
     "time": "{{value, time}}",
     "unknown": "unknown",
     "version": "Pup Edition",
-    "yes": "yes",
+    "yes": "Yes",
     "you": "you"
 }
