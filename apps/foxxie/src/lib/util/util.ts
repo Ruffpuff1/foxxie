@@ -14,6 +14,13 @@ import type { Job } from 'bull';
 import type { Schedules } from './constants';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
 
+export function loadT(lang: string) {
+    return (key: string, opts?: any) => container.i18n.format(lang, key, opts);
+}
+
+export const enUS = loadT('en-US');
+export const esMX = loadT('es-MX');
+
 /**
  * Attaches a logging catch method to a promise, "floating it".
  * @param promise The promise to float.
@@ -234,4 +241,11 @@ export interface ServerDetails {
     uptime: number;
     version: string;
     totalShards: number;
+}
+
+export function getGuildIds() {
+    const ids = process.env.GUILD_IDS!;
+
+    if (!ids) return [];
+    return ids.split(' ');
 }

@@ -2,7 +2,7 @@ export const enum Events {
     AnalyticsPostStats = 'analyticsPostStats',
     AnalyticsSync = 'analyticsSync',
     BotMessage = 'botMessage',
-    ChatInputCommandAccepted = 'chatInputCommandAccepted',
+    ChatInputCommandDenied = 'chatInputCommandDenied',
     Error = 'error',
     GuildBanAdd = 'guildBanAdd',
     GuildBanRemove = 'guildBanRemove',

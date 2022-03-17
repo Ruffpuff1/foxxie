@@ -1,6 +1,6 @@
-import { Awaitable, ChatInputCommandContext, CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserError } from '@sapphire/framework';
+import { CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserError } from '@sapphire/framework';
 import { SubCommandPluginCommand } from '@sapphire/plugin-subcommands';
-import type { CommandInteraction, Message } from 'discord.js';
+import type { Message } from 'discord.js';
 import * as Lexure from 'lexure';
 import { fetchT, TFunction } from '@sapphire/plugin-i18next';
 import { CLIENT_OWNERS } from '#root/config';
@@ -18,10 +18,6 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
     public allowedGuilds: string[];
 
     public permissionLevel: PermissionLevels;
-
-    public override chatInputRun(_: CommandInteraction, __: ChatInputCommandContext, ___?: FoxxieChatInputArgs<T>): Awaitable<unknown> {
-        throw new Error('Missing command implementation');
-    }
 
     public constructor(context: PieceContext, options: FoxxieCommand.Options) {
         super(context, {
@@ -101,6 +97,7 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
 }
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
+// eslint-disable-next-line no-redeclare
 export namespace FoxxieCommand {
     export type Options = SubCommandPluginCommand.Options & {
         guarded?: boolean;
