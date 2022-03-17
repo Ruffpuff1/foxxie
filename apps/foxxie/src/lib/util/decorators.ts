@@ -13,7 +13,7 @@ import type { FoxxieCommand } from '#lib/structures';
 
 export function RequireLevelingEnabled(): MethodDecorator {
     return createFunctionPrecondition(
-        async (message: GuildMessage) => (message.guild ? acquireSettings(message.guild, GuildSettings.Leveling.Enabled) : true),
+        async (message: GuildMessage) => message.guild ? acquireSettings(message.guild, GuildSettings.Leveling.Enabled) : true,
         (message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.Leveling)
     );
 }

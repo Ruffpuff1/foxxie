@@ -3,6 +3,7 @@ export const enum Events {
     AnalyticsSync = 'analyticsSync',
     BotMessage = 'botMessage',
     ChatInputCommandDenied = 'chatInputCommandDenied',
+    ChatInputCommandError = 'chatInputCommandError',
     Error = 'error',
     GuildBanAdd = 'guildBanAdd',
     GuildBanRemove = 'guildBanRemove',
