@@ -1,4 +1,4 @@
-import { ModerationCommand } from '#lib/structures';
+import { ModerationCommand } from '#lib/structures/moderation/ModerationCommand';
 import { ChatInputArgs, CommandName, GuildInteraction, PermissionLevels } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { RegisterChatInputCommand } from '#utils/decorators';
@@ -10,70 +10,46 @@ import type { TFunction } from '@sapphire/plugin-i18next';
 import type { GuildMember, User } from 'discord.js';
 
 @RegisterChatInputCommand(
-    CommandName.Ban,
+    CommandName.Kick,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Moderation.BanDescription))
+            .setDescription(enUS(LanguageKeys.Commands.Moderation.KickDescription))
             .addUserOption(option =>
                 option //
                     .setName('target')
-                    .setDescription(enUS(LanguageKeys.Commands.Moderation.BanOptionTarget))
+                    .setDescription(enUS(LanguageKeys.Commands.Moderation.KickOptionTarget))
                     .setRequired(true)
             )
             .addStringOption(option =>
                 option //
                     .setName('reason')
-                    .setDescription(enUS(LanguageKeys.Commands.Moderation.BanOptionReason))
-                    .setRequired(false)
-            )
-            .addStringOption(option =>
-                option //
-                    .setName('duration')
-                    .setDescription(enUS(LanguageKeys.Commands.Moderation.BanOptionDuration))
-                    .setRequired(false)
-            )
-            .addNumberOption(option =>
-                option //
-                    .setName('days')
-                    .setDescription(enUS(LanguageKeys.Commands.Moderation.BanOptionDays))
-                    .setChoices([
-                        ['0', 0],
-                        ['1', 1],
-                        ['2', 2],
-                        ['3', 3],
-                        ['4', 4],
-                        ['5', 5],
-                        ['6', 6],
-                        ['7', 7]
-                    ])
+                    .setDescription(enUS(LanguageKeys.Commands.Moderation.KickOptionReason))
                     .setRequired(false)
             )
             .addIntegerOption(option =>
                 option //
                     .setName('refrence')
-                    .setDescription(enUS(LanguageKeys.Commands.Moderation.BanOptionRefrence))
+                    .setDescription(enUS(LanguageKeys.Commands.Moderation.KickOptionRefrence))
                     .setRequired(false)
             ),
     [],
     {
-        requiredClientPermissions: PermissionFlagsBits.BanMembers,
+        requiredClientPermissions: PermissionFlagsBits.KickMembers,
         permissionLevel: PermissionLevels.Moderator
     }
 )
 export class UserCommand extends ModerationCommand {
-    public duration = true;
+    public duration = false;
 
-    public memberOnly = false;
+    public memberOnly = true;
 
-    public successKey = LanguageKeys.Commands.Moderation.BanSuccess;
+    public successKey = LanguageKeys.Commands.Moderation.KickSuccess;
 
-    public async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Ban>) {
+    public async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Kick>) {
         const {
             t,
             target: { user: target },
-            duration,
             reason,
-            days,
             refrence
         } = args!;
 
@@ -81,26 +57,23 @@ export class UserCommand extends ModerationCommand {
 
         await this.checkModerable(cast<GuildInteraction>(interaction), { t, target });
 
-        const result = await interactionPrompt(interaction, t(LanguageKeys.Commands.Moderation.BanConfirm, { target: `**${target.tag}**` }), t);
+        const result = await interactionPrompt(interaction, t(LanguageKeys.Commands.Moderation.KickConfirm, { target: `**${target.tag}**` }), t);
         if (result === false) {
             await interaction.editReply({ content: t(LanguageKeys.System.CommandCancel), components: [] });
             return;
         }
 
-        const resolvedDuration = await this.resolveDuration(duration);
+        await this.container.redis!.insert(`guild:${interaction.guild!.id}:kick:${target.id}`, '');
 
-        await this.container.redis!.insert(`guild:${interaction.guild!.id}:ban:${target.id}`, '');
-
-        const log = await getModeration(interaction.guild!).actions.ban(
+        const log = await getModeration(interaction.guild!).actions.kick(
             {
                 userId: target.id,
                 channelId: interaction.channelId,
                 moderatorId: interaction.user.id,
                 reason: reason ?? null,
-                duration: resolvedDuration,
+                duration: null,
                 refrence: refrence ?? null
             },
-            days || 0,
             await this.getDmData(cast<GuildInteraction>(interaction))
         );
 
@@ -109,7 +82,7 @@ export class UserCommand extends ModerationCommand {
 
     protected async checkModerable(interaction: GuildInteraction, context: { t: TFunction; target: User }): Promise<GuildMember | null> {
         const member = await super.checkModerable(interaction, context);
-        if (member && !member.bannable) throw context.t(LanguageKeys.Listeners.Errors.ModerationBannable, { target: `**${context.target.tag}**` });
+        if (member && !member.kickable) throw context.t(LanguageKeys.Listeners.Errors.ModerationKickable, { target: `**${context.target.tag}**` });
         return member;
     }
 }

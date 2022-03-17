@@ -2,17 +2,18 @@ import { api } from '#external/Api';
 import { LanguageKeys } from '#lib/i18n';
 import type { CustomFunctionGet, CustomGet, GuildMessage, ScheduleData } from '#lib/types';
 import { fetch } from '@foxxie/fetch';
-import { isNumber, isThenable, randomArray, ZeroWidthSpace } from '@ruffpuff/utilities';
+import { isNumber, isThenable, minutes, randomArray, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { jaroWinkler } from '@skyra/jaro-winkler';
 import { APIUser, RESTJSONErrorCodes } from 'discord-api-types/v9';
-import { Collection, CommandInteraction, Guild, Message, SnowflakeUtil, User } from 'discord.js';
-import type { TOptionsBase } from 'i18next';
+import { Collection, CommandInteraction, Guild, Message, MessageActionRow, MessageButton, SnowflakeUtil, User } from 'discord.js';
+import type { TFunction, TOptionsBase } from 'i18next';
 import type { Job } from 'bull';
 import type { Schedules } from './constants';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
+import type { AskYesNoOptions } from './Discord/messages';
 
 export function loadT(lang: string) {
     return (key: string, opts?: any) => container.i18n.format(lang, key, opts);
@@ -248,4 +249,35 @@ export function getGuildIds() {
 
     if (!ids) return [];
     return ids.split(' ');
+}
+
+export async function interactionPrompt(interaction: CommandInteraction, options: AskYesNoOptions | string, t: TFunction): Promise<null | boolean> {
+    if (typeof options === 'string') options = { content: options };
+
+    const actionRow = new MessageActionRow().setComponents(
+        new MessageButton() //
+            .setCustomId('prompt|yes')
+            .setLabel(t(LanguageKeys.Globals.Yes))
+            .setStyle('SUCCESS'),
+        new MessageButton() //
+            .setCustomId('prompt|no')
+            .setLabel(t(LanguageKeys.Globals.No))
+            .setStyle('DANGER')
+    );
+
+    const response = (
+        interaction.replied || interaction.deferred
+            ? await interaction.editReply({ ...options, components: [actionRow] })
+            : await interaction.reply({ ...options, ephemeral: true, fetchReply: true, components: [actionRow] })
+    ) as Message;
+
+    const collected = await interaction.channel?.awaitMessageComponent({
+        time: minutes(1),
+        filter: cpt => cpt.user.id === interaction.user.id && cpt.message.id === response.id,
+        componentType: 'BUTTON'
+    });
+
+    if (!collected) return false;
+
+    return collected.customId.endsWith('yes') ? true : false;
 }

@@ -1,5 +1,6 @@
 import { createClassDecorator, createFunctionPrecondition, createProxy } from '@sapphire/decorators';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { acquireSettings } from '#database/functions';
+import * as GuildSettings from '#database/Keys'
 import { LanguageKeys } from '#lib/i18n';
 import type { CommandName, GuildMessage } from '#lib/types';
 import { getAudio, sendLocalizedMessage } from '#utils/Discord';

@@ -1,4 +1,5 @@
 {
+    "banConfirm": "Are you sure you want to ban {{target}}?",
     "banDescription": "Ban a member from your server so they can no longer return.",
     "banOptionDays": "The amount of days worth of messages to delete from the user.",
     "banOptionDuration": "How long to ban the user for, if not included the ban will be permanent.",
@@ -9,5 +10,12 @@
     "banSuccess_cases": "{{SUCCESS}} Successfully banned {{targets, and}}, created case [#{{cases}}](<{{url}}>) → `{{reason}}`.",
     "caseDescription": "View a moderation case from your server.",
     "caseNoExist": "{{ERROR}} The case {{caseId}} doesn't seem to exist.",
-    "caseOptionCaseId": "The id of the case to display."
+    "caseOptionCaseId": "The id of the case to display.",
+    "kickConfirm": "Are you sure you want to kick {{target}}?",
+    "kickDescription": "Kick a member from your server so they have to join again.",
+    "kickOptionReason": "The reason for the kick.",
+    "kickOptionRefrence": "The prior case to refrence in the moderation log.",
+    "kickOptionTarget": "The member to kick.",
+    "kickSuccess": "{{SUCCESS}} Successfully kicked {{targets, and}} → `{{reason}}`.",
+    "kickSuccess_cases": "{{SUCCESS}} Successfully kicked {{targets, and}}, created case [#{{cases}}](<{{url}}>) → `{{reason}}`."
 }

@@ -14,7 +14,7 @@ export interface AskYesNoOptions extends MessageOptions {
     time?: number;
 }
 
-const enum YesNo {
+export const enum YesNo {
     Yes = '🇾',
     No = '🇳'
 }
