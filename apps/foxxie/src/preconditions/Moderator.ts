@@ -1,5 +1,5 @@
 import type { Result, UserError } from '@sapphire/framework';
-import type { CommandInteraction } from 'discord.js';
+import type { CommandInteraction, GuildMember } from 'discord.js';
 import { PermissionLevelPrecondition } from '#lib/structures';
 import type { GuildMessage } from '#lib/types';
 import { isModerator } from '#utils/Discord';
@@ -11,6 +11,6 @@ export class UserPrecondition extends PermissionLevelPrecondition {
     }
 
     public async chatInputHandle(interaction: CommandInteraction): Promise<Result<unknown, UserError>> {
-        return isModerator(interaction.guild!.members.cache.get(interaction.user.id)!) ? this.ok() : this.error({ identifier: LanguageKeys.Preconditions.Moderator });
+        return isModerator(interaction.member as GuildMember) ? this.ok() : this.error({ identifier: LanguageKeys.Preconditions.Moderator });
     }
 }
