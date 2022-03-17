@@ -1,6 +1,6 @@
 import type { FoxxieEmbed } from '#lib/discord';
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
-import type { Guild, GuildMember, Interaction, Message, MessageEmbed } from 'discord.js';
+import type { CommandInteraction, Guild, GuildMember, Message, MessageEmbed } from 'discord.js';
 
 export interface GuildMessage extends Message {
     channel: GuildTextBasedChannelTypes;
@@ -8,7 +8,7 @@ export interface GuildMessage extends Message {
     readonly member: GuildMember;
 }
 
-export interface GuildInteraction extends Interaction {
+export interface GuildInteraction extends CommandInteraction {
     guild: Guild;
 }
 

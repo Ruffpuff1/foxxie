@@ -73,6 +73,10 @@ export function messageLink<G extends string, C extends string, M extends string
     return `https://discord.com/channels/${guildId}/${channelId}/${messageId}`;
 }
 
+export function channelLink<G extends string, C extends string>(guildId: G, channelId: C): `https://discord.com/channels/${G}/${C}` {
+    return `https://discord.com/channels/${guildId}/${channelId}`;
+}
+
 /**
  * Parses a Bulbapedia-like URL to be properly embeddable on Discord
  * @param url URL to parse

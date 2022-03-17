@@ -1,5 +1,10 @@
 {
     "abort": "{{ERROR}} I couldn't reach Discord in time to run this command, go ahead and try again.",
+    "moderationFoxxie": "{{ERROR}} Why would you try to ban me? With myself too?",
+    "moderationMember": "{{ERROR}} It seems that {{target}} not a server member, please make sure they are.",
+    "moderationRole": "{{ERROR}} Your highest role must be above the highest role of {{target}}.",
+    "moderationRoleBot": "{{ERROR}} My highest role is below the highest role of {{target}}, therefore I can't ban them.",
+    "moderationSelf": "{{ERROR}} I'm sorry but I can't have you trying to ban yourself.",
     "string": "{{ERROR}} Hey {{mention}}, {{message}}",
     "tooManyRoles": "{{ERROR}} I could not create a new role because this server already has 250 roles!",
     "unexpected": "{{ERROR}} Whoops, I ran into an unexpected error, please report the steps you've taken to my developers.",

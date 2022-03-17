@@ -11,11 +11,11 @@ import {
     WarningEntity,
     StarEntity,
     UserEntity,
-    BackgroundEntity,
     ScamEntity,
     CommandEntity,
     PlaylistEntity
 } from './entities';
+import { BackgroundEntity } from './entities/BackgroundEntity';
 import { MongoDB } from './MongoDB';
 
 export async function config(): Promise<void> {

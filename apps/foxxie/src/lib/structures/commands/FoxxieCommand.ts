@@ -7,7 +7,7 @@ import { CLIENT_OWNERS } from '#root/config';
 import { HelpDisplayData, PermissionLevels } from '#lib/types';
 import type FoxxieClient from '#lib/FoxxieClient';
 import type { MongoDB } from '#lib/database';
-import { FoxxieChatInputArgs, FoxxieArgs } from './parsers';
+import { FoxxieArgs } from './parsers';
 import { seconds } from '@ruffpuff/utilities';
 
 export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand<FoxxieArgs, FoxxieCommand> {
@@ -110,7 +110,6 @@ export namespace FoxxieCommand {
     };
 
     export type Args = FoxxieArgs;
-    export type ChatInputArgs<T> = FoxxieChatInputArgs<T>;
     export type Context = MessageCommandContext;
 }
 
