@@ -14,16 +14,16 @@ import { enUS } from '#utils/util';
             .addIntegerOption(option =>
                 option //
                     .setName('caseid')
-                    .setDescription('The id of the case to display.')
+                    .setDescription(enUS(LanguageKeys.Commands.Moderation.CaseOptionCaseId))
                     .setRequired(true)
             )
             .addBooleanOption(option =>
                 option //
                     .setName('ephemeral')
-                    .setDescription('e')
+                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultTrue))
                     .setRequired(false)
             ),
-    [],
+    ['953883491332915201'],
     {
         requiredClientPermissions: PermissionFlagsBits.EmbedLinks,
         permissionLevel: PermissionLevels.Moderator

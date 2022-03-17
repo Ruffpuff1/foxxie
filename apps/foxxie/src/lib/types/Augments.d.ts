@@ -96,7 +96,6 @@ declare module '@sapphire/framework' {
         command: FoxxieCommand;
         guild: Guild;
         language: LanguageString;
-        moderationEntry: number;
         piece: Piece;
         song: string[];
         store: Store;

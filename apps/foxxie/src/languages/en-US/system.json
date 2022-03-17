@@ -12,6 +12,8 @@
     "messageNoMatch": "Hey there, be sure to choose between: {{possibles, codeand}}",
     "messageUsersNone": "Please, specify at least one **user** or **username**.",
     "missingRequired": "{{ERROR}} The {{name, code}} is a required argument for this command.",
+    "optionEphemeralDefaultFalse": "If the message should be hidden, defaults to false.",
+    "optionEphemeralDefaultTrue": "If the message should be hidden, defaults to true.",
     "prefixReminder": "Heyo! My prefix for this server is: {{prefixes, codeand}}",
     "prefixReminder_other": "Hey there! My prefixes for this server are: {{prefixes, codeand}}",
     "reactionHandlerPrompt": "Which page would you like to jump to?",
