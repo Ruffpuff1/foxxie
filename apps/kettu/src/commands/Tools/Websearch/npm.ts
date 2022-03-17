@@ -59,7 +59,7 @@ export class UserCommand extends Command {
                     t(LanguageKeys.Commands.Websearch.GithubUserUpdated, { date: data.time[data['dist-tags'].latest] })
                 ].join('\n')
             )
-            .addField(githubTitles.description, latest.description.replace(/<[^>]*>/gm, '') || none)
+            .addField(githubTitles.description, latest.description.replace(/<[^>]*>/gm, '') || none) // lgtm [js/incomplete-multi-character-sanitization]
             .addField(titles.main, latest.main || none, true)
             .addField(titles.author, latest.author?.name || latest.maintainers[0]?.name || none, true)
             .addField(githubTitles.license, latest.license || none, true)
