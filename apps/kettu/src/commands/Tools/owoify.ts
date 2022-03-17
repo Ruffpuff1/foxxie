@@ -43,8 +43,8 @@ export class UserCommand extends Command {
         const content = owoify
             // @ts-expect-error this libraries typings appear to be wrong.
             .default(text, owoMode)
-            .replace(/`/g, '`')
-            .replace(/\*/g, '*');
+            .replace(/`/g, '`') // lgtm [js/identity-replacement]
+            .replace(/\*/g, '*'); // lgtm [js/identity-replacement]
 
         return interaction.reply({ content: `**Owoified**: ${content}`, ephemeral });
     }
