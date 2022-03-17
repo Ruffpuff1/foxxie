@@ -51,7 +51,7 @@ services:
     networks:
       - kettu
     environment:
-      - PORT: 5060
+      PORT: 5060
     ports:
       - '5060:5060'
     restart: always
