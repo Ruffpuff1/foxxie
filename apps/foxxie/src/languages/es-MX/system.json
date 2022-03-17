@@ -12,6 +12,8 @@
     "messageNoMatch": "Hola, asegúrate de elegir entre: {{possibles, codeand}}",
     "messageUsersNone": "Por favor, especifica por lo menos un **usuario** o **nombre de usuario**.",
     "missingRequired": "{{ERROR}} El {{name, code}} es un requerido argumento para este comando.",
+    "optionEphemeralDefaultFalse": "Si el mensaje debe ser ocultado, el valor por defecto es falso.",
+    "optionEphemeralDefaultTrue": "Si el mensaje debe ser ocultado, el valor predeterminado es verdadero.",
     "prefixReminder": "¡Hola! Mi prefijo para este servidor es: {{prefixes, codeand}}",
     "prefixReminder_other": "¡Qué tal! Mis prefijos para este servidor son: {{prefixes, codeand}}",
     "reactionHandlerPrompt": "¿A cual página quisieras ir?",
