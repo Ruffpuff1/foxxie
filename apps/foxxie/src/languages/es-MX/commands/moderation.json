@@ -9,5 +9,6 @@
     "banSuccess_cases": "{{SUCCESS}} Exitosamente baneado {{targets, and}}, creado caso [#{{cases}}](<{{url}}>) → `{{reason}}`.",
     "caseDescription": "Ver un caso de moderación de su servidor.",
     "caseNoExist": "{{ERROR}} El caso {{caseId}} parece no existir.",
-    "caseOptionCaseId": "El id del caso para mostrar."
+    "caseOptionCaseId": "El id del caso para mostrar.",
+    "kickOptionRefrence": "El caso anterior a la autenticidad en el registro de moderación."
 }
