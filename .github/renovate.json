@@ -2,7 +2,13 @@
 	"additionalBranchPrefix": "{{parentDir}} -",
 	"assigneesFromCodeOwners": true,
 	"extends": [
-		"config:base"
+		":dependencyDashboard",
+		":semanticPrefixFixDepsChoreOthers",
+		":ignoreModulesAndTests",
+		":prConcurrentLimit10",
+		"group:monorepos",
+		"group:recommended",
+		"workarounds:all"
 	],
 	"labels": [
 		"Meta: Dependencies"
