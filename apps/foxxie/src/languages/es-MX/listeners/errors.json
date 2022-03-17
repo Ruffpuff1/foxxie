@@ -1,4 +1,14 @@
 {
+    "abort": "{{ERROR}} No pude llegar a Discord a tiempo para ejecutar este comando, sigue adelante e inténtalo de nuevo.",
+    "moderationBannable": "{{ERROR}} No tengo permiso para prohibir a este miembro.",
+    "moderationFoxxie": "{{ERROR}} ¿Por qué intentarías banearme? ¿Con mí también?",
+    "moderationKickable": "{{ERROR}} No tengo permiso para expulsar a este miembro.",
+    "moderationMember": "{{ERROR}} Parece que {{target}} no es un miembro del servidor. Por favor, asegúrate de que lo es.",
+    "moderationRole": "{{ERROR}} Tu rol más alto debe estar por encima del rol más alto de {{target}}.",
+    "moderationRoleBot": "{{ERROR}} Mi rol más alto está debajo del rol más alto de {{target}}. Por lo tanto, no puedo banearlo.",
+    "moderationSelf": "{{ERROR}} Lo siento, pero no puedo dejarte banearte a ti mismo.",
     "string": "{{ERROR}} Hola {{mention}}, {{message}}",
+    "tooManyRoles": "{{ERROR}} No pude crear un nuevo rol porque este servidor ya tiene 250 roles!",
+    "unexpected": "{{ERROR}} Ups, me encontré con un error inesperado, por favor reporta los pasos que has dado a mis desarrolladores.",
     "unexpectedWithCode": "$t(listeners/errors:unexpected) También puedes enviarles `{{report}}` para que puedan consultar lo que desencadenó el error."
 }
