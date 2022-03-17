@@ -164,7 +164,7 @@ export class UserCommand extends FoxxieCommand {
             iconURL: member.displayAvatarURL({ dynamic: true })
         });
 
-        const display = new PaginatedMessage({ template }).setPromptMessage(t(LanguageKeys.System.ReactionHandlerPrompt));
+        const display = new PaginatedMessage({ template });
 
         const pages = chunk(
             tasks.map(task => {

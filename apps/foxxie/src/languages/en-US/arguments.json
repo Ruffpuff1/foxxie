@@ -42,12 +42,6 @@
     "duration": "{{ERROR}} I could not resolve {{parameter, code}} to a valid duration!",
     "guild": "{{ERROR}} I could not resolve {{parameter, code}} to one of my servers.",
     "language": "{{ERROR}} I could not resolve {{parameter, code}} to a language I support, try picking between {{list, codeand}}.",
-    "moderationEntryLatest": [
-        "last",
-        "latest",
-        "newest"
-    ],
-    "moderationEntryNone": "{{ERROR}} I couldn't find a moderation entry for {{parameter, code}}, I'm pretty sure this server doesn't have any moderation entries.",
     "piece": "{{ERROR}} I could not resolve {{parameter, code}} to a valid piece of mine.",
     "reminder": "{{ERROR}} The taskId {{parameter, code}} either was not a valid taskId or was not a taskId of a task that you created.",
     "song": "{{ERROR}} I couldn't find any song results for that query.",

@@ -2,9 +2,6 @@ import { FT, HelpDisplayData, T } from '#lib/types';
 
 export const AvatarDescription = T('commands/misc:avatarDescription');
 export const AvatarDetailedDescription = T<HelpDisplayData>('commands/misc:avatarDetailedDescription');
-export const ColorDescription = T('commands/misc:colorDescription');
-export const ColorDetailedDescription = T<HelpDisplayData>('commands/misc:colorDetailedDescription');
-export const ColorTitle = FT<{ color: string }>('commands/misc:colorTitle');
 export const ReminderCreateSuccess = FT<{ date: Date; text: string }>('commands/misc:reminderCreateSuccess');
 export const ReminderDefault = T('commands/misc:reminderDefault');
 export const ReminderDeleteNone = T('commands/misc:reminderDeleteNone');
