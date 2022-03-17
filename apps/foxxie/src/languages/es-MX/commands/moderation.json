@@ -1,4 +1,5 @@
 {
+    "banConfirm": "¿Estás seguro de que deseas banear a {{target}}?",
     "banDescription": "Bloquea a un miembro de tu servidor para que ya no pueda regresar.",
     "banOptionDays": "La cantidad de días de mensajes a eliminar del usuario.",
     "banOptionDuration": "Cuánto tiempo de banear al usuario, si no se incluye el baneo será permanente.",
@@ -10,5 +11,11 @@
     "caseDescription": "Ver un caso de moderación de su servidor.",
     "caseNoExist": "{{ERROR}} El caso {{caseId}} parece no existir.",
     "caseOptionCaseId": "El id del caso para mostrar.",
-    "kickOptionRefrence": "El caso anterior a la autenticidad en el registro de moderación."
+    "kickConfirm": "¿Estás seguro de que quieres expulsar a {{target}}?",
+    "kickDescription": "Expulsa a un miembro de tu servidor para que tenga que unirse de nuevo.",
+    "kickOptionReason": "La razón de la expulsion.",
+    "kickOptionRefrence": "El caso anterior a la autenticidad en el registro de moderación.",
+    "kickOptionTarget": "El miembro a expulsar.",
+    "kickSuccess": "{{SUCCESS}} Expulsado con éxito {{targets, and}} → `{{reason}}`.",
+    "kickSuccess_cases": "{{SUCCESS}} Expulsado con éxito {{targets, and}}, creado caso [#{{cases}}](<{{url}}>) → `{{reason}}`."
 }
