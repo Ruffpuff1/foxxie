@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/types",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Commonly used types in Foxxie projects",
   "scripts": {
     "build": "tsup",
