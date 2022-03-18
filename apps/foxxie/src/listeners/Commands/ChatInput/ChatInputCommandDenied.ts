@@ -23,6 +23,8 @@ export class UserListener extends Listener<Events.ChatInputCommandDenied> {
             : error.message;
 
         const allowedMentions = { users: [interaction.user.id], roles: [] };
-        return interaction.replied || interaction.deferred ? interaction.editReply({ content, allowedMentions }) : interaction.reply({ content, allowedMentions, ephemeral: true });
+        return interaction.replied || interaction.deferred
+            ? interaction.editReply({ content, allowedMentions })
+            : interaction.reply({ content, allowedMentions, ephemeral: true });
     }
 }

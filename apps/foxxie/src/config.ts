@@ -18,10 +18,19 @@ import { ActivitiesOptions, ClientOptions, Collection, ExplicitContentFilterLeve
 import { config } from 'dotenv-cra';
 import type { InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
+import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { duration, longDate } from '#utils/util';
 
 config({
     path: join(rootFolder, '.env')
 });
+
+PaginatedMessage.defaultActions = [
+    PaginatedMessage.defaultActions[0], // select menu
+    PaginatedMessage.defaultActions[2], // previous
+    PaginatedMessage.defaultActions[5], // stop
+    PaginatedMessage.defaultActions[3] // next
+];
 
 export const CLIENT_OWNERS = envParseArray('CLIENT_OWNERS');
 export const WEBHOOK_ERROR = parseWebhookError();
@@ -149,7 +158,7 @@ export function getFormatters(): I18nextFormatters[] {
         },
         {
             name: 'duration',
-            format: (value, lng, options) => new DurationFormatter(getDurationOptions(lng!)).format(Date.now() - value, options.formatParams?.depth ?? 1)
+            format: value => duration(getDurationValue(value))
         },
         {
             name: 'remaining',
@@ -232,8 +241,23 @@ export function getFormatters(): I18nextFormatters[] {
 
                 return `${date} ${time}`;
             }
+        },
+        {
+            name: 'dateFormat',
+            format: value => longDate(getDurationValue(value))
         }
     ];
+}
+
+export function getDurationValue(value: Date | string) {
+    if (value instanceof Date) {
+        return value;
+    } else if (typeof value === 'string') {
+        const timestamp = new Date(value);
+        return timestamp;
+    }
+
+    return value;
 }
 
 export function mapPermissions(item: PermissionString, lng: string): string {

@@ -5,4 +5,3 @@ export * as Info from './Info';
 export * as Misc from './Misc';
 export * as Moderation from './Moderation';
 export * as Social from './Social';
-export * as Websearch from './Websearch';

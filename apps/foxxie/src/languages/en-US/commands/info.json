@@ -95,28 +95,5 @@
         "roles_other": "**:scroll: Roles ({{count}})**",
         "security": "**:lock: Security**",
         "stats": "**:bar_chart: Statistics**"
-    },
-    "userDescription": "Shows basic information about any user.",
-    "userDetailedDescription": {
-        "usages": [
-            "User"
-        ],
-        "extendedHelp": "This command will display basic information about a user, their roles, warnings, notes, and banner if any. This command will also show a user's pronouns if set with the `pronoun` command. A user's server message count will also be shown, as they are counted.",
-        "examples": [
-            "Ruffpuff"
-        ]
-    },
-    "userDiscordJoin": "Joined Discord on {{created, fulldate}} ({{created, duration}} ago)",
-    "userGuildCreate": "Created {{name}} on {{joined, fulldate}} ({{joined, duration}} ago)",
-    "userGuildJoin": "Joined {{name}} on {{joined, fulldate}} ({{joined, duration}} ago)",
-    "userMessages": "{{messages, numbercompact}} messages sent.",
-    "userTitles": {
-        "about": "**:pencil: About**",
-        "notes": "**:label: Note**",
-        "notes_other": "**:label: Notes**",
-        "roles": "**:scroll: Role**",
-        "roles_other": "**:scroll: Roles ({{count, number}})**",
-        "warnings": "**:lock: Warning**",
-        "warnings_other": "**:lock: Warnings ({{count, number}})**"
     }
 }

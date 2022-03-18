@@ -65,16 +65,3 @@ export const ServerTitles = T<{
 export const ServerTitlesChannels = FT<{ count: number }, string>('commands/info:serverTitles.channels');
 export const ServerTitlesEmojis = FT<{ count: number }, string>('commands/info:serverTitles.emojis');
 export const ServerTitlesRoles = FT<{ count: number }, string>('commands/info:serverTitles.roles');
-
-export const UserDescription = T('commands/info:userDescription');
-export const UserDetailedDescription = T<HelpDisplayData>('commands/info:userDetailedDescription');
-export const UserDiscordJoin = FT<{ created: Date }, string>('commands/info:userDiscordJoin');
-export const UserGuildCreate = FT<{ name: string; joined: Date }, string>('commands/info:userGuildCreate');
-export const UserGuildJoin = FT<{ name: string; joined: Date }, string>('commands/info:userGuildJoin');
-export const UserMessages = FT<{ messages: number }, string>('commands/info:userMessages');
-export const UserTitles = T<{
-    about: string;
-}>('commands/info:userTitles');
-export const UserTitlesNotes = FT<{ count: number }, string>('commands/info:userTitles.notes');
-export const UserTitlesRoles = FT<{ count: number }, string>('commands/info:userTitles.roles');
-export const UserTitlesWarnings = FT<{ count: number }, string>('commands/info:userTitles.warnings');

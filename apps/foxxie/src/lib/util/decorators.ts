@@ -1,6 +1,6 @@
 import { createClassDecorator, createFunctionPrecondition, createProxy } from '@sapphire/decorators';
 import { acquireSettings } from '#database/functions';
-import * as GuildSettings from '#database/Keys'
+import * as GuildSettings from '#database/Keys';
 import { LanguageKeys } from '#lib/i18n';
 import type { CommandName, GuildMessage } from '#lib/types';
 import { getAudio, sendLocalizedMessage } from '#utils/Discord';
@@ -14,7 +14,7 @@ import type { FoxxieCommand } from '#lib/structures';
 
 export function RequireLevelingEnabled(): MethodDecorator {
     return createFunctionPrecondition(
-        async (message: GuildMessage) => message.guild ? acquireSettings(message.guild, GuildSettings.Leveling.Enabled) : true,
+        async (message: GuildMessage) => (message.guild ? acquireSettings(message.guild, GuildSettings.Leveling.Enabled) : true),
         (message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.Leveling)
     );
 }

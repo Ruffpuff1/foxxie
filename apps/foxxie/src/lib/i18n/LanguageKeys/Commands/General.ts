@@ -8,20 +8,19 @@ export const AboutSummary = FT<{
     userCount: number;
     privacy: string;
 }>('commands/general:aboutSummary');
-export const HelpCommands = T('commands/general:helpCommands');
-export const HelpDescription = T('commands/general:helpDescription');
-export const HelpDetailedDescription = T<HelpDisplayData>('commands/general:helpDetailedDescription');
-export const HelpDM = T('commands/general:helpDM');
-export const HelpLoading = T('commands/general:helpLoading');
-export const HelpNoDM = T('commands/general:helpNoDM');
-export const HelpTitles = T<{
-    examples: string;
-    explainedUsage: string;
-    extendedHelp: string;
-    permNode: string;
-    serverOnly: string;
-    usage: string;
-}>('commands/general:helpTitles');
+export const InfoDescription = T('commands/general:infoDescription');
+export const InfoDescriptionUser = T('commands/general:infoDescriptionUser');
+export const InfoUserDiscordJoin = FT<{ created: Date }, string>('commands/general:infoUserDiscordJoin');
+export const InfoUserGuildCreate = FT<{ name: string; joined: Date }, string>('commands/general:infoUserGuildCreate');
+export const InfoUserGuildJoin = FT<{ name: string; joined: Date }, string>('commands/general:infoUserGuildJoin');
+export const InfoUserMessages = FT<{ messages: number }, string>('commands/general:infoUserMessages');
+export const InfoUserSelectMenu = T<[string, string]>('commands/general:infoUserSelectMenu');
+export const InfoUserTitles = T<{
+    about: string;
+}>('commands/general:infoUserTitles');
+export const InfoUserTitlesNotes = FT<{ count: number }, string>('commands/general:infoUserTitles.notes');
+export const InfoUserTitlesRoles = FT<{ count: number }, string>('commands/general:infoUserTitles.roles');
+export const InfoUserTitlesWarnings = FT<{ count: number }, string>('commands/general:infoUserTitles.warnings');
 export const Ping = T('commands/general:ping');
 export const PingDescription = T('commands/general:pingDescription');
 export const PingDetailedDescription = T<HelpDisplayData>('commands/general:pingDetailedDescription');

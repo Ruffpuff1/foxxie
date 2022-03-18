@@ -73,7 +73,7 @@ export class GuildSettingsManager<T extends GuildEntity> extends Collection<stri
         const lock = this.locks.acquire(key);
         try {
             await lock.readLock();
-            const settings = this.get(key) ?? await this.processFetch(key);
+            const settings = this.get(key) ?? (await this.processFetch(key));
 
             if (!list) return settings;
 
@@ -144,7 +144,7 @@ export class GuildSettingsManager<T extends GuildEntity> extends Collection<stri
         const lock = this.locks.acquire(key);
 
         await lock.writeLock();
-        const found = this.get(key) || await this.unlockOnThrow(this.processFetch(key), lock);
+        const found = this.get(key) || (await this.unlockOnThrow(this.processFetch(key), lock));
 
         try {
             if (typeof changes === 'function') {
@@ -165,7 +165,7 @@ export class GuildSettingsManager<T extends GuildEntity> extends Collection<stri
 
     public async fetch(key: string): Promise<T> {
         const { guilds } = container.db;
-        const existing = <T> await guilds.findOne({ id: key });
+        const existing = <T>await guilds.findOne({ id: key });
         if (existing) {
             this.set(key, existing);
             return existing;
