@@ -47,5 +47,5 @@
     "graphql/*",
     "packages/*"
   ],
-  "packageManager": "yarn@1.22.17"
+  "packageManager": "yarn@1.22.18"
 }
