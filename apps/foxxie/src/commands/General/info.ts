@@ -5,15 +5,33 @@ import { RegisterChatInputCommand } from '#utils/decorators';
 import { CommandOptionsRunTypeEnum, isErr, Result, UserError } from '@sapphire/framework';
 import { enUS, floatPromise } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import { EmbedAuthorData, Emoji, Guild, GuildMember, MessageEmbed, MessageOptions, PermissionString, Role, User } from 'discord.js';
-import { cast, chunk, resolveToNull, twemoji, ZeroWidthSpace } from '@ruffpuff/utilities';
+import {
+    CategoryChannel,
+    Collection,
+    EmbedAuthorData,
+    Emoji,
+    Guild,
+    GuildChannel,
+    GuildMember,
+    MessageEmbed,
+    MessageOptions,
+    PermissionString,
+    Role,
+    StageChannel,
+    TextChannel,
+    ThreadChannel,
+    User,
+    VoiceChannel
+} from 'discord.js';
+import { cast, ChannelMentionRegex, chunk, resolveToNull, Time, toTitleCase, twemoji, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { pronouns } from '#utils/transformers';
 import { BrandingColors } from '#utils/constants';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { GuildBasedChannelTypes, PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
 import { acquireSettings, GuildSettings } from '#lib/database';
 import { fetch } from '@foxxie/fetch';
+import { FoxxieEmbed } from '#lib/discord';
 
 const SORT = (x: Role, y: Role) => Number(y.position > x.position) || Number(x.position === y.position) - 1;
 const roleMention = (role: Role): string => role.toString();
@@ -85,6 +103,23 @@ const roleLimit = 10;
                             .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
                             .setRequired(false)
                     )
+            )
+            .addSubcommand(command =>
+                command //
+                    .setName('channel')
+                    .setDescription(enUS(LanguageKeys.Commands.General.InfoDescriptionChannel))
+                    .addStringOption(option =>
+                        option //
+                            .setName('channel')
+                            .setDescription('the channel')
+                            .setRequired(false)
+                    )
+                    .addBooleanOption(option =>
+                        option //
+                            .setName('ephemeral')
+                            .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
+                            .setRequired(false)
+                    )
             ),
     [],
     {
@@ -104,6 +139,8 @@ export class UserCommand extends FoxxieCommand {
                 return this.role(interaction, ctx, args!);
             case 'emoji':
                 return this.emoji(interaction, ctx, args!);
+            case 'channel':
+                return this.channel(interaction, ctx, args!);
             default:
                 throw new Error(`Subcommand "${subcommand}" not supported.`);
         }
@@ -112,8 +149,6 @@ export class UserCommand extends FoxxieCommand {
     private async user(...[interaction, , { t, user: args }]: Required<ChatInputArgs<CommandName.Info>>): Promise<any> {
         const user = args.user?.user || interaction.user;
         await interaction.deferReply({ ephemeral: args.ephemeral });
-
-        await floatPromise(user.fetch());
 
         const display = await this.buildUserDisplay(cast<GuildInteraction>(interaction), t, user);
 
@@ -132,6 +167,163 @@ export class UserCommand extends FoxxieCommand {
 
         const embed = this.buildRoleEmbed(role, t);
         await interaction.reply({ embeds: [embed], ephemeral: args.ephemeral });
+    }
+
+    private async channel(...[interaction, , { t, channel: args }]: Required<ChatInputArgs<CommandName.Info>>) {
+        let channel: GuildChannel;
+
+        if (typeof args.channel === 'string') {
+            const rawResult = ChannelMentionRegex.exec(args.channel);
+            if (!rawResult || rawResult.groups?.id) {
+                const result = await resolveToNull(interaction.guild!.channels.fetch(args.channel));
+                channel = result || (interaction.channel as GuildChannel);
+            } else {
+                const result = await resolveToNull(interaction.guild!.channels.fetch(rawResult.groups!.id));
+                channel = result || (interaction.channel as GuildChannel);
+            }
+        } else {
+            channel = args.channel || (interaction.channel as GuildChannel);
+        }
+
+        await channel.fetch();
+
+        const embed = this.buildChannelEmbed(t, channel, interaction.guild!);
+        await interaction.reply({ embeds: [embed], ephemeral: args.ephemeral });
+    }
+
+    private buildChannelEmbed(t: TFunction, channel: GuildChannel, guild: Guild) {
+        const embed = new FoxxieEmbed()
+            .setDescription(
+                t(LanguageKeys.Commands.General.InfoChannelCreated, {
+                    name: channel.name,
+                    date: channel.createdAt
+                })
+            )
+            .setColor(guild.me?.displayColor || BrandingColors.Primary)
+            .setAuthor({
+                name: channel.name,
+                iconURL: guild.iconURL({ dynamic: true })!
+            })
+            .setThumbnail(guild.iconURL({ dynamic: true })!);
+
+        this.decorateChannelEmbed(embed, channel, t);
+        return embed;
+    }
+
+    private decorateChannelEmbed(embed: FoxxieEmbed, channel: GuildBasedChannelTypes, t: TFunction): void {
+        switch (channel.type) {
+            case 'GUILD_TEXT':
+            case 'GUILD_STORE':
+            case 'GUILD_NEWS':
+                this.buildTextChannelEmbed(embed, channel as TextChannel, t);
+                break;
+            case 'GUILD_VOICE':
+                this.buildVoiceChannelEmbed(embed, channel as VoiceChannel, t);
+                break;
+            case 'GUILD_STAGE_VOICE':
+                this.buildStageChannelEmbed(embed, channel as StageChannel, t);
+                this.buildVoiceChannelEmbed(embed, channel as VoiceChannel, t);
+                break;
+            case 'GUILD_CATEGORY':
+                this.buildCategoryChannelEmbed(embed, channel as CategoryChannel, t);
+                break;
+            case 'GUILD_PUBLIC_THREAD':
+            case 'GUILD_PRIVATE_THREAD':
+            case 'GUILD_NEWS_THREAD':
+                this.buildThreadChannelEmbed(embed, channel as ThreadChannel, t);
+        }
+    }
+
+    private buildThreadChannelEmbed(embed: FoxxieEmbed, channel: ThreadChannel, t: TFunction): void {
+        const titles = t(LanguageKeys.Commands.General.InfoChannelTitles);
+        const none = t(LanguageKeys.Globals.None);
+
+        embed
+            .addField(titles.type, channel.type, true)
+            .addField(titles.category, channel.parent?.name || none, true)
+            .addBlankField(true)
+            .addField(
+                titles.members,
+                t(LanguageKeys.Globals.NumberFormat, {
+                    value: channel.memberCount
+                }),
+                true
+            )
+            .addField(titles.cooldown, channel.rateLimitPerUser ? this.getDuration(channel.rateLimitPerUser, t) : none, true)
+            .addField(
+                titles.archived,
+                channel.archived
+                    ? t(LanguageKeys.Commands.General.InfoChannelArchived, {
+                          time: channel.archivedAt
+                      })
+                    : t(LanguageKeys.Globals.No),
+                true
+            );
+    }
+
+    private buildCategoryChannelEmbed(embed: MessageEmbed, channel: CategoryChannel, t: TFunction): void {
+        const titles = t(LanguageKeys.Commands.General.InfoChannelTitles);
+        const none = t(LanguageKeys.Globals.None);
+
+        embed.addField(titles.channels, this.formatChildrenChannels(channel.children, none));
+    }
+
+    private formatChildrenChannels(channels: Collection<string, GuildChannel>, none: string): string {
+        return channels.size
+            ? channels
+                  .sort((a, b) => a.position - b.position)
+                  .map(channel => `${channel.name} [${channel.id}]`)
+                  .join('\n')
+            : none;
+    }
+
+    private buildStageChannelEmbed(embed: FoxxieEmbed, channel: StageChannel, t: TFunction): void {
+        const titles = t(LanguageKeys.Commands.General.InfoChannelTitles);
+        const none = t(LanguageKeys.Globals.None);
+
+        embed.addField(titles.topic, channel.topic || none);
+    }
+
+    private buildVoiceChannelEmbed(embed: FoxxieEmbed, channel: VoiceChannel, t: TFunction): void {
+        const none = t(LanguageKeys.Globals.None);
+        const infinte = toTitleCase(t(LanguageKeys.Globals.Infinte));
+        const titles = t(LanguageKeys.Commands.General.InfoChannelTitles);
+
+        embed
+            .addField(titles.type, t(LanguageKeys.Guilds.Channels[channel.type]), true)
+            .addField(titles.category, channel.parent?.name || none, true)
+            .addBlankField(true)
+            .addField(
+                titles.userLimit,
+                channel.userLimit === 0
+                    ? infinte
+                    : t(LanguageKeys.Globals.NumberFormat, {
+                          value: channel.userLimit
+                      }),
+                true
+            )
+            .addField(titles.bitrate, `${channel.bitrate / 1000}KB/s`, true)
+            .addBlankField(true);
+    }
+
+    private buildTextChannelEmbed(embed: FoxxieEmbed, channel: TextChannel, t: TFunction): void {
+        const none = toTitleCase(t(LanguageKeys.Globals.None));
+        const titles = t(LanguageKeys.Commands.General.InfoChannelTitles);
+
+        embed
+            .addField(titles.topic, channel.topic || none)
+            .addField(titles.type, t(LanguageKeys.Guilds.Channels[channel.type]), true)
+            .addField(titles.category, channel.parent?.name || none, true)
+            .addBlankField(true)
+            .addField(titles.members, channel.members.size.toString(), true)
+            .addField(titles.nsfw, toTitleCase(channel.nsfw ? t(LanguageKeys.Globals.Yes) : t(LanguageKeys.Globals.No)), true)
+            .addField(titles.cooldown, channel.rateLimitPerUser ? this.getDuration(channel.rateLimitPerUser, t) : none, true);
+    }
+
+    private getDuration(seconds: number, t: TFunction): string {
+        return t(LanguageKeys.Globals.Remaining, {
+            value: seconds * Time.Second
+        });
     }
 
     private buildRoleEmbed(role: Role, t: TFunction) {

@@ -9,7 +9,22 @@ export const AboutSummary = FT<{
     userCount: number;
     privacy: string;
 }>('commands/general:aboutSummary');
+export const InfoChannelArchived = FT<{ time: Date }>('commands/general:infoChannelArchived');
+export const InfoChannelCreated = FT<{ name: string; date: Date }, string>('commands/general:infoChannelCreated');
+export const InfoChannelTitles = T<{
+    archived: string;
+    bitrate: string;
+    category: string;
+    channels: string;
+    cooldown: string;
+    members: string;
+    nsfw: string;
+    topic: string;
+    type: string;
+    userLimit: string;
+}>('commands/general:infoChannelTitles');
 export const InfoDescription = T('commands/general:infoDescription');
+export const InfoDescriptionChannel = T('commands/general:infoDescriptionChannel');
 export const InfoDescriptionEmoji = T('commands/general:infoDescriptionEmoji');
 export const InfoDescriptionRole = T('commands/general:infoDescriptionRole');
 export const InfoDescriptionServer = T('commands/general:infoDescriptionServer');

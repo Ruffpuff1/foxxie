@@ -4,7 +4,22 @@
         "extendedHelp": "The about command will provide you with a summary of me as well as a link to my privacy policy and my user count."
     },
     "aboutSummary": "{{version}} is a bot created for [The Corner Store]({{TCS}}), with advanced moderation, utilities, and configuration. Foxxie is made to best support community servers and everything they may need to foster a healthy enviroment.\n\nHe's built on top of [Sapphire Framework](https://sapphirejs.dev/), a \"plug-and-play\" object-oriented-framework made for the [Discord.js library](https://discord.js.org/).\n\nCreated **{{created, fulldatetime}}** a whole **{{created, duration}} ago**. Right now he's taking care of about **{{userCount, number}} users**, with more every day!\n\nTo learn more about Foxxie and how he may process your data you can refer to our [privacy policy]({{privacy}}).",
+    "infoChannelArchived": "Yes, on {{time, dateFormat}} ({{time, duration}})",
+    "infoChannelCreated": "{{name}} was created on {{date, dateFormat}} ({{date, duration}})",
+    "infoChannelTitles": {
+        "archived": "**:headstone: Archived**",
+        "bitrate": "**:pager: Bitrate**",
+        "category": "**:dividers: Category**",
+        "channels": "**:card_file_box: Channels**",
+        "cooldown": "**:alarm_clock: Cooldown**",
+        "members": "**:busts_in_silhouette: Members**",
+        "nsfw": "**:underage: Nsfw**",
+        "topic": "**:information_source: Topic**",
+        "type": "**:scroll: Type**",
+        "userLimit": "**:busts_in_silhouette: User Limit**"
+    },
     "infoDescription": "Show information about things in your server.",
+    "infoDescriptionChannel": "Get information about any server channel.",
     "infoDescriptionEmoji": "Get some basic information from a Discord emoji.",
     "infoDescriptionRole": "Get information on a server role.",
     "infoDescriptionServer": "Show information and statistics about your server.",
