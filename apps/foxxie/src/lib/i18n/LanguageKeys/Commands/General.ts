@@ -10,9 +10,17 @@ export const AboutSummary = FT<{
     privacy: string;
 }>('commands/general:aboutSummary');
 export const InfoDescription = T('commands/general:infoDescription');
+export const InfoDescriptionEmoji = T('commands/general:infoDescriptionEmoji');
 export const InfoDescriptionRole = T('commands/general:infoDescriptionRole');
 export const InfoDescriptionServer = T('commands/general:infoDescriptionServer');
 export const InfoDescriptionUser = T('commands/general:infoDescriptionUser');
+export const InfoEmojiCreated = FT<{ name: string; date: Date }>('commands/general:infoEmojiCreated');
+export const InfoEmojiTitles = T<{
+    animated: string;
+    links: string;
+    name: string;
+}>('commands/general:infoEmojiTitles');
+export const InfoEmojiTwemoji = FT<{ name: string; code: string }>('commands/general:infoEmojiTwemoji');
 export const InfoRoleAllPerms = T('commands/general:infoRoleAllPerms');
 export const InfoRoleHoist = T('commands/general:infoRoleHoist');
 export const InfoRoleManaged = T('commands/general:infoRoleManaged');

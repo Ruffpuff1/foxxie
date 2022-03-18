@@ -16,13 +16,3 @@ export const ChannelTitles = T<{
     type: string;
     userLimit: string;
 }>('commands/info:channelTitles');
-
-export const EmojiCreated = FT<{ name: string; date: Date }>('commands/info:emojiCreated');
-export const EmojiDescription = T('commands/info:emojiDescription');
-export const EmojiDetailedDescription = T<HelpDisplayData>('commands/info:emojiDetailedDescription');
-export const EmojiTitles = T<{
-    animated: string;
-    links: string;
-    name: string;
-}>('commands/info:emojiTitles');
-export const EmojiTwemoji = FT<{ name: string; code: string }>('commands/info:emojiTwemoji');

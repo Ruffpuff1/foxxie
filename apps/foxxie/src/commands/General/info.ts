@@ -1,18 +1,19 @@
-import { ModerationCommand } from '#lib/structures';
-import { ChatInputArgs, CommandName, GuildInteraction } from '#lib/types';
+import { FoxxieCommand } from '#lib/structures';
+import { ChatInputArgs, CommandName, EmojiObject, GuildInteraction } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { RegisterChatInputCommand } from '#utils/decorators';
-import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { CommandOptionsRunTypeEnum, isErr, Result, UserError } from '@sapphire/framework';
 import { enUS, floatPromise } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import { EmbedAuthorData, Guild, GuildMember, MessageEmbed, PermissionString, Role, User } from 'discord.js';
-import { cast, chunk, resolveToNull, ZeroWidthSpace } from '@ruffpuff/utilities';
+import { EmbedAuthorData, Emoji, Guild, GuildMember, MessageEmbed, MessageOptions, PermissionString, Role, User } from 'discord.js';
+import { cast, chunk, resolveToNull, twemoji, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { pronouns } from '#utils/transformers';
 import { BrandingColors } from '#utils/constants';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
 import { acquireSettings, GuildSettings } from '#lib/database';
+import { fetch } from '@foxxie/fetch';
 
 const SORT = (x: Role, y: Role) => Number(y.position > x.position) || Number(x.position === y.position) - 1;
 const roleMention = (role: Role): string => role.toString();
@@ -67,6 +68,23 @@ const roleLimit = 10;
                             .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
                             .setRequired(false)
                     )
+            )
+            .addSubcommand(command =>
+                command //
+                    .setName('emoji')
+                    .setDescription(enUS(LanguageKeys.Commands.General.InfoDescriptionEmoji))
+                    .addStringOption(option =>
+                        option //
+                            .setName('emoji')
+                            .setDescription('the emoji to use')
+                            .setRequired(true)
+                    )
+                    .addBooleanOption(option =>
+                        option //
+                            .setName('ephemeral')
+                            .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
+                            .setRequired(false)
+                    )
             ),
     [],
     {
@@ -74,7 +92,7 @@ const roleLimit = 10;
         requiredClientPermissions: PermissionFlagsBits.EmbedLinks
     }
 )
-export class UserCommand extends ModerationCommand {
+export class UserCommand extends FoxxieCommand {
     public chatInputRun(...[interaction, ctx, args]: ChatInputArgs<CommandName.Info>) {
         const subcommand = interaction.options.getSubcommand(true);
         switch (subcommand) {
@@ -84,6 +102,8 @@ export class UserCommand extends ModerationCommand {
                 return this.server(interaction, ctx, args!);
             case 'role':
                 return this.role(interaction, ctx, args!);
+            case 'emoji':
+                return this.emoji(interaction, ctx, args!);
             default:
                 throw new Error(`Subcommand "${subcommand}" not supported.`);
         }
@@ -475,5 +495,74 @@ export class UserCommand extends ModerationCommand {
             user: await this.container.db.users.ensureProfile(userId),
             member: await this.container.db.members.ensure(userId, guildId)
         };
+    }
+
+    private async emoji(...[interaction, , { emoji: args, t }]: Required<ChatInputArgs<CommandName.Info>>): Promise<void> {
+        await interaction.deferReply({ ephemeral: args.ephemeral });
+
+        const options = await this.fetchEmoji(args.emoji, t);
+        await interaction.editReply(options);
+    }
+
+    private async fetchEmoji(query: string, t: TFunction): Promise<MessageOptions> {
+        const result = (await this.container.stores
+            .get('arguments')
+            .get('emoji')!
+            .run(query, {} as any)) as Result<EmojiObject, UserError>;
+
+        if (isErr(result)) throw result.error;
+
+        const { value } = result;
+
+        if (!value.id) return this.fetchTwemoji(value, t);
+
+        // @ts-expect-error emoji is a private class.
+        const emji: Emoji = new Emoji(this.client, {
+            animated: value.animated,
+            name: value.name,
+            id: value.id
+        });
+
+        const titles = t(LanguageKeys.Commands.General.InfoEmojiTitles);
+
+        const linkArray = [`[PNG](${emji.url!.substring(0, emji.url!.length - 4)}.png)`, `[JPEG](${emji.url!.substring(0, emji.url!.length - 4)}.jpeg)`];
+        if (emji.animated) linkArray.push(`[GIF](${emji.url})`);
+
+        const color = await fetch('https://color.aero.bot') //
+            .path('dominant') //
+            .query('image', emji.url!) //
+            .text();
+
+        const embed = new MessageEmbed()
+            .setThumbnail(emji.url!)
+            .setColor(color as `#${string}`)
+            .setDescription(
+                t(LanguageKeys.Commands.General.InfoEmojiCreated, {
+                    name: emji.name,
+                    date: emji.createdAt
+                })
+            )
+            .setAuthor({
+                name: `${emji.name} [${emji.id}]`,
+                iconURL: emji.url!
+            })
+            .addField(titles.name, emji.name!, true)
+            .addField(titles.animated, value.animated ? t(LanguageKeys.Globals.Yes) : t(LanguageKeys.Globals.No), true)
+            .addField(titles.links, linkArray.join(' | '), true);
+
+        return { embeds: [embed] };
+    }
+
+    private async fetchTwemoji(value: EmojiObject, t: TFunction) {
+        const emojiCode = twemoji(value.name!);
+        const name = `${emojiCode}.png`;
+
+        const attachment = await fetch(`https://twemoji.maxcdn.com/v/latest/72x72/${name}`).raw();
+        const content = t(LanguageKeys.Commands.General.InfoEmojiTwemoji, {
+            name: value.name,
+            code: emojiCode
+        });
+
+        return { content, files: [{ attachment, name: 'emoji.png' }] };
     }
 }

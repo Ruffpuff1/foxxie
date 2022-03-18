@@ -24,18 +24,5 @@
         "topic": "**:information_source: Topic**",
         "type": "**:scroll: Type**",
         "userLimit": "**:busts_in_silhouette: User Limit**"
-    },
-    "emojiCreated": "{{name}} was created on {{date, fulldate}} ({{date, duration}} ago)",
-    "emojiDescription": "Get some basic information from a Discord emoji.",
-    "emojiDetailedDescription": {
-        "usages": ["Emoji", "Twemoji"],
-        "extendedHelp": "With this command you can view information about any emoji from Discord.",
-        "examples": ["{{LOADING}}", "🥳"]
-    },
-    "emojiTitles": {
-        "animated": "**:vhs: Animated**",
-        "links": "**:link: Image Links**",
-        "name": "**:pencil2: Name**"
-    },
-    "emojiTwemoji": "**• Emoji** `:: {{name}}`\n**• ID** `:: {{code}}`"
+    }
 }

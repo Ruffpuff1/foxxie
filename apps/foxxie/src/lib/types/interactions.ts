@@ -43,7 +43,7 @@ interface InfoArgs extends BaseArgs {
     user: { user?: UserArg; ephemeral?: boolean };
     server: { ephemeral?: boolean };
     role: { role?: Role; ephemeral?: boolean };
-    emoji: { emoji?: string; ephemeral?: boolean };
+    emoji: { emoji: string; ephemeral?: boolean };
     channel: { channel?: GuildChannel; ephemeral?: boolean };
 }
 
