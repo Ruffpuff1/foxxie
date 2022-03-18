@@ -78,6 +78,7 @@
         "@influxdata/influxdb-client": "^1.23.0",
         "@ruffpuff/utilities": "^4.0.0",
         "@sapphire/decorators": "^4.2.6",
+        "@sapphire/discord.js-utilities": "^4.9.1",
         "@sapphire/framework": "next",
         "@sapphire/plugin-editable-commands": "^1.1.3-next.db15252.0",
         "@sapphire/plugin-i18next": "next",

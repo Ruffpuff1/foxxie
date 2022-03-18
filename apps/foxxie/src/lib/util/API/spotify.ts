@@ -95,11 +95,13 @@ export async function getPlaylistTracks(content: string): Promise<null | string[
 export async function resetSpotifyToken() {
     const accessToken = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64');
 
-    const data = await fromAsync(async () => fetch('https://accounts.spotify.com/api/token', 'POST')
-        .body('grant_type=client_credentials')
-        .header('Authorization', `Basic ${accessToken}`)
-        .header('Content-Type', 'application/x-www-form-urlencoded')
-        .json<SpotifyTokenData>());
+    const data = await fromAsync(async () =>
+        fetch('https://accounts.spotify.com/api/token', 'POST')
+            .body('grant_type=client_credentials')
+            .header('Authorization', `Basic ${accessToken}`)
+            .header('Content-Type', 'application/x-www-form-urlencoded')
+            .json<SpotifyTokenData>()
+    );
 
     if (!isErr(data) && data.value?.access_token) {
         // eslint-disable-next-line require-atomic-updates

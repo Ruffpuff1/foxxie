@@ -14,6 +14,7 @@ import type { Job } from 'bull';
 import type { Schedules } from './constants';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
 import type { AskYesNoOptions } from './Discord/messages';
+import { time, TimestampStyles } from '@discordjs/builders';
 
 export function loadT(lang: string) {
     return (key: string, opts?: any) => container.i18n.format(lang, key, opts);
@@ -281,3 +282,7 @@ export async function interactionPrompt(interaction: CommandInteraction, options
 
     return collected.customId.endsWith('yes') ? true : false;
 }
+
+export const duration = (value: Date) => time(value, TimestampStyles.RelativeTime);
+
+export const longDate = (value: Date) => time(value, TimestampStyles.LongDate);

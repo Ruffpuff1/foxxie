@@ -4,33 +4,83 @@
         "extendedHelp": "The about command will provide you with a summary of me as well as a link to my privacy policy and my user count."
     },
     "aboutSummary": "{{version}} is a bot created for [The Corner Store]({{TCS}}), with advanced moderation, utilities, and configuration. Foxxie is made to best support community servers and everything they may need to foster a healthy enviroment.\n\nHe's built on top of [Sapphire Framework](https://sapphirejs.dev/), a \"plug-and-play\" object-oriented-framework made for the [Discord.js library](https://discord.js.org/).\n\nCreated **{{created, fulldatetime}}** a whole **{{created, duration}} ago**. Right now he's taking care of about **{{userCount, number}} users**, with more every day!\n\nTo learn more about Foxxie and how he may process your data you can refer to our [privacy policy]({{privacy}}).",
-    "helpCommands": "commands",
-    "helpDescription": "Get example usage and descriptions of all of my commands.",
-    "helpDetailedDescription": {
-        "usages": [
-            "--all",
-            "--categories",
-            "Category",
-            "Command"
-        ],
-        "examples": [
-            "--all",
-            "--categories",
-            "general",
-            "help"
-        ],
-        "extendedHelp": "With my `help` command you can get information about any of my {{count}} commands straight from Discord.\nTo get a short overview of a command just run `{{prefix}}help [Command]`.\nTo See all of the commands in a specific category specify the category after the command."
+    "infoChannelArchived": "Yes, on {{time, dateFormat}} ({{time, duration}})",
+    "infoChannelCreated": "{{name}} was created on {{date, dateFormat}} ({{date, duration}})",
+    "infoChannelTitles": {
+        "archived": "**:headstone: Archived**",
+        "bitrate": "**:pager: Bitrate**",
+        "category": "**:dividers: Category**",
+        "channels": "**:card_file_box: Channels**",
+        "cooldown": "**:alarm_clock: Cooldown**",
+        "members": "**:busts_in_silhouette: Members**",
+        "nsfw": "**:underage: Nsfw**",
+        "topic": "**:information_source: Topic**",
+        "type": "**:scroll: Type**",
+        "userLimit": "**:busts_in_silhouette: User Limit**"
     },
-    "helpDM": ":mailbox_with_mail: | A full list of my commands have been sent to your DMs.",
-    "helpLoading": "{{LOADING}} Loading a menu of my commands, to get a full list in dms run `{{prefix}}help --all`.",
-    "helpNoDM": "{{ERROR}} I was unable to DM you, make sure your DMs are open to server members.",
-    "helpTitles": {
-        "examples": "**:link: Examples**",
-        "explainedUsage": "**:books: Explained Usage**",
-        "extendedHelp": "**:pencil: Extended Help**",
-        "permNode": "**:gear: Permission Node**",
-        "serverOnly": "**(Server only)**",
-        "usage": "**:mag: Usage**"
+    "infoDescription": "Show information about things in your server.",
+    "infoDescriptionChannel": "Get information about any server channel.",
+    "infoDescriptionEmoji": "Get some basic information from a Discord emoji.",
+    "infoDescriptionRole": "Get information on a server role.",
+    "infoDescriptionServer": "Show information and statistics about your server.",
+    "infoDescriptionUser": "Show basic information about any user.",
+    "infoEmojiCreated": "{{name}} was created on {{date, dateFormat}} ({{date, duration}})",
+    "infoEmojiTitles": {
+        "animated": "**:vhs: Animated**",
+        "links": "**:link: Image Links**",
+        "name": "**:pencil2: Name**"
+    },
+    "infoEmojiTwemoji": "**• Emoji** `:: {{name}}`\n**• ID** `:: {{code}}`",
+    "infoRoleAllPerms": "$t(guilds/permissions:ADMINISTRATOR) (all permissions)",
+    "infoRoleHoist": "{{APPROVED}} Displayed seperately",
+    "infoRoleHoist_no": "{{UNSPECIFIED}} Not displayed seperately",
+    "infoRoleManaged": "{{UNSPECIFIED}} Managed by external applications",
+    "infoRoleMemberList": "{{users}} users, {{bots}} bots",
+    "infoRoleMentionable": "{{APPROVED}} Mentionable as: {{role}}",
+    "infoRoleTitles": {
+        "color": "**:art: Color**",
+        "created": "**:calendar: Created**",
+        "members": "**:people_hugging: Member**",
+        "members_other": "**:people_hugging: Members ({{count}})**",
+        "perms": "**:hammer: Permission**",
+        "perms_other": "**:hammer: Permissions**",
+        "properties": "**:bookmark_tabs: Properties**"
+    },
+    "infoRoleUnicodeEmoji": "{{APPROVED}} Unicode Emoji: {{emoji}}",
+    "infoServerChannels": "{{channels, channellist}}",
+    "infoServerCreated": "Created by **{{owner}}** on {{created, dateFormat}} ({{created, duration}})",
+    "infoServerEmojis": "Static: **{{static}}**\nAnimated: **{{animated}}**",
+    "infoServerMessages": "{{messages, number}} messages sent.",
+    "infoServerMembers": "{{size, number}} (cached: {{cache, number}})",
+    "infoServerRolesAndMore": "{{count}} more.",
+    "infoServerSecurity": "Verification level: {{filter, verificationlevel}}\nExplicit filter: {{content, contentfilter}}",
+    "infoServerTitles": {
+        "channels": "**:speech_balloon: Channel**",
+        "channels_other": "**:speech_balloon: Channels ({{count}})**",
+        "emojis": "**:sunglasses: Emoji**",
+        "emojis_other": "**:sunglasses: Emojis ({{count}})**",
+        "members": "**:busts_in_silhouette: Members**",
+        "roles": "**:scroll: Role**",
+        "roles_other": "**:scroll: Roles ({{count}})**",
+        "security": "**:lock: Security**",
+        "stats": "**:bar_chart: Statistics**"
+    },
+    "infoUserDiscordJoin": "Joined Discord on {{created, dateFormat}} ({{created, duration}})",
+    "infoUserGuildCreate": "Created {{name}} on {{joined, dateFormat}} ({{joined, duration}})",
+    "infoUserGuildJoin": "Joined {{name}} on {{joined, dateFormat}} ({{joined, duration}})",
+    "infoUserMessages": "{{messages, numbercompact}} messages sent.",
+    "infoUserSelectMenu": [
+        "General",
+        "Banner"
+    ],
+    "infoUserTitles": {
+        "about": "**:pencil: About**",
+        "notes": "**:label: Note**",
+        "notes_other": "**:label: Notes**",
+        "roles": "**:scroll: Role**",
+        "roles_other": "**:scroll: Roles ({{count, number}})**",
+        "warnings": "**:lock: Warning**",
+        "warnings_other": "**:lock: Warnings ({{count, number}})**"
     },
     "ping": "{{LOADING}} Ping?",
     "pingDescription": "Runs a connection test to Discord.",
