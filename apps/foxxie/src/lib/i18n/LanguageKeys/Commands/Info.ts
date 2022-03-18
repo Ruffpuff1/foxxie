@@ -1,5 +1,4 @@
 import { FT, HelpDisplayData, T } from '#lib/types';
-import type { Collection, Guild, GuildChannel } from 'discord.js';
 
 export const ChannelArchived = FT<{ time: Date }>('commands/info:channelArchived');
 export const ChannelCreated = FT<{ name: string; date: Date }, string>('commands/info:channelCreated');
@@ -42,26 +41,3 @@ export const RoleTitles = T<{
     properties: string;
 }>('commands/info:roleTitles');
 export const RoleUnicodeEmoji = FT<{ emoji: string }, string>('commands/info:roleUnicodeEmoji');
-export const ServerChannels = FT<{ channels: Collection<string, GuildChannel> }, string>('commands/info:serverChannels');
-export const ServerCreated = FT<{ owner: string; created: Date }, string>('commands/info:serverCreated');
-export const ServerDescription = T('commands/info:serverDescription');
-export const ServerEmojis = FT<{ static: number; animated: number }, string>('commands/info:serverEmojis');
-export const ServerDetailedDescription = T<HelpDisplayData>('commands/info:serverDetailedDescription');
-export const ServerMessages = FT<{ messages: number }, string>('commands/info:serverMessages');
-export const ServerMembers = FT<{ size: number; cache: number }, string>('commands/info:serverMembers');
-export const ServerRolesAndMore = FT<{ count: number }, string>('commands/info:serverRolesAndMore');
-export const ServerSecurity = FT<
-    {
-        filter: Guild['verificationLevel'];
-        content: Guild['explicitContentFilter'];
-    },
-    string
->('commands/info:serverSecurity');
-export const ServerTitles = T<{
-    members: string;
-    security: string;
-    stats: string;
-}>('commands/info:serverTitles');
-export const ServerTitlesChannels = FT<{ count: number }, string>('commands/info:serverTitles.channels');
-export const ServerTitlesEmojis = FT<{ count: number }, string>('commands/info:serverTitles.emojis');
-export const ServerTitlesRoles = FT<{ count: number }, string>('commands/info:serverTitles.roles');

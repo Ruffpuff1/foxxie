@@ -1,4 +1,5 @@
 import { FT, HelpDisplayData, T } from '#lib/types';
+import type { Collection, Guild, GuildChannel } from 'discord.js';
 
 export const AboutDescription = T('commands/general:aboutDescription');
 export const AboutDetailedDescription = T('commands/general:aboutDetailedDescription');
@@ -9,7 +10,29 @@ export const AboutSummary = FT<{
     privacy: string;
 }>('commands/general:aboutSummary');
 export const InfoDescription = T('commands/general:infoDescription');
+export const InfoDescriptionServer = T('commands/general:infoDescriptionServer');
 export const InfoDescriptionUser = T('commands/general:infoDescriptionUser');
+export const InfoServerChannels = FT<{ channels: Collection<string, GuildChannel> }, string>('commands/general:infoServerChannels');
+export const InfoServerCreated = FT<{ owner: string; created: Date }, string>('commands/general:infoServerCreated');
+export const InfoServerEmojis = FT<{ static: number; animated: number }, string>('commands/general:infoServerEmojis');
+export const InfoServerMessages = FT<{ messages: number }, string>('commands/general:infoServerMessages');
+export const InfoServerMembers = FT<{ size: number; cache: number }, string>('commands/general:infoServerMembers');
+export const InfoServerRolesAndMore = FT<{ count: number }, string>('commands/general:infoServerRolesAndMore');
+export const InfoServerSecurity = FT<
+    {
+        filter: Guild['verificationLevel'];
+        content: Guild['explicitContentFilter'];
+    },
+    string
+>('commands/general:infoServerSecurity');
+export const InfoServerTitles = T<{
+    members: string;
+    security: string;
+    stats: string;
+}>('commands/general:infoServerTitles');
+export const InfoServerTitlesChannels = FT<{ count: number }, string>('commands/general:infoServerTitles.channels');
+export const InfoServerTitlesEmojis = FT<{ count: number }, string>('commands/general:infoServerTitles.emojis');
+export const InfoServerTitlesRoles = FT<{ count: number }, string>('commands/general:infoServerTitles.roles');
 export const InfoUserDiscordJoin = FT<{ created: Date }, string>('commands/general:infoUserDiscordJoin');
 export const InfoUserGuildCreate = FT<{ name: string; joined: Date }, string>('commands/general:infoUserGuildCreate');
 export const InfoUserGuildJoin = FT<{ name: string; joined: Date }, string>('commands/general:infoUserGuildJoin');

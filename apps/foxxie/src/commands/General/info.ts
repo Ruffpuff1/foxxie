@@ -1,17 +1,22 @@
 import { ModerationCommand } from '#lib/structures';
-import { ChatInputArgs, CommandName, GuildInteraction, PermissionLevels } from '#lib/types';
+import { ChatInputArgs, CommandName, GuildInteraction } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { RegisterChatInputCommand } from '#utils/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { enUS, floatPromise } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import { GuildMember, MessageEmbed, User } from 'discord.js';
-import { cast, resolveToNull } from '@ruffpuff/utilities';
+import { Guild, GuildMember, MessageEmbed, Role, User } from 'discord.js';
+import { cast, chunk, resolveToNull, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { pronouns } from '#utils/transformers';
 import { BrandingColors } from '#utils/constants';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
+import { acquireSettings, GuildSettings } from '#lib/database';
+
+const SORT = (x: Role, y: Role) => Number(y.position > x.position) || Number(x.position === y.position) - 1;
+const roleMention = (role: Role): string => role.toString();
+const roleLimit = 10;
 
 @RegisterChatInputCommand(
     CommandName.Info,
@@ -34,12 +39,22 @@ import { isGuildOwner } from '#utils/Discord';
                             .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
                             .setRequired(false)
                     )
+            )
+            .addSubcommand(command =>
+                command //
+                    .setName('server')
+                    .setDescription(enUS(LanguageKeys.Commands.General.InfoDescriptionServer))
+                    .addBooleanOption(option =>
+                        option //
+                            .setName('ephemeral')
+                            .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
+                            .setRequired(false)
+                    )
             ),
     [],
     {
         runIn: [CommandOptionsRunTypeEnum.GuildAny],
-        requiredClientPermissions: PermissionFlagsBits.BanMembers,
-        permissionLevel: PermissionLevels.Moderator
+        requiredClientPermissions: PermissionFlagsBits.EmbedLinks
     }
 )
 export class UserCommand extends ModerationCommand {
@@ -48,6 +63,8 @@ export class UserCommand extends ModerationCommand {
         switch (subcommand) {
             case 'user':
                 return this.user(interaction, ctx, args!);
+            case 'server':
+                return this.server(interaction, ctx, args!);
             default:
                 throw new Error(`Subcommand "${subcommand}" not supported.`);
         }
@@ -62,6 +79,178 @@ export class UserCommand extends ModerationCommand {
         const display = await this.buildUserDisplay(cast<GuildInteraction>(interaction), t, user);
 
         await display.run(interaction, interaction.user);
+    }
+
+    private async server(...[interaction, , { t, server: args }]: Required<ChatInputArgs<CommandName.Info>>): Promise<any> {
+        await interaction.deferReply({ ephemeral: args.ephemeral });
+
+        const display = await this.buildServerDisplay(cast<GuildInteraction>(interaction), interaction.guild!, t);
+        await display.run(interaction, interaction.user);
+    }
+
+    private async buildServerDisplay(interaction: GuildInteraction, guild: Guild, t: TFunction) {
+        const [messages, owner, color] = await this.fetchServerData(guild);
+
+        const template = new MessageEmbed() //
+            .setColor(color || interaction.guild.me!.displayColor || BrandingColors.Primary)
+            .setAuthor({
+                name: `${guild.name} [${guild.id}]`,
+                iconURL: guild.iconURL({ dynamic: true })!,
+                url: guild.vanityURLCode ? `https://discord.gg/${guild.vanityURLCode}` : undefined
+            });
+
+        const titles = t(LanguageKeys.Commands.General.InfoServerTitles);
+        const channels = guild.channels.cache.filter(c => c.type !== 'GUILD_CATEGORY');
+        const { staticEmojis, animated, hasEmojis } = this.getServerEmojiData(guild);
+        const none = t(LanguageKeys.Globals.None);
+
+        const display = new PaginatedMessage({ template }) //
+            .addPageEmbed(embed => {
+                embed //
+                    .setThumbnail(guild.iconURL({ dynamic: true })!)
+                    .setDescription(
+                        [
+                            t(LanguageKeys.Commands.General.InfoServerCreated, {
+                                owner: owner.user.tag,
+                                created: guild.createdAt
+                            }),
+                            guild.description ? `*"${guild.description}"*` : null
+                        ]
+                            .filter(a => Boolean(a))
+                            .join('\n')
+                    );
+
+                embed //
+                    .addField(
+                        t(LanguageKeys.Commands.General.InfoServerTitlesRoles, {
+                            count: guild.roles.cache.size - 1
+                        }),
+                        this.getServerRoles(guild, t)
+                    );
+
+                return embed
+                    .addField(
+                        titles.members,
+                        t(LanguageKeys.Commands.General.InfoServerMembers, {
+                            size: guild.memberCount,
+                            cache: guild.members.cache.size
+                        }),
+                        true
+                    )
+                    .addField(
+                        t(LanguageKeys.Commands.General.InfoServerTitlesChannels, {
+                            count: channels.size
+                        }),
+                        t(LanguageKeys.Commands.General.InfoServerChannels, {
+                            channels
+                        }),
+                        true
+                    )
+                    .addField(
+                        t(LanguageKeys.Commands.General.InfoServerTitlesEmojis, {
+                            count: staticEmojis + animated
+                        }),
+                        hasEmojis
+                            ? t(LanguageKeys.Commands.General.InfoServerEmojis, {
+                                  static: staticEmojis,
+                                  animated
+                              })
+                            : none,
+                        true
+                    )
+                    .addField(
+                        titles.stats,
+                        t(LanguageKeys.Commands.General.InfoServerMessages, {
+                            messages
+                        }),
+                        true
+                    )
+                    .addField(
+                        titles.security,
+                        t(LanguageKeys.Commands.General.InfoServerSecurity, {
+                            filter: guild.verificationLevel,
+                            content: guild.explicitContentFilter
+                        })
+                    );
+            });
+
+        this.addServerRoles(guild, display);
+
+        return display;
+    }
+
+    private addServerRoles(guild: Guild, display: PaginatedMessage): void {
+        const roles = [
+            ...guild.roles.cache
+                .filter(role => role.id !== guild.id)
+                .sort(SORT)
+                .values()
+        ];
+
+        if (roles.length > roleLimit) {
+            for (const page of chunk(roles, 24)) {
+                if (page.length <= 12) {
+                    display.addPageBuilder(builder =>
+                        builder.setEmbeds([new MessageEmbed().addField(ZeroWidthSpace, page.map(roleMention).join('\n'))]).setContent(null!)
+                    );
+                } else {
+                    const left = page.slice(0, 12);
+                    const right = page.slice(12);
+
+                    display.addPageBuilder(builder =>
+                        builder
+                            .setEmbeds([
+                                new MessageEmbed()
+                                    .addField(ZeroWidthSpace, left.map(roleMention).join('\n'), true)
+                                    .addField(ZeroWidthSpace, right.map(roleMention).join('\n'), true)
+                            ])
+                            .setContent(null!)
+                    );
+                }
+            }
+        }
+    }
+
+    private async fetchServerData(guild: Guild): Promise<[number, GuildMember, number]> {
+        const messages = await acquireSettings(guild, GuildSettings.MessageCount);
+        const me = guild.me!;
+        const owner = await guild.members.fetch(guild.ownerId);
+
+        return [messages, owner, me.displayColor];
+    }
+
+    private getServerRoles(guild: Guild, t: TFunction): string {
+        const roles = [...guild.roles.cache.values()].sort(SORT);
+        roles.pop();
+
+        const size = roles.length;
+        if (size <= roleLimit)
+            return t(LanguageKeys.Globals.And, {
+                value: roles.map(roleMention)
+            });
+
+        const mentions = roles
+            .slice(0, roleLimit - 1)
+            .map(roleMention)
+            .concat(
+                t(LanguageKeys.Commands.General.InfoServerRolesAndMore, {
+                    count: size - roleLimit
+                })
+            );
+
+        return t(LanguageKeys.Globals.And, { value: mentions });
+    }
+
+    private getServerEmojiData(guild: Guild): {
+        staticEmojis: number;
+        animated: number;
+        hasEmojis: boolean;
+    } {
+        return {
+            staticEmojis: guild.emojis.cache.filter(emoji => !emoji.animated).size,
+            animated: guild.emojis.cache.filter(emoji => Boolean(emoji.animated)).size,
+            hasEmojis: guild.emojis.cache.size > 0
+        };
     }
 
     private async buildUserDisplay(interaction: GuildInteraction, t: TFunction, user: User): Promise<any> {

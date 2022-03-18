@@ -65,35 +65,5 @@
         "perms_other": "**:hammer: Permissions**",
         "properties": "**:bookmark_tabs: Properties**"
     },
-    "roleUnicodeEmoji": "{{APPROVED}} Unicode Emoji: {{emoji}}",
-    "serverChannels": "{{channels, channellist}}",
-    "serverCreated": "Created by **{{owner}}** on {{created, fulldate}} ({{created, duration}} ago)",
-    "serverDescription": "I'll show information about yours or any other server I'm in.",
-    "serverDetailedDescription": {
-        "usages": [
-            "",
-            "Server"
-        ],
-        "extendedHelp": "With this command I can get you basic data about yours or any server I'm in. Simply provide the server's name or Id.",
-        "examples": [
-            "",
-            "\"The Corner Store\""
-        ]
-    },
-    "serverEmojis": "Static: **{{static}}**\nAnimated: **{{animated}}**",
-    "serverMessages": "{{messages, number}} messages sent.",
-    "serverMembers": "{{size, number}} (cached: {{cache, number}})",
-    "serverRolesAndMore": "{{count}} more.",
-    "serverSecurity": "Verification level: {{filter, verificationlevel}}\nExplicit filter: {{content, contentfilter}}",
-    "serverTitles": {
-        "channels": "**:speech_balloon: Channel**",
-        "channels_other": "**:speech_balloon: Channels ({{count}})**",
-        "emojis": "**:sunglasses: Emoji**",
-        "emojis_other": "**:sunglasses: Emojis ({{count}})**",
-        "members": "**:busts_in_silhouette: Members**",
-        "roles": "**:scroll: Role**",
-        "roles_other": "**:scroll: Roles ({{count}})**",
-        "security": "**:lock: Security**",
-        "stats": "**:bar_chart: Statistics**"
-    }
+    "roleUnicodeEmoji": "{{APPROVED}} Unicode Emoji: {{emoji}}"
 }
