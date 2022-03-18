@@ -10,7 +10,7 @@
     "any": "any",
     "case": "case",
     "dateValue": "{{value, date}}",
-    "dateDuration": "{{date, fulldate}} ({{date, duration}} ago)",
+    "dateDuration": "{{date, dateFormat}} ({{date, duration}})",
     "dateFormat": "MM/DD/YYYY",
     "dateFormatLong": "Month/Day/Year",
     "dateFull": "{{date, fulldate}}",

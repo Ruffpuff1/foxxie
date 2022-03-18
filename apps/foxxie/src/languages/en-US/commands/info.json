@@ -37,33 +37,5 @@
         "links": "**:link: Image Links**",
         "name": "**:pencil2: Name**"
     },
-    "emojiTwemoji": "**• Emoji** `:: {{name}}`\n**• ID** `:: {{code}}`",
-    "roleAllPerms": "$t(guilds/permissions:ADMINISTRATOR) (all permissions)",
-    "roleDescription": "Get information on a server role.",
-    "roleDetailedDescription": {
-        "usages": [
-            "",
-            "Role"
-        ],
-        "extendedHelp": "The role command shows information about a given server role. If no role is specified it will show your highest role.",
-        "examples": [
-            "",
-            "Members"
-        ]
-    },
-    "roleHoist": "{{APPROVED}} Displayed seperately",
-    "roleHoist_no": "{{UNSPECIFIED}} Not displayed seperately",
-    "roleManaged": "{{UNSPECIFIED}} Managed by external applications",
-    "roleMemberList": "{{users}} users, {{bots}} bots",
-    "roleMentionable": "{{APPROVED}} Mentionable as: {{role}}",
-    "roleTitles": {
-        "color": "**:art: Color**",
-        "created": "**:calendar: Created**",
-        "members": "**:people_hugging: Member**",
-        "members_other": "**:people_hugging: Members ({{count}})**",
-        "perms": "**:hammer: Permission**",
-        "perms_other": "**:hammer: Permissions**",
-        "properties": "**:bookmark_tabs: Properties**"
-    },
-    "roleUnicodeEmoji": "{{APPROVED}} Unicode Emoji: {{emoji}}"
+    "emojiTwemoji": "**• Emoji** `:: {{name}}`\n**• ID** `:: {{code}}`"
 }

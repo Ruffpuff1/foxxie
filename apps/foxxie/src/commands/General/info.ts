@@ -5,7 +5,7 @@ import { RegisterChatInputCommand } from '#utils/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { enUS, floatPromise } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import { Guild, GuildMember, MessageEmbed, Role, User } from 'discord.js';
+import { EmbedAuthorData, Guild, GuildMember, MessageEmbed, PermissionString, Role, User } from 'discord.js';
 import { cast, chunk, resolveToNull, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { pronouns } from '#utils/transformers';
@@ -50,6 +50,23 @@ const roleLimit = 10;
                             .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
                             .setRequired(false)
                     )
+            )
+            .addSubcommand(command =>
+                command //
+                    .setName('role')
+                    .setDescription(enUS(LanguageKeys.Commands.General.InfoDescriptionRole))
+                    .addRoleOption(option =>
+                        option //
+                            .setName('role')
+                            .setDescription('the role to use')
+                            .setRequired(false)
+                    )
+                    .addBooleanOption(option =>
+                        option //
+                            .setName('ephemeral')
+                            .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
+                            .setRequired(false)
+                    )
             ),
     [],
     {
@@ -65,6 +82,8 @@ export class UserCommand extends ModerationCommand {
                 return this.user(interaction, ctx, args!);
             case 'server':
                 return this.server(interaction, ctx, args!);
+            case 'role':
+                return this.role(interaction, ctx, args!);
             default:
                 throw new Error(`Subcommand "${subcommand}" not supported.`);
         }
@@ -86,6 +105,85 @@ export class UserCommand extends ModerationCommand {
 
         const display = await this.buildServerDisplay(cast<GuildInteraction>(interaction), interaction.guild!, t);
         await display.run(interaction, interaction.user);
+    }
+
+    private async role(...[interaction, , { t, role: args }]: Required<ChatInputArgs<CommandName.Info>>) {
+        const role = args.role || (interaction.member as GuildMember).roles.highest;
+
+        const embed = this.buildRoleEmbed(role, t);
+        await interaction.reply({ embeds: [embed], ephemeral: args.ephemeral });
+    }
+
+    private buildRoleEmbed(role: Role, t: TFunction) {
+        const [bots, humans] = role.members.partition(member => member.user.bot);
+        const permissions = Object.entries(role.permissions.serialize());
+        const titles = t(LanguageKeys.Commands.General.InfoRoleTitles);
+        const none = t(LanguageKeys.Globals.None);
+
+        return new MessageEmbed()
+            .setAuthor(this.formatRoleAuthor(role))
+            .setColor(role.color)
+            .addField(titles.color, role.color ? role.hexColor : none, true)
+            .addField(
+                t(LanguageKeys.Commands.General.InfoRoleTitleMembers, {
+                    count: role.members.size
+                }),
+                role.members.size
+                    ? t(LanguageKeys.Commands.General.InfoRoleMemberList, {
+                          users: humans.size,
+                          bots: bots.size
+                      })
+                    : none,
+                true
+            )
+            .addField(
+                t(LanguageKeys.Commands.General.InfoRoleTitlePerms, {
+                    count: permissions.length
+                }),
+                role.permissions.has(PermissionFlagsBits.Administrator)
+                    ? t(LanguageKeys.Commands.General.InfoRoleAllPerms)
+                    : permissions
+                          .filter(perm => perm[1])
+                          .map(([perm]) => t(LanguageKeys.Guilds.Permissions[perm as PermissionString]))
+                          .join(', ') || none,
+                false
+            )
+            .addField(
+                titles.created,
+                t(LanguageKeys.Globals.DateDuration, {
+                    date: role.createdAt,
+                    formatParams: { depth: 2 }
+                })
+            )
+            .addField(titles.properties, this.formatRoleProps(role, t));
+    }
+
+    private formatRoleProps(role: Role, t: TFunction): string {
+        const arr = [
+            t(LanguageKeys.Commands.General.InfoRoleHoist, {
+                context: role.hoist ? '' : t(LanguageKeys.Globals.No)
+            }),
+            role.mentionable
+                ? t(LanguageKeys.Commands.General.InfoRoleMentionable, {
+                      role: role.toString()
+                  })
+                : null,
+            role.managed ? t(LanguageKeys.Commands.General.InfoRoleManaged) : null,
+            role.unicodeEmoji
+                ? t(LanguageKeys.Commands.General.InfoRoleUnicodeEmoji, {
+                      emoji: role.unicodeEmoji
+                  })
+                : null
+        ].filter(a => Boolean(a));
+
+        return arr.join('\n');
+    }
+
+    private formatRoleAuthor(role: Role): EmbedAuthorData {
+        return {
+            name: `${role.name} [${role.id}]`,
+            iconURL: (role.icon ? role.iconURL() : role.guild.iconURL({ dynamic: true }))!
+        };
     }
 
     private async buildServerDisplay(interaction: GuildInteraction, guild: Guild, t: TFunction) {

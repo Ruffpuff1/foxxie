@@ -10,8 +10,22 @@ export const AboutSummary = FT<{
     privacy: string;
 }>('commands/general:aboutSummary');
 export const InfoDescription = T('commands/general:infoDescription');
+export const InfoDescriptionRole = T('commands/general:infoDescriptionRole');
 export const InfoDescriptionServer = T('commands/general:infoDescriptionServer');
 export const InfoDescriptionUser = T('commands/general:infoDescriptionUser');
+export const InfoRoleAllPerms = T('commands/general:infoRoleAllPerms');
+export const InfoRoleHoist = T('commands/general:infoRoleHoist');
+export const InfoRoleManaged = T('commands/general:infoRoleManaged');
+export const InfoRoleMemberList = FT<{ users: number; bots: number }>('commands/general:infoRoleMemberList');
+export const InfoRoleMentionable = FT<{ role: string }>('commands/general:infoRoleMentionable');
+export const InfoRoleTitleMembers = FT<{ count: number }, string>('commands/general:infoRoleTitles.members');
+export const InfoRoleTitlePerms = FT<{ count: number }, string>('commands/general:infoRoleTitles.perms');
+export const InfoRoleTitles = T<{
+    color: string;
+    created: string;
+    properties: string;
+}>('commands/general:infoRoleTitles');
+export const InfoRoleUnicodeEmoji = FT<{ emoji: string }, string>('commands/general:infoRoleUnicodeEmoji');
 export const InfoServerChannels = FT<{ channels: Collection<string, GuildChannel> }, string>('commands/general:infoServerChannels');
 export const InfoServerCreated = FT<{ owner: string; created: Date }, string>('commands/general:infoServerCreated');
 export const InfoServerEmojis = FT<{ static: number; animated: number }, string>('commands/general:infoServerEmojis');
