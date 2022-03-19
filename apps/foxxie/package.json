@@ -76,6 +76,7 @@
         "@foxxie/fetch": "0.0.2",
         "@foxxie/lock-queue": "0.1.1",
         "@influxdata/influxdb-client": "^1.23.0",
+        "@ruffpuff/api": "^0.0.2-next.ce2ba26.1647722130",
         "@ruffpuff/utilities": "^4.0.0",
         "@sapphire/decorators": "^4.2.6",
         "@sapphire/discord.js-utilities": "^4.9.1",
@@ -119,7 +120,7 @@
         "@typescript-eslint/parser": "5.15.0",
         "discord-api-types": "0.29.0",
         "eslint": "8.11.0",
-        "ruffpuff-api-types": "^0.0.1-next.e15cb6f.1647670195",
+        "ruffpuff-api-types": "^0.0.5-next.11a326b.1647721912",
         "tsc-watch": "4.6.2"
     }
 }

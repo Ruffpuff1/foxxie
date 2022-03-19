@@ -5,7 +5,7 @@ import { RegisterChatInputCommand } from '#utils/decorators';
 import { CommandOptionsRunTypeEnum, isErr, Result, UserError } from '@sapphire/framework';
 import { enUS, floatPromise } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import type { RESTGetAPIUserResult } from 'ruffpuff-api-types/v1';
+import type { Snowflake } from 'ruffpuff-api-types/v1';
 import {
     CategoryChannel,
     Collection,
@@ -33,6 +33,7 @@ import { isGuildOwner } from '#utils/Discord';
 import { acquireSettings, GuildSettings } from '#lib/database';
 import { fetch } from '@foxxie/fetch';
 import { FoxxieEmbed } from '#lib/discord';
+import { api } from '@ruffpuff/api';
 
 const SORT = (x: Role, y: Role) => Number(y.position > x.position) || Number(x.position === y.position) - 1;
 const roleMention = (role: Role): string => role.toString();
@@ -565,11 +566,12 @@ export class UserCommand extends FoxxieCommand {
     }
 
     private async fetchPronouns(userId: string) {
-        const result = await fetch('https://api.ruffpuff.dev') //
-            .path('users', userId)
-            .json<RESTGetAPIUserResult>();
+        const result = await api() //
+            .users(userId as Snowflake)
+            .pronouns()
+            .get();
 
-        if (!result || !result.pronouns) return null;
+        if (!result.pronouns) return null;
         return result.pronouns;
     }
 
