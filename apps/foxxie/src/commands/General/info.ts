@@ -5,6 +5,7 @@ import { RegisterChatInputCommand } from '#utils/decorators';
 import { CommandOptionsRunTypeEnum, isErr, Result, UserError } from '@sapphire/framework';
 import { enUS, floatPromise } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
+import type { RESTGetAPIUserResult } from 'ruffpuff-api-types/v1';
 import {
     CategoryChannel,
     Collection,
@@ -25,7 +26,7 @@ import {
 } from 'discord.js';
 import { cast, ChannelMentionRegex, chunk, resolveToNull, Time, toTitleCase, twemoji, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { LanguageKeys } from '#lib/i18n';
-import { Pronouns, pronouns } from '#utils/transformers';
+import { pronouns } from '#utils/transformers';
 import { BrandingColors } from '#utils/constants';
 import { GuildBasedChannelTypes, PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
@@ -566,7 +567,7 @@ export class UserCommand extends FoxxieCommand {
     private async fetchPronouns(userId: string) {
         const result = await fetch('https://api.ruffpuff.dev') //
             .path('users', userId)
-            .json<{ pronouns: Pronouns }>();
+            .json<RESTGetAPIUserResult>();
 
         if (!result || !result.pronouns) return null;
         return result.pronouns;
