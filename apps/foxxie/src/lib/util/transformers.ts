@@ -10,6 +10,7 @@ import { cleanMentions } from './util';
 import * as GuildSettings from '#database/Keys';
 import { TwemojiRegex } from '@sapphire/discord.js-utilities';
 import { getCode, isLetterOrDigit, isWhiteSpace } from '@skyra/char';
+import type { PronounsEnum } from 'ruffpuff-api-types/v1';
 
 export enum Pronouns {
     'he/him',
@@ -57,7 +58,7 @@ export function getPronounKey(key: string): PronounKey[] {
  * @param key Pronoun string, integer, or null.
  * @returns Pronoun string, integer, or null.
  */
-export function pronouns(key: Pronouns | null): string | null | number {
+export function pronouns(key: PronounsEnum | null): string | null | number {
     if (key === null) return null;
     return Pronouns[key];
 }

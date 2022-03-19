@@ -7328,6 +7328,11 @@ rollup@2.70.1, rollup@^2.60.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
+ruffpuff-api-types@^0.0.1-next.e15cb6f.1647670195:
+  version "0.0.1-next.e15cb6f.1647670195"
+  resolved "https://registry.yarnpkg.com/ruffpuff-api-types/-/ruffpuff-api-types-0.0.1-next.e15cb6f.1647670195.tgz#d095dd637e1fc49906415f2017b7b75a02ab86e4"
+  integrity sha512-cviY4Wf3AcPuRhq4IQK4vLn5+7M/cjCGphuph1YwVJk1yhXL8i9WdUfGsDwMve1+cqo7s70u1Wni21faiWlFbA==
+
 run-async@^2.4.0:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/run-async/-/run-async-2.4.1.tgz#8440eccf99ea3e70bd409d49aab88e10c189a455"
