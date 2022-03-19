@@ -1464,6 +1464,13 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
+"@ruffpuff/api@^0.0.2-next.ce2ba26.1647722130":
+  version "0.0.2-next.ce2ba26.1647722130"
+  resolved "https://registry.yarnpkg.com/@ruffpuff/api/-/api-0.0.2-next.ce2ba26.1647722130.tgz#34edceb658875e3fe872708e65f22dbed8dcf8f6"
+  integrity sha512-ApU4ZiBudNZv0FlGX+x4O+h1gkHoWO57Kh95NVMdGtZS3Ta9ZartKxXSjbmeN6fQ5rqMcOr4GDeSAKyhjcsaJw==
+  dependencies:
+    "@foxxie/fetch" "^0.0.2"
+
 "@ruffpuff/celestia@1.2.3":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@ruffpuff/celestia/-/celestia-1.2.3.tgz#6c2ae3c85528563a8398d2d5871327707aecffbb"
@@ -7328,10 +7335,10 @@ rollup@2.70.1, rollup@^2.60.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
-ruffpuff-api-types@^0.0.1-next.e15cb6f.1647670195:
-  version "0.0.1-next.e15cb6f.1647670195"
-  resolved "https://registry.yarnpkg.com/ruffpuff-api-types/-/ruffpuff-api-types-0.0.1-next.e15cb6f.1647670195.tgz#d095dd637e1fc49906415f2017b7b75a02ab86e4"
-  integrity sha512-cviY4Wf3AcPuRhq4IQK4vLn5+7M/cjCGphuph1YwVJk1yhXL8i9WdUfGsDwMve1+cqo7s70u1Wni21faiWlFbA==
+ruffpuff-api-types@^0.0.5-next.11a326b.1647721912:
+  version "0.0.5-next.11a326b.1647721912"
+  resolved "https://registry.yarnpkg.com/ruffpuff-api-types/-/ruffpuff-api-types-0.0.5-next.11a326b.1647721912.tgz#d7206ebf897bb39997231703eb2a262193dc1eb0"
+  integrity sha512-fnVksgMSKbIN23BdUdImVA/kaKSe/GfjfKJ4iYtPYiQUNeWhaygLqP74voGBwQcNxxZrTor3hk5F5eK7BJnibg==
 
 run-async@^2.4.0:
   version "2.4.1"
