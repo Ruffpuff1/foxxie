@@ -25,7 +25,7 @@ import {
 } from 'discord.js';
 import { cast, ChannelMentionRegex, chunk, resolveToNull, Time, toTitleCase, twemoji, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { LanguageKeys } from '#lib/i18n';
-import { pronouns } from '#utils/transformers';
+import { Pronouns, pronouns } from '#utils/transformers';
 import { BrandingColors } from '#utils/constants';
 import { GuildBasedChannelTypes, PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
@@ -121,7 +121,7 @@ const roleLimit = 10;
                             .setRequired(false)
                     )
             ),
-    [],
+    ['954428415451230359'],
     {
         runIn: [CommandOptionsRunTypeEnum.GuildAny],
         requiredClientPermissions: PermissionFlagsBits.EmbedLinks
@@ -563,6 +563,15 @@ export class UserCommand extends FoxxieCommand {
         };
     }
 
+    private async fetchPronouns(userId: string) {
+        const result = await fetch('https://api.ruffpuff.dev') //
+            .path('users', userId)
+            .json<{ pronouns: Pronouns }>();
+
+        if (!result || !result.pronouns) return null;
+        return result.pronouns;
+    }
+
     private async buildUserDisplay(interaction: GuildInteraction, t: TFunction, user: User): Promise<any> {
         const settings = await this.fetchUserSettings(interaction.guild.id, user.id);
         const titles = t(LanguageKeys.Commands.General.InfoUserTitles);
@@ -570,7 +579,7 @@ export class UserCommand extends FoxxieCommand {
         let authorString = `${user.tag} [${user.id}]`;
         const member = await resolveToNull(interaction.guild.members.fetch(user.id));
 
-        const pnKey = pronouns(settings.member.pronouns);
+        const pnKey = pronouns(await this.fetchPronouns(user.id));
         if (pnKey) authorString += ` (${pnKey})`;
 
         const template = new MessageEmbed()
