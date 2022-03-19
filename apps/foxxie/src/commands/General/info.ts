@@ -566,13 +566,17 @@ export class UserCommand extends FoxxieCommand {
     }
 
     private async fetchPronouns(userId: string) {
-        const result = await api() //
-            .users(userId as Snowflake)
-            .pronouns()
-            .get();
+        try {
+            const result = await api() //
+                .users(userId as Snowflake)
+                .pronouns()
+                .get();
 
-        if (!result.pronouns) return null;
-        return result.pronouns;
+            if (!result.pronouns) return null;
+            return result.pronouns;
+        } catch {
+            return null;
+        }
     }
 
     private async buildUserDisplay(interaction: GuildInteraction, t: TFunction, user: User): Promise<any> {
