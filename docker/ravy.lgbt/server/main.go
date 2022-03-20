@@ -32,28 +32,20 @@ func main() {
 	r.Use(middleware.Logger, middleware.Recoverer, middleware.RequestID)
 
 	transCircle := loadImage("images/circle.png")
-	transOverlay := loadImage("images/overlay.png")
 	agenderCircle := loadImage("images/circleAgender.png")
-	agenderOverlay := loadImage("images/overlayAgender.png")
 	asexualCircle := loadImage("images/circleAsexual.png")
-	asexualOverlay := loadImage("images/overlayAsexual.png")
 	bisexualCircle := loadImage("images/circleBisexual.png")
-	bisexualOverlay := loadImage("images/overlayBisexual.png")
 	fluidCircle := loadImage("images/circleGenderfluid.png")
-	fluidOverlay := loadImage("images/overlayGenderfluid.png")
 	lesbianCircle := loadImage("images/circleLesbian.png")
-	lesbianOverlay := loadImage("images/overlayLesbian.png")
 	enbyCircle := loadImage("images/circleNonbinary.png")
-	enbyOverlay := loadImage("images/overlayNonbinary.png")
 	pansexualCircle := loadImage("images/circlePansexual.png")
-	pansexualOverlay := loadImage("images/overlayPansexual.png")
 	prideCircle := loadImage("images/circlePride.png")
-	prideOverlay := loadImage("images/overlayPride.png")
 
 	r.Get("/circle", func(w http.ResponseWriter, r *http.Request) {
 		avatarURL := r.URL.Query().Get("image")
 		flag := r.URL.Query().Get("type")
 		avatar, _ := http.Get(avatarURL)
+
 		defer avatar.Body.Close()
 		avatarImage, _, _ := image.Decode(avatar.Body)
 
@@ -80,42 +72,6 @@ func main() {
 			overlay = &prideCircle
 		default:
 			overlay = &transCircle
-		}
-
-		img := lgbt.Overlay(&avatarImage, overlay)
-		png.Encode(w, img)
-	})
-
-	r.Get("/overlay", func(w http.ResponseWriter, r *http.Request) {
-		avatarURL := r.URL.Query().Get("image")
-		flag := r.URL.Query().Get("type")
-		avatar, _ := http.Get(avatarURL)
-		defer avatar.Body.Close()
-		avatarImage, _, _ := image.Decode(avatar.Body)
-
-		var overlay *image.Image
-
-		switch flag {
-		case "transsexual", "transgender", "trans":
-			overlay = &transOverlay
-		case "agender":
-			overlay = &agenderOverlay
-		case "asexual", "ace":
-			overlay = &asexualOverlay
-		case "bisexual", "bi":
-			overlay = &bisexualOverlay
-		case "genderfluid", "fluid":
-			overlay = &fluidOverlay
-		case "lesbian", "bean":
-			overlay = &lesbianOverlay
-		case "nonbinary", "enby":
-			overlay = &enbyOverlay
-		case "pansexual", "pan":
-			overlay = &pansexualOverlay
-		case "pride", "lgbt", "gay":
-			overlay = &prideOverlay
-		default:
-			overlay = &transOverlay
 		}
 
 		img := lgbt.Overlay(&avatarImage, overlay)
