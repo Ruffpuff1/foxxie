@@ -3,7 +3,7 @@
   "version": "0.0.4",
   "description": "Commonly used types in Foxxie projects",
   "scripts": {
-    "build": "tsup",
+    "build": "rm -r -f dist && tsup",
     "lint": "prettier --check . && eslint src --ext mjs,js,ts",
     "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
     "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'packages/types/*'"
