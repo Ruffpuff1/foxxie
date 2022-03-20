@@ -8,7 +8,7 @@ import { toTitleCase } from '@ruffpuff/utilities';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
-import { envParseBoolean } from '#lib/env';
+import { envParse } from '#root/config';
 
 const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) {
     getHoroscope(sunsign: $sunsign, day: $day) {
@@ -48,7 +48,7 @@ const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) 
             ),
     ['946882459788779590', '946882459788779590'],
     {
-        enabled: envParseBoolean('SAELEM_ENABLED')
+        enabled: envParse.boolean('SAELEM_ENABLED')
     }
 )
 export class UserCommand extends Command {

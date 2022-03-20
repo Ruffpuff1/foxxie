@@ -3,7 +3,6 @@ process.env.NODE_ENV ??= 'development';
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { durationOptions, ordinalOptions } from '#languages';
 import { acquireSettings, GuildSettings } from '#lib/database';
-import { envParseString, envParseArray, envParseInt } from '#lib/env';
 import { categories } from '#lib/game';
 import { LanguageKeys } from '#lib/i18n';
 import { emojis, languageFolder, rootFolder } from '#utils/constants';
@@ -20,10 +19,13 @@ import type { InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { duration, longDate } from '#utils/util';
+import { EnvParse } from '@foxxie/env';
 
 config({
     path: join(rootFolder, '.env')
 });
+
+export const envParse = new EnvParse();
 
 PaginatedMessage.defaultActions = [
     PaginatedMessage.defaultActions[0], // select menu
@@ -32,10 +34,10 @@ PaginatedMessage.defaultActions = [
     PaginatedMessage.defaultActions[3] // next
 ];
 
-export const CLIENT_OWNERS = envParseArray('CLIENT_OWNERS');
+export const CLIENT_OWNERS = envParse.array('CLIENT_OWNERS');
 export const WEBHOOK_ERROR = parseWebhookError();
-export const AUDIO_ALLOWED_GUILDS = envParseArray('AUDIO_ALLOWED_GUILDS', []);
-export const TIMEZONE = envParseString('TIMEZONE');
+export const AUDIO_ALLOWED_GUILDS = envParse.array('AUDIO_ALLOWED_GUILDS');
+export const TIMEZONE = envParse.string('TIMEZONE');
 
 export function parsePresenceActivity(): ActivitiesOptions[] {
     const { CLIENT_PRESENCE_NAME } = process.env;
@@ -43,7 +45,7 @@ export function parsePresenceActivity(): ActivitiesOptions[] {
 
     return [
         {
-            name: CLIENT_PRESENCE_NAME,
+            name: envParse.string('TIMEZONE'),
             type: 'LISTENING'
         }
     ];
@@ -319,7 +321,7 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 }
 
 export const CLIENT_OPTIONS: ClientOptions = {
-    defaultPrefix: envParseString('CLIENT_PREFIX'),
+    defaultPrefix: envParse.string('CLIENT_PREFIX'),
     presence: {
         activities: parsePresenceActivity(),
         status: 'idle'
@@ -343,7 +345,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
                 },
                 redis: {
                     host: process.env.REDIS_HOST,
-                    port: envParseInt('REDIS_PORT'),
+                    port: envParse.int('REDIS_PORT'),
                     password: process.env.REDIS_PASSWORD,
                     db: 2
                 }
@@ -351,14 +353,14 @@ export const CLIENT_OPTIONS: ClientOptions = {
         })
     },
     logger: {
-        level: envParseInt('LOG_LEVEL') as LogLevel
+        level: envParse.int('LOG_LEVEL') as LogLevel
     },
     intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_BANS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_VOICE_STATES', 'DIRECT_MESSAGES']
 };
 
 function parseAudioOptions(): NodeOptions {
     return {
-        password: envParseString('LAVALINK_PASSWORD'),
+        password: envParse.string('LAVALINK_PASSWORD'),
         userID: process.env.CLIENT_ID!,
         shardCount: 0,
         hosts: {

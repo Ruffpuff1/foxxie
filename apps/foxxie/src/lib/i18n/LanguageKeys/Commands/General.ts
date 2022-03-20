@@ -1,14 +1,8 @@
 import { FT, HelpDisplayData, T } from '#lib/types';
 import type { Collection, Guild, GuildChannel } from 'discord.js';
 
-export const AboutDescription = T('commands/general:aboutDescription');
-export const AboutDetailedDescription = T('commands/general:aboutDetailedDescription');
-export const AboutSummary = FT<{
-    version: string;
-    created: Date;
-    userCount: number;
-    privacy: string;
-}>('commands/general:aboutSummary');
+export const DonateDescription = T('commands/general:donateDescription');
+export const DonateHeader = T('commands/general:donateHeader');
 export const InfoChannelArchived = FT<{ time: Date }>('commands/general:infoChannelArchived');
 export const InfoChannelCreated = FT<{ name: string; date: Date }, string>('commands/general:infoChannelCreated');
 export const InfoChannelTitles = T<{
@@ -81,10 +75,6 @@ export const InfoUserTitles = T<{
 export const InfoUserTitlesNotes = FT<{ count: number }, string>('commands/general:infoUserTitles.notes');
 export const InfoUserTitlesRoles = FT<{ count: number }, string>('commands/general:infoUserTitles.roles');
 export const InfoUserTitlesWarnings = FT<{ count: number }, string>('commands/general:infoUserTitles.warnings');
-export const Ping = T('commands/general:ping');
-export const PingDescription = T('commands/general:pingDescription');
-export const PingDetailedDescription = T<HelpDisplayData>('commands/general:pingDetailedDescription');
-export const PingPong = FT<{ roundTrip: number; wsPing: number }>('commands/general:pingPong');
 export const StatsDescription = T('commands/general:statsDescription');
 export const StatsDetailedDescription = T<HelpDisplayData>('commands/general:statsDetailedDescription');
 export const StatsMenu = FT<

@@ -9,10 +9,15 @@ body:
     attributes:
       label: Which package is the feature request for?
       options:
+        - env
         - foxxie
         - kettu
-        - eslint-config
         - fetch
+        - fuzzysearch
+        - graphql-stardrop
+        - eslint-config
+        - stardrop
+        - ravy.lgbt
         - lock-queue
         - types
     validations:

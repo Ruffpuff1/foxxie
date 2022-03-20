@@ -8,7 +8,7 @@ import { fetch } from '@foxxie/fetch';
 import { FuzzySearch } from '#utils/FuzzySearch';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
-import { envIsDefined } from '#lib/env';
+import { envParse } from '#root/config';
 
 @RegisterChatInputCommand(
     CommandName.Currency,
@@ -43,7 +43,7 @@ import { envIsDefined } from '#lib/env';
             ),
     ['947381920881311765', '947398139462164490'],
     {
-        enabled: envIsDefined('CRYPTOCOMPARE_TOKEN')
+        enabled: envParse.exists('CRYPTOCOMPARE_TOKEN')
     }
 )
 export class UserCommand extends Command {

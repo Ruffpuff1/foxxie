@@ -1,11 +1,11 @@
 import { config } from '#database/config';
-import { envParseBoolean } from '#lib/env';
 import FoxxieClient from '#lib/FoxxieClient';
 import '#lib/setup';
 import { helpUsagePostProcessor } from '#utils/constants';
 import { container } from '@sapphire/framework';
 import { init } from '@sentry/node';
 import i18next from 'i18next';
+import { envParse } from './config';
 
 async function main() {
     try {
@@ -13,7 +13,7 @@ async function main() {
 
         i18next.use(helpUsagePostProcessor);
 
-        if (envParseBoolean('SENTRY_ENABLED', false)) {
+        if (envParse.boolean('SENTRY_ENABLED')) {
             init({
                 dsn: process.env.SENTRY_TOKEN,
                 release: `Foxxie@${process.env.CLIENT_VERSION}`
@@ -28,4 +28,4 @@ async function main() {
     }
 }
 
-main();
+void main();

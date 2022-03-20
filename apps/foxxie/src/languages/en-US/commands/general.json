@@ -1,9 +1,6 @@
 {
-    "aboutDescription": "View basic information about me.",
-    "aboutDetailedDescription": {
-        "extendedHelp": "The about command will provide you with a summary of me as well as a link to my privacy policy and my user count."
-    },
-    "aboutSummary": "{{version}} is a bot created for [The Corner Store]({{TCS}}), with advanced moderation, utilities, and configuration. Foxxie is made to best support community servers and everything they may need to foster a healthy enviroment.\n\nHe's built on top of [Sapphire Framework](https://sapphirejs.dev/), a \"plug-and-play\" object-oriented-framework made for the [Discord.js library](https://discord.js.org/).\n\nCreated **{{created, fulldatetime}}** a whole **{{created, duration}}**. Right now he's taking care of about **{{userCount, number}} users**, with more every day!\n\nTo learn more about Foxxie and how he may process your data you can refer to our [privacy policy]({{privacy}}).",
+    "donateDescription": "Donate to help further my development.",
+    "donateHeader": "Donation links",
     "infoChannelArchived": "Yes, on {{time, dateFormat}} ({{time, duration}})",
     "infoChannelCreated": "{{name}} was created on {{date, dateFormat}} ({{date, duration}})",
     "infoChannelTitles": {
@@ -82,12 +79,6 @@
         "warnings": "**:lock: Warning**",
         "warnings_other": "**:lock: Warnings ({{count, number}})**"
     },
-    "ping": "{{LOADING}} Ping?",
-    "pingDescription": "Runs a connection test to Discord.",
-    "pingDetailedDescription": {
-        "extendedHelp": "Pings my server and returns with a pong!"
-    },
-    "pingPong": "{{LOADING}} Pong! (Roundtrip: {{roundTrip, number}}ms. Heartbeat: {{wsPing, number}}ms.)",
     "statsDescription": "Provides some details about me and my stats.",
     "statsDetailedDescription": {
         "usages": [""],

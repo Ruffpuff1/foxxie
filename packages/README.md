@@ -16,6 +16,10 @@
 
 <h2>Included Packages</h2>
 
+### Env [![npm](https://img.shields.io/npm/v/@foxxie/env?color=crimson&label=env%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/env)
+
+Parser for resolving process env values.
+
 ### Eslint-config [![npm](https://img.shields.io/npm/v/@foxxie/eslint-config?color=crimson&label=eslint-config%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/eslint-config)
 
 A shared strict eslint configuration for every project in this repository.

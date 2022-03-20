@@ -27,3 +27,20 @@ declare module 'i18next' {
         <K extends string, TArgs extends O, TReturn>(key: CustomFunctionGet<K, TArgs, TReturn>, defaultValue: TReturn, options?: TOptions<TArgs>): TReturn;
     }
 }
+
+declare module '@foxxie/env' {
+    interface Env {
+        CLIENT_VERSION: `${number}.${number}.${number}`;
+
+        DISCORD_TOKEN: string;
+        GUILD_IDS: string;
+
+        CELESTIA_ENABLED: BooleanString;
+        SAELEM_ENABLED: BooleanString;
+        STARDROP_ENABLED: BooleanString;
+
+        CRYPTOCOMPARE_TOKEN: string;
+        GITHUB_TOKEN: string;
+        WOLFRAM_TOKEN: string;
+    }
+}

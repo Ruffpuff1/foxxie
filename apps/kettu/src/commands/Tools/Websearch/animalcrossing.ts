@@ -1,13 +1,13 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
 import { RegisterChatInputCommand } from '#utils/decorators';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { envParseBoolean } from '#lib/env';
 import type { VillagersEnum } from '@ruffpuff/celestia';
 import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#utils/APIs';
 import { toTitleCase } from '@ruffpuff/utilities';
 import { enUS } from '#utils/util';
 import { LanguageKeys } from '#lib/i18n';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
+import { envParse } from '#root/config';
 
 @RegisterChatInputCommand(
     CommandName.AnimalCrossing,
@@ -28,7 +28,7 @@ import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'di
             ),
     ['949309221441273866'],
     {
-        enabled: envParseBoolean('CELESTIA_ENABLED')
+        enabled: envParse.boolean('CELESTIA_ENABLED')
     }
 )
 export class UserCommand extends Command {

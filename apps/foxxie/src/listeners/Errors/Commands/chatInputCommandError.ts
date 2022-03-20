@@ -8,9 +8,8 @@ import { cast, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { EventArgs, Events } from '#lib/types';
 import { codeBlock, cutText } from '@sapphire/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v9';
-import { CLIENT_OWNERS } from '#root/config';
+import { CLIENT_OWNERS, envParse } from '#root/config';
 import { captureException } from '@sentry/node';
-import { envParseBoolean } from '#lib/env';
 import { getLocale } from '#utils/decorators';
 
 const ignoredErrorCodes = [RESTJSONErrorCodes.UnknownInteraction, RESTJSONErrorCodes.InteractionHasAlreadyBeenAcknowledged];
@@ -52,7 +51,7 @@ export class UserListener extends Listener<Events.ChatInputCommandError> {
 
     private generateErrorMessage(interaction: CommandInteraction, t: TFunction, error: Error) {
         if (CLIENT_OWNERS.includes(interaction.user.id)) return codeBlock('js', error.stack);
-        if (!envParseBoolean('SENTRY_ENABLED', false)) return t(LanguageKeys.Listeners.Errors.Unexpected);
+        if (!envParse.boolean('SENTRY_ENABLED')) return t(LanguageKeys.Listeners.Errors.Unexpected);
 
         try {
             const report = captureException(error, {
