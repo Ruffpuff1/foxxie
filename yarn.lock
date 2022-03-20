@@ -1656,6 +1656,14 @@
     tslib "^2.3.1"
     typescript "^4.6.2"
 
+"@sapphire/ts-config@3.3.3":
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/@sapphire/ts-config/-/ts-config-3.3.3.tgz#c8c74db8fc8f1a0e7175a431ba53b2a746f8b736"
+  integrity sha512-pL0Il7dOMspwOfScGMsdW+Qv3gKYrrEoLUdxHHTiuSqt9J4Oz+B5ezT3+HSorP/t3g8vYdbsB0zlfFvnVcJmSw==
+  dependencies:
+    tslib "^2.3.1"
+    typescript "^4.6.2"
+
 "@sapphire/utilities@^3.3.0", "@sapphire/utilities@^3.4.0", "@sapphire/utilities@^3.5.0", "@sapphire/utilities@^3.6.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@sapphire/utilities/-/utilities-3.6.0.tgz#8e5bb26fdf17bcb0111cbea2cc6624b86a2d1694"
@@ -1948,14 +1956,7 @@
   dependencies:
     i18next "^21.0.1"
 
-"@types/ioredis@*":
-  version "4.28.10"
-  resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.28.10.tgz#40ceb157a4141088d1394bb87c98ed09a75a06ff"
-  integrity sha512-69LyhUgrXdgcNDv7ogs1qXZomnfOEnSmrmMFqKgt1XMJxmoOSG/u3wYy13yACIfKuMJ8IhKgHafDO3sx19zVQQ==
-  dependencies:
-    "@types/node" "*"
-
-"@types/ioredis@4.28.10":
+"@types/ioredis@*", "@types/ioredis@4.28.10":
   version "4.28.10"
   resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.28.10.tgz#40ceb157a4141088d1394bb87c98ed09a75a06ff"
   integrity sha512-69LyhUgrXdgcNDv7ogs1qXZomnfOEnSmrmMFqKgt1XMJxmoOSG/u3wYy13yACIfKuMJ8IhKgHafDO3sx19zVQQ==
