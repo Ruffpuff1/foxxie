@@ -1,9 +1,6 @@
 {
-    "aboutDescription": "",
-    "aboutDetailedDescription": {
-        "extendedHelp": ""
-    },
-    "aboutSummary": "",
+    "donateDescription": "Donar para ayudar a continuar mi desarrollo.",
+    "donateHeader": "Enlaces de donación",
     "infoChannelArchived": "Sí, en {{time, dateFormat}} ({{time, duration}})",
     "infoChannelCreated": "{{name}} era creado en {{date, dateFormat}} ({{date, duration}})",
     "infoChannelTitles": {
@@ -82,12 +79,6 @@
         "warnings": "",
         "warnings_other": ""
     },
-    "ping": "",
-    "pingDescription": "",
-    "pingDetailedDescription": {
-        "extendedHelp": ""
-    },
-    "pingPong": "",
     "statsDescription": "",
     "statsDetailedDescription": {
         "usages": [
