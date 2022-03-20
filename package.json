@@ -35,7 +35,7 @@
   "homepage": "https://github.com/FoxxieBot/foxxie",
   "devDependencies": {
     "@octokit/action": "^3.18.0",
-    "@sapphire/ts-config": "3.3.2",
+    "@sapphire/ts-config": "3.3.3",
     "conventional-changelog-angular": "^5.0.13",
     "conventional-recommended-bump": "^6.1.0",
     "ts-jest": "27.1.3",
