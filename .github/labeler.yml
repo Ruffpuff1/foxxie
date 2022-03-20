@@ -5,6 +5,10 @@
 'Bot: Kettu':
   - apps/kettu/*
   - apps/kettu/**/*
+  
+'Packages: env':
+  - packages/env/*
+  - packages/env/**/*
 
 'Packages: fetch':
   - packages/fetch/*
