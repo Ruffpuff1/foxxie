@@ -69,3 +69,7 @@
 'Meta: Github':
   - .github/*
   - .github/**/*
+  
+'Site: root':
+  - website/root/*
+  - website/root/**/*
