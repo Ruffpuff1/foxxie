@@ -12,10 +12,13 @@ import { join } from 'node:path';
 import type { InterpolationOptions } from 'i18next';
 import { Emojis } from '#utils/constants';
 import { duration, longDate } from '#utils/util';
+import { EnvParse } from '@foxxie/env';
 
 config({
     path: join(process.cwd(), '.env')
 });
+
+export const envParse = new EnvParse();
 
 PaginatedMessage.defaultActions = [
     PaginatedMessage.defaultActions[0], // select menu

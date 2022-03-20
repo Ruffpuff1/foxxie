@@ -1,6 +1,5 @@
 import { container, SapphireClient, SapphirePrefix } from '@sapphire/framework';
-import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '#root/config';
-import { envParseBoolean, envParseInt } from '#lib/env';
+import { CLIENT_OPTIONS, envParse, WEBHOOK_ERROR } from '#root/config';
 import { Message, WebhookClient } from 'discord.js';
 import { magentaBright } from 'colorette';
 import { Enumerable } from '@sapphire/decorators';
@@ -39,20 +38,20 @@ export default class FoxxieClient extends SapphireClient {
 
         container.workers = new WorkerManager(3);
 
-        container.analytics = envParseBoolean('INFLUX_ENABLED', false) ? new AnalyticsManager() : null;
+        container.analytics = envParse.boolean('INFLUX_ENABLED') ? new AnalyticsManager() : null;
 
         container.settings = new SettingsManager();
 
-        container.redis = envParseBoolean('REDIS_ENABLED', false)
+        container.redis = envParse.boolean('REDIS_ENABLED')
             ? new RedisManager({
                   host: process.env.REDIS_HOST,
-                  port: envParseInt('REDIS_PORT'),
+                  port: envParse.int('REDIS_PORT'),
                   password: process.env.REDIS_PASSWORD,
                   lazyConnect: true
               })
             : null;
 
-        this.audio = envParseBoolean('AUDIO_ENABLED', false)
+        this.audio = envParse.boolean('AUDIO_ENABLED')
             ? new FoxxieQueue(CLIENT_OPTIONS.audio, (guildID, packet) => {
                   const guild = this.guilds.cache.get(guildID);
                   if (guild) guild.shard.send(packet);

@@ -7,6 +7,7 @@ export type ChatInputArgs<T = unknown> = [interaction: CommandInteraction, conte
 export enum CommandName {
     Ban = 'ban',
     Case = 'case',
+    Donate = 'donate',
     Info = 'info',
     Kick = 'kick'
 }
@@ -55,4 +56,6 @@ export type CommandArgs<T extends CommandName> = T extends CommandName.Case
     ? ModerationArgs
     : T extends CommandName.Info
     ? InfoArgs
+    : T extends CommandName.Donate
+    ? EphemeralArgs
     : never;

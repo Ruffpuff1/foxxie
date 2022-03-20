@@ -3,16 +3,15 @@ import { DiscordAPIError, HTTPError, Message, MessageEmbed } from 'discord.js';
 import type { TFunction } from 'i18next';
 import { LanguageKeys, translate } from '#lib/i18n';
 import type { FoxxieArgs, FoxxieCommand } from '#lib/structures';
-import { Colors, rootFolder } from '#utils/constants';
+import { Colors, emojis, rootFolder } from '#utils/constants';
 import { getCommandPrefix } from '#utils/transformers';
 import { sendTemporaryMessage } from '#utils/Discord';
 import { minutes, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { Events } from '#lib/types';
 import { codeBlock, cutText } from '@sapphire/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v9';
-import { CLIENT_OWNERS } from '#root/config';
+import { CLIENT_OWNERS, envParse } from '#root/config';
 import { captureException } from '@sentry/node';
-import { envParseBoolean } from '#lib/env';
 
 const ignoredErrorCodes = [RESTJSONErrorCodes.UnknownChannel, RESTJSONErrorCodes.UnknownMessage];
 
@@ -22,6 +21,11 @@ export class UserListener extends Listener<Events.MessageCommandError> {
         if (typeof error === 'string') return this.stringError(message, args.t, error);
         if (error instanceof ArgumentError) return this.argumentError(message, args.t, error);
         if (error instanceof UserError) return this.userError(message, args, error);
+
+        if (error.message === `The command ${command.name} does not have a \'messageRun\' method and does not support sub-commands.`) {
+            const content = `${emojis.loading} Hey there! You may have heard Discord bots are switching over to **Slash Commands /**. Im currently being reworked to use slash commands and this command has been too! Try using \`/${command.name}\` instead.\n\n***Full support for message based commands will be removed <t:1651345200:f>.***`;
+            return this.send(message, content);
+        }
 
         const { client, logger } = this.container;
 
@@ -51,7 +55,7 @@ export class UserListener extends Listener<Events.MessageCommandError> {
 
     private generateErrorMessage(args: Args, error: Error) {
         if (CLIENT_OWNERS.includes(args.message.author.id)) return codeBlock('js', error.stack);
-        if (!envParseBoolean('SENTRY_ENABLED', false)) return args.t(LanguageKeys.Listeners.Errors.Unexpected);
+        if (!envParse.boolean('SENTRY_ENABLED')) return args.t(LanguageKeys.Listeners.Errors.Unexpected);
 
         try {
             const report = captureException(error, {
@@ -88,7 +92,7 @@ export class UserListener extends Listener<Events.MessageCommandError> {
         );
     }
 
-    private async argumentError(message: Message, t: TFunction, error: ArgumentError<unknown>) {
+    private argumentError(message: Message, t: TFunction, error: ArgumentError<unknown>) {
         const argument = error.argument.name;
         const identifier = translate(error.identifier);
         const parameter = error.parameter.replaceAll('`', '῾');

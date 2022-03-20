@@ -15,7 +15,6 @@
   "imports": {
     "#root/*": "./dist/*.js",
     "#lib/util": "./dist/lib/util/index.js",
-    "#lib/env": "./dist/lib/env/index.js",
     "#lib/i18n": "./dist/lib/i18n/index.js",
     "#types/*": "./dist/lib/types/*.js",
     "#utils/*": "./dist/lib/util/*.js",
@@ -24,6 +23,7 @@
   },
   "dependencies": {
     "@discordjs/builders": "^0.12.0",
+    "@foxxie/env": "^0.0.1",
     "@foxxie/fetch": "0.0.2",
     "@ruffpuff/utilities": "^4.0.0",
     "@sapphire/decorators": "^4.2.6",

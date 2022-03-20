@@ -2,6 +2,7 @@ import type { APIApplicationCommandInteraction, APIUser } from 'discord-api-type
 import { userMention, italic, time, TimestampStyles } from '@discordjs/builders';
 import type { UserMention } from 'discord.js';
 import { container } from '@sapphire/framework';
+import { envParse } from '#root/config';
 
 export function wrapWithTarget<T extends string>(user: APIUser | undefined, str: T): T | `_Suggestion for: ${UserMention}_\n\n${T}` {
     if (!user) return str;
@@ -25,10 +26,11 @@ export const getAvatar = getProperty('avatar');
 export const getUser = (interaction: APIApplicationCommandInteraction, user: APIUser | undefined) => user ?? interaction.user ?? interaction.member?.user;
 
 export function getGuildIds() {
-    const ids = process.env.GUILD_IDS!;
-
-    if (!ids) return [];
-    return ids.split(' ');
+    try {
+        return envParse.array('GUILD_IDS');
+    } catch {
+        return [];
+    }
 }
 
 export function loadT(lang: string) {

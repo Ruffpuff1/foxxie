@@ -6,7 +6,7 @@ import { bold, hyperlink } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
-import { envIsDefined } from '#lib/env';
+import { envParse } from '#root/config';
 
 @RegisterChatInputCommand(
     CommandName.Wolfram,
@@ -33,7 +33,7 @@ import { envIsDefined } from '#lib/env';
             ),
     ['946769238687903784', '946769238687903784'],
     {
-        enabled: envIsDefined('WOLFRAM_TOKEN')
+        enabled: envParse.exists('WOLFRAM_TOKEN')
     }
 )
 export class UserCommand extends Command {

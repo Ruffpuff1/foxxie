@@ -7,6 +7,7 @@ on:
         description: 'The package to publish and release.'
         required: true
         options:
+          - env
           - eslint-config
           - fetch
           - fuzzysearch

@@ -1,13 +1,13 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
 import { RegisterChatInputCommand } from '#utils/decorators';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { envParseBoolean } from '#lib/env';
 import { buildStardewVillagerDisplay, fetchStardewVillager, fuzzySearchStardewVillagers } from '#utils/APIs';
 import type { VillagersEnum } from '@foxxie/stardrop';
 import { enUS } from '#utils/util';
 import { LanguageKeys } from '#lib/i18n';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { toTitleCase } from '@ruffpuff/utilities';
+import { envParse } from '#root/config';
 
 @RegisterChatInputCommand(
     CommandName.StardewValley,
@@ -28,7 +28,7 @@ import { toTitleCase } from '@ruffpuff/utilities';
             ),
     ['953151326844518430'],
     {
-        enabled: envParseBoolean('STARDROP_ENABLED', false)
+        enabled: envParse.boolean('STARDROP_ENABLED')
     }
 )
 export class UserCommand extends Command {
