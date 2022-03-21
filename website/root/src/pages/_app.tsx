@@ -1,8 +1,12 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
+import { useEffect } from 'react';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    document.documentElement.classList.add('bg-black');
+  })
   return <Component {...pageProps} />
 }
 
-export default MyApp
+export default App

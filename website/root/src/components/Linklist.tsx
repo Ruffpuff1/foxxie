@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 export function Linklist({ name }: { name: string; }) {
     const router = useRouter();
     return (
-        <ul className='flex space-x-4'>
+        <ul className='flex space-x-4 text-white'>
             {
                 router.pathname === `/${name}`
                     ?
