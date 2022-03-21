@@ -1,5 +1,5 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 
 function App({ Component, pageProps }: AppProps) {
@@ -13,14 +13,14 @@ function App({ Component, pageProps }: AppProps) {
         ruffpuff: {
           author: 'Ruffpuff',
           bot: false,
-          avatar: 'https://cdn.ruffpuff.dev/ruffpuff.jpg',
+          avatar: 'https://cdn.ruffpuff.dev/ruffpuff.jpg'
         }
       }
-    }
+    };
 
     document.documentElement.classList.add('bg-light-gray');
-  }, [])
-  return <Component {...pageProps} />
+  }, []);
+  return <Component {...pageProps} />;
 }
 
-export default App
+export default App;

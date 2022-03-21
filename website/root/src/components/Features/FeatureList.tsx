@@ -2,6 +2,7 @@ import { Ban } from "./Foxxie/Ban";
 import { InfoUser } from "./Foxxie/InfoUser";
 import { Wolfram } from "./Kettu/Wolfram";
 import Divider from '@mui/material/Divider';
+import { Pokemon } from "./Kettu/Pokemon";
 
 const features = [
     {
@@ -21,6 +22,12 @@ const features = [
         Feature: InfoUser,
         description: 'Foxxie has information about anything in your server, from users to roles, even channels and emojis!',
         bot: 'Foxxie'
+    },
+    {
+        name: 'Websearch',
+        Feature: Pokemon,
+        description: 'Kettu includes multiple websearch features, including Pokémon, Animal Crossing, Github, and more.',
+        bot: 'Kettu'
     }
 ];
 

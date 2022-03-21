@@ -1,16 +1,6 @@
-import { years } from "@ruffpuff/utilities";
 import { DiscordCommand, DiscordMessage, DiscordMessages, DiscordEmbed, DiscordEmbedField, DiscordEmbedFields, DiscordActionRow, DiscordButton, DiscordAttachments } from "@skyra/discord-components-react";
 
-export function InfoUser() {
-    const created = new Date('2018-09-04T04:44:20.911Z');
-    const joined = new Date('2020-10-02T08:59:47.563Z');
-    const now = Date.now();
-
-    const durationFromCreated = (now - created.getTime()) / years(1);
-    const durationFromJoin = (now - joined.getTime()) / years(1);
-
-    const createdFormatted = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(created);
-
+export function Pokemon() {
     return (
         <DiscordMessages>
             <DiscordMessage
@@ -27,23 +17,32 @@ export function InfoUser() {
                 ></ DiscordCommand>
                 <DiscordEmbed
                     slot='embeds'
-                    authorName="Ruffpuff#0017"
+                    authorName="#37 - Vulpix"
                     thumbnail="https://cdn.ruffpuff.dev/ruffpuff.jpg"
                     authorImage="https://cdn.ruffpuff.dev/ruffpuff.jpg"
-                    color="#898489"
+                    color="#a35119"
                 >
                     <DiscordEmbedFields slot='fields'>
-                        <DiscordEmbedField fieldTitle='📝 About'>
-                            <p>Joined Discord on {createdFormatted} ({Math.round(durationFromCreated)} years ago)</p>
-                            <p>Created The Corner Store on October 2, 2020 ({Math.round(durationFromJoin)} year ago)</p>
-                            <p>106.73K messages sent.</p>
+                        <DiscordEmbedField
+                            fieldTitle='📜 Type'
+                            inline
+                            inlineIndex={1}
+                        >
+                            Fire
                         </DiscordEmbedField>
-                        <DiscordEmbedField fieldTitle='📜 Roles (14)'>
-                            <p>Ruff, Moderator, Server Boosters</p>
-                            <p>⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯</p>
-                            <p>Senior Customers, Active, Patrons, Regulars, Returnings, New Customer, Old Timers</p>
-                            <p>⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯</p>
-                            <p>He/Him, They/Them</p>
+                        <DiscordEmbedField
+                            fieldTitle='🔮 Abilities'
+                            inline
+                            inlineIndex={2}
+                        >
+                            Flash Fire and drought
+                        </DiscordEmbedField>
+                        <DiscordEmbedField
+                            fieldTitle=''
+                            inline
+                            inlineIndex={3}
+                        >
+
                         </DiscordEmbedField>
                     </DiscordEmbedFields>
                 </DiscordEmbed>

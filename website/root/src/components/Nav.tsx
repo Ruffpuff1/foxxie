@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string; }) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [showNames, setShowNames] = showAll ? [true, () => { }] : useState(false);
+    const [showNames, setShowNames] = showAll ? [true, () => { /* */ }] : useState(false);
     const router = useRouter();
 
     return (
@@ -43,7 +43,7 @@ export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string;
                         < div className="text-lg font-source-sans" >
                             <button
                                 className='absolute left-0 pl-5 pt-2'
-                                onClick={() => setShowNames(!showNames)}
+                                onClick={() => { setShowNames(!showNames); }}
                             >
                                 <p className='font-bold'>Foxxie</p>
                             </button>
@@ -51,7 +51,7 @@ export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string;
                                 className={`duration-300 absolute left-20 pt-2${showNames ? ' opacity-100 pl-3 cursor-pointer' : ' opacity-0 pl-1 cursor-default'}`}
                                 onClick={() => {
                                     if (!showNames) return;
-                                    router.push('/kettu');
+                                    return router.push('/kettu');
                                 }}
                             >
                                 <p className='font-medium'>Kettu</p>
@@ -63,7 +63,7 @@ export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string;
                         : <div className="text-lg font-source-sans">
                             <button
                                 className='absolute left-0 pl-5 pt-2'
-                                onClick={() => setShowNames(!showNames)}
+                                onClick={() => { setShowNames(!showNames); }}
                             >
                                 <p className='font-bold'>Kettu</p>
                             </button>
@@ -71,7 +71,7 @@ export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string;
                                 className={`duration-300 absolute left-20 pt-2${showNames ? ' opacity-100 pl-3 cursor-pointer' : ' opacity-0 pl-1 cursor-default'}`}
                                 onClick={() => {
                                     if (!showNames) return;
-                                    router.push('/foxxie');
+                                    return router.push('/foxxie');
                                 }}
                             >
                                 <p className='font-medium'>Foxxie</p>
