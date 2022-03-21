@@ -3,6 +3,7 @@ import { Botlist } from '../components/Botlist';
 import { Nav } from '../components/Nav';
 import { Main } from '../components/Headers/Main';
 import { Content } from '../components/Content';
+import { Features } from '../components/Features/FeatureList';
 
 const links = [
   {
@@ -28,9 +29,12 @@ const Home: NextPage = () => {
         <Main />
 
         <Botlist />
+
       </Content>
 
-      <div className='bottom-1 absolute bg-gray w-full h-16 text-light-white text-sm pt-2 space-y-1'>
+      <Features />
+
+      <div className='bottom-0 static bg-gray w-full mt-32 md:mt-52 sm:mt-52 lg:h-16 xl:h-16 md:h-36 sm:h-32 h-36 text-light-white text-sm pt-2 space-y-1 transition-all duration-300'>
         <div className='flex justify-center space-x-5'>
           <a
             href='mailto:contact@ruffpuff.dev'
@@ -40,9 +44,14 @@ const Home: NextPage = () => {
           >
             contact@ruffpuff.dev
           </a>
-          <p>
+          <a
+            href='https://github.com/FoxxieBot/foxxie/blob/main/LICENSE'
+            target='_blank'
+            rel="noreferrer"
+            className='hover:underline'
+          >
             Copyright © Foxxie 2021
-          </p>
+          </a>
         </div>
         <div className='flex justify-center space-x-5'>
           {

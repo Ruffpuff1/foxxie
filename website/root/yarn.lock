@@ -379,10 +379,37 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.4.tgz#d8c7b8db9226d2d7664553a0741ad7d0397ee503"
   integrity sha512-q/ytXxO5NKvyT37pmisQAItCFqA7FD/vNb8dgaJy3/630Fsc+Mz9/9f2SziBoIZ30TJooXyTwZmhi1zjXmObYg==
 
+"@ruffpuff/utilities@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@ruffpuff/utilities/-/utilities-4.0.0.tgz#0a53b7db0a7cc6c52d1a8d3dcf97c48e9253749f"
+  integrity sha512-+1BE6tn+lj1YYZa++K+q0WP8tL9Jfcl95qDPCT8itFQqCn5QMQnzHsnxBsQ2EFCgkc6OAWoUEyrARUjMi/RiEw==
+
 "@rushstack/eslint-patch@^1.0.8":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.1.tgz#782fa5da44c4f38ae9fd38e9184b54e451936118"
   integrity sha512-BUyKJGdDWqvWC5GEhyOiUrGNi9iJUr4CU0O2WxJL6QJhHeeA/NVBalH+FeK0r/x/W0rPymXt5s78TDS7d6lCwg==
+
+"@skyra/discord-components-core@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@skyra/discord-components-core/-/discord-components-core-3.1.1.tgz#4b1b7b6ffe5373b622e71525231796e1a5c38890"
+  integrity sha512-C0R5ih2RHDgpXVEjIiyMMDSW2hMuCwkaafqFfXXG///rQQqIyoqLYhhZfVXtNb6eBTWCs98tCENoEcSe6ysPuw==
+  dependencies:
+    "@stencil/core" "^2.14.1"
+    clsx "^1.1.1"
+    hex-to-rgba "^2.0.1"
+
+"@skyra/discord-components-react@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@skyra/discord-components-react/-/discord-components-react-3.1.1.tgz#260d7a7f713918da0080952da1ffd9bd7779ec85"
+  integrity sha512-NB8varo3NuhL4eejO7DULaEdc7JexBe+pXv6W8Gm1Xx8cgl4Hfyus74pS97uuYMDx3+2R+Y87vo6kaZ6yzpphw==
+  dependencies:
+    "@skyra/discord-components-core" "^3.1.1"
+    tslib "^2.3.1"
+
+"@stencil/core@^2.14.1":
+  version "2.14.2"
+  resolved "https://registry.yarnpkg.com/@stencil/core/-/core-2.14.2.tgz#c221d18bbfd9b637d755d43631598695c7526ff2"
+  integrity sha512-NMC5Xi8sPFJxaO4rz6CbMHuD6PteE/RJWtjrbkusmpjKRtMXkfZJPIgOrleZ4xO+vXcNyL535Ru7vUADqEsTiQ==
 
 "@types/json5@^0.0.29":
   version "0.0.29"
@@ -1394,6 +1421,11 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
+hex-to-rgba@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/hex-to-rgba/-/hex-to-rgba-2.0.1.tgz#4176977882a1cb32b83ce5ab1db6828ab84d5a13"
+  integrity sha512-5XqPJBpsEUMsseJUi2w2Hl7cHFFi3+OO10M2pzAvKB1zL6fc+koGMhmBqoDOCB4GemiRM/zvDMRIhVw6EkB8dQ==
+
 hey-listen@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/hey-listen/-/hey-listen-1.0.8.tgz#8e59561ff724908de1aa924ed6ecc84a56a9aa68"
@@ -2301,7 +2333,7 @@ tslib@^1.8.1:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.1.0:
+tslib@^2.1.0, tslib@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
