@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import Divider from '@mui/material/Divider';
 
 export function Main() {
     return (
@@ -18,7 +19,9 @@ export function Main() {
                 The Foxxie Project
             </h1>
 
-            <h2 className='text-white pt-4 px-24 sm:px-24 lg:px-20 md:px-20 duration-300 transition-all'>
+            <Divider light={true} />
+
+            <h2 className='text-light-white pt-4 px-24 sm:px-24 lg:px-20 md:px-20 duration-300 transition-all'>
                 A shared duo of bots designed to provide everything you need in community Discord servers.
             </h2>
         </motion.div>

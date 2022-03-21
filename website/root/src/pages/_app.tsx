@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    document.documentElement.classList.add('bg-black');
+    document.documentElement.classList.add('bg-light-gray');
   })
   return <Component {...pageProps} />
 }
