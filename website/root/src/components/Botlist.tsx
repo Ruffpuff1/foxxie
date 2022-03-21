@@ -5,14 +5,14 @@ import { motion } from 'framer-motion';
 const bots = [
     {
         name: 'Foxxie',
-        color: 'bg-orange-600',
+        color: 'bg-gray',
         image: "https://cdn.ruffpuff.dev/foxxie.png",
         text: 'Foxxie is an advanced moderation bot. Including automoderation and scam detection. Including a "shield" feature to automatically detect malicious users.',
         link: '/foxxie'
     },
     {
         name: 'Kettu',
-        color: 'bg-red-400',
+        color: 'bg-gray',
         image: "https://cdn.ruffpuff.dev/kettu.png",
         text: 'Kettu is a bot for providing tooling and information in your server. He comes with a variety of websearch commands including those for fetching Pokémon, Animal Crossing, and Stardew Valley data.',
         link: '/kettu'
@@ -47,7 +47,7 @@ export function Botlist() {
                                     <h2 className='font-bold text-white hover:pl-1 hover:underline duration-700'>{bot.name}</h2>
                                 </button>
                             </div>
-                            <p className='text-white font-semibold p-2 pt-0'>
+                            <p className='text-[#dbd5d5] p-2 pt-0'>
                                 {bot.text}
                             </p>
                         </motion.div>

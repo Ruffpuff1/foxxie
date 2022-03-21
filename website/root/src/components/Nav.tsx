@@ -10,7 +10,7 @@ export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string;
 
     return (
         <motion.div
-            className="text-white"
+            className="text-light-white"
             initial={{
                 y: -20,
                 opacity: 0
