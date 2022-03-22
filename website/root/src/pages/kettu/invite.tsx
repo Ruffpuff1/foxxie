@@ -1,12 +1,13 @@
 import type { NextPage } from 'next';
-import { Nav } from '../../components/Nav';
+import { Invitepage } from '../../components/pages/Invitepage';
+import { kettuPermissions } from '../../utils/constants';
 
 const Invite: NextPage = () => {
-  return (
-    <div>
-      <Nav name='kettu' />
-    </div>
-  );
+    return (
+        <>
+            <Invitepage perms={kettuPermissions} />
+        </>
+    );
 };
 
 export default Invite;
