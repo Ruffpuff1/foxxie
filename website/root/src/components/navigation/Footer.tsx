@@ -1,5 +1,3 @@
-import BottomNavigation from '@mui/material/BottomNavigation';
-
 const links: Link[] = [
     {
         text: 'Support',
@@ -22,8 +20,8 @@ interface Link {
 
 export function Footer() {
     return (
-        <BottomNavigation className='bg-gray w-full mt-40 md:mt-52 sm:mt-96 text-light-white text-sm space-y-1 transition-all duration-300 bottom-0 static h-28 sm:h-64 md:h-28 lg:h-28 xl:h-28'>
-            <div className="pt-8 space-y-1">
+        <div className='bg-gray w-full mt-28 text-light-white text-xs space-y-1 transition-all duration-300 bottom-0 h-14 absolute overflow-hidden'>
+            <div className="pt-2 space-y-1">
                 <div className='flex justify-center space-x-5'>
                     {
                         links.map(link => {
@@ -60,6 +58,6 @@ export function Footer() {
                     </a>
                 </div>
             </div>
-        </BottomNavigation>
+        </div>
     );
 }

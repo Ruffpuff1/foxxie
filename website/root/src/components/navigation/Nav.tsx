@@ -2,7 +2,6 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { Linklist } from "./Linklist";
 import { motion } from 'framer-motion';
 
 export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string; }) {
@@ -61,9 +60,6 @@ export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string;
                                     >
                                         <p className='font-medium'>Kettu</p>
                                     </button>
-                                    <div className='absolute right-0 pr-5 pt-2'>
-                                        <Linklist name='foxxie' />
-                                    </div>
                                 </div >
                                 : <div className="text-lg font-source-sans">
                                     <button
@@ -81,9 +77,6 @@ export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string;
                                     >
                                         <p className='font-medium'>Foxxie</p>
                                     </button>
-                                    <div className='absolute right-0 pr-5 pt-2'>
-                                        <Linklist name='kettu' />
-                                    </div>
                                 </div>
                     }
                 </Toolbar>

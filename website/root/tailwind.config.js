@@ -13,8 +13,8 @@ module.exports = {
             gray: '#181818',
             'highlight-gray': '#1F1E1E',
             'dark-gray': '#111111',
-            orange: '#EA580C',
-            salmon: '#F87071'
+            foxxie: '#EA580C',
+            kettu: '#F87071'
         }
     },
     plugins: []
