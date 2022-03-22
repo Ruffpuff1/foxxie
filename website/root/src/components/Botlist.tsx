@@ -8,23 +8,27 @@ const bots = [
         color: 'bg-gray',
         image: "https://cdn.ruffpuff.dev/foxxie.png",
         text: 'Foxxie is an advanced moderation bot. Including automoderation and scam detection. Including a "shield" feature to automatically detect malicious users.',
-        link: '/foxxie'
+        link: '/foxxie',
+        hidden: false
     },
     {
         name: 'Kettu',
         color: 'bg-gray',
         image: "https://cdn.ruffpuff.dev/kettu.png",
         text: 'Kettu is a bot for providing tooling and information in your server. He comes with a variety of websearch commands including those for fetching Pokémon, Animal Crossing, and Stardew Valley data.',
-        link: '/kettu'
+        link: '/kettu',
+        hidden: false
     }
 ];
 
 export function Botlist() {
     const router = useRouter();
     return (
-        <div className="grid grid-cols-2 pt-10 space-x-4 mx-20 font-source-sans flex-col">
+        <div className="grid grid-cols-2 pt-10 mx-20 font-source-sans flex-col">
             {
                 bots.map((bot, i) => {
+                    // eslint-disable-next-line array-callback-return
+                    if (bot.hidden) return;
                     return (
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
@@ -38,7 +42,7 @@ export function Botlist() {
                                 }
                             }}
                             key={bot.name}
-                            className={`${bot.color} rounded-md lg:h-40 xl:h-48`}>
+                            className={`${bot.color} rounded-md lg:h-60 xl:h-68 mt-4 mr-4 hover:bg-highlight-gray duration-700`}>
                             <div className='flex'>
                                 <img src={bot.image} alt="" className="w-12 h-12 p-2 rounded-xl" />
                                 <button

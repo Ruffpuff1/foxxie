@@ -1,4 +1,6 @@
-const links = [
+import BottomNavigation from '@mui/material/BottomNavigation';
+
+const links: Link[] = [
     {
         text: 'Support',
         link: 'https://ruffpuff.dev/community'
@@ -13,44 +15,51 @@ const links = [
     }
 ];
 
+interface Link {
+    text: string;
+    link: string
+}
+
 export function Footer() {
     return (
-        <div className='bottom-0 static bg-gray w-full mt-32 md:mt-52 sm:mt-52 lg:h-16 xl:h-16 md:h-36 sm:h-32 h-36 text-light-white text-sm pt-2 space-y-1 transition-all duration-300'>
-            <div className='flex justify-center space-x-5'>
-                <a
-                    href='mailto:contact@ruffpuff.dev'
-                    target='_blank'
-                    rel="noreferrer"
-                    className='hover:underline'
-                >
-                    contact@ruffpuff.dev
-                </a>
-                <a
-                    href='https://github.com/FoxxieBot/foxxie/blob/main/LICENSE'
-                    target='_blank'
-                    rel="noreferrer"
-                    className='hover:underline'
-                >
-                    Copyright © Foxxie 2021
-                </a>
+        <BottomNavigation className='bg-gray w-full mt-40 md:mt-52 sm:mt-96 text-light-white text-sm space-y-1 transition-all duration-300 bottom-0 static h-28 sm:h-64 md:h-28 lg:h-28 xl:h-28'>
+            <div className="pt-8 space-y-1">
+                <div className='flex justify-center space-x-5'>
+                    {
+                        links.map(link => {
+                            return (
+                                <a
+                                    key={link.text}
+                                    href={link.link}
+                                    target='_blank'
+                                    rel="noreferrer"
+                                    className='hover:underline'
+                                >
+                                    {link.text}
+                                </a>
+                            );
+                        })
+                    }
+                </div>
+                <div className='flex justify-center space-x-4'>
+                    <a
+                        href='mailto:contact@ruffpuff.dev'
+                        target='_blank'
+                        rel="noreferrer"
+                        className='hover:underline'
+                    >
+                        contact@ruffpuff.dev
+                    </a>
+                    <a
+                        href='https://github.com/FoxxieBot/foxxie/blob/main/LICENSE'
+                        target='_blank'
+                        rel="noreferrer"
+                        className='hover:underline'
+                    >
+                        Copyright © Foxxie 2021
+                    </a>
+                </div>
             </div>
-            <div className='flex justify-center space-x-5'>
-                {
-                    links.map(link => {
-                        return (
-                            <a
-                                key={link.text}
-                                href={link.link}
-                                target='_blank'
-                                rel="noreferrer"
-                                className='hover:underline'
-                            >
-                                {link.text}
-                            </a>
-                        );
-                    })
-                }
-            </div>
-        </div>
+        </BottomNavigation>
     );
 }

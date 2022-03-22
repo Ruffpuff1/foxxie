@@ -27,7 +27,7 @@ export function InfoUser() {
                 ></ DiscordCommand>
                 <DiscordEmbed
                     slot='embeds'
-                    authorName="Ruffpuff#0017"
+                    authorName="Ruffpuff#0017 [486396074282450946] (he/they)"
                     thumbnail="https://cdn.ruffpuff.dev/ruffpuff.jpg"
                     authorImage="https://cdn.ruffpuff.dev/ruffpuff.jpg"
                     color="#898489"

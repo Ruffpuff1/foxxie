@@ -1,3 +1,5 @@
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Linklist } from "./Linklist";
@@ -29,58 +31,63 @@ export function Nav({ showAll, name = '/' }: { showAll?: boolean; name?: string;
                 opacity: 0
             }}
         >
-            {
-                name === '/'
-                    ? <div className="text-lg font-source-sans">
-                        <button
-                            className='absolute left-0 pl-5 pt-2 cursor-default'
-                        >
-                            <p className='font-bold'>Foxxie Project</p>
-                        </button>
-                    </div>
-                    : name === 'foxxie'
-                        ?
-                        < div className="text-lg font-source-sans" >
-                            <button
-                                className='absolute left-0 pl-5 pt-2'
-                                onClick={() => { setShowNames(!showNames); }}
-                            >
-                                <p className='font-bold'>Foxxie</p>
-                            </button>
-                            <button
-                                className={`duration-300 absolute left-20 pt-2${showNames ? ' opacity-100 pl-3 cursor-pointer' : ' opacity-0 pl-1 cursor-default'}`}
-                                onClick={() => {
-                                    if (!showNames) return;
-                                    return router.push('/kettu');
-                                }}
-                            >
-                                <p className='font-medium'>Kettu</p>
-                            </button>
-                            <div className='absolute right-0 pr-5 pt-2'>
-                                <Linklist name='foxxie' />
+            <AppBar color='transparent' position='absolute'>
+                <Toolbar>
+                    {
+                        name === '/'
+                            ? <div className="text-lg font-source-sans mb-6">
+                                <button
+                                    className='absolute left-0 pl-5 cursor-default'
+                                    onClick={() => { return router.push('/'); }}
+                                >
+                                    <p className='font-bold hover:underline'>Foxxie Project</p>
+                                </button>
                             </div>
-                        </div >
-                        : <div className="text-lg font-source-sans">
-                            <button
-                                className='absolute left-0 pl-5 pt-2'
-                                onClick={() => { setShowNames(!showNames); }}
-                            >
-                                <p className='font-bold'>Kettu</p>
-                            </button>
-                            <button
-                                className={`duration-300 absolute left-20 pt-2${showNames ? ' opacity-100 pl-3 cursor-pointer' : ' opacity-0 pl-1 cursor-default'}`}
-                                onClick={() => {
-                                    if (!showNames) return;
-                                    return router.push('/foxxie');
-                                }}
-                            >
-                                <p className='font-medium'>Foxxie</p>
-                            </button>
-                            <div className='absolute right-0 pr-5 pt-2'>
-                                <Linklist name='kettu' />
-                            </div>
-                        </div>
-            }
+                            : name === 'foxxie'
+                                ?
+                                < div className="text-lg font-source-sans" >
+                                    <button
+                                        className='absolute left-0 pl-5 pt-2'
+                                        onClick={() => { setShowNames(!showNames); }}
+                                    >
+                                        <p className='font-bold'>Foxxie</p>
+                                    </button>
+                                    <button
+                                        className={`duration-300 absolute left-20 pt-2${showNames ? ' opacity-100 pl-3 cursor-pointer' : ' opacity-0 pl-1 cursor-default'}`}
+                                        onClick={() => {
+                                            if (!showNames) return;
+                                            return router.push('/kettu');
+                                        }}
+                                    >
+                                        <p className='font-medium'>Kettu</p>
+                                    </button>
+                                    <div className='absolute right-0 pr-5 pt-2'>
+                                        <Linklist name='foxxie' />
+                                    </div>
+                                </div >
+                                : <div className="text-lg font-source-sans">
+                                    <button
+                                        className='absolute left-0 pl-5 pt-2'
+                                        onClick={() => { setShowNames(!showNames); }}
+                                    >
+                                        <p className='font-bold'>Kettu</p>
+                                    </button>
+                                    <button
+                                        className={`duration-300 absolute left-20 pt-2${showNames ? ' opacity-100 pl-3 cursor-pointer' : ' opacity-0 pl-1 cursor-default'}`}
+                                        onClick={() => {
+                                            if (!showNames) return;
+                                            return router.push('/foxxie');
+                                        }}
+                                    >
+                                        <p className='font-medium'>Foxxie</p>
+                                    </button>
+                                    <div className='absolute right-0 pr-5 pt-2'>
+                                        <Linklist name='kettu' />
+                                    </div>
+                                </div>
+                    }
+                </Toolbar>
+            </AppBar>
         </motion.div>
     );
 }

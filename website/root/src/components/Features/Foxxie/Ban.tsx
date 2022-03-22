@@ -1,4 +1,5 @@
 import { DiscordCommand, DiscordMessage, DiscordMessages, DiscordCustomEmoji } from "@skyra/discord-components-react";
+import Link from "next/link";
 
 export function Ban() {
     return (
@@ -18,7 +19,7 @@ export function Ban() {
                 <DiscordCustomEmoji
                     name='sucess'
                     url="https://cdn.ruffpuff.dev/emojiCheck.png"
-                /> Successfully banned Cyrus#9319, created case #241 → `No Reason Specified`
+                /> Successfully banned <strong>Cyrus#9319</strong>, created case <Link href='/foxxie/invite'>#241</Link> → <code>No Reason Specified</code>
             </DiscordMessage>
         </DiscordMessages>
     )
