@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
-    images: ['cdn.ruffpuff.dev'],
+    images: {
+        domains: ['cdn.ruffpuff.dev']
+    },
     rewrites: async () => {
         return [
             {

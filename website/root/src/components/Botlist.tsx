@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { motion } from 'framer-motion';
+import Image from "next/image";
 
-/* eslint-disable @next/next/no-img-element */
 const bots = [
     {
         name: 'Foxxie',
@@ -44,7 +44,7 @@ export function Botlist() {
                             key={bot.name}
                             className={`${bot.color} rounded-md lg:h-60 xl:h-68 mt-4 mr-4 hover:bg-highlight-gray duration-700`}>
                             <div className='flex'>
-                                <img src={bot.image} alt="" className="w-12 h-12 p-2 rounded-xl" />
+                                <Image src={bot.image} alt="" className="p-2 rounded-xl" height={48} width={48}/>
                                 <button
                                     onClick={() => router.push(bot.link)}
                                 >
