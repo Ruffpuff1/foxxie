@@ -45,7 +45,8 @@
   "workspaces": [
     "apps/*",
     "graphql/*",
-    "packages/*"
+    "packages/*",
+    "website/*"
   ],
   "packageManager": "yarn@1.22.18"
 }
