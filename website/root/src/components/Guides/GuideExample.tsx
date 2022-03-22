@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 export function GuideExample(props: { children: ReactNode, commandName: string }) {
     return (
-        <div className='mt-10 w-11/12 pl-16'>
+        <div className='mt-10 w-11/12 pl-16 xl:block lg:block md:block sm:hidden'>
             <DiscordMessages>
                 <DiscordMessage
                     author='Foxxie'

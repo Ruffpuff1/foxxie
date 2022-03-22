@@ -65,70 +65,44 @@ export function Features() {
                                     ease: [0.48, 0.15, 0.25, 0.96]
                                 }
                             }}
-                            className={`sm:hidden hidden md:block lg:block xl:block transition-all duration-300 ${isOdd ? 'pl-20 mt-20 mr-64' : 'ml-64 pr-20 mt-20'}`}
+                            className={`p-5 md:block lg:block xl:block sm:hidden hidden ${isOdd ? 'mt-20' : 'mt-20'}`}
                         >
-                            <div className="sm:hidden hidden md:flex lg:flex xl:flex transition-all duration-300 pb-8">
+                            <div className='flex flex-row odd:flex-row-reverse min-h-min items-center content-center justify-around'>
+                                {
+                                    !isOdd &&
+                                    <div className='md:hidden hidden sm:hidden lg:block xl:block'>
+                                        <Feature />
+                                    </div>
+                                }
+                                <div className='flex-col xl:w-6/12 lg:w-6/12 md:w-full flex w-full mb-4 mx-6'>
+                                    <h1
+                                        className='font-bold font-source-sans text-xl md:text-3xl p-2 text-white'
+                                    >
+                                        <button
+                                            className="font-bold"
+                                            onClick={() => {
+                                                return router.push(link);
+                                            }}
+                                        >
+                                            <span className='hover:mr-3 hover:underline duration-700 font-source-sans'>
+                                                {name}{' '}&rsaquo;
+                                            </span>
+                                            <span>
+                                                {' '}{bot}
+                                            </span>
+                                        </button>
+                                    </h1>
+
+                                    <p className='font-semibold font-source-sans text-light-white mb-2 text-sm'>
+                                        {description}
+                                    </p>
+                                </div>
                                 {
                                     isOdd ?
-
-                                        <>
-                                            <div className='sm:hidden hidden md:hidden lg:block xl:block px-12 xl:w-2/4'>
-                                                <Feature />
-                                            </div>
-                                            <div className='sm:block hidden md:block lg:block xl:block'>
-                                                <h1
-                                                    className='font-bold font-source-sans text-xl md:text-3xl p-2 text-white'
-                                                >
-                                                    <button
-                                                        className="font-bold"
-                                                        onClick={() => {
-                                                            return router.push(link);
-                                                        }}
-                                                    >
-                                                        <span className='hover:mr-3 hover:underline duration-700'>
-                                                            {name}{' '}&rsaquo;
-                                                        </span>
-                                                        <span>
-                                                            {' '}{bot}
-                                                        </span>
-                                                    </button>
-                                                </h1>
-
-                                                <p className='font-semibold font-source-sans text-light-white mb-2 text-sm'>
-                                                    {description}
-                                                </p>
-                                            </div>
-                                        </>
-
-                                        :
-                                        <>
-                                            <div className='sm:block hidden md:block lg:block xl:block'>
-                                                <h1
-                                                    className='font-bold font-source-sans text-xl md:text-3xl p-2 text-white'
-                                                >
-                                                    <button
-                                                        className="font-bold"
-                                                        onClick={() => {
-                                                            return router.push(link);
-                                                        }}
-                                                    >
-                                                        <span className='hover:mr-3 hover:underline duration-700'>
-                                                            {name}{' '}&rsaquo;
-                                                        </span>
-                                                        <span>
-                                                            {' '}{bot}
-                                                        </span>
-                                                    </button>
-                                                </h1>
-
-                                                <p className='font-semibold font-source-sans text-light-white mb-2 text-sm'>
-                                                    {description}
-                                                </p>
-                                            </div>
-                                            <div className='sm:hidden hidden md:hidden lg:block xl:block px-12 xl:w-2/4'>
-                                                <Feature />
-                                            </div>
-                                        </>
+                                    <div className='md:hidden hidden sm:hidden lg:block xl:block'>
+                                        <Feature />
+                                    </div>
+                                    : null
                                 }
                             </div>
 

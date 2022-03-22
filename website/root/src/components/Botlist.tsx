@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
 import { motion } from 'framer-motion';
-import Image from "next/image";
 
 const bots = [
     {
@@ -42,16 +42,16 @@ export function Botlist() {
                                 }
                             }}
                             key={bot.name}
-                            className={`${bot.color} rounded-md lg:h-60 xl:h-68 mt-4 mr-4 hover:bg-highlight-gray duration-700`}>
-                            <div className='flex'>
-                                <Image src={bot.image} alt="" className="p-2 rounded-xl" height={48} width={48}/>
+                            className={`${bot.color} rounded-md lg:h-60 xl:h-68 mt-4 mr-6 hover:bg-opacity-50 duration-700`}>
+                            <div className='lg:flex md:flex'>
+                                <img src={bot.image} alt="" className="p-2 rounded-xl h-14 w-14 sm:ml-24 md:ml-0 lg:ml-0 xl:ml-0" />
                                 <button
                                     onClick={() => router.push(bot.link)}
                                 >
-                                    <h2 className='font-bold text-white hover:pl-1 hover:underline duration-700'>{bot.name}</h2>
+                                    <h2 className='font-bold text-white hover:pl-1 hover:underline duration-700 sm:ml-24 md:ml-0 lg:ml-0 xl:ml-0 pl-1'>{bot.name}</h2>
                                 </button>
                             </div>
-                            <p className='text-[#dbd5d5] p-2 pt-0'>
+                            <p className='text-[#dbd5d5] p-4 pt-0'>
                                 {bot.text}
                             </p>
                         </motion.div>

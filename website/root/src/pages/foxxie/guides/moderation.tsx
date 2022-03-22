@@ -44,7 +44,7 @@ const Moderation: NextPage = () => {
                         <GuideBox>
                             If set all ban actions will be logged to your moderation logging channel.{' '}Manual bans (though the Discord UI) will automatically be logged as well.<br />
 
-                            <div className='mt-10 w-11/12 pl-16'>
+                            <div className='mt-10 w-11/12 pl-16 xl:block lg:block md:block sm:hidden'>
                                 <Ban />
                             </div>
                         </GuideBox>
