@@ -15,14 +15,14 @@ export function Main() {
                 }
             }}
         >
-            <h1 className="text-white font-semibold px-32 sm:px-24 lg:px-20 sm:text-lg md:text-xl lg:text-4xl xl:text-5xl pt-10 duration-300 transition-all text-xs">
+            <h1 className="text-white font-semibold px-32 sm:px-24 lg:px-20 md:text-xl lg:text-4xl xl:text-5xl pt-10 duration-300 transition-all text-lg">
                 The Foxxie Project
             </h1>
 
             <Divider />
 
-            <h2 className='text-light-white pt-4 px-24 duration-300 transition-all'>
-                A shared duo of bots designed to provide everything you need in community Discord servers.
+            <h2 className='text-light-white pt-4 px-24 duration-300 transition-all italic'>
+                To provide everything you need in community Discord servers.
             </h2>
         </motion.div>
     );
