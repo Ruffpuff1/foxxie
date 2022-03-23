@@ -2,7 +2,7 @@ import { Botlist } from '../presentational/Botlist';
 import { Nav } from '../navigation/Nav';
 import { Main } from '../headers/Main';
 import { Content } from '../presentational/Content';
-import { Footer } from '../navigation/Footer';
+import { Footer } from '../headers/Footer';
 
 export function Homepage() {
     return (
@@ -14,9 +14,9 @@ export function Homepage() {
 
                 <Botlist />
 
-            </Content>
+                <Footer />
 
-            <Footer />
+            </Content>
         </div >
     );
 }
