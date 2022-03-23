@@ -15,7 +15,7 @@ export function Main() {
                 }
             }}
         >
-            <h1 className="text-white font-semibold px-44 sm:px-24 lg:px-20 sm:text-lg md:text-xl lg:text-4xl xl:text-5xl pt-10 duration-300 transition-all">
+            <h1 className="text-white font-semibold px-32 sm:px-24 lg:px-20 sm:text-lg md:text-xl lg:text-4xl xl:text-5xl pt-10 duration-300 transition-all text-xs">
                 The Foxxie Project
             </h1>
 
