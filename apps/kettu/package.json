@@ -49,7 +49,7 @@
     "@skyra/saelem": "3.0.9",
     "@types/node": "17.0.21",
     "@types/tinycolor2": "1.4.3",
-    "discord-api-types": "0.29.0",
+    "discord-api-types": "0.30.0",
     "eslint": "8.11.0",
     "typescript": "4.6.2"
   },
