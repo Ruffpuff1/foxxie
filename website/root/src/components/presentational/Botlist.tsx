@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
 import { motion } from 'framer-motion';
+import { Bot } from "../../utils/types";
 
-const bots = [
+const bots: Bot[] = [
     {
         name: 'Foxxie',
         tag: 'Moderation',

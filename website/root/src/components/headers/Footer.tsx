@@ -9,12 +9,12 @@ export function Footer() {
             >
                 Terms of Service
             </a> and <a
-                href='/privacy'
+                href='/conduct'
                 target='_blank'
                 rel="noreferrer"
                 className='hover:text-kettu duration-500'
             >
-                Privacy Policy
+                Code of Conduct
             </a>. <a
                 href='https://github.com/FoxxieBot/foxxie/blob/main/LICENSE'
                 target='_blank'

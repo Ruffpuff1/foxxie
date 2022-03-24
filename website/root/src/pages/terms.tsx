@@ -3,7 +3,9 @@ import { Termspage } from '../components/pages/Termspage';
 
 const Terms: NextPage = () => {
     return (
-        <Termspage />
+        <>
+            <Termspage />
+        </>
     );
 };
 

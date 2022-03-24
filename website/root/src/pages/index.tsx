@@ -3,7 +3,9 @@ import { Homepage } from '../components/pages/Homepage';
 
 const Home: NextPage = () => {
   return (
-    <Homepage />
+    <>
+      <Homepage />
+    </>
   );
 };
 

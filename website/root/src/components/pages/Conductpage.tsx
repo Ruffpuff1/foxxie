@@ -1,7 +1,7 @@
 import { Nav } from '../navigation/Nav';
-import { Terms } from '../headers/Terms';
 import { Content } from '../presentational/Content';
 import { TermsSection } from '../../utils/types';
+import { Conduct } from '../headers/Conduct';
 
 const sections: TermsSection[] = [
     {
@@ -19,13 +19,13 @@ const sections: TermsSection[] = [
     }
 ];
 
-export function Termspage() {
+export function Conductpage() {
     return (
         <div>
             <Nav />
 
             <Content>
-                <Terms />
+                <Conduct />
 
                 <div className='pb-10'>
                     {
