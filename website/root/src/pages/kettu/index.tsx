@@ -1,9 +1,11 @@
 import { Kettupage } from "../../components/pages/kettu/Kettupage";
 
-export function Kettu() {
+function Kettu() {
     return (
         <>
             <Kettupage />
         </>
-    )
+    );
 }
+
+export default Kettu;
