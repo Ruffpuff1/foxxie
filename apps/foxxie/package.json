@@ -119,7 +119,7 @@
         "@typescript-eslint/eslint-plugin": "5.16.0",
         "@typescript-eslint/parser": "5.16.0",
         "discord-api-types": "0.30.0",
-        "eslint": "8.11.0",
+        "eslint": "8.12.0",
         "ruffpuff-api-types": "^0.0.5-next.11a326b.1647721912",
         "tsc-watch": "4.6.2"
     }
