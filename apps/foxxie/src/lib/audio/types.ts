@@ -1,4 +1,4 @@
-import type { Redis as Re, KeyType } from 'ioredis';
+import type Re from 'ioredis';
 import type { TrackInfo } from '@skyra/audio';
 
 export interface Song {

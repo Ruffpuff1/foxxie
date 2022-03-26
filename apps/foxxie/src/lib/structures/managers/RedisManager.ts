@@ -48,7 +48,7 @@ export class RedisManager extends Redis {
         if (list.length > 0) {
             shuffle(list);
             await this.del(key);
-            await this.lpush(key, list);
+            await this.lpush(key, ...list);
         }
 
         return 'OK';
@@ -65,7 +65,7 @@ export class RedisManager extends Redis {
         list[to + 1] = value;
 
         await this.del(key);
-        await this.rpush(key, list);
+        await this.rpush(key, ...list);
 
         return 'OK';
     }
