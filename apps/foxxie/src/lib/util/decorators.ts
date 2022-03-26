@@ -2,15 +2,16 @@ import { createClassDecorator, createFunctionPrecondition, createProxy } from '@
 import { acquireSettings } from '#database/functions';
 import * as GuildSettings from '#database/Keys';
 import { LanguageKeys } from '#lib/i18n';
-import type { CommandName, GuildMessage } from '#lib/types';
+import type { GuildMessage } from '#lib/types';
 import { getAudio, sendLocalizedMessage } from '#utils/Discord';
 import { Ctor, isNullish } from '@sapphire/utilities';
 import { container, RegisterBehavior } from '@sapphire/framework';
 import type { AutocompleteInteraction, CommandInteraction, CommandInteractionOption, SelectMenuInteraction } from 'discord.js';
-import { Locale } from 'discord-api-types/v9';
-import { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder, SlashCommandOptionsOnlyBuilder } from '@discordjs/builders';
+import { Locale, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v9';
 import { getGuildIds } from './util';
 import type { FoxxieCommand } from '#lib/structures';
+import type { SlashCommandBuilder } from '@discordjs/builders';
+import { FoxxieSlashCommandBuilder, FoxxieSlashCommandSubcommandsOnlyBuilder } from '#lib/discord';
 
 export function RequireLevelingEnabled(): MethodDecorator {
     return createFunctionPrecondition(
@@ -78,34 +79,24 @@ export function RequireMusicPaused(): MethodDecorator {
     );
 }
 
-export function RegisterChatInputCommand<N extends CommandName>(
-    name: N,
-    builder:
-        | SlashCommandBuilder
-        | ((
-              builder: SlashCommandBuilder
-          ) =>
-              | SlashCommandBuilder
-              | SlashCommandSubcommandsOnlyBuilder
-              | SlashCommandOptionsOnlyBuilder
-              | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>),
-    idHints: string[],
-    options: FoxxieCommand.Options = {}
+export function RegisterChatInputCommand(
+    cb: (
+        builder: FoxxieSlashCommandBuilder
+    ) => FoxxieSlashCommandBuilder | FoxxieSlashCommandSubcommandsOnlyBuilder | Omit<FoxxieSlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>,
+    options: FoxxieCommand.Options & { idHints?: string[] } = {}
 ) {
-    const registry = container.applicationCommandRegistries.acquire(name);
+    const builder = cb(new FoxxieSlashCommandBuilder());
+    const buildData = builder.toJSON();
+    const registry = container.applicationCommandRegistries.acquire(buildData.name);
 
-    const build = typeof builder === 'function' ? builder(new SlashCommandBuilder()) : new SlashCommandBuilder();
-    if (!build.name) build.setName(name);
-    const json = build.toJSON();
-
-    registry.registerChatInputCommand(build, {
+    registry.registerChatInputCommand(builder as unknown as SlashCommandBuilder, {
         guildIds: getGuildIds(),
-        idHints,
+        idHints: options.idHints ?? [],
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite
     });
 
     return createClassDecorator((command: Ctor) => {
-        const subcommands = json.options?.filter(opt => opt.type === 1);
+        const subcommands = buildData.options?.filter(opt => opt.type === 1);
 
         if (subcommands?.length) {
             for (const subcommand of subcommands) {
@@ -120,8 +111,8 @@ export function RegisterChatInputCommand<N extends CommandName>(
                 new ctor(context, {
                     ...base,
                     ...{
-                        description: build.description,
-                        name: build.name,
+                        description: (buildData as RESTPostAPIChatInputApplicationCommandsJSONBody).description,
+                        name: buildData.name,
                         ...options
                     }
                 })

@@ -10,10 +10,10 @@ import type { TFunction } from '@sapphire/plugin-i18next';
 import type { GuildMember, User } from 'discord.js';
 
 @RegisterChatInputCommand(
-    CommandName.Kick,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Moderation.KickDescription))
+            .setName(CommandName.Kick)
+            .setDescription(LanguageKeys.Commands.Moderation.KickDescription)
             .addUserOption(option =>
                 option //
                     .setName('target')
@@ -24,15 +24,12 @@ import type { GuildMember, User } from 'discord.js';
                 option //
                     .setName('reason')
                     .setDescription(enUS(LanguageKeys.Commands.Moderation.KickOptionReason))
-                    .setRequired(false)
             )
-            .addIntegerOption(option =>
+            .addNumberOption(option =>
                 option //
                     .setName('refrence')
                     .setDescription(enUS(LanguageKeys.Commands.Moderation.KickOptionRefrence))
-                    .setRequired(false)
             ),
-    [],
     {
         requiredClientPermissions: PermissionFlagsBits.KickMembers,
         permissionLevel: PermissionLevels.Moderator

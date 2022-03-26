@@ -1,21 +1,14 @@
 import { LanguageKeys } from '#lib/i18n';
 import { type ChatInputArgs, CommandName } from '#lib/types';
 import { RegisterChatInputCommand } from '#utils/decorators';
-import { enUS } from '#utils/util';
 import { bold, hyperlink, italic, underscore } from '@discordjs/builders';
 import { Command } from '@sapphire/framework';
 
-@RegisterChatInputCommand(
-    CommandName.Donate,
-    builder =>
-        builder //
-            .setDescription(enUS(LanguageKeys.Commands.General.DonateDescription)) //
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultTrue))
-            ),
-    []
+@RegisterChatInputCommand(builder =>
+    builder //
+        .setName(CommandName.Donate)
+        .setDescription(LanguageKeys.Commands.General.DonateDescription)
+        .addEphemeralOption(true)
 )
 export class UserCommand extends Command {
     private readonly urls = [

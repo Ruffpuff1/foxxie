@@ -4,27 +4,21 @@ import { ChatInputArgs, CommandName, PermissionLevels } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { getModeration } from '#utils/Discord';
 import { RegisterChatInputCommand } from '#utils/decorators';
-import { enUS } from '#utils/util';
 
 @RegisterChatInputCommand(
-    CommandName.Case,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Moderation.CaseDescription))
+            .setName(CommandName.Case)
+            .setDescription(LanguageKeys.Commands.Moderation.CaseDescription)
             .addIntegerOption(option =>
                 option //
                     .setName('caseid')
-                    .setDescription(enUS(LanguageKeys.Commands.Moderation.CaseOptionCaseId))
+                    .setDescription(LanguageKeys.Commands.Moderation.CaseOptionCaseId)
                     .setRequired(true)
             )
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultTrue))
-                    .setRequired(false)
-            ),
-    ['953883491332915201'],
+            .addEphemeralOption(true),
     {
+        idHints: ['953883491332915201'],
         requiredClientPermissions: PermissionFlagsBits.EmbedLinks,
         permissionLevel: PermissionLevels.Moderator
     }
