@@ -10,10 +10,10 @@ import type { TFunction } from '@sapphire/plugin-i18next';
 import type { GuildMember, User } from 'discord.js';
 
 @RegisterChatInputCommand(
-    CommandName.Ban,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Moderation.BanDescription))
+            .setName(CommandName.Ban)
+            .setDescription(LanguageKeys.Commands.Moderation.BanDescription)
             .addUserOption(option =>
                 option //
                     .setName('target')
@@ -24,37 +24,32 @@ import type { GuildMember, User } from 'discord.js';
                 option //
                     .setName('reason')
                     .setDescription(enUS(LanguageKeys.Commands.Moderation.BanOptionReason))
-                    .setRequired(false)
             )
             .addStringOption(option =>
                 option //
                     .setName('duration')
                     .setDescription(enUS(LanguageKeys.Commands.Moderation.BanOptionDuration))
-                    .setRequired(false)
             )
             .addNumberOption(option =>
                 option //
                     .setName('days')
                     .setDescription(enUS(LanguageKeys.Commands.Moderation.BanOptionDays))
-                    .setChoices([
-                        ['0', 0],
-                        ['1', 1],
-                        ['2', 2],
-                        ['3', 3],
-                        ['4', 4],
-                        ['5', 5],
-                        ['6', 6],
-                        ['7', 7]
+                    .addChoices([
+                        ['None (Default)', 0],
+                        ['One', 1],
+                        ['Two', 2],
+                        ['Three', 3],
+                        ['Four', 4],
+                        ['Five', 5],
+                        ['Six', 6],
+                        ['Seven', 7]
                     ])
-                    .setRequired(false)
             )
-            .addIntegerOption(option =>
+            .addNumberOption(option =>
                 option //
                     .setName('refrence')
                     .setDescription(enUS(LanguageKeys.Commands.Moderation.BanOptionRefrence))
-                    .setRequired(false)
             ),
-    [],
     {
         requiredClientPermissions: PermissionFlagsBits.BanMembers,
         permissionLevel: PermissionLevels.Moderator

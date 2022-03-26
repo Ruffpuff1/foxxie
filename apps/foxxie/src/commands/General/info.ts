@@ -3,7 +3,7 @@ import { ChatInputArgs, CommandName, EmojiObject, GuildInteraction } from '#lib/
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { RegisterChatInputCommand } from '#utils/decorators';
 import { CommandOptionsRunTypeEnum, isErr, Result, UserError } from '@sapphire/framework';
-import { enUS, floatPromise } from '#utils/util';
+import { floatPromise } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import type { Snowflake } from 'ruffpuff-api-types/v1';
 import {
@@ -40,91 +40,63 @@ const roleMention = (role: Role): string => role.toString();
 const roleLimit = 10;
 
 @RegisterChatInputCommand(
-    CommandName.Info,
     builder =>
         builder //
-            .setDescription('info cmd')
-            .addSubcommand(command =>
+            .setName(CommandName.Info)
+            .setDescription('subcommand')
+            .subcommand(command =>
                 command //
                     .setName('user')
-                    .setDescription(enUS(LanguageKeys.Commands.General.InfoDescriptionUser))
+                    .setDescription(LanguageKeys.Commands.General.InfoDescriptionUser)
                     .addUserOption(option =>
                         option //
                             .setName('user')
                             .setDescription('the user')
-                            .setRequired(false)
                     )
-                    .addBooleanOption(option =>
-                        option //
-                            .setName('ephemeral')
-                            .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                            .setRequired(false)
-                    )
+                    .addEphemeralOption()
             )
-            .addSubcommand(command =>
+            .subcommand(command =>
                 command //
                     .setName('server')
-                    .setDescription(enUS(LanguageKeys.Commands.General.InfoDescriptionServer))
-                    .addBooleanOption(option =>
-                        option //
-                            .setName('ephemeral')
-                            .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                            .setRequired(false)
-                    )
+                    .setDescription(LanguageKeys.Commands.General.InfoDescriptionServer)
+                    .addEphemeralOption()
             )
-            .addSubcommand(command =>
+            .subcommand(command =>
                 command //
                     .setName('role')
-                    .setDescription(enUS(LanguageKeys.Commands.General.InfoDescriptionRole))
+                    .setDescription(LanguageKeys.Commands.General.InfoDescriptionRole)
                     .addRoleOption(option =>
                         option //
                             .setName('role')
                             .setDescription('the role to use')
-                            .setRequired(false)
                     )
-                    .addBooleanOption(option =>
-                        option //
-                            .setName('ephemeral')
-                            .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                            .setRequired(false)
-                    )
+                    .addEphemeralOption()
             )
-            .addSubcommand(command =>
+            .subcommand(command =>
                 command //
                     .setName('emoji')
-                    .setDescription(enUS(LanguageKeys.Commands.General.InfoDescriptionEmoji))
+                    .setDescription(LanguageKeys.Commands.General.InfoDescriptionEmoji)
                     .addStringOption(option =>
                         option //
                             .setName('emoji')
                             .setDescription('the emoji to use')
                             .setRequired(true)
                     )
-                    .addBooleanOption(option =>
-                        option //
-                            .setName('ephemeral')
-                            .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                            .setRequired(false)
-                    )
+                    .addEphemeralOption()
             )
-            .addSubcommand(command =>
+            .subcommand(command =>
                 command //
                     .setName('channel')
-                    .setDescription(enUS(LanguageKeys.Commands.General.InfoDescriptionChannel))
+                    .setDescription(LanguageKeys.Commands.General.InfoDescriptionChannel)
                     .addStringOption(option =>
                         option //
                             .setName('channel')
                             .setDescription('the channel')
-                            .setRequired(false)
                     )
-                    .addBooleanOption(option =>
-                        option //
-                            .setName('ephemeral')
-                            .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                            .setRequired(false)
-                    )
+                    .addEphemeralOption()
             ),
-    ['954428415451230359'],
     {
+        idHints: ['954428415451230359'],
         runIn: [CommandOptionsRunTypeEnum.GuildAny],
         requiredClientPermissions: PermissionFlagsBits.EmbedLinks
     }
