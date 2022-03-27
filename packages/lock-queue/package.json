@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/lock-queue",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A simple utility for managing asynchonous RW locks",
   "scripts": {
     "build": "rm -r -f dist && tsup",
