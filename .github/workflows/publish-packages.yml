@@ -1,0 +1,22 @@
+name: Publish Packages
+
+on:
+  push:
+    branches:
+     - main
+    paths:
+      - 'packages/**'
+      - '.github/workflows/publish-packages.yml'
+
+jobs:
+  Publish:
+    name: Publish package to npm
+    runs-on: ubuntu-latest
+    steps:
+     - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: test
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | cut -d/ -f2 | sort -u
