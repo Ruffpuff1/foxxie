@@ -12,6 +12,8 @@ jobs:
   GetPackage:
     name: Get the name of the package to use.
     runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.getpackage.outputs.package }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -29,4 +31,4 @@ jobs:
     steps:
       - name: output
         id: output
-        run: echo ${{ steps.getpackage.outputs.package }}
+        run: echo ${{needs.GetPackage.outputs.package}}
