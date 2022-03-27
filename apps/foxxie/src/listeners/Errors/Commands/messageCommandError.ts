@@ -10,8 +10,9 @@ import { minutes, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { Events } from '#lib/types';
 import { codeBlock, cutText } from '@sapphire/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v9';
-import { CLIENT_OWNERS, envParse } from '#root/config';
+import { CLIENT_OWNERS } from '#root/config';
 import { captureException } from '@sentry/node';
+import { EnvParse } from '@foxxie/env';
 
 const ignoredErrorCodes = [RESTJSONErrorCodes.UnknownChannel, RESTJSONErrorCodes.UnknownMessage];
 
@@ -55,7 +56,7 @@ export class UserListener extends Listener<Events.MessageCommandError> {
 
     private generateErrorMessage(args: Args, error: Error) {
         if (CLIENT_OWNERS.includes(args.message.author.id)) return codeBlock('js', error.stack);
-        if (!envParse.boolean('SENTRY_ENABLED')) return args.t(LanguageKeys.Listeners.Errors.Unexpected);
+        if (!EnvParse.boolean('SENTRY_ENABLED')) return args.t(LanguageKeys.Listeners.Errors.Unexpected);
 
         try {
             const report = captureException(error, {

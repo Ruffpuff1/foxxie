@@ -7,7 +7,7 @@ import { toTitleCase } from '@ruffpuff/utilities';
 import { enUS } from '#utils/util';
 import { LanguageKeys } from '#lib/i18n';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
-import { envParse } from '#root/config';
+import { EnvParse } from '@foxxie/env';
 
 @RegisterChatInputCommand(
     builder =>
@@ -28,7 +28,7 @@ import { envParse } from '#root/config';
             ),
     {
         idHints: ['949309221441273866'],
-        enabled: envParse.boolean('CELESTIA_ENABLED')
+        enabled: EnvParse.boolean('CELESTIA_ENABLED')
     }
 )
 export class UserCommand extends Command {

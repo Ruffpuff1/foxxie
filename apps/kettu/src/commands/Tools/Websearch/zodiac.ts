@@ -6,8 +6,8 @@ import { Sunsigns, Days, Query, QueryGetHoroscopeArgs } from '@skyra/saelem';
 import { MessageEmbed } from 'discord.js';
 import { toTitleCase } from '@ruffpuff/utilities';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { envParse } from '#root/config';
 import { LanguageKeys } from '#lib/i18n';
+import { EnvParse } from '@foxxie/env';
 
 const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) {
     getHoroscope(sunsign: $sunsign, day: $day) {
@@ -42,7 +42,7 @@ const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) 
             .addEphemeralOption(),
     {
         idHints: ['946882459788779590', '946882459788779590'],
-        enabled: envParse.boolean('SAELEM_ENABLED')
+        enabled: EnvParse.boolean('SAELEM_ENABLED')
     }
 )
 export class UserCommand extends Command {

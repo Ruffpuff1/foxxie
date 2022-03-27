@@ -25,8 +25,6 @@ config({
     path: join(rootFolder, '.env')
 });
 
-export const envParse = new EnvParse();
-
 PaginatedMessage.defaultActions = [
     PaginatedMessage.defaultActions[0], // select menu
     PaginatedMessage.defaultActions[2], // previous
@@ -34,10 +32,10 @@ PaginatedMessage.defaultActions = [
     PaginatedMessage.defaultActions[3] // next
 ];
 
-export const CLIENT_OWNERS = envParse.array('CLIENT_OWNERS');
+export const CLIENT_OWNERS = EnvParse.array('CLIENT_OWNERS');
 export const WEBHOOK_ERROR = parseWebhookError();
-export const AUDIO_ALLOWED_GUILDS = envParse.array('AUDIO_ALLOWED_GUILDS');
-export const TIMEZONE = envParse.string('TIMEZONE');
+export const AUDIO_ALLOWED_GUILDS = EnvParse.array('AUDIO_ALLOWED_GUILDS');
+export const TIMEZONE = EnvParse.string('TIMEZONE');
 
 export function parsePresenceActivity(): ActivitiesOptions[] {
     const { CLIENT_PRESENCE_NAME } = process.env;
@@ -45,7 +43,7 @@ export function parsePresenceActivity(): ActivitiesOptions[] {
 
     return [
         {
-            name: envParse.string('TIMEZONE'),
+            name: EnvParse.string('TIMEZONE'),
             type: 'LISTENING'
         }
     ];
@@ -321,7 +319,7 @@ function parseInternationalizationOptions(): InternationalizationOptions {
 }
 
 export const CLIENT_OPTIONS: ClientOptions = {
-    defaultPrefix: envParse.string('CLIENT_PREFIX'),
+    defaultPrefix: EnvParse.string('CLIENT_PREFIX'),
     presence: {
         activities: parsePresenceActivity(),
         status: 'idle'
@@ -345,7 +343,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
                 },
                 redis: {
                     host: process.env.REDIS_HOST,
-                    port: envParse.int('REDIS_PORT'),
+                    port: EnvParse.int('REDIS_PORT'),
                     password: process.env.REDIS_PASSWORD,
                     db: 2
                 }
@@ -353,14 +351,14 @@ export const CLIENT_OPTIONS: ClientOptions = {
         })
     },
     logger: {
-        level: envParse.int('LOG_LEVEL') as LogLevel
+        level: EnvParse.int('LOG_LEVEL') as LogLevel
     },
     intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_BANS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_VOICE_STATES', 'DIRECT_MESSAGES']
 };
 
 function parseAudioOptions(): NodeOptions {
     return {
-        password: envParse.string('LAVALINK_PASSWORD'),
+        password: EnvParse.string('LAVALINK_PASSWORD'),
         userID: process.env.CLIENT_ID!,
         shardCount: 0,
         hosts: {

@@ -2,7 +2,7 @@ import type { APIApplicationCommandInteraction, APIUser } from 'discord-api-type
 import { userMention, italic, time, TimestampStyles } from '@discordjs/builders';
 import type { UserMention } from 'discord.js';
 import { container } from '@sapphire/framework';
-import { envParse } from '#root/config';
+import { EnvParse } from '@foxxie/env';
 
 export function wrapWithTarget<T extends string>(user: APIUser | undefined, str: T): T | `_Suggestion for: ${UserMention}_\n\n${T}` {
     if (!user) return str;
@@ -27,7 +27,7 @@ export const getUser = (interaction: APIApplicationCommandInteraction, user: API
 
 export function getGuildIds() {
     try {
-        return envParse.array('GUILD_IDS');
+        return EnvParse.array('GUILD_IDS');
     } catch {
         return [];
     }

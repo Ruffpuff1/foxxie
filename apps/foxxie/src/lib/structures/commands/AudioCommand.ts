@@ -1,4 +1,4 @@
-import { envParse } from '#root/config';
+import { EnvParse } from '@foxxie/env';
 import type { PieceContext } from '@sapphire/framework';
 import type { RedisManager } from '../managers';
 import { FoxxieCommand } from './FoxxieCommand';
@@ -7,8 +7,8 @@ export class AudioCommand extends FoxxieCommand {
     public constructor(context: PieceContext, options: AudioCommand.Options) {
         super(context, {
             ...options,
-            enabled: envParse.boolean('AUDIO_ENABLED'),
-            allowedGuilds: envParse.array('AUDIO_ALLOWED_GUILDS')
+            enabled: EnvParse.boolean('AUDIO_ENABLED'),
+            allowedGuilds: EnvParse.array('AUDIO_ALLOWED_GUILDS')
         });
     }
 

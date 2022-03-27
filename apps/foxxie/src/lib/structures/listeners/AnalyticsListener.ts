@@ -1,4 +1,4 @@
-import { envParse } from '#root/config';
+import { EnvParse } from '@foxxie/env';
 import type { Point } from '@influxdata/influxdb-client';
 import { fromAsync, isErr, Listener } from '@sapphire/framework';
 import { blueBright } from 'colorette';
@@ -8,7 +8,7 @@ export abstract class AnalyticsListener<T extends keyof ClientEvents | symbol = 
     public constructor(context: Listener.Context, options: AnalyticsListener.Options) {
         super(context, {
             ...options,
-            enabled: envParse.boolean('INFLUX_ENABLED')
+            enabled: EnvParse.boolean('INFLUX_ENABLED')
         });
     }
 
