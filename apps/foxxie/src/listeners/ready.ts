@@ -4,7 +4,7 @@ import { blue, blueBright, gray, green, magenta, magentaBright, red, white, yell
 import { Events } from '#lib/types';
 import { resetSpotifyToken } from '#utils/API';
 import { minutes } from '@ruffpuff/utilities';
-import { envParse } from '#root/config';
+import { EnvParse } from '@foxxie/env';
 
 @ApplyOptions<Listener.Options>({ once: true })
 export class UserListener extends Listener<Events.Ready> {
@@ -32,7 +32,7 @@ export class UserListener extends Listener<Events.Ready> {
     }
 
     private initAnalytics() {
-        if (envParse.boolean('INFLUX_ENABLED')) {
+        if (EnvParse.boolean('INFLUX_ENABLED')) {
             const { client } = this.container;
 
             const guildCount = client.guilds.cache.size;
@@ -81,7 +81,7 @@ ${line6}   \ \_\ \____//\_/\_\/\_/\_\\ \_\ \___"\
 ${line7} \/_/\/___/ \//\/_/\//\/_/ \/_/\/____/`;
 
         const row1 = `${pad}[${this.container.analytics ? success : failed}] Analytics`;
-        const row2 = ` ${pad}[${envParse.boolean('AUDIO_ENABLED') ? success : failed}] Audio`;
+        const row2 = ` ${pad}[${EnvParse.boolean('AUDIO_ENABLED') ? success : failed}] Audio`;
         const row3 = ``;
         const row4 = ``;
 

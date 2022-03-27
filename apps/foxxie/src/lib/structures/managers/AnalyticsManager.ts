@@ -1,10 +1,10 @@
 import type { ClientAnalytics } from '#database/entities/ClientAnalytics';
-import { envParse } from '#root/config';
+import { EnvParse } from '@foxxie/env';
 import { InfluxDB, WriteApi } from '@influxdata/influxdb-client';
 import { container } from '@sapphire/framework';
 
 export class AnalyticsManager {
-    public influx: InfluxDB | null = envParse.boolean('INFLUX_ENABLED')
+    public influx: InfluxDB | null = EnvParse.boolean('INFLUX_ENABLED')
         ? new InfluxDB({
               url: process.env.INFLUX_URL!,
               token: process.env.INFLUX_TOKEN
