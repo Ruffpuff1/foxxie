@@ -55,7 +55,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Build src
-        run: yarn build
+        run: |
+          cd packages/${{needs.get_package.outputs.package}}
+          yarn build
 
       - name: Publish new version
         run: |
