@@ -13,7 +13,7 @@ jobs:
     name: Publish package to npm
     runs-on: ubuntu-latest
     steps:
-     - name: checkout
+      - name: checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
