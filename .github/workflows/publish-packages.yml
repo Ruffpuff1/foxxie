@@ -9,14 +9,20 @@ on:
       - '.github/workflows/publish-packages.yml'
 
 jobs:
-  Publish:
-    name: Publish package to npm
+  GetPackage:
+    name: Get the name of the package to use.
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: test
+      - name: getpackage
+        id: getpackage
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | cut -d/ -f2 | sort -u
+          echo "::set-output name=package::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | cut -d/ -f2 | sort -u)"
+  Output:
+    runs-on: ubuntu-latest
+    needs: GetPackage
+    steps:
+    - run: echo ${{ jobs.getpackage.outputs.package }}
