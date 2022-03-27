@@ -1,4 +1,4 @@
-name: Publish next
+name: Publish release
 
 on:
   workflow_dispatch:
@@ -7,9 +7,28 @@ on:
       - main
 
 jobs:
+
+  get_package:
+    name: Get the name of the package to use.
+    if: github.repository_owner == 'FoxxieBot'
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.getpackage.outputs.package }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: getpackage
+        id: getpackage
+        run: |
+          PACKAGE_NAME=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | cut -d/ -f2 | sort -u)
+          echo "::set-output name=package::$PACKAGE_NAME"
+
   publish:
     name: Publish release to npm
     runs-on: ubuntu-latest
+    needs: get_package
     if: github.repository_owner == 'FoxxieBot' && startsWith(github.event.head_commit.message, 'chore(release)')
     steps:
       - name: Cancel previous publish attempts
@@ -40,6 +59,7 @@ jobs:
 
       - name: Publish new version
         run: |
+          cd packages/${{needs.get_package.outputs.package}}
           npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
