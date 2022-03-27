@@ -44,7 +44,7 @@ func main() {
 	r.Get("/circle", func(w http.ResponseWriter, r *http.Request) {
 		avatarURL := r.URL.Query().Get("image")
 		flag := r.URL.Query().Get("type")
-		avatar, _ := http.Get(avatarURL)
+		avatar, _ := http.Get(avatarURL) // lgtm [go/request-forgery]
 
 		defer avatar.Body.Close()
 		avatarImage, _, _ := image.Decode(avatar.Body)
