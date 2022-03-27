@@ -1770,12 +1770,12 @@
   resolved "https://registry.yarnpkg.com/@skyra/jaro-winkler/-/jaro-winkler-1.0.0.tgz#a1bb58025e049ec33d6fcf8751b20ab55fafda51"
   integrity sha512-ia856GQ/xbW1t+ICLbAosB+4ORhvbi+BqqdcmyIR5bfVTep/w1nURWB+WjI/cFoE9MHRYW1xpFcy6A3VnxJLlw==
 
-"@skyra/saelem@3.0.9":
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/@skyra/saelem/-/saelem-3.0.9.tgz#184f69fc43508f2ce15f765db0b69ff389e29386"
-  integrity sha512-aPSy2uqoGeZ8UpM4F27gFVof6nJCeO3lpAc0QNuIXczVPRsuTqO1dju/ZMJ3yHq+/TwBsZRSNmUC5+JtYoOvaA==
+"@skyra/saelem@3.0.25":
+  version "3.0.25"
+  resolved "https://registry.yarnpkg.com/@skyra/saelem/-/saelem-3.0.25.tgz#ba6d9150d10f2fbdf8d5c955aa7c04aa9d240e45"
+  integrity sha512-CQNr2HrSXI9ctUDGbZv2uVFDORjDO0/vDZRFMYVKFgYKgv9utP07FWcRIvvxzxIZO/52lDW13Aqivd6kHUoNBA==
   dependencies:
-    graphql "^15.5.0"
+    graphql "^15.8.0"
 
 "@sqltools/formatter@^1.2.2":
   version "1.2.3"
@@ -4780,7 +4780,7 @@ graphql-ws@^5.4.1:
   resolved "https://registry.yarnpkg.com/graphql-ws/-/graphql-ws-5.6.3.tgz#32321594a7b744755df992f24afccc84143b4b7d"
   integrity sha512-ZolWOi6bzI35ovGROCZROB9nDbwZiJdIsaPdzW/jkICCGNb3qL/33IONY/yQiBa+Je2uA11HfY4Uxse4+/ePYA==
 
-graphql@15.8.0, graphql@^15.3.0, graphql@^15.5.0, graphql@^15.8.0:
+graphql@15.8.0, graphql@^15.3.0, graphql@^15.8.0:
   version "15.8.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-15.8.0.tgz#33410e96b012fa3bdb1091cc99a94769db212b38"
   integrity sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==
