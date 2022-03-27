@@ -28,4 +28,4 @@ jobs:
     steps:
       - name: output
         id: output
-        run: echo ${{ jobs.getpackage.outputs.package }}
+        run: echo ${{ steps.getpackage.outputs.package }}
