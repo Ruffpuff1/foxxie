@@ -17,14 +17,14 @@ import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
 
 @RegisterChatInputCommand(
-    CommandName.Pokemon,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Websearch.PokemonDescription))
-            .addSubcommand(command =>
+            .setName(CommandName.Pokemon)
+            .setDescription(LanguageKeys.Commands.Websearch.PokemonDescription)
+            .subcommand(command =>
                 command //
                     .setName('dex')
-                    .setDescription(enUS(LanguageKeys.Commands.Websearch.PokemonDescriptionDex))
+                    .setDescription(LanguageKeys.Commands.Websearch.PokemonDescriptionDex)
                     .addStringOption(option =>
                         option //
                             .setName('pokemon')
@@ -39,10 +39,10 @@ import { enUS } from '#utils/util';
                             .setChoices(UserCommand.Sprites)
                     )
             )
-            .addSubcommand(command =>
+            .subcommand(command =>
                 command //
                     .setName('move')
-                    .setDescription(enUS(LanguageKeys.Commands.Websearch.PokemonDescriptionMove))
+                    .setDescription(LanguageKeys.Commands.Websearch.PokemonDescriptionMove)
                     .addStringOption(option =>
                         option //
                             .setName('move')
@@ -51,7 +51,9 @@ import { enUS } from '#utils/util';
                             .setAutocomplete(true)
                     )
             ),
-    ['946977564449177682', '947398139927756811']
+    {
+        idHints: ['946977564449177682', '947398139927756811']
+    }
 )
 export class UserCommand extends Command {
     public async chatInputRun(...[interaction, c, args]: ChatInputArgs<CommandName.Pokemon>) {

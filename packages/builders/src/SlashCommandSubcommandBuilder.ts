@@ -1,8 +1,8 @@
 import type { CustomGet } from '@foxxie/types';
 import i18next from 'i18next';
-import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
+import { SlashCommandSubcommandBuilder as BaseSubcommandBuilder } from '@discordjs/builders';
 
-export class FoxxieSlashCommandSubcommandBuilder extends SlashCommandSubcommandBuilder {
+export class SlashCommandSubcommandBuilder extends BaseSubcommandBuilder {
     public setDescription(key: CustomGet<string, string>): this {
         return super.setDescription(i18next.t(key, { lng: 'en-US' }));
     }

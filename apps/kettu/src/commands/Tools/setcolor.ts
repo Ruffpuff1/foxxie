@@ -4,16 +4,16 @@ import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
 import { resolveColorArgument } from '#utils/resolvers';
-import { Collection, ColorResolvable, DiscordAPIError, GuildMember } from 'discord.js';
+import { ColorResolvable, DiscordAPIError, GuildMember } from 'discord.js';
 import { PermissionFlagsBits, RESTJSONErrorCodes } from 'discord-api-types/v10';
 import tinycolor from 'tinycolor2';
-import { FuzzySearch } from '#utils/FuzzySearch';
+import { FuzzySearch } from '@foxxie/fuzzysearch';
 
 @RegisterChatInputCommand(
-    CommandName.Setcolor,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorDescription))
+            .setName(CommandName.Setcolor)
+            .setDescription(LanguageKeys.Commands.Tools.SetcolorDescription)
             .addRoleOption(option =>
                 option //
                     .setName('role')
@@ -33,8 +33,8 @@ import { FuzzySearch } from '#utils/FuzzySearch';
                     .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorOptionReason))
                     .setRequired(false)
             ),
-    ['950400529970888707'],
     {
+        idHints: ['950400529970888707'],
         requiredClientPermissions: PermissionFlagsBits.ManageRoles
     }
 )
@@ -62,7 +62,7 @@ export class UserCommand extends Command {
     }
 
     public override autocompleteRun(...[interaction]: Parameters<AutocompleteCommand['autocompleteRun']>) {
-        const fuzz = new FuzzySearch(new Collection(Object.keys(tinycolor.names).map(k => [k, { color: k }])), ['color']);
+        const fuzz = new FuzzySearch(Object.keys(tinycolor.names), ['key']);
 
         const arg = interaction.options.getString('color', true);
         const result = fuzz.runFuzzy(arg);
@@ -80,7 +80,7 @@ export class UserCommand extends Command {
 
         const options = [];
         if (!hasOpt) options.push({ name: arg, value: arg });
-        options.push(...result.slice(0, hasOpt ? 19 : 20).map(r => ({ name: r.color, value: r.color })));
+        options.push(...result.slice(0, hasOpt ? 19 : 20).map(r => ({ name: r.key, value: r.key })));
 
         return interaction.respond(options);
     }

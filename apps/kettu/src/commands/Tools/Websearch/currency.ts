@@ -3,18 +3,18 @@ import { RegisterChatInputCommand } from '#utils/decorators';
 import { Colors } from '#utils/constants';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { cryptoCompare, CryptoCompareResultOk } from '#utils/APIs';
-import { Collection, MessageEmbed } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import { fetch } from '@foxxie/fetch';
-import { FuzzySearch } from '#utils/FuzzySearch';
+import { FuzzySearch } from '@foxxie/fuzzysearch';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
 import { envParse } from '#root/config';
 
 @RegisterChatInputCommand(
-    CommandName.Currency,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Websearch.CurrencyDescription))
+            .setName(CommandName.Currency)
+            .setDescription(LanguageKeys.Commands.Websearch.CurrencyDescription)
             .addStringOption(option =>
                 option //
                     .setName('from')
@@ -35,14 +35,9 @@ import { envParse } from '#root/config';
                     .setDescription(enUS(LanguageKeys.Commands.Websearch.CurrencyOptionAmount))
                     .setRequired(false)
             )
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                    .setRequired(false)
-            ),
-    ['947381920881311765', '947398139462164490'],
+            .addEphemeralOption(),
     {
+        idHints: ['947381920881311765', '947398139462164490'],
         enabled: envParse.exists('CRYPTOCOMPARE_TOKEN')
     }
 )
@@ -73,7 +68,7 @@ export class UserCommand extends Command {
     public async autocompleteRun(...[interaction]: Parameters<AutocompleteCommand['autocompleteRun']>) {
         const opt = interaction.options.getFocused(true);
 
-        const fuzz = new FuzzySearch(new Collection(this.keys.map(k => [k, { key: k }])), ['key']);
+        const fuzz = new FuzzySearch(this.keys, ['key']);
         const result = fuzz.runFuzzy(opt.value as string);
 
         return interaction.respond(result.slice(0, 20).map(r => ({ name: r.key, value: r.key })));

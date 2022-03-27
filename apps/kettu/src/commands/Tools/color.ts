@@ -1,8 +1,7 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
 import { fetch } from '@foxxie/fetch';
 import tinycolor from 'tinycolor2';
-import { FuzzySearch } from '#utils/FuzzySearch';
-import { Collection } from 'discord.js';
+import { FuzzySearch } from '@foxxie/fuzzysearch';
 import { getLocale, RegisterChatInputCommand } from '#utils/decorators';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
@@ -10,10 +9,10 @@ import { enUS } from '#utils/util';
 import { resolveColorArgument } from '#utils/resolvers';
 
 @RegisterChatInputCommand(
-    CommandName.Color,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Tools.ColorDescription))
+            .setName(CommandName.Color)
+            .setDescription(LanguageKeys.Commands.Tools.ColorDescription)
             .addStringOption(option =>
                 option //
                     .setName('color')
@@ -21,13 +20,10 @@ import { resolveColorArgument } from '#utils/resolvers';
                     .setRequired(true)
                     .setAutocomplete(true)
             )
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                    .setRequired(false)
-            ),
-    ['946619789583978496', '946619789583978496']
+            .addEphemeralOption(),
+    {
+        idHints: ['946619789583978496', '946619789583978496']
+    }
 )
 export class UserCommand extends Command {
     public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Color>): Promise<unknown> {
@@ -52,7 +48,7 @@ export class UserCommand extends Command {
     }
 
     public override autocompleteRun(...[interaction]: Parameters<AutocompleteCommand['autocompleteRun']>) {
-        const fuzz = new FuzzySearch(new Collection(Object.keys(tinycolor.names).map(k => [k, { color: k }])), ['color']);
+        const fuzz = new FuzzySearch(Object.keys(tinycolor.names), ['key']);
 
         const arg = interaction.options.getString('color', true);
         const result = fuzz.runFuzzy(arg);
@@ -70,7 +66,7 @@ export class UserCommand extends Command {
 
         const options = [];
         if (!hasOpt) options.push({ name: arg, value: arg });
-        options.push(...result.slice(0, hasOpt ? 19 : 20).map(r => ({ name: r.color, value: r.color })));
+        options.push(...result.slice(0, hasOpt ? 19 : 20).map(r => ({ name: r.key, value: r.key })));
 
         return interaction.respond(options);
     }

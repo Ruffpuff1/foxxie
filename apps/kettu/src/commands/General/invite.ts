@@ -3,19 +3,16 @@ import { hyperlink, bold, italic, underscore } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { RegisterChatInputCommand } from '#utils/decorators';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
 
 @RegisterChatInputCommand(
-    CommandName.Invite,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.General.InviteDescription)) //
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultTrue))
-            ),
-    ['945871213144711260', '945871213144711260']
+            .setName(CommandName.Invite)
+            .setDescription(LanguageKeys.Commands.General.InviteDescription)
+            .addEphemeralOption(true),
+    {
+        idHints: ['945871213144711260', '945871213144711260']
+    }
 )
 export class UserCommand extends Command {
     private readonly urls = [

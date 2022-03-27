@@ -6,9 +6,8 @@ import { Sunsigns, Days, Query, QueryGetHoroscopeArgs } from '@skyra/saelem';
 import { MessageEmbed } from 'discord.js';
 import { toTitleCase } from '@ruffpuff/utilities';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
 import { envParse } from '#root/config';
+import { LanguageKeys } from '#lib/i18n';
 
 const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) {
     getHoroscope(sunsign: $sunsign, day: $day) {
@@ -22,10 +21,10 @@ const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) 
 }`;
 
 @RegisterChatInputCommand(
-    CommandName.Zodiac,
     builder =>
         builder //
-            .setDescription('Search for your daily horoscope using Saelem.')
+            .setName(CommandName.Zodiac)
+            .setDescription(LanguageKeys.Commands.Websearch.ZodiacDescription)
             .addStringOption(option =>
                 option //
                     .setName('sign')
@@ -40,14 +39,9 @@ const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) 
                     .setRequired(false)
                     .addChoices(UserCommand.Days)
             )
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                    .setRequired(false)
-            ),
-    ['946882459788779590', '946882459788779590'],
+            .addEphemeralOption(),
     {
+        idHints: ['946882459788779590', '946882459788779590'],
         enabled: envParse.boolean('SAELEM_ENABLED')
     }
 )

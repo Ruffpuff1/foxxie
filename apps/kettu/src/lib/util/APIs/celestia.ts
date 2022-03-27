@@ -3,12 +3,12 @@ import { CoffeeBeansEnum, CoffeeMilkEnum, CoffeeSugarEnum, GamesEnum, KkSliderSo
 import type { Query, QueryGetCardByNameArgs, QueryGetVillagerByNameArgs } from '@ruffpuff/celestia';
 import { fetch } from '@foxxie/fetch';
 import { fromAsync, isErr, UserError } from '@sapphire/framework';
-import { Collection, MessageEmbed } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import { cast, gql, toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { Colors } from '../constants';
-import { FuzzySearch } from '#utils/FuzzySearch';
+import { FuzzySearch } from '@foxxie/fuzzysearch';
 
 export async function fetchGraphQLAnimalCrossing<R extends AnimalCrossingReturnTypes>(
     query: string,
@@ -47,7 +47,7 @@ export async function fuzzySearchVillagers(query: string, take = 20, cache?: Vil
         }
     }
 
-    const fuzz = new FuzzySearch(new Collection(cache.map(k => [k, { key: k }])), ['key']);
+    const fuzz = new FuzzySearch(cache, ['key']);
     const result = fuzz.runFuzzy(query);
 
     return result.slice(0, take);

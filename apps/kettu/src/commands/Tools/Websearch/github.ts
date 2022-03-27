@@ -14,15 +14,14 @@ import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
 
 @RegisterChatInputCommand(
-    CommandName.Github,
     builder =>
         builder //
-            .setName('github')
-            .setDescription(enUS(LanguageKeys.Commands.Websearch.GithubDescription))
-            .addSubcommand(command =>
+            .setName(CommandName.Github)
+            .setDescription(LanguageKeys.Commands.Websearch.GithubDescription)
+            .subcommand(command =>
                 command //
                     .setName('user') //
-                    .setDescription(enUS(LanguageKeys.Commands.Websearch.GithubDescriptionUser))
+                    .setDescription(LanguageKeys.Commands.Websearch.GithubDescriptionUser)
                     .addStringOption(option =>
                         option //
                             .setName(GithubOptionType.User)
@@ -31,10 +30,10 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
                             .setAutocomplete(true)
                     )
             )
-            .addSubcommand(command =>
+            .subcommand(command =>
                 command //
                     .setName('repo')
-                    .setDescription(enUS(LanguageKeys.Commands.Websearch.GithubDescriptionRepo))
+                    .setDescription(LanguageKeys.Commands.Websearch.GithubDescriptionRepo)
                     .addStringOption(option =>
                         option //
                             .setName(GithubOptionType.Owner)
@@ -57,7 +56,9 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
                             .setAutocomplete(true)
                     )
             ),
-    ['947857986594959390', '947873927873593364']
+    {
+        idHints: ['947857986594959390', '947873927873593364']
+    }
 )
 export class UserCommand extends Command {
     public chatInputRun(...[interaction, c, args]: ChatInputArgs<CommandName.Github>) {

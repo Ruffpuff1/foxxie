@@ -1,40 +1,27 @@
-import type { CommandName } from '#types/Interactions';
-import { SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, SlashCommandSubcommandsOnlyBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from '@foxxie/builders';
 import { createClassDecorator, createProxy } from '@sapphire/decorators';
 import { Command, container, RegisterBehavior } from '@sapphire/framework';
 import type { Ctor } from '@sapphire/utilities';
-import { Locale } from 'discord-api-types/v10';
+import { Locale, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
 import type { AutocompleteInteraction, CommandInteraction, CommandInteractionOption, SelectMenuInteraction } from 'discord.js';
 import { getGuildIds } from './util';
 
-export function RegisterChatInputCommand<N extends CommandName>(
-    name: N,
-    builder:
-        | SlashCommandBuilder
-        | ((
-              builder: SlashCommandBuilder
-          ) =>
-              | SlashCommandBuilder
-              | SlashCommandSubcommandsOnlyBuilder
-              | SlashCommandOptionsOnlyBuilder
-              | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>),
-    idHints: string[],
-    options: Command.Options = {}
+export function RegisterChatInputCommand(
+    cb: (builder: SlashCommandBuilder) => SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>,
+    options: Command.Options & { idHints?: string[] } = {}
 ) {
-    const registry = container.applicationCommandRegistries.acquire(name);
+    const builder = cb(new SlashCommandBuilder());
+    const buildData = builder.toJSON();
+    const registry = container.applicationCommandRegistries.acquire(buildData.name);
 
-    const build = typeof builder === 'function' ? builder(new SlashCommandBuilder()) : new SlashCommandBuilder();
-    if (!build.name) build.setName(name);
-    const json = build.toJSON();
-
-    registry.registerChatInputCommand(build, {
+    registry.registerChatInputCommand(builder as unknown as SlashCommandBuilder, {
         guildIds: getGuildIds(),
-        idHints,
+        idHints: options.idHints ?? [],
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite
     });
 
     return createClassDecorator((command: Ctor) => {
-        const subcommands = json.options?.filter(opt => opt.type === 1);
+        const subcommands = buildData.options?.filter(opt => opt.type === 1);
 
         if (subcommands?.length) {
             for (const subcommand of subcommands) {
@@ -49,8 +36,8 @@ export function RegisterChatInputCommand<N extends CommandName>(
                 new ctor(context, {
                     ...base,
                     ...{
-                        description: build.description,
-                        name: build.name,
+                        description: (buildData as RESTPostAPIChatInputApplicationCommandsJSONBody).description,
+                        name: buildData.name,
                         ...options
                     }
                 })

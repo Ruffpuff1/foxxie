@@ -7,10 +7,10 @@ import { fetch } from '@foxxie/fetch';
 import type { GuildMember } from 'discord.js';
 
 @RegisterChatInputCommand(
-    CommandName.Pride,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Tools.PrideDescription))
+            .setName(CommandName.Pride)
+            .setDescription(LanguageKeys.Commands.Tools.PrideDescription)
             .addStringOption(option =>
                 option //
                     .setName('flag')
@@ -24,13 +24,10 @@ import type { GuildMember } from 'discord.js';
                     .setDescription(enUS(LanguageKeys.Commands.Tools.PrideOptionGuildAvatar))
                     .setRequired(false)
             )
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                    .setRequired(false)
-            ),
-    ['950369662179344414']
+            .addEphemeralOption(),
+    {
+        idHints: ['950369662179344414']
+    }
 )
 export class UserCommand extends Command {
     public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Pride>): Promise<any> {

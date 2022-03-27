@@ -1,11 +1,11 @@
-import type { CustomGet } from '#lib/types';
-import { enUS } from '#utils/util';
+import type { CustomGet } from '@foxxie/types';
+import i18next from 'i18next';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { FoxxieSlashCommandSubcommandBuilder } from './FoxxieSlashCommandSubcommandBuilder';
 
 export class FoxxieSlashCommandBuilder extends SlashCommandBuilder {
     public setDescription(key: CustomGet<string, string> | 'subcommand'): this {
-        return super.setDescription(enUS(key));
+        return super.setDescription(i18next.t(key, { lng: 'en-US' }));
     }
 
     public subcommand(
@@ -20,7 +20,7 @@ export class FoxxieSlashCommandBuilder extends SlashCommandBuilder {
         return super.addBooleanOption(option =>
             option //
                 .setName('ephemeral')
-                .setDescription(enUS(`system:optionEphemeralDefault${base ? 'True' : 'False'}`))
+                .setDescription(i18next.t(`system:optionEphemeralDefault${base ? 'True' : 'False'}`, { lng: 'en-US' }))
         ) as this;
     }
 }

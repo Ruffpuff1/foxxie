@@ -4,15 +4,14 @@ import { RegisterChatInputCommand } from '#utils/decorators';
 import { Emojis } from '#utils/constants';
 import { bold, hyperlink } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
 import { envParse } from '#root/config';
+import { LanguageKeys } from '#lib/i18n';
 
 @RegisterChatInputCommand(
-    CommandName.Wolfram,
     builder =>
         builder //
-            .setDescription('Search the Wolfram|Alpha API, with additional graphing tools.')
+            .setName(CommandName.Wolfram)
+            .setDescription(LanguageKeys.Commands.Websearch.WolframDescription)
             .addStringOption(option =>
                 option //
                     .setName('query')
@@ -25,14 +24,9 @@ import { envParse } from '#root/config';
                     .setDescription('If Wolfram|Alpha graphing should be enabled for math questions.')
                     .setRequired(false)
             )
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                    .setRequired(false)
-            ),
-    ['946769238687903784', '946769238687903784'],
+            .addEphemeralOption(),
     {
+        idHints: ['946769238687903784', '946769238687903784'],
         enabled: envParse.exists('WOLFRAM_TOKEN')
     }
 )
