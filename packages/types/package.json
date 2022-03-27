@@ -1,7 +1,7 @@
 {
   "name": "@foxxie/types",
   "version": "0.0.4",
-  "description": "Commonly used types in Foxxie projects",
+  "description": "Commonly used types in Foxxiebot projects",
   "scripts": {
     "build": "rm -r -f dist && tsup",
     "lint": "prettier --check . && eslint src --ext mjs,js,ts",
