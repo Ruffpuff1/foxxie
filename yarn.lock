@@ -671,6 +671,14 @@
     "@typescript-eslint/parser" "^5.10.2"
     eslint "^8.8.0"
 
+"@foxxie/lock-queue@0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@foxxie/lock-queue/-/lock-queue-0.1.1.tgz#ed888364bfc828d3bf6c84cdb82e232de36fa8ff"
+  integrity sha512-Jjm/0LP+BAHRwddV/MUffrQfONqeEUfDH5WijOWZpVgQnPVMMfWc4jPCPTM3mRtHjR2pQQOAeWZk6GB10gFbSg==
+  dependencies:
+    "@foxxie/eslint-config" "^0.0.0"
+    async-rwlock "^1.1.1"
+
 "@graphql-codegen/cli@2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-2.6.2.tgz#a9aa4656141ee0998cae8c7ad7d0bf9ca8e0c9ae"
