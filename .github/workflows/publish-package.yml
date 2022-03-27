@@ -1,0 +1,45 @@
+name: Publish next
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    name: Publish release to npm
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'FoxxieBot' && startsWith(github.event.head_commit.message, 'chore(release)')
+    steps:
+      - name: Cancel previous publish attempts
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install Node v16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: yarn
+        
+      - name: Set Git User and Email
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Build src
+        run: yarn build
+
+      - name: Publish new version
+        run: |
+          npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
