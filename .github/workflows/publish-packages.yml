@@ -20,7 +20,8 @@ jobs:
       - name: getpackage
         id: getpackage
         run: |
-          echo "::set-output name=package::$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | cut -d/ -f2 | sort -u)"
+          PACKAGE_NAME=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | cut -d/ -f2 | sort -u)
+          echo "::set-output name=package::$PACKAGE_NAME"
   Output:
     name: Output the name of the package.
     runs-on: ubuntu-latest
