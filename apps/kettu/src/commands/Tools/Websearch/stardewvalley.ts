@@ -7,7 +7,7 @@ import { enUS } from '#utils/util';
 import { LanguageKeys } from '#lib/i18n';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { toTitleCase } from '@ruffpuff/utilities';
-import { envParse } from '#root/config';
+import { EnvParse } from '@foxxie/env';
 
 @RegisterChatInputCommand(
     builder =>
@@ -28,7 +28,7 @@ import { envParse } from '#root/config';
             ),
     {
         idHints: ['953151326844518430'],
-        enabled: envParse.boolean('STARDROP_ENABLED')
+        enabled: EnvParse.boolean('STARDROP_ENABLED')
     }
 )
 export class UserCommand extends Command {

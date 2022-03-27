@@ -4,8 +4,8 @@ import { RegisterChatInputCommand } from '#utils/decorators';
 import { Emojis } from '#utils/constants';
 import { bold, hyperlink } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { envParse } from '#root/config';
 import { LanguageKeys } from '#lib/i18n';
+import { EnvParse } from '@foxxie/env';
 
 @RegisterChatInputCommand(
     builder =>
@@ -27,7 +27,7 @@ import { LanguageKeys } from '#lib/i18n';
             .addEphemeralOption(),
     {
         idHints: ['946769238687903784', '946769238687903784'],
-        enabled: envParse.exists('WOLFRAM_TOKEN')
+        enabled: EnvParse.exists('WOLFRAM_TOKEN')
     }
 )
 export class UserCommand extends Command {

@@ -8,7 +8,7 @@ import { fetch } from '@foxxie/fetch';
 import { FuzzySearch } from '@foxxie/fuzzysearch';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS } from '#utils/util';
-import { envParse } from '#root/config';
+import { EnvParse } from '@foxxie/env';
 
 @RegisterChatInputCommand(
     builder =>
@@ -38,7 +38,7 @@ import { envParse } from '#root/config';
             .addEphemeralOption(),
     {
         idHints: ['947381920881311765', '947398139462164490'],
-        enabled: envParse.exists('CRYPTOCOMPARE_TOKEN')
+        enabled: EnvParse.exists('CRYPTOCOMPARE_TOKEN')
     }
 )
 export class UserCommand extends Command {
