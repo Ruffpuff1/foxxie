@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/env",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A utility for parsing env values.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
