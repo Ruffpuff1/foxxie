@@ -10,15 +10,6 @@ class LockQueue extends Map<string, RWLock> {
         return lock;
     }
 
-    public shift(k?: string) {
-        const [key] = k ? [k] : [...this.keys()];
-
-        const lock = this.get(key)!;
-        lock.unlock();
-
-        this.delete(key);
-    }
-
     public async write(key: string) {
         const lock = this.acquire(key);
         await lock.writeLock();
