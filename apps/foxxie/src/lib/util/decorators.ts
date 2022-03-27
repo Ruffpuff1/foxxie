@@ -10,8 +10,7 @@ import type { AutocompleteInteraction, CommandInteraction, CommandInteractionOpt
 import { Locale, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v9';
 import { getGuildIds } from './util';
 import type { FoxxieCommand } from '#lib/structures';
-import type { SlashCommandBuilder } from '@discordjs/builders';
-import { FoxxieSlashCommandBuilder, FoxxieSlashCommandSubcommandsOnlyBuilder } from '#lib/discord';
+import { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from '@foxxie/builders';
 
 export function RequireLevelingEnabled(): MethodDecorator {
     return createFunctionPrecondition(
@@ -81,11 +80,11 @@ export function RequireMusicPaused(): MethodDecorator {
 
 export function RegisterChatInputCommand(
     cb: (
-        builder: FoxxieSlashCommandBuilder
-    ) => FoxxieSlashCommandBuilder | FoxxieSlashCommandSubcommandsOnlyBuilder | Omit<FoxxieSlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>,
+        builder: SlashCommandBuilder
+    ) => SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>,
     options: FoxxieCommand.Options & { idHints?: string[] } = {}
 ) {
-    const builder = cb(new FoxxieSlashCommandBuilder());
+    const builder = cb(new SlashCommandBuilder());
     const buildData = builder.toJSON();
     const registry = container.applicationCommandRegistries.acquire(buildData.name);
 

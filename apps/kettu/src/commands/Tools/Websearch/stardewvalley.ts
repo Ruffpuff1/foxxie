@@ -10,14 +10,14 @@ import { toTitleCase } from '@ruffpuff/utilities';
 import { envParse } from '#root/config';
 
 @RegisterChatInputCommand(
-    CommandName.StardewValley,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Websearch.StardewvalleyDescription))
-            .addSubcommand(command =>
+            .setName(CommandName.StardewValley)
+            .setDescription(LanguageKeys.Commands.Websearch.StardewvalleyDescription)
+            .subcommand(command =>
                 command //
                     .setName('character')
-                    .setDescription(enUS(LanguageKeys.Commands.Websearch.StardewvalleyDescriptionCharacter))
+                    .setDescription(LanguageKeys.Commands.Websearch.StardewvalleyDescriptionCharacter)
                     .addStringOption(option =>
                         option //
                             .setName('villager')
@@ -26,8 +26,8 @@ import { envParse } from '#root/config';
                             .setRequired(true)
                     )
             ),
-    ['953151326844518430'],
     {
+        idHints: ['953151326844518430'],
         enabled: envParse.boolean('STARDROP_ENABLED')
     }
 )

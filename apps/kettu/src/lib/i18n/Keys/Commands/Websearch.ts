@@ -117,3 +117,5 @@ export const StardewvalleyTitles = T<{
     marryable: string;
 }>('commands/websearch:stardewvalleyTitles');
 export const StardewvalleyVillagerPageLabels = T<[string, string]>('commands/websearch:stardewvalleyVillagerPageLabel');
+export const WolframDescription = T('commands/websearch:wolframDescription');
+export const ZodiacDescription = T('commands/websearch:zodiacDescription');

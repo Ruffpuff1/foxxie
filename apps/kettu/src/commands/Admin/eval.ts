@@ -16,12 +16,13 @@ import { inspect } from 'node:util';
 import { RegisterChatInputCommand, getLocale } from '#utils/decorators';
 import Type from '#utils/Type';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
+import { LanguageKeys } from '#lib/i18n';
 
 @RegisterChatInputCommand(
-    CommandName.Eval,
     builder =>
         builder //
-            .setDescription('Evaluates any JavaScript code. Can only be used by the bot owner.')
+            .setName(CommandName.Eval)
+            .setDescription(LanguageKeys.Commands.Admin.EvalDescription)
             .setDefaultPermission(false)
             .addStringOption(option =>
                 option //
@@ -66,7 +67,9 @@ import { type ChatInputArgs, CommandName } from '#types/Interactions';
                     .setName('show-hidden')
                     .setDescription('Whether to show hidden JSON properties when stringifying.')
             ),
-    ['946775073539358740', '946775073539358740']
+    {
+        idHints: ['946775073539358740', '946775073539358740']
+    }
 )
 export class UserCommand extends Command {
     public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Eval>): Promise<unknown> {

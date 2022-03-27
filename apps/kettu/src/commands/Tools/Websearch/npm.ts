@@ -13,10 +13,10 @@ import type { TFunction } from '@sapphire/plugin-i18next';
 const LOGO = 'https://cdn.ruffpuff.dev/npm.png';
 
 @RegisterChatInputCommand(
-    CommandName.Npm,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Websearch.NpmDescription))
+            .setName(CommandName.Npm)
+            .setDescription(LanguageKeys.Commands.Websearch.NpmDescription)
             .addStringOption(option =>
                 option //
                     .setName('package')
@@ -24,13 +24,7 @@ const LOGO = 'https://cdn.ruffpuff.dev/npm.png';
                     .setRequired(true)
                     .setAutocomplete(true)
             )
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                    .setRequired(false)
-            ),
-    []
+            .addEphemeralOption()
 )
 export class UserCommand extends Command {
     public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Npm>): Promise<void> {

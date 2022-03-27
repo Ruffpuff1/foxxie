@@ -132,5 +132,7 @@
     "stardewvalleyVillagerPageLabels": [
         "General",
         "Relationship Data"
-    ]
+    ],
+    "wolframDescription": "Search the Wolfram|Alpha API, with additional graphing tools.",
+    "zodiacDescription": "Search for your daily horoscope using Saelem."
 }

@@ -6,10 +6,10 @@ import { enUS } from '#utils/util';
 import owoify from 'owoify-js';
 
 @RegisterChatInputCommand(
-    CommandName.Owoify,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Tools.OwoifyDescription))
+            .setName(CommandName.Owoify)
+            .setDescription(LanguageKeys.Commands.Tools.OwoifyDescription)
             .addStringOption(option =>
                 option //
                     .setName('text')
@@ -27,13 +27,10 @@ import owoify from 'owoify-js';
                         ['(∮UvU◆ χ) UvU', 'uvu']
                     ])
             )
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-                    .setRequired(false)
-            ),
-    ['953403239146082324']
+            .addEphemeralOption(),
+    {
+        idHints: ['953403239146082324']
+    }
 )
 export class UserCommand extends Command {
     public override chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Owoify>): Promise<any> {

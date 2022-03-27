@@ -10,6 +10,7 @@
     "require": "./generated/stardrop.cjs"
   },
   "scripts": {
+    "build": "rollup -c scripts/rollup.config.mjs",
     "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'packages/stardrop/*'"
   },
   "repository": {

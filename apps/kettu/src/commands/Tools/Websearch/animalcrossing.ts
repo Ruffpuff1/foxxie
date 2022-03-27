@@ -10,14 +10,14 @@ import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'di
 import { envParse } from '#root/config';
 
 @RegisterChatInputCommand(
-    CommandName.AnimalCrossing,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.Websearch.AnimalcrossingDescription))
-            .addSubcommand(command =>
+            .setName(CommandName.AnimalCrossing)
+            .setDescription(LanguageKeys.Commands.Websearch.AnimalcrossingDescription)
+            .subcommand(command =>
                 command //
                     .setName('villager')
-                    .setDescription(enUS(LanguageKeys.Commands.Websearch.AnimalcrossingDescriptionVillager))
+                    .setDescription(LanguageKeys.Commands.Websearch.AnimalcrossingDescriptionVillager)
                     .addStringOption(option =>
                         option //
                             .setName('villager')
@@ -26,8 +26,8 @@ import { envParse } from '#root/config';
                             .setRequired(true)
                     )
             ),
-    ['949309221441273866'],
     {
+        idHints: ['949309221441273866'],
         enabled: envParse.boolean('CELESTIA_ENABLED')
     }
 )

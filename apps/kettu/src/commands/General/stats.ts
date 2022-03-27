@@ -3,23 +3,20 @@ import { time, TimestampStyles } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { RegisterChatInputCommand } from '#utils/decorators';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
 import { roundNumber, seconds } from '@ruffpuff/utilities';
 import { CpuInfo, cpus, uptime } from 'node:os';
 import { Colors } from '#utils/constants';
 import { MessageEmbed, version } from 'discord.js';
 
 @RegisterChatInputCommand(
-    CommandName.Stats,
     builder =>
         builder //
-            .setDescription(enUS(LanguageKeys.Commands.General.StatsDescription)) //
-            .addBooleanOption(option =>
-                option //
-                    .setName('ephemeral')
-                    .setDescription(enUS(LanguageKeys.System.OptionEphemeralDefaultFalse))
-            ),
-    ['951268274887327744']
+            .setName(CommandName.Stats)
+            .setDescription(LanguageKeys.Commands.General.StatsDescription)
+            .addEphemeralOption(),
+    {
+        idHints: ['951268274887327744']
+    }
 )
 export class UserCommand extends Command {
     public chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Stats>) {

@@ -8,6 +8,7 @@
     "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
     "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'apps/kettu/*'",
     "dev": "yarn build && yarn start",
+    "build": "tsc -b src",
     "start": "node .",
     "prod": "NODE_ENV=production node ."
   },
@@ -24,6 +25,7 @@
     "@discordjs/builders": "^0.12.0",
     "@foxxie/env": "^0.0.1",
     "@foxxie/fetch": "0.0.2",
+    "@foxxie/fuzzysearch": "^0.0.3",
     "@ruffpuff/utilities": "^4.0.0",
     "@sapphire/decorators": "^4.2.6",
     "@sapphire/discord.js-utilities": "^4.8.2",

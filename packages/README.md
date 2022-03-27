@@ -16,6 +16,10 @@
 
 <h2>Included Packages</h2>
 
+### Builders [![npm](https://img.shields.io/npm/v/@foxxie/builders?color=crimson&label=builders%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/builders)
+
+Extensions of @discordjs/builders for Foxxie project.
+
 ### Env [![npm](https://img.shields.io/npm/v/@foxxie/env?color=crimson&label=env%20version&logo=npm&style=flat-rounded)](https://www.npmjs.com/package/@foxxie/env)
 
 Parser for resolving process env values.
