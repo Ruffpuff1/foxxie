@@ -49,4 +49,29 @@ describe('fetch', () => {
             expect(result.data).toBe(errorStatusMessage);
         });
     });
+
+    describe('Successful fetches', () => {
+        test('GIVEN raw fetch for an image, return buffer', async () => {
+            const result = await fetch('https://cdn.ruffpuff.dev/ruffpuff.jpg').raw();
+
+            expect(result).toBeInstanceOf(Buffer);
+        });
+
+        test('GIVEN fetch for text, return a STRING', async () => {
+            const result = await fetch('https://cdn.ruffpuff.dev').text();
+
+            expect(typeof result).toBe('string');
+        });
+
+        describe('Fetches without content headers', () => {
+            test('GIVEN fetch with json body EXPECT "sendDataAs" to be json', () => {
+                const query = fetch('https://cdn.ruffpuff.dev') //
+                    .body({
+                        test: 'test'
+                    }, 'json');
+
+                expect(query.sendDataAs).toBe('json');
+            })
+        })
+    });
 });
