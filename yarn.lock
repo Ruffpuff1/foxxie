@@ -2467,7 +2467,7 @@
   resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.8.3.tgz#781d360c282436494b32fe7d9f7f8e64b3118aa3"
   integrity sha512-fbF6oTd4sGGy0xjHPKAt+eS2CrxJ3+6gQ3FGcBoIJR2TLAyCkCyI8JqZNy+FeON0AhVgNJoUumVoZQjBFUqHkw==
 
-"@typescript-eslint/eslint-plugin@5.16.0", "@typescript-eslint/eslint-plugin@^5.10.2", "@typescript-eslint/eslint-plugin@^5.12.0", "@typescript-eslint/eslint-plugin@^5.13.0":
+"@typescript-eslint/eslint-plugin@5.16.0", "@typescript-eslint/eslint-plugin@^5.12.0", "@typescript-eslint/eslint-plugin@^5.13.0":
   version "5.16.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.16.0.tgz#78f246dd8d1b528fc5bfca99a8a64d4023a3d86d"
   integrity sha512-SJoba1edXvQRMmNI505Uo4XmGbxCK9ARQpkvOd00anxzri9RNQk0DDCxD+LIl+jYhkzOJiOMMKYEHnHEODjdCw==
@@ -2498,7 +2498,6 @@
     tsutils "^3.21.0"
 
 "@typescript-eslint/parser@5.16.0", "@typescript-eslint/parser@^5.12.0", "@typescript-eslint/parser@^5.13.0":
-
   version "5.16.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.16.0.tgz#e4de1bde4b4dad5b6124d3da227347616ed55508"
   integrity sha512-fkDq86F0zl8FicnJtdXakFs4lnuebH6ZADDw6CYQv0UZeIjHvmEw87m9/29nk2Dv5Lmdp0zQ3zDQhiMWQf/GbA==
