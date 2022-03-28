@@ -138,5 +138,35 @@ describe('fetch', () => {
 
             expect(Reflect.get(query.reqHeaders, 'header1')).toBe('h1');
         });
+
+        test('When using auth method, apply auth to the request', () => {
+            const query = fetch('http://localhost') //
+                .auth('token');
+
+            expect(Reflect.get(query.reqHeaders, 'authorization')).toBe('Bearer token');
+        });
+
+        describe('The follow method.', () => {
+            test('Using follow with true value EXPECT redirects to be 20', () => {
+                const query = fetch('http://localhost') //
+                    .follow(true);
+
+                expect(query.redirects).toBe(20);
+            });
+
+            test('Using follow with false value EXPECT redirects to be 0', () => {
+                const query = fetch('http://localhost') //
+                    .follow(false);
+
+                expect(query.redirects).toBe(0);
+            });
+
+            test('Using follow with number value EXPECT redirects to be the number', () => {
+                const query = fetch('http://localhost') //
+                    .follow(5);
+
+                expect(query.redirects).toBe(5);
+            });
+        });
     });
 });
