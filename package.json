@@ -10,7 +10,8 @@
     "up": "yarn upgrade-interactive --latest",
     "graph": "nx dep-graph",
     "affected": "nx graph",
-    "full:test": "jest --pass-with-no-tests --collect-coverage --verbose"
+    "full:test": "jest --pass-with-no-tests --collect-coverage --verbose",
+    "nx:b": "nx build"
   },
   "contributors": [
     "Ruffpuff1 <contact@ruffpuff.dev>",
@@ -19,7 +20,7 @@
   "keywords": [
     "bot",
     "npm",
-    "turbo",
+    "nx",
     "packages",
     "monorepo",
     "yarn",
