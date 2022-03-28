@@ -24,7 +24,7 @@ jobs:
         run: yarn --immutable
       - name: Run unit tests
         run: |
-          yarn build
+          yarn nx affected:build
           yarn full:test
       - name: Store code coverage report
         uses: actions/upload-artifact@v3
