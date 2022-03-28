@@ -20,10 +20,12 @@ jobs:
         with:
           node-version: 16
           cache: yarn
+      - name: Build packages
       - name: Install Dependencies
         run: yarn --immutable
       - name: Run unit tests
         run: |
+          yarn nx run-many --target=build --projects=fetch,types,eslint-config
           yarn full:test
       - name: Store code coverage report
         uses: actions/upload-artifact@v3

@@ -10,5 +10,8 @@ export default async (): Promise<Config.InitialOptions> => ({
         'ts-jest': {
             tsconfig: '<rootDir>/tsconfig.json'
         }
-    }
+    },
+    moduleDirectories: [
+        'node_modules'
+    ]
 });
