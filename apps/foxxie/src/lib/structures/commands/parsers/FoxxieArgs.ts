@@ -1,4 +1,4 @@
-import { fetch, type HttpMethod } from '@foxxie/fetch';
+import { fetch, HttpMethodEnum } from '@foxxie/fetch';
 import { Args, MessageCommandContext, isOk, Result, UserError, MessageCommand } from '@sapphire/framework';
 import type { Message } from 'discord.js';
 import type { TFunction } from 'i18next';
@@ -84,7 +84,7 @@ export class FoxxieArgs extends Args {
         return writeSettings(this.message.guild!, keys);
     }
 
-    public centra(url: string, method?: HttpMethod) {
+    public centra(url: string, method?: `${HttpMethodEnum}`) {
         return fetch(url, method);
     }
 

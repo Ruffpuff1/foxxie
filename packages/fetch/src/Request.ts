@@ -2,23 +2,7 @@ import { seconds } from '@ruffpuff/utilities';
 import { join } from 'node:path/win32';
 import { stringify } from 'node:querystring';
 import { request } from 'undici';
-
-/**
- * Enum with all http method options.
- */
-export enum HttpMethodEnum {
-    Options = 'OPTIONS',
-    Connect = 'CONNECT',
-    Delete = 'DELETE',
-    Trace = 'TRACE',
-    Head = 'HEAD',
-    Post = 'POST',
-    Put = 'PUT',
-    Get = 'GET',
-    Patch = 'PATCH'
-}
-
-export type HttpMethod = `${HttpMethodEnum}`;
+import type { HttpMethodEnum } from './types';
 
 /**
  * Represents an HTTP request.
@@ -32,7 +16,7 @@ export class Request {
     /**
      * The http method for the request can be any {@link HttpMethod}
      */
-    public httpMethod: HttpMethod;
+    public httpMethod: `${HttpMethodEnum}`;
 
     /**
      * The data to send with the request.
@@ -84,7 +68,7 @@ export class Request {
      * @param url The url for the request.
      * @param method The http method for the request, defaults to GET.
      */
-    public constructor(url: string | URL, method?: HttpMethod) {
+    public constructor(url: string | URL, method?: `${HttpMethodEnum}`) {
         this.url = typeof url === 'string' ? new URL(url) : url;
 
         this.httpMethod = method ?? 'GET';
@@ -205,7 +189,7 @@ export class Request {
         return this;
     }
 
-    public method(method: HttpMethod): this {
+    public method(method: `${HttpMethodEnum}`): this {
         this.httpMethod = method;
         return this;
     }

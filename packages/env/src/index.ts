@@ -3,7 +3,7 @@ import type { Env, BooleanString, IntegerString } from './types';
 class EnvParse {
     public static string<K extends keyof Env>(key: K): string {
         const value = process.env[key];
-        if (value) return value;
+        if (value) return value as string;
 
         throw new Error(`Could not resolve "${key}" to string value.`);
     }
@@ -12,7 +12,7 @@ class EnvParse {
         const value = process.env[key];
         if (!value) throw new Error(`Could not resolve "${key}" to integer value.`);
 
-        const parsed = parseInt(value, 10);
+        const parsed = parseInt(value as string, 10);
         if (!Number.isInteger(parsed)) throw new Error(`Could not resolve "${key}" to integer value.`);
         return parsed;
     }
