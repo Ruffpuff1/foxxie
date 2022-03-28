@@ -193,10 +193,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@foxxie/eslint-config@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@foxxie/eslint-config/-/eslint-config-0.0.1.tgz#ebf1cc17e3a9313ccad95937adf20c0446d055db"
-  integrity sha512-Ggfc7Z7Sz2jou7pEWq0sYlp/HWSPck+A24ZqnsLrrwSBB5tWiF+JG4MFMTiF81eKSyXtlDZFWV19ol7MDrWXng==
+"@foxxie/eslint-config@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@foxxie/eslint-config/-/eslint-config-0.0.2.tgz#c9dcb8fd9d3a2ef26907c2aff4746315fb420b61"
+  integrity sha512-7PXzd4ATKUHG3nKv5uREl/ccv47vVOatefp3Hf3tShHPH5DoptZyLN+t+DnmQ6dYa2iaDcZhhXun8OB7UdLqfg==
   dependencies:
     "@ruffpuff/eslint-config" "^1.0.1"
     "@typescript-eslint/eslint-plugin" "^5.13.0"
