@@ -10,6 +10,7 @@
     "lint": "turbo run lint",
     "format": "turbo run format",
     "dev": "turbo run dev",
+    "up": "yarn upgrade-interactive --latest",
     "changelog": "turbo run changelog"
   },
   "contributors": [
