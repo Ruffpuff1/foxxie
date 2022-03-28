@@ -22,8 +22,6 @@ jobs:
           cache: yarn
       - name: Install Dependencies
         run: yarn --immutable
-      - name: Build project
-        run: yarn build
       - name: Run unit tests
         run: yarn full:test
       - name: Store code coverage report
