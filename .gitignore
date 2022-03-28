@@ -101,7 +101,6 @@ dist
 # TernJS port file
 .tern-port
 
-.turbo
 build/**
 
 *.DS_Store
