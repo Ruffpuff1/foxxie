@@ -1,4 +1,4 @@
-import { FuzzySearch } from '../dist';
+import { FuzzySearch } from '../src'
 
 describe('Fuzzy search', () => {
     const fuzzySearch = new FuzzySearch(['foo', 'bar', 'baz'], ['key']);

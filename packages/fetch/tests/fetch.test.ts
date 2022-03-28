@@ -1,4 +1,4 @@
-import { fetch, HttpMethodEnum } from '../dist';
+import { fetch, HttpMethodEnum } from '../src';
 import nock from 'nock';
 
 describe('fetch', () => {
