@@ -1,4 +1,5 @@
-import { HttpMethod, Request } from './Request';
+import { Request } from './Request';
+import { HttpMethodEnum } from './types';
 
 /**
  * Fetch a link using undici
@@ -6,5 +7,5 @@ import { HttpMethod, Request } from './Request';
  * @param method The method to fetch with, defaults to GET.
  * @returns Request The {@link Request} class.
  */
-export const fetch = (url: string | URL, method?: HttpMethod) => new Request(url, method);
-export { HttpMethodEnum, HttpMethod } from './Request';
+export const fetch = (url: string | URL, method?: `${HttpMethodEnum}`) => new Request(url, method);
+export { HttpMethodEnum };

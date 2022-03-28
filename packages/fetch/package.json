@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "description": "A centra inspired http client for Foxxie bots",
   "scripts": {
-    "build": "rm -r -f dist && tsup",
+    "build": "tsup",
     "lint": "prettier --check . && eslint src --ext mjs,js,ts",
     "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
     "test": "jest --pass-with-no-tests --collect-coverage --verbose",
