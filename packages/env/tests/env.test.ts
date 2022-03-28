@@ -1,4 +1,4 @@
-import { BooleanString, EnvParse, IntegerString } from '../dist';
+import { BooleanString, EnvParse, IntegerString } from '../src';
 
 process.env.STRING = 'string';
 process.env.INT = '17';
@@ -69,7 +69,7 @@ describe('env utils', () => {
     });
 });
 
-declare module '../dist' {
+declare module '../src' {
     interface Env {
         STRING: string;
         INT: IntegerString;
