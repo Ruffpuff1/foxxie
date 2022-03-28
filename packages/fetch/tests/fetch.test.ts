@@ -66,12 +66,52 @@ describe('fetch', () => {
         describe('Fetches without content headers', () => {
             test('GIVEN fetch with json body EXPECT "sendDataAs" to be json', () => {
                 const query = fetch('https://cdn.ruffpuff.dev') //
-                    .body({
-                        test: 'test'
-                    }, 'json');
+                    .body(
+                        {
+                            test: 'test'
+                        },
+                        'json'
+                    );
 
                 expect(query.sendDataAs).toBe('json');
-            })
-        })
+            });
+        });
+    });
+
+    describe('Fetching different methods', () => {
+        test('GIVEN fetch with get method EXPECT method to be get', () => {
+            const query = fetch('http://localhost').get();
+
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            expect(query.httpMethod).toBe(HttpMethodEnum.Get)
+        });
+
+        test('GIVEN fetch with post method EXPECT method to be post', () => {
+            const query = fetch('http://localhost').post();
+
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            expect(query.httpMethod).toBe(HttpMethodEnum.Post);
+        });
+
+        test('GIVEN fetch with patch method EXPECT method to be patch', () => {
+            const query = fetch('http://localhost').patch();
+
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            expect(query.httpMethod).toBe(HttpMethodEnum.Patch);
+        });
+
+        test('GIVEN fetch with put method EXPECT method to be put', () => {
+            const query = fetch('http://localhost').put();
+
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            expect(query.httpMethod).toBe(HttpMethodEnum.Put);
+        });
+
+        test('GIVEN fetch with delete method EXPECT method to be delete', () => {
+            const query = fetch('http://localhost').delete();
+
+            // eslint-disable-next-line @typescript-eslint/unbound-method
+            expect(query.httpMethod).toBe(HttpMethodEnum.Delete);
+        });
     });
 });
