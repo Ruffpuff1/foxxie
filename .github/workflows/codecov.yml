@@ -23,7 +23,9 @@ jobs:
       - name: Install Dependencies
         run: yarn --immutable
       - name: Run unit tests
-        run: yarn full:test
+        run: |
+          yarn build
+          yarn full:test
       - name: Store code coverage report
         uses: actions/upload-artifact@v3
         with:

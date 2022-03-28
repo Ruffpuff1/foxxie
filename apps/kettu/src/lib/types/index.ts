@@ -1,2 +1,2 @@
 export * from './Interactions';
-export * from './Utils';
+export * from './utils';

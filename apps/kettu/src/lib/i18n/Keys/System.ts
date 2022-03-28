@@ -1,4 +1,4 @@
-import { FT, T } from '#types/Utils';
+import { FT, T } from '#types/utils';
 
 export const AndMore = FT<{ count: number }>('system:andMore');
 export const OptionEphemeralDefaultFalse = T('system:optionEphemeralDefaultFalse');
