@@ -1,5 +1,6 @@
 import { fetch, HttpMethodEnum } from '../src';
 import nock from 'nock';
+import { seconds } from '@ruffpuff/utilities';
 
 describe('fetch', () => {
     let nockScopeHttps: nock.Scope;
@@ -83,7 +84,7 @@ describe('fetch', () => {
             const query = fetch('http://localhost').get();
 
             // eslint-disable-next-line @typescript-eslint/unbound-method
-            expect(query.httpMethod).toBe(HttpMethodEnum.Get)
+            expect(query.httpMethod).toBe(HttpMethodEnum.Get);
         });
 
         test('GIVEN fetch with post method EXPECT method to be post', () => {
@@ -112,6 +113,30 @@ describe('fetch', () => {
 
             // eslint-disable-next-line @typescript-eslint/unbound-method
             expect(query.httpMethod).toBe(HttpMethodEnum.Delete);
+        });
+    });
+
+    describe('Using various methods to edit the fetch', () => {
+        test('WHEN using timeout method with fetch, add the timeout', () => {
+            const query = fetch('http://localhost').timeout(seconds(10));
+
+            expect(query.timeoutDuration).toBe(seconds(10));
+        });
+
+        test('WHEN using agent method with fetch, add the user agent', () => {
+            const query = fetch('http://localhost').agent('agent');
+
+            expect(query.ua).toBe('agent');
+        });
+
+        test('When using an object of headers, apply all headers to the request', () => {
+            const query = fetch('http://localhost') //
+                .header({
+                    header1: 'h1',
+                    header2: 'h2'
+                });
+
+            expect(Reflect.get(query.reqHeaders, 'header1')).toBe('h1');
         });
     });
 });
