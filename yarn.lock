@@ -2414,6 +2414,13 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
+"@types/skia-canvas@^0.9.28":
+  version "0.9.28"
+  resolved "https://registry.yarnpkg.com/@types/skia-canvas/-/skia-canvas-0.9.28.tgz#31a25599c02d8476fb6547bb55803018bb6ec7d5"
+  integrity sha512-buN0xnXKC2TvCMGdA3uFTzdTXgcyNBbbHwkSOnt9buxhhvz5UXyDEw9oWjm3T1tjFr7M4ycUZZhLSGL+nke6+g==
+  dependencies:
+    skia-canvas "*"
+
 "@types/spotify-api@0.0.14":
   version "0.0.14"
   resolved "https://registry.yarnpkg.com/@types/spotify-api/-/spotify-api-0.0.14.tgz#daaa5357d16163d290c52ae47bb0f4a7c8edb865"
@@ -8059,7 +8066,7 @@ sisteransi@^1.0.5:
   resolved "https://registry.yarnpkg.com/sisteransi/-/sisteransi-1.0.5.tgz#134d681297756437cc05ca01370d3a7a571075ed"
   integrity sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==
 
-skia-canvas@^0.9.29:
+skia-canvas@*, skia-canvas@^0.9.29:
   version "0.9.29"
   resolved "https://registry.yarnpkg.com/skia-canvas/-/skia-canvas-0.9.29.tgz#8b09d251b2485fe8f74f4f2f6584eb615d3ddf0a"
   integrity sha512-PT17gdI/CbZFHQ9T4tYswaBJ3C3IJHM9ktNjo8tTLrWzl77DJdsIWxeWMFz4dPB8QwUgPfuZKrLByfAxZXpXeA==
