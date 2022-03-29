@@ -227,13 +227,6 @@ export class Request {
     }
 
     public send() {
-        if (this.data) {
-            if (!Reflect.has(this.reqHeaders, 'content-type')) {
-                if (this.sendDataAs === 'json') this.reqHeaders['content-type'] = 'application/json';
-                else if (this.sendDataAs === 'form') this.reqHeaders['content-type'] = 'application/x-www-form-urlencoded';
-            }
-        }
-
         this.header('User-Agent', this.ua);
 
         const options = {
