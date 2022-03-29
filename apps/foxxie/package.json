@@ -74,7 +74,7 @@
         "@favware/graphql-pokemon": "6.5.0",
         "@foxxie/builders": "^0.0.0",
         "@foxxie/env": "^0.0.2",
-        "@foxxie/fetch": "0.0.2",
+        "@foxxie/fetch": "0.0.3",
         "@foxxie/lock-queue": "0.1.2",
         "@influxdata/influxdb-client": "^1.23.0",
         "@ruffpuff/api": "^0.0.2-next.ce2ba26.1647722130",
@@ -109,7 +109,7 @@
     },
     "devDependencies": {
         "@foxxie/eslint-config": "^0.0.2",
-        "@foxxie/types": "^0.0.4",
+        "@foxxie/types": "^0.0.5",
         "@types/aero__sanitizer": "1.2.0",
         "@types/bull": "3.15.8",
         "@types/ioredis": "4.28.10",

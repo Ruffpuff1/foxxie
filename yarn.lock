@@ -671,7 +671,7 @@
     "@typescript-eslint/parser" "^5.10.2"
     eslint "^8.8.0"
 
-"@foxxie/fetch@0.0.2", "@foxxie/fetch@^0.0.2":
+"@foxxie/fetch@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@foxxie/fetch/-/fetch-0.0.2.tgz#a202e06e527382fb366678e6c2f538ff279e8b65"
   integrity sha512-950dUjA2g8FHUrK9Xlg6G6R+/F799A/F9Bw16H38cHIfAHPYvd9U9xGVxiPiww4gy7ykp2jcNqUsqCbCfChWxA==
