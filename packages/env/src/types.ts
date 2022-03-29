@@ -1,4 +1,5 @@
 export interface Env {
+    TZ: string;
     NODE_ENV: 'production' | 'development';
 }
 
