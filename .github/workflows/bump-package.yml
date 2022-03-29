@@ -47,9 +47,13 @@ jobs:
         run: yarn --immutable
 
       - name: Set Git User and Email
+        env:
+          GITHUB_USER: Foxxie-bot
+          GITHUB_EMAIL: contact@ruffpuff.dev
+          GITHUB_TOKEN: ${{ secrets.FOXXIE_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "${GITHUB_USER}"
+          git config user.email "${GITHUB_EMAIL}"
       - name: Bump version
         run: node ./scripts/bump-version.mjs --package=${{needs.get_package.outputs.package}}
         env:
