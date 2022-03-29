@@ -57,11 +57,11 @@ jobs:
       - name: Bump version
         run: node ./scripts/bump-version.mjs --package=${{needs.get_package.outputs.package}}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.FOXXIE_TOKEN }}
 
       - name: Create branch for changes, add all changes and push
         run: node ./scripts/update-git.mjs --package=${{needs.get_package.outputs.package}}
       - name: Create Pull Request
         run: GITHUB_SHA=${GITHUB_SHA} node ./scripts/create-pr.mjs --package=${{needs.get_package.outputs.package}}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.FOXXIE_TOKEN }}
