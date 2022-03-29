@@ -17,8 +17,8 @@
     "@skyra/discord-components-react": "^3.1.1",
     "framer-motion": "^6.2.8",
     "next": "12.1.2",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react": "18.0.0",
+    "react-dom": "18.0.0"
   },
   "devDependencies": {
     "@foxxie/eslint-config": "^0.0.2",
