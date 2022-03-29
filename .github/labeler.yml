@@ -5,10 +5,18 @@
 'Bot: Kettu':
   - apps/kettu/*
   - apps/kettu/**/*
-  
+
 'Packages: env':
   - packages/env/*
   - packages/env/**/*
+
+'Packages: builders':
+  - packages/builders/*
+  - packages/builders/**/*
+
+'Packages: statuspage':
+  - packages/statuspage/*
+  - packages/statuspage/**/*
 
 'Packages: fetch':
   - packages/fetch/*
@@ -69,7 +77,7 @@
 'Meta: Github':
   - .github/*
   - .github/**/*
-  
+
 'Site: foxxie.xyz':
   - website/foxxie.xyz/*
   - website/foxxie.xyz/**/*

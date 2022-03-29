@@ -7,6 +7,9 @@ describe('fetch', () => {
 
     const errorStatusMessage = "Couldn't access file: The resource was not found";
 
+    jest.setTimeout(seconds(10));
+
+
     beforeAll(() => {
         nockScopeHttps = nock('https://cdn.ruffpuff.dev') //
             .persist()

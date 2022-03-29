@@ -114,7 +114,6 @@
         "@types/bull": "3.15.8",
         "@types/ioredis": "4.28.10",
         "@types/node": "17.0.23",
-        "@types/skia-canvas": "0.9.28",
         "@types/spotify-api": "0.0.14",
         "@types/tinycolor2": "1.4.3",
         "@typescript-eslint/eslint-plugin": "5.17.0",

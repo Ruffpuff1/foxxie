@@ -22,8 +22,12 @@ jobs:
           cache: yarn
       - name: Install Dependencies
         run: yarn --immutable
+      - name: Build packages
+        run: |
+          yarn nx run-many --target=build --projects=fetch,types,eslint-config
       - name: Run unit tests
-        run: yarn full:test
+        run: |
+          yarn full:test
       - name: Store code coverage report
         uses: actions/upload-artifact@v3
         with:
