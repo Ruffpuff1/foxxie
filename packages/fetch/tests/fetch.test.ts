@@ -9,7 +9,6 @@ describe('fetch', () => {
 
     jest.setTimeout(seconds(10));
 
-
     beforeAll(() => {
         nockScopeHttps = nock('https://cdn.ruffpuff.dev') //
             .persist()
@@ -170,6 +169,34 @@ describe('fetch', () => {
 
                 expect(query.redirects).toBe(5);
             });
+        });
+
+        test('WHEN using query append the query string to the url path', () => {
+            const query = fetch('http://localhost').query('one', 'two').query({
+                one: '1',
+                two: '2'
+            });
+
+            expect(query.url.href).toHaveLength(37);
+        });
+
+        test('WHEN using path append the path string to the url', () => {
+            const query = fetch('https://foxxie.xyz') //
+                .path('kettu')
+                .path('invite');
+
+            expect(query.url.href).toBe('https://foxxie.xyz/kettu/invite');
+        });
+
+        test('WHEN using options, add the options to the fetch options', () => {
+            const query = fetch('http://localhost') //
+                .options('one', '1')
+                .options({
+                    two: '2',
+                    three: '3'
+                });
+
+            expect(Reflect.get(query.coreOptions, 'one')).toBe('1')
         });
     });
 });
