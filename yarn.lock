@@ -2,16 +2,6 @@
 # yarn lockfile v1
 
 
-"@aero/sanitizer@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@aero/sanitizer/-/sanitizer-1.2.0.tgz#de8ea6186b81e18fe2426ffef47561a710f4d2c2"
-  integrity sha512-Bz3hq53ehfDjY36DviD5NZdstrQdJpQXyGI0gF4aQTPRtRrBJjC8U+Y64dyLuBchViN02Ic+Z2yYQsOxP4VYPw==
-  dependencies:
-    latinize "^0.4.1"
-    remove-accents "^0.4.2"
-    unidecode "^0.1.8"
-    unorm "^1.6.0"
-
 "@ampproject/remapping@^2.1.0":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.1.2.tgz#4edca94973ded9630d20101cd8559cedb8d8bd34"
@@ -2106,11 +2096,6 @@
   integrity sha512-jOdnI/3qTpHABjM5cx1Hc0sKsPoYCp+DP/GJRGtDlPd7fiV9oXGGIcjW/ZOxLIvjGz8MA+uMZI9metHlgqbgwQ==
   dependencies:
     "@types/node" "*"
-
-"@types/aero__sanitizer@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@types/aero__sanitizer/-/aero__sanitizer-1.2.0.tgz#523596c2ad557756786beaa403e87369fec01b5c"
-  integrity sha512-7LNi3J68tsJJ6tp3AiRtLAkRc0IL4YKAawqfrCwjbxfumjzBmwKJsmh0qkf2aGs45lXPuNJg3oWE5xx9L1lA0w==
 
 "@types/babel__core@^7.0.0", "@types/babel__core@^7.1.14":
   version "7.1.19"
@@ -6375,11 +6360,6 @@ latest-version@5.1.0:
   integrity sha512-weT+r0kTkRQdCdYCNtkMwWXQTMEswKrFBkm4ckQOMVhhqhIMI1UT2hMj+1iigIhgSZm5gTmrRXBNoGUgaTY1xA==
   dependencies:
     package-json "^6.3.0"
-
-latinize@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/latinize/-/latinize-0.4.1.tgz#1b82d6e0687f2722dfdf67a19302fc345a772738"
-  integrity sha512-A4miz97dNF+EbNgQdayPAEtud5eRpCGPwJy7JQFD1hBQcOzOgBS4m721zoREuPqpz1yKm8hYT2ANlh7pirapsA==
 
 latinize@^0.5.0:
   version "0.5.0"

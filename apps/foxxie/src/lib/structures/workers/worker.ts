@@ -12,7 +12,7 @@ import {
     RunHighlightPayload,
     RunWordFilterPayload
 } from './types';
-import sanitize from '@aero/sanitizer';
+import { sanitize } from '@foxxie/sanitize';
 
 if (isMainThread || parentPort === null) throw new Error('This worker can only be ran using worker_threads.');
 
