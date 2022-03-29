@@ -11,7 +11,7 @@ on:
 jobs:
   get_package:
     name: Get the name of the package to use.
-    if: github.repository_owner == 'FoxxieBot' && !startsWith(github.event.head_commit.message, 'chore(release)')
+    if: github.repository_owner == 'FoxxieBot' && !startsWith(github.event.head_commit.message, 'chore(release)') && !startsWith(github.event.head_commit.message, 'chore(deps)')
     runs-on: ubuntu-latest
     outputs:
       package: ${{ steps.getpackage.outputs.package }}
