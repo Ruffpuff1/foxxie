@@ -1,4 +1,4 @@
-import { T } from '#lib/types';
+import { T } from '#types/utils';
 
 export const CREATE_INSTANT_INVITE = T('permissions:CREATE_INSTANT_INVITE');
 export const KICK_MEMBERS = T('permissions:KICK_MEMBERS');
