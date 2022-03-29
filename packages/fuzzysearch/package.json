@@ -1,7 +1,7 @@
 {
   "name": "@foxxie/fuzzysearch",
   "version": "0.0.3",
-  "description": "A tool for returning fuzzyily searched results.",
+  "description": "A tool for parsing fuzzyily searched results.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
     "test": "jest --pass-with-no-tests --collect-coverage --verbose",
