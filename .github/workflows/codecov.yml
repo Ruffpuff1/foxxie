@@ -20,11 +20,11 @@ jobs:
         with:
           node-version: 16
           cache: yarn
+      - name: Install Dependencies
+        run: yarn --immutable
       - name: Build packages
         run: |
           yarn nx run-many --target=build --projects=fetch,types,eslint-config
-      - name: Install Dependencies
-        run: yarn --immutable
       - name: Run unit tests
         run: |
           yarn full:test
