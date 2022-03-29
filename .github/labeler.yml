@@ -18,6 +18,10 @@
   - packages/statuspage/*
   - packages/statuspage/**/*
 
+'Packages: sanitize':
+  - packages/sanitize/*
+  - packages/sanitize/**/*
+
 'Packages: fetch':
   - packages/fetch/*
   - packages/fetch/**/*
