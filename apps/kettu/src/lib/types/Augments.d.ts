@@ -16,18 +16,6 @@ declare module '@sapphire/framework' {
     }
 }
 
-declare module 'i18next' {
-    export interface TFunction {
-        lng: string;
-        ns?: string;
-
-        <K extends string, TReturn>(key: CustomGet<K, TReturn>, options?: TOptionsBase | string): TReturn;
-        <K extends string, TReturn>(key: CustomGet<K, TReturn>, defaultValue: TReturn, options?: TOptionsBase | string): TReturn;
-        <K extends string, TArgs extends O, TReturn>(key: CustomFunctionGet<K, TArgs, TReturn>, options?: TOptions<TArgs>): TReturn;
-        <K extends string, TArgs extends O, TReturn>(key: CustomFunctionGet<K, TArgs, TReturn>, defaultValue: TReturn, options?: TOptions<TArgs>): TReturn;
-    }
-}
-
 declare module '@foxxie/env' {
     interface Env {
         CLIENT_VERSION: `${number}.${number}.${number}`;
