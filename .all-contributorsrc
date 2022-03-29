@@ -40,13 +40,13 @@
       ]
     },
     {
-      "login": "foxxiedev[bot]",
-      "name": "foxxiedev[bot]",
-      "avatar_url": "https://avatars.githubusercontent.com/in/180135?v=4",
-      "profile": "https://github.com/apps/foxxiedev",
+      "login": "Foxxie-bot",
+      "name": "Foxxie[bot]",
+      "avatar_url": "https://avatars.githubusercontent.com/u/102572510?v=4",
+      "profile": "https://github.com/FoxxieBot",
       "contributions": [
         "content",
-        "doc"
+        "translation"
       ]
     }
   ],
