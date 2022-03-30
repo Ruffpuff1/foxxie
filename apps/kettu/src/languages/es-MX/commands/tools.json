@@ -16,5 +16,7 @@
     "setcolorOptionReason": "La razón para establecer el color que se mostrará en los registros de auditoría.",
     "setcolorOptionRole": "El rol al que quieres asignar el color.",
     "setcolorReason": "`[Setcolor]` Establecer color de rol usando el comando.",
-    "setcolorSuccess": "Bien, he establecido el color de **{{role}}** a `{{color}}`."
+    "setcolorSuccess": "Bien, he establecido el color de **{{role}}** a `{{color}}`.",
+    "shortenDescription": "Acortar una url usando isgd.",
+    "shortenOptionUrl": "La url a acortar."
 }
