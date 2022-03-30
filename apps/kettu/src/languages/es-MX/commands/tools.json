@@ -4,6 +4,7 @@
     "colorNotFound": "{{ERROR}} No pude analizar `{{color}}` a un color válido.",
     "colorOptionColor": "El color que desea previsualizar, en formato hexadecimal o rgb.",
     "colorRandom": "aleatorio",
+    "owoifyOptionMode": "Cómo debo transformar la producción.",
     "prideDescription": "Cubre tu perfil con una imagen de bandera de orgullo.",
     "prideOptionFlag": "La bandera de orgullo con la que vas a cubrir la imagen de perfil.",
     "prideOptionGuildAvatar": "Si debo usar el avatar de tu hermandad o el avatar del usuario, por defecto para el usuario.",
