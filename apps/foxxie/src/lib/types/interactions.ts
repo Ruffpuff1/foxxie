@@ -2,7 +2,16 @@ import type { ChatInputCommandContext } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import type { CommandInteraction, GuildChannel, GuildMember, Role, User } from 'discord.js';
 
-export type ChatInputArgs<T = unknown> = [interaction: CommandInteraction, context: ChatInputCommandContext, args?: T extends CommandName ? CommandArgs<T> : unknown];
+export type ChatInputArgs<T = unknown> = [
+    interaction: CommandInteraction,
+    context: ChatInputCommandContext,
+    args?: T extends CommandName ? CommandArgs<T> & { t: TFunction } : unknown
+];
+export type ChatInputSubcommandArgs<T extends CommandName, E extends keyof CommandArgs<T>> = [
+    interaction: CommandInteraction,
+    context: ChatInputCommandContext,
+    args?: CommandArgs<T>[E] & { t: TFunction }
+];
 
 export enum CommandName {
     Ban = 'ban',
