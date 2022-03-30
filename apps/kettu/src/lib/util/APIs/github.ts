@@ -291,8 +291,8 @@ export const GithubUserDefaults: Label[] = [
         label: '⭐ Ruffpuff1'
     },
     {
-        login: 'FoxxieBot',
-        label: '⭐ FoxxieBot'
+        login: 'Ruffpuff1',
+        label: '⭐ Ruffpuff1'
     },
     {
         login: 'sapphiredev',
@@ -357,7 +357,7 @@ export async function fetchIssuesAndPrs({ repository, owner, number }: FetchIssu
         return response.data;
     });
 
-    if (isErr(result) || isNullish(result.value.repository?.pullRequest) && isNullish(result.value.repository?.issue)) {
+    if (isErr(result) || (isNullish(result.value.repository?.pullRequest) && isNullish(result.value.repository?.issue))) {
         throw new Error('no-data');
     }
 
@@ -394,7 +394,7 @@ export async function fuzzilySearchForIssuesAndPullRequests({
     });
 
     // If there are no results or there was an error then return an empty array
-    if (isErr(result) || isNullishOrEmpty(result.value.repository?.pullRequests) && isNullishOrEmpty(result.value.repository?.issues)) {
+    if (isErr(result) || (isNullishOrEmpty(result.value.repository?.pullRequests) && isNullishOrEmpty(result.value.repository?.issues))) {
         return [];
     }
 
@@ -488,8 +488,7 @@ function getDataForIssuesAndPrSearch(number: string, pullRequests: PullRequest[]
         if (!pullRequestResults.length) {
             const [req] = pullRequests;
 
-            const parsedPullRequestState =
-                req?.state === 'CLOSED' ? 'Closed Pull Request' : req?.state === 'OPEN' ? 'Open Pull Request' : 'Merged Pull Request';
+            const parsedPullRequestState = req?.state === 'CLOSED' ? 'Closed Pull Request' : req?.state === 'OPEN' ? 'Open Pull Request' : 'Merged Pull Request';
 
             pullRequestResults.push({
                 name: cutText(`(${parsedPullRequestState}) - ${req.number} - ${req.title}`, AutoCompleteLimits.MaximumLengthOfNameOfOption),

@@ -43,7 +43,7 @@ export class UserCommand extends FoxxieCommand {
             .setAuthor({
                 name: `${this.client.user?.username} v${process.env.VERSION_NUM}${isDev() ? '-dev' : ''}${head}`,
                 iconURL: this.client.user?.displayAvatarURL({ format: 'png', size: 2048 }),
-                url: `https://github.com/FoxxieBot/foxxie/commit/${hash}`
+                url: `https://github.com/Ruffpuff1/foxxie/commit/${hash}`
             })
             .setDescription(stats)
             .setColor(args.color)

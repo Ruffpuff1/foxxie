@@ -119,7 +119,7 @@ export const enum Urls {
     Imgur = 'https://api.imgur.com/3',
     Isgd = 'https://is.gd/create.php',
     Npm = 'https://registry.yarnpkg.com/',
-    Repo = 'https://github.com/FoxxieBot/foxxie',
+    Repo = 'https://github.com/Ruffpuff1/foxxie',
     Scam = 'https://api.phisherman.gg/v1/',
     StatusPage = 'https://discordstatus.com',
     TimezoneDb = 'http://api.timezonedb.com/v2.1/',
@@ -163,7 +163,7 @@ export const helpUsagePostProcessor: PostProcessorModule = {
 };
 
 export const commit = async () =>
-    fetch('https://api.github.com/repos/FoxxieBot/foxxie/commits/main') //
+    fetch('https://api.github.com/repos/Ruffpuff1/foxxie/commits/main') //
         .json()
         .then((data: any) => data.sha.substring(0, 7))
         .catch(() => null);
