@@ -3,14 +3,6 @@ const nextConfig = {
     reactStrictMode: true,
     images: {
         domains: ['cdn.ruffpuff.dev']
-    },
-    rewrites: async () => {
-        return [
-            {
-                source: '/',
-                destination: '/foxxie'
-            }
-        ];
     }
 };
 
