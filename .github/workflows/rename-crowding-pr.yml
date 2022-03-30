@@ -22,7 +22,7 @@ jobs:
                   jq -cr '.data.repository.releases.nodes[0].releaseAssets.nodes[]? | select(.name | contains("linux_amd64.tar.gz")).downloadUrl') |
               tar -xz --wildcards "*gh" && mv gh*linux_amd64/bin/gh . && rm -r gh_*linux_amd64
       - name: Change PR title
-        if: (github.event.pull_request.title == 'New Crowdin updates' && github.event.pull_request.user.login == 'Foxxie-bot' && github.event.pull_request.head.ref == 'i18n/crowdin')
+        if: (github.event.pull_request.title == 'New Crowdin updates' && github.event.pull_request.head.ref == 'i18n/crowdin')
         env:
           GITHUB_TOKEN: ${{ secrets.FOXXIE_TOKEN }}
         run: "./gh pr edit ${{ github.event.pull_request.number }} --title 'feat(crowdin): update localization files'"
