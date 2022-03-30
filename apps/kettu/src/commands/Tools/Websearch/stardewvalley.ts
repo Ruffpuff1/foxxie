@@ -40,7 +40,7 @@ export class UserCommand extends Command {
         return interaction.respond(data.map(r => ({ name: r.key, value: r.key })));
     }
 
-    public async character(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.StardewValley, 'character'>>) {
+    public async character(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.StardewValley, 'character'>>): Promise<any> {
         await interaction.deferReply();
         console.log(args);
         const { villager } = args;

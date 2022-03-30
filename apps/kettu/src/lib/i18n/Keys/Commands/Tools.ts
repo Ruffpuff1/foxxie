@@ -19,3 +19,6 @@ export const SetcolorOptionReason = T('commands/tools:setcolorOptionReason');
 export const SetcolorOptionRole = T('commands/tools:setcolorOption');
 export const SetcolorReason = T('commands/tools:setcolorReason');
 export const SetcolorSuccess = FT<{ role: string; color: string }>('commands/tools:setcolorSuccess');
+export const ShortenDescription = T('commands/tools:shortenDescription');
+export const ShortenOptionUrl = T('commands/tools:shortenOptionUrl');
+export const ShortenSuccess = FT<{ url: string }>('commands/tools:shortenSuccess');

@@ -18,5 +18,8 @@
     "setcolorOptionReason": "The reason for setting the color that will be displayed in the audit logs.",
     "setcolorOptionRole": "The role you want to set the color of.",
     "setcolorReason": "`[Setcolor]` Role color set using command.",
-    "setcolorSuccess": "Alrighy, I set the color of **{{role}}** to `{{color}}`."
+    "setcolorSuccess": "Alrighy, I set the color of **{{role}}** to `{{color}}`.",
+    "shortenDescription": "Shorten a url using isgd.",
+    "shortenOptionUrl": "The url to shorten.",
+    "shortenSuccess": "Done, I shortened the url to: **{{url}}**"
 }

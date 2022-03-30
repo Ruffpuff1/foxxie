@@ -41,7 +41,7 @@ export class UserCommand extends Command {
         return interaction.respond(data.map(r => ({ name: r.key, value: r.key })));
     }
 
-    public async villager(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.AnimalCrossing, 'villager'>>) {
+    public async villager(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.AnimalCrossing, 'villager'>>): Promise<any> {
         await interaction.deferReply();
         const { villager } = args;
 

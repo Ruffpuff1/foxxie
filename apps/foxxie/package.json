@@ -78,6 +78,7 @@
         "@foxxie/sanitize": "^0.0.0",
         "@influxdata/influxdb-client": "^1.23.0",
         "@ruffpuff/api": "^0.0.2-next.ce2ba26.1647722130",
+        "@ruffpuff/ts": "^1.0.1",
         "@ruffpuff/utilities": "^4.0.0",
         "@sapphire/decorators": "^4.2.6",
         "@sapphire/discord.js-utilities": "^4.9.1",
