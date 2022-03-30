@@ -39,5 +39,5 @@ jobs:
           context: ./graphql/stardrop
           tags: |
             ruffpuff/stardrop:latest
-            ghcr.io/Ruffpuff1/stardrop:latest
+            ghcr.io/ruffpuff1/stardrop:latest
 

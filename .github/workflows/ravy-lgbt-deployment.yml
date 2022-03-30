@@ -37,5 +37,5 @@ jobs:
           context: ./docker/ravy.lgbt
           tags: |
             ruffpuff/ravy.lgbt:latest
-            ghcr.io/Ruffpuff1/ravy.lgbt:latest
+            ghcr.io/ruffpuff1/ravy.lgbt:latest
 
