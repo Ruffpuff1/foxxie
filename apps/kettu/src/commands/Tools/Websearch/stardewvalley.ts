@@ -1,6 +1,6 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
 import { RegisterChatInputCommand } from '#utils/decorators';
-import { type ChatInputArgs, CommandName } from '#types/Interactions';
+import { CommandName, ChatInputSubcommandArgs } from '#types/Interactions';
 import { buildStardewVillagerDisplay, fetchStardewVillager, fuzzySearchStardewVillagers } from '#utils/APIs';
 import type { VillagersEnum } from '@foxxie/stardrop';
 import { enUS } from '#utils/util';
@@ -32,17 +32,6 @@ import { EnvParse } from '@foxxie/env';
     }
 )
 export class UserCommand extends Command {
-    public chatInputRun(...[interaction, c, args]: ChatInputArgs<CommandName.StardewValley>): Promise<any> {
-        const subcommand = interaction.options.getSubcommand(true);
-
-        switch (subcommand) {
-            case 'character':
-                return this.character(interaction, c, args!);
-            default:
-                throw new Error(`Subcommand "${subcommand}" not supported.`);
-        }
-    }
-
     public async autocompleteRun(...[interaction]: Parameters<AutocompleteCommand['autocompleteRun']>) {
         const opt = interaction.options.getFocused(true);
         const data = await fuzzySearchStardewVillagers(opt.value as string);
@@ -50,9 +39,10 @@ export class UserCommand extends Command {
         return interaction.respond(data.map(r => ({ name: r.key, value: r.key })));
     }
 
-    private async character(...[interaction, , args]: Required<ChatInputArgs<CommandName.StardewValley>>) {
+    public async character(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.StardewValley, 'character'>>) {
         await interaction.deferReply();
-        const { villager } = args.character;
+        console.log(args);
+        const { villager } = args;
 
         const villagerData = await fetchStardewVillager(villager as VillagersEnum);
         if (!villagerData) {

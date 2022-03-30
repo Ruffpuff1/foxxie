@@ -4,7 +4,16 @@ import type { TFunction } from '@sapphire/plugin-i18next';
 import type { Days, Sunsigns } from '@skyra/saelem';
 import type { CommandInteraction, Role } from 'discord.js';
 
-export type ChatInputArgs<T = unknown> = [interaction: CommandInteraction, context: ChatInputCommandContext, args?: T extends CommandName ? CommandArgs<T> : unknown];
+export type ChatInputArgs<T = unknown> = [
+    interaction: CommandInteraction,
+    context: ChatInputCommandContext,
+    args?: T extends CommandName ? CommandArgs<T> & { t: TFunction } : unknown
+];
+export type ChatInputSubcommandArgs<T extends CommandName, E extends keyof CommandArgs<T>> = [
+    interaction: CommandInteraction,
+    context: ChatInputCommandContext,
+    args?: CommandArgs<T>[E] & { t: TFunction }
+];
 
 export enum CommandName {
     AnimalCrossing = 'animalcrossing',
@@ -26,9 +35,7 @@ export enum CommandName {
     Zodiac = 'zodiac'
 }
 
-interface BaseArgs {
-    t: TFunction;
-}
+interface BaseArgs {}
 
 interface EphemeralArgs extends BaseArgs {
     ephemeral?: boolean;

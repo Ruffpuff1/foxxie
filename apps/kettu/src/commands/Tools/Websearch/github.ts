@@ -1,4 +1,4 @@
-import { type ChatInputArgs, CommandName } from '#types/Interactions';
+import { CommandName, ChatInputSubcommandArgs } from '#types/Interactions';
 import { RegisterChatInputCommand } from '#utils/decorators';
 import { fetch } from '@foxxie/fetch';
 import { GithubUserRegex } from '@ruffpuff/utilities';
@@ -61,24 +61,10 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
     }
 )
 export class UserCommand extends Command {
-    public chatInputRun(...[interaction, c, args]: ChatInputArgs<CommandName.Github>) {
-        const subcommand = interaction.options.getSubcommand(true);
-        args = args!;
-
-        switch (subcommand) {
-            case 'user':
-                return this.user(interaction, c, args);
-            case 'repo':
-                return this.repo(interaction, c, args);
-            default:
-                throw new Error(`Unknown subcommand: ${subcommand}`);
-        }
-    }
-
-    public async user(...[interaction, , args]: Required<ChatInputArgs<CommandName.Github>>): Promise<any> {
+    public async user(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Github, 'user'>>): Promise<any> {
         await interaction.deferReply();
 
-        const user = this.parseUser(args.user.user);
+        const user = this.parseUser(args.user);
         const result = await fromAsync(this.fetchUserResult(user));
 
         if (isErr(result) || !result.value) return interaction.editReply(args.t(LanguageKeys.Commands.Websearch.GithubUserNotFound, { user }));
@@ -87,11 +73,11 @@ export class UserCommand extends Command {
         return interaction.editReply({ embeds: [embed] });
     }
 
-    public async repo(...[interaction, , args]: Required<ChatInputArgs<CommandName.Github>>): Promise<any> {
+    public async repo(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Github, 'repo'>>): Promise<any> {
         await interaction.deferReply();
 
-        const user = this.parseUser(args.repo.owner);
-        const { repo, number } = args.repo;
+        const user = this.parseUser(args.repo);
+        const { repo, number } = args;
 
         if (number) {
             try {

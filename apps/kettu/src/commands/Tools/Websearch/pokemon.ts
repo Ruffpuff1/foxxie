@@ -1,4 +1,4 @@
-import { ChatInputArgs, CommandName } from '#types/Interactions';
+import { ChatInputSubcommandArgs, CommandName } from '#types/Interactions';
 import {
     cleanFormattedPokemonName,
     fuzzySearchMove,
@@ -56,25 +56,11 @@ import { enUS } from '#utils/util';
     }
 )
 export class UserCommand extends Command {
-    public async chatInputRun(...[interaction, c, args]: ChatInputArgs<CommandName.Pokemon>) {
-        const subcommand = interaction.options.getSubcommand(true);
-        args = args!;
-
-        switch (subcommand) {
-            case 'dex':
-                return this.dex(interaction, c, args);
-            case 'move':
-                return this.move(interaction, c, args);
-            default:
-                throw new Error(`Subcommand ${subcommand} not supported.`);
-        }
-    }
-
-    public async dex(...[interaction, , args]: Required<ChatInputArgs<CommandName.Pokemon>>): Promise<any> {
+    public async dex(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Pokemon, 'dex'>>): Promise<any> {
         await interaction.deferReply();
 
-        const { pokemon } = args.dex;
-        const spriteToGet = args.dex.sprite ?? 'sprite';
+        const { pokemon } = args;
+        const spriteToGet = args.sprite ?? 'sprite';
 
         const data = await getPokemon(cleanFormattedPokemonName(pokemon));
 
@@ -106,10 +92,10 @@ export class UserCommand extends Command {
         return display.run(interaction);
     }
 
-    public async move(...[interaction, , args]: Required<ChatInputArgs<CommandName.Pokemon>>): Promise<any> {
+    public async move(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Pokemon, 'move'>>): Promise<any> {
         await interaction.deferReply();
 
-        const { move } = args.move;
+        const { move } = args;
 
         const data = await getMove(move as MovesEnum);
 
