@@ -4,6 +4,7 @@
     "colorNotFound": "{{ERROR}} No pude analizar `{{color}}` a un color válido.",
     "colorOptionColor": "El color que desea previsualizar, en formato hexadecimal o rgb.",
     "colorRandom": "aleatorio",
+    "owoifyOptionMode": "Cómo debo transformar la producción.",
     "prideDescription": "Cubre tu perfil con una imagen de bandera de orgullo.",
     "prideOptionFlag": "La bandera de orgullo con la que vas a cubrir la imagen de perfil.",
     "prideOptionGuildAvatar": "Si debo usar el avatar de tu hermandad o el avatar del usuario, por defecto para el usuario.",
@@ -15,5 +16,7 @@
     "setcolorOptionReason": "La razón para establecer el color que se mostrará en los registros de auditoría.",
     "setcolorOptionRole": "El rol al que quieres asignar el color.",
     "setcolorReason": "`[Setcolor]` Establecer color de rol usando el comando.",
-    "setcolorSuccess": "Bien, he establecido el color de **{{role}}** a `{{color}}`."
+    "setcolorSuccess": "Bien, he establecido el color de **{{role}}** a `{{color}}`.",
+    "shortenDescription": "Acortar una url usando isgd.",
+    "shortenOptionUrl": "La url a acortar."
 }
