@@ -41,7 +41,7 @@ export function Nav() {
                     <div className="text-lg font-source-sans mb-6 pl-12 sm:pl-16">
                         <button
                             className='absolute'
-                            onClick={() => { return router.push('https://ruffpuff.dev/community'); }}
+                            onClick={() => { return router.push('/support'); }}
                         >
                             <p className='font-bold hover:underline text-sm sm:text-base'>Support</p>
                         </button>
@@ -57,7 +57,7 @@ export function Nav() {
                     <div className="text-lg font-source-sans mb-6">
                         <button
                             className='absolute'
-                            onClick={() => { return router.push('/'); }}
+                            onClick={() => { return router.push('https://docs.foxxie.xyz'); }}
                         >
                             <p className='font-bold hover:underline text-sm sm:text-base'>Docs</p>
                         </button>
