@@ -3,7 +3,8 @@ import { LanguageKeys } from '#lib/i18n';
 import { ChatInputArgs, CommandName, PermissionLevels } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { getModeration } from '#utils/Discord';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
+import { getGuildIds } from '#utils/util';
 
 @RegisterChatInputCommand(
     builder =>
@@ -20,7 +21,10 @@ import { RegisterChatInputCommand } from '#utils/decorators';
     {
         idHints: ['953883491332915201'],
         requiredClientPermissions: PermissionFlagsBits.EmbedLinks,
-        permissionLevel: PermissionLevels.Moderator
+        guildIds: getGuildIds(),
+        ...({
+            permissionLevel: PermissionLevels.Moderator
+        } as any)
     }
 )
 export class UserCommand extends FoxxieCommand {

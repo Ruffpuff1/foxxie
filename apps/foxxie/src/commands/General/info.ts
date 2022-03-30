@@ -1,9 +1,9 @@
 import { FoxxieCommand } from '#lib/structures';
-import { ChatInputArgs, CommandName, EmojiObject, GuildInteraction } from '#lib/types';
+import { ChatInputSubcommandArgs, CommandName, EmojiObject, GuildInteraction } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { CommandOptionsRunTypeEnum, isErr, Result, UserError } from '@sapphire/framework';
-import { floatPromise } from '#utils/util';
+import { floatPromise, getGuildIds } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import type { Snowflake } from 'ruffpuff-api-types/v1';
 import {
@@ -97,53 +97,36 @@ const roleLimit = 10;
             ),
     {
         idHints: ['954428415451230359'],
+        guildIds: getGuildIds(),
         runIn: [CommandOptionsRunTypeEnum.GuildAny],
         requiredClientPermissions: PermissionFlagsBits.EmbedLinks
     }
 )
 export class UserCommand extends FoxxieCommand {
-    public chatInputRun(...[interaction, ctx, args]: ChatInputArgs<CommandName.Info>) {
-        const subcommand = interaction.options.getSubcommand(true);
-        switch (subcommand) {
-            case 'user':
-                return this.user(interaction, ctx, args!);
-            case 'server':
-                return this.server(interaction, ctx, args!);
-            case 'role':
-                return this.role(interaction, ctx, args!);
-            case 'emoji':
-                return this.emoji(interaction, ctx, args!);
-            case 'channel':
-                return this.channel(interaction, ctx, args!);
-            default:
-                throw new Error(`Subcommand "${subcommand}" not supported.`);
-        }
-    }
-
-    private async user(...[interaction, , { t, user: args }]: Required<ChatInputArgs<CommandName.Info>>): Promise<any> {
+    public async user(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Info, 'user'>>): Promise<any> {
         const user = args.user?.user || interaction.user;
         await interaction.deferReply({ ephemeral: args.ephemeral });
 
-        const display = await this.buildUserDisplay(cast<GuildInteraction>(interaction), t, user);
+        const display = await this.buildUserDisplay(cast<GuildInteraction>(interaction), args.t, user);
 
         await display.run(interaction, interaction.user);
     }
 
-    private async server(...[interaction, , { t, server: args }]: Required<ChatInputArgs<CommandName.Info>>): Promise<any> {
+    public async server(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Info, 'server'>>): Promise<any> {
         await interaction.deferReply({ ephemeral: args.ephemeral });
 
-        const display = await this.buildServerDisplay(cast<GuildInteraction>(interaction), interaction.guild!, t);
+        const display = await this.buildServerDisplay(cast<GuildInteraction>(interaction), interaction.guild!, args.t);
         await display.run(interaction, interaction.user);
     }
 
-    private async role(...[interaction, , { t, role: args }]: Required<ChatInputArgs<CommandName.Info>>) {
+    public async role(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Info, 'role'>>) {
         const role = args.role || (interaction.member as GuildMember).roles.highest;
 
-        const embed = this.buildRoleEmbed(role, t);
+        const embed = this.buildRoleEmbed(role, args.t);
         await interaction.reply({ embeds: [embed], ephemeral: args.ephemeral });
     }
 
-    private async channel(...[interaction, , { t, channel: args }]: Required<ChatInputArgs<CommandName.Info>>) {
+    public async channel(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Info, 'channel'>>) {
         let channel: GuildChannel;
 
         if (typeof args.channel === 'string') {
@@ -161,8 +144,15 @@ export class UserCommand extends FoxxieCommand {
 
         await channel.fetch();
 
-        const embed = this.buildChannelEmbed(t, channel, interaction.guild!);
+        const embed = this.buildChannelEmbed(args.t, channel, interaction.guild!);
         await interaction.reply({ embeds: [embed], ephemeral: args.ephemeral });
+    }
+
+    public async emoji(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Info, 'emoji'>>): Promise<void> {
+        await interaction.deferReply({ ephemeral: args.ephemeral });
+
+        const options = await this.fetchEmoji(args.emoji, args.t);
+        await interaction.editReply(options);
     }
 
     private buildChannelEmbed(t: TFunction, channel: GuildChannel, guild: Guild) {
@@ -675,13 +665,6 @@ export class UserCommand extends FoxxieCommand {
             user: await this.container.db.users.ensureProfile(userId),
             member: await this.container.db.members.ensure(userId, guildId)
         };
-    }
-
-    private async emoji(...[interaction, , { emoji: args, t }]: Required<ChatInputArgs<CommandName.Info>>): Promise<void> {
-        await interaction.deferReply({ ephemeral: args.ephemeral });
-
-        const options = await this.fetchEmoji(args.emoji, t);
-        await interaction.editReply(options);
     }
 
     private async fetchEmoji(query: string, t: TFunction): Promise<MessageOptions> {

@@ -1,14 +1,19 @@
 import { LanguageKeys } from '#lib/i18n';
 import { type ChatInputArgs, CommandName } from '#lib/types';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { bold, hyperlink, italic, underscore } from '@discordjs/builders';
 import { Command } from '@sapphire/framework';
+import { getGuildIds } from '#utils/util';
 
-@RegisterChatInputCommand(builder =>
-    builder //
-        .setName(CommandName.Donate)
-        .setDescription(LanguageKeys.Commands.General.DonateDescription)
-        .addEphemeralOption(true)
+@RegisterChatInputCommand(
+    builder =>
+        builder //
+            .setName(CommandName.Donate)
+            .setDescription(LanguageKeys.Commands.General.DonateDescription)
+            .addEphemeralOption(true),
+    {
+        guildIds: getGuildIds()
+    }
 )
 export class UserCommand extends Command {
     private readonly urls = [

@@ -1,11 +1,11 @@
 import { ModerationCommand } from '#lib/structures';
 import { ChatInputArgs, CommandName, GuildInteraction, PermissionLevels } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { cast } from '@ruffpuff/utilities';
 import { getModeration } from '#utils/Discord';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS, interactionPrompt } from '#utils/util';
+import { enUS, getGuildIds, interactionPrompt } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import type { GuildMember, User } from 'discord.js';
 
@@ -52,7 +52,10 @@ import type { GuildMember, User } from 'discord.js';
             ),
     {
         requiredClientPermissions: PermissionFlagsBits.BanMembers,
-        permissionLevel: PermissionLevels.Moderator
+        guildIds: getGuildIds(),
+        ...({
+            permissionLevel: PermissionLevels.Moderator
+        } as any)
     }
 )
 export class UserCommand extends ModerationCommand {
