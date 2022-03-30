@@ -39,5 +39,5 @@ jobs:
           context: ./apps/kettu
           tags: |
             ruffpuff/kettu:latest
-            ghcr.io/foxxiebot/kettu:latest
-  
+            ghcr.io/Ruffpuff1/kettu:latest
+

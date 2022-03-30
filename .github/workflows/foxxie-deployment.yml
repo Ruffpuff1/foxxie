@@ -39,5 +39,5 @@ jobs:
           context: ./apps/foxxie
           tags: |
             ruffpuff/foxxie:latest
-            ghcr.io/foxxiebot/foxxie:latest
+            ghcr.io/Ruffpuff1/foxxie:latest
 
