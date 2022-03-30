@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "@discordjs/builders": "^0.12.0",
-    "@foxxie/builders": "^0.0.0",
     "@foxxie/commands": "^0.0.0",
     "@foxxie/env": "^0.0.2",
     "@foxxie/fetch": "0.0.4",
