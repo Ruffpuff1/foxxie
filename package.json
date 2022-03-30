@@ -37,7 +37,7 @@
   "homepage": "https://github.com/FoxxieBot/foxxie",
   "devDependencies": {
     "@nrwl/cli": "latest",
-    "@nrwl/nx-cloud": "latest",
+    "@nrwl/nx-cloud": "13.2.1",
     "@nrwl/workspace": "^13.9.5",
     "@octokit/action": "^3.18.0",
     "@sapphire/ts-config": "3.3.3",

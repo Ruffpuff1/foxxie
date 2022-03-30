@@ -13,7 +13,7 @@
     "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'graphql/stardrop/*'"
   },
   "devDependencies": {
-   "@foxxie/eslint-config": "0.0.2",
+    "@foxxie/eslint-config": "0.0.2",
     "@graphql-codegen/cli": "2.6.2",
     "@graphql-codegen/typescript": "2.4.8",
     "@graphql-codegen/typescript-resolvers": "2.6.1",
@@ -24,8 +24,8 @@
   },
   "dependencies": {
     "@foxxie/fuzzysearch": "0.0.3",
-    "apollo-server-core": "^3.6.3",
-    "apollo-server-koa": "^3.6.3",
+    "apollo-server-core": "^3.6.7",
+    "apollo-server-koa": "^3.6.7",
     "class-validator": "^0.13.2",
     "graphql": "15.8.0",
     "graphql-parse-resolve-info": "^4.12.0",
