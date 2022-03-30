@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/commands",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Interaction command registration for Foxxie, used exclusively with the Sapphire framework.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
