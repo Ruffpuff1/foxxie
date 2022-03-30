@@ -1,9 +1,9 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { CommandName, ChatInputSubcommandArgs } from '#types/Interactions';
 import { buildStardewVillagerDisplay, fetchStardewVillager, fuzzySearchStardewVillagers } from '#utils/APIs';
 import type { VillagersEnum } from '@foxxie/stardrop';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import { LanguageKeys } from '#lib/i18n';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { toTitleCase } from '@ruffpuff/utilities';
@@ -28,7 +28,8 @@ import { EnvParse } from '@foxxie/env';
             ),
     {
         idHints: ['953151326844518430'],
-        enabled: EnvParse.boolean('STARDROP_ENABLED')
+        enabled: EnvParse.boolean('STARDROP_ENABLED'),
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

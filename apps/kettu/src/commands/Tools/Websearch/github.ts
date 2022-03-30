@@ -1,5 +1,5 @@
 import { CommandName, ChatInputSubcommandArgs } from '#types/Interactions';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { fetch } from '@foxxie/fetch';
 import { GithubUserRegex } from '@ruffpuff/utilities';
 import { Command, fromAsync, isErr } from '@sapphire/framework';
@@ -8,7 +8,7 @@ import { Colors } from '#utils/constants';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import { fetchIssuesAndPrs, fuzzilySearchForIssuesAndPullRequests, GithubOptionType } from '#utils/APIs';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
@@ -57,7 +57,8 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
                     )
             ),
     {
-        idHints: ['947857986594959390', '947873927873593364']
+        idHints: ['947857986594959390', '947873927873593364'],
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

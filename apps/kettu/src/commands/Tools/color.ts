@@ -2,10 +2,11 @@ import { AutocompleteCommand, Command } from '@sapphire/framework';
 import { fetch } from '@foxxie/fetch';
 import tinycolor from 'tinycolor2';
 import { FuzzySearch } from '@foxxie/fuzzysearch';
-import { getLocale, RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
+import { getLocale } from '#utils/decorators';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import { resolveColorArgument } from '#utils/resolvers';
 
 @RegisterChatInputCommand(
@@ -22,7 +23,8 @@ import { resolveColorArgument } from '#utils/resolvers';
             )
             .addEphemeralOption(),
     {
-        idHints: ['946619789583978496', '946619789583978496']
+        idHints: ['946619789583978496', '946619789583978496'],
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

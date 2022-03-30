@@ -1,9 +1,9 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
 import { ApplicationCommandOptionChoice, MessageEmbed } from 'discord.js';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import { fetch } from '@foxxie/fetch';
 import type { Npm } from '@foxxie/types';
 import { toTitleCase } from '@ruffpuff/utilities';
@@ -24,7 +24,10 @@ const LOGO = 'https://cdn.ruffpuff.dev/npm.png';
                     .setRequired(true)
                     .setAutocomplete(true)
             )
-            .addEphemeralOption()
+            .addEphemeralOption(),
+    {
+        guildIds: getGuildIds()
+    }
 )
 export class UserCommand extends Command {
     public override async chatInputRun(...[interaction, , args]: ChatInputArgs<CommandName.Npm>): Promise<void> {

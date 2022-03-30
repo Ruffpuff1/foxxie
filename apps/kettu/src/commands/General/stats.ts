@@ -1,12 +1,13 @@
 import { Command } from '@sapphire/framework';
 import { time, TimestampStyles } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { LanguageKeys } from '#lib/i18n';
 import { roundNumber, seconds } from '@ruffpuff/utilities';
 import { CpuInfo, cpus, uptime } from 'node:os';
 import { Colors } from '#utils/constants';
 import { MessageEmbed, version } from 'discord.js';
+import { getGuildIds } from '#utils/util';
 
 @RegisterChatInputCommand(
     builder =>
@@ -15,7 +16,8 @@ import { MessageEmbed, version } from 'discord.js';
             .setDescription(LanguageKeys.Commands.General.StatsDescription)
             .addEphemeralOption(),
     {
-        idHints: ['951268274887327744']
+        idHints: ['951268274887327744'],
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

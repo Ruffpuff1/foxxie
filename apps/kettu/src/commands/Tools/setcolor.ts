@@ -1,13 +1,14 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
-import { getLocale, RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import { resolveColorArgument } from '#utils/resolvers';
 import { ColorResolvable, DiscordAPIError, GuildMember } from 'discord.js';
 import { PermissionFlagsBits, RESTJSONErrorCodes } from 'discord-api-types/v10';
 import tinycolor from 'tinycolor2';
 import { FuzzySearch } from '@foxxie/fuzzysearch';
+import { getLocale } from '#utils/decorators';
 
 @RegisterChatInputCommand(
     builder =>
@@ -35,6 +36,7 @@ import { FuzzySearch } from '@foxxie/fuzzysearch';
             ),
     {
         idHints: ['950400529970888707'],
+        guildIds: getGuildIds(),
         requiredClientPermissions: PermissionFlagsBits.ManageRoles
     }
 )

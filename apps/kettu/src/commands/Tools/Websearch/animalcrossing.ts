@@ -1,10 +1,10 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { CommandName, ChatInputSubcommandArgs } from '#types/Interactions';
 import type { VillagersEnum } from '@ruffpuff/celestia';
 import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#utils/APIs';
 import { toTitleCase } from '@ruffpuff/utilities';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import { LanguageKeys } from '#lib/i18n';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { EnvParse } from '@foxxie/env';
@@ -28,7 +28,8 @@ import { EnvParse } from '@foxxie/env';
             ),
     {
         idHints: ['949309221441273866'],
-        enabled: EnvParse.boolean('CELESTIA_ENABLED')
+        enabled: EnvParse.boolean('CELESTIA_ENABLED'),
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

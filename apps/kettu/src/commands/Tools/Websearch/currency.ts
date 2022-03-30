@@ -1,5 +1,5 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { Colors } from '#utils/constants';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { cryptoCompare, CryptoCompareResultOk } from '#utils/APIs';
@@ -7,7 +7,7 @@ import { MessageEmbed } from 'discord.js';
 import { fetch } from '@foxxie/fetch';
 import { FuzzySearch } from '@foxxie/fuzzysearch';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import { EnvParse } from '@foxxie/env';
 
 @RegisterChatInputCommand(
@@ -38,7 +38,8 @@ import { EnvParse } from '@foxxie/env';
             .addEphemeralOption(),
     {
         idHints: ['947381920881311765', '947398139462164490'],
-        enabled: EnvParse.exists('CRYPTOCOMPARE_TOKEN')
+        enabled: EnvParse.exists('CRYPTOCOMPARE_TOKEN'),
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

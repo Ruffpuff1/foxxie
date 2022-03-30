@@ -9,12 +9,12 @@ import {
     pokemonDisplayBuilder,
     PokemonEnumToString
 } from '#utils/APIs';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { Command } from '@sapphire/framework';
 import type { MovesEnum } from '@favware/graphql-pokemon';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 
 @RegisterChatInputCommand(
     builder =>
@@ -52,7 +52,8 @@ import { enUS } from '#utils/util';
                     )
             ),
     {
-        idHints: ['946977564449177682', '947398139927756811']
+        idHints: ['946977564449177682', '947398139927756811'],
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

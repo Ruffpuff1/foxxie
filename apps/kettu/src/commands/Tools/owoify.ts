@@ -1,8 +1,8 @@
 import { Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import owoify from 'owoify-js';
 
 @RegisterChatInputCommand(
@@ -29,7 +29,8 @@ import owoify from 'owoify-js';
             )
             .addEphemeralOption(),
     {
-        idHints: ['953403239146082324']
+        idHints: ['953403239146082324'],
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {
