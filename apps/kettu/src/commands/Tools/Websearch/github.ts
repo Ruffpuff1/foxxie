@@ -1,5 +1,5 @@
-import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { CommandName, ChatInputSubcommandArgs } from '#types/Interactions';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { fetch } from '@foxxie/fetch';
 import { GithubUserRegex } from '@ruffpuff/utilities';
 import { Command, fromAsync, isErr } from '@sapphire/framework';
@@ -8,7 +8,7 @@ import { Colors } from '#utils/constants';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import { fetchIssuesAndPrs, fuzzilySearchForIssuesAndPullRequests, GithubOptionType } from '#utils/APIs';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
@@ -57,28 +57,15 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
                     )
             ),
     {
-        idHints: ['947857986594959390', '947873927873593364']
+        idHints: ['947857986594959390', '947873927873593364'],
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {
-    public chatInputRun(...[interaction, c, args]: ChatInputArgs<CommandName.Github>) {
-        const subcommand = interaction.options.getSubcommand(true);
-        args = args!;
-
-        switch (subcommand) {
-            case 'user':
-                return this.user(interaction, c, args);
-            case 'repo':
-                return this.repo(interaction, c, args);
-            default:
-                throw new Error(`Unknown subcommand: ${subcommand}`);
-        }
-    }
-
-    public async user(...[interaction, , args]: Required<ChatInputArgs<CommandName.Github>>): Promise<any> {
+    public async user(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Github, 'user'>>): Promise<any> {
         await interaction.deferReply();
 
-        const user = this.parseUser(args.user.user);
+        const user = this.parseUser(args.user);
         const result = await fromAsync(this.fetchUserResult(user));
 
         if (isErr(result) || !result.value) return interaction.editReply(args.t(LanguageKeys.Commands.Websearch.GithubUserNotFound, { user }));
@@ -87,11 +74,11 @@ export class UserCommand extends Command {
         return interaction.editReply({ embeds: [embed] });
     }
 
-    public async repo(...[interaction, , args]: Required<ChatInputArgs<CommandName.Github>>): Promise<any> {
+    public async repo(...[interaction, , args]: Required<ChatInputSubcommandArgs<CommandName.Github, 'repo'>>): Promise<any> {
         await interaction.deferReply();
 
-        const user = this.parseUser(args.repo.owner);
-        const { repo, number } = args.repo;
+        const user = this.parseUser(args.repo);
+        const { repo, number } = args;
 
         if (number) {
             try {

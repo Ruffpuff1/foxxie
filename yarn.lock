@@ -651,6 +651,17 @@
   dependencies:
     graphql "^15.8.0"
 
+"@foxxie/commands@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@foxxie/commands/-/commands-0.0.0.tgz#ebf991257e9b87e75365907915d401835fde51fc"
+  integrity sha512-7PRnPxFP9kr11Nh8tda/VhBUY5J5/Tvk7yFRdPS9j4GgWKk4/9yIFDyRwhzmF1agM4RVIx3AFxu2k+Eu67a6Aw==
+  dependencies:
+    "@foxxie/builders" "^0.0.0"
+    "@sapphire/decorators" "^4.3.3"
+    "@sapphire/framework" next
+    discord.js "^13.6.0"
+    i18next "^21.6.14"
+
 "@foxxie/eslint-config@^0.0.0":
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/@foxxie/eslint-config/-/eslint-config-0.0.0.tgz#a177ccd5c65e01a50fa795b629f9c4ca3216f6b7"

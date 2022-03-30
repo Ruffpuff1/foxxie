@@ -1,8 +1,9 @@
 import { Command } from '@sapphire/framework';
 import { hyperlink, bold, italic, underscore } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { LanguageKeys } from '#lib/i18n';
+import { getGuildIds } from '#utils/util';
 
 @RegisterChatInputCommand(
     builder =>
@@ -11,7 +12,8 @@ import { LanguageKeys } from '#lib/i18n';
             .setDescription(LanguageKeys.Commands.General.InviteDescription)
             .addEphemeralOption(true),
     {
-        idHints: ['945871213144711260', '945871213144711260']
+        idHints: ['945871213144711260', '945871213144711260'],
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

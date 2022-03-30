@@ -13,7 +13,8 @@ import { codeBlock, filterNullAndUndefinedAndEmpty, isThenable } from '@sapphire
 import type { CommandInteraction, Message } from 'discord.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { inspect } from 'node:util';
-import { RegisterChatInputCommand, getLocale } from '#utils/decorators';
+import { getLocale } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import Type from '#utils/Type';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
@@ -68,7 +69,8 @@ import { LanguageKeys } from '#lib/i18n';
                     .setDescription('Whether to show hidden JSON properties when stringifying.')
             ),
     {
-        idHints: ['946775073539358740', '946775073539358740']
+        idHints: ['946775073539358740', '946775073539358740'],
+        guildIds: [/* tcs */ '761512748898844702', /* pp */ '826893949880631376']
     }
 )
 export class UserCommand extends Command {

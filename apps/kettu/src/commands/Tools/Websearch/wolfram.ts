@@ -1,11 +1,12 @@
 import { fetch } from '@foxxie/fetch';
 import { ChatInputCommand, Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { Emojis } from '#utils/constants';
 import { bold, hyperlink } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { EnvParse } from '@foxxie/env';
+import { getGuildIds } from '#utils/util';
 
 @RegisterChatInputCommand(
     builder =>
@@ -27,7 +28,8 @@ import { EnvParse } from '@foxxie/env';
             .addEphemeralOption(),
     {
         idHints: ['946769238687903784', '946769238687903784'],
-        enabled: EnvParse.exists('WOLFRAM_TOKEN')
+        enabled: EnvParse.exists('WOLFRAM_TOKEN'),
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

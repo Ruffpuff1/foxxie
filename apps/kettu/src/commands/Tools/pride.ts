@@ -1,8 +1,8 @@
 import { Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
-import { enUS } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 import { fetch } from '@foxxie/fetch';
 import type { GuildMember } from 'discord.js';
 
@@ -26,7 +26,8 @@ import type { GuildMember } from 'discord.js';
             )
             .addEphemeralOption(),
     {
-        idHints: ['950369662179344414']
+        idHints: ['950369662179344414'],
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {

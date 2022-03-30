@@ -1,6 +1,6 @@
 import { fetch } from '@foxxie/fetch';
 import { Command, UserError } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterChatInputCommand } from '@foxxie/commands';
 import { Colors, Emojis } from '#utils/constants';
 import { Sunsigns, Days, Query, QueryGetHoroscopeArgs } from '@skyra/saelem';
 import { MessageEmbed } from 'discord.js';
@@ -8,6 +8,7 @@ import { toTitleCase } from '@ruffpuff/utilities';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { EnvParse } from '@foxxie/env';
+import { getGuildIds } from '#utils/util';
 
 const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) {
     getHoroscope(sunsign: $sunsign, day: $day) {
@@ -42,7 +43,8 @@ const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) 
             .addEphemeralOption(),
     {
         idHints: ['946882459788779590', '946882459788779590'],
-        enabled: EnvParse.boolean('SAELEM_ENABLED')
+        enabled: EnvParse.boolean('SAELEM_ENABLED'),
+        guildIds: getGuildIds()
     }
 )
 export class UserCommand extends Command {
