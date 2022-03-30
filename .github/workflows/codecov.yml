@@ -24,7 +24,7 @@ jobs:
         run: yarn --immutable
       - name: Build packages
         run: |
-          yarn nx run-many --target=build --projects=fetch,types,eslint-config
+          yarn nx run-many --target=build --projects=builders,fetch,types,eslint-config
       - name: Run unit tests
         run: |
           yarn full:test
