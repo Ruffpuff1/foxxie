@@ -16,7 +16,7 @@ export function Footer() {
             >
                 Code of Conduct
             </a>. <a
-                href='https://github.com/FoxxieBot/foxxie/blob/main/LICENSE'
+                href='https://github.com/Ruffpuff1/foxxie/blob/main/LICENSE'
                 target='_blank'
                 rel="noreferrer"
                 className='hover:text-foxxie duration-500'

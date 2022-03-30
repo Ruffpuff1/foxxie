@@ -51,7 +51,7 @@ export class LGBTCommand extends FoxxieCommand {
             .png()
             .then(resolveImage);
 
-        const iUrl = `https://raw.githubusercontent.com/FoxxieBot/foxxie/main/apps/foxxie/assets/pride/${this.name}.png`;
+        const iUrl = `https://raw.githubusercontent.com/Ruffpuff1/foxxie/main/apps/foxxie/assets/pride/${this.name}.png`;
 
         const attachment = await new Canvas(w, h)
             .printImage(canvas, 0, 0)

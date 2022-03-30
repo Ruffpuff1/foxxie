@@ -8,9 +8,9 @@ body = """
     # [{{ version | trim_start_matches(pat="v") }}]\
     {% if previous %}\
         {% if previous.version %}\
-            (https://github.com/FoxxieBot/foxxie/compare/{{ previous.version }}...{{ version }})\
+            (https://github.com/Ruffpuff1/foxxie/compare/{{ previous.version }}...{{ version }})\
         {% else %}
-            (https://github.com/FoxxieBot/foxxie/tree/{{ version }})\
+            (https://github.com/Ruffpuff1/foxxie/tree/{{ version }})\
         {% endif %}\
     {% endif %} \
     - ({{ timestamp | date(format="%Y-%m-%d") }})
@@ -26,7 +26,7 @@ body = """
             {% if commit.scope %}\
                 **{{commit.scope}}:** \
             {% endif %}\
-            {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/FoxxieBot/foxxie/commit/{{ commit.id }}))\
+            {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/Ruffpuff1/foxxie/commit/{{ commit.id }}))\
     {% endfor %}
 {% endfor %}\n
 """

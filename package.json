@@ -29,12 +29,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/FoxxieBot/foxxie.git"
+    "url": "https://github.com/Ruffpuff1/foxxie.git"
   },
   "bugs": {
-    "url": "https://github.com/FoxxieBot/foxxie/issues"
+    "url": "https://github.com/Ruffpuff1/foxxie/issues"
   },
-  "homepage": "https://github.com/FoxxieBot/foxxie",
+  "homepage": "https://github.com/Ruffpuff1/foxxie",
   "devDependencies": {
     "@nrwl/cli": "latest",
     "@nrwl/nx-cloud": "13.2.1",

@@ -21,11 +21,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/FoxxieBot/foxxie.git",
+    "url": "https://github.com/Ruffpuff1/foxxie.git",
     "directory": "packages/fuzzysearch"
   },
   "bugs": {
-    "url": "https://github.com/FoxxieBot/foxxie/issues"
+    "url": "https://github.com/Ruffpuff1/foxxie/issues"
   },
   "files": [
     "dist"

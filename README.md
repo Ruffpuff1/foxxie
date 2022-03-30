@@ -6,9 +6,9 @@
   <br />
 
 [![Typescript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/FoxxieBot/foxxie.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/FoxxieBot/foxxie/context:javascript)
-[![codecov](https://codecov.io/gh/FoxxieBot/foxxie/branch/main/graph/badge.svg?token=XWI6XSC4QF)](https://codecov.io/gh/FoxxieBot/foxxie)  
-[![GitHub](https://img.shields.io/github/license/FoxxieBot/foxxie?logo=github&style=flat-rounded)](https://github.com/FoxxieBot/foxxie/blob/main/LICENSE)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/Ruffpuff1/foxxie.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Ruffpuff1/foxxie/context:javascript)
+[![codecov](https://codecov.io/gh/Ruffpuff1/foxxie/branch/main/graph/badge.svg?token=XWI6XSC4QF)](https://codecov.io/gh/Ruffpuff1/foxxie)
+[![GitHub](https://img.shields.io/github/license/Ruffpuff1/foxxie?logo=github&style=flat-rounded)](https://github.com/Ruffpuff1/foxxie/blob/main/LICENSE)
 [![Crowdin](https://badges.crowdin.net/kettu/localized.svg)](https://crowdin.com/project/kettu)
 
 [![Discord server](https://img.shields.io/discord/761512748898844702?color=5865F2&logo=discord&logoColor=white)](https://ruff.cafe/community)
@@ -30,10 +30,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/Ruffpuff1"><img src="https://avatars.githubusercontent.com/u/73779441?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ruff</b></sub></a><br /><a href="https://github.com/FoxxieBot/foxxie/commits?author=Ruffpuff1" title="Code">💻</a> <a href="#ideas-Ruffpuff1" title="Ideas, Planning, & Feedback">🤔</a> <a href="#content-Ruffpuff1" title="Content">🖋</a> <a href="#financial-Ruffpuff1" title="Financial">💵</a></td>
+    <td align="center"><a href="https://github.com/Ruffpuff1"><img src="https://avatars.githubusercontent.com/u/73779441?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ruff</b></sub></a><br /><a href="https://github.com/Ruffpuff1/foxxie/commits?author=Ruffpuff1" title="Code">💻</a> <a href="#ideas-Ruffpuff1" title="Ideas, Planning, & Feedback">🤔</a> <a href="#content-Ruffpuff1" title="Content">🖋</a> <a href="#financial-Ruffpuff1" title="Financial">💵</a></td>
     <td align="center"><a href="https://github.com/Raindrop-Droptop"><img src="https://avatars.githubusercontent.com/u/81828616?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Raindrop-Droptop</b></sub></a><br /><a href="#ideas-Raindrop-Droptop" title="Ideas, Planning, & Feedback">🤔</a> <a href="#financial-Raindrop-Droptop" title="Financial">💵</a> <a href="#translation-Raindrop-Droptop" title="Translation">🌍</a></td>
-    <td align="center"><a href="https://github.com/orihuu"><img src="https://avatars.githubusercontent.com/u/81810945?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ori</b></sub></a><br /><a href="#content-orihuu" title="Content">🖋</a> <a href="https://github.com/FoxxieBot/foxxie/commits?author=orihuu" title="Tests">⚠️</a> <a href="https://github.com/FoxxieBot/foxxie/issues?q=author%3Aorihuu" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/FoxxieBot"><img src="https://avatars.githubusercontent.com/u/102572510?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Foxxie[bot]</b></sub></a><br /><a href="#content-Foxxie-bot" title="Content">🖋</a></td>
+    <td align="center"><a href="https://github.com/orihuu"><img src="https://avatars.githubusercontent.com/u/81810945?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ori</b></sub></a><br /><a href="#content-orihuu" title="Content">🖋</a> <a href="https://github.com/Ruffpuff1/foxxie/commits?author=orihuu" title="Tests">⚠️</a> <a href="https://github.com/Ruffpuff1/foxxie/issues?q=author%3Aorihuu" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/Ruffpuff1"><img src="https://avatars.githubusercontent.com/u/102572510?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Foxxie[bot]</b></sub></a><br /><a href="#content-Foxxie-bot" title="Content">🖋</a></td>
   </tr>
 </table>
 
