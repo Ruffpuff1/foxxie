@@ -110,12 +110,12 @@
         "weight": "**:scales: Peso**"
     },
     "npmDescription": "",
-    "npmNoDependencies": "",
+    "npmNoDependencies": "No hay dependencias 🎊",
     "npmNoResults": "",
     "npmOptionPackage": "",
     "npmTitles": {
-        "author": "",
-        "dependencies": "",
+        "author": ":pen_ballpoint: **Autor**",
+        "dependencies": ":card_box: **Dependancias**",
         "main": "",
         "maintainers": ""
     },
