@@ -42,6 +42,10 @@
   - packages/stardrop/*
   - packages/stardrop/**/*
 
+'Packages: commands':
+  - packages/commands/*
+  - packages/commands/**/*
+
 'Packages: types':
   - packages/types/*
   - packages/types/**/*
