@@ -10,6 +10,7 @@
     "dev": "yarn build && yarn start",
     "build": "tsc -b src",
     "start": "node .",
+    "test": "jest --pass-with-no-tests --collect-coverage --verbose",
     "prod": "NODE_ENV=production node ."
   },
   "imports": {

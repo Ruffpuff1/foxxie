@@ -4,6 +4,7 @@
         "outDir": "../dist",
         "rootDir": ".",
         "baseUrl": ".",
+        "composite": true,
         "moduleResolution": "node",
         "strictNullChecks": true,
         "allowSyntheticDefaultImports": true,

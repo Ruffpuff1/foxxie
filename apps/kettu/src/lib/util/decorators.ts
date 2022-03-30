@@ -5,5 +5,5 @@ import type { AutocompleteInteraction, CommandInteraction, SelectMenuInteraction
 export function getLocale(interaction: CommandInteraction | SelectMenuInteraction | AutocompleteInteraction) {
     const string = getLocaleString(interaction);
 
-    return container.i18n.getT(string);
+    return container.i18n?.getT(string) ?? { lng: string };
 }
