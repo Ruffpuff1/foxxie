@@ -29,7 +29,7 @@ jobs:
     name: Create PR for new version
     runs-on: ubuntu-latest
     needs: get_package
-    if: contains(fromJson('["builders", "env", "eslint-config", "fetch", "fuzzysearch", "lock-queue", "sanitize", "stardrop", "statuspage", "types"]'), needs.get_package.outputs.package) && github.repository_owner == 'FoxxieBot' && !startsWith(github.event.head_commit.message, 'chore(release)')
+    if: contains(fromJson('["builders", "commands", "env", "eslint-config", "fetch", "fuzzysearch", "lock-queue", "sanitize", "stardrop", "statuspage", "types"]'), needs.get_package.outputs.package) && github.repository_owner == 'FoxxieBot' && !startsWith(github.event.head_commit.message, 'chore(release)')
     steps:
 
       - name: Checkout repository
