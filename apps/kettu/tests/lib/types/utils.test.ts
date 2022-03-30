@@ -1,4 +1,4 @@
-import { FT, T } from '#types/utils';
+import { FT, T } from '../../../src/lib/types/utils';
 
 describe('t function wrapper', () => {
     test('WHEN given a string return the same string', () => {

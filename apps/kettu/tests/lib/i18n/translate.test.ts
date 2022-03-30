@@ -1,4 +1,4 @@
-import { LanguageKeys, translate } from '#lib/i18n';
+import { LanguageKeys, translate } from '../../../src/lib/i18n';
 import { Identifiers } from '@sapphire/framework';
 
 describe('translate', () => {

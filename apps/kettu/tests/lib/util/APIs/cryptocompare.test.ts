@@ -1,4 +1,4 @@
-import { cryptoCompare } from '#utils/APIs';
+import { cryptoCompare } from '../../../../src/lib/util/APIs';
 
 describe('cryptocompare', () => {
     test('WHEN fetching return error', async () => {

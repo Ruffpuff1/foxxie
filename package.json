@@ -10,7 +10,7 @@
     "up": "yarn upgrade-interactive --latest",
     "graph": "nx dep-graph",
     "affected": "nx graph",
-    "full:test": "jest --pass-with-no-tests --collect-coverage --verbose",
+    "full:test": "jest",
     "nx:b": "nx build"
   },
   "contributors": [

@@ -1,4 +1,4 @@
-import { CommandName } from '#types/Interactions';
+import { CommandName } from '../../../src/lib/types/Interactions';
 
 describe('command name enum', () => {
     test('WHEN given command name key, return the name of the command', () => {

@@ -1,4 +1,4 @@
-import { gamesEnumToString } from '#utils/APIs';
+import { gamesEnumToString } from '../../../../src/lib/util/APIs';
 import { GamesEnum } from '@ruffpuff/celestia';
 
 describe('celestia', () => {

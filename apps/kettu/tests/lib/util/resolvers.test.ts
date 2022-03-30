@@ -1,4 +1,4 @@
-import { resolveColorArgument } from '#utils/resolvers';
+import { resolveColorArgument } from '../../../src/lib/util/resolvers';
 import type { CommandInteraction } from 'discord.js';
 import i18next from 'i18next';
 

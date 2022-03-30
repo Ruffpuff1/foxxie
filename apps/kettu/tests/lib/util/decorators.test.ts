@@ -1,4 +1,4 @@
-import { getLocale } from '#utils/decorators';
+import { getLocale } from '../../../src/lib/util/decorators';
 import type { CommandInteraction } from 'discord.js';
 
 describe('decorator functions', () => {

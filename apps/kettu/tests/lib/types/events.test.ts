@@ -1,4 +1,4 @@
-import { Events } from '#types/Events';
+import { Events } from '../../../src/lib/types/Events';
 
 describe('the events enum', () => {
     test('WHEN given an enum value return the same value', () => {
