@@ -1,5 +1,6 @@
 import { CommandName } from '#types/Interactions';
 import { fetchFuzzyRepo, fetchFuzzyUser, fuzzilySearchForIssuesAndPullRequests, GithubOptionType, Label } from '#utils/APIs';
+import { getLocale } from '#utils/decorators';
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import type { AutocompleteInteraction } from 'discord.js';
@@ -15,6 +16,7 @@ export class UserInteractionHandler extends InteractionHandler {
     public override async parse(interaction: AutocompleteInteraction) {
         if (interaction.commandName !== CommandName.Github) return this.none();
         const option = interaction.options.getFocused(true);
+        const t = getLocale(interaction);
 
         switch (option.name) {
             case GithubOptionType.User:
@@ -27,11 +29,14 @@ export class UserInteractionHandler extends InteractionHandler {
                 return this.some(fuzzyResult.map(entry => ({ value: entry.name, name: entry.name })));
             }
             case 'number': {
-                const data = await fuzzilySearchForIssuesAndPullRequests({
-                    repository: interaction.options.getString(GithubOptionType.Repo, true),
-                    owner: interaction.options.getString(GithubOptionType.Owner, true),
-                    number: option.value.toString()
-                });
+                const data = await fuzzilySearchForIssuesAndPullRequests(
+                    {
+                        repository: interaction.options.getString(GithubOptionType.Repo, true),
+                        owner: interaction.options.getString(GithubOptionType.Owner, true),
+                        number: option.value.toString()
+                    },
+                    t
+                );
                 return this.some(data);
             }
             default:
