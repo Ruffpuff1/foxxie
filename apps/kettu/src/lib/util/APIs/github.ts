@@ -291,10 +291,6 @@ export const GithubUserDefaults: Label[] = [
         label: '⭐ Ruffpuff1'
     },
     {
-        login: 'Ruffpuff1',
-        label: '⭐ Ruffpuff1'
-    },
-    {
         login: 'sapphiredev',
         label: '⭐ SapphireDev'
     },

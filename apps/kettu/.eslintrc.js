@@ -6,6 +6,7 @@ module.exports = {
         project: 'tsconfig.base.json'
     },
     rules: {
+        '@typescript-eslint/no-extra-parens': 'off',
         '@typescript-eslint/member-ordering': [
             'error',
             {
