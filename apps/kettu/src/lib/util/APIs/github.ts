@@ -367,11 +367,10 @@ export async function fetchIssuesAndPrs({ repository, owner, number }: FetchIssu
     throw new Error('no-data');
 }
 
-export async function fuzzilySearchForIssuesAndPullRequests({
-    repository,
-    owner,
-    number
-}: GhSearchIssuesAndPullRequestsParameters): Promise<APIApplicationCommandOptionChoice[]> {
+export async function fuzzilySearchForIssuesAndPullRequests(
+    { repository, owner, number }: GhSearchIssuesAndPullRequestsParameters,
+    t: TFunction
+): Promise<APIApplicationCommandOptionChoice[]> {
     const result = await fromAsync(async () => {
         const response = await fetch(graphQLBaseURL)
             .header({
@@ -394,15 +393,21 @@ export async function fuzzilySearchForIssuesAndPullRequests({
         return [];
     }
 
-    return getDataForIssuesAndPrSearch(number, result.value.repository?.pullRequests?.nodes, result.value.repository?.issues?.nodes);
+    return getDataForIssuesAndPrSearch(number, result.value.repository?.pullRequests?.nodes, result.value.repository?.issues?.nodes, t);
 }
 
-function getDataForIssuesAndPrSearch(number: string, pullRequests: PullRequest[] | undefined, issues: Issue[] | undefined): APIApplicationCommandOptionChoice[] {
+function getDataForIssuesAndPrSearch(
+    number: string,
+    pullRequests: PullRequest[] | undefined,
+    issues: Issue[] | undefined,
+    t: TFunction
+): APIApplicationCommandOptionChoice[] {
     const numberParsedNumber = isNullishOrEmpty(number) ? NaN : Number(number);
     const issuesHasExactNumber = issues?.find(issue => issue.number === numberParsedNumber);
 
     if (issuesHasExactNumber) {
-        const parsedIssueState = issuesHasExactNumber?.state === 'OPEN' ? 'Open Issue' : 'Closed Issue';
+        const parsedIssueState =
+            issuesHasExactNumber?.state === 'OPEN' ? t(LanguageKeys.Commands.Websearch.GithubLabelIssueOpen) : t(LanguageKeys.Commands.Websearch.GithubLabelIssueClosed);
 
         return [
             {
@@ -417,10 +422,10 @@ function getDataForIssuesAndPrSearch(number: string, pullRequests: PullRequest[]
     if (pullRequestsHaveExactNumber) {
         const parsedPullRequestState =
             pullRequestsHaveExactNumber?.state === 'CLOSED'
-                ? 'Closed Pull Request'
+                ? t(LanguageKeys.Commands.Websearch.GithubLabelPrClosed)
                 : pullRequestsHaveExactNumber?.state === 'OPEN'
-                ? 'Open Pull Request'
-                : 'Merged Pull Request';
+                ? t(LanguageKeys.Commands.Websearch.GithubLabelPrOpen)
+                : t(LanguageKeys.Commands.Websearch.GithubLabelPrMerged);
 
         return [
             {
@@ -438,7 +443,8 @@ function getDataForIssuesAndPrSearch(number: string, pullRequests: PullRequest[]
 
     if (!isNullishOrEmpty(issues)) {
         for (const issue of issues) {
-            const parsedIssueState = issue?.state === 'OPEN' ? 'Open Issue' : 'Closed Issue';
+            const parsedIssueState =
+                issue?.state === 'OPEN' ? t(LanguageKeys.Commands.Websearch.GithubLabelIssueOpen) : t(LanguageKeys.Commands.Websearch.GithubLabelIssueClosed);
 
             if (!Number.isNaN(numberParsedNumber)) {
                 if (!issue.number.toString().charAt(0).startsWith(numberParsedNumber.toString().charAt(0))) {
@@ -455,7 +461,8 @@ function getDataForIssuesAndPrSearch(number: string, pullRequests: PullRequest[]
         if (!issueResults.length) {
             const [is] = issues;
 
-            const parsedIssueState = is?.state === 'OPEN' ? 'Open Issue' : 'Closed Issue';
+            const parsedIssueState =
+                is?.state === 'OPEN' ? t(LanguageKeys.Commands.Websearch.GithubLabelIssueOpen) : t(LanguageKeys.Commands.Websearch.GithubLabelIssueClosed);
 
             issueResults.push({
                 name: cutText(`(${parsedIssueState}) - ${is.number} - ${is.title}`, AutoCompleteLimits.MaximumLengthOfNameOfOption),
@@ -467,7 +474,11 @@ function getDataForIssuesAndPrSearch(number: string, pullRequests: PullRequest[]
     if (!isNullishOrEmpty(pullRequests)) {
         for (const pullRequest of pullRequests) {
             const parsedPullRequestState =
-                pullRequest?.state === 'CLOSED' ? 'Closed Pull Request' : pullRequest?.state === 'OPEN' ? 'Open Pull Request' : 'Merged Pull Request';
+                pullRequest?.state === 'CLOSED'
+                    ? t(LanguageKeys.Commands.Websearch.GithubLabelPrClosed)
+                    : pullRequest?.state === 'OPEN'
+                    ? t(LanguageKeys.Commands.Websearch.GithubLabelPrOpen)
+                    : t(LanguageKeys.Commands.Websearch.GithubLabelPrMerged);
 
             if (!Number.isNaN(numberParsedNumber)) {
                 if (!pullRequest.number.toString().charAt(0).startsWith(numberParsedNumber.toString().charAt(0))) {
@@ -484,7 +495,12 @@ function getDataForIssuesAndPrSearch(number: string, pullRequests: PullRequest[]
         if (!pullRequestResults.length) {
             const [req] = pullRequests;
 
-            const parsedPullRequestState = req?.state === 'CLOSED' ? 'Closed Pull Request' : req?.state === 'OPEN' ? 'Open Pull Request' : 'Merged Pull Request';
+            const parsedPullRequestState =
+                req?.state === 'CLOSED'
+                    ? t(LanguageKeys.Commands.Websearch.GithubLabelPrClosed)
+                    : req?.state === 'OPEN'
+                    ? t(LanguageKeys.Commands.Websearch.GithubLabelPrOpen)
+                    : t(LanguageKeys.Commands.Websearch.GithubLabelPrMerged);
 
             pullRequestResults.push({
                 name: cutText(`(${parsedPullRequestState}) - ${req.number} - ${req.title}`, AutoCompleteLimits.MaximumLengthOfNameOfOption),

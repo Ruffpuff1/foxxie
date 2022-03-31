@@ -78,7 +78,7 @@ export class UserCommand extends Command {
         await interaction.deferReply();
 
         const user = this.parseUser(args.repo);
-        const { repo, number } = args;
+        const { repo, number, t } = args;
 
         if (number) {
             try {
@@ -96,7 +96,7 @@ export class UserCommand extends Command {
 
                 return interaction.editReply(parts.join('\n'));
             } catch {
-                const data = await fuzzilySearchForIssuesAndPullRequests({ repository: repo, owner: user, number: `${number}` });
+                const data = await fuzzilySearchForIssuesAndPullRequests({ repository: repo, owner: user, number: `${number}` }, t);
 
                 if (!data.length) return interaction.editReply(args.t(LanguageKeys.Commands.Websearch.GithubIssuePRNotFound, { number }));
 
