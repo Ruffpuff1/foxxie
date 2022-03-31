@@ -3,6 +3,8 @@ import { LanguageKeys } from ".";
 
 export function translate(key: string) {
     switch (key) {
+    case Identifiers.CommandDisabled:
+        return LanguageKeys.Preconditions.Enabled
     case Identifiers.PreconditionClientPermissions:
         return LanguageKeys.Preconditions.ClientPermissions;
     default:
