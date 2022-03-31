@@ -1647,10 +1647,10 @@
     prettier "^2.5.1"
     typescript "^4.5.5"
 
-"@ruffpuff/ts@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@ruffpuff/ts/-/ts-1.0.3.tgz#e32af90c6b250f4bccdb1f8ad5d83749c241e4b8"
-  integrity sha512-TYifEFb/A8nsLuJAbS6jVUMnJPalTaJd/w5u4mTrE1VOzhY1R/zFve3hy0vmWzEolzmVrUJsjifxUUkDvpYHKw==
+"@ruffpuff/ts@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@ruffpuff/ts/-/ts-1.0.4.tgz#0a3b8061313b2e538cb555c8b61fc22797ef1c49"
+  integrity sha512-8xTMYHnuqdZ5t8FfzxzxbuelwcWqHtoaFmXUCAXfy9jaSR62Ave45pXWixLHK1CbbSDiUcz3/UB9oz5CgDLR9A==
 
 "@ruffpuff/ts@^1.0.1":
   version "1.0.1"
