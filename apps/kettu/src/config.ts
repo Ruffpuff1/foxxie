@@ -60,7 +60,8 @@ export function getInterpolation(): InterpolationOptions {
     return {
         escapeValue: false,
         defaultVariables: {
-            ERROR: Emojis.Error
+            ERROR: Emojis.Error,
+            LOADING: Emojis.Loading
         }
     };
 }

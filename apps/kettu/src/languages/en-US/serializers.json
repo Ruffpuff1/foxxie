@@ -1,0 +1,10 @@
+{
+    "minMaxBothExclusive": "{{name}} has to be between {{min}} and {{max}} exclusively.",
+	"minMaxBothInclusive": "{{name}} has to be between {{min}} and {{max}} inclusively.",
+	"minMaxExactlyExclusive": "{{name}} has to be exactly {{min}}.",
+	"minMaxExactlyInclusive": "{{name}} has to be exactly {{min}}.",
+	"minMaxMaxExclusive": "{{name}} has to be less than {{max}} exclusively.",
+	"minMaxMaxInclusive": "{{name}} has to be less than {{max}} inclusively",
+	"minMaxMinExclusive": "{{name}} has to be greater than {{min}} exclusively.",
+	"minMaxMinInclusive": "{{name}} has to be greater than {{min}} inclusively."
+}
