@@ -26,6 +26,7 @@ export enum CommandName {
     Owoify = 'owoify',
     Npm = 'npm',
     Pokemon = 'pokemon',
+    Poll = 'poll',
     Pride = 'pride',
     Setcolor = 'setcolor',
     Shorten = 'shorten',
@@ -136,4 +137,6 @@ export type CommandArgs<T extends CommandName> = T extends CommandName.Donate
     ? NpmArgs
     : T extends CommandName.Shorten
     ? EphemeralArgs & { url: string }
+    : T extends CommandName.Poll
+    ? BaseArgs & { options: string; title: string }
     : never;

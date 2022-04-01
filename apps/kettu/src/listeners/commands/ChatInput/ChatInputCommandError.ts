@@ -11,7 +11,7 @@ const ignoredCodes = [RESTJSONErrorCodes.InteractionHasAlreadyBeenAcknowledged, 
     event: Events.ChatInputCommandError
 })
 export class UserListener extends Listener<Events.ChatInputCommandError> {
-    public run(...[error]: EventArgs<Events.ChatInputCommandError>) {
+    public async run(...[error, { interaction }]: EventArgs<Events.ChatInputCommandError>) {
         if (error instanceof UserError) {
             console.log(error); //
             return; //
@@ -19,6 +19,11 @@ export class UserListener extends Listener<Events.ChatInputCommandError> {
 
         if (error instanceof DiscordAPIError) {
             if (ignoredCodes.includes(error.code)) return;
+        }
+
+        if (typeof error === 'string') {
+            interaction.replied || interaction.deferred ? await interaction.editReply(error) : await interaction.reply({ content: error, ephemeral: true });
+            return;
         }
 
         throw error;

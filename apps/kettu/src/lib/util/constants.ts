@@ -10,5 +10,6 @@ export const enum Emojis {
     GithubIssueOpen = '<:GithubIssueOpen:950035888459624518>',
     GithubPRClosed = '<:GithubPRClosed:950017073231298560>',
     GithubPRMerged = '<:GithubPRMerged:950014664979406858>',
-    GithubPROpen = '<:GithubPROpen:950014721979985960>'
+    GithubPROpen = '<:GithubPROpen:950014721979985960>',
+    Loading = '<a:foxwiggle:799197027568713748>'
 }
