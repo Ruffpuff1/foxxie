@@ -7479,11 +7479,6 @@ prepend-http@^2.0.0:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-2.0.0.tgz#e92434bfa5ea8c19f41cdfd401d741a3c819d897"
   integrity sha1-6SQ0v6XqjBn0HN/UAddBo8gZ2Jc=
 
-prettier@2.6.2:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.2.tgz#e26d71a18a74c3d0f0597f55f01fb6c06c206032"
-  integrity sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==
-
 prettier@^2.5.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.1.tgz#d472797e0d7461605c1609808e27b80c0f9cfe17"
@@ -8696,26 +8691,6 @@ tsscmp@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/tsscmp/-/tsscmp-1.0.6.tgz#85b99583ac3589ec4bfef825b5000aa911d605eb"
   integrity sha512-LxhtAkPDTkVCMQjt2h6eBVY28KCjikZqZfMcC15YBeNjkgUpdCfBu5HoiOTDu86v6smE8yOjyEktJ8hlbANHQA==
-
-tsup@5.12.2:
-  version "5.12.2"
-  resolved "https://registry.yarnpkg.com/tsup/-/tsup-5.12.2.tgz#6a13dd08fa2f4e3329118964ce92f89db091cf58"
-  integrity sha512-CZcM4UGYlKcdQzDIJbrwgpn4sQe8zobnHRgAF6C8RpMGvfRov9ipSQY3mjjnZRAkEZQO1+Jr3cxeaQJjY/iVTg==
-  dependencies:
-    bundle-require "^3.0.2"
-    cac "^6.7.12"
-    chokidar "^3.5.1"
-    debug "^4.3.1"
-    esbuild "^0.14.25"
-    execa "^5.0.0"
-    globby "^11.0.3"
-    joycon "^3.0.1"
-    postcss-load-config "^3.0.1"
-    resolve-from "^5.0.0"
-    rollup "^2.60.0"
-    source-map "^0.7.3"
-    sucrase "^3.20.3"
-    tree-kill "^1.2.2"
 
 tsup@^5.12.3:
   version "5.12.3"
