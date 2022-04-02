@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["mongoDb"]
 }
 
@@ -11,8 +11,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Ban {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  provider    String   @default("Foxxie")
+  reason      String
+  moderatorId String
+  createdAt   DateTime
+  user        User     @relation(fields: [userId], references: [userId])
+  userId      String
+}
+
 model User {
-  id    String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId String
-  pronouns Int  @default(0)
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String
+  pronouns Int    @default(0)
+  bans     Ban[]
 }
