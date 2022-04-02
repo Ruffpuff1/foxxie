@@ -1809,14 +1809,6 @@
   dependencies:
     "@sapphire/utilities" "^3.6.1"
 
-"@sapphire/ts-config@3.3.3":
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/@sapphire/ts-config/-/ts-config-3.3.3.tgz#c8c74db8fc8f1a0e7175a431ba53b2a746f8b736"
-  integrity sha512-pL0Il7dOMspwOfScGMsdW+Qv3gKYrrEoLUdxHHTiuSqt9J4Oz+B5ezT3+HSorP/t3g8vYdbsB0zlfFvnVcJmSw==
-  dependencies:
-    tslib "^2.3.1"
-    typescript "^4.6.2"
-
 "@sapphire/ts-config@3.3.4":
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/@sapphire/ts-config/-/ts-config-3.3.4.tgz#dabab6a3c1a862ea753b8d4e67a6ac07e9f5d7a7"
@@ -8828,7 +8820,7 @@ typeorm@^0.2.45:
     yargs "^17.0.1"
     zen-observable-ts "^1.0.0"
 
-typescript@4.6.3, typescript@^4.5.3, typescript@^4.5.5, typescript@^4.6.2, typescript@^4.6.3:
+typescript@4.6.3, typescript@^4.5.3, typescript@^4.5.5, typescript@^4.6.3:
   version "4.6.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.3.tgz#eefeafa6afdd31d725584c67a0eaba80f6fc6c6c"
   integrity sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==
