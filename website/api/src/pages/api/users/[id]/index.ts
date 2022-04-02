@@ -15,9 +15,13 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                 const user = await prisma.user.findFirst({
                     where: {
                         userId: id as string
+                    },
+                    include: {
+                        bans: true
                     }
                 });
 
+                // eslint-disable-next-line no-negated-condition
                 if (!user) {
                     res.json({
                         error: 'User not found',
