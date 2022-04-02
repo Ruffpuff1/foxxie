@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "@foxxie"
+  ],
+  "rules": {
+    "no-unused-vars":"error"
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
+}

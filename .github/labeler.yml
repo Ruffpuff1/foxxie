@@ -89,3 +89,7 @@
 'Site: foxxie.xyz':
   - website/foxxie.xyz/*
   - website/foxxie.xyz/**/*
+
+'Site: api':
+  - website/api/*
+  - website/api/**/*
