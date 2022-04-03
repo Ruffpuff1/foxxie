@@ -5,7 +5,6 @@ import { RegisterChatInputCommand } from '@foxxie/commands';
 import { CommandOptionsRunTypeEnum, isErr, Result, UserError } from '@sapphire/framework';
 import { floatPromise, getGuildIds } from '#utils/util';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import type { Snowflake } from 'ruffpuff-api-types/v1';
 import {
     CategoryChannel,
     Collection,
@@ -33,7 +32,7 @@ import { isGuildOwner } from '#utils/Discord';
 import { acquireSettings, GuildSettings } from '#lib/database';
 import { fetch } from '@foxxie/fetch';
 import { FoxxieEmbed } from '#lib/discord';
-import { api } from '@ruffpuff/api';
+import { api } from '@foxxie/api';
 
 const SORT = (x: Role, y: Role) => Number(y.position > x.position) || Number(x.position === y.position) - 1;
 const roleMention = (role: Role): string => role.toString();
@@ -530,11 +529,10 @@ export class UserCommand extends FoxxieCommand {
     private async fetchPronouns(userId: string) {
         try {
             const result = await api() //
-                .users(userId as Snowflake)
-                .pronouns()
+                .users(userId)
+                .pronouns
                 .get();
 
-            if (!result.pronouns) return null;
             return result.pronouns;
         } catch {
             return null;
