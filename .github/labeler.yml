@@ -6,6 +6,10 @@
   - apps/kettu/*
   - apps/kettu/**/*
 
+'Packages: api':
+  - packages/api/*
+  - packages/api/**/*
+
 'Packages: env':
   - packages/env/*
   - packages/env/**/*
