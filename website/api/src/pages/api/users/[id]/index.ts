@@ -51,6 +51,9 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                     error: 'User already exists',
                     code: 20001
                 });
+
+                await prisma.$disconnect();
+                return;
             }
 
             type BodyType = OType<{ userId: string; pronouns?: number }>;
