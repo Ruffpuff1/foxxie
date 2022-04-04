@@ -1,5 +1,5 @@
 // @ts-expect-error pronoun enum imported for jsdoc.
-import { PronounEnum } from './rest';
+import { PronounEnum } from './rest'; // lgtm [js/unused-local-variable]
 
 export enum RESTJSONErrorCodes {
     /**
