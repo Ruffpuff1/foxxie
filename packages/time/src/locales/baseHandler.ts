@@ -1,4 +1,4 @@
-import type { LocaleString, ParsedContext } from '../types';
+import type { LocaleString, ParsedContext, ParseDurationOptions } from '../types';
 
 export abstract class BaseHandler {
     /**
@@ -44,6 +44,15 @@ export abstract class BaseHandler {
      * ```
      */
     public static monthName: (str: string) => ParsedContext | null;
+
+    /**
+     * Parse a the duration of a string, will be negative if the date is in the passed.
+     * Will always default to {@link enUS}, if you want to use other locales use their individual handler.
+     * @param string The string to parse to a duration.
+     * @param Options the optional options to pass to the parser see {@link ParseDurationOptions} for more information.
+     * @returns number or null
+     */
+    public static duration: (str: string, options?: Partial<ParseDurationOptions>) => number | null;
 }
 
 interface PatternsMap {

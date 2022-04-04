@@ -10,9 +10,30 @@ describe('esMX casual', () => {
 
     test('WHEN given a string resolve it to a duration', () => {
         const str = 'a la medianoche';
-        const result = esMX.casual(str)!;
+        const result = esMX.duration(str, { mode: 'casual' })!;
 
-        expect(typeof result.duration).toBe('number');
+        expect(typeof result).toBe('number');
+    });
+
+    test('WHEN given a string resolve it to a duration without mode', () => {
+        const str = 'esta mañana';
+        const result = esMX.duration(str)!;
+
+        expect(typeof result).toBe('number');
+    });
+
+    test('WHEN given a string resolve it to a duration without mode', () => {
+        const str = 'enero';
+        const result = esMX.duration(str)!;
+
+        expect(typeof result).toBe('number');
+    });
+
+    test('WHEN given an invalid string resolve it to null', () => {
+        const str = 'enedhjjdro';
+        const result = esMX.duration(str)!;
+
+        expect(result).toBeNull();
     });
 
     test('WHEN given a string resolve it to a duration', () => {
