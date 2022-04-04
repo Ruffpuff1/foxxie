@@ -1,7 +1,7 @@
 {
   "name": "@foxxie/time",
   "version": "0.0.0",
-  "description": "A natrual language parsing utility for Foxxie.",
+  "description": "A natural language parsing utility for Foxxie.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
     "lint": "prettier --check . && eslint src --ext mjs,js,ts",

@@ -46,6 +46,10 @@
   - packages/stardrop/*
   - packages/stardrop/**/*
 
+'Packages: time':
+  - packages/time/*
+  - packages/time/**/*
+
 'Packages: commands':
   - packages/commands/*
   - packages/commands/**/*
