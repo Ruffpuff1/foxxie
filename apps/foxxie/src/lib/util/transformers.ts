@@ -71,6 +71,12 @@ function pronounEnumToString(key: PronounEnum) {
             return 'It/Her';
         case PronounEnum.ItThem:
             return 'It/Them';
+        case PronounEnum.Other:
+            return 'Other';
+        case PronounEnum.UseName:
+            return 'Use Name';
+        case PronounEnum.Ask:
+            return 'Ask';
     }
 }
 
