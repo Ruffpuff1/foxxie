@@ -9,7 +9,7 @@ export function extractTerms(mappeed: Mapper): string[] {
 }
 
 export function matchAnyPattern(mappeed: Mapper): string {
-    const joined = extractTerms(mappeed)
+    const joined = extractTerms(mappeed) // lgtm [js/incomplete-sanitization]
         .sort((a, b) => b.length - a.length)
         .join('|')
         .replace(/\./g, '\\.');
