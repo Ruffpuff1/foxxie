@@ -28,7 +28,13 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                         code: 10001
                     });
                 } else {
-                    res.json({ ...user });
+                    const returnObj = {
+                        userId: user.userId,
+                        pronouns: user.pronouns,
+                        bans: user.bans
+                    };
+
+                    res.json({ ...returnObj });
                 }
 
                 await prisma.$disconnect();
@@ -79,7 +85,12 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                 data
             });
 
-            res.json({ ...created });
+            const returnObj = {
+                userId: created.userId,
+                pronouns: created.pronouns
+            };
+
+            res.json({ ...returnObj });
 
             await prisma.$disconnect();
         }
@@ -93,23 +104,3 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
             break;
     }
 }
-
-/*
-none 0
-he/him 1
-he/her 2
-he/it 3
-he/they 4
-they/them 5
-they/he 6
-they/she 7
-they/it 8
-she/her 9
-she/him 10
-she/it 11
-she/they 12
-it/its 13
-it/him 14
-it/her 15
-it/them 16
-*/

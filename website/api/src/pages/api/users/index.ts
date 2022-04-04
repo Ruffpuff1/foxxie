@@ -10,7 +10,9 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                 await prisma.$connect();
 
                 const users = await prisma.user.findMany();
-                res.json({ users });
+                const returnVal = users.map(({ userId, pronouns }) => ({ userId, pronouns }));
+
+                res.json({ users: returnVal });
 
                 await prisma.$disconnect();
             }
