@@ -1,11 +1,29 @@
-import type { RESTGetAPIUsersUserBansResult, RESTGetAPIUsersUserPronounsResult, RESTGetAPIUsersUserResult, RESTPostAPIUsersUserJSONBody } from './rest';
+import type { RESTGetAPIUsersResult, RESTGetAPIUsersUserBansResult, RESTGetAPIUsersUserBaseObject, RESTGetAPIUsersUserPronounsResult, RESTGetAPIUsersUserResult, RESTPostAPIUsersUserJSONBody } from './rest';
 
+/**
+ * The Api routing function.
+ */
 export interface Api {
+    /**
+     * The `/users` endpoint.
+     */
     users: ApiUsers;
 }
 
+/**
+ * Represents the routes of the `/users` endpoint.
+ */
 interface ApiUsers {
+    /**
+     * Query a specific user by their `userId`.
+     */
     (userId: string): ApiUsersUser;
+
+    /**
+     * Returns a list of Partial users in the API.
+     * @method GET
+     */
+    get(): Promise<RESTGetAPIUsersResult>
 }
 
 /**
@@ -23,7 +41,7 @@ interface ApiUsersUser {
      * If the user already exists returns a 20001 user already exists error.
      * @method POST
      */
-    post(body?: RESTPostAPIUsersUserJSONBody): Promise<RESTGetAPIUsersUserResult>;
+    post(body?: RESTPostAPIUsersUserJSONBody): Promise<RESTGetAPIUsersUserBaseObject>;
 
     /**
      * Bans endpoint

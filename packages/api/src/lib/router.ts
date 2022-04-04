@@ -18,13 +18,6 @@ function route() {
                 }
 
                 switch (name) {
-                    case 'get': {
-                        return () =>
-                            fetch('https://api.foxxie.xyz') //
-                                .path(...route)
-                                .get()
-                                .json();
-                    }
                     case 'post': {
                         return (options: Record<any, any>) =>
                             fetch('https://api.foxxie.xyz') //
@@ -54,4 +47,9 @@ function route() {
     return new Proxy(noop, handler);
 }
 
+/**
+ * Query the Api using a route builder.
+ * With full typescript type safety and jsdoc support.
+ * @returns Api function
+ */
 export const api = () => route() as Api;
