@@ -27,7 +27,15 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                         code: 10001
                     });
                 } else {
-                    res.json({ bans: user.bans });
+                    const bans = user.bans.map(({ reason, provider, moderatorId, createdAt, userId }) => ({
+                        provider,
+                        reason,
+                        moderatorId,
+                        createdAt,
+                        userId
+                    }));
+
+                    res.json({ bans });
                 }
 
                 await prisma.$disconnect();
