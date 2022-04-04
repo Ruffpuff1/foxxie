@@ -1,6 +1,8 @@
 import { api, PronounEnum, RESTJSONErrorCodes } from '../src';
 
 describe('/users endpoint', () => {
+    jest.setTimeout(10000);
+
     test('WHEN fetching users endpoint with user, return user object', async () => {
         const result = await api() //
             .users('486396074282450946')
