@@ -31,6 +31,7 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                     const returnObj = {
                         userId: user.userId,
                         pronouns: user.pronouns,
+                        whitelisted: user.whitelisted,
                         bans: user.bans
                     };
 
@@ -87,7 +88,8 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
 
             const returnObj = {
                 userId: created.userId,
-                pronouns: created.pronouns
+                pronouns: created.pronouns,
+                whitelisted: created.whitelisted
             };
 
             res.json({ ...returnObj });
