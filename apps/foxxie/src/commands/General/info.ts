@@ -29,7 +29,7 @@ import { pronouns } from '#utils/transformers';
 import { BrandingColors } from '#utils/constants';
 import { GuildBasedChannelTypes, PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { fetch } from '@foxxie/fetch';
 import { FoxxieEmbed } from '#lib/discord';
 import { api } from '@foxxie/api';
@@ -485,7 +485,7 @@ export class UserCommand extends FoxxieCommand {
     }
 
     private async fetchServerData(guild: Guild): Promise<[number, GuildMember, number]> {
-        const messages = await acquireSettings(guild, GuildSettings.MessageCount);
+        const messages = await this.container.prisma.guilds(guild.id, GuildSettings.MessageCount);
         const me = guild.me!;
         const owner = await guild.members.fetch(guild.ownerId);
 

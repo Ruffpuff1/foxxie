@@ -1,8 +1,9 @@
 import type { Guild } from 'discord.js';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { LockQueue } from '@foxxie/lock-queue';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { seconds } from '@ruffpuff/utilities';
+import { container } from '@sapphire/framework';
 
 export abstract class ModerationTask<T = unknown> extends ScheduledTask {
     private readonly locks = new LockQueue();
@@ -32,7 +33,7 @@ export abstract class ModerationTask<T = unknown> extends ScheduledTask {
 
     protected async getDmData(guild: Guild): Promise<{ send: boolean }> {
         return {
-            send: await acquireSettings(guild, GuildSettings.Moderation.Dm)
+            send: await container.prisma.guilds(guild.id, GuildSettings.Moderation.Dm)
         };
     }
 

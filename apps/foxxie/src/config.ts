@@ -2,6 +2,7 @@ process.env.NODE_ENV ??= 'development';
 
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { durationOptions, ordinalOptions } from '#languages';
+import { GuildSettings } from '#lib/database';
 import { categories } from '#lib/game';
 import { LanguageKeys } from '#lib/i18n';
 import { emojis, rootFolder } from '#utils/constants';
@@ -303,6 +304,7 @@ export async function initI18n() {
         lng: 'en-US',
         fallbackLng: 'en-US',
         defaultNS: 'globals',
+<<<<<<< HEAD
         interpolation: getInterpolation(),
         initImmediate: false,
         debug: true
@@ -311,6 +313,32 @@ export async function initI18n() {
     for (const { name, format } of getFormatters()) {
         i18next.services.formatter!.add(name, format);
     }
+=======
+        defaultLanguageDirectory: languageFolder,
+        fetchLanguage: ({ guild }) => {
+            if (!guild) return 'en-US';
+            return container.prisma.guilds(guild.id, GuildSettings.Language);
+        },
+        formatters: getFormatters(),
+        i18next: (_: string[], languages: string[]) => ({
+            supportedLngs: languages,
+            ignoreJSONStructure: true,
+            preload: languages,
+            returnObjects: true,
+            returnEmptyString: false,
+            returnNull: false,
+            load: 'all',
+            lng: 'en-US',
+            fallbackLng: 'en-US',
+            defaultNS: 'globals',
+            interpolation: getInterpolation(),
+            overloadTranslationOptionHandler: (args: unknown[]) => ({
+                defaultValue: args[1] ?? LanguageKeys.Globals.DefaultT
+            }),
+            initImmediate: false
+        })
+    };
+>>>>>>> 607dcdd (feat: foxxie migrate to prisma)
 }
 
 export const CLIENT_OPTIONS: ClientOptions = {

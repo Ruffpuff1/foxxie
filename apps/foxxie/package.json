@@ -24,10 +24,12 @@
         "build": "yarn tsc -b",
         "clean": "rm -r node_modules && yarn",
         "watch": "tsc -b -w",
-        "dev": "yarn build && yarn start",
+        "dev": "dotenv -e .env.development -- yarn build && yarn start",
         "watch:start": "tsc-watch -b --onSuccess \"yarn start\"",
         "clean:dist": "rm -r dist",
-        "production": "NODE_ENV=production node ."
+        "production": "NODE_ENV=production node .",
+        "prisma:gen": "npx prisma generate",
+        "prisma:pull": "dotenv -e .env.development -- npx prisma db pull"
     },
     "imports": {
         "#database/*": "./dist/lib/database/*.js",
@@ -39,6 +41,7 @@
         "#lib/*": "./dist/lib/*.js",
         "#lib/audio": "./dist/lib/audio/index.js",
         "#lib/database": "./dist/lib/database/index.js",
+        "#lib/prisma": "./dist/lib/prisma/index.js",
         "#lib/discord": "./dist/lib/discord/index.js",
         "#lib/FoxxieClient": "./dist/lib/FoxxieClient.js",
         "#lib/game": "./dist/lib/game/index.js",
@@ -78,6 +81,7 @@
         "@foxxie/lock-queue": "0.1.2",
         "@foxxie/sanitize": "^0.0.0",
         "@influxdata/influxdb-client": "^1.24.0",
+        "@prisma/client": "^3.12.0",
         "@ruffpuff/api": "^0.0.2-next.ce2ba26.1647722130",
         "@ruffpuff/ts": "^1.0.4",
         "@ruffpuff/utilities": "^4.0.0",
@@ -117,7 +121,16 @@
         "@types/node": "17.0.23",
         "@types/spotify-api": "0.0.14",
         "@types/tinycolor2": "1.4.3",
+<<<<<<< HEAD
         "discord-api-types": "0.31.1",
+=======
+        "@typescript-eslint/eslint-plugin": "5.18.0",
+        "@typescript-eslint/parser": "5.18.0",
+        "discord-api-types": "0.31.0",
+        "dotenv-cli": "^5.1.0",
+        "eslint": "8.12.0",
+        "prisma": "^3.12.0",
+>>>>>>> 607dcdd (feat: foxxie migrate to prisma)
         "ruffpuff-api-types": "^0.0.5-next.11a326b.1647721912",
         "tsc-watch": "5.0.3",
         "typescript": "^4.6.3"
