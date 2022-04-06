@@ -1,5 +1,4 @@
 import * as GuildSettings from '#database/Keys';
-import { acquireSettings } from '#database/functions';
 import type { ModerationEntity } from '#database/entities/ModerationEntity';
 import { LanguageKeys } from '#lib/i18n';
 import { GuildInteraction, PermissionLevels } from '#lib/types';
@@ -82,12 +81,15 @@ export class ModerationCommand extends FoxxieCommand {
 
     protected async getDmData(interaction: GuildInteraction): Promise<SendOptions> {
         return {
-            send: await acquireSettings(interaction.guild, GuildSettings.Moderation.Dm)
+            send: await this.container.prisma.guilds(interaction.guildId!, GuildSettings.Moderation.Dm)
         };
     }
 
     protected async respond(interaction: GuildInteraction, log: ModerationEntity, target: User): Promise<void> {
-        const [modChannelId, t] = await acquireSettings(interaction.guildId!, settings => [settings[GuildSettings.Channels.Logs.Moderation], settings.getLanguage()]);
+        const [modChannelId, t] = await this.container.prisma.guilds(interaction.guildId!, settings => [
+            settings[GuildSettings.Channels.Logs.Moderation],
+            settings.getLanguage()
+        ]);
 
         const content = modChannelId
             ? t(this.successKey, {

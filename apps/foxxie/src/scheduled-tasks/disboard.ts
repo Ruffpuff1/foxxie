@@ -1,4 +1,4 @@
-import { acquireSettings, GuildSettings, writeSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import type { ScheduleData } from '#lib/types';
 import { Schedules } from '#utils/constants';
@@ -7,7 +7,7 @@ import { isDev, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { RESTJSONErrorCodes } from 'discord-api-types/v9';
-import { type Guild, MessageEmbed, type MessageEmbedOptions, DiscordAPIError } from 'discord.js';
+import { type Guild, MessageEmbed, DiscordAPIError } from 'discord.js';
 
 @ApplyOptions<ScheduledTask.Options>({
     name: Schedules.Disboard,
@@ -27,7 +27,7 @@ export class UserTask extends ScheduledTask {
     }
 
     private async sendMessage(guild: Guild): Promise<void> {
-        const [message, embed, t] = await acquireSettings(guild, settings => [
+        const [message, embed, t] = await this.container.prisma.guilds(guild.id, settings => [
             settings[GuildSettings.Messages.Disboard],
             settings[GuildSettings.Embeds.Disboard],
             settings.getLanguage()
@@ -39,18 +39,16 @@ export class UserTask extends ScheduledTask {
         const embeds: MessageEmbed[] = [];
         const base = embed ? '' : t(LanguageKeys.Tasks.DisboardDefault);
 
-        if (embed) {
-            const embedToSend = new MessageEmbed(embed as MessageEmbedOptions);
-            if (embed.color) embedToSend.setColor(embed.color);
-            embeds.push(embedToSend);
-        }
+        if (embed) embeds.push(embed);
 
         try {
             await channel.send({ content: message || base || null, embeds });
         } catch (error) {
             if (!(error instanceof DiscordAPIError)) return;
             if (error.code === RESTJSONErrorCodes.UnknownChannel) {
-                await writeSettings(guild, settings => (settings[GuildSettings.Channels.Disboard] = null));
+                await this.container.prisma.guilds(guild.id, {
+                    [GuildSettings.Channels.Disboard]: null
+                });
             }
         }
     }

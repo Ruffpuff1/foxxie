@@ -4,6 +4,7 @@ import type { LongLivingReactionCollector } from '#external/LongLivingReactionCo
 import type { FoxxieCommand, AnalyticsManager, GiveawayManager, RedisManager, InviteManager, WorkerManager } from '#lib/structures';
 import type { CustomGet, CustomFunctionGet, LanguageString, ColorData } from './Utils';
 import { Events } from './Events';
+import { PrismaClient } from '@prisma/client';
 import type { GuildMessage, TypeOfEmbed } from './Discord';
 import type { Snowflake } from 'discord-api-types/v9';
 import type { Nullish } from '@sapphire/utilities';
@@ -68,6 +69,7 @@ declare module '@sapphire/pieces' {
     interface Container {
         analytics: AnalyticsManager | null;
         db: MongoDB;
+        prisma: MongoClient;
         redis: RedisManager | null;
         settings: SettingsManager;
         workers: WorkerManager;
@@ -79,6 +81,7 @@ declare module '@sapphire/pieces' {
 }
 
 import type { BooleanString, IntegerString } from '@foxxie/env';
+import type { MongoClient } from '#lib/prisma';
 
 declare module '@foxxie/env' {
     interface Env {
@@ -138,7 +141,6 @@ declare module '@foxxie/env' {
         WEBSTER_TOKEN: string;
     }
 }
-
 
 declare module '@sapphire/framework' {
     interface DetailedDescriptionCommandObject {}

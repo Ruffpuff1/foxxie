@@ -1,10 +1,9 @@
-import { acquireSettings, GuildEntity, writeSettings } from '#lib/database';
 import { GuildModerationManager, PersistRoleManager } from '#lib/structures';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { container, fromAsync, isErr } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';
 import type { Guild, GuildAuditLogsAction, GuildAuditLogsEntry, GuildResolvable, GuildTextBasedChannel } from 'discord.js';
-import type { Snowflake } from 'discord-api-types/v9';
+import type { GuildModel } from '#lib/prisma';
 
 interface GuildUtilities {
     readonly moderation: GuildModerationManager;
@@ -39,15 +38,15 @@ function getProperty<K extends keyof GuildUtilities>(property: K) {
     return (resolvable: GuildResolvable): GuildUtilities[K] => getGuildUtilities(resolvable)[property];
 }
 
-export async function fetchChannel<T = GuildTextBasedChannel>(resolvable: GuildResolvable, key: PickByValue<GuildEntity, Snowflake | null>) {
+export async function fetchChannel<T = GuildTextBasedChannel>(resolvable: GuildResolvable, key: PickByValue<GuildModel, string | null>) {
     const guild = container.client.guilds.resolve(resolvable)!;
 
-    const channelId = await acquireSettings(guild, key);
+    const channelId = await container.prisma.guilds(guild.id, key);
     if (!channelId) return null;
 
     const channel = await resolveToNull(guild.channels.fetch(channelId));
     if (!channel) {
-        await writeSettings(guild, settings => (settings[key] = null!));
+        await container.prisma.guilds(guild.id, { [key]: null });
         return null;
     }
 

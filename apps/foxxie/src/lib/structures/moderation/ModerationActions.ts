@@ -1,6 +1,6 @@
 import { Guild, GuildChannel, MessageEmbed, PermissionOverwriteOptions, PermissionOverwrites, Role } from 'discord.js';
 import { isNullishOrZero, isNullishOrEmpty } from '@sapphire/utilities';
-import { GuildSettings, ModerationEntity, writeSettings } from '#lib/database';
+import { GuildSettings, ModerationEntity } from '#lib/database';
 import { getModeration, getPersistRoles, messagePrompt } from '#utils/Discord';
 import { SendOptions, TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 import { api } from '#external/Api';
@@ -449,7 +449,7 @@ export class ModerationActions {
             reason: lang.reason
         });
 
-        await writeSettings(this.guild, settings => (settings[settingsKey] = role.id));
+        await container.prisma.guilds(this.guild.id, { [settingsKey]: role.id });
 
         if (
             await messagePrompt(

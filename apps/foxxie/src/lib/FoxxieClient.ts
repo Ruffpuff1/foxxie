@@ -1,16 +1,17 @@
-import { container, SapphireClient, SapphirePrefix } from '@sapphire/framework';
+import { container, SapphireClient } from '@sapphire/framework';
 import { CLIENT_OPTIONS, WEBHOOK_ERROR } from '#root/config';
-import { Message, WebhookClient } from 'discord.js';
+import { WebhookClient } from 'discord.js';
 import { magentaBright } from 'colorette';
 import { Enumerable } from '@sapphire/decorators';
 import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
-import { acquireSettings, GuildSettings, SettingsManager } from '#lib/database';
+import { SettingsManager } from '#lib/database';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import { AnalyticsManager, GiveawayManager, InviteManager, RedisManager, WorkerManager } from './structures';
 import { FoxxieQueue } from './audio';
 import { isDev } from '@ruffpuff/utilities';
 import { Leaderboard } from '#utils/Leaderboard';
 import { EnvParse } from '@foxxie/env';
+import { MongoClient } from './prisma';
 
 export default class FoxxieClient extends SapphireClient {
     @Enumerable(false)
@@ -43,6 +44,8 @@ export default class FoxxieClient extends SapphireClient {
 
         container.settings = new SettingsManager();
 
+        container.prisma = new MongoClient();
+
         container.redis = EnvParse.boolean('REDIS_ENABLED')
             ? new RedisManager({
                   host: process.env.REDIS_HOST,
@@ -60,12 +63,6 @@ export default class FoxxieClient extends SapphireClient {
               })
             : null;
     }
-
-    public fetchPrefix = async (message: Message): Promise<SapphirePrefix> => {
-        if (!message.guild) return process.env.CLIENT_PREFIX!;
-        if (process.env.NODE_ENV !== 'production') return process.env.CLIENT_PREFIX!;
-        return (await acquireSettings(message.guild, GuildSettings.Prefix))!;
-    };
 
     public async login(): Promise<string> {
         const { shardCount } = CLIENT_OPTIONS;

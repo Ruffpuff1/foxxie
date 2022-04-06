@@ -2,7 +2,7 @@ process.env.NODE_ENV ??= 'development';
 
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { durationOptions, ordinalOptions } from '#languages';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { categories } from '#lib/game';
 import { LanguageKeys } from '#lib/i18n';
 import { emojis, languageFolder, rootFolder } from '#utils/constants';
@@ -295,7 +295,7 @@ function parseInternationalizationOptions(): InternationalizationOptions {
         defaultLanguageDirectory: languageFolder,
         fetchLanguage: ({ guild }) => {
             if (!guild) return 'en-US';
-            return acquireSettings(guild, GuildSettings.Language);
+            return container.prisma.guilds(guild.id, GuildSettings.Language);
         },
         formatters: getFormatters(),
         i18next: (_: string[], languages: string[]) => ({
