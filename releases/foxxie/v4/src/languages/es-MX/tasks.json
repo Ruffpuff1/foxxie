@@ -1,0 +1,11 @@
+{
+    "birthdayMessageAge": "Todos desean {member} le un cumpleaños muy feliz. ¡Cumplen {age} hoy! :cake:",
+    "birthdayMessage": "¡Todos desean {member} les a un cumpleaños muy feliz! :cake:",
+    "birthdayYearOlder": "un año mayor",
+    "disboard": {
+        "default": "Es hora de promocionar el servidor en disboard. Usa el comando `!d bump` y te recordare en **dos horas**.",
+        "title": "Recordatorio de promocionar"
+    },
+    "reminderChannel": "¡Que tal! En **{{timeago, fullDateTime}}** querías que te recordara:\n*{{text}}*",
+    "reminderDm": ":mailbox_with_mail: ¡Tienes correo!\nEn **{{timeago, fullDateTime}}** querías que te recordara:\n*{{text}}*"
+}

@@ -2,5 +2,11 @@
     "extends": "@sapphire/ts-config",
     "compilerOptions": {
         "incremental": false
-    }
+    },
+    "ignore": [
+        "releases"
+    ],
+    "include": [
+        "*"
+    ]
 }

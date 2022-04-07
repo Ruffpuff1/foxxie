@@ -1,0 +1,29 @@
+{
+    "attachment": "Adjunto",
+    "actionDelete": "Mensaje Borado",
+    "actionEdit": "Mensaje Editado",
+    "actionMemberJoin": "Miembro Ingresado",
+    "actionMemberLeft": "Miembro Dejo",
+    "argsAttachment": "**Adjuntos**: {{attachments}}",
+    "argsCreated": "**Creado**: {{date, fullDate}} (hace {{date, duration}})",
+    "argsChannel": "**Ubicación**: {{channel.name}} [{{channel.id}}]",
+    "argsDate": "**Fetcha**: {{date, fullDate}}",
+    "argsDuration": "**Expira en**: {{duration, duration}}",
+    "argsInvite": "**Invitación**: {{invite}}",
+    "argsInvites": "**Invitación**:\n{{links}}",
+    "argsInvites_other": "**Invitaciónes**:\n{{links}}",
+    "argsJoinedAt": "**Se unió en**: {{date, fullDate}} (hace {{date, duration}})",
+    "argsLink": "**Enlace**: [Aqui]({{link}})",
+    "argsMember": "**Miembro**: {{member.user.tag}} [{{member.id}}]",
+    "argsMessage": "**Mensaje**: {{content}}",
+    "argsMessages": [
+        "**Antes**: {{old}}",
+        "**Después**: {{new}}"
+    ],
+    "argsMessageCount": "**Mensajes**: {{count, number}} enviados",
+    "argsModerator": "**Moderador**: {{mod.tag}} [{{mod.id}}]",
+    "argsPosition": "**Posición**: {{position, ordinal}}",
+    "argsReason": "**Razón**: {{reason}}",
+    "argsUser": "**Usuario**: {{user.tag}} [{{user.id}}]",
+    "argsUsers": "**Usuarios**:\n{{users}}\n"
+}

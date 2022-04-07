@@ -1,0 +1,11 @@
+{
+    "audioNoMember": "{{ERROR}} This command can only be run in a server.",
+    "audioNoVoiceChannel": "{{ERROR}} You needa be in a voice channel to run this command.",
+    "nsfw": "{{ERROR}} Ahem, due to it's potential risqué nature, the command `{{name}}` can only be used in **nsfw** type channels.",
+    "permissions": "{{ERROR}} You need the {{missing, permissionArray}} permission to use this command, which you do not.",
+    "permissions_other": "{{ERROR}} To use this command you need the {{missing, permissionArray}} permissions, it seems you have none.",
+    "runIn": {
+        "list": "{{ERROR}} This command can only run in {{list, channelArray}} type channels.",
+        "none": "{{ERROR}} The command `{{name}}` isn't configured to run in any type of channel."
+    }
+}

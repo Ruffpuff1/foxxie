@@ -1,0 +1,5 @@
+{
+    "optionEphemeralDefaultFalse": "If the message should be hidden, defaults to false.",
+    "optionEphemeralDefaultTrue": "If the message should be hidden, defaults to true.",
+    "queryFail": "{{ERROR}} I couldn't find any data from the server about that query, please try again."
+}

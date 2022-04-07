@@ -1,0 +1,51 @@
+{
+    "avatar": {
+        "description": "Obtiene una imagen de un avatar usario.",
+        "extendedUsage": "--user {{mention}}"
+    },
+    "color": {
+        "description": "Vista previa de colores usando [color.aero](https://color.aero.bot).",
+        "extendedUsage": [
+            "#5965f2",
+            "rgb(89, 101, 242)"
+        ],
+        "title": "Vista previa del color {{color}}"
+    },
+    "pronounsDescription": "Adjusta tus pronombres preferidos para el servidor.",
+    "pronounsExtendedUsage": [
+        "reset",
+        "show",
+        "set he/him"
+    ],
+    "pronounsNone": "{{ERROR}} **{name}** actualmente no ha puesto sus pronombres preferidos.",
+    "pronounsNone_self": "{{ERROR}} Tus pronombres no estan actualizados.",
+    "pronounsReset": "{{SUCCESS}} Cambiamos tus pronombres preferidos.",
+    "pronounsSet": "{{SUCCESS}} Adjusta tus pronombres preferidos a **{{pronouns}}**.",
+    "pronounsShow": "**{{name}}** quiere ser llamado **{{pronouns}}**.",
+    "pronounsShow_self": "Tus pronombres estan actualizados como **{{pronouns}}**.",
+    "remindmeCreated": "",
+    "remindmeDeleted": "",
+    "remindmeDescription": "",
+    "remindmeExtendedUsage": "",
+    "remindmeList": "",
+    "remindmeNone": "",
+    "remindmeNoReason": "",
+    "remindmeShow": "",
+    "setcolor": {
+        "description": "",
+        "extendedUsage": "",
+        "noPerms": "",
+        "noPerms_mine": ""
+    },
+    "shorten": {
+        "description": "",
+        "error": "",
+        "extendedUsage": "",
+        "success": ""
+    },
+    "stealDescription": "",
+    "stealDuplicate": "",
+    "stealError": "",
+    "stealExtendedUsage": "{{emoji}}",
+    "stealSuccess": ""
+}

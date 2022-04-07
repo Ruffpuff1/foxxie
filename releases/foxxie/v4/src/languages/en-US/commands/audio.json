@@ -1,0 +1,11 @@
+{
+    "playDescription": "Play music for you and your friends while in vc.",
+    "playExtendedUsage": "https://www.youtube.com/watch?v=jofNR_WkoCE",
+    "playErrorJoining": "{{ERROR}} It seems like I can't currently join the voice channel you're in.",
+    "playNoResult": "{{ERROR}} I couldn't find any songs that match: {{query, code}}",
+    "skipDescription": "Skip the currently playing song.",
+    "skipNoSong": "{{ERROR}} Looks like there currently isn't a song playing in the queue.",
+    "skipSuccess": "{{SUCCESS}} Done, skipped **{{song}}**.",
+    "stopDescription": "Disconnects me and stops the currently playing music.",
+    "stopNoSong": "{{ERROR}} Seems like theres nothing playing at the moment."
+}

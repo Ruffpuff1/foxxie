@@ -1,0 +1,89 @@
+{
+    "channelArchived": "Sí, en {{time, dateShort}} (hace {{time, duration}})",
+    "channelCreated": "{{name}} era creado en {{date, fullDate}} (hace {{date, duration}})",
+    "channelDescription": "",
+    "channelExtendedUsage": "#{{channel}}",
+    "channelTitles": {
+        "archived": "",
+        "bitrate": "",
+        "category": "",
+        "channels": "",
+        "cooldown": "",
+        "members": "",
+        "nsfw": "",
+        "topic": "",
+        "type": "",
+        "userLimit": ""
+    },
+    "emojiDescription": "",
+    "emojiExtendedUsage": "{{emoji}}",
+    "emojiTitles": {
+        "animated": "**:vhs: Animado**",
+        "links": "***:link: Enlaces de Imagen**",
+        "name": "**:pencil2: Nombre**"
+    },
+    "roleAllPerms": "$t(guilds/permissions:ADMINISTRATOR) (todos los permisos)",
+    "roleDescription": "",
+    "roleExtendedUsage": "@{{role}}",
+    "roleHoist": "",
+    "roleHoist_no": "",
+    "roleManaged": "",
+    "roleMemberList": "",
+    "roleMentionable": "",
+    "roleTitleMembers": "**:people_hugging: Miembro**",
+    "roleTitleMembers_other": "**:people_hugging: Miembros ({{count}})**",
+    "roleTitlePerms": "**:hammer: Permiso**",
+    "roleTitlePerms_other": "**:hammer: Permisos**",
+    "roleTitles": {
+        "color": "**:art: Color**",
+        "created": "**:calendar: Creado**",
+        "properties": "**:bookmark_tabs: Propiedad**"
+    },
+    "roleUnicodeEmoji": "",
+    "serverChannels": "{{channels, channelList}}",
+    "serverCreated": "Creado por **{{owner}}** en {{created, fullDate}} (hace {{created, duration}})",
+    "serverDescription": "Te mostrare información sobre tu o cualquier otro servidor",
+    "serverEmojis": [
+        "Estático: **{{static}}**",
+        "Animado: **{{animated}}**"
+    ],
+    "serverExtendedUsage": [
+        "\"{{guild}}\"",
+        "{{guildId}}"
+    ],
+    "serverMessages": "{{messages, numberCompact}} mensajes enviados.",
+    "serverMembers": "{{size, number}} (cachéd: {{cache}})",
+    "serverRoles": "{{count, number}}",
+    "serverSecurity": [
+        "Verificación de nivel: {{filter, verificationLevel}}",
+        "Filtro explícito: {{content, contentFilter}}"
+    ],
+    "serverTitles": {
+        "channels": "**:speech_balloon: Canal**",
+        "channels_other": "**:speech_balloon: Canales ({{count}})**",
+        "emojis": "**:sunglasses: Emoji**",
+        "emojis_other": "**:sunglasses: Emojis ({{count}})**",
+        "members": "**:busts_in_silhouette: Miembros**",
+        "roles": "**:scroll: Rols**",
+        "security": "**:lock: Seguridad**",
+        "stats": "**:bar_chart: Estadísticas**"
+    },
+    "userDescription": "Muestra información basica de cualquier usor, para miembros mostrare sus rols, advertencias, y notas.",
+    "userDiscordJoin": "Se unió a Discord en {{created, fullDate}} (Hace {{created, duration}})",
+    "userExtendedUsage": [
+        "{{mention}}",
+        "{{id}}"
+    ],
+    "userGuildCreate": "Creó {{name}} en {{joined, fullDate}} (Hace {{joined, duration}})",
+    "userGuildJoin": "Se unió {{name}} en {{joined, fullDate}} (Hace {{joined, duration}})",
+    "userMessages": "{{messages, numberCompact}} mensajes enviados.",
+    "userTitles": {
+        "about": "**:pencil: Sobre**"
+    },
+    "userTitlesNotes": "**:label: Nota**",
+    "userTitlesNotes_other": "**:label: Notas**",
+    "userTitlesRoles": "**:scroll: Rol**",
+    "userTitlesRoles_other": "**:scroll: Rols ({{count, number}})**",
+    "userTitlesWarnings": "**:lock: Advertencia**",
+    "userTitlesWarnings_other": "**:lock: Advertencias ({{count, number}})**"
+}

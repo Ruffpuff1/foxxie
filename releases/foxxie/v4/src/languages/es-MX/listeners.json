@@ -1,0 +1,17 @@
+{
+    "guildMemberAddGreetingDefault": "",
+    "guildMemberRemoveFarewellDefault": "",
+    "highlightAttachment": "Mesaje tiene un documento adjunto. Oprime **[here]({{url}})** para verlo.",
+    "highlightClickToJump": "Oprime aqui para ver el mensaje.",
+    "highlightContentRegex": "",
+    "highlightContentWord": "Tu palabra **{{word}}** ha sido enviada por **{{author}}** en {{channel}}.",
+    "highlightEmbed": "Mensaje tine un enlase. Oprime **[here]({{url}})** para ver el mensaje.",
+    "highlightSize": "El contenido del mensaje es muy largo. Oprime **[here]({{url}})** para verlo.",
+    "messageBoostDefault": "",
+    "messageBoostTitle": "",
+    "pointsMessages": "",
+    "pointsRoleMessages": "",
+    "starboardJumpTo": "",
+    "trackAddInfo": "",
+    "trackStartInfo": ""
+}

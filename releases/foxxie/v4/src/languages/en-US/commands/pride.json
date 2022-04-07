@@ -1,0 +1,38 @@
+{
+    "agender": {
+        "description": "Get an agender pride flag overlay from [ravy.lgbt](https://api.ravy.lgbt) on your profile picture.",
+        "extendedUsage": "--overlay"
+    },
+    "asexual": {
+        "description": "Get an asexual pride flag overlay from [ravy.lgbt](https://api.ravy.lgbt) on your profile picture.",
+        "extendedUsage": "--overlay"
+    },
+    "bisexual": {
+        "description": "Get a bisexual flag overlay from [ravy.lgbt](https://api.ravy.lgbt) on your profile picture.",
+        "extendedUsage": "--overlay"
+    },
+    "gay": {
+        "description": "Get a gay flag overlay from [ravy.lgbt](https://api.ravy.lgbt) on your profile picture.",
+        "extendedUsage": "--overlay"
+    },
+    "genderfluid": {
+        "description": "Get a genderfluid flag overlay from [ravy.lgbt](https://api.ravy.lgbt) on your profile picture.",
+        "extendedUsage": "--overlay"
+    },
+    "lesbian": {
+        "description": "Get a lesbian flag overlay from [ravy.lgbt](https://api.ravy.lgbt) on your profile picture.",
+        "extendedUsage": "--overlay"
+    },
+    "nonbinary": {
+        "description": "Get a nonbinary flag overlay from [ravy.lgbt](https://api.ravy.lgbt) on your profile picture.",
+        "extendedUsage": "--overlay"
+    },
+    "pansexual": {
+        "description": "Get a pansexual flag overlay from [ravy.lgbt](https://api.ravy.lgbt) on your profile picture.",
+        "extendedUsage": "--overlay"
+    },
+    "transgender": {
+        "description": "Get a transgender flag overlay from [ravy.lgbt](https://api.ravy.lgbt) on your profile picture.",
+        "extendedUsage": "--overlay"
+    }
+}

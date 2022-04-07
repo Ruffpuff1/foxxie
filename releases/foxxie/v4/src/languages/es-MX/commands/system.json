@@ -1,0 +1,65 @@
+{
+    "blacklist": {
+        "description": "",
+        "extendedUsage": "",
+        "success": ""
+    },
+    "conf": {
+        "current": "",
+        "description": "",
+        "extendedUsage": "",
+        "noKey": "",
+        "noNewValue": "",
+        "noValid": "",
+        "noValue": "",
+        "nowValue": "",
+        "removed": "",
+        "saved": "",
+        "set": "",
+        "toSet": "",
+        "value": ""
+    },
+    "disable": {
+        "description": "",
+        "warn": ""
+    },
+    "echo": {
+        "description": "",
+        "extendedUsage": "",
+        "noContent": "",
+        "success": ""
+    },
+    "enableDescription": "",
+    "eval": {
+        "description": "Te deja evaluar el código de javascript directamente de discord.\n\n El comando evalúa codigo así como es, cualquer error sera procesado.",
+        "error": "**Error**:{{output}}\n**Tipo**:{{type}}\n{{time}}",
+        "haste": "**Salida era muy largo**... mandame el resultado a hastebin: {{output}}\n\n**Tipo**:{{footer}}\n{{time}}",
+        "extendedUsage": [
+            "console.log('Hola, mi nombre es ${msg.author.username}')",
+            "this.t.explainer",
+            "--d=2 this.client.commands"
+        ],
+        "output": "**Salida**:{{output}}\n**Tipo**:{{type}}\n{{time}}"
+    },
+    "rebootDescription": "Reinicio mis aparatos y artigulos.",
+    "reboot": "{{LOADING}} Reiniciando...",
+    "reload": {
+        "description": "Te deja recargar modulus individuales sin reiniciar el bot",
+        "error": "{{ERROR}} ¡Ay caramba! No pude recargar: {{name}}{{stack, jsCode}}",
+        "extendedUsage": [
+            "{{command}}",
+            "monitors",
+            "everything"
+        ],
+        "success": "{{SUCCESS}} Listo, recarge {{type}}: {{name}}. <Tomo {{time}}>",
+        "successStore": "{{SUCCESS}} Listo, módulo recargado: {{name}}. <Tomo {{time}}>",
+        "successEverything": "{{SUCCESS}} Listo, todo se recargo con excito. <Tomo {{time}}>"
+    },
+    "serverlistDescription": "Muestra cada gremino que el bot esta en actualmente junto con, su id y cuenta de miembros.",
+    "serverlistFooter": [
+        "{{size}} servidores en total.",
+        "Pagina -"
+    ],
+    "serverlistMembers": "miembros",
+    "serverlistTitle": "Servidores usando {{name}}"
+}

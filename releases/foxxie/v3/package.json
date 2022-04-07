@@ -1,0 +1,38 @@
+{
+  "name": "foxxie",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "authors": [
+    {
+      "name": "Ruff",
+      "github": "Ruffpuff1",
+      "discord": "Ruffpuff#0017"
+    },
+    {
+      "name": "Raindrop",
+      "github": "Raindrop-droptop"
+    }
+  ],
+  "dependencies": {
+    "axios": "^0.21.1",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "isgd": "^1.1.3",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
+    "mongoose": "^5.12.3",
+    "ms": "^2.1.3",
+    "novelcovid": "^3.0.0",
+    "request": "^2.88.2",
+    "tinycolor2": "^1.4.2",
+    "weather-js": "^2.0.0",
+    "wolfram-alpha-api": "https://products.wolframalpha.com/api/libraries/javascript/wolfram-alpha-api-1.0.0-rc.1.tgz"
+  }
+}

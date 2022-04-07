@@ -1,0 +1,11 @@
+export * as arguments from './arguments';
+export * as commands from './commands';
+export * as errors from './errors';
+export * as globals from './globals';
+export * as guilds from './guilds';
+export * as listeners from './listeners';
+export * as moderation from './moderation';
+export * as preconditions from './preconditions';
+export * as system from './system';
+export * as tasks from './tasks';
+export * as titles from './titles';

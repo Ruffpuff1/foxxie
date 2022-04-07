@@ -1,0 +1,23 @@
+{
+    "leaderboardDescription": "Display different leaderboards in your server, defaulting to leveling.",
+    "leaderboardExplainer_level": "This is the current leveling leaderboard of **{{guild}}**.\nReminder that these leaderboards are refreshed every two hours, so the data may not entirely be up to date.",
+    "leaderboardExplainer_messages": "This is the current messaging leaderboard of **{{guild}}**.\nReminder that these leaderboards are refreshed every two hours, so the data may not entirely be up to date.",
+    "leaderboardExtendedUsage": ["messages", "level"],
+    "leaderboardFooter": "Last updated at",
+    "leaderboardNoData_level": "{{ERROR}} Looks like this server has no leveling data so far.",
+    "leaderboardNoData_messages": "{{ERROR}} It seems that this server somehow has no messages sent.",
+    "level": "Level",
+    "levelDescription": "Check your server level and the amount of experience you have.",
+    "levelExtendedUsage": "{{mention}}",
+    "levelrolesAddSuccess": "{{SUCCESS}} Added {{role}} as the level role for level **{{level}}**.",
+    "levelrolesAlready": "{{ERROR}} You already have the role {{role}} assigned to a level role.",
+    "levelrolesDescription": "Configure and manage your server's leveling roles.",
+    "levelrolesExtendedUsage": [
+        "show",
+        "add @{{role}} 20",
+        "remove @{{role}}"
+    ],
+    "levelrolesNoExist": "{{ERROR}} A level role does not exist for the role {{role}}.",
+    "levelrolesNone": "{{ERROR}} This server currently doesn't have any leveling roles.",
+    "levelrolesRemoveSuccess": "{{SUCCESS}} Removed {{role}} as a level role for level **{{level}}**."
+}

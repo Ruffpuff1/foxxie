@@ -1,0 +1,71 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Ruffpuff1",
+      "name": "Ruff",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73779441?v=4",
+      "profile": "https://github.com/Ruffpuff1",
+      "contributions": [
+        "bug",
+        "code",
+        "data",
+        "doc",
+        "design",
+        "financial",
+        "ideas",
+        "maintenance",
+        "projectManagement",
+        "review",
+        "translation"
+      ]
+    },
+    {
+      "login": "Raindrop-Droptop",
+      "name": "Raindrop-Droptop",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81828616?v=4",
+      "profile": "https://github.com/Raindrop-Droptop",
+      "contributions": [
+        "ideas",
+        "translation"
+      ]
+    },
+    {
+      "login": "dependabot[bot]",
+      "name": "dependabot[bot]",
+      "avatar_url": "https://avatars.githubusercontent.com/in/29110?v=4",
+      "profile": "https://github.com/apps/dependabot",
+      "contributions": [
+        "maintenance"
+      ]
+    },
+    {
+      "login": "allcontributors[bot]",
+      "name": "allcontributors[bot]",
+      "avatar_url": "https://avatars.githubusercontent.com/in/23186?v=4",
+      "profile": "https://github.com/apps/allcontributors",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "code-factor",
+      "name": "Automated code reviews",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13309880?v=4",
+      "profile": "https://www.codefactor.io",
+      "contributions": [
+        "bug"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "Foxxie",
+  "projectOwner": "FoxxieBot",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
