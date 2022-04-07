@@ -18,7 +18,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Dabgot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Dabgiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Dabgiven`) || '0';
 
 		let dabText = args.slice(1).join(' ');
 		if (mentionMember && dabText) {
@@ -39,7 +39,6 @@ module.exports = {
 			message.channel.send(dabMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const dabEmbed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** is dabbing.`)
@@ -47,6 +46,6 @@ module.exports = {
 				.setFooter(`${message.member.user.username} has dabbed ${GivenAuth} times.`);
 			message.channel.send(dabEmbed);
 			return;
-		}
+
 	}
 };

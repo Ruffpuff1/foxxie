@@ -28,7 +28,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Teasegot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Teasegiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Teasegiven`) || '0';
 
 		let teaseText = args.slice(1).join(' ');
 		if (mentionMember && teaseText) {
@@ -49,7 +49,6 @@ module.exports = {
 			message.channel.send(teaseMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const teaseEmbed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** is teasing.`)
@@ -57,6 +56,5 @@ module.exports = {
 				.setFooter(`${message.member.user.username} has teased ${GivenAuth} times.`);
 			message.channel.send(teaseEmbed);
 			return;
-		}
 	}
 };

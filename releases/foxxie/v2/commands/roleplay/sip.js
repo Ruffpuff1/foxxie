@@ -32,7 +32,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Sipgot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Sipgiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Sipgiven`) || '0';
 
 		let sipText = args.slice(1).join(' ');
 		if (mentionMember && sipText) {
@@ -53,7 +53,6 @@ module.exports = {
 			message.channel.send(sipMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const sipEmbed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** took a passive aggressive sip.`)
@@ -61,6 +60,5 @@ module.exports = {
 				.setFooter(`${message.member.user.username} has sipped ${GivenAuth} times.`);
 			message.channel.send(sipEmbed);
 			return;
-		}
 	}
 };

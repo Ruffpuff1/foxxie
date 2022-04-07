@@ -28,7 +28,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Facepalmgot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Facepalmgiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Facepalmgiven`) || '0';
 
 		let facepalmText = args.slice(1).join(' ');
 		if (mentionMember && facepalmText) {
@@ -49,15 +49,11 @@ module.exports = {
 			message.channel.send(facepalmMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const facepalmEmbed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** is facepalming.`)
 				.setImage(facepalmGif[Math.floor(Math.random() * facepalmGif.length)])
-				.setFooter(`${message.member.user.username} has cried ${GivenAuth} times.`)
 				.setFooter(`${message.member.user.username} has facepalmed ${GivenAuth} times.`);
 			message.channel.send(facepalmEmbed);
-			return;
-		}
 	}
 };

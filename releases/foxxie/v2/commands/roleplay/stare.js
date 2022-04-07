@@ -32,7 +32,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Staregot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Staregiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Staregiven`) || '0';
 
 		let lurkText = args.slice(1).join(' ');
 		if (mentionMember && lurkText) {
@@ -53,7 +53,6 @@ module.exports = {
 			message.channel.send(lurkMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const lurkEmbed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** is staring.`)
@@ -61,6 +60,6 @@ module.exports = {
 				.setFooter(`${message.member.user.username} has stared ${GivenAuth} times.`);
 			message.channel.send(lurkEmbed);
 			return;
-		}
+
 	}
 };

@@ -28,7 +28,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Lurkgot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Lurkgiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Lurkgiven`) || '0';
 
 		let lurkText = args.slice(1).join(' ');
 		if (mentionMember && lurkText) {
@@ -49,14 +49,13 @@ module.exports = {
 			message.channel.send(lurkMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const lurkEmbed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** is lurking.`)
 				.setImage(lurkGif[Math.floor(Math.random() * lurkGif.length)])
 				.setFooter(`${message.member.user.username} has stared ${GivenAuth} times.`);
 			message.channel.send(lurkEmbed);
-			return;
-		}
+
+
 	}
 };

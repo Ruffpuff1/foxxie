@@ -15,7 +15,6 @@ const messageUpdate = require('./Fuctions/message-update');
 const messageDelete = require('./Fuctions/message-delete');
 const commands = require('./Fuctions/commands');
 const distube = require('./Fuctions/distube');
-const { time } = require('console');
 
 client.distube = new DisTube(client, {
 	searchSongs: false,
@@ -45,7 +44,6 @@ client.once('ready', () => {
 			let authID = client.disboard[i].authID;
 			let disbordTime = client.disboard[i].time;
 			let guild = client.guilds.cache.get(guildID);
-			let member = guild.members.cache.get(authID);
 			let channelID = client.disboard[i].channelID;
 			let channel = guild.channels.cache.get(channelID);
 

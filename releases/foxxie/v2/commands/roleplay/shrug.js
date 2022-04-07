@@ -30,7 +30,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Shruggot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Shruggiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Shruggiven`) || '0';
 
 		let shrugText = args.slice(1).join(' ');
 		if (mentionMember && shrugText) {
@@ -51,7 +51,6 @@ module.exports = {
 			message.channel.send(shrugMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const shrugEmbed = new Discord.MessageEmbed()
 				.setColor('#EC8363')
 				.setDescription(`**${message.member.user.username}** is shrugging.`)
@@ -59,6 +58,5 @@ module.exports = {
 				.setFooter(`${message.member.user.username} has shrugged ${GivenAuth} times.`);
 			message.channel.send(shrugEmbed);
 			return;
-		}
 	}
 };

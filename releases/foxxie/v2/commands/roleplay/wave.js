@@ -34,7 +34,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Wavegot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Wavegiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Wavegiven`) || '0';
 
 		let waveText = args.slice(1).join(' ');
 		if (mentionMember && waveText) {
@@ -55,7 +55,6 @@ module.exports = {
 			message.channel.send(waveMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const waveEmbed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** is waving.`)
@@ -63,6 +62,5 @@ module.exports = {
 				.setFooter(`${message.member.user.username} has waved ${GivenAuth} times.`);
 			message.channel.send(waveEmbed);
 			return;
-		}
 	}
 };

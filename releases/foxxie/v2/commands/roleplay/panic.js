@@ -31,7 +31,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Panicgot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Panicgiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Panicgiven`) || '0';
 
 		let panicText = args.slice(1).join(' ');
 		if (mentionMember && panicText) {
@@ -52,14 +52,12 @@ module.exports = {
 			message.channel.send(panicMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const panicEmbed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** is panicking.`)
 				.setImage(panicGif[Math.floor(Math.random() * panicGif.length)])
 				.setFooter(`${message.member.user.username} has panicked ${GivenAuth} times.`);
 			message.channel.send(panicEmbed);
-			return;
-		}
+
 	}
 };
