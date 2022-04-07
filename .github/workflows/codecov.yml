@@ -4,7 +4,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'packages/*'
+      - 'packages/**/*'
+      - '.github/workflows/codecov.yml'
+      - 'package.json'
   pull_request:
+    paths:
+      - 'packages/*'
+      - 'packages/**/*'
+      - '.github/workflows/codecov.yml'
+      - 'package.json'
 
 jobs:
   UnitTesting:
