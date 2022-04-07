@@ -1,0 +1,8 @@
+{
+    "GUILD_NEWS_SHORT": "News: **{{count, number}}**",
+    "GUILD_STAGE_VOICE_SHORT": "Stage: **{{count, number}}**",
+    "GUILD_STORE_SHORT": "Store: **{{count, number}}**",
+    "GUILD_TEXT_SHORT": "Text: **{{count, number}}**",
+    "GUILD_PUBLIC_THREAD_SHORT": "Threads: **{{count, number}}**",
+    "GUILD_VOICE_SHORT": "Voice: **{{count, number}}**"
+}

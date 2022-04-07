@@ -1,0 +1,53 @@
+{
+    "helpDescription": "Get example usage and descriptions of all of my commands.\nRun `{{prefix}}help usage` for a further explaination.",
+    "helpExplainer": [
+        "With my `help` command you can get information about any of my commands straight from Discord.",
+        "To get a short overview of a command just run `{{prefix}}help [command]`.",
+        "",
+        "The syntax for usage is very simple aswell:",
+        "Square brackets `[]` indicate an argument is required, parenthesis `()` indicate an argument is optional, and a pipe `|` between arguments indicates for you to choose between options.",
+        "",
+        "When you use the help command, I will by default only show you commands you can currently use.",
+        "If you need any further help be sure to join my server at [ruff.cafe]({{server}})."
+    ],
+    "helpExplainerTitle": "Explained Usage",
+    "helpExtendedUsage": [
+        "{{command}}",
+        "usage"
+    ],
+    "helpMenu": "Here's all of my commands, right now I have {{size}}. Need more info on a certain command? Just do `{{prefix}}help (command)`.",
+    "helpTitle": "{{bot}}'s Commands",
+    "helpTitles": {
+        "categories": {
+            "audio": "**:violin: Audio**",
+            "games": "**:video_game: Games**",
+            "general": "**:nut_and_bolt: General**",
+            "leveling": "**:medal: Leveling**",
+            "misc": "**:books: Misc**",
+            "moderation": "**:shield: Moderation**",
+            "pride": "**:rainbow: Pride**",
+            "settings": "**:wrench: Settings**",
+            "system": "**:mouse_three_button: System**",
+            "websearch": "**:mag: Websearch**"
+        },
+        "examples": "**:link: Examples**",
+        "permissions": "**:gear: Permissions**",
+        "permNode": "**:gear: Permission Node**",
+        "usage": "**:mag: Usage**"
+    },
+    "inviteDescription": "Get the invite link for me and my server.",
+    "inviteExtendedUsage": "--noperms",
+    "inviteLinks": "[Invite me to your server]({{invite}}) | [Join support server]({{server}})",
+    "invitePerms": "Don't worry about unchecking some permissions, if I need specific permissions for a command I'll be sure to let you know.",
+    "pingDescription": "Runs a connection test to Discord.",
+    "ping": "{{LOADING}} Ping?",
+    "pingPong": "{{LOADING}} Pong! (Roundtrip: {{roundTrip}}ms. Heartbeat: {{wsPing}}ms.)",
+    "statsDescription": "Provides some details about me and my stats.",
+    "statsMenu": [
+        "**My current statistics!**",
+        "**•** Reading {{commands, number}} Commands, and {{messages, number}} Messages",
+        "**I've been running**",
+        "**•** For {{uptime, duration}} on {{process}} (shard {{shard}} / {{shardTotal}})",
+        "**•** Using {{deps, and}}."
+    ]
+}

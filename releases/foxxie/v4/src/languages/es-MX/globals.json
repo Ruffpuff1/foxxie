@@ -1,0 +1,40 @@
+{
+    "abortOptions": [
+        "parar",
+        "cancelar",
+        "abortar",
+        "fin",
+        "listo"
+    ],
+    "and": "{{value, and}}",
+    "any": "alguno",
+    "case": "caso",
+    "dateValue": "{{value, date}}",
+    "dateDuration": "{{date, fullDate}} (hace {{date, duration}})",
+    "dateFormat": "DD/MM/YYYY",
+    "dateFormatLong": "Día/Mes/Año",
+    "dateFull": "{{date, fullDate}}",
+    "dateShort": "{{date, dateShort}}",
+    "dateTime": "{{date, dateTime}}",
+    "default": "{{key}} no ha sido localizado es-MX al momento.",
+    "defaultLanguage": "Idioma Predeterminado",
+    "duration": "{{duration, duration}}",
+    "fullDateTime": "{{date, fullDateTime}}",
+    "infinte": "infinito",
+    "input": "el aporte",
+    "me": "me",
+    "no": "no",
+    "none": "ninguno",
+    "numberCompact": "{{value, numberCompact}}",
+    "numberFormat": "{{value, number}}",
+    "numberOrdinal": "{{value, ordinal}}",
+    "other": "otro",
+    "resetOptions": [
+        "ninguno",
+        "reajustar"
+    ],
+    "unknown": "desconocido",
+    "version": "Edición Pup",
+    "yes": "sí",
+    "you": "tú"
+}

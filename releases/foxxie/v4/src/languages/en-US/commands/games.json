@@ -1,0 +1,22 @@
+{
+  "connect4Challenge": "Hey {{user}}! {{author}} wants to play connect4 with you, do you accept?",
+  "connect4CollumnFull": "{{ERROR}} {{user}}, that collumn is full, choose another spot.",
+  "connect4CurrentTurn": "Current turn: ",
+  "connect4Declined": "Looks like they didn't wanna play {{author}}, sorry about that.",
+  "connect4Description": "Play connect4 with your friends by reacting to the number, first to get four in a row wins!",
+  "connect4ExtendedUsage": "{{mention}}",
+  "connect4MaxMoves": "Looks like this game concluded in a tie!",
+  "connect4NoBots": "{{ERROR}} You can't play connect4 with bots.",
+  "connect4NoOpponent": "{{ERROR}} Heyo! Be sure to mention an opponent to play against.",
+  "connect4Occuring": "{{ERROR}} It seems there is already a game of connect4 in this channel, lets try another one.",
+  "connect4Quit": "Looks like {{user}} ended the game.",
+  "connect4Timeout": "{{ERROR}} It seems that the game has timed out, sorry about that.",
+  "connect4Win": "{{user}} won the game!",
+  "connect4Yourself": "{{ERROR}} Playing connect4 by yourself wouldn't be much fun, try picking another opponent.",
+  "opponent": "opponent",
+  "loading": [
+    "{{LOADING}} Setting up the pieces, hold on for just a sec.",
+    "{{LOADING}} Reading the rulebook, wait a minute.",
+    "{{LOADING}} Looking through the box, this will only take a second."
+  ]
+}

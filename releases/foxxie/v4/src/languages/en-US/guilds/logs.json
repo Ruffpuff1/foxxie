@@ -1,0 +1,29 @@
+{
+    "attachment": "Attachment",
+    "actionDelete": "Message Deleted",
+    "actionEdit": "Message Edited",
+    "actionMemberJoin": "Member Joined",
+    "actionMemberLeft": "Member Left",
+    "argsAttachment": "**Attachments**: {{attachments}}",
+    "argsCreated": "**Created**: {{date, fullDate}} ({{date, duration}} ago)",
+    "argsChannel": "**Location**: {{channel.name}} [{{channel.id}}]",
+    "argsDate": "**Date**: {{date, fullDate}}",
+    "argsDuration": "**Expires In**: {{duration, duration}}",
+    "argsInvite": "**Invite**: {{invite}}",
+    "argsInvites": "**Invite**:\n{{links}}",
+    "argsInvitesother": "**Invites**:\n{{links}}",
+    "argsJoinedAt": "**Joined at**: {{date, fullDate}} ({{date, duration}} ago)",
+    "argsLink": "**Link**: [Here]({{link}})",
+    "argsMember": "**Member**: {{member.user.tag}} [{{member.id}}]",
+    "argsMessage": "**Message**: {{content}}",
+    "argsMessages": [
+        "**Before**: {{old}}",
+        "**After**: {{new}}"
+    ],
+    "argsMessageCount": "**Messages**: {{count, number}} sent",
+    "argsModerator": "**Moderator**: {{mod.tag}} [{{mod.id}}]",
+    "argsPosition": "**Position**: {{position, ordinal}}",
+    "argsReason": "**Reason**: {{reason}}",
+    "argsUser": "**User**: {{user.tag}} [{{user.id}}]",
+    "argsUsers": "**Users**:\n{{users}}\n"
+}

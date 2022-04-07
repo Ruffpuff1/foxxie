@@ -1,0 +1,22 @@
+{
+    "connect4Challenge": "¡Oyé {{user}}! {{author}} quiere jugar connect4 contigo, ¿Aceptas?",
+    "connect4CollumnFull": "{{ERROR}} {{user}}, esa columna esta llena, elige otro lugar",
+    "connect4CurrentTurn": "Turno actual: ",
+    "connect4Declined": "Parece que no querian jugar {{author}}, lo siento.",
+    "connect4Description": "Juega connect4 con tus amigos reaccionando al numero, el primero que conecte cuatro gana",
+    "connect4ExtendedUsage": "{{mention}}",
+    "connect4MaxMoves": "¡Parece que el juego termino en un emmpate!",
+    "connect4NoBots": "{{ERROR}} No puedes jugar connect4 con bots.",
+    "connect4NoOpponent": "{{ERROR}} ¡Oyé! Asegurate de mencionar un oponente con quien jugar.",
+    "connect4Occuring": "{{ERROR}} Parece que ya hay un juego de connect4 en este canal, vamos a intetar en orto.",
+    "connect4Quit": "Parece que {{user}} ha terminado el juego.",
+    "connect4Timeout": "{{ERROR}} Parece que este juego se ha expirado, lo siento.",
+    "connect4Win": "¡{{user}} ha ganado el juego!",
+    "connect4Yourself": "{{ERROR}} Jugando connect4 soloito no parce ser muy divertido, trata jugando con un oponente.",
+    "opponent": "oponente",
+    "loading": [
+        "{{LOADING}} Colocando las piesas, un segundo por favor.",
+        "{{LOADING}} Lejendo las reglas, espera un minuto.",
+        "{{LOADING}} Urgando por la caja, esto solo tomara un momento."
+    ]
+}

@@ -1,0 +1,76 @@
+{
+  "name": "foxxie",
+  "version": "4.0.0",
+  "description": "A utility and moderation centered discord bot, to provide orginazation to your server.",
+  "main": "./dist/src/Foxxie.js",
+  "homepage": "https://github.com/FoxxieBot/Foxxie/blob/master/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FoxxieBot/Foxxie"
+  },
+  "keywords": [
+    "foxxie"
+  ],
+  "scripts": {
+    "test": "echo Testing",
+    "start": "node .",
+    "deps": "npm install --save",
+    "prebuild": "rm -r dist",
+    "lint": "eslint . --ext .ts --fix",
+    "build": "tsc -b",
+    "prelaunch": "npm run build",
+    "launch": "node ."
+  },
+  "_moduleAliases": {
+    "lib/database": "dist/src/lib/database",
+    "lib/discord": "dist/src/lib/discord",
+    "lib/i18n": "dist/src/lib/i18n",
+    "lib/structures": "dist/src/lib/structures",
+    "lib/types": "dist/src/lib/types",
+    "lib/util": "dist/src/lib/util"
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://ko-fi.com/ruffpuff"
+  },
+  "author": "ruffpuff",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@favware/zalgo": "^3.1.2",
+    "@foxxie/centra": "^1.0.0",
+    "@ruffpuff/utilities": "^2.0.7",
+    "@sapphire/decorators": "next",
+    "@sapphire/framework": "next",
+    "@sapphire/plugin-editable-commands": "next",
+    "@sapphire/plugin-i18next": "next",
+    "@sapphire/plugin-logger": "next",
+    "@sapphire/plugin-subcommands": "next",
+    "@sapphire/snowflake": "next",
+    "@sapphire/stopwatch": "next",
+    "@sentry/node": "^6.13.3",
+    "canvas-constructor": "^5.0.1",
+    "colorette": "^2.0.16",
+    "discord-player": "^5.1.0",
+    "discord.js": "^13.3.0",
+    "dotenv": "^10.0.0",
+    "ffmpeg-static": "^4.4.0",
+    "i18next": "^21.3.3",
+    "lexure": "^0.17.0",
+    "module-alias": "^2.2.2",
+    "mongodb": "^3.7.2",
+    "skia-canvas": "^0.9.27",
+    "tinycolor2": "^1.4.2",
+    "typeorm": "^0.2.38"
+  },
+  "devDependencies": {
+    "@ruffpuff/eslint-config-ruffpuff": "^1.1.2",
+    "@sapphire/ts-config": "next",
+    "@types/node": "^16.10.2",
+    "@types/skia-canvas": "^0.9.2",
+    "@types/tinycolor2": "^1.4.3",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
+    "eslint": "^8.1.0",
+    "typescript": "^4.5.0-dev"
+  }
+}

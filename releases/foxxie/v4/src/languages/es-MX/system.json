@@ -1,0 +1,18 @@
+{
+    "footer": "Pagina -",
+    "messageLoading": [
+        "{{LOADING}} Yo me encargare de eso, un momento por favor.",
+        "{{LOADING}} ¡Por supuesto! Esto tomara unos segundos.",
+        "{{LOADING}} Un momento, deja le pregunto a mi jefe.",
+        "{{LOADING}} Me encargare de eso, ¿quieres hielo?",
+        "{{LOADING}} ¡Oyé cocinero! ¡Tenemos una nueva orden!"
+    ],
+    "messageMembersNone": "Por favor, deme por lo menos un **miembro del servidor**.",
+    "messageNoMatch": "Qué tal, asegurese seleccionar: {{possibles, codeAnd}}",
+    "messageUsersNone": "Por favor, especifica por lo menos un **usuario** o **nombre de usuario**.",
+    "missingRequired": "",
+    "prefixReminder": "¡Hola! My prefijo para este servidor es: {{prefixes, codeAnd}}",
+    "prefixReminder_other": "¡Qué tal! Mis prefijos para este servidor son: {{prefixes, codeAnd}}",
+    "reactionHandlerPrompt": "¿A cual página quisieras ir?",
+    "textPromptTimeout": "{{ERROR}} Lo siento, este inmediato de ha expirado."
+}

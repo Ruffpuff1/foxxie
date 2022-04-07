@@ -1,0 +1,69 @@
+{
+    "anime": {
+        "count": "{{count, number}} Episodes",
+        "date": "Started: **{{date, dateShort}}**\nEnded: **{{end, dateShort}}**",
+        "description": "Get anime data from [Kitsu](https://kitsu.io).",
+        "duration": "{{length, number}} minutes per episode",
+        "extendedUsage": "Ouran high school host club",
+        "noResults": "{{ERROR}} I couldn't find any results for {{anime, code}}, try searching for something else.",
+        "nsfw": "{{ERROR}} The result seemed to be a bit inappropriate, try searching in an nsfw channel.",
+        "popularity": "Placed #{{rank, number}}\n*({{users}} Kitsu users)*",
+        "ranking": "**Top {{rank}}**",
+        "rating": "**{{average, number}} / {{total, number}}**\n*({{rating, number}} ratings)*"
+    },
+    "defineDescription": "Get the definition of a word from [Webster](https://dictionaryapi.com).",
+    "defineExtendedUsage": "word",
+    "defineNotFound": "{{ERROR}} I couldn't find any definition for {{word, code}}.",
+    "dogDescription": "Gets an image of a fluffy friend.",
+    "dogTitle": "Random Dog",
+    "foxDescription": "These creatures look familiar... gets you an image of one of me.",
+    "foxTitle": "Random Fox",
+    "github": {
+        "description": "Display information about users from [Github](https://github.com/FoxxieBot/Foxxie).",
+        "extendedUsage": [
+            "user ruffpuff1",
+            "user FoxxieBot"
+        ],
+        "joined": "Joined on {{created, fullDate}} ({{created, duration}} ago)",
+        "modified": "Last modified on {{modified, fullDate}} ({{modified, duration}} ago)",
+        "noUser": "I couldn't find a github user that matches {{user, code}}, perhaps you made a typo?"
+    },
+    "npmCreated": "Created at {{created, fullDate}} ({{created, duration}} ago)",
+    "npmDescription": "Fetch data from [npm] about any node package.",
+    "npmExtendedUsage": "@sapphire/framework",
+    "npmNoDependencies": "No Dependancies 🎊",
+    "npmNoResults": "{{ERROR}} I couldn't find results for the package {{pack, code}}.",
+    "npmTitles": {
+        "author": ":pen_ballpoint: **Author**",
+        "dependencies": ":card_box: **Dependancies**",
+        "description": ":scroll: **Description**",
+        "license": ":clipboard: **License**",
+        "main": ":mag_right: **Main Entry**",
+        "maintainers": ":card_index: **Maintainers**"
+    },
+    "npmUpdated": "Updated at {{updated, fullDate}} ({{updated, duration}} ago)",
+    "pokemon": {
+        "description": "Display info about a certain pokemon, including their stats and a pokedex entry.",
+        "extendedUsage": [
+            "mew",
+            "--shiny rowlet",
+            "--back vulpix"
+        ],
+        "externalResource": "[Bulbapedia]({{bulba}}) | [Serebii]({{sere}}) | [Smogon]({{smogon}})",
+        "genderless": "Genderless",
+        "noEggGroups": "No Egggroups",
+        "noEvolutions": "(No Evolutions)",
+        "noExist": "{{ERROR}} Sorry I couldn't find a pokemon named `{{pokemon}}`. Make sure it actually exists oki?"
+    },
+    "webtoonDescription": "Search for webcomics on [webtoons.com](https://www.webtoons.com/en/).",
+    "webtoonExtendedUsage": "domestic beast",
+    "webtoonNotFound": "{{ERROR}} I couldn't find a webtoon titled `{{search}}` try a different one.",
+    "webtoonTitles": {
+        "author": "**:notepad_spiral: Author**",
+        "average": "**:sparkles: Average Rating**",
+        "favorite": "**:gift_heart: Number Favorites**",
+        "genre": "**:magic_wand: Genre**",
+        "read": "**:eyeglasses: Times Read**",
+        "total": "**:books: Total Episodes**"
+    }
+}
