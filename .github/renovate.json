@@ -1,7 +1,7 @@
 {
 	"additionalBranchPrefix": "{{parentDir}} -",
 	"assigneesFromCodeOwners": true,
-	"ignorePaths": ["**/releases/**"]
+	"ignorePaths": ["**/releases/**"],
 	"extends": [
 		":dependencyDashboard",
 		":semanticPrefixFixDepsChoreOthers",
