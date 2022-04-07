@@ -1,15 +1,20 @@
 {
 	"additionalBranchPrefix": "{{parentDir}} -",
 	"assigneesFromCodeOwners": true,
+	"ignorePaths": ["**/releases/**"]
 	"extends": [
 		":dependencyDashboard",
 		":semanticPrefixFixDepsChoreOthers",
 		":ignoreModulesAndTests",
-		":prConcurrentLimit10",
-		"group:monorepos",
 		"group:recommended",
 		"workarounds:all"
 	],
+	"prConcurrentLimit": 5,
+	"timezone": "America/Los_Angeles",
+	"schedule": [
+    		"after 5am",
+    		"before 9am"
+  	],
 	"labels": [
 		"Meta: Dependencies"
 	],
