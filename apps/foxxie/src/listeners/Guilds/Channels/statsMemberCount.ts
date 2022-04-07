@@ -1,4 +1,4 @@
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { EventArgs, Events } from '#lib/types';
 import { fetchChannel } from '#utils/Discord';
@@ -20,9 +20,12 @@ export class UserListener extends Listener<Events.StatsMemberCount> {
 
         if (!guild.me?.permissions.has(PermissionFlagsBits.ManageChannels)) return;
 
-        const [template, isCompact] = await acquireSettings(guild, [GuildSettings.Channels.StatsMemberCountTemplate, GuildSettings.Channels.StatsMemberCountCompact]);
-        const channel = await fetchChannel(guild, GuildSettings.Channels.StatsMemberCount);
+        const [template, isCompact] = await this.container.prisma.guilds(guild.id, [
+            GuildSettings.Channels.StatsMemberCountTemplate,
+            GuildSettings.Channels.StatsMemberCountCompact
+        ]);
 
+        const channel = await fetchChannel(guild, GuildSettings.Channels.StatsMemberCount);
         if (!channel) return;
 
         const memberCount = t(LanguageKeys.Globals[isCompact ? 'NumberCompact' : 'NumberFormat'], { value: guild.memberCount });

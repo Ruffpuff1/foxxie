@@ -70,7 +70,8 @@ model Guild {
   rolesMuted                          String?
   words                               Word[]
 
-  members Member[]
+  members     Member[]
+  moderations Moderation[]
 
   @@map("guild")
 }
@@ -91,4 +92,25 @@ model Member {
   persistRoles String[]
 
   @@map("member")
+}
+
+model Moderation {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  caseId       Int
+  createdAt    DateTime
+  extraData    Json?
+  guild        Guild    @relation(fields: [guildId], references: [guildId])
+  guildId      String
+  moderatorId  String
+  reason       String?
+  type         Int
+  channelId    String?
+  logChannelId String?
+  logMessageId String?
+  userId       String?
+  duration     BigInt?
+  refrence     Int?
+
+
+  @@map("moderation")
 }

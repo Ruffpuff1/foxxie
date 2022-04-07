@@ -1,7 +1,7 @@
 import { Listener } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { EventArgs, Events, GuildMessage } from '#lib/types';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { fetchChannel, fetchAuditEntry } from '#utils/Discord';
 import { LanguageKeys } from '#lib/i18n';
 import { MessageEmbed, User } from 'discord.js';
@@ -18,7 +18,7 @@ export class UserListener extends Listener<Events.GuildMessageDeleteLog> {
     public async run(...[msg]: EventArgs<Events.GuildMessageDeleteLog>): Promise<void> {
         if (msg.partial || !msg.guild || !msg.guild.available || msg.author!.bot || (!msg.content && !msg.attachments.size)) return;
 
-        const [ignoredChannels, t] = await acquireSettings(msg.guild, settings => [settings[GuildSettings.Channels.IgnoreAll], settings.getLanguage()]);
+        const [ignoredChannels, t] = await this.container.prisma.guilds(msg.guild.id, settings => [settings[GuildSettings.Channels.IgnoreAll], settings.getLanguage()]);
 
         const channel = await fetchChannel(msg.guild, GuildSettings.Channels.Logs.MessageDelete);
         if (ignoredChannels.includes(msg.channel.id) || !channel) return;

@@ -1,5 +1,3 @@
-import * as GuildSettings from '#database/Keys';
-import type { ModerationEntity } from '#database/entities/ModerationEntity';
 import { LanguageKeys } from '#lib/i18n';
 import { GuildInteraction, PermissionLevels } from '#lib/types';
 import { isGuildOwner } from '#utils/Discord';
@@ -10,6 +8,7 @@ import { CommandOptionsRunTypeEnum, PieceContext, Result, UserError } from '@sap
 import type { TFunction } from '@sapphire/plugin-i18next';
 import type { GuildMember, User } from 'discord.js';
 import { FoxxieCommand } from '../commands';
+import { GuildSettings, ModerationModel } from '#lib/prisma';
 
 export class ModerationCommand extends FoxxieCommand {
     public memberOnly: boolean;
@@ -85,7 +84,7 @@ export class ModerationCommand extends FoxxieCommand {
         };
     }
 
-    protected async respond(interaction: GuildInteraction, log: ModerationEntity, target: User): Promise<void> {
+    protected async respond(interaction: GuildInteraction, log: ModerationModel, target: User): Promise<void> {
         const [modChannelId, t] = await this.container.prisma.guilds(interaction.guildId!, settings => [
             settings[GuildSettings.Channels.Logs.Moderation],
             settings.getLanguage()

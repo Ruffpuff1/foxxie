@@ -1,7 +1,7 @@
 import { floatPromise } from '#utils/util';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { ListenerOptions } from '@sapphire/framework';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import type { Guild, GuildMember, GuildTextBasedChannel } from 'discord.js';
 import { EventArgs, Events, GuildMessage } from '#lib/types';
 import { fetchChannel, isBoostMessage } from '#utils/Discord';
@@ -62,7 +62,7 @@ export class UserListener extends AutomationListener<Events.SystemMessage> {
     }
 
     private async sendMessage(msg: GuildMessage, channel: GuildTextBasedChannel): Promise<void> {
-        const [message, embed, t] = await acquireSettings(msg.guild, settings => [
+        const [message, embed, t] = await this.container.prisma.guilds(msg.guild.id, settings => [
             settings[GuildSettings.Messages.Boost],
             settings[GuildSettings.Embeds.Boost],
             settings.getLanguage()

@@ -87,16 +87,16 @@
         "@ruffpuff/utilities": "^4.0.0",
         "@sapphire/decorators": "^4.3.4",
         "@sapphire/discord.js-utilities": "^4.9.4",
-        "@sapphire/framework": "next",
+        "@sapphire/framework": "2.4.1",
         "@sapphire/plugin-editable-commands": "^1.1.3-next.db15252.0",
-        "@sapphire/plugin-i18next": "next",
-        "@sapphire/plugin-logger": "next",
+        "@sapphire/plugin-i18next": "2.3.1",
+        "@sapphire/plugin-logger": "2.2.1",
         "@sapphire/plugin-scheduled-tasks": "^2.3.2",
         "@sapphire/plugin-subcommands": "2.2.0",
         "@sapphire/ratelimits": "^2.4.4",
         "@sapphire/stopwatch": "^1.4.1",
         "@sapphire/utilities": "^3.6.2",
-        "@sentry/node": "^6.19.3",
+        "@sentry/node": "^6.19.4",
         "@skyra/audio": "^2.0.0",
         "@skyra/char": "^1.0.2",
         "@skyra/jaro-winkler": "^1.0.0",
@@ -109,9 +109,9 @@
         "ioredis": "^5.0.0",
         "lexure": "^0.17.0",
         "moment-timezone": "^0.5.34",
-        "mongodb": "^3.7.3",
+        "mongodb": "^4.5.0",
         "skia-canvas": "^0.9.29",
-        "typeorm": "^0.2.45"
+        "typeorm": "^0.3.5"
     },
     "devDependencies": {
         "@foxxie/eslint-config": "^0.0.2",
@@ -128,6 +128,6 @@
         "eslint": "8.12.0",
         "prisma": "^3.12.0",
         "ruffpuff-api-types": "^0.0.5-next.11a326b.1647721912",
-        "tsc-watch": "5.0.2"
+        "tsc-watch": "5.0.3"
     }
 }

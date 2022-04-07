@@ -38,14 +38,14 @@ declare module 'discord.js' {
         [Events.GuildBanAdd]: [ban: GuildBan];
         [Events.GuildBanRemove]: [ban: GuildBan];
         [Events.GuildMemberAdd]: [member: GuildMember];
-        [Events.GuildMemberJoin]: [member: GuildMember, settings: GuildEntity];
+        [Events.GuildMemberJoin]: [member: GuildMember, settings: GuildModel];
         [Events.GuildMessageDeleteLog]: [message: GuildMessage];
         [Events.GuildMessageUpdateLog]: [oldMessage: GuildMessage, message: GuildMessage];
-        [Events.GuildMessageLog]: [guild: Guild, key: PickByValue<GuildEntity, Snowflake | Nullish>, makeEmbed: () => Awaitable<TypeOfEmbed | MessageOptions>];
+        [Events.GuildMessageLog]: [guild: Guild, key: PickByValue<GuildModel, Snowflake | Nullish>, makeEmbed: () => Awaitable<TypeOfEmbed | MessageOptions>];
         [Events.MessageCommandLogging]: [message: Message, command: FoxxieCommand];
         [Events.MessageDeleteResponse]: [message: Message];
-        [Events.ModerationEntryAdd]: [entry: ModerationEntity];
-        [Events.ModerationEntryEdit]: [clone: ModerationEntity, entry: ModerationEntity];
+        [Events.ModerationEntryAdd]: [entry: ModerationModel];
+        [Events.ModerationEntryEdit]: [clone: ModerationModel, entry: ModerationModel];
         [Events.MusicAddNotify]: [message: GuildMessage, tracks: Song[]];
         [Events.MusicFinish]: [queue: Queue];
         [Events.MusicFinishNotify]: [channel: GuildBasedChannelTypes];
@@ -81,7 +81,7 @@ declare module '@sapphire/pieces' {
 }
 
 import type { BooleanString, IntegerString } from '@foxxie/env';
-import type { MongoClient } from '#lib/prisma';
+import type { GuildModel, ModerationModel, MongoClient } from '#lib/prisma';
 
 declare module '@foxxie/env' {
     interface Env {
