@@ -1,4 +1,4 @@
-const { emojis: { perms: { granted, denied, notSpecified } } } = require('../../../lib/util/constants')
+const { emojis: { perms: { notSpecified } } } = require('../../../lib/util/constants')
 const { getModCount } = require('../../tasks/modCountAdd')
 module.exports = {
     name: 'stafflog',
@@ -26,7 +26,7 @@ module.exports = {
         if (modCounts != null && modCounts.unlocks != null) desc2.push(`${notSpecified} Performed ${modCounts.unlocks.toLocaleString()} **unlock${modCounts.unlocks>1?`s`:``}**`)
         if (modCounts != null && modCounts.nukes != null) desc2.push(`${notSpecified} Performed ${modCounts.nukes.toLocaleString()} **nuke${modCounts.nukes>1?`s`:``}**`)
         if (modCounts != null && modCounts.purges != null) desc2.push(`${notSpecified} Performed ${modCounts.purges.toLocaleString()} **purge${modCounts.purges>1?`s`:``}** (**${modCounts.purgeTotal.toLocaleString()}** message${modCounts.purgeTotal>1?`s`:``})`)
-       
+
         let arr = [
             desc1.filter(i => !!i).join('\n'),
             desc2.filter(i => !!i).join('\n')
@@ -34,5 +34,5 @@ module.exports = {
 
         loading.delete()
         message.channel.send(`${arr.length ? `__Moderation logs for **${member.user.tag}**:__\n\n` : `This user has **not** performed any moderation actions in this server.`}${arr}`)
-    } 
+    }
 }

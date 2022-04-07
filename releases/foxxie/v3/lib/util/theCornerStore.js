@@ -2,7 +2,6 @@ const { timezone, format, clockchannel, updateinterval } = require('../../lib/co
 const { serverSettings } = require('../settings')
 const moment = require('moment')
 const Discord = require('discord.js')
-const tz = require('moment-timezone')
 module.exports.mimuPick = (message) => {
     if (message.guild.id === '761512748898844702' && message.content.toLowerCase() === '.pick')
     return message.channel.send('**Darlin\'** I\'m flattered you want to pick me but again mimu\'s prefix is \`?\`.')
@@ -60,7 +59,7 @@ module.exports.welcomeMessage = async (member) => {
    let welcomeChannel = await serverSettings(member)
    if (welcomeChannel == null || welcomeChannel.welcomeChannel == null) return;
 
-   welChn = member.guild.channels.cache.get(welcomeChannel.welcomeChannel)
+   const welChn = member.guild.channels.cache.get(welcomeChannel.welcomeChannel)
    welChn.send(`<@${member.id}> **Just joined the server. <@&774173127717552139> be sure to welcome them. We now have ${member.guild.memberCount} member${member.guild.memberCount > 1 ? 's' : ''}!**`, {embed: embed} )
    .then(msg => {setTimeout(() => msg.delete(), 300000)})
 }
