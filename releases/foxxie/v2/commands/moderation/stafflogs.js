@@ -30,8 +30,6 @@ module.exports = {
 		let slowmodesDone = db.get(`Users_${mentionMember.user.id}_Slowmodes_${message.guild.id}`) || '0';
 		let purgesDone = db.get(`Users_${mentionMember.user.id}_Purges_${message.guild.id}`) || '0';
 		let totalPurges = db.get(`Users_${mentionMember.user.id}_Purgetotal_${message.guild.id}`) || '0';
-		let locksdone = db.get(`Users_${message.author.id}_Locks_${message.guild.id}`) || '0';
-		let unlocksdone = db.get(`Users_${message.author.id}_Unlocks_${message.guild.id}`) || '0';
 		let warnsDone = db.get(`Users_${message.author.id}_Warns_${message.guild.id}`) || '0';
 
 		const modLogEmbed = new Discord.MessageEmbed()

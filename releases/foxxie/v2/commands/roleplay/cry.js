@@ -39,7 +39,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Crygot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Crygiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Crygiven`) || '0';
 
 		let cryText = args.slice(1).join(' ');
 		if (mentionMember && cryText) {
@@ -60,7 +60,6 @@ module.exports = {
 			message.channel.send(cryMemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const cryEmbed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** is crying.`)
@@ -68,6 +67,6 @@ module.exports = {
 				.setFooter(`${message.member.user.username} has cried ${GivenAuth} times.`);
 			message.channel.send(cryEmbed);
 			return;
-		}
+
 	}
 };

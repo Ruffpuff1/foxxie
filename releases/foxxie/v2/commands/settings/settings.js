@@ -9,16 +9,16 @@ module.exports = {
 	guildOnly: true,
 	permission: 'ADMINISTRATOR',
 	execute(client, message, args) {
-		welChannel = db.get(`Guilds_${message.guild.id}_Welchannel`) || 'No welcome channel is set';
-		byeChannel = db.get(`Guilds_${message.guild.id}_Byechannel`) || 'No goodbye channel is set';
-		logChannel = db.get(`Guilds_${message.guild.id}_Logchannel`) || 'No mod log channel is set';
-		msgChannel = db.get(`Guilds_${message.guild.id}_Messagechannel`) || 'No edit logging channel is set';
-		prefix = db.get(`Guilds_${message.guild.id}_Prefix`) || 'No custom prefix is set. Default is `.` or `fox`.';
+		const welChannel = db.get(`Guilds_${message.guild.id}_Welchannel`) || 'No welcome channel is set';
+		const byeChannel = db.get(`Guilds_${message.guild.id}_Byechannel`) || 'No goodbye channel is set';
+		const logChannel = db.get(`Guilds_${message.guild.id}_Logchannel`) || 'No mod log channel is set';
+		const msgChannel = db.get(`Guilds_${message.guild.id}_Messagechannel`) || 'No edit logging channel is set';
+		const prefix = db.get(`Guilds_${message.guild.id}_Prefix`) || 'No custom prefix is set. Default is `.` or `fox`.';
 
-		wel = db.has(`Guilds_${message.guild.id}_Welchannel`) ? `<#${welChannel}>` : 'No welcome channel is set';
-		bye = db.has(`Guilds_${message.guild.id}_Byechannel`) ? `<#${byeChannel}>` : 'No goodbye channel is set';
-		log = db.has(`Guilds_${message.guild.id}_Logchannel`) ? `<#${logChannel}>` : 'No mod log channel is set';
-		msg = db.has(`Guilds_${message.guild.id}_Messagechannel`) ? `<#${msgChannel}>` : 'No edit logging channel is set';
+		const wel = db.has(`Guilds_${message.guild.id}_Welchannel`) ? `<#${welChannel}>` : 'No welcome channel is set';
+		const bye = db.has(`Guilds_${message.guild.id}_Byechannel`) ? `<#${byeChannel}>` : 'No goodbye channel is set';
+		const log = db.has(`Guilds_${message.guild.id}_Logchannel`) ? `<#${logChannel}>` : 'No mod log channel is set';
+		const msg = db.has(`Guilds_${message.guild.id}_Messagechannel`) ? `<#${msgChannel}>` : 'No edit logging channel is set';
 
 		const settingsEmbed = new Discord.MessageEmbed()
 			.setAuthor(`Settings for Foxxie in ${message.guild.name}`, message.guild.iconURL({ dynamic: true }))

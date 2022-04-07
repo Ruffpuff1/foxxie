@@ -1,11 +1,4 @@
 const config = require('../../../lib/config')
-const moment = require('moment')
-const constant = require('../../../lib/util/constants')
-const { roleplayCommand } = require('../../../lib/structures/roleplayCommands')
-const roleplay = require('../../../lib/structures/roleplayCommand')
-const english = require('../../languages/en')
-const spanish = require('../../languages/es')
-const Discord = require('discord.js')
 module.exports = {
     name: 'eval',
     aliases: ['ev'],
@@ -23,7 +16,7 @@ module.exports = {
                         return message.channel.send(`${lang.COMMAND_EVAL_OUTPUT}\n\`\`\`javascript\n${COMMAND_EVAL_UNDEFINED}\n\`\`\``)
                     if (typeof code !== "string")
                         code = require("util").inspect(code, { depth : 0 } )
-                    
+
                     message.channel.send(`\n${lang.COMMAND_EVAL_OUTPUT}\n\`\`\`javascript\n${code.length > 1024 ? `${lang.COMMAND_EVAL_OVER}` : code}\n\`\`\`\n${lang.COMMAND_EVAL_TYPE}\n\`\`\`javascript\n${type}\n\`\`\``)
                         .then(resultMessage => {
                             const time = resultMessage.createdTimestamp - message.createdTimestamp
@@ -37,7 +30,7 @@ module.exports = {
                         .then(resultMessage => {
                             const time = resultMessage.createdTimestamp - message.createdTimestamp
                             const timeMs = resultMessage.createdTimestamp*1000 - message.createdTimestamp*1000
-                            resultMessage.edit(`\n${lang.COMMAND_EVAL_OUTPUT}\n\`\`\`javascript\n${e.length > 1024 ? `${lang.COMMAND_EVAL_OVER}` : e}\n\`\`\`\n${lang.COMMAND_EVAL_TYPE}\n\`\`\`javascript\n${eType}\n\`\`\`\n:stopwatch: ${time}ms (${timeMs.toLocaleString()}μs)`) 
+                            resultMessage.edit(`\n${lang.COMMAND_EVAL_OUTPUT}\n\`\`\`javascript\n${e.length > 1024 ? `${lang.COMMAND_EVAL_OVER}` : e}\n\`\`\`\n${lang.COMMAND_EVAL_TYPE}\n\`\`\`javascript\n${eType}\n\`\`\`\n:stopwatch: ${time}ms (${timeMs.toLocaleString()}μs)`)
                         }
                     )
                 }

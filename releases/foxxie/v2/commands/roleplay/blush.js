@@ -34,7 +34,7 @@ module.exports = {
 			Got = db.get(`Users_${mentionMember.user.id}_Blushgot`) || '0';
 		}
 
-		GivenAuth = db.get(`Users_${message.author.id}_Blushgiven`) || '0';
+		const GivenAuth = db.get(`Users_${message.author.id}_Blushgiven`) || '0';
 
 		let Text = args.slice(1).join(' ');
 		if (mentionMember && Text) {
@@ -55,7 +55,6 @@ module.exports = {
 			message.channel.send(MemberEmbed);
 			return;
 		}
-		if (!mentionMember) {
 			const Embed = new Discord.MessageEmbed()
 				.setColor(foxColor)
 				.setDescription(`**${message.member.user.username}** is blushing.`)
@@ -63,6 +62,6 @@ module.exports = {
 				.setFooter(`${message.member.user.username} has blushed ${GivenAuth} times.`);
 			message.channel.send(Embed);
 			return;
-		}
+
 	}
 };

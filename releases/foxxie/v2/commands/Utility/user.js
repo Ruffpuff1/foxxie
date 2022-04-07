@@ -10,10 +10,6 @@ module.exports = {
 	execute(client, message, args) {
 		let member = message.mentions.users.first() || client.users.cache.get(args[0]) || message.member;
 
-		let isBot = member.id == '812546582531801118';
-		let isDev = member.id == '486396074282450946';
-		let isAmb = member.id == '379951803107901450';
-
 		let guild = client.guilds.cache.get(message.guild.id),
 			USER_ID = member.id;
 
@@ -32,8 +28,6 @@ module.exports = {
 				.replace(', @everyone', ' ');
 			if (rolemap.length > 1024) rolemap = 'To many roles to display';
 			if (!rolemap) rolemap = 'No roles';
-
-			let nick = member.displayName || member.user.username;
 
 			const userServerEmbed = new Discord.MessageEmbed()
 				.setColor(member.roles.highest.color)
@@ -72,15 +66,15 @@ module.exports = {
 			/*
     let badges = [
         ''
-    ]        
-    
+    ]
+
     if (isDev) badges.push('<:owner:820998011940241496>')
     if (member.roles.cache.find(r => r.id === "818506873950175264")) badges.push('<:staff:820997808877862912>')
     if (member.roles.cache.find(r => r.id === "809105934672330802")) badges.push('<:nitro:821024073345007647>')
     if (member.roles.cache.find(r => r.id === "811834242383609877")) badges.push('<:dev:820675971711631374>')
     if (member.roles.cache.find(r => r.id === "816015895335665664")) badges.push('<:partner:820997906433441809>') //Do this for each badge
     if (member.roles.cache.find(r => r.id === "774894802889474058")) badges.push('<:early:820997942458449961>')
-    
+
     if (badges.length) userServerEmbed.setTitle(`${member.user.tag} ${badges.join(' ')}`) */
 
 			// if (isBot) { userServerEmbed.setDescription(`Hey look it\'s me, your friendly neighborhood fox butler. Hope I can be of some use to ya ;)`) }

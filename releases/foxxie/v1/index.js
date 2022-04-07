@@ -1,15 +1,11 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token, serverLink, botOwner, welChannelId, byeChannelId, welcomeWagonPing } = require('./config.json');
-
-const memberCount = require('./member-count');
+const { prefix, serverLink, botOwner } = require('./config.json');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
 const commandFolders = fs.readdirSync('./commands');
-
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const folder of commandFolders) {
 	const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));

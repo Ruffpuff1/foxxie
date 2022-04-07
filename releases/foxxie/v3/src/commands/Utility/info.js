@@ -13,10 +13,10 @@ module.exports = {
 	category: 'utility',
     execute: async (lang, message, args, client) => {
         let user;
-        channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name.toLowerCase() === args.join(' ').toLocaleLowerCase());
+        const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]) || message.guild.channels.cache.find(c => c.name.toLowerCase() === args.join(' ').toLocaleLowerCase());
         user = message.mentions.users.first() || client.users.cache.get(args[0]) || client.users.cache.find(u => u.username.toLowerCase() === args.join(' ').toLocaleLowerCase()) || message.member.user;
         let server = client.guilds.cache.get(args[1]) || message.guild;
-		let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase()); 
+		let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase());
 
 		this.perms = lang.PERMISSIONS
         this.regions = lang.REGIONS
@@ -84,7 +84,7 @@ module.exports = {
             return message.channel.send(embed)
         }
 
-        if (role) { 
+        if (role) {
             const [bots, humans] = role.members.partition(member => member.user.bot);
 
             const embed = new MessageEmbed()
@@ -114,7 +114,7 @@ module.exports = {
         if (server && args[0] === 'server') {
             console.log(server.id)
             let results = await getGuildMessageCount(message, server.id)
-                    
+
             let messages;
             messages = 0
             if (results !== null) messages = results.messageCount
@@ -144,11 +144,11 @@ module.exports = {
         }
 
         if (user && args[0] !== 'server') {
-        
+
             const loading = await message.channel.send(lang.COMMAND_MESSAGE_LOADING);
 
             let embed = new MessageEmbed();
-            
+
                 embed
                     .setTitle(`${user.tag} (ID: ${user.id})`)
                     .setThumbnail(user.displayAvatarURL({ dynamic: true }));
@@ -156,17 +156,17 @@ module.exports = {
                     if (contributor.includes(user.id)) embed.setDescription(`<:Foxxie:825972379875409980> Foxxie Contributor`)
                     user.id === '754598258742919178' ? embed.setDescription(`<:CertifiedCutiepieTallBoy:833197162610425857> Certified Cutiepie Tall Boy`) : '';
                     user.id === '827514096865509386' ? embed.setDescription(`<:Fokushi:835668026048380968> Sister Bot`) : '';
-            
+
                     const member = message.guild ? await message.guild.members.fetch(user).catch(() => null) : null;
-            
+
                     const statistics = [
                         `Joined Discord on ${moment(user.createdAt).format('MMMM Do YYYY')} **(${moment([moment(user.createdAt).format('YYYY'), moment(user.createdAt).format('M') - 1, moment(user.createdAt).format('D')]).toNow(true)} ago)**` //Duration.toNow(user.createdAt)
                     ];
-            
+
                     if (member) {
 
                         guildId = message.guild.id
-                        userId = member.user.id
+                        const userId = member.user.id
 
                         let results = await getUserMessageCount(message, userId)
 
@@ -176,12 +176,12 @@ module.exports = {
                         statistics.push((
                             `${member.user.id == message.guild.ownerID ? 'Created' : 'Joined'} ${message.guild.name} ${moment(member.joinedAt).format('MMMM Do YYYY')} **(${moment([moment(member.joinedAt).format('YYYY'), moment(member.joinedAt).format('M') - 1, moment(member.joinedAt).format('D')]).toNow(true)} ago)**`
                         ))
-                        
+
                         statistics.push(`${stats_messages.toLocaleString()} messages sent`);
 
                         embed.addField(`:pencil: **Statistics**`, statistics.join('\n'));
                         if (!member) return embed;
-                
+
                         const roles = member.roles.cache.sort((a, b) => b.position - a.position);
                         let spacer = false;
                         const roleString = roles
@@ -199,7 +199,7 @@ module.exports = {
                                     }
                                 } else { return acc; }
                             }, '');
-                
+
                         if (roles.size) {
                             embed.addField(
                                 `:scroll: **Role${roles.size > 2 ? `s (${roles.size - 1})` : roles.size === 2 ? '' : 's'}**`,
@@ -229,6 +229,7 @@ module.exports = {
                                     guildId,
                                     userId
                                 })
+                                let notes;
                                 results2?notes = results2.notes : notes = [];
                                 if (notes.length) {
                                     embed.addField(
@@ -248,7 +249,7 @@ module.exports = {
 
             loading.delete();
             await message.channel.send(embed);
-    
+
         }
     }
 }
