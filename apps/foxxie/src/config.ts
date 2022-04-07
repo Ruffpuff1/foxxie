@@ -2,7 +2,7 @@ process.env.NODE_ENV ??= 'development';
 
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { durationOptions, ordinalOptions } from '#languages';
-import { GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/prisma';
 import { categories } from '#lib/game';
 import { LanguageKeys } from '#lib/i18n';
 import { emojis, rootFolder } from '#utils/constants';

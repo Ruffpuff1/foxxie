@@ -52,7 +52,7 @@ export class GuildModel {
 
     public disabledChannels: string[];
 
-    public disboardCommands: string[];
+    public disabledCommands: string[];
 
     public embedsBoost: MessageEmbed | null;
 
@@ -85,6 +85,8 @@ export class GuildModel {
     public messagesGoodbyeAutoDelete: number;
 
     public messagesModerationAutoDelete: boolean;
+
+    public messagesWelcome: string | null;
 
     public messagesWelcomeAutoDelete: number;
 

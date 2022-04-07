@@ -6,7 +6,11 @@ module.exports = {
         project: 'tsconfig.json'
     },
     rules: {
+<<<<<<< HEAD
         'no-redeclare': 'off',
+=======
+        '@typescript-eslint/no-extra-parens': 'off',
+>>>>>>> 996a644 (feat: migrate moderation handling)
         '@typescript-eslint/member-ordering': [
             'error',
             {

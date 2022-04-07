@@ -1,4 +1,4 @@
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { EventArgs, Events } from '#lib/types';
 import { getPersistRoles } from '#utils/Discord';
 import { Listener } from '@sapphire/framework';
@@ -7,7 +7,7 @@ export class UserListener extends Listener<Events.GuildMemberAdd> {
     public async run(...[member]: EventArgs<Events.GuildMemberAdd>): Promise<void> {
         if (member.pending) return;
 
-        const [roleId, settings] = await acquireSettings(member.guild, settings => [settings[GuildSettings.Roles.Muted], settings]);
+        const [roleId, settings] = await this.container.prisma.guilds(member.guild.id, settings => [settings[GuildSettings.Roles.Muted], settings]);
         if (roleId) {
             const persistRoles = getPersistRoles(member.guild);
 

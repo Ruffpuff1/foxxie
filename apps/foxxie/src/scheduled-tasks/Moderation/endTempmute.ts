@@ -1,4 +1,4 @@
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationData, ModerationTask } from '#lib/structures';
 import { Schedules } from '#utils/constants';
@@ -15,7 +15,7 @@ export class UserTask extends ModerationTask {
         const me = await this.fetchMe(guild);
         if (!me.permissions.has(PermissionFlagsBits.ManageRoles)) return null;
 
-        const [roleId, t] = await acquireSettings(guild, settings => [settings[GuildSettings.Roles.Muted], settings.getLanguage()]);
+        const [roleId, t] = await this.container.prisma.guilds(guild.id, settings => [settings[GuildSettings.Roles.Muted], settings.getLanguage()]);
         if (!roleId) return null;
 
         const reason = t(LanguageKeys.Moderation.Unmute, this.ctx(data.duration));

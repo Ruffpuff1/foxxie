@@ -1,5 +1,5 @@
 import type { Connection, Repository } from 'typeorm';
-import { BackgroundEntity, GuildEntity, ModerationEntity, NoteEntity, PlaylistEntity, ScamEntity, StarEntity, WarningEntity } from './entities';
+import { BackgroundEntity, GuildEntity, NoteEntity, PlaylistEntity, ScamEntity, StarEntity, WarningEntity } from './entities';
 import { UserRepository } from './repository/UserRepository';
 import { ClientRepository, CommandRepository, MemberRepository } from './repository';
 import { CommandInteraction, Message } from 'discord.js';
@@ -17,8 +17,6 @@ export class MongoDB {
     public readonly guilds: Repository<GuildEntity>;
 
     public readonly members: MemberRepository;
-
-    public readonly moderations: Repository<ModerationEntity>;
 
     public readonly notes: Repository<NoteEntity>;
 
@@ -39,7 +37,6 @@ export class MongoDB {
         this.commands = connection.getCustomRepository(CommandRepository);
         this.guilds = connection.getRepository(GuildEntity);
         this.members = connection.getCustomRepository(MemberRepository);
-        this.moderations = connection.getRepository(ModerationEntity);
         this.notes = connection.getRepository(NoteEntity);
         this.playlists = connection.getRepository(PlaylistEntity);
         this.scams = connection.getRepository(ScamEntity);
@@ -53,10 +50,6 @@ export class MongoDB {
         return user.profile!.color || msg.guild?.me?.displayColor || (msg as Message).member?.displayColor || BrandingColors.Primary;
     }
 
-    public async fetchModerationEntry(caseId: number, guildId: string): Promise<ModerationEntity | undefined> {
-        return this.moderations.findOne({ caseId, guildId });
-    }
-
     public async fetchStarsForGuild(guildId: string): Promise<StarEntity[]> {
         return this.starboards.find({
             where: {
@@ -67,6 +60,7 @@ export class MongoDB {
     }
 }
 
+// eslint-disable-next-line no-redeclare
 export interface MongoDB {
     readonly connection: Connection;
     readonly backgrounds: Repository<BackgroundEntity>;
@@ -74,7 +68,6 @@ export interface MongoDB {
     readonly commands: CommandRepository;
     readonly guilds: Repository<GuildEntity>;
     readonly members: MemberRepository;
-    readonly moderations: Repository<ModerationEntity>;
     readonly notes: Repository<NoteEntity>;
     readonly playlists: Repository<PlaylistEntity>;
     readonly scams: Repository<ScamEntity>;

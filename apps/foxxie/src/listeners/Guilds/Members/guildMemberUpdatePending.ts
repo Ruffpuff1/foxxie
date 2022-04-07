@@ -1,4 +1,4 @@
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { EventArgs, Events } from '#lib/types';
 import { Colors } from '#utils/constants';
@@ -13,7 +13,7 @@ export class UserListener extends Listener<Events.GuildMemberUpdate> {
     public async run(...[previous, next]: EventArgs<Events.GuildMemberUpdate>): Promise<void> {
         if (!(previous.pending && !next.pending)) return;
         // fetch t and settings.
-        const [t, settings] = await acquireSettings(next.guild, settings => [settings.getLanguage(), settings]);
+        const [t, settings] = await this.container.prisma.guilds(next.guild.id, settings => [settings.getLanguage(), settings]);
 
         // emit the member join event once screening passes.
         this.container.client.emit(Events.GuildMemberJoin, next, settings);

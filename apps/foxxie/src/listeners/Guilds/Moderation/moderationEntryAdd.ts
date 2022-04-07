@@ -32,7 +32,25 @@ export class UserListener extends Listener<Events.ModerationEntryAdd> {
             entry.logChannelId = sent.channel.id;
             entry.logMessageId = sent.id;
 
-            await entry.save();
+            const { caseId, createdAt, extraData, guildId, moderatorId, reason, type, channelId, logChannelId, logMessageId, userId, duration, refrence } = entry;
+
+            await this.container.prisma.moderation.create({
+                data: {
+                    caseId,
+                    createdAt,
+                    extraData,
+                    guildId,
+                    moderatorId,
+                    reason,
+                    type,
+                    channelId,
+                    logChannelId,
+                    logMessageId,
+                    userId,
+                    duration,
+                    refrence
+                }
+            });
         } catch {
             moderation._count! -= 1;
         }

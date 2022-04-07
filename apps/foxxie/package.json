@@ -109,9 +109,9 @@
         "ioredis": "^5.0.3",
         "lexure": "^0.17.0",
         "moment-timezone": "^0.5.34",
-        "mongodb": "^3.7.3",
+        "mongodb": "^4.5.0",
         "skia-canvas": "^0.9.29",
-        "typeorm": "^0.2.45"
+        "typeorm": "^0.3.5"
     },
     "devDependencies": {
         "@foxxie/eslint-config": "^0.0.2",
@@ -132,7 +132,11 @@
         "prisma": "^3.12.0",
 >>>>>>> 607dcdd (feat: foxxie migrate to prisma)
         "ruffpuff-api-types": "^0.0.5-next.11a326b.1647721912",
+<<<<<<< HEAD
         "tsc-watch": "5.0.3",
         "typescript": "^4.6.3"
+=======
+        "tsc-watch": "5.0.3"
+>>>>>>> 996a644 (feat: migrate moderation handling)
     }
 }

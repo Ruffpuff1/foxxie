@@ -29,7 +29,7 @@ import { pronouns } from '#utils/transformers';
 import { BrandingColors } from '#utils/constants';
 import { GuildBasedChannelTypes, PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
-import { GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/prisma';
 import { fetch } from '@foxxie/fetch';
 import { FoxxieEmbed } from '#lib/discord';
 import { api } from '@foxxie/api';
