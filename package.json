@@ -4,14 +4,14 @@
   "description": "Monorepository containing all the source code for the Foxxie Project.",
   "private": true,
   "scripts": {
-    "build": "nx affected:build",
-    "test": "nx affected:test",
-    "lint": "nx affected:lint",
+    "build": "yarn nx affected:build",
+    "test": "yarn nx affected:test",
+    "lint": "yarn nx affected:lint",
     "upin": "yarn upgrade-interactive",
-    "graph": "nx dep-graph",
-    "affected": "nx graph",
+    "graph": "yarn nx dep-graph",
+    "affected": "yarn nx graph",
     "full:test": "jest --pass-with-no-tests --collect-coverage --verbose",
-    "nx:b": "nx build"
+    "nx:b": "yarn nx build"
   },
   "contributors": [
     "Ruffpuff1 <contact@ruffpuff.dev>",
@@ -45,6 +45,7 @@
     "conventional-changelog-angular": "^5.0.13",
     "conventional-recommended-bump": "^6.1.0",
     "jest": "^27.5.1",
+    "nx": "^13.10.1",
     "prettier": "^2.6.2",
     "ts-jest": "27.1.4",
     "ts-node": "10.7.0",

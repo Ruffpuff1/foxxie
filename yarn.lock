@@ -1061,6 +1061,7 @@ __metadata:
     conventional-changelog-angular: ^5.0.13
     conventional-recommended-bump: ^6.1.0
     jest: ^27.5.1
+    nx: ^13.10.1
     prettier: ^2.6.2
     ts-jest: 27.1.4
     ts-node: 10.7.0
@@ -2084,6 +2085,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nrwl/cli@npm:13.10.1":
+  version: 13.10.1
+  resolution: "@nrwl/cli@npm:13.10.1"
+  dependencies:
+    nx: 13.10.1
+  checksum: 132962f23d549de4e0293fa3fb60d7fcdab4ea37aba94acc35049ca14f18ce4156100a3eb3c601f3c9c11815df1e1e09fc9af0ab6f2e6112224676831476dc2f
+  languageName: node
+  linkType: hard
+
 "@nrwl/devkit@npm:13.10.0":
   version: 13.10.0
   resolution: "@nrwl/devkit@npm:13.10.0"
@@ -2158,6 +2168,17 @@ __metadata:
   bin:
     tao: index.js
   checksum: b1cfe997947c8f5262de123801c248567be947bd50eb6937dcaef72abb0234a4107b7f14ba057586dd3d348bcf4288568d78c7c96a204ea8cef1748283948f00
+  languageName: node
+  linkType: hard
+
+"@nrwl/tao@npm:13.10.1":
+  version: 13.10.1
+  resolution: "@nrwl/tao@npm:13.10.1"
+  dependencies:
+    nx: 13.10.1
+  bin:
+    tao: index.js
+  checksum: cd6fbef7ad36e0f04f8c00959170d12386a733e6c4adabddc448311db48162ab71807615d9f69ed5cb1cb3e2a629418f224168d035a2a6b4d2b39328760ba878
   languageName: node
   linkType: hard
 
@@ -2549,7 +2570,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sapphire/framework@npm:^3.0.0-next.379f5db.0":
+"@sapphire/framework@npm:^3.0.0-next.379f5db.0, @sapphire/framework@npm:next":
   version: 3.0.0-next.379f5db.0
   resolution: "@sapphire/framework@npm:3.0.0-next.379f5db.0"
   dependencies:
@@ -6991,7 +7012,7 @@ __metadata:
     "@ruffpuff/utilities": ^4.0.0
     "@sapphire/decorators": ^4.3.4
     "@sapphire/discord.js-utilities": ^4.9.4
-    "@sapphire/framework": ^3.0.0-next.379f5db.0
+    "@sapphire/framework": next
     "@sapphire/plugin-editable-commands": ^1.1.3-next.db15252.0
     "@sapphire/plugin-i18next": ^2.3.2-next.02c4555.0
     "@sapphire/plugin-logger": ^2.2.2-next.02c4555.0
@@ -7028,6 +7049,7 @@ __metadata:
     skia-canvas: ^0.9.29
     tsc-watch: 5.0.3
     typeorm: ^0.2.45
+    typescript: ^4.6.3
   languageName: unknown
   linkType: soft
 
@@ -10410,6 +10432,47 @@ __metadata:
   bin:
     nx: bin/nx.js
   checksum: 510180ae337317557df040daeb7076f604b75d12291adac5dba6338c867f4e3c610568e6b544497439056d163c3de7f4782cb6be559bf67aa01fe3c7bbc10b20
+  languageName: node
+  linkType: hard
+
+"nx@npm:13.10.1, nx@npm:^13.10.1":
+  version: 13.10.1
+  resolution: "nx@npm:13.10.1"
+  dependencies:
+    "@nrwl/cli": 13.10.1
+    "@nrwl/tao": 13.10.1
+    "@parcel/watcher": 2.0.4
+    "@swc-node/register": ^1.4.2
+    "@swc/core": ^1.2.152
+    chalk: 4.1.0
+    chokidar: ^3.5.1
+    cli-cursor: 3.1.0
+    cli-spinners: 2.6.1
+    dotenv: ~10.0.0
+    enquirer: ~2.3.6
+    fast-glob: 3.2.7
+    figures: 3.2.0
+    flat: ^5.0.2
+    fs-extra: ^9.1.0
+    glob: 7.1.4
+    ignore: ^5.0.4
+    jsonc-parser: 3.0.0
+    minimatch: 3.0.4
+    npm-run-path: ^4.0.1
+    open: ^8.4.0
+    rxjs: ^6.5.4
+    rxjs-for-await: 0.0.2
+    semver: 7.3.4
+    tar-stream: ~2.2.0
+    tmp: ~0.2.1
+    tsconfig-paths: ^3.9.0
+    tslib: ^2.3.0
+    v8-compile-cache: 2.3.0
+    yargs: ^17.4.0
+    yargs-parser: 21.0.1
+  bin:
+    nx: bin/nx.js
+  checksum: 9528eda785369f7d77398df01f8708983df7dc16d5068be78edf9faf0a35eabd45f7f61b5b8017e8c008b0de20ed9d88446f9b57b8ad03c5aee828419e7aff39
   languageName: node
   linkType: hard
 
