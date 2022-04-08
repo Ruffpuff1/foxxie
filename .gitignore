@@ -67,6 +67,11 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
+# Yarn files
+.yarn/install-state.gz
+.yarn/build-state.yml
+.yarn/cache
+
 # dotenv environment variables file
 .env.test
 

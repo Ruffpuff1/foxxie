@@ -51,11 +51,10 @@
     "jest": "^27.5.1",
     "typescript": "4.6.3"
   },
-  "private": false,
   "dependencies": {
     "@foxxie/builders": "^0.0.0",
     "@sapphire/decorators": "^4.3.4",
-    "@sapphire/framework": "next",
+    "@sapphire/framework": "^3.0.0-next.379f5db.0",
     "discord.js": "^13.6.0",
     "i18next": "^21.6.14"
   }
