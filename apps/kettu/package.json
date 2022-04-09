@@ -41,6 +41,7 @@
     "@favware/graphql-pokemon": "6.5.0",
     "@foxxie/eslint-config": "0.0.2",
     "@foxxie/stardrop": "^0.0.1",
+    "@foxxie/ts-config": "^0.0.0",
     "@foxxie/types": "0.0.5",
     "@octokit/types": "6.34.0",
     "@ruffpuff/celestia": "1.3.0",
