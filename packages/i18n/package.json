@@ -39,6 +39,7 @@
   "devDependencies": {
     "@foxxie/eslint-config": "^0.0.2",
     "@ruffpuff/ts": "^1.0.4",
+    "@types/i18next-fs-backend": "^1.1.2",
     "discord-api-types": "^0.31.0",
     "typescript": "4.6.3"
   },
