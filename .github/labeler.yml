@@ -50,6 +50,10 @@
   - packages/time/*
   - packages/time/**/*
 
+'Packages: ts-config':
+  - packages/ts-config/*
+  - packages/ts-config/**/*
+
 'Packages: commands':
   - packages/commands/*
   - packages/commands/**/*

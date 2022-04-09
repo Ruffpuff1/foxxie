@@ -29,4 +29,4 @@ function cleanPackages(directory) {
 }
 
 execSync(`rm -rf node_modules`);
-for (const dir of ['apps', 'graphql', 'packages']) cleanPackages(dir);
+for (const dir of ['apps', 'graphql', 'packages', 'website']) cleanPackages(dir);
