@@ -4,14 +4,14 @@
   "description": "Monorepository containing all the source code for the Foxxie Project.",
   "private": true,
   "scripts": {
-    "build": "nx affected:build",
-    "test": "nx affected:test",
-    "lint": "nx affected:lint",
-    "up": "yarn upgrade-interactive --latest",
-    "graph": "nx dep-graph",
-    "affected": "nx graph",
+    "build": "yarn nx affected:build",
+    "test": "yarn nx affected:test",
+    "lint": "yarn nx affected:lint",
+    "upin": "yarn upgrade-interactive",
+    "graph": "yarn nx dep-graph",
+    "affected": "yarn nx graph",
     "full:test": "jest --pass-with-no-tests --collect-coverage --verbose",
-    "nx:b": "nx build"
+    "nx:b": "yarn nx build"
   },
   "contributors": [
     "Ruffpuff1 <contact@ruffpuff.dev>",
@@ -38,13 +38,14 @@
   "devDependencies": {
     "@nrwl/cli": "latest",
     "@nrwl/nx-cloud": "13.2.2",
-    "@nrwl/workspace": "^13.9.5",
+    "@nrwl/workspace": "^13.10.0",
     "@octokit/action": "^3.18.0",
     "@sapphire/ts-config": "3.3.4",
     "@types/skia-canvas": "^0.9.28",
     "conventional-changelog-angular": "^5.0.13",
     "conventional-recommended-bump": "^6.1.0",
     "jest": "^27.5.1",
+    "nx": "^13.10.1",
     "prettier": "^2.6.2",
     "ts-jest": "27.1.4",
     "ts-node": "10.7.0",

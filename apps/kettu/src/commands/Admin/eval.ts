@@ -15,7 +15,7 @@ import { setTimeout as sleep } from 'node:timers/promises';
 import { inspect } from 'node:util';
 import { getLocale } from '#utils/decorators';
 import { RegisterChatInputCommand } from '@foxxie/commands';
-import Type from '#utils/Type';
+import { Type } from '@sapphire/type';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 

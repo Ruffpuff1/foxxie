@@ -1,3 +1,4 @@
 path_classifiers:
   test:
     - releases
+    - third_party
