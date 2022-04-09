@@ -1,5 +1,6 @@
 import { Serializer } from '#lib/database';
 import type { Awaitable } from '@sapphire/utilities';
+import i18next from 'i18next';
 
 export class UserSerializer extends Serializer<string> {
     public async parse(args: Serializer.Args) {
@@ -7,6 +8,6 @@ export class UserSerializer extends Serializer<string> {
     }
 
     public isValid(value: string): Awaitable<boolean> {
-        return this.container.i18n.languages.has(value);
+        return i18next.languages.includes(value);
     }
 }

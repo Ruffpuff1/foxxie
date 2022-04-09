@@ -6,7 +6,7 @@ import { cast } from '@ruffpuff/utilities';
 import { getModeration } from '#utils/Discord';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS, getGuildIds, interactionPrompt } from '#utils/util';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import type { GuildMember, User } from 'discord.js';
 
 @RegisterChatInputCommand(

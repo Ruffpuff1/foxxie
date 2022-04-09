@@ -6,7 +6,7 @@ import { Enumerable } from '@sapphire/decorators';
 import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import { acquireSettings, GuildSettings, SettingsManager } from '#lib/database';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import { AnalyticsManager, GiveawayManager, InviteManager, RedisManager, WorkerManager } from './structures';
+import { AnalyticsManager, InviteManager, RedisManager, WorkerManager } from './structures';
 import { FoxxieQueue } from './audio';
 import { isDev } from '@ruffpuff/utilities';
 import { Leaderboard } from '#utils/Leaderboard';
@@ -18,9 +18,6 @@ export default class FoxxieClient extends SapphireClient {
 
     @Enumerable(false)
     public readonly guildMemberFetchQueue = new GuildMemberFetchQueue();
-
-    @Enumerable(false)
-    public giveaways = new GiveawayManager();
 
     @Enumerable(false)
     public llrCollectors = new Set<LongLivingReactionCollector>();
@@ -71,9 +68,6 @@ export default class FoxxieClient extends SapphireClient {
         const { shardCount } = CLIENT_OPTIONS;
         container.logger.info(`${magentaBright('Gateway:')} Logging in with ${shardCount ?? 1} shard${(shardCount ?? 1) > 1 ? 's' : ''}`);
 
-        await this.giveaways.init().catch(err => {
-            container.logger.fatal(err);
-        });
         return super.login();
     }
 

@@ -1,11 +1,11 @@
 import { acquireSettings, GuildEntity, GuildSettings } from '#lib/database';
-import { CustomGet, Events, GuildMessage } from '#lib/types';
+import { Events, GuildMessage } from '#lib/types';
+import type { CustomGet, TFunction } from '@foxxie/i18n';
 import { getModeration, isModerator, isSendableChannel } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
 import { isDev, seconds } from '@ruffpuff/utilities';
 import { Listener, ListenerOptions, PieceContext } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
 import type { Awaitable, PickByValue } from '@sapphire/utilities';
 import { ModerationBitField, ModerationHardActionFlags, ModerationFlagBits } from './ModerationBitfield';
 

@@ -2,7 +2,7 @@ import { CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserErr
 import { SubCommandPluginCommand } from '@sapphire/plugin-subcommands';
 import type { Message } from 'discord.js';
 import * as Lexure from 'lexure';
-import { fetchT, TFunction } from '@sapphire/plugin-i18next';
+import { getT, TFunction } from '@foxxie/i18n';
 import { CLIENT_OWNERS } from '#root/config';
 import { HelpDisplayData, PermissionLevels } from '#lib/types';
 import type FoxxieClient from '#lib/FoxxieClient';
@@ -68,7 +68,7 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
     public async messagePreParse(message: Message, parameters: string, context: MessageCommandContext): Promise<FoxxieCommand.Args> {
         const parser = new Lexure.Parser(this.lexer.setInput(parameters).lex()).setUnorderedStrategy(this.strategy);
         const args = new Lexure.Args(parser.parse());
-        const [t, color] = await Promise.all([fetchT(message), this.container.db.fetchColor(message)]);
+        const [t, color] = await Promise.all([getT('en-US'), this.container.db.fetchColor(message)]);
 
         return new FoxxieArgs(message, this, args, context, t, color);
     }

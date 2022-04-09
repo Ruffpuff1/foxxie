@@ -1,4 +1,4 @@
-import { FT, T } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 
 export const BirthdayMessage = T('tasks:birthdayMessage');
 export const BirthdayMessageAge = T('tasks:birthdayMessageAge');

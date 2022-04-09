@@ -1,4 +1,5 @@
-import { FT, HelpDisplayData, T } from '#lib/types';
+import type { HelpDisplayData } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 
 export const AvatarDescription = T('commands/misc:avatarDescription');
 export const AvatarDetailedDescription = T<HelpDisplayData>('commands/misc:avatarDetailedDescription');

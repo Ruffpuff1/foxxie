@@ -1,11 +1,10 @@
-import { GuildSettings } from '#lib/database';
+import { acquireSettings, GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { EventArgs, Events } from '#lib/types';
 import { Colors } from '#utils/constants';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { fetchT } from '@sapphire/plugin-i18next';
 import { MessageEmbed } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
@@ -14,7 +13,7 @@ import { MessageEmbed } from 'discord.js';
 })
 export class UserListener extends Listener<Events.GuildMemberAdd> {
     public async run(...[member]: EventArgs<Events.GuildMemberAdd>): Promise<void> {
-        const t = await fetchT(member.guild);
+        const t = await acquireSettings(member.guild, s => s.getLanguage());
 
         this.container.client.emit(Events.GuildMessageLog, member.guild, GuildSettings.Channels.Logs.MemberJoin, () =>
             new MessageEmbed()

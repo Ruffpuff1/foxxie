@@ -1,7 +1,7 @@
 import type { MongoDB, SettingsManager, ScheduleEntity, ModerationEntity, GuildEntity, TaskStore } from '#lib/database';
 import type { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import type { FoxxieCommand, AnalyticsManager, GiveawayManager, RedisManager, InviteManager, WorkerManager } from '#lib/structures';
+import type { FoxxieCommand, AnalyticsManager, RedisManager, InviteManager, WorkerManager } from '#lib/structures';
 import type { CustomGet, CustomFunctionGet, LanguageString, ColorData } from './Utils';
 import { Events } from './Events';
 import type { GuildMessage, TypeOfEmbed } from './Discord';
@@ -12,7 +12,7 @@ import type { GuildBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import type { NodeOptions } from '@skyra/audio';
 import type { Piece, Store } from '@sapphire/framework';
 import type { Guild, User } from 'discord.js';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 
 declare module 'discord.js' {
     interface Client {
@@ -20,7 +20,6 @@ declare module 'discord.js' {
         development: boolean;
         invites: InviteManager;
         webhookError: WebhookClient | null;
-        giveaways: GiveawayManager;
         guildMemberFetchQueue: GuildMemberFetchQueue;
         llrCollectors: Set<LongLivingReactionCollector>;
     }
@@ -162,17 +161,5 @@ declare module '@sapphire/framework' {
         store: Store;
         timespan: number;
         username: User;
-    }
-}
-
-declare module 'i18next' {
-    export interface TFunction {
-        lng: string;
-        ns?: string;
-
-        <K extends string, TReturn>(key: CustomGet<K, TReturn>, options?: TOptionsBase | string): TReturn;
-        <K extends string, TReturn>(key: CustomGet<K, TReturn>, defaultValue: TReturn, options?: TOptionsBase | string): TReturn;
-        <K extends string, TArgs extends O, TReturn>(key: CustomFunctionGet<K, TArgs, TReturn>, options?: TOptions<TArgs>): TReturn;
-        <K extends string, TArgs extends O, TReturn>(key: CustomFunctionGet<K, TArgs, TReturn>, defaultValue: TReturn, options?: TOptions<TArgs>): TReturn;
     }
 }

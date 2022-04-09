@@ -3,17 +3,6 @@ import type { BirthdayData } from '#utils/birthday';
 import type { Schedules } from '#utils/constants';
 import type { APIEmbed } from 'discord-api-types/v9';
 
-export interface GiveawayCreateData {
-    channelId: string;
-    authorId: string;
-    title: string;
-    endsAt: Date;
-    guildId: string;
-    emoji: string;
-    messageId: null | string;
-    minimumWinners: number;
-}
-
 export interface ReminderTaskData {
     channelId: string | null;
     userId: string;
@@ -53,8 +42,6 @@ export type ScheduleData<T> = T extends Schedules.Birthday
     ? ModerationData<{ nickname: string }>
     : T extends Schedules.EndTempRestrictEmbed
     ? ModerationData
-    : T extends Schedules.GiveawayCreate
-    ? GiveawayCreateData
     : T extends Schedules.PostAnalytics
     ? Record<string, never>
     : T extends Schedules.Reminder

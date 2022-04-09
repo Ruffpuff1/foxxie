@@ -1,27 +1,24 @@
 import { api } from '#external/Api';
 import { LanguageKeys } from '#lib/i18n';
-import type { CustomFunctionGet, CustomGet, GuildMessage, ScheduleData } from '#lib/types';
+import type { GuildMessage, ScheduleData } from '#lib/types';
+import type { CustomFunctionGet, CustomGet } from '@foxxie/i18n';
 import { fetch } from '@foxxie/fetch';
 import { isNumber, isThenable, minutes, randomArray, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { fetchT } from '@sapphire/plugin-i18next';
 import { jaroWinkler } from '@skyra/jaro-winkler';
-import { APIUser, RESTJSONErrorCodes } from 'discord-api-types/v9';
+import { APIUser, LocaleString, RESTJSONErrorCodes } from 'discord-api-types/v9';
 import { Collection, CommandInteraction, Guild, Message, MessageActionRow, MessageButton, SnowflakeUtil, User } from 'discord.js';
 import type { TFunction, TOptionsBase } from 'i18next';
 import type { Job } from 'bull';
 import type { Schedules } from './constants';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
 import type { AskYesNoOptions } from './Discord/messages';
-import { time, TimestampStyles } from '@discordjs/builders';
+import { getT } from '@foxxie/i18n';
+import { acquireSettings } from '#lib/database';
 
-export function loadT(lang: string) {
-    return (key: string, opts?: any) => container.i18n.format(lang, key, opts);
-}
-
-export const enUS = loadT('en-US');
-export const esMX = loadT('es-MX');
+export const enUS = (k: string) => getT('en-US')(k);
+export const esMX = (k: string) => getT('es-MX' as LocaleString)(k);
 
 /**
  * Attaches a logging catch method to a promise, "floating it".
@@ -95,9 +92,9 @@ export async function sendLoadingMessage(
     args = {},
     ephemeral = false
 ): Promise<Message> {
-    const t = await fetchT(msg.guild!);
-    const translated = t<IterableIterator<string>>(key, args as TOptionsBase);
-    const content = Array.isArray(translated) ? randomArray(translated) : translated;
+    const t = await acquireSettings(msg.guild!, s => s.getLanguage());
+    const translated = t<string[]>(key, args as TOptionsBase);
+    const content = (Array.isArray(translated) ? randomArray(translated as any) : translated) as string;
 
     return msg instanceof CommandInteraction
         ? ((await msg.reply({
@@ -282,7 +279,3 @@ export async function interactionPrompt(interaction: CommandInteraction, options
 
     return collected.customId.endsWith('yes') ? true : false;
 }
-
-export const duration = (value: Date) => time(value, TimestampStyles.RelativeTime);
-
-export const longDate = (value: Date) => time(value, TimestampStyles.LongDate);

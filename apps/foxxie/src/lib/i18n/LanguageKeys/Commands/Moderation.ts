@@ -1,4 +1,4 @@
-import { FT, T } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 
 export const BanConfirm = FT<{ target: string }>('commands/moderation:banConfirm');
 export const BanDescription = T('commands/moderation:banDescription');

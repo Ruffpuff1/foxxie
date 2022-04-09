@@ -1,4 +1,4 @@
-import { FT, T } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 import type { RoleMention, UserMention } from 'discord.js';
 
 export const BoostMessageDefault = T('listeners/events:boostMessageDefault');

@@ -7,8 +7,9 @@ import { arrayStrictEquals, minutes, years } from '@ruffpuff/utilities';
 import { create } from '#utils/regexCreator';
 import { ConfigurableKey } from '../util';
 import { LanguageKeys } from '#lib/i18n';
-import type { APIEmbed, Snowflake } from 'discord-api-types/v9';
+import type { APIEmbed, LocaleString, Snowflake } from 'discord-api-types/v9';
 import type { HighlightTypeEnum } from '#lib/structures/workers/types';
+import { getT } from '@foxxie/i18n';
 
 @Entity('guild', { schema: 'public' })
 export class GuildEntity extends BaseEntity {
@@ -919,7 +920,7 @@ export class GuildEntity extends BaseEntity {
     }
 
     public getLanguage(): TFunction {
-        return container.i18n.getT(this.language);
+        return getT(this.language as LocaleString);
     }
 
     @AfterLoad()

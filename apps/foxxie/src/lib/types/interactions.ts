@@ -1,5 +1,5 @@
 import type { ChatInputCommandContext } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import type { CommandInteraction, GuildChannel, GuildMember, Role, User } from 'discord.js';
 
 export type ChatInputArgs<T = unknown> = [

@@ -4,7 +4,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { RegisterChatInputCommand } from '@foxxie/commands';
 import { CommandOptionsRunTypeEnum, isErr, Result, UserError } from '@sapphire/framework';
 import { floatPromise, getGuildIds } from '#utils/util';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import {
     CategoryChannel,
     Collection,

@@ -6,7 +6,7 @@ import { floatPromise } from '#utils/util';
 import { isDev, minutes, randomArray, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import type { Guild, GuildMember, Role } from 'discord.js';
 
@@ -85,7 +85,7 @@ export class UserListener extends Listener<Events.PointsReward> {
         return randomArray(arr);
     }
 
-    private async getLevelSettings(guild: Guild) {
+    private getLevelSettings(guild: Guild) {
         return acquireSettings(guild, settings => {
             const isEnabled = settings[GuildSettings.Leveling.MessagesEnabled];
             if (!isEnabled) return { announce: false } as const;
@@ -113,7 +113,7 @@ export class UserListener extends Listener<Events.PointsReward> {
         return `leveling:${msg.guild.id}:${msg.member.id}:role`;
     }
 
-    private async fetchRoleSettings(guild: Guild, level: number) {
+    private fetchRoleSettings(guild: Guild, level: number) {
         return acquireSettings(guild, settings => {
             const role = this.getRole(settings, level);
             if (role.latest === null) return null;

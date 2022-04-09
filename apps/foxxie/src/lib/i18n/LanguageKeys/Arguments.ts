@@ -1,4 +1,4 @@
-import { FT, T } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 
 export const Color = FT<{ color: string }>('arguments:color');
 export const Birthday = FT<{ parameter: string }>('arguments:birthday');

@@ -1,5 +1,5 @@
 import { container } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import type { User } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
