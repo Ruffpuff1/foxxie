@@ -1,0 +1,53 @@
+{
+  "name": "@foxxie/i18n",
+  "version": "0.0.2",
+  "description": "I18n management utility for Foxxie projects.",
+  "scripts": {
+    "build": "rm -r -f dist && tsup",
+    "lint": "prettier --write . && eslint src --ext mjs,js,ts --fix"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
+  "directories": {
+    "lib": "src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ruffpuff1/foxxie.git",
+    "directory": "packages/i18n"
+  },
+  "bugs": {
+    "url": "https://github.com/Ruffpuff1/foxxie/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "foxxie",
+    "i18n",
+    "translations",
+    "internalization",
+    "crowdin",
+    "i10n"
+  ],
+  "devDependencies": {
+    "@foxxie/eslint-config": "^0.0.2",
+    "@ruffpuff/ts": "^1.0.4",
+    "discord-api-types": "^0.31.0",
+    "typescript": "4.6.3"
+  },
+  "dependencies": {
+    "@discordjs/collection": "^0.5.0",
+    "i18next": "^21.6.14",
+    "i18next-fs-backend": "^1.1.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

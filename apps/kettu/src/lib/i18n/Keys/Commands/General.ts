@@ -1,4 +1,4 @@
-import { FT, T } from '#types/utils';
+import { FT, T } from '@foxxie/i18n';
 
 export const DonateDescription = T('commands/general:donateDescription');
 export const DonateHeader = T('commands/general:donateHeader');

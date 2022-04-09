@@ -1,4 +1,4 @@
-import { FT, T } from '#types/utils';
+import { FT, T } from '@foxxie/i18n';
 
 export const AndMore = FT<{ count: number }>('system:andMore');
 export const Loading = T('system:loading');

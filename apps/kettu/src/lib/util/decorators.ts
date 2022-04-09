@@ -1,9 +1,10 @@
-import { container } from '@sapphire/framework';
 import { getLocaleString } from '@foxxie/commands';
 import type { AutocompleteInteraction, CommandInteraction, SelectMenuInteraction } from 'discord.js';
+import { getT } from '@foxxie/i18n';
+import type { LocaleString } from 'discord-api-types/v10';
 
 export function getLocale(interaction: CommandInteraction | SelectMenuInteraction | AutocompleteInteraction) {
     const string = getLocaleString(interaction);
 
-    return container.i18n.getT(string);
+    return getT(string as LocaleString);
 }

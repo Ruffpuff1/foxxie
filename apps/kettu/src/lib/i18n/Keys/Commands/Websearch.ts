@@ -1,4 +1,4 @@
-import { FT, T } from '#types/utils';
+import { FT, T } from '@foxxie/i18n';
 
 export const AnimalcrossingCoffee = FT<{ beans: string; milk: string; sugar: string }>('commands/websearch:animalcrossingCoffee');
 export const AnimalcrossingDescription = T('commands/websearch:animalcrossingDescription');

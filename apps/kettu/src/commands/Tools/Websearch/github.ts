@@ -5,7 +5,7 @@ import { GithubUserRegex } from '@ruffpuff/utilities';
 import { Command, fromAsync, isErr } from '@sapphire/framework';
 import type { Github } from '@foxxie/types';
 import { Colors } from '#utils/constants';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS, getGuildIds } from '#utils/util';

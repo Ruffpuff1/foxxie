@@ -32,7 +32,7 @@ import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { MessageEmbed } from 'discord.js';
 import { bold, inlineCode, italic } from '@discordjs/builders';
 import { Colors } from '..';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { LanguageKeys } from '#lib/i18n';
 
 export async function fetchGraphQLPokemon<R extends PokemonQueryReturnTypes>(query: string, variables: PokemonQueryVariables<R>): Promise<PokemonResponse<R>> {

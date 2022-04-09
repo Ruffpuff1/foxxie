@@ -1,4 +1,4 @@
-import { FT } from '#types/utils';
+import { FT } from '@foxxie/i18n';
 
 export const MinMaxBothExclusive = FT<{
     name: string;

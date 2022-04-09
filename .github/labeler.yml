@@ -34,6 +34,10 @@
   - packages/fuzzysearch/*
   - packages/fuzzysearch/**/*
 
+'Packages: i18n':
+  - packages/i18n/*
+  - packages/i18n/**/*
+
 'Packages: lock-queue':
   - packages/lock-queue/*
   - packages/lock-queue/**/*

@@ -1,6 +1,6 @@
 import type { PokemonSpriteTypes } from '#utils/APIs';
 import type { ChatInputCommandContext } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import type { Days, Sunsigns } from '@skyra/saelem';
 import type { CommandInteraction, Role } from 'discord.js';
 

@@ -2,8 +2,6 @@ process.env.NODE_ENV ??= 'development';
 
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { LogLevel } from '@sapphire/framework';
-import type { I18nextFormatters } from '@sapphire/plugin-i18next';
-import '@sapphire/plugin-i18next/register';
 import '@sapphire/plugin-logger/register';
 import { GatewayIntentBits } from 'discord-api-types/v10';
 import { ClientOptions, Formatters } from 'discord.js';
@@ -11,7 +9,12 @@ import { config } from 'dotenv-cra';
 import { join } from 'node:path';
 import type { InterpolationOptions } from 'i18next';
 import { Emojis } from '#utils/constants';
-import { duration, longDate } from '#utils/util';
+import { addFormatters, Formatter, init } from '@foxxie/i18n';
+import { time, TimestampStyles } from '@discordjs/builders';
+
+export const duration = (value: Date) => time(value, TimestampStyles.RelativeTime);
+
+export const longDate = (value: Date) => time(value, TimestampStyles.LongDate);
 
 config({
     path: join(process.cwd(), '.env')
@@ -24,7 +27,7 @@ PaginatedMessage.defaultActions = [
     PaginatedMessage.defaultActions[3] // next
 ];
 
-export function getFormatters(): I18nextFormatters[] {
+export function getFormatters(): Formatter[] {
     return [
         {
             name: 'and',
@@ -66,32 +69,26 @@ export function getInterpolation(): InterpolationOptions {
     };
 }
 
+export async function initI18n() {
+    await init({
+        languageDirectory: join(__dirname, 'languages'),
+        returnObjects: true,
+        returnEmptyString: false,
+        returnNull: false,
+        load: 'all',
+        lng: 'en-US',
+        fallbackLng: 'en-US',
+        defaultNS: 'globals',
+        interpolation: getInterpolation(),
+        initImmediate: false
+    });
+
+    addFormatters(...getFormatters());
+}
+
 export const clientOptions: ClientOptions = {
     presence: {
         status: 'idle'
-    },
-    i18n: {
-        fetchLanguage: ({ guild }) => {
-            if (!guild) return 'en-US';
-
-            return 'en-US';
-        },
-        formatters: getFormatters(),
-        i18next: (_: string[], languages: string[]) => ({
-            supportedLngs: languages,
-            ignoreJSONStructure: true,
-            preload: languages,
-            returnObjects: true,
-            returnEmptyString: false,
-            returnNull: false,
-            load: 'all',
-            lng: 'en-US',
-            fallbackLng: 'en-US',
-            defaultNS: 'globals',
-            interpolation: getInterpolation(),
-            overloadTranslationOptionHandler: (args: unknown[]) => ({ defaultValue: args[1] ?? 'globals:defaultT' }),
-            initImmediate: false
-        })
     },
     intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages],
     partials: ['CHANNEL'],
