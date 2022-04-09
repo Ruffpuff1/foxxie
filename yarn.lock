@@ -677,14 +677,10 @@
     "@ruffpuff/utilities" "^4.0.0"
     undici "^4.15.0"
 
-"@foxxie/i18n@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@foxxie/i18n/-/i18n-0.0.2.tgz#d58b88370e0a21ab6983b763b43d438663f87753"
-  integrity sha512-juI/rPkv3+btWmWP0lb0byunvyDI0lwDqWQx+h29VHU1iEp0VtAV97h5/4DMGspVEvdOSLBqdgOLuZ06GqwENA==
-  dependencies:
-    "@discordjs/collection" "^0.5.0"
-    i18next "^21.6.14"
-    i18next-fs-backend "^1.1.4"
+"@foxxie/types@0.0.5", "@foxxie/types@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@foxxie/types/-/types-0.0.5.tgz#c0622a6121278948f2b1787a087d05094eba9317"
+  integrity sha512-yfuBymaoaj1+pN+eFbuYFR7U9Uk8CNHxZVbuhYUZ37XsU9jWdWt+Ks4ls6k0GjVILlR4XCsI1BJppB0+5p7b+A==
 
 "@graphql-codegen/cli@2.6.2":
   version "2.6.2"

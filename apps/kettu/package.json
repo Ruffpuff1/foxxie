@@ -25,7 +25,7 @@
     "@foxxie/env": "^0.0.2",
     "@foxxie/fetch": "0.0.4",
     "@foxxie/fuzzysearch": "^0.0.3",
-    "@foxxie/i18n": "^0.0.2",
+    "@foxxie/i18n": "^0.0.3",
     "@ruffpuff/ts": "1.0.4",
     "@ruffpuff/utilities": "^4.0.0",
     "@sapphire/decorators": "^4.3.4",
