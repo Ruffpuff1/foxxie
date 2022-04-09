@@ -2,7 +2,7 @@ import { LanguageKeys } from '#lib/i18n';
 import type { TypeOfEmbed } from '#lib/types';
 import { BrandingColors } from '#utils/constants';
 import { Listener } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import type { APIEmbed } from 'discord-api-types/v9';
 import { ClientEvents, GuildMember, MessageEmbed, MessageEmbedOptions } from 'discord.js';
 

@@ -5,6 +5,7 @@ import { Events } from '#lib/types';
 import { resetSpotifyToken } from '#utils/API';
 import { minutes } from '@ruffpuff/utilities';
 import { EnvParse } from '@foxxie/env';
+import i18next from 'i18next';
 
 @ApplyOptions<Listener.Options>({ once: true })
 export class UserListener extends Listener<Events.Ready> {
@@ -99,12 +100,12 @@ ${line14}       ${this.isDev ? `${pad}${blc('<')}${llc('/')}${blc('>')} ${llc('D
     }
 
     private printStoreDebugInformation() {
-        const { client, logger, i18n } = this.container;
+        const { client, logger } = this.container;
         const stores = [...client.stores.values()];
         const last = stores.pop()!;
 
         for (const store of stores) logger.info(this.styleStore(store));
-        logger.info(gray(`├─ Loaded ${this.style(i18n.languages.size.toString().padEnd(3, ' '))} languages.`));
+        logger.info(gray(`├─ Loaded ${this.style(i18next.languages.length.toString().padEnd(3, ' '))} languages.`));
         logger.info(this.styleStore(last, true));
     }
 

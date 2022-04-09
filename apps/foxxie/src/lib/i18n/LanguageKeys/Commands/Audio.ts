@@ -1,4 +1,5 @@
-import { FT, HelpDisplayData, T } from '#lib/types';
+import type { HelpDisplayData } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 import type { ChannelMention } from 'discord.js';
 
 export const DisconnectDescription = T('commands/audio:disconnectDescription');

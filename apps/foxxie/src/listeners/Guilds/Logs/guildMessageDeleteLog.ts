@@ -8,7 +8,7 @@ import { MessageEmbed, User } from 'discord.js';
 import { Colors } from '#utils/constants';
 import { floatPromise, idToTimestamp } from '#utils/util';
 import { resolveToNull, cast, seconds, isDev } from '@ruffpuff/utilities';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 
 @ApplyOptions<Listener.Options>({
     enabled: !isDev(),

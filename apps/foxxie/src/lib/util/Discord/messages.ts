@@ -1,12 +1,12 @@
 import type { GuildMessage } from '#lib/types';
 import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { resolveKey } from '@sapphire/plugin-i18next';
 import type { Message, MessageOptions, UserResolvable } from 'discord.js';
 import { canRemoveAllReactions, canReact } from '@sapphire/discord.js-utilities';
 import { floatPromise } from '#utils/util';
 import { minutes } from '@ruffpuff/utilities';
 import { emojis } from '#utils/constants';
+import { getT } from '@foxxie/i18n';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 export interface AskYesNoOptions extends MessageOptions {
@@ -20,7 +20,7 @@ export const enum YesNo {
 }
 
 export async function sendLocalizedMessage(msg: GuildMessage, key: string): Promise<Message> {
-    const content = await resolveKey(msg, key);
+    const content = resolveKey(msg, key);
     return send(msg, content);
 }
 
@@ -70,7 +70,7 @@ export async function promptWithMessage(message: Message, options: AskYesNoOptio
     return [shouldPrompt, response];
 }
 
-export async function reactYes(msg: Message): Promise<unknown> {
+export function reactYes(msg: Message): Promise<unknown> {
     return floatPromise(msg.react(emojis.reactions.yes));
 }
 
@@ -87,11 +87,11 @@ export async function promptForMessage(message: Message, sendOptions: string | M
     return responses.size === 0 ? null : responses.first()!.content;
 }
 
-export async function reactNo(msg: Message): Promise<unknown> {
+export function reactNo(msg: Message): Promise<unknown> {
     return floatPromise(msg.react(emojis.reactions.no));
 }
 
-export async function deleteMessageImmediately(message: Message): Promise<unknown> {
+export function deleteMessageImmediately(message: Message): Promise<unknown> {
     return floatPromise(message.delete());
 }
 
@@ -147,4 +147,7 @@ export function isBoostMessage(message: Message): boolean {
     ];
 
     return boostMessageTypes.includes(message.type);
+}
+function resolveKey(_: GuildMessage, key: string) {
+    return getT('en-US')(key);
 }

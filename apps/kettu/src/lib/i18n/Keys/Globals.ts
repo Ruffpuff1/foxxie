@@ -1,4 +1,4 @@
-import { FT, T } from '#types/utils';
+import { FT, T } from '@foxxie/i18n';
 
 export const And = FT<{ value: any[] }>('globals:and');
 export const By = T('globals:by');

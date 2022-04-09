@@ -2,14 +2,14 @@ process.env.NODE_ENV ??= 'development';
 
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { durationOptions, ordinalOptions } from '#languages';
-import { acquireSettings, GuildSettings } from '#lib/database';
 import { categories } from '#lib/game';
 import { LanguageKeys } from '#lib/i18n';
-import { emojis, languageFolder, rootFolder } from '#utils/constants';
+import { emojis, rootFolder } from '#utils/constants';
 import { toPermissionArray } from '#utils/transformers';
 import { isString, toTitleCase } from '@ruffpuff/utilities';
-import { container, LogLevel } from '@sapphire/framework';
-import type { I18nextFormatters, InternationalizationOptions, TFunction } from '@sapphire/plugin-i18next';
+import type { LogLevel } from '@sapphire/framework';
+import { Formatter, getT, init, TFunction } from '@foxxie/i18n';
+import i18next from 'i18next';
 import { DurationFormatAssetsTime, DurationFormatter } from '@sapphire/time-utilities';
 import type { NodeOptions } from '@skyra/audio';
 import type { PermissionString } from 'discord.js';
@@ -18,12 +18,17 @@ import { config } from 'dotenv-cra';
 import type { InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
-import { duration, longDate } from '#utils/util';
 import { EnvParse } from '@foxxie/env';
+import type { LocaleString } from 'discord-api-types/v10';
+import { time, TimestampStyles } from '@discordjs/builders';
 
 config({
     path: join(rootFolder, '.env')
 });
+
+export const duration = (value: Date) => time(value, TimestampStyles.RelativeTime);
+
+export const longDate = (value: Date) => time(value, TimestampStyles.LongDate);
 
 PaginatedMessage.defaultActions = [
     PaginatedMessage.defaultActions[0], // select menu
@@ -120,7 +125,7 @@ export function channelList(value: Collection<string, GuildChannel>, t: TFunctio
     );
 }
 
-export function getFormatters(): I18nextFormatters[] {
+export function getFormatters(): Formatter[] {
     return [
         {
             name: 'and',
@@ -138,7 +143,7 @@ export function getFormatters(): I18nextFormatters[] {
         },
         {
             name: 'channellist',
-            format: (value, lng) => channelList(value, container.i18n.getT(lng!))
+            format: (value, lng) => channelList(value, getT(lng! as LocaleString))
         },
         {
             name: 'codeand',
@@ -208,15 +213,15 @@ export function getFormatters(): I18nextFormatters[] {
         },
         {
             name: 'verificationlevel',
-            format: (value, lng) => container.i18n.format(lng!, `guilds/verificationLevels:${value}`)
+            format: (value, lng) => getT(lng as LocaleString)(`guilds/verificationLevels:${value}`)
         },
         {
             name: 'permissions',
-            format: (value, lng) => container.i18n.format(lng!, `guilds/permissions:${value}`)
+            format: (value, lng) => getT(lng as LocaleString)(`guilds/permissions:${value}`)
         },
         {
             name: 'contentfilter',
-            format: (value: ExplicitContentFilterLevel, lng) => container.i18n.format(lng!, LanguageKeys.Guilds.ContentFilters[value])
+            format: (value: ExplicitContentFilterLevel, lng) => getT(lng as LocaleString)(LanguageKeys.Guilds.ContentFilters[value])
         },
         {
             name: 'dateshort',
@@ -261,7 +266,7 @@ export function getDurationValue(value: Date | string) {
 }
 
 export function mapPermissions(item: PermissionString, lng: string): string {
-    return Formatters.bold(container.i18n.format(lng, LanguageKeys.Guilds.Permissions[item]).toLowerCase());
+    return Formatters.bold(getT(lng as LocaleString)(LanguageKeys.Guilds.Permissions[item]).toLowerCase());
 }
 
 export function getDefaultVars(): Record<string, string | string[]> {
@@ -277,7 +282,7 @@ export function getDefaultVars(): Record<string, string | string[]> {
         RAIN: 'Waindwop ᓚᘏᗢ#7799',
         TCS: 'https://discord.gg/ZAZ4yRezC7',
         TRIVACATEGORIES: Object.keys(categories).filter(c => c !== 'general'),
-        LANGUAGES: ['de-DE', 'en-US', 'es-MX']
+        LANGUAGES: ['en-US', 'es-MX']
     };
 }
 
@@ -288,34 +293,24 @@ export function getInterpolation(): InterpolationOptions {
     };
 }
 
-function parseInternationalizationOptions(): InternationalizationOptions {
-    return {
-        defaultMissingKey: 'default',
+export async function initI18n() {
+    await init({
+        languageDirectory: join(__dirname, 'languages'),
+        returnObjects: true,
+        returnEmptyString: false,
+        returnNull: false,
+        load: 'all',
+        lng: 'en-US',
+        fallbackLng: 'en-US',
         defaultNS: 'globals',
-        defaultLanguageDirectory: languageFolder,
-        fetchLanguage: ({ guild }) => {
-            if (!guild) return 'en-US';
-            return acquireSettings(guild, GuildSettings.Language);
-        },
-        formatters: getFormatters(),
-        i18next: (_: string[], languages: string[]) => ({
-            supportedLngs: languages,
-            ignoreJSONStructure: true,
-            preload: languages,
-            returnObjects: true,
-            returnEmptyString: false,
-            returnNull: false,
-            load: 'all',
-            lng: 'en-US',
-            fallbackLng: 'en-US',
-            defaultNS: 'globals',
-            interpolation: getInterpolation(),
-            overloadTranslationOptionHandler: (args: unknown[]) => ({
-                defaultValue: args[1] ?? LanguageKeys.Globals.DefaultT
-            }),
-            initImmediate: false
-        })
-    };
+        interpolation: getInterpolation(),
+        initImmediate: false,
+        debug: true
+    });
+
+    for (const { name, format } of getFormatters()) {
+        i18next.services.formatter!.add(name, format);
+    }
 }
 
 export const CLIENT_OPTIONS: ClientOptions = {
@@ -330,7 +325,6 @@ export const CLIENT_OPTIONS: ClientOptions = {
     loadDefaultErrorListeners: false,
     loadMessageCommandListeners: true,
     shards: 'auto',
-    i18n: parseInternationalizationOptions(),
     caseInsensitiveCommands: true,
     caseInsensitivePrefixes: true,
     allowedMentions: { parse: ['users'] },

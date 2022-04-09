@@ -1,5 +1,5 @@
 import { LanguageKeys } from '#lib/i18n';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import type { CommandInteraction } from 'discord.js';
 import tinycolor from 'tinycolor2';
 import { fetch } from '@foxxie/fetch';

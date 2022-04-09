@@ -2,7 +2,7 @@ import type { GuildEntity } from '../entities/GuildEntity';
 import type { ISchemaValue, SchemaGroup } from './SchemaGroup';
 import type { Serializer, SerializerUpdateContext } from '../structures/Serializer';
 import type { FoxxieArgs } from '#lib/structures';
-import type { CustomGet } from '#lib/types';
+import type { CustomGet } from '@foxxie/i18n';
 import { container } from '@sapphire/framework';
 import { isNullish, NonNullObject } from '@sapphire/utilities';
 import type { TFunction } from 'i18next';

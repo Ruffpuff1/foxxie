@@ -7,7 +7,7 @@ import { EventArgs, Events, GuildMessage } from '#lib/types';
 import { fetchChannel, isBoostMessage } from '#utils/Discord';
 import { LanguageKeys } from '#lib/i18n';
 import { AutomationListener } from '#lib/structures';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { isDev } from '@ruffpuff/utilities';
 
 @ApplyOptions<ListenerOptions>({

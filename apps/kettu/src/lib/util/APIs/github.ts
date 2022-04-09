@@ -11,7 +11,7 @@ import { Emojis } from '..';
 import { cutText, isNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 import { AutoCompleteLimits } from '@sapphire/discord.js-utilities';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { LanguageKeys } from '#lib/i18n';
 
 export type PullRequestState =

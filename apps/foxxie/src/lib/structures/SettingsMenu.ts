@@ -9,7 +9,7 @@ import { container } from '@sapphire/framework';
 import { deepClone, minutes, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v9';
 import { DiscordAPIError, MessageCollector, MessageEmbed } from 'discord.js';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import * as Lexure from 'lexure';
 import { FoxxieArgs } from './commands/parsers/FoxxieArgs';
 import type { FoxxieCommand } from './commands/FoxxieCommand';

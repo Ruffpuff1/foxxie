@@ -1,4 +1,4 @@
-import { FT, T } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 import type { UserMention } from 'discord.js';
 
 export const InvitesAlert = FT<{ author: UserMention }>('author:invitesAlert');

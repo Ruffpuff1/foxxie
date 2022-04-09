@@ -1,3 +1,4 @@
+import { initI18n } from './config';
 import { config } from '#database/config';
 import FoxxieClient from '#lib/FoxxieClient';
 import '#lib/setup';
@@ -9,6 +10,8 @@ import i18next from 'i18next';
 
 async function main() {
     try {
+        await initI18n();
+
         const client = new FoxxieClient();
 
         i18next.use(helpUsagePostProcessor);

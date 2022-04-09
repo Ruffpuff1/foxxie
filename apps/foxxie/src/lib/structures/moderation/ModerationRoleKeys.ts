@@ -1,6 +1,7 @@
 import type { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import type { CustomFunctionGet, RoleLanguageKeyData } from '#lib/types';
+import type { RoleLanguageKeyData } from '#lib/types';
+import type { CustomFunctionGet } from '@foxxie/i18n';
 import { PermissionOverwriteOptions, PermissionResolvable, Permissions } from 'discord.js';
 
 export const enum RoleKey {

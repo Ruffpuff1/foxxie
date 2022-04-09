@@ -1,4 +1,4 @@
-import { T } from '#lib/types';
+import { T } from '@foxxie/i18n';
 
 export const CommandCancel = T('system:commandCancel');
 export const DmWarn = T('system:dmWarn');

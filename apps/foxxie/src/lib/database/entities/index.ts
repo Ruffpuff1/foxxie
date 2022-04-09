@@ -2,7 +2,6 @@ export * from './BackgroundEntity';
 export * from './ClientAnalytics';
 export * from './ClientEntity';
 export * from './CommandEntity';
-export * from './GiveawayEntity';
 export * from './GuildEntity';
 export * from './MemberEntity';
 export * from './ModerationEntity';

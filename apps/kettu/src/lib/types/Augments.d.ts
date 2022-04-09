@@ -1,7 +1,6 @@
 import type { REST } from '@discordjs/rest';
 import type { Command, CommandOptions, Args, Awaitable, ChatInputCommandContext, AliasPiece } from '@sapphire/framework';
 import type { CommandInteraction } from 'discord.js';
-import type { CustomFunctionGet, CustomGet } from './Utils';
 import type { Endpoints } from '@octokit/types';
 
 declare module '@sapphire/pieces' {

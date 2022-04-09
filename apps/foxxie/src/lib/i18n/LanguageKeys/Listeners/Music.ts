@@ -1,4 +1,4 @@
-import { FT, T } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 
 export const AddPlaylist = FT<{ count: number }>('listeners/music:addPlaylist');
 export const AddSong = FT<{ title: string }>('listeners/music:addSong');

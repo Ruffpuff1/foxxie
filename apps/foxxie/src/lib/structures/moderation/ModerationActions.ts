@@ -1,11 +1,10 @@
 import { Guild, GuildChannel, MessageEmbed, PermissionOverwriteOptions, PermissionOverwrites, Role } from 'discord.js';
 import { isNullishOrZero, isNullishOrEmpty } from '@sapphire/utilities';
-import { GuildSettings, ModerationEntity, writeSettings } from '#lib/database';
+import { acquireSettings, GuildSettings, ModerationEntity, writeSettings } from '#lib/database';
 import { getModeration, getPersistRoles, messagePrompt } from '#utils/Discord';
 import { SendOptions, TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 import { api } from '#external/Api';
 import { isCategoryChannel, isTextChannel, isStageChannel, isNewsChannel, isVoiceChannel } from '@sapphire/discord.js-utilities';
-import { fetchT } from '@sapphire/plugin-i18next';
 import { LanguageKeys } from '#lib/i18n';
 import { handleDiscordAPIError } from '#utils/transformers';
 import { BrandingColors } from '#utils/constants';
@@ -377,7 +376,7 @@ export class ModerationActions {
 
     private async buildDMEmbed(entry: ModerationEntity): Promise<MessageEmbed> {
         const moderator = await entry.fetchModerator();
-        const t = await fetchT(this.guild);
+        const t = await acquireSettings(this.guild, s => s.getLanguage());
         const { title: name } = await entry.formats();
 
         const obj = {
@@ -403,13 +402,13 @@ export class ModerationActions {
         return logs.filter(log => log.appealTaskName === type && extra(log)).last();
     }
 
-    private async removePersistPunish(roleId: string, userId: string): Promise<string[]> {
+    private removePersistPunish(roleId: string, userId: string): Promise<string[]> {
         return this.persistRoles.remove(userId, roleId);
     }
 
     private async fetchReason(entry: ModerationEntity): Promise<string> {
         const moderator = await entry.fetchModerator();
-        const t = await fetchT(this.guild);
+        const t = await acquireSettings(this.guild, s => s.getLanguage());
 
         return `${entry.duration ? `[Temp] ` : ''}${moderator?.tag} | ${entry.reason ?? t(LanguageKeys.Moderation.NoReason)}`;
     }
@@ -432,7 +431,7 @@ export class ModerationActions {
     }
 
     private async initRole(msg: GuildMessage, settingsKey: RoleSettingsKey, key?: RoleKey): Promise<void> {
-        const t = await fetchT(this.guild);
+        const t = await acquireSettings(this.guild, s => s.getLanguage());
 
         const languageKeys = roleLanguageKeys.get(key ?? RoleKey.Muted)!;
         const data = roleData.get(key ?? RoleKey.Muted)!;

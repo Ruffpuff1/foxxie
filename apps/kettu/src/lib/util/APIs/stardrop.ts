@@ -5,7 +5,7 @@ import { fetch } from '@foxxie/fetch';
 import { MessageEmbed } from 'discord.js';
 import { toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { Colors } from '#utils/constants';
 
 export async function fetchGraphQLStardewValley<R extends StardewValleyReturnTypes>(

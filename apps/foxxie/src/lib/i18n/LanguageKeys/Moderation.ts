@@ -1,4 +1,5 @@
-import { FT, RoleLanguageKeyData, T } from '#lib/types';
+import type { RoleLanguageKeyData } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 
 export const Ban = T('moderation:ban');
 export const Dm = FT<

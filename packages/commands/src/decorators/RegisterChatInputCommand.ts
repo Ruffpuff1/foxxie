@@ -5,7 +5,8 @@ import { container, RegisterBehavior, ChatInputCommand } from '@sapphire/framewo
 import { createClassDecorator, createProxy } from '@sapphire/decorators';
 import type { Ctor } from '@sapphire/utilities';
 import { getLocaleString, parseArgs } from '../utils';
-import type { TFunction } from 'i18next';
+import { getT, TFunction } from '@foxxie/i18n';
+import type { LocaleString } from 'discord-api-types/v10';
 
 export function RegisterChatInputCommand(
     cb: (builder: SlashCommandBuilder) => SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>,
@@ -37,7 +38,7 @@ export function RegisterChatInputCommand(
 
                 return command.prototype[subcommand].call(
                     this,
-                    ...[...args, { t: command.prototype.container.i18n.getT(getLocaleString(interaction)) as TFunction, ...raw[subcommand] }].filter(a => Boolean(a))
+                    ...[...args, { t: getT(getLocaleString(interaction) as LocaleString) as TFunction, ...raw[subcommand] }].filter(a => Boolean(a))
                 );
             };
         } else {
@@ -69,6 +70,6 @@ function applyWrapperToMethod(command: Ctor, name: string) {
         const interaction = args[0];
         const raw: Record<string, any> = parseArgs(interaction.options.data as any, {});
 
-        return func!.call(this, ...[...args, { t: command.prototype.container.i18n.getT(getLocaleString(interaction)) as TFunction, ...raw }].filter(a => Boolean(a)));
+        return func!.call(this, ...[...args, { t: getT(getLocaleString(interaction) as LocaleString) as TFunction, ...raw }].filter(a => Boolean(a)));
     };
 }

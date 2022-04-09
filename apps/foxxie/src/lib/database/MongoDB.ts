@@ -1,5 +1,5 @@
 import type { Connection, Repository } from 'typeorm';
-import { BackgroundEntity, GiveawayEntity, GuildEntity, ModerationEntity, NoteEntity, PlaylistEntity, ScamEntity, StarEntity, WarningEntity } from './entities';
+import { BackgroundEntity, GuildEntity, ModerationEntity, NoteEntity, PlaylistEntity, ScamEntity, StarEntity, WarningEntity } from './entities';
 import { UserRepository } from './repository/UserRepository';
 import { ClientRepository, CommandRepository, MemberRepository } from './repository';
 import { CommandInteraction, Message } from 'discord.js';
@@ -13,8 +13,6 @@ export class MongoDB {
     public readonly clients: ClientRepository;
 
     public readonly commands: CommandRepository;
-
-    public readonly giveaways: Repository<GiveawayEntity>;
 
     public readonly guilds: Repository<GuildEntity>;
 
@@ -39,7 +37,6 @@ export class MongoDB {
         this.backgrounds = connection.getRepository(BackgroundEntity);
         this.clients = connection.getCustomRepository(ClientRepository);
         this.commands = connection.getCustomRepository(CommandRepository);
-        this.giveaways = connection.getRepository(GiveawayEntity);
         this.guilds = connection.getRepository(GuildEntity);
         this.members = connection.getCustomRepository(MemberRepository);
         this.moderations = connection.getRepository(ModerationEntity);
@@ -75,7 +72,6 @@ export interface MongoDB {
     readonly backgrounds: Repository<BackgroundEntity>;
     readonly clients: ClientRepository;
     readonly commands: CommandRepository;
-    readonly giveaways: Repository<GiveawayEntity>;
     readonly guilds: Repository<GuildEntity>;
     readonly members: MemberRepository;
     readonly moderations: Repository<ModerationEntity>;

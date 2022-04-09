@@ -6,7 +6,7 @@ import { Schedules } from '#utils/constants';
 import { fetchChannel } from '#utils/Discord';
 import { days, isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import type { Guild, GuildMember } from 'discord.js';
 

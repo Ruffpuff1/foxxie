@@ -1,4 +1,5 @@
-import { FT, HelpDisplayData, T } from '#lib/types';
+import type { HelpDisplayData } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 
 export const ConfDescription = T('commands/admin:confDescription');
 export const ConfDetailedDescription = T<HelpDisplayData>('commands/admin:confDetailedDescription');

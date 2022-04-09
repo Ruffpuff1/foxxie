@@ -8,7 +8,7 @@ import type { SendOptions } from '#utils/moderation';
 import { channelLink } from '#utils/transformers';
 import { minutes, years } from '@ruffpuff/utilities';
 import { CommandOptionsRunTypeEnum, PieceContext, Result, UserError } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import type { GuildMember, User } from 'discord.js';
 import { FoxxieCommand } from '../commands';
 

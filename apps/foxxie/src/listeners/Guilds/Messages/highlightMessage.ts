@@ -4,7 +4,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { acquireSettings, GuildSettings, Highlight } from '#lib/database';
 import { HighlightReturnData, HighlightTypeEnum, IncomingType } from '#lib/structures/workers/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { Message, MessageEmbed, Util } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
 import { isDev, resolveToNull } from '@ruffpuff/utilities';

@@ -8,7 +8,7 @@ import { fetch } from '@foxxie/fetch';
 import type { Npm } from '@foxxie/types';
 import { toTitleCase } from '@ruffpuff/utilities';
 import { Colors } from '#utils/constants';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 
 const LOGO = 'https://cdn.ruffpuff.dev/npm.png';
 

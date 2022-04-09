@@ -6,7 +6,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { assetsFolder, BrandingColors } from '#utils/constants';
 import { Canvas, resolveImage, Image, rgba } from 'canvas-constructor/skia';
 import { join } from 'node:path';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { LanguageKeys } from '#lib/i18n';
 import { RequireLevelingEnabled } from '#utils/decorators';
 import { sendLoadingMessage, xpNeeded } from '#utils/util';

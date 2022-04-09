@@ -6,7 +6,7 @@ import { acquireSettings, GuildSettings, Word } from '#lib/database';
 import { isDev, seconds } from '@ruffpuff/utilities';
 import { IncomingType, ModerationBitField, ModerationFlagBits, OutgoingWordFilterPayload, ModerationHardActionFlags, OutputType } from '#lib/structures';
 import { floatPromise } from '#utils/util';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { Message, MessageEmbed } from 'discord.js';
 import { Colors } from '#utils/constants';
 import { LanguageKeys } from '#lib/i18n';

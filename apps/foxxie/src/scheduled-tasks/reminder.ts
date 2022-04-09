@@ -4,6 +4,7 @@ import { Schedules } from '#utils/constants';
 import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
+import { getT } from '@foxxie/i18n';
 import { MessageEmbed, type MessageEmbedOptions, GuildTextBasedChannel } from 'discord.js';
 
 @ApplyOptions<ScheduledTask.Options>({
@@ -46,7 +47,7 @@ export class UserTask extends ScheduledTask {
         const embeds: MessageEmbed[] = [];
         let content: string | null = null;
 
-        const t = this.container.i18n.getT('en-US');
+        const t = getT('en-US');
 
         if (data.json) {
             embeds.push(new MessageEmbed(data.json as MessageEmbedOptions));

@@ -1,4 +1,5 @@
-import { FT, HelpDisplayData, T } from '#lib/types';
+import type { HelpDisplayData } from '#lib/types';
+import { FT, T } from '@foxxie/i18n';
 import type { Collection, Guild, GuildChannel } from 'discord.js';
 
 export const DonateDescription = T('commands/general:donateDescription');

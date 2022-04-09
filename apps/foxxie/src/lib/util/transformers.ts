@@ -1,4 +1,4 @@
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { DiscordAPIError, Guild, GuildMember, MessageEmbed, Permissions } from 'discord.js';
 import { time, TimestampStyles } from '@discordjs/builders';
 import { BrandingColors } from './constants';

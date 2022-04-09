@@ -4,7 +4,7 @@ import { PermissionLevels } from '#lib/types';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Piece, Store } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { Stopwatch } from '@sapphire/stopwatch';
 import type { Message } from 'discord.js';
 import i18next from 'i18next';
@@ -36,7 +36,7 @@ export class UserCommand extends FoxxieCommand {
 
     private async reloadEverything(t: TFunction): Promise<string> {
         const timer = new Stopwatch();
-        await Promise.all([i18next.reloadResources([...this.container.i18n.languages.keys()]), ...[...this.container.stores.map(store => store.loadAll())]]);
+        await Promise.all([i18next.reloadResources(i18next.languages), ...[...this.container.stores.map(store => store.loadAll())]]);
 
         return t(LanguageKeys.Commands.Admin.ReloadEverything, {
             time: timer.stop().toString()

@@ -1,4 +1,4 @@
-import { FT, T } from '#types/utils';
+import { FT, T } from '@foxxie/i18n';
 
 export const ColorDescription = T('commands/tools:colorDescription');
 export const ColorDominant = T('commands/tools:colorDominant');

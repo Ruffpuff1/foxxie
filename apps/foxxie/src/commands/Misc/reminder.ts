@@ -8,7 +8,7 @@ import { fetchTasks, MappedJob, sendLoadingMessage, sortTasksByTime } from '#uti
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { Args } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import type { TFunction } from '@sapphire/plugin-i18next';
+import type { TFunction } from '@foxxie/i18n';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { GuildMember, Message, MessageEmbed, Util } from 'discord.js';
 import type { Job } from 'bull';

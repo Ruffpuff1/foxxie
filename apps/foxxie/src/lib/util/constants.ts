@@ -60,7 +60,6 @@ export const enum Schedules {
     EndTempMute = 'endTempmute',
     EndTempNick = 'endTempnick',
     EndTempRestrictEmbed = 'endTemprestrictembed',
-    GiveawayCreate = 'giveawayCreate',
     PostAnalytics = 'postAnalytics',
     Reminder = 'reminder',
     ReminderRepeat = 'reminderRepeat',
@@ -133,7 +132,6 @@ export const enum Urls {
 
 export const rootFolder = process.cwd();
 export const assetsFolder = join(rootFolder, 'assets');
-export const languageFolder = join(rootFolder, 'dist', 'languages');
 
 export const allowedInviteIds = [
     // ID for `The Corner Store`, Foxxie's home server.

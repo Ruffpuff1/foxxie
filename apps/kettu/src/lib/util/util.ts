@@ -1,8 +1,8 @@
-import type { APIApplicationCommandInteraction, APIUser } from 'discord-api-types/v10';
+import type { APIApplicationCommandInteraction, APIUser, LocaleString } from 'discord-api-types/v10';
 import { userMention, italic, time, TimestampStyles } from '@discordjs/builders';
 import type { UserMention } from 'discord.js';
-import { container } from '@sapphire/framework';
 import { EnvParse } from '@foxxie/env';
+import { getT } from '@foxxie/i18n';
 
 export function wrapWithTarget<T extends string>(user: APIUser | undefined, str: T): T | `_Suggestion for: ${UserMention}_\n\n${T}` {
     if (!user) return str;
@@ -33,14 +33,8 @@ export function getGuildIds() {
     }
 }
 
-export function loadT(lang: string) {
-    return (key: string, opts?: any) => container.i18n.format(lang, key, opts);
-}
-
-export const enUS = loadT('en-US');
-export const esMX = loadT('es-MX');
-export const enGB = loadT('en-GB');
-export const jaJP = loadT('ja-JP');
+export const enUS = getT('en-US');
+export const esMX = getT('es-MX' as LocaleString);
 
 export const duration = (value: Date) => time(value, TimestampStyles.RelativeTime);
 

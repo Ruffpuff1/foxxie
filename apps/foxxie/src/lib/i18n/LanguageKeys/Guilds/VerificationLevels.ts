@@ -1,4 +1,4 @@
-import { T } from '#lib/types';
+import { T } from '@foxxie/i18n';
 
 export const NONE = T('guilds/verificationLevels:NONE');
 export const LOW = T('guilds/verificationLevels:LOW');

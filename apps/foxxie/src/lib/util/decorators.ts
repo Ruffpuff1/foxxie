@@ -6,12 +6,14 @@ import type { GuildMessage } from '#lib/types';
 import { getLocaleString } from '@foxxie/commands';
 import { getAudio, sendLocalizedMessage } from '#utils/Discord';
 import { isNullish } from '@sapphire/utilities';
-import { container } from '@sapphire/framework';
+import { getT } from '@foxxie/i18n';
+import i18next from 'i18next';
 import type { AutocompleteInteraction, CommandInteraction, SelectMenuInteraction } from 'discord.js';
+import type { LocaleString } from 'discord-api-types/v10';
 
 export function RequireLevelingEnabled(): MethodDecorator {
     return createFunctionPrecondition(
-        async (message: GuildMessage) => message.guild ? acquireSettings(message.guild, GuildSettings.Leveling.Enabled) : true,
+        (message: GuildMessage) => message.guild ? acquireSettings(message.guild, GuildSettings.Leveling.Enabled) : true,
         (message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.Leveling)
     );
 }
@@ -57,7 +59,7 @@ export function RequireSongPresent(): MethodDecorator {
             const track = await getAudio(message.guild).getCurrentSong();
             return !isNullish(track);
         },
-        async (message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.MusicNothingPlaying)
+        (message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.MusicNothingPlaying)
     );
 }
 
@@ -78,5 +80,5 @@ export function RequireMusicPaused(): MethodDecorator {
 export function getLocale(interaction: CommandInteraction | SelectMenuInteraction | AutocompleteInteraction) {
     const loc = getLocaleString(interaction);
 
-    return container.i18n.languages.has(loc) ? container.i18n.getT(loc) : container.i18n.getT('en-US');
+    return i18next.languages.includes(loc) ? getT(loc as LocaleString) : getT('en-US');
 }
