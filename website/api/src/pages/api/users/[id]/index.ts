@@ -32,7 +32,8 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                         userId: user.userId,
                         pronouns: user.pronouns,
                         whitelisted: user.whitelisted,
-                        bans: user.bans
+                        bans: user.bans,
+                        attributes: user.attributes
                     };
 
                     res.json({ ...returnObj });
@@ -43,7 +44,7 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
             break;
         case 'POST': {
             const { id } = req.query;
-            const { pronouns } = req.body || {};
+            const { pronouns, attributes } = req.body || {};
 
             await prisma.$connect();
 
@@ -63,8 +64,9 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                 return;
             }
 
-            type BodyType = OType<{ userId: string; pronouns?: number }>;
-            const data: BodyType = { userId: id as string };
+            type AttributeType = OType<{ email?: string; github?: string; twitter?: string; location?: string }>;
+            type BodyType = OType<{ userId: string; pronouns?: number; attributes: AttributeType }>;
+            const data: BodyType = { userId: id as string, attributes: {} };
 
             if (pronouns) {
                 const validPronuns = Array.from(Array(17).keys());
@@ -82,6 +84,13 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                 data.pronouns = pronouns as number;
             }
 
+            if (attributes) {
+                if (attributes.email) data.attributes.email = attributes.email;
+                if (attributes.github) data.attributes.github = attributes.github;
+                if (attributes.location) data.attributes.location = attributes.location;
+                if (attributes.twitter) data.attributes.twitter = attributes.twitter;
+            }
+
             const created = await prisma.user.create({
                 data
             });
@@ -89,7 +98,8 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
             const returnObj = {
                 userId: created.userId,
                 pronouns: created.pronouns,
-                whitelisted: created.whitelisted
+                whitelisted: created.whitelisted,
+                attributes: created.attributes
             };
 
             res.json({ ...returnObj });
