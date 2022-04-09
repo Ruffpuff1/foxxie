@@ -114,7 +114,7 @@ export class GiveawayEntity extends BaseEntity {
 
             await api().channels(this.channelId).messages(this.messageId).reactions(defaultEmoji, '@me').put();
             this.emoji = defaultEmoji;
-            await writeSettings(this.guild!, settings => (settings.giveawayEmoji = defaultEmoji));
+            await writeSettings(this.guild!, settings => settings.giveawayEmoji = defaultEmoji);
         }
 
         return this.save();
@@ -175,7 +175,7 @@ export class GiveawayEntity extends BaseEntity {
     }
 
     public async fetchWinners() {
-        const participants = await this.filter([...(await fetchReactionUsers(this.channelId, this.messageId!, this.emoji))]);
+        const participants = await this.filter([...await fetchReactionUsers(this.channelId, this.messageId!, this.emoji)]);
 
         if (participants.length < this.minimum) return null;
 

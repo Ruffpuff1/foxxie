@@ -34,7 +34,7 @@ export class UserCommand extends AudioCommand {
         }
 
         const current = await audio.getCurrentSong();
-        if (!current && (await audio.count()) === 0) {
+        if (!current && await audio.count() === 0) {
             const content = args.t(LanguageKeys.Commands.Audio.PlayQueueEmpty);
             await send(msg, content);
             return;

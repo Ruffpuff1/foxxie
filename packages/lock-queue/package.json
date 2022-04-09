@@ -4,9 +4,7 @@
   "description": "A simple utility for managing asynchonous RW locks",
   "scripts": {
     "build": "rm -r -f dist && tsup",
-    "lint": "prettier --check . && eslint src --ext mjs,js,ts",
-    "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
-    "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'packages/lock-queue/*'"
+    "lint": "prettier --write . && eslint src --ext mjs,js,ts --fix"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -39,9 +37,6 @@
   ],
   "devDependencies": {
     "@types/node": "17.0.23",
-    "@typescript-eslint/eslint-plugin": "5.18.0",
-    "@typescript-eslint/parser": "5.18.0",
-    "eslint": "8.12.0",
     "typescript": "4.6.3"
   },
   "dependencies": {

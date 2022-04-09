@@ -25,4 +25,5 @@ export class FoxxieSlashCommandBuilder extends SlashCommandBuilder {
     }
 }
 
-export interface FoxxieSlashCommandSubcommandsOnlyBuilder extends Pick<FoxxieSlashCommandBuilder, 'toJSON' | 'addSubcommand' | 'addSubcommandGroup' | 'setName' | 'setDescription' | 'subcommand'> {}
+export interface FoxxieSlashCommandSubcommandsOnlyBuilder
+    extends Pick<FoxxieSlashCommandBuilder, 'toJSON' | 'addSubcommand' | 'addSubcommandGroup' | 'setName' | 'setDescription' | 'subcommand'> {}

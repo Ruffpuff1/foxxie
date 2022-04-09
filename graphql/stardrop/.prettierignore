@@ -6,3 +6,4 @@ coverage/
 package.json
 .eslintrc.json
 tsconfig.json
+codegen.yml

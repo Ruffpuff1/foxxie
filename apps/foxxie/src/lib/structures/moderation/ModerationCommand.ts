@@ -56,7 +56,7 @@ export class ModerationCommand extends FoxxieCommand {
             const modRolePosition = mod?.roles.highest.position;
 
             // A member who isn't a server owner is not allowed to moderate somebody with higher role than them:
-            if (!mod || !modRolePosition || (!isGuildOwner(mod) && targetRolePos >= modRolePosition)) {
+            if (!mod || !modRolePosition || !isGuildOwner(mod) && targetRolePos >= modRolePosition) {
                 throw context.t(LanguageKeys.Listeners.Errors.ModerationRole, { target: `**${context.target.tag}**` });
             }
         }

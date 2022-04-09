@@ -703,7 +703,7 @@ export const villagers = new EnumCollection<string, StardewValleyTypes.Villager>
             aliases: ['mrasmodius'],
             birthday: `${SeasonEnum.Winter} 17`,
             livesIn: LivesInEnum.CindersapForest,
-            address: 'Wizard\'s Tower',
+            address: "Wizard's Tower",
             family: [],
             friends: ['linus'],
             marriage: false,

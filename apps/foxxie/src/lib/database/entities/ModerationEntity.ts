@@ -126,7 +126,7 @@ export class ModerationEntity extends BaseEntity {
 
         if (!this.shouldSend) return null;
 
-        this.caseId = (await this.#manager!.getCurrentId()) + 1;
+        this.caseId = await this.#manager!.getCurrentId() + 1;
         this.#manager!.insert(this);
 
         this.guild?.client.emit(Events.ModerationEntryAdd, this);

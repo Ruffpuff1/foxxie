@@ -139,7 +139,6 @@ declare module '@foxxie/env' {
     }
 }
 
-
 declare module '@sapphire/framework' {
     interface DetailedDescriptionCommandObject {}
 

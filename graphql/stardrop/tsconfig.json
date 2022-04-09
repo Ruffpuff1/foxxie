@@ -61,7 +61,8 @@
         }
     },
     "ignore": [
-        "dist/"
+        "dist/",
+        "codegen.yml"
     ],
     "include": [
         "./src/**/*"

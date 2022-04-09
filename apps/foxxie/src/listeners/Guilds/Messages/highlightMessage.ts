@@ -30,7 +30,7 @@ export class UserListener extends Listener<Events.UserMessage> {
 
         const previousChannelMessages = [];
         if (msg.channel.permissionsFor(msg.guild.me!).has(PermissionFlagsBits.ReadMessageHistory)) {
-            previousChannelMessages.push(...(await this.fetchMessages(msg, t)));
+            previousChannelMessages.push(...await this.fetchMessages(msg, t));
         }
 
         for (const match of wordResults.results) {

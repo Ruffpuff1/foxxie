@@ -4,10 +4,8 @@
   "description": "Router for foxxie's Api.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
-    "lint": "prettier --check . && eslint src --ext mjs,js,ts",
-    "test": "jest --pass-with-no-tests --collect-coverage --verbose",
-    "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
-    "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'packages/api/*'"
+    "lint": "prettier --write . && eslint src --ext mjs,js,ts --fix",
+    "test": "jest --pass-with-no-tests --collect-coverage --verbose"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -44,9 +42,6 @@
     "@ruffpuff/ts": "^1.0.4",
     "@types/jest": "^27.4.1",
     "@types/node": "17.0.23",
-    "@typescript-eslint/eslint-plugin": "5.18.0",
-    "@typescript-eslint/parser": "5.18.0",
-    "eslint": "8.12.0",
     "jest": "^27.5.1",
     "typescript": "4.6.3"
   },

@@ -77,7 +77,7 @@ export class UserTask extends ScheduledTask {
         } catch (error) {
             if (!(error instanceof DiscordAPIError)) return;
             if (error.code === RESTJSONErrorCodes.UnknownChannel) {
-                await writeSettings(guild, settings => (settings.clockChannel = null));
+                await writeSettings(guild, settings => settings.clockChannel = null);
             }
         }
     }
@@ -95,7 +95,7 @@ export class UserTask extends ScheduledTask {
     }
 
     private getSceneEmoji(sign: string, parsedHour: number, parsedMin: number) {
-        const isAfterSunset = (parsedHour > 5 && sign === 'pm') || (sign === 'am' && (parsedHour < 5 || parsedHour === 12));
+        const isAfterSunset = parsedHour > 5 && sign === 'pm' || sign === 'am' && (parsedHour < 5 || parsedHour === 12);
         const isSunSet = parsedHour === 5 && parsedMin < 30;
         const isDusk = parsedHour === 5 && parsedMin >= 30;
         const isTop = parsedHour === 12 && sign === 'am';

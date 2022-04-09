@@ -65,7 +65,7 @@ export class UserListener extends Listener<Events.PointsReward> {
         const settings = await this.getLevelSettings(msg.guild);
         if (!settings.announce) return;
 
-        const isSent = this.container.redis ? (await this.container.redis.get(this.getKey(msg))) === '1' : false;
+        const isSent = this.container.redis ? await this.container.redis.get(this.getKey(msg)) === '1' : false;
 
         if (!isSent) {
             const content = this.getLevelContent(settings.t, msg.member, level);

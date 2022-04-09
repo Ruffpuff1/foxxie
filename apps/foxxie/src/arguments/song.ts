@@ -12,7 +12,7 @@ export class UserArgument extends Argument<string[]> {
         let tracks: string[] | null;
 
         if (SpotifyPlaylistRegExp.test(param) || SpotifySongRegExp.test(param)) tracks = await this.handleSpotify(message, param);
-        else tracks = (await this.fetchURL(message, param)) ?? (await this.handleYouTube(message, param));
+        else tracks = await this.fetchURL(message, param) ?? await this.handleYouTube(message, param);
 
         if (tracks === null || tracks.length === 0) {
             return this.error({

@@ -22,7 +22,7 @@ export class UserInteractionHandler extends InteractionHandler {
                     data.title
                 ];
 
-                return interaction.reply(parts.join('\n'))
+                return interaction.reply(parts.join('\n'));
             }
         }
     }

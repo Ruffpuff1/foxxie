@@ -16,7 +16,7 @@ export class UserListener extends Listener<Events.UserMessage> {
         // don't run on edits.
         if (msg.editedAt) return;
 
-        if (!(await this.isEnabled(msg))) return;
+        if (!await this.isEnabled(msg)) return;
         if (Date.now() - msg.member.joinedTimestamp! < minutes(5)) return;
         if (this.isRatelimited(msg.author.id)) return;
 

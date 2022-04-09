@@ -530,8 +530,7 @@ export class UserCommand extends FoxxieCommand {
         try {
             const result = await api() //
                 .users(userId)
-                .pronouns
-                .get();
+                .pronouns.get();
 
             return result.pronouns;
         } catch {

@@ -79,7 +79,7 @@ export class UserCommand extends SocialCommand {
         const nextLevel = xpNeeded(level + 1);
 
         const diff = nextLevel - points;
-        const progressBar = Math.max(Math.round((points / nextLevel) * 296), 10);
+        const progressBar = Math.max(Math.round(points / nextLevel * 296), 10);
         const position = await this.getPosition(member);
 
         return new Canvas(640, 174)

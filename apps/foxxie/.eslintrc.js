@@ -6,6 +6,7 @@ module.exports = {
         project: 'tsconfig.json'
     },
     rules: {
+        'no-redeclare': 'off',
         '@typescript-eslint/member-ordering': [
             'error',
             {
