@@ -1,5 +1,5 @@
 {
-    "extends": "@sapphire/ts-config",
+    "extends": "@foxxie/ts-config",
     "compilerOptions": {
         "lib": [
             "ESNext",

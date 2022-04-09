@@ -12,7 +12,8 @@
     "affected": "yarn nx graph",
     "full:test": "jest --pass-with-no-tests --collect-coverage --verbose",
     "nx:b": "yarn nx build",
-    "clean": "node scripts/clean.mjs"
+    "clean": "node scripts/clean.mjs",
+    "delete-branches": "git branch  | egrep -v \"(^\\*|master|main)\" | xargs git branch -D"
   },
   "contributors": [
     "Ruffpuff1 <contact@ruffpuff.dev>",
@@ -41,7 +42,6 @@
     "@nrwl/nx-cloud": "13.2.2",
     "@nrwl/workspace": "^13.10.0",
     "@octokit/action": "^3.18.0",
-    "@sapphire/ts-config": "3.3.4",
     "@types/eslint": "^8",
     "@types/skia-canvas": "^0.9.28",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
@@ -61,7 +61,11 @@
   "workspaces": [
     "apps/*",
     "graphql/*",
-    "packages/*"
+    "packages/*",
+    "website/*"
   ],
-  "packageManager": "yarn@1.22.18"
+  "packageManager": "yarn@1.22.18",
+  "dependencies": {
+    "@foxxie/ts-config": "^0.0.0"
+  }
 }
