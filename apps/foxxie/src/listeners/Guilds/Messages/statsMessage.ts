@@ -20,7 +20,7 @@ export class UserListener extends Listener<Events.StatsMessage> {
     }
 
     private async countGuild(guildId: string): Promise<void> {
-        await writeSettings(guildId, (settings: GuildEntity) => (settings[GuildSettings.MessageCount] += 1));
+        await writeSettings(guildId, (settings: GuildEntity) => settings[GuildSettings.MessageCount] += 1);
     }
 
     private async countMember(member: GuildMember, guildId: string): Promise<void> {

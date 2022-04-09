@@ -102,7 +102,7 @@ export class Queue {
     }
 
     public async canStart(): Promise<boolean> {
-        return (await this.store.redis.exists(this.redisKeys.current, this.redisKeys.next)) > 0;
+        return await this.store.redis.exists(this.redisKeys.current, this.redisKeys.next) > 0;
     }
 
     public async add(...tracks: readonly Song[]): Promise<number> {

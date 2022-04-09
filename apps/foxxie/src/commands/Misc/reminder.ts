@@ -37,7 +37,7 @@ export class UserCommand extends FoxxieCommand {
         });
         const repeat = await args.pick('timespan', { minimum: minutes(1), maximum: years(1) }).catch(() => null);
         const channel = await args.pick('guildTextChannel').catch(() => null);
-        const content = (await args.rest('string')) ?? args.t(LanguageKeys.Commands.Misc.ReminderDefault);
+        const content = await args.rest('string') ?? args.t(LanguageKeys.Commands.Misc.ReminderDefault);
 
         let json: ReturnType<MessageEmbed['toJSON']> | null = null;
         try {

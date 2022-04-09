@@ -45,7 +45,7 @@ export class UserCommand extends AudioCommand {
     }
 
     private async checkPerms(msg: GuildMessage, id: string): Promise<void> {
-        const channel = <VoiceChannel | null>await resolveToNull(msg.guild.channels.fetch(id));
+        const channel = <VoiceChannel | null> await resolveToNull(msg.guild.channels.fetch(id));
         const permissions = channel!.permissionsFor(msg.guild.me!);
 
         if (channel!.full && !permissions.has(PermissionFlagsBits.Administrator)) this.error(LanguageKeys.Commands.Audio.JoinVoiceChannelFull);

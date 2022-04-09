@@ -107,7 +107,7 @@ export abstract class Serializer<T> extends AliasPiece {
     // eslint-disable-next-line complexity
     protected minOrMax(value: T, length: number, { entry: { minimum, maximum, inclusive, name }, t }: SerializerUpdateContext): SerializerResult<T> {
         if (minimum !== null && maximum !== null) {
-            if ((length >= minimum && length <= maximum && inclusive) || (length > minimum && length < maximum && !inclusive)) {
+            if (length >= minimum && length <= maximum && inclusive || length > minimum && length < maximum && !inclusive) {
                 return this.ok(value);
             }
 
@@ -130,7 +130,7 @@ export abstract class Serializer<T> extends AliasPiece {
         }
 
         if (minimum !== null) {
-            if ((length >= minimum && inclusive) || (length > minimum && !inclusive)) {
+            if (length >= minimum && inclusive || length > minimum && !inclusive) {
                 return this.ok(value);
             }
 
@@ -143,7 +143,7 @@ export abstract class Serializer<T> extends AliasPiece {
         }
 
         if (maximum !== null) {
-            if ((length <= maximum && inclusive) || (length < maximum && !inclusive)) {
+            if (length <= maximum && inclusive || length < maximum && !inclusive) {
                 return this.ok(value);
             }
 

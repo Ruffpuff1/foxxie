@@ -1,4 +1,4 @@
-import type { Endpoints } from "@octokit/types";
+import type { Endpoints } from '@octokit/types';
 
 export namespace Github {
     export type User = Endpoints['GET /users/{username}']['response']['data'];
@@ -12,5 +12,6 @@ export namespace Github {
 
     export type UserResult = UserNotFound | User;
 
-    {}
+    {
+    }
 }

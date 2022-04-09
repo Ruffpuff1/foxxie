@@ -10,3 +10,4 @@ tsconfig.base.json
 src/languages/**/*.json
 docker-compose.yml
 crowdin.yml
+/assets

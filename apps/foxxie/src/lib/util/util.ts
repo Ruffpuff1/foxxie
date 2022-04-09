@@ -221,7 +221,7 @@ export function getServerDetails(): ServerDetails {
     return {
         totalmemory,
         memoryUsed,
-        memoryPercent: ((parseInt(memoryUsed, 10) / parseInt(totalmemory, 10)) * 100).toFixed(1),
+        memoryPercent: (parseInt(memoryUsed, 10) / parseInt(totalmemory, 10) * 100).toFixed(1),
         process: hostname(),
         cpuCount: cpus().length,
         cpuUsage: (loadavg()[0] * 10).toFixed(1),

@@ -38,8 +38,8 @@ export class UserListener extends AnalyticsListener<Events.AnalyticsPostStats> {
         const combined = members.concat(users as unknown as MemberEntity);
 
         return {
-            points: combined.reduce((acc, d) => (d.points += acc), 0),
-            rep: users.reduce((acc, d) => (d.reputation += acc), 0),
+            points: combined.reduce((acc, d) => d.points += acc, 0),
+            rep: users.reduce((acc, d) => d.reputation += acc, 0),
             stars: await this.container.db.starboards.find().then(s => s.length)
         };
     }

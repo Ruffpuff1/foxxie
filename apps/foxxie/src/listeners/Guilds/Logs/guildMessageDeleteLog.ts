@@ -16,7 +16,7 @@ import type { TFunction } from '@sapphire/plugin-i18next';
 })
 export class UserListener extends Listener<Events.GuildMessageDeleteLog> {
     public async run(...[msg]: EventArgs<Events.GuildMessageDeleteLog>): Promise<void> {
-        if (msg.partial || !msg.guild || !msg.guild.available || msg.author!.bot || (!msg.content && !msg.attachments.size)) return;
+        if (msg.partial || !msg.guild || !msg.guild.available || msg.author!.bot || !msg.content && !msg.attachments.size) return;
 
         const [ignoredChannels, t] = await acquireSettings(msg.guild, settings => [settings[GuildSettings.Channels.IgnoreAll], settings.getLanguage()]);
 

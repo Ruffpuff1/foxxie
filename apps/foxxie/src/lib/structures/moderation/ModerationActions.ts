@@ -449,7 +449,7 @@ export class ModerationActions {
             reason: lang.reason
         });
 
-        await writeSettings(this.guild, settings => (settings[settingsKey] = role.id));
+        await writeSettings(this.guild, settings => settings[settingsKey] = role.id);
 
         if (
             await messagePrompt(
@@ -522,7 +522,7 @@ export class ModerationActions {
     }
 
     private get manageableChannelCount() {
-        return this.guild.channels.cache.reduce((acc, channel) => (channel.manageable ? acc + 1 : acc), 0);
+        return this.guild.channels.cache.reduce((acc, channel) => channel.manageable ? acc + 1 : acc, 0);
     }
 
     private get persistRoles() {

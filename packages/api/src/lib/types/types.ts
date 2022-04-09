@@ -1,4 +1,11 @@
-import type { RESTGetAPIUsersResult, RESTGetAPIUsersUserBansResult, RESTGetAPIUsersUserBaseObject, RESTGetAPIUsersUserPronounsResult, RESTGetAPIUsersUserResult, RESTPostAPIUsersUserJSONBody } from './rest';
+import type {
+    RESTGetAPIUsersResult,
+    RESTGetAPIUsersUserBansResult,
+    RESTGetAPIUsersUserBaseObject,
+    RESTGetAPIUsersUserPronounsResult,
+    RESTGetAPIUsersUserResult,
+    RESTPostAPIUsersUserJSONBody
+} from './rest';
 
 /**
  * The Api routing function.
@@ -23,7 +30,7 @@ interface ApiUsers {
      * Returns a list of Partial users in the API.
      * @method GET
      */
-    get(): Promise<RESTGetAPIUsersResult>
+    get(): Promise<RESTGetAPIUsersResult>;
 }
 
 /**

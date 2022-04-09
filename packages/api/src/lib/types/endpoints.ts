@@ -1,4 +1,10 @@
-import type { RESTGetAPIUsersResult, RESTGetAPIUsersUserBansResult, RESTGetAPIUsersUserBaseObject, RESTGetAPIUsersUserPronounsResult, RESTGetAPIUsersUserResult } from './rest';
+import type {
+    RESTGetAPIUsersResult,
+    RESTGetAPIUsersUserBansResult,
+    RESTGetAPIUsersUserBaseObject,
+    RESTGetAPIUsersUserPronounsResult,
+    RESTGetAPIUsersUserResult
+} from './rest';
 
 export interface Endpoints {
     /**

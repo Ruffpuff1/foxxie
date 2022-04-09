@@ -5,7 +5,7 @@ describe('esMX month name parser', () => {
         const str = 'marzo';
         const result = esMX.monthName(str);
 
-        expect(result!.time).toBeInstanceOf(Date)
+        expect(result!.time).toBeInstanceOf(Date);
     });
 
     test('WHEN testing for a duration, resolve duration', () => {

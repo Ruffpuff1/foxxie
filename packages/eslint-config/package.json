@@ -4,9 +4,7 @@
   "description": "Strict, shared eslint configuration used within Foxxie's projects. With Typescript support.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
-    "lint": "prettier --check . && eslint . --ext mjs,js,ts",
-    "format": "prettier --write . && eslint . --ext mjs,js,ts --fix",
-    "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'packages/eslint-config/*'"
+    "lint": "prettier --write . && eslint . --ext mjs,js,ts --fix"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

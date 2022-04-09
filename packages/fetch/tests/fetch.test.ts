@@ -196,7 +196,7 @@ describe('fetch', () => {
                     three: '3'
                 });
 
-            expect(Reflect.get(query.coreOptions, 'one')).toBe('1')
+            expect(Reflect.get(query.coreOptions, 'one')).toBe('1');
         });
     });
 });

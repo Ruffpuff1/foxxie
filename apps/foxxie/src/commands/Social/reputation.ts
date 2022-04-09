@@ -40,7 +40,7 @@ export class UserCommand extends SocialCommand {
             return send(msg, content);
         }
 
-        const reset = previously.length >= 3 || (timeReputation && timeReputation + days(1) < Date.now());
+        const reset = previously.length >= 3 || timeReputation && timeReputation + days(1) < Date.now();
 
         if (reset) author.cooldown.reputation.users = [];
         if (author.cooldown.reputation.users.includes(user.id)) this.error(LanguageKeys.Commands.Social.ReputationAlreadyExists, { user: user.tag });

@@ -50,7 +50,7 @@ export class UserTask extends ScheduledTask {
         } catch (error) {
             if (!(error instanceof DiscordAPIError)) return;
             if (error.code === RESTJSONErrorCodes.UnknownChannel) {
-                await writeSettings(guild, settings => (settings[GuildSettings.Channels.Disboard] = null));
+                await writeSettings(guild, settings => settings[GuildSettings.Channels.Disboard] = null);
             }
         }
     }

@@ -47,7 +47,7 @@ export async function fetchChannel<T = GuildTextBasedChannel>(resolvable: GuildR
 
     const channel = await resolveToNull(guild.channels.fetch(channelId));
     if (!channel) {
-        await writeSettings(guild, settings => (settings[key] = null!));
+        await writeSettings(guild, settings => settings[key] = null!);
         return null;
     }
 

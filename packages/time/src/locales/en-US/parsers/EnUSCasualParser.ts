@@ -47,4 +47,3 @@ export class EnUSCasualParser {
         return d.getTime() - e.setHours(0, 0, 0, 0);
     }
 }
-
