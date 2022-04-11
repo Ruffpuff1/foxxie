@@ -76,25 +76,24 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
             // eslint-disable-next-line no-negated-condition
             if (!user) {
                 user = {
-                    ...await prisma.user.create({
+                    ...(await prisma.user.create({
                         data: {
                             userId: id as string,
                             attributes: {}
                         }
-                    }),
+                    })),
                     bans: [postObj as Ban]
                 };
-            } else {
-                const bans = user.bans.map(({ reason, provider, moderatorId, createdAt, userId }) => ({
-                    provider,
-                    reason,
-                    moderatorId,
-                    createdAt,
-                    userId
-                }));
-
-                res.json({ bans });
             }
+            const bans = user.bans.map(({ reason, provider, moderatorId, createdAt, userId }) => ({
+                provider,
+                reason,
+                moderatorId,
+                createdAt,
+                userId
+            }));
+
+            res.json({ bans });
 
             await prisma.$disconnect();
             break;
