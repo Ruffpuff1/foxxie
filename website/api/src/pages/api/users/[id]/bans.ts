@@ -43,7 +43,9 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
             break;
         case 'POST': {
             const { id } = req.query;
-            const { reason, provider, moderatorId, createdAt, userId } = req.body || {};
+            const { reason, provider, moderatorId, createdAt, userId } = JSON.parse(req.body || {});
+
+            console.log(!req.body.reason);
 
             if (!reason && !moderatorId && !createdAt && !userId) {
                 res.json({
@@ -76,12 +78,18 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
             // eslint-disable-next-line no-negated-condition
             if (!user) {
                 user = {
-                    ...await prisma.user.create({
+                    ...(await prisma.user.create({
                         data: {
                             userId: id as string,
-                            attributes: {}
+                            attributes: {
+                                github: null,
+                                twitter: null,
+                                color: null,
+                                location: null,
+                                email: null,
+                            }
                         }
-                    }),
+                    })),
                     bans: [postObj as Ban]
                 };
             }
