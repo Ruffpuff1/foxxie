@@ -3,7 +3,8 @@ import type {
     RESTGetAPIUsersUserBansResult,
     RESTGetAPIUsersUserBaseObject,
     RESTGetAPIUsersUserPronounsResult,
-    RESTGetAPIUsersUserResult
+    RESTGetAPIUsersUserResult,
+    RESTPostAPIUsersUserBansResult
 } from './rest';
 
 export interface Endpoints {
@@ -39,6 +40,14 @@ export interface Endpoints {
      * @method GET
      */
     'GET /users/:id/bans': RESTGetAPIUsersUserBansResult;
+    /**
+     * The `POST /users/:id/bans` endpoint.
+     * Returns a full user object of the user the ban belongs to.
+     * Will return error 30002 "Invalid Ban" if ban fields are not valid or missing.
+     * @endpoint /users/:id/bans
+     * @method POST
+     */
+    'POST /users/:id/bans': RESTPostAPIUsersUserBansResult;
     /**
      * The `GET /users/:id/pronouns` endpoint.
      * Returns an object with the user's pronouns.
