@@ -44,7 +44,7 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
             break;
         case 'POST': {
             const { id } = req.query;
-            const { pronouns, attributes } = req.body || {};
+            const { pronouns, attributes } = JSON.parse(req.body || {});
 
             await prisma.$connect();
 
@@ -64,9 +64,18 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                 return;
             }
 
-            type AttributeType = OType<{ color?: number; email?: string; github?: string; twitter?: string; location?: string }>;
+            type AttributeType = OType<{ color?: number | null; email?: string | null; github?: string | null; twitter?: string | null; location?: string | null }>;
             type BodyType = OType<{ userId: string; pronouns?: number; attributes: AttributeType }>;
-            const data: BodyType = { userId: id as string, attributes: {} };
+            const data: BodyType = {
+                userId: id as string,
+                attributes: {
+                    github: null,
+                    twitter: null,
+                    color: null,
+                    location: null,
+                    email: null
+                }
+            };
 
             if (pronouns) {
                 const validPronuns = Array.from(Array(17).keys());
@@ -107,6 +116,7 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
             res.json({ ...returnObj });
 
             await prisma.$disconnect();
+            break;
         }
         default:
             {
