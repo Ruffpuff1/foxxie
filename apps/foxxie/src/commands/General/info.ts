@@ -2,7 +2,7 @@ import { FoxxieCommand } from '#lib/structures';
 import { ChatInputSubcommandArgs, CommandName, EmojiObject, GuildInteraction } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { RegisterChatInputCommand } from '@foxxie/commands';
-import { CommandOptionsRunTypeEnum, isErr, Result, UserError } from '@sapphire/framework';
+import { CommandOptionsRunTypeEnum, container, isErr, Result, UserError } from '@sapphire/framework';
 import { floatPromise, getGuildIds } from '#utils/util';
 import type { TFunction } from '@foxxie/i18n';
 import {
@@ -25,14 +25,14 @@ import {
 } from 'discord.js';
 import { cast, ChannelMentionRegex, chunk, resolveToNull, Time, toTitleCase, twemoji, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { LanguageKeys } from '#lib/i18n';
-import { pronouns } from '#utils/transformers';
-import { BrandingColors } from '#utils/constants';
+import { BrandingColors, Colors } from '#utils/constants';
 import { GuildBasedChannelTypes, PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
 import { acquireSettings, GuildSettings } from '#lib/database';
 import { fetch } from '@foxxie/fetch';
 import { FoxxieEmbed } from '#lib/discord';
-import { api } from '@foxxie/api';
+import type { RESTGetAPIUsersUserBansBan } from '@foxxie/api';
+import { fetchApiUser, pronouns } from '#utils/API';
 
 const SORT = (x: Role, y: Role) => Number(y.position > x.position) || Number(x.position === y.position) - 1;
 const roleMention = (role: Role): string => role.toString();
@@ -526,15 +526,14 @@ export class UserCommand extends FoxxieCommand {
         };
     }
 
-    private async fetchPronouns(userId: string) {
+    private async fetchAPI(userId: string) {
         try {
-            const result = await api() //
-                .users(userId)
-                .pronouns.get();
-
-            return result.pronouns;
+            return await fetchApiUser(userId);
         } catch {
-            return null;
+            return {
+                pronouns: null,
+                bans: []
+            };
         }
     }
 
@@ -544,12 +543,14 @@ export class UserCommand extends FoxxieCommand {
 
         let authorString = `${user.tag} [${user.id}]`;
         const member = await resolveToNull(interaction.guild.members.fetch(user.id));
+        const apiData = await this.fetchAPI(user.id);
+        console.log(apiData);
 
-        const pnKey = pronouns(await this.fetchPronouns(user.id));
+        const pnKey = pronouns(apiData.pronouns);
         if (pnKey) authorString += ` (${pnKey})`;
 
         const template = new MessageEmbed()
-            .setColor(settings.user.profile.color || interaction.guild.me?.displayColor || BrandingColors.Primary)
+            .setColor(apiData.bans.length ? Colors.Red : settings.user.profile.color || interaction.guild.me?.displayColor || BrandingColors.Primary)
             .setThumbnail(member?.displayAvatarURL({ dynamic: true }) || user.displayAvatarURL({ dynamic: true }))
             .setAuthor({
                 name: authorString,
@@ -572,6 +573,8 @@ export class UserCommand extends FoxxieCommand {
                 if (member) this.addRoles(embed, member, t);
                 await this.addWarnings(embed, user.id, interaction.guild.id, t);
                 await this.addNotes(embed, user.id, interaction.guild.id, t);
+
+                if (apiData.bans.length) embed.addField('bans', await UserCommand.formatBans(apiData.bans, t));
 
                 return embed;
             });
@@ -724,5 +727,16 @@ export class UserCommand extends FoxxieCommand {
         });
 
         return { content, files: [{ attachment, name: 'emoji.png' }] };
+    }
+
+    private static async formatBans(bans: RESTGetAPIUsersUserBansBan[], t: TFunction): Promise<string> {
+        const promises = bans.map(async (ban, i) => {
+            const moderator = await resolveToNull(container.client.users.fetch(ban.moderatorId));
+            return `${i + 1}. ${ban.reason} - **${moderator?.tag || t(LanguageKeys.Globals.Unknown)}** (${t(LanguageKeys.Globals.Duration, {
+                duration: ban.createdAt
+            })})`;
+        });
+
+        return Promise.all(promises).then(result => result.join('\n'));
     }
 }

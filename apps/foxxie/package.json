@@ -70,7 +70,7 @@
     "dependencies": {
         "@discordjs/builders": "^0.12.0",
         "@favware/graphql-pokemon": "6.5.0",
-        "@foxxie/api": "^0.0.1",
+        "@foxxie/api": "0.0.2",
         "@foxxie/commands": "^0.0.1",
         "@foxxie/env": "^0.0.2",
         "@foxxie/fetch": "0.0.4",
@@ -101,7 +101,7 @@
         "colorette": "^2.0.16",
         "discord.js": "^13.6.0",
         "dotenv-cra": "^3.0.2",
-        "i18next": "^21.6.14",
+        "i18next": "^21.6.16",
         "ioredis": "^5.0.3",
         "lexure": "^0.17.0",
         "moment-timezone": "^0.5.34",
@@ -111,7 +111,7 @@
     },
     "devDependencies": {
         "@foxxie/eslint-config": "^0.0.2",
-        "@foxxie/types": "^0.0.5",
+        "@foxxie/types": "^0.0.6",
         "@types/bull": "3.15.8",
         "@types/ioredis": "4.28.10",
         "@types/node": "17.0.23",
