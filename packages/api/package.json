@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Router for foxxie's Api.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
