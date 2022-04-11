@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { OType } from '@ruffpuff/ts';
 
@@ -90,11 +90,11 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                 if (attributes.location) data.attributes.location = attributes.location;
                 if (attributes.twitter) data.attributes.twitter = attributes.twitter;
 
-                if (attributes.color && !isNaN(parseInt(attributes.color))) data.attributes.color = parseInt(attributes.color);
+                if (attributes.color && !isNaN(parseInt(attributes.color, 10))) data.attributes.color = parseInt(attributes.color, 10);
             }
 
             const created = await prisma.user.create({
-                data
+                data: data as User
             });
 
             const returnObj = {
