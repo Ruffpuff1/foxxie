@@ -1,5 +1,5 @@
 // @ts-expect-error pronoun enum imported for jsdoc.
-import { PronounEnum } from './rest'; // lgtm [js/unused-local-variable]
+import { PronounEnum, RESTGetAPIUsersUserBansBan } from './rest'; // lgtm [js/unused-local-variable]
 
 export enum RESTJSONErrorCodes {
     /**
@@ -21,5 +21,11 @@ export enum RESTJSONErrorCodes {
      * Error code `30001` "Invalid pronouns".
      * Given when pronouns specified in a request body do not exist on the {@link PronounEnum}.
      */
-    InvalidPronouns = 30001
+    InvalidPronouns = 30001,
+    /**
+     * Error code `30002` "Invalid Ban"
+     * Given when a ban object is either incomplete or malformed.
+     * See {@link RESTGetAPIUsersUserBansBan}.
+     */
+    InvalidBan = 30002
 }
