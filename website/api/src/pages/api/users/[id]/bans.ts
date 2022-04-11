@@ -78,7 +78,7 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
             // eslint-disable-next-line no-negated-condition
             if (!user) {
                 user = {
-                    ...(await prisma.user.create({
+                    ...await prisma.user.create({
                         data: {
                             userId: id as string,
                             attributes: {
@@ -86,10 +86,10 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                                 twitter: null,
                                 color: null,
                                 location: null,
-                                email: null,
+                                email: null
                             }
                         }
-                    })),
+                    }),
                     bans: [postObj as Ban]
                 };
             }
