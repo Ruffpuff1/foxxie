@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
-import type { CombineObjects } from '@ruffpuff/ts';
-
 /**
  * The result for the `GET /users` endpoint.
  * Contains an array of {@link Partial} user objects in the API.
@@ -8,14 +7,14 @@ import type { CombineObjects } from '@ruffpuff/ts';
 export type RESTGetAPIUsersResult = {
     /**
      * An array of {@link Partial} user objects in the API.
-     * Omitting the bans field on the users.
+     * Omitting the bans and attributes field on the users.
      */
     users: RESTGetAPIUsersUserBaseObject[];
 };
 
 /**
  * Represents a base user in the API.
- * Does not contain the `bans` field.
+ * Does not contain the `bans` and `attributes` field.
  */
 export type RESTGetAPIUsersUserBaseObject = {
     /**
@@ -35,10 +34,23 @@ export type RESTGetAPIUsersUserBaseObject = {
 };
 
 /**
+ * Represents a full user in the API.
+ * Every field is included.
+ */
+export type RESTGetAPIUsersUserFullUserObject = RESTGetAPIUsersUserBaseObject &
+    RESTGetAPIUsersUserBansResult & {
+        /**
+         * An object of user attributes, all can be set to `null`.
+         * For refrence see {@link RESTGetAPIUsersUserAttributes}.
+         */
+        attributes: RESTGetAPIUsersUserAttributes;
+    };
+
+/**
  * The result for the `GET /users/:id` endpoint.
  * Represents a user in the API.
  */
-export type RESTGetAPIUsersUserResult = CombineObjects<RESTGetAPIUsersUserBaseObject, RESTGetAPIUsersUserBansResult>;
+export type RESTGetAPIUsersUserResult = RESTGetAPIUsersUserFullUserObject;
 
 /**
  * The JSON body to send in the `POST /users/:id` endpoint.
@@ -50,6 +62,11 @@ export type RESTPostAPIUsersUserJSONBody = AddUndefinedToPossiblyUndefinedProper
      * Must be a member of the {@link PronounEnum} or not specified.
      */
     pronouns?: PronounEnum;
+    /**
+     * An object of user attributes, all optional or can be set to `null`.
+     * For refrence see {@link RESTGetAPIUsersUserAttributes}.
+     */
+    attributes?: MakeAllPropertiesOfInterfaceUndefined<RESTGetAPIUsersUserAttributes>;
 }>;
 
 /**
@@ -62,10 +79,13 @@ export type RESTGetAPIUsersUserBansResult = {
      * An array of {@link RESTGetAPIUserUserBansBan} objects.
      * Will be an empty array if the user has no bans.
      */
-    bans: RESTGetAPIUserUserBansBan[];
+    bans: RESTGetAPIUsersUserBansBan[];
 };
 
-export type RESTGetAPIUserUserBansBan = {
+/**
+ * A ban user object.
+ */
+export type RESTGetAPIUsersUserBansBan = {
     /**
      * The provider for the ban, will currently always be `Foxxie`.
      */
@@ -87,6 +107,28 @@ export type RESTGetAPIUserUserBansBan = {
      */
     userId: string;
 };
+
+/**
+ * A user's attributes. All will be null if not defined.
+ */
+export type RESTGetAPIUsersUserAttributes = MakeEveryPropertyOfInterfacePossiblyNull<{
+    /**
+     * A user's email.
+     */
+    email: string;
+    /**
+     * A user's chosen location.
+     */
+    location: string;
+    /**
+     * A user's twitter username.
+     */
+    twitter: string;
+    /**
+     * A user's github username.
+     */
+    github: string;
+}>;
 
 export type RESTGetAPIUsersUserPronounsResult = {
     /**
@@ -185,3 +227,11 @@ export enum PronounEnum {
 type AddUndefinedToPossiblyUndefinedPropertiesOfInterface<Base> = {
     [K in keyof Base]: Base[K] extends Exclude<Base[K], undefined> ? Base[K] : Base[K] | undefined;
 };
+
+type MakeEveryPropertyOfInterfacePossiblyNull<Base> = {
+    [K in keyof Base]: Base[K] | null;
+};
+
+type MakeAllPropertiesOfInterfaceUndefined<Base> = AddUndefinedToPossiblyUndefinedPropertiesOfInterface<{
+    [K in keyof Base]?: Base[K];
+}>;

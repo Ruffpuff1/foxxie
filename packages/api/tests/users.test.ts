@@ -49,4 +49,14 @@ describe('/users endpoint', () => {
 
         expect(Reflect.get(result, 'code')).toBe(RESTJSONErrorCodes.UserAlreadyExists);
     });
+
+    test('WHEN fetching user, include attributes', async () => {
+        const result = await api() //
+            .users('486396074282450946')
+            .get();
+
+        console.log(result);
+
+        expect(result.attributes.email).toBe('mail@ruffpuff.dev');
+    });
 });
