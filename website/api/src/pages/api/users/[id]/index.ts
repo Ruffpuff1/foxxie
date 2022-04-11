@@ -64,7 +64,7 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                 return;
             }
 
-            type AttributeType = OType<{ email?: string; github?: string; twitter?: string; location?: string }>;
+            type AttributeType = OType<{ color?: number; email?: string; github?: string; twitter?: string; location?: string }>;
             type BodyType = OType<{ userId: string; pronouns?: number; attributes: AttributeType }>;
             const data: BodyType = { userId: id as string, attributes: {} };
 
@@ -89,6 +89,8 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
                 if (attributes.github) data.attributes.github = attributes.github;
                 if (attributes.location) data.attributes.location = attributes.location;
                 if (attributes.twitter) data.attributes.twitter = attributes.twitter;
+
+                if (attributes.color && !isNaN(parseInt(attributes.color))) data.attributes.color = parseInt(attributes.color);
             }
 
             const created = await prisma.user.create({
