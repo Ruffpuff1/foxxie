@@ -4,6 +4,8 @@ import type {
     RESTGetAPIUsersUserBaseObject,
     RESTGetAPIUsersUserPronounsResult,
     RESTGetAPIUsersUserResult,
+    RESTPostAPIUsersUserBansJSONBody,
+    RESTPostAPIUsersUserBansResult,
     RESTPostAPIUsersUserJSONBody
 } from './rest';
 
@@ -71,6 +73,11 @@ interface ApiUsersUserBans {
      * @method GET
      */
     get(): Promise<RESTGetAPIUsersUserBansResult>;
+    /**
+     * Add a new user ban to the user.
+     * @method POST
+     */
+    post(body: RESTPostAPIUsersUserBansJSONBody): Promise<RESTPostAPIUsersUserBansResult>;
 }
 
 /**

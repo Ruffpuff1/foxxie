@@ -83,6 +83,18 @@ export type RESTGetAPIUsersUserBansResult = {
 };
 
 /**
+ * The result for this `POST /users/:id/bans` endpoint.
+ * Contains the user that the ban belongs to.
+ */
+export type RESTPostAPIUsersUserBansResult = RESTGetAPIUsersUserFullUserObject;
+
+/**
+ * The JSON body to send in the `POST /users/:id/bans` endpoint.
+ * Every member of the body is required except for the provider.
+ */
+export type RESTPostAPIUsersUserBansJSONBody = RESTGetAPIUsersUserBansBan & { provider?: string };
+
+/**
  * A ban user object.
  */
 export type RESTGetAPIUsersUserBansBan = {
@@ -112,6 +124,10 @@ export type RESTGetAPIUsersUserBansBan = {
  * A user's attributes. All will be null if not defined.
  */
 export type RESTGetAPIUsersUserAttributes = MakeEveryPropertyOfInterfacePossiblyNull<{
+    /**
+     * A user's preferred color.
+     */
+    color: number;
     /**
      * A user's email.
      */
