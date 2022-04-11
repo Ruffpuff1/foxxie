@@ -24,7 +24,7 @@ type UserAttributes {
   color    Int?
   email    String?
   location String?
-  twitter  String
+  twitter  String?
   github   String?
 }
 
