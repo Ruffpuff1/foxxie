@@ -7,6 +7,7 @@ module.exports = {
     },
     rules: {
         'no-redeclare': 'off',
+        '@typescript-eslint/no-extra-parens': 'off',
         '@typescript-eslint/member-ordering': [
             'error',
             {

@@ -3,8 +3,7 @@ import type { TypeOfEmbed } from '#lib/types';
 import { BrandingColors } from '#utils/constants';
 import { Listener } from '@sapphire/framework';
 import type { TFunction } from '@foxxie/i18n';
-import type { APIEmbed } from 'discord-api-types/v9';
-import { ClientEvents, GuildMember, MessageEmbed, MessageEmbedOptions } from 'discord.js';
+import type { ClientEvents, GuildMember, MessageEmbed } from 'discord.js';
 
 export abstract class AutomationListener<T extends keyof ClientEvents | symbol = ''> extends Listener<T> {
     private matchRegex = /{user\.(mention|name|tag|discrim|position|createdat|joinedat)}|{guild(\.(splash|count))?}/g;
@@ -15,18 +14,14 @@ export abstract class AutomationListener<T extends keyof ClientEvents | symbol =
         member: GuildMember,
         t: TFunction,
         message: string | null,
-        embed: APIEmbed | null,
+        embed: MessageEmbed | null,
         defaultMsg: string
     ): [MessageEmbed[], string | null] {
         const embeds: MessageEmbed[] = [];
         const parsedMessage = this.format(message || defaultMsg, member, t);
         const content = message ? parsedMessage : embed ? null : parsedMessage;
 
-        if (embed) {
-            const _embed = new MessageEmbed(embed as MessageEmbedOptions);
-            if (embed.color) _embed.setColor(embed.color);
-            embeds.push(this.prepareEmbed(_embed, member, t));
-        }
+        if (embed) embeds.push(this.prepareEmbed(embed, member, t));
 
         return [embeds, content];
     }
@@ -106,6 +101,7 @@ const enum Matches {
     JoinedAt = '{user.joinedat}'
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace AutomationListener {
     export type Options = Listener.Options;
 }

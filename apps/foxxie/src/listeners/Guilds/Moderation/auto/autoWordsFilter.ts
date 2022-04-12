@@ -2,7 +2,7 @@ import { Events, EventArgs, GuildMessage } from '#lib/types';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { deleteMessage, getModeration, isModerator, isSendableChannel, sendTemporaryMessage } from '#utils/Discord';
-import { acquireSettings, GuildSettings, Word } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { isDev, seconds } from '@ruffpuff/utilities';
 import { IncomingType, ModerationBitField, ModerationFlagBits, OutgoingWordFilterPayload, ModerationHardActionFlags, OutputType } from '#lib/structures';
 import { floatPromise } from '#utils/util';
@@ -11,6 +11,7 @@ import { Message, MessageEmbed } from 'discord.js';
 import { Colors } from '#utils/constants';
 import { LanguageKeys } from '#lib/i18n';
 import type { SendOptions } from '#utils/moderation';
+import type { Word } from '#lib/prisma';
 
 @ApplyOptions<ListenerOptions>({
     event: Events.UserMessage,
@@ -21,7 +22,7 @@ export class UserListener extends Listener<Events.UserMessage> {
         const shouldRun = this.shouldRun(msg);
         if (!shouldRun) return;
 
-        const [regex, words, t] = await acquireSettings(msg.guild, settings => [
+        const [regex, words, t] = await this.container.prisma.guilds(msg.guild.id, settings => [
             settings.wordFilterRegExp,
             settings[GuildSettings.Moderation.Words],
             settings.getLanguage()
@@ -118,7 +119,7 @@ export class UserListener extends Listener<Events.UserMessage> {
     }
 
     private async onMute(msg: GuildMessage, t: TFunction, duration: number | null) {
-        const roleId = await acquireSettings(msg.guild, GuildSettings.Roles.Muted);
+        const roleId = await this.container.prisma.guilds(msg.guild.id, GuildSettings.Roles.Muted);
         if (!roleId) return;
 
         return getModeration(msg.guild).actions.mute(
@@ -177,7 +178,7 @@ export class UserListener extends Listener<Events.UserMessage> {
     }
 
     private async getDmOptions(msg: GuildMessage): Promise<SendOptions> {
-        const shouldSend = await acquireSettings(msg.guild, GuildSettings.Moderation.Dm);
+        const shouldSend = await this.container.prisma.guilds(msg.guild.id, GuildSettings.Moderation.Dm);
         return { send: shouldSend };
     }
 

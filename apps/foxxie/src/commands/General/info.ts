@@ -28,7 +28,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { BrandingColors, Colors } from '#utils/constants';
 import { GuildBasedChannelTypes, PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/prisma';
 import { fetch } from '@foxxie/fetch';
 import { FoxxieEmbed } from '#lib/discord';
 import type { RESTGetAPIUsersUserBansBan } from '@foxxie/api';
@@ -485,7 +485,7 @@ export class UserCommand extends FoxxieCommand {
     }
 
     private async fetchServerData(guild: Guild): Promise<[number, GuildMember, number]> {
-        const messages = await acquireSettings(guild, GuildSettings.MessageCount);
+        const messages = await this.container.prisma.guilds(guild.id, GuildSettings.MessageCount);
         const me = guild.me!;
         const owner = await guild.members.fetch(guild.ownerId);
 

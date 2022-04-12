@@ -4,6 +4,7 @@ import type { LongLivingReactionCollector } from '#external/LongLivingReactionCo
 import type { FoxxieCommand, AnalyticsManager, RedisManager, InviteManager, WorkerManager } from '#lib/structures';
 import type { CustomGet, CustomFunctionGet, LanguageString, ColorData } from './Utils';
 import { Events } from './Events';
+import { PrismaClient } from '@prisma/client';
 import type { GuildMessage, TypeOfEmbed } from './Discord';
 import type { Snowflake } from 'discord-api-types/v9';
 import type { Nullish } from '@sapphire/utilities';
@@ -36,14 +37,14 @@ declare module 'discord.js' {
         [Events.GuildBanAdd]: [ban: GuildBan];
         [Events.GuildBanRemove]: [ban: GuildBan];
         [Events.GuildMemberAdd]: [member: GuildMember];
-        [Events.GuildMemberJoin]: [member: GuildMember, settings: GuildEntity];
+        [Events.GuildMemberJoin]: [member: GuildMember, settings: GuildModel];
         [Events.GuildMessageDeleteLog]: [message: GuildMessage];
         [Events.GuildMessageUpdateLog]: [oldMessage: GuildMessage, message: GuildMessage];
-        [Events.GuildMessageLog]: [guild: Guild, key: PickByValue<GuildEntity, Snowflake | Nullish>, makeEmbed: () => Awaitable<TypeOfEmbed | MessageOptions>];
+        [Events.GuildMessageLog]: [guild: Guild, key: PickByValue<GuildModel, Snowflake | Nullish>, makeEmbed: () => Awaitable<TypeOfEmbed | MessageOptions>];
         [Events.MessageCommandLogging]: [message: Message, command: FoxxieCommand];
         [Events.MessageDeleteResponse]: [message: Message];
-        [Events.ModerationEntryAdd]: [entry: ModerationEntity];
-        [Events.ModerationEntryEdit]: [clone: ModerationEntity, entry: ModerationEntity];
+        [Events.ModerationEntryAdd]: [entry: ModerationModel];
+        [Events.ModerationEntryEdit]: [clone: ModerationModel, entry: ModerationModel];
         [Events.MusicAddNotify]: [message: GuildMessage, tracks: Song[]];
         [Events.MusicFinish]: [queue: Queue];
         [Events.MusicFinishNotify]: [channel: GuildBasedChannelTypes];
@@ -67,6 +68,7 @@ declare module '@sapphire/pieces' {
     interface Container {
         analytics: AnalyticsManager | null;
         db: MongoDB;
+        prisma: MongoClient;
         redis: RedisManager | null;
         settings: SettingsManager;
         workers: WorkerManager;
@@ -78,6 +80,7 @@ declare module '@sapphire/pieces' {
 }
 
 import type { BooleanString, IntegerString } from '@foxxie/env';
+import type { GuildModel, ModerationModel, MongoClient } from '#lib/prisma';
 
 declare module '@foxxie/env' {
     interface Env {

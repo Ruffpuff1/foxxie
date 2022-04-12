@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id                                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  guildId                             String   @map("id")
+  autoroles                           String[]
+  botroles                            String[]
+  channelsBoost                       String?
+  channelsDisboard                    String?
+  channelsGoodbye                     String?
+  channelsIgnoreAll                   String[]
+  channelsLogsDisboard                String?
+  channelsLogsFilterInvites           String?
+  channelsLogsFilterWords             String?
+  channelsLogsMemberJoin              String?
+  channelsLogsMemberLeave             String?
+  channelsLogsMemberScreening         String?
+  channelsLogsMessageDelete           String?
+  channelsLogsMessageEdit             String?
+  channelsLogsModeration              String?
+  channelsLogsRoleUpdate              String?
+  channelsStatsMemberCountChannel     String?
+  channelsStatsMemberCountCompact     Boolean  @default(false)
+  channelsStatsMemberCountTemplate    String?
+  channelsWelcome                     String?
+  commandChannels                     String[]
+  disabledChannels                    String[]
+  disabledCommands                    String[]
+  embedsBoost                         Json?
+  embedsDisboard                      Json?
+  embedsGoodbye                       Json?
+  embedsWelcome                       Json?
+  eventsBanAdd                        Boolean  @default(true)
+  eventsBanRemove                     Boolean  @default(true)
+  eventsKick                          Boolean  @default(true)
+  eventsMuteAdd                       Boolean  @default(true)
+  eventsMuteRemove                    Boolean  @default(true)
+  highlights                          Json[]
+  language                            String   @default("en-US")
+  messageCount                        BigInt   @default(0)
+  messagesBoost                       String?
+  messagesDisboard                    String?
+  messagesGoodbye                     String?
+  messagesGoodbyeAutoDelete           BigInt?
+  messagesModerationAutoDelete        Boolean?
+  messagesWelcomeAutoDelete           BigInt?
+  moderationChannelsIgnoreAll         String[]
+  moderationDm                        Boolean  @default(true)
+  moderationGiftsEnabled              Boolean  @default(false)
+  moderationGiftsSoftPunish           Int      @default(0)
+  moderationGiftsHardPunish           Int      @default(0)
+  moderationGiftsHardPunishDuration   BigInt?
+  moderationInvitesEnabled            Boolean  @default(false)
+  moderationInvitesSoftPunish         Int      @default(0)
+  moderationInvitesHardPunish         Int      @default(0)
+  moderationInvitesHardPunishDuration BigInt?
+  moderationScamsEnabled              Boolean  @default(false)
+  moderationScamsSoftPunish           Int      @default(0)
+  moderationScamsHardPunish           Int      @default(0)
+  moderationScamsHardPunishDuration   BigInt?
+  persistRolesEnabled                 Boolean  @default(false)
+  raidChannel                         String?
+  rolesMuted                          String?
+  words                               Word[]
+
+  members     Member[]
+  moderations Moderation[]
+
+  @@map("guild")
+}
+
+type Word {
+  word               String
+  softPunish         Int
+  hardPunish         Int
+  hardPunishDuration BigInt?
+}
+
+model Member {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @map("id")
+  guild        Guild    @relation(fields: [guildId], references: [guildId])
+  guildId      String
+  messageCount BigInt   @default(0)
+  persistRoles String[]
+
+  @@map("member")
+}
+
+model Moderation {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  caseId       Int
+  createdAt    DateTime
+  extraData    Json?
+  guild        Guild    @relation(fields: [guildId], references: [guildId])
+  guildId      String
+  moderatorId  String
+  reason       String?
+  type         Int
+  channelId    String?
+  logChannelId String?
+  logMessageId String?
+  userId       String?
+  duration     BigInt?
+  refrence     Int?
+
+
+  @@map("moderation")
+}

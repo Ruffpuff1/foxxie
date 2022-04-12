@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ChatInputCommand, Identifiers, Precondition, PreconditionContext } from '@sapphire/framework';
 import type { CommandInteraction, Message } from 'discord.js';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import type { FoxxieCommand } from '#lib/structures';
 import { isModerator } from '#utils/Discord';
 import { LanguageKeys } from '#lib/i18n';
@@ -18,9 +18,9 @@ export class UserPrecondition extends Precondition {
             });
         if (!interaction.guild) return this.ok();
 
-        const [disabledCommands, disabledChannels, commandChannels] = await acquireSettings(interaction.guild, [
+        const [disabledCommands, disabledChannels, commandChannels] = await this.container.prisma.guilds(interaction.guild.id, [
             GuildSettings.DisabledCommands,
-            GuildSettings.DisabledChannels,
+            GuildSettings.DisabledCommands,
             GuildSettings.CommandChannels
         ]);
 
@@ -47,7 +47,7 @@ export class UserPrecondition extends Precondition {
             });
         if (!msg.guild) return this.ok();
 
-        const [disabledCommands, disabledChannels, commandChannels] = await acquireSettings(msg.guild, [
+        const [disabledCommands, disabledChannels, commandChannels] = await this.container.prisma.guilds(msg.guild.id, [
             GuildSettings.DisabledCommands,
             GuildSettings.DisabledChannels,
             GuildSettings.CommandChannels

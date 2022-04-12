@@ -1,4 +1,4 @@
-import type { ModerationEntity } from '#lib/database';
+import type { ModerationModel } from '#lib/prisma';
 import type { ClientEvents } from 'discord.js';
 
 export type LanguageString = 'en-US' | 'es-MX';
@@ -42,7 +42,7 @@ export interface RoleLanguageKeyData {
     init: string;
 }
 
-export type PartialModerationEntityWithRoleIdExtraData = Partial<ModerationEntity> & { extraData: { roleId: string } };
+export type PartialModerationModelWithRoleIdExtraData = Partial<ModerationModel> & { extraData: { roleId: string } };
 
 export type EventArgs<T extends keyof ClientEvents> = ClientEvents[T];
 
