@@ -1,6 +1,6 @@
 import { Events, EventArgs } from '#lib/types';
 import { ApplyOptions } from '@sapphire/decorators';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { fetchChannel, getPersistRoles } from '#utils/Discord';
 import { AutomationListener } from '#lib/structures';
 import type { GuildMember } from 'discord.js';
@@ -13,11 +13,12 @@ import { floatPromise } from '#utils/util';
 })
 export class UserAutomationAutomationListener extends AutomationListener<Events.GuildMemberRemove> {
     public async run(...[member]: EventArgs<Events.GuildMemberRemove>): Promise<void> {
-        const [message, embed, timer, persist, t] = await acquireSettings(member.guild, settings => [
+        const [message, embed, timer, persist, t] = await this.container.prisma.guilds(member.guild.id, settings => [
             settings[GuildSettings.Messages.Goodbye],
             settings[GuildSettings.Embeds.Goodbye],
             settings[GuildSettings.Messages.AutoDelete.Goodbye],
-            settings[GuildSettings.PersistRoles],
+            // TODO persist roles
+            [],
             settings.getLanguage()
         ]);
 

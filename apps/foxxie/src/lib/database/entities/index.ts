@@ -4,7 +4,6 @@ export * from './ClientEntity';
 export * from './CommandEntity';
 export * from './GuildEntity';
 export * from './MemberEntity';
-export * from './ModerationEntity';
 export * from './NoteEntity';
 export * from './PlaylistEntity';
 export * from './ScamEntity';

@@ -1,20 +1,16 @@
 import { ModerationActions } from '../moderation';
-import type { MongoDB } from '#database/MongoDB';
-import { ModerationEntity } from '#database/entities/ModerationEntity';
 import { Collection, Guild } from 'discord.js';
 import { container } from '@sapphire/framework';
 import type FoxxieClient from '#lib/FoxxieClient';
-import { createReferPromise, ReferredPromise } from '@ruffpuff/utilities';
-import { floatPromise } from '#utils/util';
+import { ModerationModel } from '#lib/prisma';
+import type { Moderation } from '@prisma/client';
 
-export class GuildModerationManager extends Collection<number, ModerationEntity> {
+export class GuildModerationManager extends Collection<number, ModerationModel> {
     public guild: Guild | null = null;
 
     public actions: ModerationActions;
 
     public _count: number | null = null;
-
-    private _locks: ReferredPromise<void>[] = [];
 
     public constructor(guild: Guild) {
         super();
@@ -24,15 +20,17 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         this.actions = new ModerationActions(this.guild);
     }
 
-    public toArray(): ModerationEntity[] | [] {
+    public toArray(): ModerationModel[] | [] {
         return [...super.values()];
     }
 
     public async getCurrentId() {
         if (this._count === null) {
-            const { moderations } = this.db;
-
-            const cases = await moderations.find({ guildId: this.guild!.id });
+            const cases = await container.prisma.moderation.findMany({
+                where: {
+                    guildId: this.guild!.id
+                }
+            });
 
             this._count = cases.length ?? 0;
         }
@@ -40,32 +38,61 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         return this._count;
     }
 
-    public create(data: Partial<ModerationEntity>): ModerationEntity {
-        return new ModerationEntity(data).setup(this);
+    public create(data: Partial<Moderation>): ModerationModel {
+        return new ModerationModel(data).setup(this);
     }
 
-    public async fetch(id: number): Promise<ModerationEntity | null>;
-    public async fetch(id: string | number[]): Promise<Collection<number, ModerationEntity>>;
+    public async fetch(id: number): Promise<ModerationModel | null>;
+    public async fetch(id: string | number[]): Promise<Collection<number, ModerationModel>>;
     public async fetch(id?: null): Promise<this>;
-    public async fetch(id?: number | number[] | null | string): Promise<ModerationEntity | null | Collection<number, ModerationEntity> | this> {
+    public async fetch(id?: number | number[] | null | string): Promise<ModerationModel | null | Collection<number, ModerationModel> | this> {
         if (!id) {
-            const entries = await this.db.moderations.find({
-                guildId: this.guild?.id
+            const entries = await container.prisma.moderation.findMany({
+                where: {
+                    guildId: { equals: this.guild!.id }
+                }
             });
-            return this._cache(entries);
+            return this._cache(entries.map(data => new ModerationModel(data).setup(this)));
         }
 
         if (typeof id === 'string') {
-            const entries = await this.db.moderations.find({ userId: id });
-            return this._cache(entries);
+            const entries = await container.prisma.moderation.findMany({
+                where: {
+                    userId: { equals: id }
+                }
+            });
+            return this._cache(entries.map(data => new ModerationModel(data).setup(this)));
         }
 
         if (Array.isArray(id)) {
-            const entries = await Promise.all(id.map(async caseId => this.db.fetchModerationEntry(caseId, this.guild?.id as string)));
-            return this._cache(entries as ModerationEntity[]);
+            const entries = await Promise.all(
+                id.map(async caseId =>
+                    container.prisma.moderation
+                        .findFirst({
+                            where: {
+                                guildId: this.guild!.id,
+                                caseId
+                            }
+                        })
+                        .then(data => new ModerationModel(data!).setup(this))
+                )
+            );
+            return this._cache(entries);
         }
 
-        return super.get(id) || this._cache(await this.db.fetchModerationEntry(id as number, (this.guild as Guild).id));
+        return (
+            super.get(id) ||
+            this._cache(
+                await container.prisma.moderation
+                    .findFirst({
+                        where: {
+                            guildId: this.guild!.id,
+                            caseId: id
+                        }
+                    })
+                    .then(data => new ModerationModel(data!).setup(this))
+            )
+        );
     }
 
     public delete(key: number): boolean {
@@ -74,32 +101,11 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         return deleted;
     }
 
-    public createLock() {
-        const lock = createReferPromise<void>();
-        this._locks.push(lock);
-        void floatPromise(
-            lock.promise.finally(() => {
-                this._locks.splice(this._locks.indexOf(lock), 1);
-            })
-        );
-
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        return lock.resolve;
-    }
-
-    public releaseLock() {
-        for (const lock of this._locks) lock.resolve();
-    }
-
-    public waitLock() {
-        return Promise.all(this._locks.map(lock => lock.promise));
-    }
-
-    public insert(data: ModerationEntity | ModerationEntity[]): Collection<number, ModerationEntity> | ModerationEntity | null {
+    public insert(data: ModerationModel | ModerationModel[]): Collection<number, ModerationModel> | ModerationModel | null {
         return this._cache(data, 'insert');
     }
 
-    private _cache(entries: ModerationEntity | ModerationEntity[] | undefined, type?: string): Collection<number, ModerationEntity> | ModerationEntity | null {
+    private _cache(entries: ModerationModel | ModerationModel[], type?: string): Collection<number, ModerationModel> | ModerationModel | null {
         if (!entries) return null;
 
         const parsedEntries = Array.isArray(entries) ? entries : [entries];
@@ -117,17 +123,13 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         return this.guild!.client as FoxxieClient;
     }
 
-    public get latest(): null | undefined | ModerationEntity {
+    public get latest(): null | undefined | ModerationModel {
         if (!this.size) return null;
         return this.sort((a, b) => b.createdAt!.getTime() - a.createdAt!.getTime()).first();
     }
 
-    public get oldest(): ModerationEntity | null | undefined {
+    public get oldest(): ModerationModel | null | undefined {
         if (!this.size) return null;
         return this.sort((a, b) => b.createdAt!.getTime() - a.createdAt!.getTime()).last();
-    }
-
-    private get db(): MongoDB {
-        return container.db;
     }
 }

@@ -1,6 +1,7 @@
-import { acquireSettings, GuildEntity, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
+import type { GuildModel } from '#lib/prisma';
 import { Events, GuildMessage } from '#lib/types';
-import type { CustomGet, TFunction } from '@foxxie/i18n';
+import type { CustomGet } from '@foxxie/i18n';
 import { getModeration, isModerator, isSendableChannel } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
@@ -10,13 +11,13 @@ import type { Awaitable, PickByValue } from '@sapphire/utilities';
 import { ModerationBitField, ModerationHardActionFlags, ModerationFlagBits } from './ModerationBitfield';
 
 export abstract class ModerationListener extends Listener {
-    private readonly keyEnabled: PickByValue<GuildEntity, boolean>;
+    private readonly keyEnabled: PickByValue<GuildModel, boolean>;
 
-    private readonly softPunishmentPath: PickByValue<GuildEntity, number>;
+    private readonly softPunishmentPath: PickByValue<GuildModel, number>;
 
-    private readonly hardPunishmentPath: PickByValue<GuildEntity, number>;
+    private readonly hardPunishmentPath: PickByValue<GuildModel, number>;
 
-    private readonly hardPunishDuration: PickByValue<GuildEntity, number | null>;
+    private readonly hardPunishDuration: PickByValue<GuildModel, number | null>;
 
     private readonly reasonLanguageKey: CustomGet<string, string>;
 
@@ -37,7 +38,7 @@ export abstract class ModerationListener extends Listener {
         const preProcessed = await this.preProcess(msg);
         if (preProcessed === null) return;
 
-        const [softPunish, language] = await acquireSettings(msg.guild, settings => {
+        const [softPunish, language] = await this.container.prisma.guilds(msg.guild.id, settings => {
             return [settings[this.softPunishmentPath], settings.getLanguage()];
         });
 
@@ -67,7 +68,10 @@ export abstract class ModerationListener extends Listener {
     }
 
     private async processHardPunishment(message: GuildMessage, language: TFunction): Promise<void> {
-        const [action, duration] = await acquireSettings(message.guild, settings => [settings[this.hardPunishmentPath], settings[this.hardPunishDuration]]);
+        const [action, duration] = await this.container.prisma.guilds(message.guild.id, settings => [
+            settings[this.hardPunishmentPath],
+            settings[this.hardPunishDuration]
+        ]);
         switch (action) {
             case ModerationHardActionFlags.Warning:
                 await this.onWarning(message, language);
@@ -143,7 +147,7 @@ export abstract class ModerationListener extends Listener {
     }
 
     private async onMute(msg: GuildMessage, t: TFunction, duration: number | null) {
-        const roleId = await acquireSettings(msg.guild, GuildSettings.Roles.Muted);
+        const roleId = await this.container.prisma.guilds(msg.guild.id, GuildSettings.Roles.Muted);
         if (!roleId) return;
 
         return getModeration(msg.guild).actions.mute(
@@ -160,24 +164,25 @@ export abstract class ModerationListener extends Listener {
     }
 
     private async shouldRun(msg: GuildMessage): Promise<boolean> {
-        const [enabled, exemptChannels] = await acquireSettings(msg.guild, settings => {
+        const [enabled, exemptChannels] = await this.container.prisma.guilds(msg.guild.id, settings => {
             return [settings[this.keyEnabled], settings.moderationChannelsIgnoreAll];
         });
         return enabled && !exemptChannels.includes(msg.channel.id) && !isModerator(msg.member);
     }
 
     private async getDmOptions(msg: GuildMessage): Promise<SendOptions> {
-        const send = await acquireSettings(msg.guild, GuildSettings.Moderation.Dm);
+        const send = await this.container.prisma.guilds(msg.guild.id, GuildSettings.Moderation.Dm);
         return { send };
     }
 }
 
+// eslint-disable-next-line no-redeclare
 export namespace ModerationListener {
     export interface Options extends ListenerOptions {
-        keyEnabled: PickByValue<GuildEntity, boolean>;
-        softPunishmentPath: PickByValue<GuildEntity, number>;
-        hardPunishmentPath: PickByValue<GuildEntity, number>;
-        hardPunishDuration: PickByValue<GuildEntity, number | null>;
+        keyEnabled: PickByValue<GuildModel, boolean>;
+        softPunishmentPath: PickByValue<GuildModel, number>;
+        hardPunishmentPath: PickByValue<GuildModel, number>;
+        hardPunishDuration: PickByValue<GuildModel, number | null>;
         reasonLanguageKey: CustomGet<string, string>;
     }
 }

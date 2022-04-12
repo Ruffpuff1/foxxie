@@ -1,7 +1,7 @@
 import { container, Listener } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { EventArgs, Events } from '#lib/types';
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { MessageEmbed } from 'discord.js';
 import { Colors } from '#utils/constants';
@@ -17,7 +17,7 @@ export class UserListener extends Listener<Events.GuildMessageUpdateLog> {
 
         if (!msg.guild || !msg.guild.available || msg.author!.bot || old.content === msg.content) return;
 
-        const [ignoredChannels, t] = await acquireSettings(msg.guild, settings => [settings[GuildSettings.Channels.IgnoreAll], settings.getLanguage()]);
+        const [ignoredChannels, t] = await this.container.prisma.guilds(msg.guild.id, settings => [settings[GuildSettings.Channels.IgnoreAll], settings.getLanguage()]);
         if (ignoredChannels.includes(msg.channel.id)) return;
 
         this.container.client.emit(Events.GuildMessageLog, msg.guild, GuildSettings.Channels.Logs.MessageEdit, () =>
