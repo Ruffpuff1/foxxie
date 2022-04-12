@@ -46,7 +46,6 @@ export async function fetchChannel<T = GuildTextBasedChannel>(resolvable: GuildR
 
     const channel = await resolveToNull(guild.channels.fetch(channelId));
     if (!channel) {
-
         await container.prisma.guilds(guild.id, { [key]: null });
         return null;
     }

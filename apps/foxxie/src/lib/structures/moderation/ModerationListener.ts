@@ -1,7 +1,7 @@
 import { GuildSettings } from '#lib/database';
 import type { GuildModel } from '#lib/prisma';
 import { Events, GuildMessage } from '#lib/types';
-import type { CustomGet } from '@foxxie/i18n'
+import type { CustomGet } from '@foxxie/i18n';
 import { getModeration, isModerator, isSendableChannel } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';

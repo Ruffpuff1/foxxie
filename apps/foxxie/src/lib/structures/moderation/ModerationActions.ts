@@ -377,7 +377,6 @@ export class ModerationActions {
 
     private async buildDMEmbed(entry: ModerationModel): Promise<MessageEmbed> {
         const moderator = await entry.fetchModerator();
-
         const t = await container.prisma.guilds(this.guild.id, settings => settings.getLanguage());
         const { title: name } = await entry.formatUtils();
 
