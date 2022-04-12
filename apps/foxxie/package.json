@@ -123,7 +123,7 @@
         "@types/tinycolor2": "1.4.3",
         "discord-api-types": "0.31.1",
         "@typescript-eslint/eslint-plugin": "5.18.0",
-        "@typescript-eslint/parser": "5.18.0",
+        "@typescript-eslint/parser": "5.19.0",
         "dotenv-cli": "^5.1.0",
         "eslint": "8.13.0",
         "prisma": "^3.12.0",
