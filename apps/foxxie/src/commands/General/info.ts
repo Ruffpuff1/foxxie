@@ -32,7 +32,7 @@ import { GuildSettings } from '#lib/prisma';
 import { fetch } from '@foxxie/fetch';
 import { FoxxieEmbed } from '#lib/discord';
 import type { RESTGetAPIUsersUserBansBan } from '@foxxie/api';
-import { fetchApiUser, pronouns } from '#utils/API';
+import { fetchUserProps, pronouns } from '#utils/API';
 
 const SORT = (x: Role, y: Role) => Number(y.position > x.position) || Number(x.position === y.position) - 1;
 const roleMention = (role: Role): string => role.toString();
@@ -527,14 +527,7 @@ export class UserCommand extends FoxxieCommand {
     }
 
     private async fetchAPI(userId: string) {
-        try {
-            return await fetchApiUser(userId);
-        } catch {
-            return {
-                pronouns: null,
-                bans: []
-            };
-        }
+        return fetchUserProps(userId, ['pronouns', 'bans']);
     }
 
     private async buildUserDisplay(interaction: GuildInteraction, t: TFunction, user: User): Promise<any> {
@@ -543,14 +536,13 @@ export class UserCommand extends FoxxieCommand {
 
         let authorString = `${user.tag} [${user.id}]`;
         const member = await resolveToNull(interaction.guild.members.fetch(user.id));
-        const apiData = await this.fetchAPI(user.id);
-        console.log(apiData);
+        const [pronounKey, bans] = await this.fetchAPI(user.id);
 
-        const pnKey = pronouns(apiData.pronouns);
+        const pnKey = pronouns(pronounKey);
         if (pnKey) authorString += ` (${pnKey})`;
 
         const template = new MessageEmbed()
-            .setColor(apiData.bans.length ? Colors.Red : settings.user.profile.color || interaction.guild.me?.displayColor || BrandingColors.Primary)
+            .setColor(bans.length ? Colors.Red : settings.user.profile.color || interaction.guild.me?.displayColor || BrandingColors.Primary)
             .setThumbnail(member?.displayAvatarURL({ dynamic: true }) || user.displayAvatarURL({ dynamic: true }))
             .setAuthor({
                 name: authorString,
@@ -574,7 +566,7 @@ export class UserCommand extends FoxxieCommand {
                 await this.addWarnings(embed, user.id, interaction.guild.id, t);
                 await this.addNotes(embed, user.id, interaction.guild.id, t);
 
-                if (apiData.bans.length) embed.addField('bans', await UserCommand.formatBans(apiData.bans, t));
+                if (bans.length) embed.addField('bans', await UserCommand.formatBans(bans, t));
 
                 return embed;
             });

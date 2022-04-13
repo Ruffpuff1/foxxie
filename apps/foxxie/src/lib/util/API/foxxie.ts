@@ -1,4 +1,13 @@
-import { api, Api, Endpoints, PronounEnum, RESTJSONErrorCodes, RESTPostAPIUsersUserJSONBody } from '@foxxie/api';
+import {
+    cb,
+    Endpoints,
+    EndpointsEnum,
+    FoxxieApiError,
+    PronounEnum,
+    RESTJSONErrorCodes,
+    RESTPostAPIUsersUserBansJSONBody,
+    RESTPostAPIUsersUserJSONBody
+} from '@foxxie/api';
 
 function pronounEnumToString(key: PronounEnum) {
     switch (key) {
@@ -55,46 +64,73 @@ export function pronouns(key: PronounEnum | null) {
     return pronounEnumToString(key);
 }
 
-export async function fetchFoxxieApi<T extends keyof Endpoints>(cb: (api: Api) => Promise<Endpoints[T]>): Promise<Endpoints[T]> {
+export async function fetchApiUserButFallbackToCreating(userId: string, data: RESTPostAPIUsersUserJSONBody = {}) {
     try {
-        const result = await cb(api());
-        const isErr = Reflect.has(result, 'code');
-        if (isErr) throw new FoxxieAPIError(result as any);
-
-        return result as Endpoints[T];
-    } catch (err) {
-        throw err;
-    }
-}
-
-export async function fetchApiUser(userId: string) {
-    return fetchFoxxieApi<'GET /users/:id'>(api => api.users(userId).get());
-}
-
-export async function fetchApiUserButFallbackToCreating(userId: string, data: RESTPostAPIUsersUserJSONBody) {
-    try {
-        const result = await fetchApiUser(userId);
+        const result = await cb<EndpointsEnum.GetUsersUser>(api => api.users(userId).get());
         return result;
     } catch (err) {
-        if (err instanceof FoxxieAPIError && err.code === RESTJSONErrorCodes.UserNotFound) {
-            const result = await fetchFoxxieApi(api => api.users(userId).post(data));
-            return result;
+        if (err instanceof FoxxieApiError && err.code === RESTJSONErrorCodes.UserNotFound) {
+            const result = await cb<EndpointsEnum.PostUsersUser>(api => api.users(userId).post(data));
+            return result as User;
         }
 
         throw err;
     }
 }
 
-export class FoxxieAPIError extends Error {
-    public code: number;
+export async function fetchApiUserButFallbackToMock(userId: string): Promise<User> {
+    try {
+        const result = await cb<EndpointsEnum.GetUsersUser>(api => api.users(userId).get());
+        return result;
+    } catch (err) {
+        if (err instanceof FoxxieApiError && err.code === RESTJSONErrorCodes.UserNotFound) {
+            return {
+                userId,
+                pronouns: 0,
+                bans: [],
+                attributes: {
+                    color: null,
+                    email: null,
+                    location: null,
+                    twitter: null,
+                    github: null
+                },
+                whitelisted: false
+            }
+        }
 
-    public message: string;
+        throw err;
+    }
+}
 
-    public error: string;
+type User = Endpoints[EndpointsEnum.GetUsersUser];
+type A = keyof User;
 
-    public constructor(data: { code: number; message?: string; error: string }) {
-        super();
-        this.code = data.code;
-        this.message = data.message || data.error;
+interface UserCb<T extends User, R> {
+    (model: T): Promise<R> | R;
+}
+
+export async function fetchUserProps<K>(userId: string, cb: UserCb<User, K>): Promise<K>
+export async function fetchUserProps<K1 extends A, K2 extends A>(userId: string, keys: [K1, K2]): Promise<[User[K1], User[K2]]>
+export async function fetchUserProps<K extends A>(userId: string, keys: K): Promise<User[K]>
+export async function fetchUserProps<K>(userId: string, keys: A | [A, A] | UserCb<User, K>) {
+    const user = await fetchApiUserButFallbackToMock(userId);
+
+    if (Array.isArray(keys)) {
+        return keys.map(k => user[k]);
+    } else if (typeof keys === 'function') {
+        return keys(user)
+    } else {
+        return user[keys]
+    }
+}
+
+export async function postApiBan(data: RESTPostAPIUsersUserBansJSONBody): Promise<Endpoints[EndpointsEnum.PostUsersUserBans]> {
+    try {
+        const result = await cb<EndpointsEnum.PostUsersUserBans>(api => api.users(data.userId).bans.post(data));
+        return result;
+    } catch (err) {
+        if (err instanceof FoxxieApiError && err.code === RESTJSONErrorCodes.InvalidBan) throw err;
+        return null!;
     }
 }

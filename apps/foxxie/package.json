@@ -73,7 +73,7 @@
     "dependencies": {
         "@discordjs/builders": "^0.12.0",
         "@favware/graphql-pokemon": "6.5.0",
-        "@foxxie/api": "0.0.2",
+        "@foxxie/api": "0.0.3",
         "@foxxie/commands": "^0.0.1",
         "@foxxie/env": "^0.0.2",
         "@foxxie/fetch": "0.0.4",
