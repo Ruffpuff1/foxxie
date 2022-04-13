@@ -1,4 +1,6 @@
 import { fetch } from '@foxxie/fetch';
+import { FoxxieApiError } from './FoxxieApiError';
+import type { Endpoints, EndpointsEnum } from './types';
 import type { Api } from './types/types';
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
@@ -53,3 +55,16 @@ function route() {
  * @returns Api function
  */
 export const api = () => route() as Api;
+
+/**
+ * Query the Api using a route callback function.
+ * If error is detected. Will throw a new {@link FoxxieApiError}.
+ * Else returning the value.
+ */
+export async function cb<R extends `${EndpointsEnum}`>(cb: (api: Api) => Promise<Endpoints[R]>): Promise<Endpoints[R]> {
+    const value = await cb(api());
+    const isErr = Reflect.has(value, 'code');
+
+    if (isErr) throw new FoxxieApiError(value as any);
+    return value;
+}

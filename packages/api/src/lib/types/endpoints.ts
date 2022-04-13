@@ -57,3 +57,12 @@ export interface Endpoints {
      */
     'GET /users/:id/pronouns': RESTGetAPIUsersUserPronounsResult;
 }
+
+export enum EndpointsEnum {
+    GetUsers = 'GET /users',
+    GetUsersUser = 'GET /users/:id',
+    PostUsersUser = 'POST /users/:id',
+    GetUsersUserBans = 'GET /users/:id/bans',
+    PostUsersUserBans = 'POST /users/:id/bans',
+    GetUsersUserPronouns = 'GET /users/:id/pronouns'
+}
