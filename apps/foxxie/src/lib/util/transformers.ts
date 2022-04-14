@@ -10,7 +10,6 @@ import { cleanMentions } from './util';
 import * as GuildSettings from '#database/Keys';
 import { TwemojiRegex } from '@sapphire/discord.js-utilities';
 import { getCode, isLetterOrDigit, isWhiteSpace } from '@skyra/char';
-import { PronounEnum } from '@foxxie/api';
 
 type PronounKey =
     | typeof GuildSettings.Roles.Pronouns.HeHim
@@ -33,61 +32,6 @@ export function getPronounKey(key: string): PronounKey[] {
     if (itItsRegex.test(key) || anyRegex.test(key)) keys.push(GuildSettings.Roles.Pronouns.ItIts);
 
     return keys;
-}
-
-function pronounEnumToString(key: PronounEnum) {
-    switch (key) {
-        case PronounEnum.None:
-            return '';
-        case PronounEnum.HeHim:
-            return 'He/Him';
-        case PronounEnum.HeHer:
-            return 'He/Her';
-        case PronounEnum.HeIt:
-            return 'He/It';
-        case PronounEnum.HeThey:
-            return 'He/They';
-        case PronounEnum.TheyThem:
-            return 'They/Them';
-        case PronounEnum.TheyHe:
-            return 'They/He';
-        case PronounEnum.TheyShe:
-            return 'They/She';
-        case PronounEnum.TheyIt:
-            return 'They/It';
-        case PronounEnum.SheHer:
-            return 'She/Her';
-        case PronounEnum.SheHim:
-            return 'She/Him';
-        case PronounEnum.SheIt:
-            return 'She/It';
-        case PronounEnum.SheThey:
-            return 'She/They';
-        case PronounEnum.ItIts:
-            return 'It/Its';
-        case PronounEnum.ItHim:
-            return 'It/Him';
-        case PronounEnum.ItHer:
-            return 'It/Her';
-        case PronounEnum.ItThem:
-            return 'It/Them';
-        case PronounEnum.Other:
-            return 'Other';
-        case PronounEnum.UseName:
-            return 'Use Name';
-        case PronounEnum.Ask:
-            return 'Ask';
-    }
-}
-
-/**
- * Transforms a pronoun integer into a string, or vice versa.
- * @param key Pronoun string, integer, or null.
- * @returns Pronoun string, integer, or null.
- */
-export function pronouns(key: PronounEnum | null) {
-    if (key === null || key === PronounEnum.None) return null;
-    return pronounEnumToString(key);
 }
 
 /**

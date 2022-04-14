@@ -1,4 +1,4 @@
-import type { CustomGet } from '@foxxie/types';
+import type { CustomGet } from '@foxxie/i18n';
 import i18next from 'i18next';
 import { SlashCommandSubcommandBuilder as BaseSubcommandBuilder } from '@discordjs/builders';
 

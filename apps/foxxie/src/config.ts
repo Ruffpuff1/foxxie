@@ -306,7 +306,7 @@ export async function initI18n() {
         defaultNS: 'globals',
         interpolation: getInterpolation(),
         initImmediate: false,
-        debug: true
+        debug: false
     });
 
     for (const { name, format } of getFormatters()) {
