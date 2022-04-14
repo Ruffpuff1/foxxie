@@ -11,7 +11,6 @@ services:
     env_file:
       - .env.foxxie
     depends_on:
-      - lavalink
       - redis
     networks:
       - foxxie
@@ -66,17 +65,6 @@ services:
       - '8287:8287'
     volumes:
       - redis_data:/data
-    restart: always
-
-  lavalink:
-    container_name: lavalink
-    depends_on:
-      - redis
-    image: 'skyrabot/lavalink:latest'
-    networks:
-      - foxxie
-    ports:
-      - '2333:2333'
     restart: always
 
   celestia:

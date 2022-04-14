@@ -10,8 +10,7 @@ import {
     StarEntity,
     UserEntity,
     ScamEntity,
-    CommandEntity,
-    PlaylistEntity
+    CommandEntity
 } from './entities';
 import { BackgroundEntity } from './entities/BackgroundEntity';
 import { MongoDB } from './MongoDB';
@@ -31,7 +30,6 @@ export async function config(): Promise<void> {
             GuildEntity,
             MemberEntity,
             NoteEntity,
-            PlaylistEntity,
             ScamEntity,
             StarEntity,
             UserEntity,

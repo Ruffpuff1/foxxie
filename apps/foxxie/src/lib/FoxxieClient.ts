@@ -7,7 +7,6 @@ import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import { SettingsManager } from '#lib/database';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import { AnalyticsManager, InviteManager, RedisManager, WorkerManager } from './structures';
-import { FoxxieQueue } from './audio';
 import { isDev } from '@ruffpuff/utilities';
 import { Leaderboard } from '#utils/Leaderboard';
 import { EnvParse } from '@foxxie/env';
@@ -22,9 +21,6 @@ export default class FoxxieClient extends SapphireClient {
 
     @Enumerable(false)
     public llrCollectors = new Set<LongLivingReactionCollector>();
-
-    @Enumerable(false)
-    public audio: FoxxieQueue | null = null;
 
     @Enumerable(false)
     public invites = new InviteManager();
@@ -49,14 +45,6 @@ export default class FoxxieClient extends SapphireClient {
                   port: EnvParse.int('REDIS_PORT'),
                   password: process.env.REDIS_PASSWORD,
                   lazyConnect: true
-              })
-            : null;
-
-        this.audio = EnvParse.boolean('AUDIO_ENABLED')
-            ? new FoxxieQueue(CLIENT_OPTIONS.audio, (guildID, packet) => {
-                  const guild = this.guilds.cache.get(guildID);
-                  if (guild) guild.shard.send(packet);
-                  return undefined;
               })
             : null;
     }

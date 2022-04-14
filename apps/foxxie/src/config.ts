@@ -2,7 +2,6 @@ process.env.NODE_ENV ??= 'development';
 
 import { ScheduledTaskRedisStrategy } from '@sapphire/plugin-scheduled-tasks/register-redis';
 import { durationOptions, ordinalOptions } from '#languages';
-import { GuildSettings } from '#lib/prisma';
 import { categories } from '#lib/game';
 import { LanguageKeys } from '#lib/i18n';
 import { emojis, rootFolder } from '#utils/constants';
@@ -12,7 +11,6 @@ import type { LogLevel } from '@sapphire/framework';
 import { Formatter, getT, init, TFunction } from '@foxxie/i18n';
 import i18next from 'i18next';
 import { DurationFormatAssetsTime, DurationFormatter } from '@sapphire/time-utilities';
-import type { NodeOptions } from '@skyra/audio';
 import type { PermissionString } from 'discord.js';
 import { ActivitiesOptions, ClientOptions, Collection, ExplicitContentFilterLevel, Formatters, GuildChannel, WebhookClientData } from 'discord.js';
 import { config } from 'dotenv-cra';
@@ -40,7 +38,6 @@ PaginatedMessage.defaultActions = [
 
 export const CLIENT_OWNERS = EnvParse.array('CLIENT_OWNERS');
 export const WEBHOOK_ERROR = parseWebhookError();
-export const AUDIO_ALLOWED_GUILDS = EnvParse.array('AUDIO_ALLOWED_GUILDS');
 export const TIMEZONE = EnvParse.string('TIMEZONE');
 
 export function parsePresenceActivity(): ActivitiesOptions[] {
@@ -321,7 +318,6 @@ export const CLIENT_OPTIONS: ClientOptions = {
         status: 'idle'
     },
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
-    audio: parseAudioOptions(),
     regexPrefix: parseRegexPrefix(),
     loadDefaultErrorListeners: false,
     loadMessageCommandListeners: true,
@@ -350,21 +346,3 @@ export const CLIENT_OPTIONS: ClientOptions = {
     },
     intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_BANS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_VOICE_STATES', 'DIRECT_MESSAGES']
 };
-
-function parseAudioOptions(): NodeOptions {
-    return {
-        password: EnvParse.string('LAVALINK_PASSWORD'),
-        userID: process.env.CLIENT_ID!,
-        shardCount: 0,
-        hosts: {
-            rest: `http://${process.env.LAVALINK_URL}`,
-            ws: {
-                url: `ws://${process.env.LAVALINK_URL}`,
-                options: {
-                    resumeKey: 'FOXXIE_RESUME_KEY',
-                    resumeTimeout: 120
-                }
-            }
-        }
-    };
-}

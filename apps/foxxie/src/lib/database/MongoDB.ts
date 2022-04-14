@@ -1,5 +1,5 @@
 import type { Connection, Repository } from 'typeorm';
-import { BackgroundEntity, GuildEntity, NoteEntity, PlaylistEntity, ScamEntity, StarEntity, WarningEntity } from './entities';
+import { BackgroundEntity, GuildEntity, NoteEntity, ScamEntity, StarEntity, WarningEntity } from './entities';
 import { UserRepository } from './repository/UserRepository';
 import { ClientRepository, CommandRepository, MemberRepository } from './repository';
 import { CommandInteraction, Message } from 'discord.js';
@@ -20,8 +20,6 @@ export class MongoDB {
 
     public readonly notes: Repository<NoteEntity>;
 
-    public readonly playlists: Repository<PlaylistEntity>;
-
     public readonly scams: Repository<ScamEntity>;
 
     public readonly starboards: Repository<StarEntity>;
@@ -38,7 +36,6 @@ export class MongoDB {
         this.guilds = connection.getRepository(GuildEntity);
         this.members = connection.getCustomRepository(MemberRepository);
         this.notes = connection.getRepository(NoteEntity);
-        this.playlists = connection.getRepository(PlaylistEntity);
         this.scams = connection.getRepository(ScamEntity);
         this.starboards = connection.getRepository(StarEntity);
         this.users = connection.getCustomRepository(UserRepository);
@@ -69,7 +66,6 @@ export interface MongoDB {
     readonly guilds: Repository<GuildEntity>;
     readonly members: MemberRepository;
     readonly notes: Repository<NoteEntity>;
-    readonly playlists: Repository<PlaylistEntity>;
     readonly scams: Repository<ScamEntity>;
     readonly starboards: Repository<StarEntity>;
     readonly users: UserRepository;

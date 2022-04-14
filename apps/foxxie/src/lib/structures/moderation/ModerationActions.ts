@@ -409,7 +409,7 @@ export class ModerationActions {
 
     private async fetchReason(entry: ModerationModel): Promise<string> {
         const moderator = await entry.fetchModerator();
-        const t = await acquireSettings(this.guild, s => s.getLanguage());
+        const t = await container.prisma.guilds(this.guild.id, s => s.getLanguage());
 
         return `${entry.duration ? `[Temp] ` : ''}${moderator?.tag} | ${entry.reason ?? t(LanguageKeys.Moderation.NoReason)}`;
     }
@@ -432,7 +432,7 @@ export class ModerationActions {
     }
 
     private async initRole(msg: GuildMessage, settingsKey: RoleSettingsKey, key?: RoleKey): Promise<void> {
-        const t = await acquireSettings(this.guild, s => s.getLanguage());
+        const t = await container.prisma.guilds(this.guild.id, s => s.getLanguage());
 
         const languageKeys = roleLanguageKeys.get(key ?? RoleKey.Muted)!;
         const data = roleData.get(key ?? RoleKey.Muted)!;

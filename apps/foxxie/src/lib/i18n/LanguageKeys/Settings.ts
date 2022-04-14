@@ -72,7 +72,6 @@ export const ModerationScamsSoftPunish = T('settings:moderationScamsSoftPunish')
 export const ModerationScamsHardPunish = T('settings:moderationScamsHardPunish');
 export const ModerationScamsHardPunishDuration = T('settings:moderationScamsHardPunishDuration');
 export const ModerationMuteTimeout = T('settings:moderationMuteTimeout');
-export const MusicAutoLeave = T('settings:musicAutoLeave');
 export const PermissionNodesEnabled = T('settings:permissionNodesEnabled');
 export const RolesPersistEnabled = T('settings:rolesPersistEnabled');
 export const Prefix = T('settings:prefix');

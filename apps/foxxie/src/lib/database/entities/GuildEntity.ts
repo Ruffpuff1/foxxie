@@ -715,14 +715,6 @@ export class GuildEntity extends BaseEntity {
     public moderationMuteTimeout = true;
 
     @ConfigurableKey({
-        description: LanguageKeys.Settings.MusicAutoLeave,
-        name: 'music.auto-leave',
-        type: 'boolean'
-    })
-    @Column('boolean', { name: 'musicAutoLeave', default: false })
-    public musicAutoLeave = false;
-
-    @ConfigurableKey({
         description: LanguageKeys.Settings.PermissionNodesEnabled,
         name: 'moderation.nodes-enabled',
         type: 'boolean'
