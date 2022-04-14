@@ -4,9 +4,6 @@
     "cooldown": "{{ERROR}} Parece que ya usaste este comando, inténtelo de nuevo en **{{remaining, remaining}}**.",
     "leveling": "{{ERROR}} Este comando se requiere el sistema de nivelación para funcionar en este servidor.",
     "moderator": "{{ERROR}} Debes de ser un **moderador** en este servidor para usar el {{name, code}} comando.",
-    "musicFoxxieVoiceChannel": "{{ERROR}} Necesito estar en un canal de voz para que este comando funcione.",
-    "musicQueueNotEmpty": "{{ERROR}} Antes de usar este comando asegúrese que haya algunas canciones en la cola.",
-    "musicUserVoiceChannel": "{{ERROR}} Usted debe estar en un canal de voz para usar este comando!",
     "nsfw": "{{ERROR}} Debido a el contenido escandaloso de este comando {{name, code}}, solo puede ser usado en **nsfw** tipo de canales.",
     "starboard": "{{ERROR}} Este comando requiere un canal de starboard para ser configurar en el servidor."
 }
