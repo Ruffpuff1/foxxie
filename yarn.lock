@@ -658,13 +658,6 @@
   dependencies:
     graphql "^15.8.0"
 
-"@foxxie/api@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@foxxie/api/-/api-0.0.3.tgz#7a31a5658e46553774f562007d0983dff3c8163f"
-  integrity sha512-DgNw5WlCv3mCFTJ4L2j72/kUtDGiJ6f8yb8chLl9zqJpVE7fDtjaL3xOW277nalZSLVpVOUIdChS8zaD98lScg==
-  dependencies:
-    "@foxxie/fetch" "^0.0.4"
-
 "@foxxie/eslint-config@^0.0.0":
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/@foxxie/eslint-config/-/eslint-config-0.0.0.tgz#a177ccd5c65e01a50fa795b629f9c4ca3216f6b7"
@@ -1402,11 +1395,12 @@
     tmp "~0.2.1"
     tslib "^2.3.0"
 
-"@nrwl/nx-cloud@13.2.2":
-  version "13.2.2"
-  resolved "https://registry.yarnpkg.com/@nrwl/nx-cloud/-/nx-cloud-13.2.2.tgz#9eee1e9ea0b0c3a3a805208405fb6341a02123b4"
-  integrity sha512-ryGE3JBkSGie0Oy+hFHfiYVNt1BQlNGa3Q7RjeZjILFyNFXkSFzufWYCt1gIRiGlQ7+Q48t1m6gLi2afElNGmg==
+"@nrwl/nx-cloud@13.3.0":
+  version "13.3.0"
+  resolved "https://registry.yarnpkg.com/@nrwl/nx-cloud/-/nx-cloud-13.3.0.tgz#d827a3844fc315f55100051f02077db17c4277d2"
+  integrity sha512-5vpQ16cXk9l4O40Hsdtl5vKkjGUJuPgaDzMppcla/7Hck4+eGclQ8Oec8M3tGwxoIqK0/KKVdgUbIr5LG/S7aA==
   dependencies:
+    "@nrwl/devkit" "13.10.2"
     axios "^0.21.1"
     chalk "4.1.0"
     node-machine-id "^1.1.12"
