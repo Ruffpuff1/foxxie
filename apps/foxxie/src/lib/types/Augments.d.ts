@@ -8,25 +8,18 @@ import { PrismaClient } from '@prisma/client';
 import type { GuildMessage, TypeOfEmbed } from './Discord';
 import type { Snowflake } from 'discord-api-types/v9';
 import type { Nullish } from '@sapphire/utilities';
-import type { FoxxieQueue, Queue, NP, Song } from '#lib/audio';
 import type { GuildBasedChannelTypes } from '@sapphire/discord.js-utilities';
-import type { NodeOptions } from '@skyra/audio';
 import type { Piece, Store } from '@sapphire/framework';
 import type { Guild, User } from 'discord.js';
 import type { TFunction } from '@foxxie/i18n';
 
 declare module 'discord.js' {
     interface Client {
-        audio: FoxxieQueue | null;
         development: boolean;
         invites: InviteManager;
         webhookError: WebhookClient | null;
         guildMemberFetchQueue: GuildMemberFetchQueue;
         llrCollectors: Set<LongLivingReactionCollector>;
-    }
-
-    interface ClientOptions {
-        audio: NodeOptions;
     }
 
     interface ClientEvents {
@@ -45,14 +38,6 @@ declare module 'discord.js' {
         [Events.MessageDeleteResponse]: [message: Message];
         [Events.ModerationEntryAdd]: [entry: ModerationModel];
         [Events.ModerationEntryEdit]: [clone: ModerationModel, entry: ModerationModel];
-        [Events.MusicAddNotify]: [message: GuildMessage, tracks: Song[]];
-        [Events.MusicFinish]: [queue: Queue];
-        [Events.MusicFinishNotify]: [channel: GuildBasedChannelTypes];
-        [Events.MusicSongPlayNotify]: [queue: Queue, NP];
-        [Events.MusicSongReplayNotify]: [queue: Queue, NP];
-        [Events.MusicSongResumeNotify]: [message: GuildMessage];
-        [Events.MusicSongSetReplayNotify]: [message: GuildMessage, mode: boolean];
-        [Events.MusicSongPauseNotify]: [message: GuildMessage];
         [Events.PointsMember]: [message: GuildMessage];
         [Events.PointsReward]: [message: GuildMessage, level: number];
         [Events.PointsUser]: [message: GuildMessage];
@@ -99,17 +84,11 @@ declare module '@foxxie/env' {
         PRIVACY_POLICY: string;
         THE_CORNER_STORE_URL: string;
 
-        AUDIO_ENABLED: BooleanString;
-        LAVALINK_URL: string;
-        LAVALINK_PASSWORD: string;
-
         PROD_HOST: string;
         VERSION_SIG: string;
         VERSION_NUM: string;
         COPYRIGHT_YEAR: string;
         SENTRY_ENABLED: BooleanString;
-
-        AUDIO_ALLOWED_GUILDS: string;
 
         WEBHOOK_ERROR_ID: string;
         WEBHOOK_ERROR_TOKEN: string;

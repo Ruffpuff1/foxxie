@@ -6,7 +6,6 @@ import { hostname } from 'os';
 import { aquireSettings, guildSettings, SettingsManager } from './database';
 import type * as Sentry from '@sentry/node';
 import type { Message } from 'discord.js';
-import { Player } from 'discord-player';
 import { ScheduleManager } from './structures/managers';
 import { Enumerable } from '@sapphire/decorators';
 import { GuildMemberFetchQueue } from './discord';

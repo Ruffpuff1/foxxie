@@ -1,9 +1,10 @@
 import { create } from '#utils/regexCreator';
 import type { Guild } from '@prisma/client';
-import { container } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';
 import type { APIEmbed } from 'discord-api-types/v9';
+import { getT } from '@foxxie/i18n';
 import { MessageEmbed, MessageEmbedOptions } from 'discord.js';
+import type { LocaleString } from 'discord-api-types/v10';
 
 export class GuildModel {
     public id: string;
@@ -148,7 +149,7 @@ export class GuildModel {
     }
 
     public getLanguage() {
-        return container.i18n.getT(this.language);
+        return getT(this.language as LocaleString);
     }
 
     private keys() {

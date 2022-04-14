@@ -30,10 +30,6 @@ export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 export const getModeration = getProperty('moderation');
 export const getPersistRoles = getProperty('persistRoles');
 
-export function getAudio(resolvable: GuildResolvable) {
-    return container.client.audio!.queues.get(container.client.guilds.resolveId(resolvable)!);
-}
-
 function getProperty<K extends keyof GuildUtilities>(property: K) {
     return (resolvable: GuildResolvable): GuildUtilities[K] => getGuildUtilities(resolvable)[property];
 }

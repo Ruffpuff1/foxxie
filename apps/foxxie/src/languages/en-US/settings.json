@@ -71,7 +71,6 @@
     "moderationScamsHardPunish": "",
     "moderationScamsHardPunishDuration": "",
     "moderationMuteTimeout": "",
-    "musicAutoLeave": "",
     "permissionNodesEnabled": "",
     "rolesPersistEnabled": "Whether I should keep track of the roles members have, and re-add them if they leave and join back. By default this is set to `false`.",
     "prefix": "The prefix I'll respond to in your server, by default this is set to `.` otherwise you can mention me as a prefix.",

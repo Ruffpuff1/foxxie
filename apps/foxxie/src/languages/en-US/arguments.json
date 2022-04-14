@@ -44,7 +44,6 @@
     "language": "{{ERROR}} I could not resolve {{parameter, code}} to a language I support, try picking between {{list, codeand}}.",
     "piece": "{{ERROR}} I could not resolve {{parameter, code}} to a valid piece of mine.",
     "reminder": "{{ERROR}} The taskId {{parameter, code}} either was not a valid taskId or was not a taskId of a task that you created.",
-    "song": "{{ERROR}} I couldn't find any song results for that query.",
     "snowflake": "{{ERROR}} I couldn't resolve {{parameter, code}} to a valid Discord snowflake.",
     "store": "{{ERROR}} I could not resolve {{parameter, code}} to a valid store, try choosing between {{possibles, and}}.",
     "timespanTooLarge": "{{ERROR}} The timespan of {{parameter, code}} seems to be a timespan larger than **{{duration, remaining}}**, which isn't allowed.",

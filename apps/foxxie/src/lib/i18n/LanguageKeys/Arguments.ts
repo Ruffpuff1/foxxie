@@ -17,7 +17,6 @@ export const Guild = FT<{ parameter: string }>('arguments:guild');
 export const Language = FT<{ list: string[]; parameter: string }>('arguments:language');
 export const Piece = FT<{ parameter: string }>('arguments:piece');
 export const Reminder = FT<{ parameter: string }>('arguments:reminder');
-export const Song = FT<{ parameter: string }>('arguments:song');
 export const Snowflake = FT<{ parameter: string }>('arguments:snowflake');
 export const Store = FT<{ parameter: string; possibles: string[] }>('arguments:store');
 export const TimespanTooLarge = FT<{ duration: number; parameter: string }, string>('arguments:timespanTooLarge');

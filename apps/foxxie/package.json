@@ -39,7 +39,6 @@
         "#external/LongLivingReactionCollector": "./dist/lib/util/External/LongLivingReactionCollector.js",
         "#external/PaginatedMessage": "./dist/lib/util/External/PaginatedMessage.js",
         "#lib/*": "./dist/lib/*.js",
-        "#lib/audio": "./dist/lib/audio/index.js",
         "#lib/database": "./dist/lib/database/index.js",
         "#lib/prisma": "./dist/lib/prisma/index.js",
         "#lib/discord": "./dist/lib/discord/index.js",
@@ -97,7 +96,6 @@
         "@sapphire/type": "^2.2.0",
         "@sapphire/utilities": "^3.6.2",
         "@sentry/node": "^6.19.6",
-        "@skyra/audio": "^2.0.0",
         "@skyra/char": "^1.0.2",
         "@skyra/jaro-winkler": "^1.1.0",
         "bull": "^4.8.1",
@@ -109,9 +107,9 @@
         "ioredis": "^5.0.3",
         "lexure": "^0.17.0",
         "moment-timezone": "^0.5.34",
-        "mongodb": "^4.5.0",
+        "mongodb": "^3.7.3",
         "skia-canvas": "^0.9.29",
-        "typeorm": "^0.3.5"
+        "typeorm": "^0.2.45"
     },
     "devDependencies": {
         "@foxxie/eslint-config": "^0.0.2",
@@ -121,9 +119,9 @@
         "@types/node": "17.0.23",
         "@types/spotify-api": "0.0.14",
         "@types/tinycolor2": "1.4.3",
-        "discord-api-types": "0.31.1",
         "@typescript-eslint/eslint-plugin": "5.19.0",
         "@typescript-eslint/parser": "5.19.0",
+        "discord-api-types": "0.31.1",
         "dotenv-cli": "^5.1.0",
         "eslint": "8.13.0",
         "prisma": "^3.12.0",

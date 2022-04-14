@@ -3,7 +3,6 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { blue, blueBright, gray, green, magenta, magentaBright, red, white, yellow } from 'colorette';
 import { Events } from '#lib/types';
 import { resetSpotifyToken } from '#utils/API';
-import { minutes } from '@ruffpuff/utilities';
 import { EnvParse } from '@foxxie/env';
 import i18next from 'i18next';
 
@@ -13,23 +12,13 @@ export class UserListener extends Listener<Events.Ready> {
 
     public async run() {
         try {
-            await Promise.all([this.initSpotify()]);
+            await this.initSpotify();
         } catch (error) {
             this.container.logger.fatal(error);
         }
-        this.startLavalink();
         this.initAnalytics();
         this.printBanner();
         this.printStoreDebugInformation();
-    }
-
-    private startLavalink() {
-        if (this.container.client.audio)
-            setTimeout(async () => {
-                await this.container.client.audio!.connect();
-                await this.container.client.audio!.queues.start();
-                this.container.logger.debug(`${blueBright('Lavalink:')} Successfully initialized.`);
-            }, minutes(1));
     }
 
     private initAnalytics() {
@@ -82,7 +71,7 @@ ${line6}   \ \_\ \____//\_/\_\/\_/\_\\ \_\ \___"\
 ${line7} \/_/\/___/ \//\/_/\//\/_/ \/_/\/____/`;
 
         const row1 = `${pad}[${this.container.analytics ? success : failed}] Analytics`;
-        const row2 = ` ${pad}[${EnvParse.boolean('AUDIO_ENABLED') ? success : failed}] Audio`;
+        const row2 = ``;
         const row3 = ``;
         const row4 = ``;
 
