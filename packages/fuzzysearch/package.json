@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/fuzzysearch",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A tool for parsing fuzzyily searched results.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
