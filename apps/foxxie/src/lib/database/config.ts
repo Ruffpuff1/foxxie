@@ -6,7 +6,6 @@ import {
     ClientEntity,
     MemberEntity,
     NoteEntity,
-    WarningEntity,
     StarEntity,
     UserEntity,
     ScamEntity,
@@ -32,8 +31,7 @@ export async function config(): Promise<void> {
             NoteEntity,
             ScamEntity,
             StarEntity,
-            UserEntity,
-            WarningEntity
+            UserEntity
         ],
         authSource: 'admin',
         useNewUrlParser: true,

@@ -1,5 +1,5 @@
 import type { Connection, Repository } from 'typeorm';
-import { BackgroundEntity, GuildEntity, NoteEntity, ScamEntity, StarEntity, WarningEntity } from './entities';
+import { BackgroundEntity, GuildEntity, NoteEntity, ScamEntity, StarEntity } from './entities';
 import { UserRepository } from './repository/UserRepository';
 import { ClientRepository, CommandRepository, MemberRepository } from './repository';
 import { CommandInteraction, Message } from 'discord.js';
@@ -26,8 +26,6 @@ export class MongoDB {
 
     public readonly users: UserRepository;
 
-    public readonly warnings: Repository<WarningEntity>;
-
     public constructor(connection: Connection) {
         this.connection = connection;
         this.backgrounds = connection.getRepository(BackgroundEntity);
@@ -39,7 +37,6 @@ export class MongoDB {
         this.scams = connection.getRepository(ScamEntity);
         this.starboards = connection.getRepository(StarEntity);
         this.users = connection.getCustomRepository(UserRepository);
-        this.warnings = connection.getRepository(WarningEntity);
     }
 
     public async fetchColor(msg: Message | CommandInteraction): Promise<number> {
@@ -69,5 +66,4 @@ export interface MongoDB {
     readonly scams: Repository<ScamEntity>;
     readonly starboards: Repository<StarEntity>;
     readonly users: UserRepository;
-    readonly warnings: Repository<WarningEntity>;
 }
