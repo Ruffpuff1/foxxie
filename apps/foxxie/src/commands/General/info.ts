@@ -28,7 +28,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { BrandingColors, Colors } from '#utils/constants';
 import { GuildBasedChannelTypes, PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { isGuildOwner } from '#utils/Discord';
-import { GuildSettings } from '#lib/prisma';
+import { GuildSettings, WarningModel } from '#lib/prisma';
 import { fetch } from '@foxxie/fetch';
 import { FoxxieEmbed } from '#lib/discord';
 import type { RESTGetAPIUsersUserBansBan } from '@foxxie/api';
@@ -621,13 +621,17 @@ export class UserCommand extends FoxxieCommand {
     }
 
     private async addWarnings(embed: MessageEmbed, userId: string, guildId: string, t: TFunction) {
-        const warnings = await this.container.db.warnings.find({
-            id: userId,
-            guildId
-        });
+        const warnings = await this.container.prisma.warning
+            .findMany({
+                where: {
+                    userId,
+                    guildId
+                }
+            })
+            .then(chunks => chunks.map(d => new WarningModel(d)));
         if (!warnings.length) return;
 
-        for (const { author } of warnings) await floatPromise(this.client.users.fetch(author));
+        for (const { authorId } of warnings) await floatPromise(this.client.users.fetch(authorId));
         embed.addField(
             t(LanguageKeys.Commands.General.InfoUserTitlesWarnings, {
                 count: warnings.length

@@ -13,7 +13,7 @@ import { container, UserError } from '@sapphire/framework';
 import { chunk } from '@ruffpuff/utilities';
 import type { APIGuildChannel, APIOverwrite, ChannelType } from 'discord-api-types/v9';
 import { floatPromise } from '#utils/util';
-import { GuildSettings, ModerationModel } from '#lib/prisma';
+import { GuildSettings, ModerationModel, WarningModel } from '#lib/prisma';
 import type { Moderation } from '@prisma/client';
 
 export class ModerationActions {
@@ -262,13 +262,14 @@ export class ModerationActions {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Warning);
         const moderationLog = this.create(options);
 
-        const warning = container.db.warnings.create({
-            guildId: this.guild.id,
-            id: moderationLog.userId!
+        const warning = new WarningModel({
+            authorId: moderationLog.moderatorId,
+            reason: moderationLog.reason,
+            createdAt: new Date(),
+            userId: moderationLog.userId!,
+            guildId: this.guild.id
         });
-        warning.author = moderationLog.moderatorId;
-        warning.reason = moderationLog.reason;
-        warning.createdAt = new Date();
+
         await warning.save();
 
         await this.sendDM(moderationLog, sendOptions);
@@ -522,7 +523,7 @@ export class ModerationActions {
     }
 
     private get manageableChannelCount() {
-        return this.guild.channels.cache.reduce((acc, channel) => channel.manageable ? acc + 1 : acc, 0);
+        return this.guild.channels.cache.reduce((acc, channel) => (channel.manageable ? acc + 1 : acc), 0);
     }
 
     private get persistRoles() {

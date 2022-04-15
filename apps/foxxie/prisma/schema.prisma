@@ -114,3 +114,19 @@ model Moderation {
 
   @@map("moderation")
 }
+
+model Warning {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String @map("id")
+
+  guildId String
+
+  authorId String @map("author")
+
+  reason String?
+
+  createdAt DateTime
+
+  @@map("warning")
+}

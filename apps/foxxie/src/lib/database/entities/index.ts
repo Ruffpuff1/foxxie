@@ -11,4 +11,3 @@ export * from './UserCooldown';
 export * from './UserCooldownReputation';
 export * from './UserEntity';
 export * from './UserProfile';
-export * from './WarningEntity';
