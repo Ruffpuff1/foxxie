@@ -20,7 +20,7 @@
     "#utils/APIs": "./dist/lib/util/APIs/index.js"
   },
   "dependencies": {
-    "@discordjs/builders": "^0.12.0",
+    "@discordjs/builders": "^0.13.0",
     "@foxxie/commands": "^0.0.1",
     "@foxxie/env": "^0.0.2",
     "@foxxie/fetch": "0.0.4",
