@@ -4,7 +4,9 @@ import { SlashCommandSubcommandBuilder as BaseSubcommandBuilder } from '@discord
 
 export class SlashCommandSubcommandBuilder extends BaseSubcommandBuilder {
     public setDescription(key: CustomGet<string, string>): this {
-        return super.setDescription(i18next.t(key, { lng: 'en-US' }));
+        return super //
+            .setDescription(i18next.t(key, { lng: 'en-US' }))
+            .setDescriptionLocalization('es-ES', i18next.t(key, { lng: 'es-MX' }));
     }
 
     public addEphemeralOption(base = false) {
@@ -12,6 +14,7 @@ export class SlashCommandSubcommandBuilder extends BaseSubcommandBuilder {
             option //
                 .setName('ephemeral')
                 .setDescription(i18next.t(`system:optionEphemeralDefault${base ? 'True' : 'False'}`, { lng: 'en-US' }))
+                .setDescriptionLocalization('es-ES', i18next.t(`system:optionEphemeralDefault${base ? 'True' : 'False'}`, { lng: 'es-MX' }))
         ) as this;
     }
 }
