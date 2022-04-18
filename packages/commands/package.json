@@ -47,7 +47,7 @@
     "typescript": "4.6.3"
   },
   "dependencies": {
-    "@foxxie/builders": "^0.0.0",
+    "@foxxie/builders": "^0.0.1",
     "@foxxie/i18n": "^0.0.3",
     "@sapphire/decorators": "^4.3.4",
     "@sapphire/framework": "^3.0.0-next.379f5db.0",
