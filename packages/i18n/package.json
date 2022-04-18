@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/i18n",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "I18n management utility for Foxxie projects.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
