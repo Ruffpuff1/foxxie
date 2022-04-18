@@ -1,5 +1,5 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { CommandName, ChatInputSubcommandArgs } from '#types/Interactions';
 import type { VillagersEnum } from '@ruffpuff/celestia';
 import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#utils/APIs';
@@ -14,14 +14,17 @@ import { EnvParse } from '@foxxie/env';
         builder //
             .setName(CommandName.AnimalCrossing)
             .setDescription(LanguageKeys.Commands.Websearch.AnimalcrossingDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.AnimalcrossingDescription))
             .subcommand(command =>
                 command //
                     .setName('villager')
                     .setDescription(LanguageKeys.Commands.Websearch.AnimalcrossingDescriptionVillager)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.AnimalcrossingDescriptionVillager))
                     .addStringOption(option =>
                         option //
                             .setName('villager')
                             .setDescription(enUS(LanguageKeys.Commands.Websearch.AnimalcrossingOptionVillager))
+                            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.AnimalcrossingOptionVillager))
                             .setAutocomplete(true)
                             .setRequired(true)
                     )

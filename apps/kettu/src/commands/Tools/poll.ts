@@ -1,5 +1,5 @@
 import { Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { ChatInputArgs, CommandName } from '#types/Interactions';
 import { enUS, getGuildIds } from '#utils/util';
 import { GuildMember, Message, MessageEmbed } from 'discord.js';
@@ -14,16 +14,19 @@ const ALPHABET_OPTS = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '
         builder //
             .setName(CommandName.Poll)
             .setDescription(LanguageKeys.Commands.Tools.PollDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Tools.PollDescription))
             .addStringOption(option =>
                 option //
                     .setName('options')
                     .setDescription(enUS(LanguageKeys.Commands.Tools.PollOptionOptions))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Tools.PollOptionOptions))
                     .setRequired(true)
             )
             .addStringOption(option =>
                 option //
                     .setName('title')
                     .setDescription(enUS(LanguageKeys.Commands.Tools.PollOptionTitle))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Tools.PollOptionTitle))
                     .setRequired(false)
             ),
     {

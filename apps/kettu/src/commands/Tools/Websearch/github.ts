@@ -1,5 +1,5 @@
 import { CommandName, ChatInputSubcommandArgs } from '#types/Interactions';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { fetch } from '@foxxie/fetch';
 import { GithubUserRegex } from '@ruffpuff/utilities';
 import { Command, fromAsync, isErr } from '@sapphire/framework';
@@ -18,14 +18,17 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
         builder //
             .setName(CommandName.Github)
             .setDescription(LanguageKeys.Commands.Websearch.GithubDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.GithubDescription))
             .subcommand(command =>
                 command //
                     .setName('user') //
                     .setDescription(LanguageKeys.Commands.Websearch.GithubDescriptionUser)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.GithubDescriptionUser))
                     .addStringOption(option =>
                         option //
                             .setName(GithubOptionType.User)
                             .setDescription(enUS(LanguageKeys.Commands.Websearch.GithubOptionUser))
+                            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.GithubOptionUser))
                             .setRequired(true)
                             .setAutocomplete(true)
                     )
@@ -34,10 +37,12 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
                 command //
                     .setName('repo')
                     .setDescription(LanguageKeys.Commands.Websearch.GithubDescriptionRepo)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.GithubDescriptionRepo))
                     .addStringOption(option =>
                         option //
                             .setName(GithubOptionType.Owner)
                             .setDescription(enUS(LanguageKeys.Commands.Websearch.GithubOptionOwner))
+                            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.GithubOptionOwner))
                             .setRequired(true)
                             .setAutocomplete(true)
                     )
@@ -45,6 +50,7 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
                         option //
                             .setName(GithubOptionType.Repo)
                             .setDescription(enUS(LanguageKeys.Commands.Websearch.GithubOptionRepo))
+                            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.GithubOptionRepo))
                             .setRequired(true)
                             .setAutocomplete(true)
                     )
@@ -52,6 +58,7 @@ import { hideLinkEmbed, hyperlink } from '@discordjs/builders';
                         option //
                             .setName('number')
                             .setDescription(enUS(LanguageKeys.Commands.Websearch.GithubOptionNumber))
+                            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.GithubOptionNumber))
                             .setRequired(false)
                             .setAutocomplete(true)
                     )

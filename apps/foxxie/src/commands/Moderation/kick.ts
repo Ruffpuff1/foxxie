@@ -1,7 +1,7 @@
 import { ModerationCommand } from '#lib/structures/moderation/ModerationCommand';
 import { ChatInputArgs, CommandName, GuildInteraction, PermissionLevels } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { cast } from '@ruffpuff/utilities';
 import { getModeration } from '#utils/Discord';
 import { LanguageKeys } from '#lib/i18n';
@@ -14,21 +14,25 @@ import type { GuildMember, User } from 'discord.js';
         builder //
             .setName(CommandName.Kick)
             .setDescription(LanguageKeys.Commands.Moderation.KickDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Moderation.KickDescription))
             .addUserOption(option =>
                 option //
                     .setName('target')
                     .setDescription(enUS(LanguageKeys.Commands.Moderation.KickOptionTarget))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Moderation.KickOptionTarget))
                     .setRequired(true)
             )
             .addStringOption(option =>
                 option //
                     .setName('reason')
                     .setDescription(enUS(LanguageKeys.Commands.Moderation.KickOptionReason))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Moderation.KickOptionReason))
             )
             .addNumberOption(option =>
                 option //
                     .setName('refrence')
                     .setDescription(enUS(LanguageKeys.Commands.Moderation.KickOptionRefrence))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Moderation.KickOptionRefrence))
             ),
     {
         requiredClientPermissions: PermissionFlagsBits.KickMembers,

@@ -1,7 +1,7 @@
 import { FoxxieCommand } from '#lib/structures';
 import { ChatInputSubcommandArgs, CommandName, EmojiObject, GuildInteraction } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { CommandOptionsRunTypeEnum, container, isErr, Result, UserError } from '@sapphire/framework';
 import { floatPromise, getGuildIds } from '#utils/util';
 import type { TFunction } from '@foxxie/i18n';
@@ -47,6 +47,7 @@ const roleLimit = 10;
                 command //
                     .setName('user')
                     .setDescription(LanguageKeys.Commands.General.InfoDescriptionUser)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.General.InfoDescriptionUser))
                     .addUserOption(option =>
                         option //
                             .setName('user')
@@ -58,12 +59,14 @@ const roleLimit = 10;
                 command //
                     .setName('server')
                     .setDescription(LanguageKeys.Commands.General.InfoDescriptionServer)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.General.InfoDescriptionServer))
                     .addEphemeralOption()
             )
             .subcommand(command =>
                 command //
                     .setName('role')
                     .setDescription(LanguageKeys.Commands.General.InfoDescriptionRole)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.General.InfoDescriptionRole))
                     .addRoleOption(option =>
                         option //
                             .setName('role')
@@ -75,6 +78,7 @@ const roleLimit = 10;
                 command //
                     .setName('emoji')
                     .setDescription(LanguageKeys.Commands.General.InfoDescriptionEmoji)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.General.InfoDescriptionEmoji))
                     .addStringOption(option =>
                         option //
                             .setName('emoji')
@@ -87,6 +91,7 @@ const roleLimit = 10;
                 command //
                     .setName('channel')
                     .setDescription(LanguageKeys.Commands.General.InfoDescriptionChannel)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.General.InfoDescriptionChannel))
                     .addStringOption(option =>
                         option //
                             .setName('channel')

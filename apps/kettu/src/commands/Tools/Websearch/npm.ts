@@ -1,6 +1,6 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
 import { ApplicationCommandOptionChoice, MessageEmbed } from 'discord.js';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS, getGuildIds } from '#utils/util';
@@ -17,10 +17,12 @@ const LOGO = 'https://cdn.ruffpuff.dev/npm.png';
         builder //
             .setName(CommandName.Npm)
             .setDescription(LanguageKeys.Commands.Websearch.NpmDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.NpmDescription))
             .addStringOption(option =>
                 option //
                     .setName('package')
                     .setDescription(enUS(LanguageKeys.Commands.Websearch.NpmOptionPackage))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.NpmOptionPackage))
                     .setRequired(true)
                     .setAutocomplete(true)
             )

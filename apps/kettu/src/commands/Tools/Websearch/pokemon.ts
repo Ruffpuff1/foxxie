@@ -9,26 +9,30 @@ import {
     pokemonDisplayBuilder,
     PokemonEnumToString
 } from '#utils/APIs';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { Command } from '@sapphire/framework';
 import type { MovesEnum } from '@favware/graphql-pokemon';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS, getGuildIds } from '#utils/util';
+import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 
 @RegisterChatInputCommand(
     builder =>
         builder //
             .setName(CommandName.Pokemon)
             .setDescription(LanguageKeys.Commands.Websearch.PokemonDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.PokemonDescription))
             .subcommand(command =>
                 command //
                     .setName('dex')
                     .setDescription(LanguageKeys.Commands.Websearch.PokemonDescriptionDex)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.PokemonDescriptionDex))
                     .addStringOption(option =>
                         option //
                             .setName('pokemon')
                             .setDescription(enUS(LanguageKeys.Commands.Websearch.PokemonOptionPokemon))
+                            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.PokemonOptionPokemon))
                             .setRequired(true)
                             .setAutocomplete(true)
                     )
@@ -36,17 +40,20 @@ import { enUS, getGuildIds } from '#utils/util';
                         option //
                             .setName('sprite')
                             .setDescription(enUS(LanguageKeys.Commands.Websearch.PokemonOptionSprite))
-                            .setChoices(UserCommand.Sprites)
+                            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.PokemonOptionSprite))
+                            .setChoices(...UserCommand.Sprites)
                     )
             )
             .subcommand(command =>
                 command //
                     .setName('move')
                     .setDescription(LanguageKeys.Commands.Websearch.PokemonDescriptionMove)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.PokemonDescriptionMove))
                     .addStringOption(option =>
                         option //
                             .setName('move')
                             .setDescription(enUS(LanguageKeys.Commands.Websearch.PokemonOptionMove))
+                            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.PokemonOptionMove))
                             .setRequired(true)
                             .setAutocomplete(true)
                     )
@@ -124,10 +131,22 @@ export class UserCommand extends Command {
         return display.run(interaction);
     }
 
-    private static readonly Sprites: [string, string][] = [
-        ['Sprite', 'sprite'],
-        ['Back Sprite', 'backSprite'],
-        ['Shiny Sprite', 'shinySprite'],
-        ['Shiny Back Sprite', 'shinyBackSprite']
+    private static readonly Sprites: APIApplicationCommandOptionChoice<string>[] = [
+        {
+            name: 'Sprite',
+            value: 'sprite'
+        },
+        {
+            name: 'Back Sprite',
+            value: 'backSprite'
+        },
+        {
+            name: 'Shiny Sprite',
+            value: 'shinySprite'
+        },
+        {
+            name: 'Shiny Back Sprite',
+            value: 'shinyBackSprite'
+        }
     ];
 }
