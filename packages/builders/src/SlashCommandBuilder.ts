@@ -13,15 +13,18 @@ export class SlashCommandBuilder extends BaseBuilder {
     ): SlashCommandSubcommandsOnlyBuilder {
         const result = typeof input === 'function' ? input(new SlashCommandSubcommandBuilder()) : input;
 
-        return super.addSubcommand(result) as unknown as SlashCommandSubcommandsOnlyBuilder;
+        return super //
+            .addSubcommand(result) as unknown as SlashCommandSubcommandsOnlyBuilder;
     }
 
     public addEphemeralOption(base = false) {
-        return super.addBooleanOption(option =>
-            option //
-                .setName('ephemeral')
-                .setDescription(i18next.t(`system:optionEphemeralDefault${base ? 'True' : 'False'}`, { lng: 'en-US' }))
-        ) as this;
+        return super //
+            .addBooleanOption(option =>
+                option //
+                    .setName('ephemeral')
+                    .setDescription(i18next.t(`system:optionEphemeralDefault${base ? 'True' : 'False'}`, { lng: 'en-US' }))
+                    .setDescriptionLocalization('es-ES', i18next.t(`system:optionEphemeralDefault${base ? 'True' : 'False'}`, { lng: 'es-MX' }))
+            ) as this;
     }
 }
 
