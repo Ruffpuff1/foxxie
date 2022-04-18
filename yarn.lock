@@ -678,6 +678,15 @@
     "@ruffpuff/utilities" "^4.0.0"
     undici "^4.15.0"
 
+"@foxxie/i18n@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@foxxie/i18n/-/i18n-0.0.3.tgz#c70f7432544f8ab5831bc1d9456e819c47b2ecc8"
+  integrity sha512-NJPPA9dC05snO6rrgkpn/2uJJYR17dnDNm/0UPJ7aNGYKNqKsi5H+cHWwL8B+szmkTrTUJ2jfXYxA1csvcGCoQ==
+  dependencies:
+    "@discordjs/collection" "^0.5.0"
+    i18next "^21.6.14"
+    i18next-fs-backend "^1.1.4"
+
 "@graphql-codegen/cli@2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-2.6.2.tgz#a9aa4656141ee0998cae8c7ad7d0bf9ca8e0c9ae"
@@ -5218,7 +5227,7 @@ i18next-fs-backend@^1.1.4:
   resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-1.1.4.tgz#d0e9b9ed2fa7a0f11002d82b9fa69c3c3d6482da"
   integrity sha512-/MfAGMP0jHonV966uFf9PkWWuDjPYLIcsipnSO3NxpNtAgRUKLTwvm85fEmsF6hGeu0zbZiCQ3W74jwO6K9uXA==
 
-i18next@^21.0.1, i18next@^21.6.16:
+i18next@^21.0.1, i18next@^21.6.14, i18next@^21.6.16:
   version "21.6.16"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.6.16.tgz#8cff8c3ba2ffaf8438a8c83fe284083f15cf3941"
   integrity sha512-xJlzrVxG9CyAGsbMP1aKuiNr1Ed2m36KiTB7hjGMG2Zo4idfw3p9THUEu+GjBwIgEZ7F11ZbCzJcfv4uyfKNuw==
