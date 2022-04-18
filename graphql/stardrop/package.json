@@ -18,7 +18,7 @@
     "@types/koa": "2.13.4"
   },
   "dependencies": {
-    "@foxxie/fuzzysearch": "0.0.3",
+    "@foxxie/fuzzysearch": "0.0.4",
     "apollo-server-core": "^3.6.7",
     "apollo-server-koa": "^3.6.7",
     "class-validator": "^0.13.2",
