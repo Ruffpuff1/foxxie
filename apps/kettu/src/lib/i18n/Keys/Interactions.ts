@@ -1,5 +1,12 @@
 import { T } from '@foxxie/i18n';
 
+export const ChoiceDayToday = T('interactions:choiceDayToday');
+export const ChoiceDayTomorrow = T('interactions:choiceDayTomorrow');
+export const ChoiceDayYesterday = T('interactions:choiceDayYesterday');
+export const ChoiceSpriteBackSprite = T('interactions:choiceSpriteBackSprite');
+export const ChoiceSpriteShinyBackSprite = T('interactions:choiceSpriteBackSprite');
+export const ChoiceSpriteShinySprite = T('interactions:choiceSpriteShinySprite');
+export const ChoiceSpriteSprite = T('interactions:choiceSpriteSprite');
 export const ChoiceZodiacAquarius = T('interactions:choiceZodiacAquarius');
 export const ChoiceZodiacAries = T('interactions:choiceZodiacAries');
 export const ChoiceZodiacCancer = T('interactions:choiceZodiacCancer');

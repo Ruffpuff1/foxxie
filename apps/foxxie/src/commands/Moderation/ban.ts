@@ -2,7 +2,7 @@ import { ModerationCommand } from '#lib/structures';
 import { ChatInputArgs, CommandName, GuildInteraction, PermissionLevels } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { RegisterChatInputCommand, toLocalizationMap, toLocalizationChoiceMap } from '@foxxie/commands';
-import { cast } from '@ruffpuff/utilities';
+import { cast, seconds } from '@ruffpuff/utilities';
 import { getModeration } from '#utils/Discord';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS, getGuildIds, interactionPrompt } from '#utils/util';
@@ -117,7 +117,7 @@ export class UserCommand extends ModerationCommand {
 
         const resolvedDuration = await this.resolveDuration(duration);
 
-        await this.container.redis!.insert(`guild:${interaction.guild!.id}:ban:${target.id}`, '');
+        await this.container.redis!.pinsertex(`guild:${interaction.guild!.id}:ban:${target.id}`, seconds(20), '');
 
         const log = await getModeration(interaction.guild!).actions.ban(
             {

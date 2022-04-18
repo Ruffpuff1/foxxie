@@ -136,16 +136,16 @@ export class UserCommand extends Command {
 
     public static readonly Days: APIApplicationCommandOptionChoice<Days>[] = [
         {
-            name: 'Today',
-            value: Days.Today
+            value: Days.Today,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceDayToday)
         },
         {
-            name: 'Tomorrow',
-            value: Days.Tomorrow
+            value: Days.Tomorrow,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceDayTomorrow)
         },
         {
-            name: 'Yesterday',
-            value: Days.Yesterday
+            value: Days.Yesterday,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceDayYesterday)
         }
     ];
 }

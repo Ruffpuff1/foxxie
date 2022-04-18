@@ -14,7 +14,7 @@ import type { CommandInteraction, Message } from 'discord.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { inspect } from 'node:util';
 import { getLocale } from '#utils/decorators';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { Type } from '@sapphire/type';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
@@ -25,6 +25,7 @@ import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
         builder //
             .setName(CommandName.Eval)
             .setDescription(LanguageKeys.Commands.Admin.EvalDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Admin.EvalDescription))
             .setDefaultPermission(false)
             .addStringOption(option =>
                 option //

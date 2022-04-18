@@ -1,7 +1,7 @@
 import { Command } from '@sapphire/framework';
 import { time, TimestampStyles } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { LanguageKeys } from '#lib/i18n';
 import { roundNumber, seconds } from '@ruffpuff/utilities';
 import { CpuInfo, cpus, uptime } from 'node:os';
@@ -14,6 +14,7 @@ import { getGuildIds } from '#utils/util';
         builder //
             .setName(CommandName.Stats)
             .setDescription(LanguageKeys.Commands.General.StatsDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.General.StatsDescription))
             .addEphemeralOption(),
     {
         idHints: ['951268274887327744'],

@@ -1,4 +1,11 @@
 {
+    "choiceDayToday": "Today",
+    "choiceDayTomorrow": "Tomorrow",
+    "choiceDayYesterday": "Yesterday",
+    "choiceSpriteBackSprite": "Back Sprite",
+    "choiceSpriteShinyBackSprite": "Shiny Back Sprite",
+    "choiceSpriteShinySprite": "Shiny Sprite",
+    "choiceSpriteSprite": "Sprite",
     "choiceZodiacAquarius": "Aquarius",
     "choiceZodiacAries": "Aries",
     "choiceZodiacCancer": "Cancer",

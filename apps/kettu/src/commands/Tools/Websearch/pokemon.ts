@@ -9,7 +9,7 @@ import {
     pokemonDisplayBuilder,
     PokemonEnumToString
 } from '#utils/APIs';
-import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationChoiceMap, toLocalizationMap } from '@foxxie/commands';
 import { Command } from '@sapphire/framework';
 import type { MovesEnum } from '@favware/graphql-pokemon';
 import { MessageActionRow, MessageSelectMenu, MessageSelectOptionData } from 'discord.js';
@@ -133,20 +133,21 @@ export class UserCommand extends Command {
 
     private static readonly Sprites: APIApplicationCommandOptionChoice<string>[] = [
         {
-            name: 'Sprite',
-            value: 'sprite'
+            value: 'sprite',
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceSpriteSprite)
         },
         {
-            name: 'Back Sprite',
-            value: 'backSprite'
+            value: 'backSprite',
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceSpriteBackSprite)
         },
         {
-            name: 'Shiny Sprite',
-            value: 'shinySprite'
+            value: 'shinySprite',
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceSpriteShinySprite)
         },
         {
-            name: 'Shiny Back Sprite',
-            value: 'shinyBackSprite'
+            value: 'shinyBackSprite',
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceSpriteShinyBackSprite)
         }
     ];
 }
+//
