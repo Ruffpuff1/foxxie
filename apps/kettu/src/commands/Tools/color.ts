@@ -2,7 +2,7 @@ import { AutocompleteCommand, Command } from '@sapphire/framework';
 import { fetch } from '@foxxie/fetch';
 import tinycolor from 'tinycolor2';
 import { FuzzySearch } from '@foxxie/fuzzysearch';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { getLocale } from '#utils/decorators';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
@@ -14,10 +14,12 @@ import { resolveColorArgument } from '#utils/resolvers';
         builder //
             .setName(CommandName.Color)
             .setDescription(LanguageKeys.Commands.Tools.ColorDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Tools.ColorDescription))
             .addStringOption(option =>
                 option //
                     .setName('color')
                     .setDescription(enUS(LanguageKeys.Commands.Tools.ColorOptionColor))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Tools.ColorOptionColor))
                     .setRequired(true)
                     .setAutocomplete(true)
             )

@@ -1,6 +1,6 @@
 import { LanguageKeys } from '#lib/i18n';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { bold, hyperlink, italic, underscore } from '@discordjs/builders';
 import { Command } from '@sapphire/framework';
 import { getGuildIds } from '#utils/util';
@@ -10,6 +10,7 @@ import { getGuildIds } from '#utils/util';
         builder //
             .setName(CommandName.Donate)
             .setDescription(LanguageKeys.Commands.General.DonateDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.General.DonateDescription))
             .addEphemeralOption(true),
     {
         idHints: ['945897471513612318', '945897471513612318'],

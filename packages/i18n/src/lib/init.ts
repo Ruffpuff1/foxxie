@@ -12,7 +12,7 @@ export function isDiscordLocale(lng: string): lng is LocaleString {
     return discordLocales.has(lng as LocaleString);
 }
 
-export const loadedLocales = new Set<LocaleString>();
+export const loadedLocales = new Set<string>();
 export const loadedNamespaces = new Set<string>();
 
 export const loadedPaths = new Set<string>();
@@ -58,7 +58,7 @@ export async function load(directory: PathLike) {
     const dir = await opendir(directory);
     for await (const entry of dir) {
         if (!entry.isDirectory()) continue;
-        loadedLocales.add(entry.name as LocaleString);
+        loadedLocales.add(entry.name);
         await loadLocale(join(dir.path, entry.name), '');
     }
 
@@ -76,8 +76,8 @@ async function loadLocale(directory: string, ns: string) {
     }
 }
 
-const cache = new Collection<LocaleString, TFunction>();
-export function getT(locale: LocaleString) {
+const cache = new Collection<string, TFunction>();
+export function getT(locale: string) {
     if (!loadedLocales.has(locale)) throw new ReferenceError(`invalid locale (${locale})`);
     return cache.ensure(locale, () => getFixedT(locale));
 }

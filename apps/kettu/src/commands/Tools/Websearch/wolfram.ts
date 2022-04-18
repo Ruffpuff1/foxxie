@@ -1,6 +1,6 @@
 import { fetch } from '@foxxie/fetch';
 import { ChatInputCommand, Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { Emojis } from '#utils/constants';
 import { bold, hyperlink } from '@discordjs/builders';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
@@ -13,6 +13,7 @@ import { getGuildIds } from '#utils/util';
         builder //
             .setName(CommandName.Wolfram)
             .setDescription(LanguageKeys.Commands.Websearch.WolframDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.WolframDescription))
             .addStringOption(option =>
                 option //
                     .setName('query')

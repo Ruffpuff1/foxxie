@@ -1,5 +1,5 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { CommandName, ChatInputSubcommandArgs } from '#types/Interactions';
 import { buildStardewVillagerDisplay, fetchStardewVillager, fuzzySearchStardewVillagers } from '#utils/APIs';
 import type { VillagersEnum } from '@foxxie/stardrop';
@@ -14,14 +14,17 @@ import { EnvParse } from '@foxxie/env';
         builder //
             .setName(CommandName.StardewValley)
             .setDescription(LanguageKeys.Commands.Websearch.StardewvalleyDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.StardewvalleyDescription))
             .subcommand(command =>
                 command //
                     .setName('character')
                     .setDescription(LanguageKeys.Commands.Websearch.StardewvalleyDescriptionCharacter)
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.StardewvalleyDescriptionCharacter))
                     .addStringOption(option =>
                         option //
                             .setName('villager')
                             .setDescription(enUS(LanguageKeys.Commands.Websearch.StardewvalleyOptionVillager))
+                            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.StardewvalleyOptionVillager))
                             .setAutocomplete(true)
                             .setRequired(true)
                     )

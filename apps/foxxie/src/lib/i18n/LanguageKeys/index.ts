@@ -3,6 +3,7 @@ export * as Automod from './Automod';
 export * as Commands from './Commands';
 export * as Globals from './Globals';
 export * as Guilds from './Guilds';
+export * as Interactions from './Interactions';
 export * as Listeners from './Listeners';
 export * as Moderation from './Moderation';
 export * as Preconditions from './Preconditions';

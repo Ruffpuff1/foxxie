@@ -1,6 +1,6 @@
 import { fetch } from '@foxxie/fetch';
 import { Command, UserError } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap, toLocalizationChoiceMap } from '@foxxie/commands';
 import { Colors, Emojis } from '#utils/constants';
 import { Sunsigns, Days, Query, QueryGetHoroscopeArgs } from '@skyra/saelem';
 import { MessageEmbed } from 'discord.js';
@@ -9,6 +9,7 @@ import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { EnvParse } from '@foxxie/env';
 import { getGuildIds } from '#utils/util';
+import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 
 const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) {
     getHoroscope(sunsign: $sunsign, day: $day) {
@@ -26,19 +27,20 @@ const SaelemQueryString = `query getHoroscope($sunsign: Sunsigns!, $day: Days!) 
         builder //
             .setName(CommandName.Zodiac)
             .setDescription(LanguageKeys.Commands.Websearch.ZodiacDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.ZodiacDescription))
             .addStringOption(option =>
                 option //
                     .setName('sign')
                     .setDescription('The star sign to search.')
                     .setRequired(true)
-                    .addChoices(UserCommand.Zodiacs)
+                    .addChoices(...UserCommand.Zodiacs)
             )
             .addStringOption(option =>
                 option //
                     .setName('day')
                     .setDescription('The day to search for the horoscope.')
                     .setRequired(false)
-                    .addChoices(UserCommand.Days)
+                    .addChoices(...UserCommand.Days)
             )
             .addEphemeralOption(),
     {
@@ -81,25 +83,70 @@ export class UserCommand extends Command {
         }
     }
 
-    public static readonly Zodiacs: [name: string, value: Sunsigns][] = [
-        ['Aquarius', Sunsigns.Aquarius],
-        ['Aries', Sunsigns.Aries],
-        ['Cancer', Sunsigns.Cancer],
-        ['Capricorn', Sunsigns.Capricorn],
-        ['Gemini', Sunsigns.Gemini],
-        ['Leo', Sunsigns.Leo],
-        ['Libra', Sunsigns.Libra],
-        ['Pisces', Sunsigns.Pisces],
-        ['Sagittarius', Sunsigns.Sagittarius],
-        ['Scorpio', Sunsigns.Scorpio],
-        ['Taurus', Sunsigns.Taurus],
-        ['Virgo', Sunsigns.Virgo]
+    public static readonly Zodiacs: APIApplicationCommandOptionChoice<Sunsigns>[] = [
+        {
+            value: Sunsigns.Aquarius,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacAquarius)
+        },
+        {
+            value: Sunsigns.Aries,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacAries)
+        },
+        {
+            value: Sunsigns.Cancer,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacCancer)
+        },
+        {
+            value: Sunsigns.Capricorn,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacCapricorn)
+        },
+        {
+            value: Sunsigns.Gemini,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacGemini)
+        },
+        {
+            value: Sunsigns.Leo,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacLeo)
+        },
+        {
+            value: Sunsigns.Libra,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacLibra)
+        },
+        {
+            value: Sunsigns.Pisces,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacPisces)
+        },
+        {
+            value: Sunsigns.Sagittarius,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacSagittarius)
+        },
+        {
+            value: Sunsigns.Scorpio,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacScorpio)
+        },
+        {
+            value: Sunsigns.Taurus,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacTaurus)
+        },
+        {
+            value: Sunsigns.Virgo,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceZodiacVirgo)
+        }
     ];
 
-    public static readonly Days: [name: string, value: Days][] = [
-        ['Today', Days.Today],
-        ['Tomorrow', Days.Tomorrow],
-        ['Yesterday', Days.Yesterday]
+    public static readonly Days: APIApplicationCommandOptionChoice<Days>[] = [
+        {
+            value: Days.Today,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceDayToday)
+        },
+        {
+            value: Days.Tomorrow,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceDayTomorrow)
+        },
+        {
+            value: Days.Yesterday,
+            ...toLocalizationChoiceMap(LanguageKeys.Interactions.ChoiceDayYesterday)
+        }
     ];
 }
 

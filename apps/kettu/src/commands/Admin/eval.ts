@@ -14,16 +14,18 @@ import type { CommandInteraction, Message } from 'discord.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { inspect } from 'node:util';
 import { getLocale } from '#utils/decorators';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { Type } from '@sapphire/type';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
+import type { APIApplicationCommandOptionChoice } from 'discord-api-types/v10';
 
 @RegisterChatInputCommand(
     builder =>
         builder //
             .setName(CommandName.Eval)
             .setDescription(LanguageKeys.Commands.Admin.EvalDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Admin.EvalDescription))
             .setDefaultPermission(false)
             .addStringOption(option =>
                 option //
@@ -40,13 +42,13 @@ import { LanguageKeys } from '#lib/i18n';
                 builder //
                     .setName('language')
                     .setDescription('The language of the output codeblock.')
-                    .setChoices(UserCommand.languageChoices)
+                    .setChoices(...UserCommand.languageChoices)
             )
             .addStringOption(builder =>
                 builder //
                     .setName('output-to')
                     .setDescription('The location to send the output to.')
-                    .setChoices(UserCommand.outputChoices)
+                    .setChoices(...UserCommand.outputChoices)
             )
             .addBooleanOption(builder =>
                 builder //
@@ -317,19 +319,46 @@ export class UserCommand extends Command {
 
     public static readonly timeout = 60000;
 
-    public static readonly languageChoices: [name: string, value: string][] = [
-        ['JavaScript', 'js'],
-        ['TypeScript', 'ts'],
-        ['JSON', 'json'],
-        ['Raw text', 'txt']
+    public static readonly languageChoices: APIApplicationCommandOptionChoice<string>[] = [
+        {
+            name: 'JavaScript',
+            value: 'js'
+        },
+        {
+            name: 'TypeScript',
+            value: 'ts'
+        },
+        {
+            name: 'JSON',
+            value: 'json'
+        },
+        {
+            name: 'Raw text',
+            value: 'txt'
+        }
     ];
 
-    public static readonly outputChoices: [name: string, value: string][] = [
-        ['Reply', 'reply'],
-        ['File', 'file'],
-        ['Hastebin', 'hastebin'],
-        ['Console', 'console'],
-        ['Abort', 'none']
+    public static readonly outputChoices: APIApplicationCommandOptionChoice<string>[] = [
+        {
+            name: 'Reply',
+            value: 'reply'
+        },
+        {
+            name: 'File',
+            value: 'file'
+        },
+        {
+            name: 'Hastebin',
+            value: 'hastebin'
+        },
+        {
+            name: 'Console',
+            value: 'console'
+        },
+        {
+            name: 'Abort',
+            value: 'none'
+        }
     ];
 }
 

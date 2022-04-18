@@ -1,5 +1,5 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { Colors } from '#utils/constants';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { cryptoCompare, CryptoCompareResultOk } from '#utils/APIs';
@@ -15,10 +15,12 @@ import { EnvParse } from '@foxxie/env';
         builder //
             .setName(CommandName.Currency)
             .setDescription(LanguageKeys.Commands.Websearch.CurrencyDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.CurrencyDescription))
             .addStringOption(option =>
                 option //
                     .setName('from')
                     .setDescription(enUS(LanguageKeys.Commands.Websearch.CurrencyOptionFrom))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.CurrencyOptionFrom))
                     .setRequired(true)
                     .setAutocomplete(true)
             )
@@ -26,6 +28,7 @@ import { EnvParse } from '@foxxie/env';
                 option //
                     .setName('to')
                     .setDescription(enUS(LanguageKeys.Commands.Websearch.CurrencyOptionTo))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.CurrencyOptionTo))
                     .setRequired(true)
                     .setAutocomplete(true)
             )
@@ -33,6 +36,7 @@ import { EnvParse } from '@foxxie/env';
                 option //
                     .setName('amount')
                     .setDescription(enUS(LanguageKeys.Commands.Websearch.CurrencyOptionAmount))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Websearch.CurrencyOptionAmount))
                     .setRequired(false)
             )
             .addEphemeralOption(),

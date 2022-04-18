@@ -185,7 +185,7 @@ export function colorLink(hex: string): string {
  */
 export function getCommandPrefix(args: FoxxieCommand.Args): string {
     const { commandContext: context, message } = args;
-    return context.prefix instanceof RegExp && !context.commandPrefix.endsWith(' ') || UserOrMemberMentionRegex.test(context.commandPrefix)
+    return (context.prefix instanceof RegExp && !context.commandPrefix.endsWith(' ')) || UserOrMemberMentionRegex.test(context.commandPrefix)
         ? `${cleanMentions(message.guild!, context.commandPrefix)} `
         : cleanMentions(message.guild!, context.commandPrefix);
 }

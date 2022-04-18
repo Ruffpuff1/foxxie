@@ -1,5 +1,5 @@
 import { AutocompleteCommand, Command } from '@sapphire/framework';
-import { RegisterChatInputCommand } from '@foxxie/commands';
+import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
 import { type ChatInputArgs, CommandName } from '#types/Interactions';
 import { LanguageKeys } from '#lib/i18n';
 import { enUS, getGuildIds } from '#utils/util';
@@ -15,16 +15,19 @@ import { getLocale } from '#utils/decorators';
         builder //
             .setName(CommandName.Setcolor)
             .setDescription(LanguageKeys.Commands.Tools.SetcolorDescription)
+            .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Tools.SetcolorDescription))
             .addRoleOption(option =>
                 option //
                     .setName('role')
                     .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorOptionRole))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Tools.SetcolorOptionRole))
                     .setRequired(true)
             )
             .addStringOption(option =>
                 option //
                     .setName('color')
                     .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorOptionColor))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Tools.SetcolorOptionColor))
                     .setRequired(true)
                     .setAutocomplete(true)
             )
@@ -32,6 +35,7 @@ import { getLocale } from '#utils/decorators';
                 option //
                     .setName('reason')
                     .setDescription(enUS(LanguageKeys.Commands.Tools.SetcolorOptionReason))
+                    .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Tools.SetcolorOptionReason))
                     .setRequired(false)
             ),
     {
