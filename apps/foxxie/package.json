@@ -70,7 +70,7 @@
     "author": "ruffpuff",
     "license": "MIT",
     "dependencies": {
-        "@discordjs/builders": "^0.12.0",
+        "@discordjs/builders": "^0.13.0",
         "@favware/graphql-pokemon": "6.5.0",
         "@foxxie/api": "0.0.3",
         "@foxxie/commands": "^0.0.1",
