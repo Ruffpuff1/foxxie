@@ -1,6 +1,6 @@
 import { cb, EndpointsEnum, FoxxieApiError } from '../src';
 
-jest.setTimeout(10000);
+jest.setTimeout(15000);
 
 describe('testing callback wrappers', () => {
     test('EXPECT array of partial users', async () => {
