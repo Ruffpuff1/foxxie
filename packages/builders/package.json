@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/builders",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Extensions of @discordjs/builders for Foxxie project.",
   "scripts": {
     "build": "rm -r -f dist && tsup",
