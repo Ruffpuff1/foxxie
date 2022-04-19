@@ -4,7 +4,7 @@ import { ChatInputArgs, CommandName, PermissionLevels } from '#lib/types';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { getModeration } from '#utils/Discord';
 import { RegisterChatInputCommand, toLocalizationMap } from '@foxxie/commands';
-import { getGuildIds } from '#utils/util';
+import { enUS, getGuildIds } from '#utils/util';
 
 @RegisterChatInputCommand(
     builder =>
@@ -15,7 +15,7 @@ import { getGuildIds } from '#utils/util';
             .addIntegerOption(option =>
                 option //
                     .setName('caseid')
-                    .setDescription(LanguageKeys.Commands.Moderation.CaseOptionCaseId)
+                    .setDescription(enUS(LanguageKeys.Commands.Moderation.CaseOptionCaseId))
                     .setDescriptionLocalizations(toLocalizationMap(LanguageKeys.Commands.Moderation.CaseOptionCaseId))
                     .setRequired(true)
             )

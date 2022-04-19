@@ -9,9 +9,9 @@ import { init } from '@sentry/node';
 import i18next from 'i18next';
 
 async function main() {
-    try {
-        await initI18n();
+    await initI18n();
 
+    try {
         const client = new FoxxieClient();
 
         i18next.use(helpUsagePostProcessor);

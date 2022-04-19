@@ -156,7 +156,7 @@ export class ModerationModel {
             channel ? t(LanguageKeys.Guilds.Logs.ArgsChannel, { channel }) : null,
             this.duration
                 ? t(LanguageKeys.Guilds.Logs.ArgsDuration, {
-                      duration: Date.now() - this.duration
+                      duration: Date.now() - Number(this.duration)
                   })
                 : null,
             t(LanguageKeys.Guilds.Logs.ArgsReason, {

@@ -78,6 +78,6 @@ async function loadLocale(directory: string, ns: string) {
 
 const cache = new Collection<string, TFunction>();
 export function getT(locale: string) {
-    if (!loadedLocales.has(locale)) throw new ReferenceError(`invalid locale (${locale})`);
+    if (!loadedLocales.has(locale)) process.emitWarning(`could not find locale (${locale})`);
     return cache.ensure(locale, () => getFixedT(locale));
 }
