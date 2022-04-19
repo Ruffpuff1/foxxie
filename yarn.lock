@@ -683,6 +683,14 @@
     "@ruffpuff/utilities" "^4.0.0"
     undici "^4.15.0"
 
+"@foxxie/fuzzysearch@0.0.3", "@foxxie/fuzzysearch@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@foxxie/fuzzysearch/-/fuzzysearch-0.0.3.tgz#615af8ee3e51ce951c598a10d25cc1789591e808"
+  integrity sha512-TXs5pqDewuwBUx7LU2jMEgb2wLdU2txSaY00cmT6mdx+rDdZTl3qHd74FyJSQOpBDWXU2N/JJFNDEgLdeAzY8w==
+  dependencies:
+    "@discordjs/collection" "^0.5.0"
+    "@skyra/jaro-winkler" "^1.0.0"
+
 "@foxxie/i18n@^0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@foxxie/i18n/-/i18n-0.0.3.tgz#c70f7432544f8ab5831bc1d9456e819c47b2ecc8"
@@ -690,6 +698,15 @@
   dependencies:
     "@discordjs/collection" "^0.5.0"
     i18next "^21.6.14"
+    i18next-fs-backend "^1.1.4"
+
+"@foxxie/i18n@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@foxxie/i18n/-/i18n-0.0.4.tgz#9b9dde46c541acb306858fe107c4cf61854f0530"
+  integrity sha512-rGV55zM+LUDW/POQHixGV3tKK7T9Lv8K0436+lcRRLQ+uPGvZ/mcLeE9dKq98nEKuRMh1TcY3itxOsjEoywz6w==
+  dependencies:
+    "@discordjs/collection" "^0.5.0"
+    i18next "^21.6.16"
     i18next-fs-backend "^1.1.4"
 
 "@graphql-codegen/cli@2.6.2":
@@ -1928,7 +1945,7 @@
   resolved "https://registry.yarnpkg.com/@skyra/editable-commands/-/editable-commands-2.1.2.tgz#93ea2502d00d715d4b6095f7b136f3eb97efb1d1"
   integrity sha512-oS1fwZ/lIreqjw3V2fZthxxBWijAl+wZInExWjw1kC3eeF1ZKr/Sz9kqt554Aop9f7DjDtdV8vVqKbGl5iOx6A==
 
-"@skyra/jaro-winkler@^1.1.0":
+"@skyra/jaro-winkler@^1.0.0", "@skyra/jaro-winkler@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@skyra/jaro-winkler/-/jaro-winkler-1.1.0.tgz#6e0ccff912f5d72b3e1cdf386f85b10102412608"
   integrity sha512-cfamfsSmi6dqc8yAABKg5YC76FGwZq0ui+T4/N8R8oi52HS9GGXgq0ZbcBhaGT6CHoNtd9bRALcQRUJx1NH0Ig==
@@ -4063,11 +4080,6 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-discord-api-types@0.31.1, discord-api-types@^0.31.1:
-  version "0.31.1"
-  resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.31.1.tgz#e83208fef3669c263bb48e68c9c84ecf3e286b01"
-  integrity sha512-QBWl1/x20ZyKAiY750wuWAWokudhlOnQzXhCTEkQsCNOOM9tU/HIqkpLgZqJI1EFmZMeWHdaRKzpiD7n7iCS+w==
-
 discord-api-types@0.31.2:
   version "0.31.2"
   resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.31.2.tgz#8d131e25340bd695815af3bb77128a6993c1b516"
@@ -4077,6 +4089,11 @@ discord-api-types@^0.26.0:
   version "0.26.1"
   resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.26.1.tgz#726f766ddc37d60da95740991d22cb6ef2ed787b"
   integrity sha512-T5PdMQ+Y1MEECYMV5wmyi9VEYPagEDEi4S0amgsszpWY0VB9JJ/hEvM6BgLhbdnKky4gfmZEXtEEtojN8ZKJQQ==
+
+discord-api-types@^0.31.1:
+  version "0.31.1"
+  resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.31.1.tgz#e83208fef3669c263bb48e68c9c84ecf3e286b01"
+  integrity sha512-QBWl1/x20ZyKAiY750wuWAWokudhlOnQzXhCTEkQsCNOOM9tU/HIqkpLgZqJI1EFmZMeWHdaRKzpiD7n7iCS+w==
 
 discord.js@^13.6.0:
   version "13.6.0"
@@ -8884,7 +8901,7 @@ tsscmp@1.0.6:
   resolved "https://registry.yarnpkg.com/tsscmp/-/tsscmp-1.0.6.tgz#85b99583ac3589ec4bfef825b5000aa911d605eb"
   integrity sha512-LxhtAkPDTkVCMQjt2h6eBVY28KCjikZqZfMcC15YBeNjkgUpdCfBu5HoiOTDu86v6smE8yOjyEktJ8hlbANHQA==
 
-tsup@^5.12.3:
+tsup@^5.12.3, tsup@^5.12.5:
   version "5.12.5"
   resolved "https://registry.yarnpkg.com/tsup/-/tsup-5.12.5.tgz#3cb67b568d5ea7460756469329f8533f933bf815"
   integrity sha512-lKwzJsB49sDto51QjqOB4SdiBLKRvgTymEBuBCovcksdDwFEz3esrkbf3m497PXntUKVTzcgOfPdTgknMtvufw==
