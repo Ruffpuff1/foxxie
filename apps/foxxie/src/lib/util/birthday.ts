@@ -101,7 +101,7 @@ export function getFormatted({ month, day }: BirthdayData): string {
 }
 
 export function yearIsLeap(year: BirthdayData['year']): boolean {
-    return (year as number) % 4 === 0 && (year as number) % 100 !== 0 || (year as number) % 400 === 0;
+    return ((year as number) % 4 === 0 && (year as number) % 100 !== 0) || (year as number) % 400 === 0;
 }
 
 export function getDuration({ month, day }: BirthdayData): string {

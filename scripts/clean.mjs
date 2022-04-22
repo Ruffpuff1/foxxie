@@ -9,7 +9,7 @@ import { execSync } from 'node:child_process';
  */
 function cleanPackages(directory) {
     const packagesPath = join(process.cwd(), directory);
-    const arr = readdirSync(packagesPath).filter(dir => !dir.startsWith('.') && !dir.endsWith('.md'));
+    const arr = readdirSync(packagesPath).filter(dir => !dir.startsWith('.') && !dir.endsWith('.md') && !['localizations', 'parsers'].includes(dir));
 
     // @ts-expect-error intl listformat isn't typed.
     const list = new Intl.ListFormat('en-US', { type: 'conjunction' }).format(arr);
@@ -29,4 +29,4 @@ function cleanPackages(directory) {
 }
 
 execSync(`rm -rf node_modules`);
-for (const dir of ['apps', 'graphql', 'packages', 'website']) cleanPackages(dir);
+for (const dir of ['apps', 'api', 'packages', 'website']) cleanPackages(dir);

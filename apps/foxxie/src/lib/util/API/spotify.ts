@@ -82,7 +82,7 @@ export async function getPlaylistTracks(content: string): Promise<null | string[
 
     const mapped = data.tracks.items.map(song => {
         const { track } = song;
-        return `${track.name} - ${track.artists[0].name}`;
+        return `${track?.name} - ${track?.artists[0].name}`;
     });
 
     if (redis) {

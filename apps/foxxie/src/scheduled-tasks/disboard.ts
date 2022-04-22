@@ -45,7 +45,7 @@ export class UserTask extends ScheduledTask {
             await channel.send({ content: message || base || null, embeds });
         } catch (error) {
             if (!(error instanceof DiscordAPIError)) return;
-        
+
             if (error.code === RESTJSONErrorCodes.UnknownChannel) {
                 await this.container.prisma.guilds(guild.id, {
                     [GuildSettings.Channels.Disboard]: null

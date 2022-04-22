@@ -38,9 +38,9 @@
   },
   "homepage": "https://github.com/Ruffpuff1/foxxie",
   "devDependencies": {
-    "@nrwl/cli": "latest",
+    "@nrwl/cli": "14.0.1",
     "@nrwl/nx-cloud": "13.3.1",
-    "@nrwl/workspace": "^13.10.0",
+    "@nrwl/workspace": "^14.0.1",
     "@octokit/action": "^3.18.0",
     "@types/eslint": "^8",
     "@types/skia-canvas": "^0.9.28",
@@ -55,12 +55,12 @@
     "prettier": "^2.6.2",
     "ts-jest": "27.1.4",
     "ts-node": "10.7.0",
-    "tsup": "^5.12.3",
+    "tsup": "^5.12.6",
     "typescript": "^4.6.3"
   },
   "workspaces": [
     "apps/*",
-    "graphql/*",
+    "api/*",
     "packages/*"
   ],
   "packageManager": "yarn@1.22.18",

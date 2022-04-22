@@ -36,7 +36,7 @@ export class UserSerializer extends Serializer<string> {
         const command = this.container.stores.get('commands').get(cmd) as FoxxieCommand;
 
         if (cmd === '*') {
-            if (!validCategories.includes(cate) || command && command.guarded) return false;
+            if (!validCategories.includes(cate) || (command && command.guarded)) return false;
             return true;
         }
 

@@ -22,6 +22,6 @@ export class WorkerManager {
     }
 
     private getWorker() {
-        return this.workers.reduce((best, worker) => best.remaining > worker.remaining ? worker : best);
+        return this.workers.reduce((best, worker) => (best.remaining > worker.remaining ? worker : best));
     }
 }

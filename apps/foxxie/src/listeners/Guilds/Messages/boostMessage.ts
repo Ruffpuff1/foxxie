@@ -26,9 +26,9 @@ export class UserListener extends AutomationListener<Events.SystemMessage> {
         await this.sendMessage(msg, channel);
     }
 
-    protected nextTier = (guild: Guild) => guild.premiumTier === 'NONE' ? 1 : guild.premiumTier === 'TIER_1' ? 2 : guild.premiumTier === 'TIER_2' ? 3 : 3;
+    protected nextTier = (guild: Guild) => (guild.premiumTier === 'NONE' ? 1 : guild.premiumTier === 'TIER_1' ? 2 : guild.premiumTier === 'TIER_2' ? 3 : 3);
 
-    protected tierBoostCount = (guild: Guild) => guild.premiumTier === 'NONE' ? 2 : guild.premiumTier === 'TIER_1' ? 7 : guild.premiumTier === 'TIER_2' ? 14 : 14;
+    protected tierBoostCount = (guild: Guild) => (guild.premiumTier === 'NONE' ? 2 : guild.premiumTier === 'TIER_1' ? 7 : guild.premiumTier === 'TIER_2' ? 14 : 14);
 
     protected format(message: string, member: GuildMember, t: TFunction) {
         const replaced = message.replace(this.boostMatchRegex, match => {

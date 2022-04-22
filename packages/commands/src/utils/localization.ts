@@ -1,5 +1,5 @@
-import { CustomGet, getT, loadedLocales } from "@foxxie/i18n";
-import { APIApplicationCommandOptionChoice, Locale, LocalizationMap } from "discord-api-types/v10";
+import { CustomGet, getT, loadedLocales } from '@foxxie/i18n';
+import { APIApplicationCommandOptionChoice, Locale, LocalizationMap } from 'discord-api-types/v10';
 
 const langs: LanguageKey[] = [...loadedLocales] as LanguageKey[];
 
