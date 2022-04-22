@@ -5,10 +5,10 @@ on:
     branches:
       - main
     paths:
-      - 'graphql/stardrop/src/**'
-      - 'graphql/stardrop/Dockerfile'
+      - 'api/stardrop/src/**'
+      - 'api/stardrop/Dockerfile'
       - '.github/workflows/stardrop-deployment.yml'
-      - 'graphql/stardrop/package.json'
+      - 'api/stardrop/package.json'
   workflow_dispatch:
 
 jobs:
@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a # tag=v2.10.0
         with:
           push: true
-          context: ./graphql/stardrop
+          context: ./api/stardrop
           tags: |
             ruffpuff/stardrop:latest
             ghcr.io/ruffpuff1/stardrop:latest

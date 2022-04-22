@@ -67,12 +67,12 @@
   - packages/types/**/*
 
 'GraphQL: stardrop':
-  - graphql/stardrop/*
-  - graphql/stardrop/**/*
+  - api/stardrop/*
+  - api/stardrop/**/*
 
 'Docker Images: ravy.lgbt':
-  - docker/ravy.lgbt/*
-  - docker/ravy.lgbt/**/*
+  - third_party/ravy.lgbt/*
+  - third_party/ravy.lgbt/**/*
 
 'I18n: en-US':
   - apps/foxxie/src/languages/en-US/*

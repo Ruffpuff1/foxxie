@@ -81,7 +81,7 @@ export class WorkerHandler {
 
     private generateId() {
         if (this.id === WorkerHandler.maximumId) {
-            return this.id = 0;
+            return (this.id = 0);
         }
 
         return this.id++;

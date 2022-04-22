@@ -46,7 +46,7 @@ services:
   stardrop:
     container_name: stardrop
     build:
-      context: '../../graphql/stardrop'
+      context: '../../api/stardrop'
     networks:
       - kettu
     ports:
@@ -55,7 +55,7 @@ services:
 
   ravy.lgbt:
     build:
-      context: ../../docker/ravy.lgbt
+      context: ../../third_party/ravy.lgbt
     container_name: ravy.lgbt
     networks:
       - kettu

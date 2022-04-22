@@ -82,7 +82,7 @@ export class Request {
         this.streamEnabled = false;
 
         this.compressionEnabled = false;
-        this.ua = `@foxxie/fetch/0.0.1`;
+        this.ua = `@foxxie/fetch/0.0.4`;
 
         this.coreOptions = {};
 

@@ -96,7 +96,7 @@ export async function fetchApiUserButFallbackToMock(userId: string): Promise<Use
                     github: null
                 },
                 whitelisted: false
-            }
+            };
         }
 
         throw err;
@@ -110,19 +110,19 @@ interface UserCb<T extends User, R> {
     (model: T): Promise<R> | R;
 }
 
-export async function fetchUserProps<K>(userId: string, cb: UserCb<User, K>): Promise<K>
-export async function fetchUserProps<K1 extends A, K2 extends A>(userId: string, keys: [K1, K2]): Promise<[User[K1], User[K2]]>
-export async function fetchUserProps<K extends A>(userId: string, keys: K): Promise<User[K]>
+export async function fetchUserProps<K>(userId: string, cb: UserCb<User, K>): Promise<K>;
+export async function fetchUserProps<K1 extends A, K2 extends A>(userId: string, keys: [K1, K2]): Promise<[User[K1], User[K2]]>;
+export async function fetchUserProps<K extends A>(userId: string, keys: K): Promise<User[K]>;
 export async function fetchUserProps<K>(userId: string, keys: A | [A, A] | UserCb<User, K>) {
     const user = await fetchApiUserButFallbackToMock(userId);
 
     if (Array.isArray(keys)) {
         return keys.map(k => user[k]);
     } else if (typeof keys === 'function') {
-        return keys(user)
-    } else {
-        return user[keys]
-    }
+        return keys(user);
+    } 
+        return user[keys];
+    
 }
 
 export async function postApiBan(data: RESTPostAPIUsersUserBansJSONBody): Promise<Endpoints[EndpointsEnum.PostUsersUserBans]> {

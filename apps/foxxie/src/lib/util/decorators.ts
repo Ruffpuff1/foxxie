@@ -12,7 +12,7 @@ import type { LocaleString } from 'discord-api-types/v10';
 
 export function RequireLevelingEnabled(): MethodDecorator {
     return createFunctionPrecondition(
-        (message: GuildMessage) => message.guild ? acquireSettings(message.guild, GuildSettings.Leveling.Enabled) : true,
+        (message: GuildMessage) => (message.guild ? acquireSettings(message.guild, GuildSettings.Leveling.Enabled) : true),
         (message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.Leveling)
     );
 }

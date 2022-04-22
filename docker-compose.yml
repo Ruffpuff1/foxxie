@@ -37,7 +37,7 @@ services:
 
   ravy.lgbt:
     build:
-      context: ./docker/ravy.lgbt
+      context: ./third_party/ravy.lgbt
     container_name: ravy.lgbt
     restart: always
     networks:

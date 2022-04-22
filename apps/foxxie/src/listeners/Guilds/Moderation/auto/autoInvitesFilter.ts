@@ -62,7 +62,7 @@ export class UserListener extends ModerationListener {
     }
 
     private async validLink(msg: GuildMessage, code: string, url: string) {
-        return await this.allowedLink(msg, code) ? null : url;
+        return (await this.allowedLink(msg, code)) ? null : url;
     }
 
     private async allowedLink(msg: GuildMessage, code: string) {

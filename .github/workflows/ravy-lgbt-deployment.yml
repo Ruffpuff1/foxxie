@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'docker/ravy.lgbt/**'
+      - 'third_party/ravy.lgbt/**'
       - '.github/workflows/ravy-lgbt-deployment.yml'
   workflow_dispatch:
 
@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a # tag=v2.10.0
         with:
           push: true
-          context: ./docker/ravy.lgbt
+          context: ./third_party/ravy.lgbt
           tags: |
             ruffpuff/ravy.lgbt:latest
             ghcr.io/ruffpuff1/ravy.lgbt:latest

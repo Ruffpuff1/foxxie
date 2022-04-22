@@ -72,12 +72,12 @@ export function getDurationOptions(lng: string): DurationFormatAssetsTime {
 }
 
 export function channelList(value: Collection<string, GuildChannel>, t: TFunction): string {
-    const textSize = value.reduce((acc, itm) => acc += itm.type === 'GUILD_TEXT' ? 1 : 0, 0);
-    const stageSize = value.reduce((acc, itm) => acc += itm.type === 'GUILD_STAGE_VOICE' ? 1 : 0, 0);
-    const storeSize = value.reduce((acc, itm) => acc += itm.type === 'GUILD_STORE' ? 1 : 0, 0);
-    const newsSize = value.reduce((acc, itm) => acc += itm.type === 'GUILD_NEWS' ? 1 : 0, 0);
-    const voiceSize = value.reduce((acc, itm) => acc += itm.type === 'GUILD_VOICE' ? 1 : 0, 0);
-    const pubThreadSize = value.reduce((acc, itm) => acc += itm.type === 'GUILD_PUBLIC_THREAD' ? 1 : 0, 0);
+    const textSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_TEXT' ? 1 : 0), 0);
+    const stageSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_STAGE_VOICE' ? 1 : 0), 0);
+    const storeSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_STORE' ? 1 : 0), 0);
+    const newsSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_NEWS' ? 1 : 0), 0);
+    const voiceSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_VOICE' ? 1 : 0), 0);
+    const pubThreadSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_PUBLIC_THREAD' ? 1 : 0), 0);
 
     return (
         [
