@@ -25,7 +25,7 @@ export default function Navbar() {
             <div className='flex items-center justify-center  space-x-5 p-4 duration-500 md:space-x-8 md:p-6'>
                 <button
                     role='link'
-                    onClick={() => router.push(hasLocale ? `https://ruffpuff.dev/${hl}` : 'https://ruffpuff.dev')}
+                    onClick={() => router.push(hasLocale ? `https://about.ruffpuff.dev/${hl}` : 'https://about.ruffpuff.dev')}
                     className='rounded-md py-2 px-3 duration-500 hover:bg-gray-100 hover:underline'
                 >
                     {nav.about}
