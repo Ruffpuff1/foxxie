@@ -1,19 +1,25 @@
 import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
+import Homepage from '../components/pages/Homepage';
 
 const Home: NextPage = () => {
     return (
         <div>
             <Head>
-                <link rel='icon' href='' />
-                <meta name='theme-color' content='' />
+                <link rel='icon' href='https://cdn.ruffpuff.dev/reese.jpg' />
+                <meta name='theme-color' content='#000000' />
             </Head>
-            <NextSeo title='' description='' />
+            <NextSeo
+                title='Reese Harlak - My Personal Website'
+                description="Hi I'm Reese, a web developer and musician."
+                openGraph={{
+                    title: 'Reese Harlak - My Personal Website',
+                    description: 'Hi I\'m Reese, a web developer and musician.'
+                }}
+            />
 
-            <body>Welcome Home.</body>
+            <Homepage />
         </div>
     );
 };
