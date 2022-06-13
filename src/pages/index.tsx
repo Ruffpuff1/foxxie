@@ -15,7 +15,7 @@ const Home: NextPage = () => {
                 description="Hi I'm Reese, a web developer and musician."
                 openGraph={{
                     title: 'Reese Harlak - My Personal Website',
-                    description: 'Hi I\'m Reese, a web developer and musician.'
+                    description: "Hi I'm Reese, a web developer and musician."
                 }}
             />
 

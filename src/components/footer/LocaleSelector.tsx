@@ -15,15 +15,13 @@ export default function LocaleSelector() {
             }}
             className='rounded-md bg-transparent p-3 text-lg duration-500 hover:cursor-pointer hover:bg-gray-200'
         >
-            {
-                ['en_us', 'es_mx', 'fr_fr'].map(loc => {
-                    return (
-                        <option key={loc} value={loc}>
-                            {getName(loc)}
-                        </option>
-                    );
-                })
-            }
+            {['en_us', 'es_mx', 'fr_fr'].map(loc => {
+                return (
+                    <option key={loc} value={loc}>
+                        {getName(loc)}
+                    </option>
+                );
+            })}
         </select>
     );
 }
