@@ -45,6 +45,11 @@ const nextConfig = {
                 destination: 'https://newtab.ruffpuff.dev',
                 permanent: false
             },
+             {
+                source: '/contact',
+                destination: 'https://about.ruffpuff.dev/contact-me',
+                permanent: false
+            },
             {
                 source: '/cdn',
                 destination: 'https://cdn.ruffpuff.dev',
