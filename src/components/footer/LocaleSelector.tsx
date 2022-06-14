@@ -13,7 +13,7 @@ export default function LocaleSelector() {
             onChange={async e => {
                 return router.push(router.asPath, undefined, { locale: e.target.value });
             }}
-            className='rounded-md bg-transparent p-3 text-lg duration-500 hover:cursor-pointer hover:bg-gray-200'
+            className='rounded-md bg-transparent p-3 text-sm duration-500 hover:cursor-pointer hover:bg-gray-200 md:text-lg'
         >
             {['en_us', 'es_mx', 'fr_fr'].map(loc => {
                 return (

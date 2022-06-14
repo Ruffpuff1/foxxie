@@ -1,8 +1,6 @@
-import { useRouter } from 'next/router';
 import useLocale from '../../hooks/useLocale';
 
-export default function Navbar({ name = './' }) {
-    const router = useRouter();
+export default function Navbar() {
     const [
         {
             home: { nav }
@@ -14,29 +12,19 @@ export default function Navbar({ name = './' }) {
 
     return (
         <header className='flex items-center justify-between border-b border-b-gray-200 shadow-sm duration-500 md:border-none md:shadow-none'>
-            <div className='px-4 py-3 md:px-6 md:py-3'>
-                <h2 className='text-lg'>
-                    <a href={hasLocale ? `/${hl}` : '/'} className='rounded-md px-2 py-1 text-blue-500 duration-500 hover:bg-gray-100 hover:underline'>
-                        {name}
-                    </a>
-                    Reese
-                </h2>
-            </div>
-            <div className='flex items-center justify-center  space-x-5 p-4 duration-500 md:space-x-8 md:p-6'>
-                <button
-                    role='link'
-                    onClick={() => router.push(hasLocale ? `https://about.ruffpuff.dev/${hl}` : 'https://about.ruffpuff.dev')}
-                    className='rounded-md py-2 px-3 duration-500 hover:bg-gray-100 hover:underline'
+            <div className='flex items-center justify-center space-x-3 p-4 duration-500 md:space-x-6 md:p-6'>
+                <a
+                    href={hasLocale ? `https://about.ruffpuff.dev/${hl}` : 'https://about.ruffpuff.dev'}
+                    className='rounded-md py-2 px-3 text-sm duration-500 hover:bg-gray-100 hover:underline md:text-base'
                 >
                     {nav.about}
-                </button>
-                <button
-                    role='link'
-                    onClick={() => router.push(hasLocale ? `/${hl}/projects` : '/projects')}
-                    className='rounded-md py-2 px-3 duration-500 hover:bg-gray-100 hover:underline'
+                </a>
+                <a
+                    href={hasLocale ? `/${hl}/projects` : '/projects'}
+                    className='rounded-md py-2 px-3 text-sm duration-500 hover:bg-gray-100 hover:underline md:text-base'
                 >
                     {nav.projects}
-                </button>
+                </a>
             </div>
         </header>
     );
