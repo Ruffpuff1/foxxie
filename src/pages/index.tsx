@@ -1,6 +1,8 @@
 import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
+import HomeFooter from '../components/footer/HomeFooter';
+import Navbar from '../components/nav/Navbar';
 import Homepage from '../components/pages/Homepage';
 
 const Home: NextPage = () => {
@@ -18,8 +20,9 @@ const Home: NextPage = () => {
                     description: "Hi I'm Reese, a web developer and musician."
                 }}
             />
-
+            <Navbar />
             <Homepage />
+            <HomeFooter />
         </div>
     );
 };

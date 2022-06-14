@@ -26,6 +26,11 @@ const nextConfig = {
                 permanent: false
             },
             {
+                source: '/about/contact-me',
+                destination: 'https://about.ruffpuff.dev/contact-me',
+                permanent: false
+            },
+            {
                 source: '/projects',
                 destination: 'https://opensource.ruffpuff.dev/projects',
                 permanent: false
@@ -45,7 +50,7 @@ const nextConfig = {
                 destination: 'https://newtab.ruffpuff.dev',
                 permanent: false
             },
-             {
+            {
                 source: '/contact',
                 destination: 'https://about.ruffpuff.dev/contact-me',
                 permanent: false
