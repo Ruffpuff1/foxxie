@@ -38,7 +38,7 @@ function Icon({ children, text }: { children: ReactNode; text: string; url: stri
                     setHover(false);
                 }}
             >
-                <span className='text-xl duration-500 hover:text-blue-500'>{children}</span>
+                <span className='text-xl'>{children}</span>
             </button>
 
             {hover && (
