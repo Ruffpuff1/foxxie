@@ -1,3 +1,5 @@
+**NOTE**: this project has been archived until further notice, thank you to all who used Foxxie.
+
 <div align='center'>
   <img src='https://cdn.ruffpuff.dev/foxxie.png' width='140' height='140' />
   <h1>Foxxie ⚡️</h1>
