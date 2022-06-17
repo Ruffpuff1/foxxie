@@ -63,7 +63,7 @@
     "api/*",
     "packages/*"
   ],
-  "packageManager": "yarn@1.22.18",
+  "packageManager": "yarn@1.22.19",
   "dependencies": {
     "@foxxie/ts-config": "^0.0.0"
   }
