@@ -43,16 +43,6 @@ services:
       - '8284:8284'
     restart: always
 
-  stardrop:
-    container_name: stardrop
-    build:
-      context: '../../api/stardrop'
-    networks:
-      - kettu
-    ports:
-      - '4000:4000'
-    restart: always
-
   ravy.lgbt:
     build:
       context: ../../third_party/ravy.lgbt

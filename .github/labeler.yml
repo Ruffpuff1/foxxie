@@ -66,10 +66,6 @@
   - packages/types/*
   - packages/types/**/*
 
-'GraphQL: stardrop':
-  - api/stardrop/*
-  - api/stardrop/**/*
-
 'Docker Images: ravy.lgbt':
   - third_party/ravy.lgbt/*
   - third_party/ravy.lgbt/**/*

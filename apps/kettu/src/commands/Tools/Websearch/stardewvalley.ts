@@ -31,7 +31,8 @@ import { EnvParse } from '@foxxie/env';
             ),
     {
         idHints: ['953151326844518430'],
-        enabled: EnvParse.boolean('STARDROP_ENABLED'),
+        enabled: false,
+        // EnvParse.boolean('STARDROP_ENABLED'),
         guildIds: getGuildIds()
     }
 )

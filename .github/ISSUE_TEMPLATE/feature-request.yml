@@ -14,7 +14,6 @@ body:
         - kettu
         - fetch
         - fuzzysearch
-        - graphql-stardrop
         - eslint-config
         - stardrop
         - ravy.lgbt
