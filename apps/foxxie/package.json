@@ -71,7 +71,7 @@
     "license": "MIT",
     "dependencies": {
         "@discordjs/builders": "^0.13.0",
-        "@favware/graphql-pokemon": "6.5.0",
+        "@favware/graphql-pokemon": "6.5.12",
         "@foxxie/api": "0.0.3",
         "@foxxie/commands": "^0.0.3",
         "@foxxie/env": "^0.0.2",

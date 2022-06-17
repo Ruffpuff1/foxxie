@@ -732,6 +732,13 @@
   dependencies:
     graphql "^15.8.0"
 
+"@favware/graphql-pokemon@6.5.12":
+  version "6.5.12"
+  resolved "https://registry.yarnpkg.com/@favware/graphql-pokemon/-/graphql-pokemon-6.5.12.tgz#88cc186a2b533b19298c0f84055520f0c37f2c48"
+  integrity sha512-Y/oLR0wK3mKqx18tJLaRxG/38bVqxWABV5zUPVqN9JisbaYezN0pWkqGcID8Z5UWVjVXu6uTmURCRAFGfXKvxA==
+  dependencies:
+    graphql "^15.8.0"
+
 "@foxxie/eslint-config@^0.0.0":
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/@foxxie/eslint-config/-/eslint-config-0.0.0.tgz#a177ccd5c65e01a50fa795b629f9c4ca3216f6b7"
