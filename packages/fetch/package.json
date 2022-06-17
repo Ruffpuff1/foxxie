@@ -37,7 +37,7 @@
     "yarn"
   ],
   "devDependencies": {
-    "@types/jest": "27.4.1",
+    "@types/jest": "27.5.2",
     "@types/node": "17.0.25",
     "jest": "27.5.1",
     "nock": "13.2.7",
