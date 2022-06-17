@@ -117,7 +117,7 @@
         "@types/bull": "3.15.8",
         "@types/ioredis": "4.28.10",
         "@types/node": "17.0.25",
-        "@types/spotify-api": "0.0.15",
+        "@types/spotify-api": "0.0.16",
         "@types/tinycolor2": "1.4.3",
         "@typescript-eslint/eslint-plugin": "5.20.0",
         "@typescript-eslint/parser": "5.20.0",
