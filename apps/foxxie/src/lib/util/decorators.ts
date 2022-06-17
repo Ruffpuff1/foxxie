@@ -8,7 +8,7 @@ import { sendLocalizedMessage } from '#utils/Discord';
 import { getT } from '@foxxie/i18n';
 import i18next from 'i18next';
 import type { AutocompleteInteraction, CommandInteraction, SelectMenuInteraction } from 'discord.js';
-import type { LocaleString } from 'discord-api-types/v10';
+import { Iso6391Enum } from '@foxxie/i18n-codes';
 
 export function RequireLevelingEnabled(): MethodDecorator {
     return createFunctionPrecondition(
@@ -27,5 +27,5 @@ export function RequireStarboardEnabled(): MethodDecorator {
 export function getLocale(interaction: CommandInteraction | SelectMenuInteraction | AutocompleteInteraction) {
     const loc = getLocaleString(interaction);
 
-    return i18next.languages.includes(loc) ? getT(loc as LocaleString) : getT('en-US');
+    return i18next.languages.includes(loc) ? getT(loc) : getT(Iso6391Enum.EnglishUnitedStates);
 }

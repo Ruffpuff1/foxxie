@@ -20,6 +20,7 @@ import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { EnvParse } from '@foxxie/env';
 import type { LocaleString } from 'discord-api-types/v10';
 import { time, TimestampStyles } from '@discordjs/builders';
+import { Iso6391Enum } from '@foxxie/i18n-codes';
 
 config({
     path: join(rootFolder, '.env')
@@ -68,7 +69,7 @@ function parseWebhookError(): WebhookClientData | null {
 }
 
 export function getDurationOptions(lng: string): DurationFormatAssetsTime {
-    return durationOptions.get(lng) ?? durationOptions.get('en-US')!;
+    return durationOptions.get(lng) ?? durationOptions.get(Iso6391Enum.EnglishUnitedStates)!;
 }
 
 export function channelList(value: Collection<string, GuildChannel>, t: TFunction): string {
@@ -198,7 +199,7 @@ export function getFormatters(): Formatter[] {
         },
         {
             name: 'ordinal',
-            format: (value, lng) => ordinalOptions.get(lng ?? 'en-US')!(value)
+            format: (value, lng) => ordinalOptions.get(lng ?? Iso6391Enum.EnglishUnitedStates)!(value)
         },
         {
             name: 'numbercompact',
@@ -280,7 +281,7 @@ export function getDefaultVars(): Record<string, string | string[]> {
         RAIN: 'Waindwop ᓚᘏᗢ#7799',
         TCS: 'https://discord.gg/ZAZ4yRezC7',
         TRIVACATEGORIES: Object.keys(categories).filter(c => c !== 'general'),
-        LANGUAGES: ['en-US', 'es-MX']
+        LANGUAGES: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishMexico]
     };
 }
 
@@ -298,8 +299,8 @@ export async function initI18n() {
         returnEmptyString: false,
         returnNull: false,
         load: 'all',
-        lng: 'en-US',
-        fallbackLng: 'en-US',
+        lng: Iso6391Enum.EnglishUnitedStates,
+        fallbackLng: Iso6391Enum.EnglishUnitedStates,
         defaultNS: 'globals',
         interpolation: getInterpolation(),
         initImmediate: false,

@@ -5,6 +5,7 @@ import type { APIEmbed } from 'discord-api-types/v9';
 import { getT } from '@foxxie/i18n';
 import { MessageEmbed, MessageEmbedOptions } from 'discord.js';
 import type { LocaleString } from 'discord-api-types/v10';
+import type { Iso6391Code } from '@foxxie/i18n-codes';
 
 export class GuildModel {
     public id: string;
@@ -73,7 +74,7 @@ export class GuildModel {
 
     public eventsMuteRemove: boolean;
 
-    public language: 'en-US' | 'es-MX';
+    public language: Iso6391Code;
 
     public messageCount: number;
 

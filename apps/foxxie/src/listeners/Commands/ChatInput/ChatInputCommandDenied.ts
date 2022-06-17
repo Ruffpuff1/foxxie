@@ -18,9 +18,9 @@ export class UserListener extends Listener<Events.ChatInputCommandDenied> {
     public handleMessage(interaction: CommandInteraction, error: UserError): Promise<any> {
         const t = getLocale(interaction);
 
-        const content = error.identifier //
+        const content = (error.identifier //
             ? t(translate(error.identifier), { ...Object(error.context), name: interaction.commandName, prefix: '/' })
-            : error.message;
+            : error.message) as string;
 
         const allowedMentions = { users: [interaction.user.id], roles: [] };
         return interaction.replied || interaction.deferred

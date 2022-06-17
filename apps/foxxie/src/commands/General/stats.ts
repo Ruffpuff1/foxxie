@@ -26,7 +26,7 @@ export class UserCommand extends FoxxieCommand {
         const shard = (msg.guild ? msg.guild.shardId : 0) + 1;
 
         const stats = args.t(LanguageKeys.Commands.General.StatsMenu, {
-            uptime,
+            uptime: new Date(uptime),
             process: pross,
             shard,
             shardTotal: totalShards,

@@ -1,22 +1,20 @@
 import { Locale } from 'discord-api-types/v9';
 import type { CommandInteraction, AutocompleteInteraction, SelectMenuInteraction } from 'discord.js';
+import { Iso6391Enum, Iso6391Code } from '@foxxie/i18n-codes';
 
 export function getLocaleString(interaction: CommandInteraction | SelectMenuInteraction | AutocompleteInteraction) {
     const string = (interaction.locale ?? interaction.guildLocale) as Locale;
-    let loc: string;
+    let loc: Iso6391Code;
 
     switch (string) {
         case Locale.SpanishES:
-            loc = 'es-MX';
-            break;
-        case Locale.Japanese:
-            loc = 'ja-JP';
+            loc = Iso6391Enum.SpanishMexico;
             break;
         case Locale.French:
-            loc = 'fr-FR';
+            loc = Iso6391Enum.FrenchFrance;
             break;
         default:
-            loc = 'en-US';
+            loc = Iso6391Enum.EnglishUnitedStates;
             break;
     }
 

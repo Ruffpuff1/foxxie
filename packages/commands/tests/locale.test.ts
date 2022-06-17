@@ -1,3 +1,4 @@
+import { Iso6391Enum } from '@foxxie/i18n-codes';
 import type { CommandInteraction } from 'discord.js';
 import { getLocaleString } from '../src';
 
@@ -20,14 +21,14 @@ const mockInteractionFrFR = {
 describe('testing locale string parsing', () => {
     test('WHEN GIVEN interaction with en-US locale, return en-US', () => {
         const value = getLocaleString(mockInteractionEnUS);
-        const expected = 'en-US';
+        const expected = Iso6391Enum.EnglishUnitedStates;
 
         expect(value).toEqual(expected);
     });
 
     test('WHEN GIVEN interaction with es-ES locale, return es-MX', () => {
         const value = getLocaleString(mockInteractionEsES);
-        const expected = 'es-MX';
+        const expected = Iso6391Enum.SpanishMexico;
 
         expect(value).toEqual(expected);
     });
@@ -41,7 +42,7 @@ describe('testing locale string parsing', () => {
 
     test('WHEN GIVEN interaction with fr locale, return fr-FR', () => {
         const value = getLocaleString(mockInteractionFrFR);
-        const expected = 'fr-FR';
+        const expected = Iso6391Enum.FrenchFrance;
 
         expect(value).toEqual(expected);
     });

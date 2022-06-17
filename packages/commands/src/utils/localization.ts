@@ -1,7 +1,8 @@
 import { CustomGet, getT, loadedLocales } from '@foxxie/i18n';
+import { Iso6391Code, Iso6391Enum } from '@foxxie/i18n-codes';
 import { APIApplicationCommandOptionChoice, Locale, LocalizationMap } from 'discord-api-types/v10';
 
-const langs: LanguageKey[] = [...loadedLocales] as LanguageKey[];
+const langs: Iso6391Code[] = [...loadedLocales] as Iso6391Code[];
 
 export function toLocalizationMap(key: CustomGet<string, string>): LocalizationMap {
     const map: LocalizationMap = {};
@@ -15,7 +16,7 @@ export function toLocalizationMap(key: CustomGet<string, string>): LocalizationM
     return map;
 }
 
-export function toLocalizationChoiceMap(key: CustomGet<string, string>, baseLng = 'en-US'): Omit<APIApplicationCommandOptionChoice, 'value'> {
+export function toLocalizationChoiceMap(key: CustomGet<string, string>, baseLng = Iso6391Enum.EnglishUnitedStates): Omit<APIApplicationCommandOptionChoice, 'value'> {
     const map: LocalizationMap = {};
     const name = getT(baseLng)(key);
 
@@ -28,20 +29,17 @@ export function toLocalizationChoiceMap(key: CustomGet<string, string>, baseLng 
     return { name, name_localizations: map };
 }
 
-type LanguageKey = 'es-MX' | 'en-GB' | 'en-US' | 'fr-FR' | 'de-DE' | 'hi-IN' | 'ja-JP';
-
-export function langugeKeyToDiscordKey(K: LanguageKey): Locale {
+export function langugeKeyToDiscordKey(K: Iso6391Code): Locale {
     switch (K) {
-        case 'de-DE':
+        case Iso6391Enum.GermanGermany:
             return Locale.German;
-        case 'es-MX':
+        case Iso6391Enum.SpanishArgentina:
+        case Iso6391Enum.SpanishBolivia:
+        case Iso6391Enum.SpanishChile:
+        case Iso6391Enum.SpanishMexico:
             return Locale.SpanishES;
-        case 'fr-FR':
+        case Iso6391Enum.FrenchFrance:
             return Locale.French;
-        case 'hi-IN':
-            return Locale.Hindi;
-        case 'ja-JP':
-            return Locale.Japanese;
         default: {
             return K as Locale;
         }

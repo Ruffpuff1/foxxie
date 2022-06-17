@@ -9,6 +9,7 @@ import type FoxxieClient from '#lib/FoxxieClient';
 import type { MongoDB } from '#lib/database';
 import { FoxxieArgs } from './parsers';
 import { seconds } from '@ruffpuff/utilities';
+import { Iso6391Enum } from '@foxxie/i18n-codes';
 
 export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand<FoxxieArgs, FoxxieCommand> {
     public readonly guarded: boolean;
@@ -68,7 +69,7 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
     public async messagePreParse(message: Message, parameters: string, context: MessageCommandContext): Promise<FoxxieCommand.Args> {
         const parser = new Lexure.Parser(this.lexer.setInput(parameters).lex()).setUnorderedStrategy(this.strategy);
         const args = new Lexure.Args(parser.parse());
-        const [t, color] = await Promise.all([getT('en-US'), this.container.db.fetchColor(message)]);
+        const [t, color] = await Promise.all([getT(Iso6391Enum.EnglishUnitedStates), this.container.db.fetchColor(message)]);
 
         return new FoxxieArgs(message, this, args, context, t, color);
     }

@@ -1,6 +1,7 @@
 import { api } from '#external/Api';
 import { acquireSettings, ClockEmojiStyle, GuildSettings, writeSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
+import { Iso6391Enum } from '@foxxie/i18n-codes';
 import { Schedules } from '#utils/constants';
 import { isDev, map, minutes } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -60,7 +61,7 @@ export class UserTask extends ScheduledTask {
         };
 
         const name = tz(timeZone).format('z').toLowerCase();
-        const time = new Intl.DateTimeFormat('en-US', options).format(now).toLowerCase();
+        const time = new Intl.DateTimeFormat(Iso6391Enum.EnglishUnitedStates, options).format(now).toLowerCase();
         const formatted = this.format(template, name, time, this.getEmoji(time, emoji));
 
         try {

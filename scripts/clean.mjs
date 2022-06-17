@@ -29,4 +29,4 @@ function cleanPackages(directory) {
 }
 
 execSync(`rm -rf node_modules`);
-for (const dir of ['apps', 'api', 'packages', 'website']) cleanPackages(dir);
+for (const dir of ['apps', 'api', 'packages']) cleanPackages(dir);

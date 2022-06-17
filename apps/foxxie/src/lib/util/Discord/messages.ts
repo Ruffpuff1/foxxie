@@ -8,6 +8,7 @@ import { minutes } from '@ruffpuff/utilities';
 import { emojis } from '#utils/constants';
 import { getT } from '@foxxie/i18n';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { Iso6391Enum } from '@foxxie/i18n-codes';
 
 export interface AskYesNoOptions extends MessageOptions {
     target?: UserResolvable;
@@ -149,5 +150,5 @@ export function isBoostMessage(message: Message): boolean {
     return boostMessageTypes.includes(message.type);
 }
 function resolveKey(_: GuildMessage, key: string) {
-    return getT('en-US')(key);
+    return getT(Iso6391Enum.EnglishUnitedStates)(key);
 }

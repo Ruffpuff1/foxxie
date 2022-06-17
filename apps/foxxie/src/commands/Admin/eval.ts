@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Type } from '@sapphire/type';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';
@@ -95,7 +94,7 @@ export class UserCommand extends FoxxieCommand {
         let asyncTime, result, success, syncTime;
         // eslint-disable-next-line one-var
         let hasThen = false,
-            type: Type | string = '';
+            type = '';
 
         try {
             if (args.getFlags('a', 'async')) code = `(async () => {\n${code}\n})();`;
@@ -103,18 +102,18 @@ export class UserCommand extends FoxxieCommand {
             // eslint-disable-next-line no-eval
             result = eval(code);
             syncTime = stopwatch.toString();
-            type = new Type(result);
+            type = `any`
             if (isThenable(result)) {
                 hasThen = true;
                 stopwatch.restart();
                 result = await result;
-                type = `Promise<${new Type(result).toString()}>`;
+                type = `Promise<any>`;
                 asyncTime = stopwatch.toString();
             }
             success = true;
         } catch (error) {
             if (!syncTime) syncTime = stopwatch.toString();
-            if (!type) type = new Type(error);
+            if (!type) type = `Error`;
             if (hasThen && !asyncTime) asyncTime = stopwatch.toString();
             result = error;
             success = false;

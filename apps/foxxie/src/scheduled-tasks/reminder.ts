@@ -6,6 +6,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ScheduledTask } from '@sapphire/plugin-scheduled-tasks';
 import { getT } from '@foxxie/i18n';
 import { MessageEmbed, type MessageEmbedOptions, GuildTextBasedChannel } from 'discord.js';
+import { Iso6391Enum } from '@foxxie/i18n-codes';
 
 @ApplyOptions<ScheduledTask.Options>({
     name: Schedules.Reminder,
@@ -47,7 +48,7 @@ export class UserTask extends ScheduledTask {
         const embeds: MessageEmbed[] = [];
         let content: string | null = null;
 
-        const t = getT('en-US');
+        const t = getT(Iso6391Enum.EnglishUnitedStates);
 
         if (data.json) {
             embeds.push(new MessageEmbed(data.json as MessageEmbedOptions));

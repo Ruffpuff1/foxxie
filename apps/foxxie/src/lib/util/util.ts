@@ -7,7 +7,7 @@ import { isNumber, isThenable, minutes, randomArray, ZeroWidthSpace } from '@ruf
 import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { jaroWinkler } from '@skyra/jaro-winkler';
-import { APIUser, LocaleString, RESTJSONErrorCodes } from 'discord-api-types/v9';
+import { APIUser, RESTJSONErrorCodes } from 'discord-api-types/v9';
 import { Collection, CommandInteraction, Guild, Message, MessageActionRow, MessageButton, SnowflakeUtil, User } from 'discord.js';
 import type { TFunction, TOptionsBase } from 'i18next';
 import type { Job } from 'bull';
@@ -16,9 +16,10 @@ import { cpus, hostname, loadavg, totalmem } from 'node:os';
 import type { AskYesNoOptions } from './Discord/messages';
 import { getT } from '@foxxie/i18n';
 import { acquireSettings } from '#lib/database';
+import { Iso6391Enum } from '@foxxie/i18n-codes';
 
-export const enUS = (k: string) => getT('en-US')(k);
-export const esMX = (k: string) => getT('es-MX' as LocaleString)(k);
+export const enUS = (k: string) => getT(Iso6391Enum.EnglishUnitedStates)(k);
+export const esMX = (k: string) => getT(Iso6391Enum.SpanishMexico)(k);
 
 /**
  * Attaches a logging catch method to a promise, "floating it".
@@ -266,7 +267,7 @@ export async function interactionPrompt(interaction: CommandInteraction, options
     const response = (
         interaction.replied || interaction.deferred
             ? await interaction.editReply({ ...options, components: [actionRow] })
-            : await interaction.reply({ ...options, ephemeral: true, fetchReply: true, components: [actionRow] })
+            : await interaction.reply({ ephemeral: true, fetchReply: true, components: [actionRow] })
     ) as Message;
 
     const collected = await interaction.channel?.awaitMessageComponent({
