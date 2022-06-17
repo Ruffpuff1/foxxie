@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
-import HomeFooter from '../components/footer/HomeFooter';
-import Navbar from '../components/nav/Navbar';
+import HomeFooter from '../components/ui/HomeFooter';
+import Navbar from '../components/ui/Navbar';
 import Homepage from '../components/pages/Homepage';
 
 const Home: NextPage = () => {

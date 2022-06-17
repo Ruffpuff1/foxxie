@@ -24,9 +24,15 @@ export default function Navbar() {
                 >
                     {nav.about}
                 </button>
-                <a href={hasLocale ? `/${hl}/projects` : '/projects'} className='rounded-md py-2 px-3 text-sm hover:underline'>
+                <button
+                    onClick={e => {
+                        e.preventDefault();
+                        return router.push(hasLocale ? `https://about.ruffpuff.dev/${hl}/projects` : 'https://about.ruffpuff.dev/projects', undefined, { shallow: true });
+                    }}
+                    className='rounded-md py-2 px-3 text-sm hover:underline'
+                >
                     {nav.projects}
-                </a>
+                </button>
             </div>
         </header>
     );

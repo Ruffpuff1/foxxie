@@ -1,6 +1,6 @@
 import useLocale from '../../hooks/useLocale';
-import HomeFooter from '../footer/HomeFooter';
-import Navbar from '../nav/Navbar';
+import HomeFooter from '../ui/HomeFooter';
+import Navbar from '../ui/Navbar';
 
 export default function Notfoundpage() {
     const [translations, hl] = useLocale();

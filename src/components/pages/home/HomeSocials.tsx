@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { SiGithub, SiGmail, SiTwitter } from 'react-icons/si';
-import useLocale from '../../hooks/useLocale';
+import useLocale from '../../../hooks/useLocale';
 
 export default function HomeSocials() {
     const [

@@ -2,7 +2,11 @@ module.exports = {
     darkMode: 'class',
     content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/util/**/*.{js,ts,jsx,tsx}'],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                ptSans: ['Roboto', 'sans-serif']
+            }
+        },
         screens: {
             sm: '640px',
             md: '768px',

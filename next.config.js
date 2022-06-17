@@ -5,8 +5,9 @@ const nextConfig = {
         defaultLocale: 'en_us',
         locales: ['en_us', 'es_mx', 'fr_fr']
     },
+    trailingSlash: true,
     images: {
-        domains: ['cdn.ruffpuff.dev']
+        domains: ['cdn.reeseharlak.com']
     },
     redirects: async () => {
         return [
