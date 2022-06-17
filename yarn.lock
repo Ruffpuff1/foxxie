@@ -690,11 +690,6 @@
   resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.5.0.tgz#e1717661600891c9ca0735e76ec5bb64fe880f9c"
   integrity sha512-3Vr3y4/Kl6ThOsD/cbXkK4JmjawQahbM3ojHpD6XyTEOG4fwZFMYH/NTWKFd5WZUw38iQsvGC4Kt4VkL++1hFQ==
 
-"@discordjs/collection@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.6.0.tgz#ee9c7b349a61d081fcdbda36df4187e575510952"
-  integrity sha512-Ieaetb36l0nmAS5X9Upqk4W7euAO6FdXPxn3I8vBAKEcoIzEZI1mcVcPfCfagGJZSgBKpENnAnKkP4GAn+MV8w==
-
 "@discordjs/collection@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-0.7.0.tgz#1a6c00198b744ba2b73a64442145da637ac073b8"
@@ -843,17 +838,17 @@
     "@graphql-tools/utils" "^8.1.1"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript-resolvers@2.6.1":
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-resolvers/-/typescript-resolvers-2.6.1.tgz#5963da60de79cfb847b55b2433cd9f65a33d7aad"
-  integrity sha512-tb8qiIYRDbypHvEVBi04OlItABPeormhd6gh26Q0FO/dD+tLx1V85A6wnHC4jExWPP9+/3PwHJL1pq/0n1kxlA==
+"@graphql-codegen/typescript-resolvers@2.6.6":
+  version "2.6.6"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-resolvers/-/typescript-resolvers-2.6.6.tgz#c42cabbc05103b44a29df5ac4a015f2a8e8ab4aa"
+  integrity sha512-6yVU0rojI64qZbAtGy4+5kA1xJbolcWbefd4y/nwLOn2g99QBHt9nQRCVl96rppfBNinLPkiJCtQ0thOHu9glg==
   dependencies:
     "@graphql-codegen/plugin-helpers" "^2.4.0"
-    "@graphql-codegen/typescript" "^2.4.8"
-    "@graphql-codegen/visitor-plugin-common" "2.7.4"
+    "@graphql-codegen/typescript" "^2.5.1"
+    "@graphql-codegen/visitor-plugin-common" "2.9.1"
     "@graphql-tools/utils" "^8.1.1"
     auto-bind "~4.0.0"
-    tslib "~2.3.0"
+    tslib "~2.4.0"
 
 "@graphql-codegen/typescript@2.4.8":
   version "2.4.8"
@@ -866,7 +861,7 @@
     auto-bind "~4.0.0"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript@^2.4.8":
+"@graphql-codegen/typescript@^2.5.1":
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-2.5.1.tgz#5131485ff3ac83d5bc0aae11a2af0c9bdc08854c"
   integrity sha512-D/9V2VfVIE4Mu5UiMGQtxyFU5xe1ZkAZi8g/IsqymW8rqlhTwsGhtk4JR55qPfOYxR8G94RJSJpzgNakRneytw==
