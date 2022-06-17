@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/Ruffpuff1/foxxie",
   "devDependencies": {
-    "@nrwl/cli": "14.0.1",
+    "@nrwl/cli": "14.3.6",
     "@nrwl/nx-cloud": "13.3.1",
     "@nrwl/workspace": "^14.0.1",
     "@octokit/action": "^3.18.0",

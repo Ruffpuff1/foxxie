@@ -843,17 +843,17 @@
     "@graphql-tools/utils" "^8.1.1"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript-resolvers@2.6.1":
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-resolvers/-/typescript-resolvers-2.6.1.tgz#5963da60de79cfb847b55b2433cd9f65a33d7aad"
-  integrity sha512-tb8qiIYRDbypHvEVBi04OlItABPeormhd6gh26Q0FO/dD+tLx1V85A6wnHC4jExWPP9+/3PwHJL1pq/0n1kxlA==
+"@graphql-codegen/typescript-resolvers@2.6.6":
+  version "2.6.6"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-resolvers/-/typescript-resolvers-2.6.6.tgz#c42cabbc05103b44a29df5ac4a015f2a8e8ab4aa"
+  integrity sha512-6yVU0rojI64qZbAtGy4+5kA1xJbolcWbefd4y/nwLOn2g99QBHt9nQRCVl96rppfBNinLPkiJCtQ0thOHu9glg==
   dependencies:
     "@graphql-codegen/plugin-helpers" "^2.4.0"
-    "@graphql-codegen/typescript" "^2.4.8"
-    "@graphql-codegen/visitor-plugin-common" "2.7.4"
+    "@graphql-codegen/typescript" "^2.5.1"
+    "@graphql-codegen/visitor-plugin-common" "2.9.1"
     "@graphql-tools/utils" "^8.1.1"
     auto-bind "~4.0.0"
-    tslib "~2.3.0"
+    tslib "~2.4.0"
 
 "@graphql-codegen/typescript@2.4.8":
   version "2.4.8"
@@ -866,7 +866,7 @@
     auto-bind "~4.0.0"
     tslib "~2.3.0"
 
-"@graphql-codegen/typescript@^2.4.8":
+"@graphql-codegen/typescript@^2.5.1":
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-2.5.1.tgz#5131485ff3ac83d5bc0aae11a2af0c9bdc08854c"
   integrity sha512-D/9V2VfVIE4Mu5UiMGQtxyFU5xe1ZkAZi8g/IsqymW8rqlhTwsGhtk4JR55qPfOYxR8G94RJSJpzgNakRneytw==
@@ -1487,13 +1487,6 @@
   dependencies:
     nx "13.10.5"
 
-"@nrwl/cli@14.0.1":
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.0.1.tgz#7751167c746ecdc93ce624d38c04fed142b908cc"
-  integrity sha512-+tsQdHyVlgolmHrRVEUkybOcOucbh9Q6zQCsHw6qlIApk/a9kNE9meTGvZTo9W0njoeWhtJAnCaXB1l7fmqBQg==
-  dependencies:
-    nx "14.0.1"
-
 "@nrwl/cli@14.3.6":
   version "14.3.6"
   resolved "https://registry.yarnpkg.com/@nrwl/cli/-/cli-14.3.6.tgz#bf9d36822bbe9db42c250f4151df2b496ae7f13f"
@@ -1579,13 +1572,6 @@
   integrity sha512-MDHr4gpWRRSHPOUf4Bo7gIQb5owKwA9JyvGoy8huZliDmvaMjQjO/H+FPYIhYZcXd4xr3mwfnkAnZrMt5ROhlw==
   dependencies:
     nx "13.10.5"
-
-"@nrwl/tao@14.0.1":
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/@nrwl/tao/-/tao-14.0.1.tgz#32f9af09b405856728e9103b7d9aed1f512e2490"
-  integrity sha512-xvNvkqRDAlreZc9FFMm0C+Fup4uCrZAp4w+KMzdibM0tJJBKC37rEdCJnXl0HWFV79aCJIwqW3BlDxHxMeVMBg==
-  dependencies:
-    nx "14.0.1"
 
 "@nrwl/tao@14.3.6":
   version "14.3.6"
@@ -7613,43 +7599,6 @@ nx@13.10.5, nx@^13.10.1:
   dependencies:
     "@nrwl/cli" "13.10.5"
     "@nrwl/tao" "13.10.5"
-    "@parcel/watcher" "2.0.4"
-    "@swc-node/register" "^1.4.2"
-    "@swc/core" "^1.2.152"
-    chalk "4.1.0"
-    chokidar "^3.5.1"
-    cli-cursor "3.1.0"
-    cli-spinners "2.6.1"
-    dotenv "~10.0.0"
-    enquirer "~2.3.6"
-    fast-glob "3.2.7"
-    figures "3.2.0"
-    flat "^5.0.2"
-    fs-extra "^9.1.0"
-    glob "7.1.4"
-    ignore "^5.0.4"
-    jsonc-parser "3.0.0"
-    minimatch "3.0.4"
-    npm-run-path "^4.0.1"
-    open "^8.4.0"
-    rxjs "^6.5.4"
-    rxjs-for-await "0.0.2"
-    semver "7.3.4"
-    tar-stream "~2.2.0"
-    tmp "~0.2.1"
-    tsconfig-paths "^3.9.0"
-    tslib "^2.3.0"
-    v8-compile-cache "2.3.0"
-    yargs "^17.4.0"
-    yargs-parser "21.0.1"
-
-nx@14.0.1:
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/nx/-/nx-14.0.1.tgz#d8cec87e7716d5b8cfe0e226b22759c9d12494a6"
-  integrity sha512-m/td2BGYnUgRtxyhDAFssjKQt2FYfhAV14Igrnyvaleo0385yQIjzkcfJh9XAyvMvuhq6uzlvMqOd85EL6aTwg==
-  dependencies:
-    "@nrwl/cli" "14.0.1"
-    "@nrwl/tao" "14.0.1"
     "@parcel/watcher" "2.0.4"
     "@swc-node/register" "^1.4.2"
     "@swc/core" "^1.2.152"
