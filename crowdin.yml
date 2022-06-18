@@ -1,3 +1,0 @@
-files:
-  - source: /src/assets/locales/en_us/*.ts
-    translation: /src/assets/locales/%locale_with_underscore%/%original_file_name%.ts
