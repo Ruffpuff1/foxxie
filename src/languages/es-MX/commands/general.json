@@ -1,5 +1,5 @@
 {
-    "ping": "Ping?",
-    "pingDescription": "Runs a connection test to my database and Discord.",
-    "pingPong": "Pong! Took {{roundTrip}}ms (Discord Latency: {{wsPing}}ms. Database Connection: {{dbPing}}ms)"
+    "ping": "¿Ping?",
+    "pingDescription": "Ejecuta una prueba de conexión a mi base de datos y Discord.",
+    "pingPong": "¡Pong! Total {{roundTrip}}ms (Latencia de Discord: {{wsPing}}ms. Conexión de la base de datos: {{dbPing}}ms)"
 }
