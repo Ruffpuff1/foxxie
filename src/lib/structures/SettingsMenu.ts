@@ -75,7 +75,7 @@ export class SettingsMenu {
         const description: string[] = [];
         if (isSchemaGroup(this.schema)) {
             description.push(
-                t(LanguageKeys.Commands.Admin.ConfMenuRenderAtFolder, {
+                t(LanguageKeys.Commands.Configuration.ConfMenuRenderAtFolder, {
                     path: this.schema.name
                 })
             );
@@ -88,15 +88,15 @@ export class SettingsMenu {
                 else keys.push(key);
             }
 
-            if (!folders.length && !keys.length) description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderNoKeys));
-            else description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderSelect), '', ...folders.map(folder => `📁 ${folder}`), ...keys.map(key => `⚙️ ${key}`));
+            if (!folders.length && !keys.length) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderNoKeys));
+            else description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderSelect), '', ...folders.map(folder => `📁 ${folder}`), ...keys.map(key => `⚙️ ${key}`));
         } else {
             description.push(
-                t(LanguageKeys.Commands.Admin.ConfMenuRenderAtPiece, {
+                t(LanguageKeys.Commands.Configuration.ConfMenuRenderAtPiece, {
                     path: this.schema.name
                 })
             );
-            if (this.errorMessage) description.push('\n', this.errorMessage, '\n');
+            if (this.errorMessage) description.push('', this.errorMessage);
 
             const [value, serialized, language] = await acquireSettings(this.message.guild, settings => {
                 const language = settings.getLanguage();
@@ -104,13 +104,13 @@ export class SettingsMenu {
                 return [settings[key.property], key.display(settings, language), language];
             });
             this.t = language;
-            description.push(t(this.schema.description), '', t(LanguageKeys.Commands.Admin.ConfMenuRenderUpdate));
-            if (this.schema.array && (value as unknown[]).length) description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderRemove));
-            if (this.updatedValue) description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderReset));
-            if (this.updatedValue) description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderUndo));
+            description.push(t(this.schema.description), '', t(LanguageKeys.Commands.Configuration.ConfMenuRenderUpdate));
+            if (this.schema.array && (value as unknown[]).length) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderRemove));
+            if (this.updatedValue) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderReset));
+            if (this.updatedValue) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderUndo));
             description.push(
                 '',
-                t(LanguageKeys.Commands.Admin.ConfMenuRenderCValue, {
+                t(LanguageKeys.Commands.Configuration.ConfMenuRenderCValue, {
                     value: serialized
                 })
             );
@@ -124,7 +124,7 @@ export class SettingsMenu {
             .setColor(container.db.fetchColor(this.message))
             .setDescription(`${description.filter(v => v !== null).join('\n')}\n${ZeroWidthSpace}`)
             .setFooter({
-                text: parent ? t(LanguageKeys.Commands.Admin.ConfMenuRenderBack) : ''
+                text: parent ? t(LanguageKeys.Commands.Configuration.ConfMenuRenderBack) : ''
             })
             .setTimestamp();
     }
@@ -141,7 +141,7 @@ export class SettingsMenu {
                 this.schema = schema as SchemaKey | SchemaGroup;
                 this.oldValue = undefined;
             } else {
-                this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfMenuInvalidKey);
+                this.errorMessage = this.t(LanguageKeys.Commands.Configuration.ConfMenuInvalidKey);
             }
         } else {
             //                                                                                                           parser context
@@ -156,7 +156,7 @@ export class SettingsMenu {
             else if (commandLowerCase === 'remove') await this.tryUpdate(UpdateType.Remove, args);
             else if (commandLowerCase === 'reset') await this.tryUpdate(UpdateType.Reset);
             else if (commandLowerCase === 'undo') await this.tryUndo();
-            else this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfMenuInvalidAction);
+            else this.errorMessage = this.t(LanguageKeys.Commands.Configuration.ConfMenuInvalidAction);
         }
 
         if (!this.errorMessage) await floatPromise(deleteMessage(message));
@@ -264,7 +264,7 @@ export class SettingsMenu {
             });
 
             if (skipped) {
-                this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfMenuNoChange, { key: key.name });
+                this.errorMessage = this.t(LanguageKeys.Commands.Configuration.ConfMenuNoChange, { key: key.name });
             } else {
                 this.oldValue = oldValue;
             }
@@ -278,7 +278,7 @@ export class SettingsMenu {
             await this.tryUpdate(UpdateType.Replace, null, this.oldValue);
         } else {
             const key = this.schema as SchemaKey;
-            this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfMenuNoChange, {
+            this.errorMessage = this.t(LanguageKeys.Commands.Configuration.ConfMenuNoChange, {
                 key: key.name
             });
         }
@@ -290,7 +290,7 @@ export class SettingsMenu {
                 await floatPromise(this.response.reactions.removeAll());
             }
 
-            const content = this.t(LanguageKeys.Commands.Admin.ConfMenuSaved);
+            const content = this.t(LanguageKeys.Commands.Configuration.ConfMenuSaved);
             await floatPromise(this.response.edit({ content, embeds: [] }));
         }
 

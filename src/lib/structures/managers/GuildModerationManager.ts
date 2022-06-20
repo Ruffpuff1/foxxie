@@ -1,7 +1,7 @@
 import { ModerationActions } from '../moderation';
 import { Collection, Guild } from 'discord.js';
 import { container } from '@sapphire/framework';
-import { ModerationEntity } from '#lib/database';
+import { ModerationEntity } from '#database/entities/ModerationEntity';
 import type FoxxieClient from '#lib/FoxxieClient';
 
 export class GuildModerationManager extends Collection<number, ModerationEntity> {
@@ -25,7 +25,7 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
 
     public async getCurrentId() {
         if (this._count === null) {
-            const cases = await container.db.moderations.find();
+            const cases = await container.db.moderations.find({ guildId: this.guild!.id });
             this._count = cases.length ?? 0;
         }
 
@@ -74,19 +74,17 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
             return this._cache(entries);
         }
 
-        return (
-            super.get(id) ||
-            this._cache(
-                await container.db.moderations
-                    .findOne({
-                        where: {
-                            guildId: this.guild!.id,
-                            caseId: id
-                        }
-                    })
-                    .then(data => new ModerationEntity(data!).setup(this))
-            )
-        );
+        if (super.has(id)) return super.get(id)!;
+
+        const found = await container.db.moderations.findOne({
+            where: {
+                guildId: this.guild!.id,
+                caseId: id
+            }
+        });
+
+        if (found) return this._cache(new ModerationEntity(found).setup(this));
+        return null;
     }
 
     public delete(key: number): boolean {

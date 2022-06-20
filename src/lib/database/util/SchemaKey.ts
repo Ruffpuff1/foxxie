@@ -111,7 +111,7 @@ export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implemen
         }
 
         const value = settings[this.property];
-        return isNullish(value) ? t(LanguageKeys.Commands.Admin.ConfNotSet) : serializer.stringify(value, context);
+        return isNullish(value) ? t(LanguageKeys.Commands.Configuration.ConfNotSet) : serializer.stringify(value, context);
     }
 
     public getContext(settings: GuildEntity, language: TFunction): SerializerUpdateContext {

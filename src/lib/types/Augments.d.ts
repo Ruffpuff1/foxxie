@@ -25,7 +25,7 @@ declare module 'discord.js' {
         [Events.GuildMessageLog]: [guild: Guild, key: PickByValue<GuildEntity, Snowflake | Nullish>, makeEmbed: () => Awaitable<TypeOfEmbed | MessageOptions>];
         [Events.MessageCommandLogging]: [message: Message, command: FoxxieCommand];
         [Events.ModerationEntryAdd]: [entry: ModerationEntity];
-        [Events.ModerationEntryEdit]: [clone: ModerationEntity, entry: ModerationEntity];
+        [Events.ModerationEntryEdit]: [old: ModerationEntity, entry: ModerationEntity];
         [Events.StatsMessage]: [guildId: Snowflake, member: GuildMember];
         [Events.SystemMessage]: [message: GuildMessage];
         [Events.UserMessage]: [message: GuildMessage];
@@ -63,6 +63,7 @@ declare module '@sapphire/framework' {
         command: FoxxieCommand;
         guild: Guild;
         language: LanguageString;
+        moderationLog: number;
         piece: Piece;
         song: string[];
         store: Store<any>;
