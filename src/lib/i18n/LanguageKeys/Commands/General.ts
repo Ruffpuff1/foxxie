@@ -4,6 +4,12 @@ import type { Collection, Guild, GuildChannel } from 'discord.js';
 
 export const DonateDescription = T('commands/general:donateDescription');
 export const DonateHeader = T('commands/general:donateHeader');
+
+export const HelpDescription = T('commands/general:helpDescription');
+export const HelpMenu = FT<{ name: string }>('commands/general:helpMenu');
+export const HelpTitles = T<{ usage: string }>('commands/general:helpTitles');
+export const HelpUsage = T('commands/general:helpUsage');
+
 export const InfoChannelArchived = FT<{ time: Date }>('commands/general:infoChannelArchived');
 export const InfoChannelCreated = FT<{ name: string; date: Date }, string>('commands/general:infoChannelCreated');
 export const InfoChannelTitles = T<{
@@ -79,7 +85,11 @@ export const InfoUserTitlesWarnings = FT<{ count: number }, string>('commands/ge
 
 export const Ping = T('commands/general:ping');
 export const PingDescription = T('commands/general:pingDescription');
-export const PingPong = T('commands/general:pingPong');
+export const PingPong = FT<{
+    roundTrip: number;
+    wsPing: number;
+    dbPing: number;
+}>('commands/general:pingPong');
 
 export const StatsDescription = T('commands/general:statsDescription');
 export const StatsDetailedDescription = T<HelpDisplayData>('commands/general:statsDetailedDescription');

@@ -11,6 +11,8 @@ import { ActivitiesOptions, ClientOptions, Formatters, WebhookClientData } from 
 import { type LocaleString, GatewayIntentBits } from 'discord-api-types/v10';
 import type { InterpolationOptions } from 'i18next';
 import type { LogLevel } from '@sapphire/framework';
+import { localeMap } from '#languages';
+import { Iso6391Enum } from '@foxxie/i18n-codes';
 
 config({
     path: join(rootFolder, '.env')
@@ -186,6 +188,10 @@ function getFormatters(): Formatter[] {
         {
             name: 'dateFormat',
             format: value => formatLongDate(getDurationValue(value))
+        },
+        {
+            name: 'ordinal',
+            format: (value, lng) => localeMap.get(lng || 'en-US')!.ordinal(value)
         }
     ];
 }
@@ -197,12 +203,12 @@ export async function initI18n() {
         returnEmptyString: false,
         returnNull: false,
         load: 'all',
-        lng: 'en-US',
         fallbackLng: 'en-US',
         defaultNS: 'globals',
+        supportedLngs: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishMexico],
         interpolation: getInterpolation(),
         initImmediate: false,
-        debug: false
+        debug: true
     });
 
     for (const { name, format } of getFormatters()) {

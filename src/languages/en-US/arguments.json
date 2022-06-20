@@ -1,0 +1,4 @@
+{
+    "command": "{{ERROR}} I don't have a command named `{{parameter}}`! Maybe you spelled it wrong?",
+    "language": "{{ERROR}} I don't currently support `{{parameter}}` as a language. Please choose between {{list, codeand}}."
+}
