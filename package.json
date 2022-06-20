@@ -51,7 +51,7 @@
     "@sapphire/ratelimits": "^2.4.4",
     "@sapphire/stopwatch": "^1.4.1",
     "@sapphire/utilities": "^3.6.2",
-    "@sentry/node": "^6.19.6",
+    "@sentry/node": "^7.0.0",
     "@skyra/char": "^1.0.2",
     "@skyra/jaro-winkler": "^1.1.0",
     "canvas-constructor": "^6.0.0",
