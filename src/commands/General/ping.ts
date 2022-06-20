@@ -7,7 +7,7 @@ import { Stopwatch } from '@sapphire/stopwatch';
 import type { Message } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
-    aliases: ['ping'],
+    aliases: ['pong'],
     description: LanguageKeys.Commands.General.PingDescription
 })
 export default class UserCommand extends FoxxieCommand {
