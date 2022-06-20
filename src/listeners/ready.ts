@@ -69,7 +69,7 @@ ${line14}       ${this.isDev ? `${pad}${blc('<')}${llc('/')}${blc('>')} ${llc('D
         const last = stores.pop()!;
 
         for (const store of stores) logger.info(this.styleStore(store));
-        logger.info(gray(`├─ Loaded ${this.style(i18next.languages.length.toString().padEnd(3, ' '))} languages.`));
+        logger.info(gray(`├─ Loaded ${this.style((i18next.options.preload as string[]).length.toString().padEnd(3, ' '))} languages.`));
         logger.info(this.styleStore(last, true));
     }
 
