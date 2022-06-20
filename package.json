@@ -75,7 +75,7 @@
     "@typescript-eslint/eslint-plugin": "5.20.0",
     "@typescript-eslint/parser": "5.20.0",
     "colorette": "^2.0.16",
-    "discord-api-types": "0.31.2",
+    "discord-api-types": "0.34.0",
     "eslint": "8.13.0",
     "prettier": "^2.6.2"
   },
