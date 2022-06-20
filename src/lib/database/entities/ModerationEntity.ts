@@ -159,7 +159,7 @@ export class ModerationEntity extends BaseEntity {
             .setColor(this.color)
             .setTimestamp(this.createdTimestamp)
             .setDescription(description.join('\n'))
-            .setFooter(`${caseT} #${t(LanguageKeys.Globals.NumberFormat, { value: this.caseId })}`);
+            .setFooter({ text: `${caseT} #${t(LanguageKeys.Globals.NumberFormat, { value: this.caseId })}` });
 
         return embed;
     }
@@ -223,10 +223,10 @@ export class ModerationEntity extends BaseEntity {
 
         return [
             _users ? t(LanguageKeys.Guilds.Logs.ArgsUser, { user: _users }) : null,
-            _channel ? `${t(LanguageKeys.Guilds.Logs.ArgsChannel, { channel: _channel })}\n` : null,
+            _channel ? t(LanguageKeys.Guilds.Logs.ArgsChannel, { channel: _channel }) : null,
             _moderator ? t(LanguageKeys.Guilds.Logs.ArgsModerator, { mod: _moderator }) : null,
             t(LanguageKeys.Guilds.Logs.ArgsReason, { reason: this.reason ?? fillReason }),
-            this.duration ? t(LanguageKeys.Guilds.Logs.ArgsDuration, { duration: Date.now() - this.duration }) : null
+            this.duration ? t(LanguageKeys.Guilds.Logs.ArgsDuration, { duration: this.createdTimestamp + this.duration }) : null
         ].filter(a => Boolean(a)) as string[];
     }
 

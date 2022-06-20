@@ -49,7 +49,7 @@ function parseRegexPrefix(): RegExp {
     return new RegExp(str, 'i');
 }
 
-function getDurationValue(value: Date | string) {
+function getDurationValue(value: Date | string | number) {
     if (value instanceof Date) {
         return value;
     } else if (typeof value === 'string') {
@@ -57,7 +57,7 @@ function getDurationValue(value: Date | string) {
         return timestamp;
     }
 
-    return value;
+    return new Date(value);
 }
 
 function parseWebhookError(): WebhookClientData | null {

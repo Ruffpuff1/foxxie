@@ -1,0 +1,8 @@
+{
+    "caseDescription": "View a prior moderation case from your server.",
+    "caseNoExist": "{{ERROR}} A moderation case with the id `{{id}}` doesn't exist in this server.",
+    "caseUsage": "[caseId | \"latest\"]",
+    "reasonDescription": "Edit the reason for a moderation case in your server.",
+    "reasonSuccess": "{{SUCCESS}} Changed the case's reason to `{{reason}}`.",
+    "reasonUsage": "[caseId | \"latest\"] [reason]"
+}

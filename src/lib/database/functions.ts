@@ -102,7 +102,7 @@ export async function set(settings: GuildEntity, key: SchemaKey, args: FoxxieArg
         const { serializer } = key;
         if (serializer.equals(value, parsed)) {
             throw new UserError({
-                identifier: LanguageKeys.Commands.Admin.ConfMenuNoChange,
+                identifier: LanguageKeys.Commands.Configuration.ConfMenuNoChange,
                 context: {
                     key: key.name,
                     value: key.stringify(settings, args.t, parsed)
@@ -123,7 +123,7 @@ export async function remove(settings: GuildEntity, key: SchemaKey, args: Foxxie
         const index = values.findIndex(value => serializer.equals(value, parsed));
         if (index === -1) {
             throw new UserError({
-                identifier: LanguageKeys.Commands.Admin.ConfMissingValue,
+                identifier: LanguageKeys.Commands.Configuration.ConfMissingValue,
                 context: {
                     key: key.name,
                     value: key.stringify(settings, args.t, parsed)

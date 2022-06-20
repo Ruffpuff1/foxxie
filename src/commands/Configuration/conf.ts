@@ -7,6 +7,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['config', 'settings'],
     description: LanguageKeys.Commands.Configuration.ConfDescription,
+    usage: LanguageKeys.Commands.Configuration.ConfUsage,
     subCommands: [{ input: 'menu', default: true }]
 })
 export default class UserCommand extends FoxxieCommand {

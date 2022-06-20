@@ -33,7 +33,7 @@ export default class UserCommand extends FoxxieCommand {
             embed.addField(
                 category,
                 commands //
-                    .sort((a, b) => b.name.localeCompare(a.name))
+                    .sort((a, b) => a.name.localeCompare(b.name))
                     .filter(c => c.category === category)
                     .map(c => `\`${c.name}\``)
                     .join(', ')
