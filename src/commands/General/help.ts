@@ -1,14 +1,17 @@
-// import { LanguageKeys } from '#lib/i18n';
+import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
 import type { GuildMessage } from '#lib/types';
 import type { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
+import { PermissionFlagsBits } from 'discord-api-types/v10';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['h', 'commands'],
-    description: ''
+    description: LanguageKeys.Commands.General.HelpDescription,
+    usage: LanguageKeys.Commands.General.HelpUsage,
+    requiredClientPermissions: [PermissionFlagsBits.EmbedLinks]
 })
 export default class UserCommand extends FoxxieCommand {
     public async messageRun(message: GuildMessage, args: FoxxieCommand.Args, ctx: FoxxieCommand.Context): Promise<Message> {
@@ -18,8 +21,9 @@ export default class UserCommand extends FoxxieCommand {
         return this.fullHelp(message, args);
     }
 
-    async fullHelp(message: GuildMessage, _args: FoxxieCommand.Args) {
+    private async fullHelp(message: GuildMessage, args: FoxxieCommand.Args) {
         const embed = new MessageEmbed() //
+            .setAuthor({ name: args.t(LanguageKeys.Commands.General.HelpMenu, { name: this.container.client.user?.username }) })
             .setColor(message.guild.me!.displayColor);
 
         const commands = this.container.stores.get('commands');
@@ -38,12 +42,14 @@ export default class UserCommand extends FoxxieCommand {
         return send(message, { embeds: [embed] });
     }
 
-    async commandHelp(command: FoxxieCommand, message: GuildMessage, args: FoxxieCommand.Args, prefix: string) {
+    private async commandHelp(command: FoxxieCommand, message: GuildMessage, args: FoxxieCommand.Args, prefix: string) {
+        const titles = args.t(LanguageKeys.Commands.General.HelpTitles);
+
         const embed = new MessageEmbed() //
             .setColor(message.guild.me!.displayColor)
             .setAuthor({ name: `${command.name}${command.aliases.length ? ` (${command.aliases.join(', ')})` : ''}` })
             .setDescription(args.t(command.description))
-            .addField('Usage', `\`${prefix}${command.name}\``);
+            .addField(titles.usage, `\`${prefix}${command.name}${command.usage ? ` ${args.t(command.usage)}` : ''}\``);
 
         return send(message, { embeds: [embed] });
     }

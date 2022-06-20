@@ -2,14 +2,12 @@ import { CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserErr
 import { SubCommandPluginCommand } from '@sapphire/plugin-subcommands';
 import type { Message } from 'discord.js';
 import * as Lexure from 'lexure';
-import { getT } from '@foxxie/i18n';
 import { clientOwners } from '#root/config';
 import { HelpDisplayData, PermissionLevels } from '#lib/types';
 import type FoxxieClient from '#lib/FoxxieClient';
 import type { MongoDB } from '#lib/database';
 import { FoxxieArgs } from './parsers';
 import { seconds } from '@ruffpuff/utilities';
-import { Iso6391Enum } from '@foxxie/i18n-codes';
 
 export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand<FoxxieArgs, FoxxieCommand> {
     public readonly guarded: boolean;
@@ -17,6 +15,8 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
     public hidden: boolean;
 
     public allowedGuilds: string[];
+
+    public usage: string | null = null;
 
     public permissionLevel: PermissionLevels;
 
@@ -31,6 +31,7 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
         });
 
         this.guarded = options.guarded ?? false;
+        this.usage = options.usage ?? null;
         this.hidden = options.hidden ?? false;
         this.allowedGuilds = options.allowedGuilds ?? [];
         this.permissionLevel = options.permissionLevel ?? PermissionLevels.Everyone;
@@ -69,7 +70,10 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
     public async messagePreParse(message: Message, parameters: string, context: MessageCommandContext): Promise<FoxxieCommand.Args> {
         const parser = new Lexure.Parser(this.lexer.setInput(parameters).lex()).setUnorderedStrategy(this.strategy);
         const args = new Lexure.Args(parser.parse());
-        const [t, color] = await Promise.all([getT(Iso6391Enum.EnglishUnitedStates), this.container.db.fetchColor(message)]);
+        const [t, color] = await Promise.all([
+            this.container.db.guilds.acquire(message.guild!.id, settings => settings.getLanguage()),
+            this.container.db.fetchColor(message)
+        ]);
 
         return new FoxxieArgs(message, this, args, context, t, color);
     }
@@ -104,6 +108,7 @@ export namespace FoxxieCommand {
         guarded?: boolean;
         hidden?: boolean;
         spam?: boolean;
+        usage?: string;
         allowedGuilds?: string[];
         permissionLevel?: PermissionLevels;
 

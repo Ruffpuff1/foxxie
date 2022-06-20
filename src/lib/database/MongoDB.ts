@@ -1,9 +1,9 @@
 import type { Connection, Repository } from 'typeorm';
 import { GuildEntity, ModerationEntity, StarEntity } from './entities';
 import { ClientRepository, MemberRepository, GuildRepository } from './repository';
-import type { CommandInteraction, Message } from 'discord.js';
+import type { Message } from 'discord.js';
 import { BrandingColors } from '#utils/constants';
-import { container } from '@sapphire/framework';
+import { SerializerStore } from './structures';
 
 export class MongoDB {
     public readonly connection: Connection;
@@ -18,6 +18,8 @@ export class MongoDB {
 
     public readonly starboards: Repository<StarEntity>;
 
+    public serializers = new SerializerStore();
+
     public constructor(connection: Connection) {
         this.connection = connection;
         this.clients = connection.getCustomRepository(ClientRepository);
@@ -27,12 +29,8 @@ export class MongoDB {
         this.starboards = connection.getRepository(StarEntity);
     }
 
-    public fetchColor(msg: Message | CommandInteraction): number {
-        return msg.guild?.me?.displayColor || (msg as Message).member?.displayColor || BrandingColors.Primary;
-    }
-
-    public get serializers() {
-        return container.stores.get('serializers');
+    public fetchColor(msg: Message): number {
+        return msg.guild?.me?.displayColor || msg.member?.displayColor || BrandingColors.Primary;
     }
 }
 
