@@ -1,15 +1,64 @@
 {
-    "extends": "@foxxie/ts-config",
     "compilerOptions": {
-        "incremental": false
+        "target": "es2020",
+        "module": "Commonjs",
+        "strict": true,
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "traceResolution": false,
+        "sourceMap": false,
+        "experimentalDecorators": true,
+        "outDir": "dist",
+        "allowSyntheticDefaultImports": true,
+        "strictPropertyInitialization": false,
+        "alwaysStrict": true,
+        "declarationMap": false,
+        "emitDecoratorMetadata": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "importsNotUsedAsValues": "error",
+        "useUnknownInCatchVariables": false,
+        "incremental": true,
+        "lib": [
+            "esnext"
+        ],
+        "newLine": "lf",
+        "noImplicitOverride": false,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "preserveConstEnums": true,
+        "pretty": true,
+        "useDefineForClassFields": true,
+        "removeComments": true,
+        "allowJs": true,
+        "baseUrl": ".",
+        "rootDir": ".",
+        "paths": {
+            "#external/*": [
+                "src/lib/util/External/*"
+            ],
+            "#utils/*": [
+                "src/lib/util/*"
+            ],
+            "#lib/*": [
+                "src/lib/*"
+            ],
+            "#languages": [
+                "src/languages/index"
+            ],
+            "#database/*": [
+                "src/lib/database/*"
+            ],
+            "#root/*": [
+                "src/*"
+            ]
+        }
     },
-    "ignore": [
-        "releases"
-    ],
     "include": [
-        "packages/**/*",
-        "apps/**/*",
-        "websites/**/*",
-        "apis/**/*"
+        "./src/**/*", "./src/**/*.json"
     ]
 }

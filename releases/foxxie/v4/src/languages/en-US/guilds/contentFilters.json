@@ -1,5 +1,0 @@
-{
-    "DISABLED": "Don't scan any messages",
-    "MEMBERS_WITHOUT_ROLES": "Scan messages from members without a role",
-    "ALL_MEMBERS": "Scan messages by all members"
-}

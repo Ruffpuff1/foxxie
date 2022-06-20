@@ -1,4 +1,0 @@
-{
-    "clientPermissions": "I seem to be missing the {{missing, and}} permissions, which are required to run this command.",
-    "enabled": "It looks like the `{{name}}` command isn't currently enabled, try asking about it at [**The Corner Store**](<https://discord.gg/ZAZ4yRezC7>)."
-}

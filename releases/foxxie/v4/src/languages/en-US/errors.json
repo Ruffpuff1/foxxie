@@ -1,4 +1,0 @@
-{
-    "invalidRole": "{{ERROR}} I can't seem to find a role given what you've provided.",
-    "missingPermissions": "{{ERROR}} My apologies, I don't have enough permissions to preform the task given."
-}

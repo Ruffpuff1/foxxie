@@ -1,0 +1,5 @@
+{
+    "ping": "Ping?",
+    "pingDescription": "Runs a connection test to my database and Discord.",
+    "pingPong": "Pong! Took {{roundTrip}}ms (Discord Latency: {{wsPing}}ms. Database Connection: {{dbPing}}ms)"
+}

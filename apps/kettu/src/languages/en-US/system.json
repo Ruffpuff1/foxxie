@@ -1,7 +1,0 @@
-{
-    "andMore": "{{count, number}} more.",
-    "loading": "{{LOADING}} Yea I'll get that set up for you! just a sec.",
-    "optionEphemeralDefaultFalse": "If the message should be hidden, defaults to false.",
-    "optionEphemeralDefaultTrue": "If the message should be hidden, defaults to true.",
-    "queryFail": "{{ERROR}} I couldn't find any data from the server about that query, please try again."
-}

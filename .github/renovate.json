@@ -1,5 +1,4 @@
 {
-	"ignorePaths": ["**/releases/**", "apps/kettu/**"],
 	"extends": [
 		"github>Ruffpuff1/.github:renovate"
 	]

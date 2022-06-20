@@ -1,8 +1,0 @@
-{
-    "GUILD_NEWS_SHORT": "Noticias: **{{count, number}}**",
-    "GUILD_STAGE_VOICE_SHORT": "Estrado: **{{count, number}}**",
-    "GUILD_STORE_SHORT": "Tienda: **{{count, number}}**",
-    "GUILD_TEXT_SHORT": "Texto: **{{count, number}}**",
-    "GUILD_PUBLIC_THREAD_SHORT": "Hilos: **{{count, number}}**",
-    "GUILD_VOICE_SHORT": "Voz: **{{count, number}}**"
-}

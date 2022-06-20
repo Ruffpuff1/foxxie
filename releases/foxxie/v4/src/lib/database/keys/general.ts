@@ -1,9 +1,0 @@
-export const persistRoles = 'persistRoles';
-export const persistRolesEnabled = 'persistRolesEnabled';
-export const prefix = 'prefix';
-export const language = 'language';
-export const messageCount = 'messageCount';
-export const highlights = 'highlights';
-export const disableNaturalPrefix = 'disableNaturalPrefix';
-export const nodesEnabled = 'permissionNodesEnabled';
-export const tags = 'tags';
