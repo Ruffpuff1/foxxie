@@ -29,7 +29,7 @@
   },
   "homepage": "https://reeseharlak.com/foxxie/about",
   "dependencies": {
-    "@discordjs/builders": "^0.13.0",
+    "@discordjs/builders": "^0.15.0",
     "@foxxie/api": "0.0.3",
     "@foxxie/commands": "^0.0.3",
     "@foxxie/env": "^0.0.2",
