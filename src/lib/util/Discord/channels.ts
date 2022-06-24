@@ -3,10 +3,8 @@ import { cast, resolveToNull } from '@ruffpuff/utilities';
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';
-import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { GuildResolvable, GuildTextBasedChannel, Permissions, Snowflake } from 'discord.js';
-
-const sendMessages = new Permissions([PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]);
+import type { GuildResolvable, GuildTextBasedChannel, Snowflake } from 'discord.js';
+import { sendMessages } from './permissions';
 
 export function isSendableChannel(channel: GuildTextBasedChannelTypes): boolean {
     if (!channel) return false;

@@ -7,7 +7,7 @@
     "build": "tsc -b",
     "start": "node .",
     "dev": "yarn build && yarn start",
-    "lint": "prettier --write src"
+    "lint": "prettier --write src --ext mjs,js,ts"
   },
   "contributors": [
     "Ruffpuff1 <reese@reeseharlak.com>",

@@ -45,7 +45,6 @@ export class ModerationCommand extends FoxxieCommand {
             const targetRolePos = member.roles.highest.position;
             const myRolePos = interaction.guild?.me?.roles.highest.position;
 
-            // Skyra cannot moderate members with higher role position than her:
             if (!myRolePos || targetRolePos >= myRolePos) {
                 throw context.t(LanguageKeys.Listeners.Errors.ModerationRoleBot, { target: `**${context.target.tag}**` });
             }

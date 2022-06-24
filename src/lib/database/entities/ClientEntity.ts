@@ -1,7 +1,7 @@
-import { Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
 @Entity('client', { schema: 'public' })
-export class ClientEntity {
+export class ClientEntity extends BaseEntity {
     @ObjectIdColumn()
     public _id!: string;
 
@@ -16,4 +16,7 @@ export class ClientEntity {
 
     @Column('bigint', { default: 0 })
     public messageCount = 0;
+
+    @Column('bigint', { default: 0 })
+    public scheduleCount = 0;
 }

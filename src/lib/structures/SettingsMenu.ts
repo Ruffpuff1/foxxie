@@ -7,12 +7,11 @@ import { deleteMessage, sendLoadingMessage } from '#utils/Discord';
 import { LLRCData, LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import { container } from '@sapphire/framework';
 import { deepClone, minutes, ZeroWidthSpace } from '@ruffpuff/utilities';
-import { RESTJSONErrorCodes } from 'discord-api-types/v9';
+import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import { DiscordAPIError, MessageCollector, MessageEmbed } from 'discord.js';
 import type { TFunction } from '@foxxie/i18n';
 import * as Lexure from 'lexure';
-import { FoxxieArgs } from './commands/parsers/FoxxieArgs';
-import type { FoxxieCommand } from './commands/FoxxieCommand';
+import { FoxxieArgs, FoxxieCommand } from './commands';
 
 const EMOJIS = { BACK: '◀', STOP: '⏹' };
 const TIMEOUT = minutes(15);
@@ -89,7 +88,13 @@ export class SettingsMenu {
             }
 
             if (!folders.length && !keys.length) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderNoKeys));
-            else description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderSelect), '', ...folders.map(folder => `📁 ${folder}`), ...keys.map(key => `⚙️ ${key}`));
+            else
+                description.push(
+                    t(LanguageKeys.Commands.Configuration.ConfMenuRenderSelect),
+                    '',
+                    ...folders.map(folder => `📁 ${folder}`),
+                    ...keys.map(key => `⚙️ ${key}`)
+                );
         } else {
             description.push(
                 t(LanguageKeys.Commands.Configuration.ConfMenuRenderAtPiece, {

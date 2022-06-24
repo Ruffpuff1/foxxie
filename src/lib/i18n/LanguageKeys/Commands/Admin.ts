@@ -3,7 +3,6 @@ import { FT, T } from '@foxxie/i18n';
 
 export const EvalConsole = FT<{ name: string; footer: string; time: string }>('commands/admin:evalConsole');
 export const EvalDescription = T('commands/admin:evalDescription');
-export const EvalDetailedDescription = T<HelpDisplayData>('commands/admin:evalDetailedDescription');
 export const EvalError = FT<{ output: string; type: string; time: string }>('commands/admin:evalError');
 export const EvalHaste = FT<{ output: string; footer: string; time: string }>('commands/admin:evalHaste');
 export const EvalOutput = FT<{ output: string; footer: string; time: string }>('commands/admin:evalOutput');

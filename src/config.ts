@@ -208,7 +208,7 @@ export async function initI18n() {
         supportedLngs: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishMexico],
         interpolation: getInterpolation(),
         initImmediate: false,
-        debug: true
+        debug: false
     });
 
     for (const { name, format } of getFormatters()) {

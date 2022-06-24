@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import { container } from '@sapphire/framework';
-import { GuildEntity, ClientEntity, MemberEntity, StarEntity, ModerationEntity } from './entities';
+import { GuildEntity, ClientEntity, MemberEntity, StarEntity, ModerationEntity, ScheduleEntity } from './entities';
 import { MongoDB } from './MongoDB';
 
 export async function config(): Promise<void> {
@@ -12,7 +12,7 @@ export async function config(): Promise<void> {
         port: 3306,
         username: process.env.MONGO_USER,
         password: process.env.MONGO_PASSWORD,
-        entities: [ClientEntity, GuildEntity, MemberEntity, ModerationEntity, StarEntity],
+        entities: [ClientEntity, GuildEntity, MemberEntity, ModerationEntity, ScheduleEntity, StarEntity],
         authSource: 'admin',
         useNewUrlParser: true,
         useUnifiedTopology: true,
