@@ -27,13 +27,13 @@ const nextConfig = {
                 permanent: false
             },
             {
-                source: '/about/contact-me',
+                source: '/contact',
                 destination: 'https://about.ruffpuff.dev/contact-me',
                 permanent: false
             },
             {
                 source: '/projects',
-                destination: 'https://opensource.ruffpuff.dev/projects',
+                destination: 'https://about.ruffpuff.dev/projects',
                 permanent: false
             },
             {
@@ -62,8 +62,8 @@ const nextConfig = {
                 permanent: false
             },
             {
-                source: '/opensource',
-                destination: 'https://opensource.ruffpuff.dev',
+                source: '/kiko',
+                destination: 'https://kiko.gg',
                 permanent: false
             }
         ];

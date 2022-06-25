@@ -1,5 +1,4 @@
 import {
-    DiscordCommand,
     DiscordCustomEmoji,
     DiscordEmbed,
     DiscordEmbedField,
@@ -13,8 +12,10 @@ import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
 export default function RoleInfo() {
     return (
         <DiscordMessages className='rounded-sm duration-500 lg:rounded-lg'>
-            <DiscordMessage ephemeral roleColor='#5965f2' avatar='https://cdn.ruffpuff.dev/foxxie.png' author='Foxxie' bot>
-                <DiscordCommand roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg' slot='reply' command='/info'></DiscordCommand>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg'>
+                .info role
+            </DiscordMessage>
+            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.ruffpuff.dev/foxxie.png' author='Foxxie' bot>
                 <DiscordEmbed slot='embeds' authorImage='https://cdn.ruffpuff.dev/emojis/ruff-giggle.png' authorName='Ruff [912226301908254720]' color='#898489'>
                     <DiscordEmbedFields slot='fields'>
                         <DiscordEmbedField fieldTitle='🎨 Color' inline inlineIndex={1}>

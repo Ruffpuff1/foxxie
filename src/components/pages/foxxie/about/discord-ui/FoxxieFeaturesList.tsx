@@ -4,7 +4,7 @@ import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
 
 export default function FoxxieFeaturesList() {
     return (
-        <section className='flex h-[100vh] w-screen sm:hidden'>
+        <div className='flex h-[100vh] w-screen sm:hidden'>
             <div className='foxxie-main-panel bg-[#37393F]'>
                 <div className='flex h-[48px] items-center justify-start space-x-2 px-5 shadow-md'>
                     <span className='text-2xl italic text-gray-400'>#</span>
@@ -30,6 +30,6 @@ export default function FoxxieFeaturesList() {
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     );
 }

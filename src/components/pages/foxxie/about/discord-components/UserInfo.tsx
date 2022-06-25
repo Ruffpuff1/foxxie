@@ -1,11 +1,13 @@
-import { DiscordCommand, DiscordEmbed, DiscordEmbedField, DiscordEmbedFields, DiscordMessage, DiscordMessages, DiscordTime } from '@skyra/discord-components-react';
+import { DiscordEmbed, DiscordEmbedField, DiscordEmbedFields, DiscordMessage, DiscordMessages, DiscordTime } from '@skyra/discord-components-react';
 import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
 
 export default function UserInfo() {
     return (
         <DiscordMessages lightTheme={false} className='rounded-sm duration-500 lg:rounded-lg'>
-            <DiscordMessage ephemeral roleColor='#5965f2' avatar='https://cdn.ruffpuff.dev/foxxie.png' author='Foxxie' bot>
-                <DiscordCommand roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg' slot='reply' command='/info'></DiscordCommand>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg'>
+                .info channel
+            </DiscordMessage>
+            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.ruffpuff.dev/foxxie.png' author='Foxxie' bot>
                 <DiscordEmbed
                     slot='embeds'
                     authorImage='https://cdn.ruffpuff.dev/reese.jpg'

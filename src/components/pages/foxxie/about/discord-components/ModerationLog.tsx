@@ -27,7 +27,7 @@ export default function ModerationLog() {
                         <br />
                         <strong>Moderator</strong>: <code>Jutsu#0100</code> (282321212766552065)
                         <br />
-                        <strong>Reason</strong>: Please use <code>/reason 168 [reason]</code> to set the reason.
+                        <strong>Reason</strong>: Please use <code>.reason 168 [reason]</code> to set the reason.
                     </DiscordEmbedDescription>
                     <DiscordEmbedFooter slot='footer' timestamp='05/29/2022'>
                         Case #168

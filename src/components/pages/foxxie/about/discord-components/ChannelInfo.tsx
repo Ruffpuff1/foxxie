@@ -1,10 +1,8 @@
 import {
-    DiscordCommand,
     DiscordEmbed,
     DiscordEmbedDescription,
     DiscordEmbedField,
     DiscordEmbedFields,
-    DiscordMention,
     DiscordMessage,
     DiscordMessages,
     DiscordTime
@@ -14,8 +12,10 @@ import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
 export default function ChannelInfo() {
     return (
         <DiscordMessages className='rounded-sm duration-500 lg:rounded-lg'>
-            <DiscordMessage ephemeral roleColor='#5965f2' avatar='https://cdn.ruffpuff.dev/foxxie.png' author='Foxxie' bot>
-                <DiscordCommand roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg' slot='reply' command='/info'></DiscordCommand>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg'>
+                .info channel
+            </DiscordMessage>
+            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.ruffpuff.dev/foxxie.png' author='Foxxie' bot>
                 <DiscordEmbed
                     slot='embeds'
                     authorImage='https://cdn.ruffpuff.dev/tcs.gif'

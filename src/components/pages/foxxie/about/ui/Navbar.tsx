@@ -37,7 +37,7 @@ export default function Navbar({ hide }: { hide: boolean }) {
                 </h1>
             </button>
 
-            <button onClick={() => router.push('/community')} className='rounded-md bg-blue-500 p-3 text-white'>
+            <button onClick={() => router.push('/community')} className='hidden xl:block rounded-md bg-blue-500 p-3 text-white'>
                 Join the Server
             </button>
         </header>

@@ -7,13 +7,13 @@ export default function FoxxieDiscordUI() {
     const [section, setSection] = useState('moderation-log');
 
     return (
-        <section className='hidden h-screen w-screen sm:flex'>
+        <div className='hidden h-screen w-screen sm:flex'>
             {/** server section */}
             <FoxxieDiscordServerPanel />
             {/** channel section */}
             <FoxxieDiscordChannelPanel setSection={setSection} section={section} />
             {/** chat section */}
             <FoxxieDiscordChatSection section={section} />
-        </section>
+        </div>
     );
 }
