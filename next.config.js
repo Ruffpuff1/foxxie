@@ -65,6 +65,11 @@ const nextConfig = {
                 source: '/kiko',
                 destination: 'https://kiko.gg',
                 permanent: false
+            },
+            {
+                source: '/celestia',
+                destination: 'https://celestia.ruffpuff.dev',
+                permanent: false
             }
         ];
     }
