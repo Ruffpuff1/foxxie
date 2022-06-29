@@ -1,7 +1,7 @@
 import { configurableGroups, isSchemaGroup, isSchemaKey, remove, reset, SchemaKey, set } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand, SettingsMenu } from '#lib/structures';
-import type { GuildMessage } from '#lib/types';
+import { GuildMessage, PermissionLevels } from '#lib/types';
 import { inlineCode } from '@discordjs/builders';
 import { filter, map, toTitleCase } from '@ruffpuff/utilities';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
@@ -12,6 +12,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
     aliases: ['config', 'settings'],
     guarded: true,
     description: LanguageKeys.Commands.Configuration.ConfDescription,
+    permissionLevel: PermissionLevels.Administrator,
     usage: LanguageKeys.Commands.Configuration.ConfUsage,
     subCommands: [{ input: 'menu', default: true }, { input: 'add', output: 'set' }, 'set', 'show', 'remove', 'reset']
 })

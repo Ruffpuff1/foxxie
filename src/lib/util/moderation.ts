@@ -121,12 +121,14 @@ export type Title =
     | 'Lock'
     | 'Unlock';
 
-export const TypeVariationAppealNames = {
+export const TypeVariationAppealNames: Record<string, ModerationScheule> = {
     Nickname: Schedules.EndTempNick,
     Mute: Schedules.EndTempMute,
     Ban: Schedules.EndTempBan,
     RestrictEmbed: Schedules.EndTempRestrictEmbed
 };
+
+export type ModerationScheule = Schedules.EndTempBan | Schedules.EndTempMute | Schedules.EndTempNick | Schedules.EndTempRestrictEmbed;
 
 export interface ModerationManagerDescriptionData {
     type: string;

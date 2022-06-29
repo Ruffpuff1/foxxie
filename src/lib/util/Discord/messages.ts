@@ -5,7 +5,7 @@ import { minutes, randomArray } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import type { Message, MessageOptions, UserResolvable } from 'discord.js';
 import { send } from '@sapphire/plugin-editable-commands';
-import { setTimeout as sleep } from 'timers/promises';
+import { setTimeout as sleep } from 'node:timers/promises';
 import { floatPromise } from '#utils/util';
 import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
 
@@ -98,4 +98,19 @@ export async function askYesOrNo(message: Message, response: Message, options: A
     }
 
     return reactions.size === 0 ? null : reactions.firstKey() === YesNo.Yes;
+}
+
+/**
+ * Sends a temporary editable message and then floats a {@link deleteMessage} with the given `timer`.
+ * @param message The message to reply to.
+ * @param options The options to be sent to the channel.
+ * @param timer The timer in which the message should be deleted, using {@link deleteMessage}.
+ * @returns The response message.
+ */
+export async function sendTemporaryMessage(message: Message, options: string | MessageOptions, timer = minutes(1)): Promise<Message> {
+    if (typeof options === 'string') options = { content: options };
+
+    const response = (await send(message, options)) as Message;
+    await floatPromise(deleteMessage(response, timer));
+    return response;
 }

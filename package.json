@@ -7,7 +7,8 @@
     "build": "tsc -b",
     "start": "node .",
     "dev": "yarn build && yarn start",
-    "lint": "prettier --write src --ext mjs,js,ts"
+    "lint": "prettier --write src --ext mjs,js,ts",
+    "start:docker": "docker-compose up --build foxxie"
   },
   "contributors": [
     "Ruffpuff1 <reese@reeseharlak.com>",
@@ -27,6 +28,7 @@
   "bugs": {
     "url": "https://github.com/Ruffpuff1/foxxie/issues"
   },
+  "license": "MIT",
   "homepage": "https://reeseharlak.com/foxxie/about",
   "dependencies": {
     "@discordjs/builders": "^0.15.0",

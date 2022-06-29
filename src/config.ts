@@ -9,6 +9,7 @@ import { EnvParse } from '@foxxie/env';
 import { Formatter, getT, i18next, init } from '@foxxie/i18n';
 import { ActivitiesOptions, ClientOptions, Formatters, WebhookClientData } from 'discord.js';
 import { type LocaleString, GatewayIntentBits } from 'discord-api-types/v10';
+import { DurationFormatAssetsTime, DurationFormatter } from '@sapphire/time-utilities';
 import type { InterpolationOptions } from 'i18next';
 import type { LogLevel } from '@sapphire/framework';
 import { localeMap } from '#languages';
@@ -42,6 +43,10 @@ function parsePresenceActivity(): ActivitiesOptions[] {
             type: 'LISTENING'
         }
     ];
+}
+
+export function getDurationOptions(lng: string): DurationFormatAssetsTime {
+    return (localeMap.get(lng) ?? localeMap.get('en-US')!).duration;
 }
 
 function parseRegexPrefix(): RegExp {
@@ -143,6 +148,10 @@ function getFormatters(): Formatter[] {
                     timeZone: timezone,
                     timeStyle: 'short'
                 }).format(typeof value === 'string' ? new Date(value) : value)
+        },
+        {
+            name: 'remaining',
+            format: (value, lng, options) => new DurationFormatter(getDurationOptions(lng!)).format(value, options.formatParams?.depth ?? 1)
         },
         {
             name: 'numbercompact',

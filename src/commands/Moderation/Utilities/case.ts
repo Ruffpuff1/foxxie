@@ -1,6 +1,6 @@
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
-import type { GuildMessage } from '#lib/types';
+import { GuildMessage, PermissionLevels } from '#lib/types';
 import { getModeration } from '#utils/Discord';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
@@ -9,6 +9,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
     aliases: ['modlog'],
     description: LanguageKeys.Commands.Moderation.CaseDescription,
     usage: LanguageKeys.Commands.Moderation.CaseUsage,
+    permissionLevel: PermissionLevels.Moderator,
     requiredClientPermissions: PermissionFlagsBits.EmbedLinks
 })
 export default class UserCommand extends FoxxieCommand {

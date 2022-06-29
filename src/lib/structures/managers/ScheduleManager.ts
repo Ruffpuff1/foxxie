@@ -3,6 +3,8 @@
  * @copyright 2019 Skyra Project
  */
 import { ResponseType, ResponseValue, ScheduleEntity } from '#database/entities/ScheduleEntity';
+import type { ScheduleData } from '#lib/types';
+import type { Schedules } from '#utils/constants';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';
 
@@ -28,7 +30,7 @@ export class ScheduleManager {
         this._checkInterval();
     }
 
-    public async add(taskId: string, timeResolvable: TimeResolvable, options: ScheduleManagerAddOptions = {}) {
+    public async add<T extends Schedules>(taskId: T, timeResolvable: TimeResolvable, options: ScheduleManagerAddOptions<T> = {}) {
         if (!container.db.tasks.has(taskId)) throw new Error(`The task '${taskId}' does not exist.`);
 
         this.count++;
@@ -205,7 +207,7 @@ export class ScheduleManager {
     }
 }
 
-export interface ScheduleManagerAddOptions {
+export interface ScheduleManagerAddOptions<T extends Schedules> {
     /**
      * If the task should try to catch up if the bot is down.
      */
@@ -214,7 +216,7 @@ export interface ScheduleManagerAddOptions {
     /**
      * The data to pass to the Task piece when the ScheduledTask is ready for execution.
      */
-    data?: Record<string, unknown>;
+    data?: ScheduleData<T>;
 }
 
 export type TimeResolvable = number | Date | string | Cron;

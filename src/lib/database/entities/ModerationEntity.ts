@@ -1,5 +1,5 @@
 import type { GuildModerationManager } from '#lib/structures';
-import { MetaData, metadata, ModerationManagerDescriptionData, TypeMetadata, TypeVariationAppealNames } from '#utils/moderation';
+import { MetaData, metadata, ModerationManagerDescriptionData, ModerationScheule, TypeMetadata, TypeVariationAppealNames } from '#utils/moderation';
 import { resolveToNull, Time, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { Guild, GuildChannel, MessageEmbed, User } from 'discord.js';
@@ -9,6 +9,7 @@ import type { TFunction } from 'i18next';
 import { GuildEntity, GuildSettings } from '..';
 import { LanguageKeys } from '#lib/i18n';
 import type FoxxieClient from '#lib/FoxxieClient';
+import { messageLink } from '#utils/transformers';
 
 @Entity('moderation', { schema: 'public' })
 export class ModerationEntity extends BaseEntity {
@@ -47,6 +48,9 @@ export class ModerationEntity extends BaseEntity {
 
     @Column('smallint')
     public type?: number | null;
+
+    @Column('smallint', { nullable: true, default: () => 'null' })
+    public refrence: number | null;
 
     @Column('varchar', { nullable: true, default: () => 'null' })
     public channelId: string | null = null;
@@ -100,6 +104,7 @@ export class ModerationEntity extends BaseEntity {
             moderatorId: this.moderatorId ?? null,
             channelId: this.channelId ?? null,
             type: this.type,
+            refrence: this.refrence,
             createdAt: this.createdAt,
             duration: this.duration ?? null,
             userId: this.userId ?? null,
@@ -221,13 +226,22 @@ export class ModerationEntity extends BaseEntity {
         const [_users, _channel] = await Promise.all([this.fetchUser(), this.fetchChannel()]);
         const fillReason = t(LanguageKeys.Moderation.FillReason, { prefix, count: this.caseId });
 
+        const refrence = this.refrence ? await this.fetchRefrenceCase(this.refrence) : null;
+
         return [
             _users ? t(LanguageKeys.Guilds.Logs.ArgsUser, { user: _users }) : null,
             _channel ? t(LanguageKeys.Guilds.Logs.ArgsChannel, { channel: _channel }) : null,
             _moderator ? t(LanguageKeys.Guilds.Logs.ArgsModerator, { mod: _moderator }) : null,
             t(LanguageKeys.Guilds.Logs.ArgsReason, { reason: this.reason ?? fillReason }),
+            refrence ? t(LanguageKeys.Guilds.Logs.ArgsRefrence, { id: this.refrence, url: messageLink(this.guildId!, refrence.logChannelId!, refrence.logMessageId!) }) : null,
             this.duration ? t(LanguageKeys.Guilds.Logs.ArgsDuration, { duration: this.createdTimestamp + this.duration }) : null
         ].filter(a => Boolean(a)) as string[];
+    }
+
+    private async fetchRefrenceCase(caseId: number) {
+        const fetched = await this.#manager?.fetch(caseId);
+        if (fetched) return fetched;
+        return null;
     }
 
     public get guild(): Guild | null | undefined {
@@ -256,7 +270,7 @@ export class ModerationEntity extends BaseEntity {
         return this.createdAt?.getTime() ?? Date.now();
     }
 
-    public get appealTaskName(): string | null {
+    public get appealTaskName(): ModerationScheule | null {
         if (!this.duration) return null;
         switch (this.title) {
             case 'tempMute':
