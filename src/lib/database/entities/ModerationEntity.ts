@@ -233,7 +233,9 @@ export class ModerationEntity extends BaseEntity {
             _channel ? t(LanguageKeys.Guilds.Logs.ArgsChannel, { channel: _channel }) : null,
             _moderator ? t(LanguageKeys.Guilds.Logs.ArgsModerator, { mod: _moderator }) : null,
             t(LanguageKeys.Guilds.Logs.ArgsReason, { reason: this.reason ?? fillReason }),
-            refrence ? t(LanguageKeys.Guilds.Logs.ArgsRefrence, { id: this.refrence, url: messageLink(this.guildId!, refrence.logChannelId!, refrence.logMessageId!) }) : null,
+            refrence
+                ? t(LanguageKeys.Guilds.Logs.ArgsRefrence, { id: this.refrence, url: messageLink(this.guildId!, refrence.logChannelId!, refrence.logMessageId!) })
+                : null,
             this.duration ? t(LanguageKeys.Guilds.Logs.ArgsDuration, { duration: this.createdTimestamp + this.duration }) : null
         ].filter(a => Boolean(a)) as string[];
     }

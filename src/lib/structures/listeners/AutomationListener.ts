@@ -1,9 +1,9 @@
 import { LanguageKeys } from '#lib/i18n';
-import type { TypeOfEmbed } from '#lib/types';
 import { BrandingColors } from '#utils/constants';
 import { Listener } from '@sapphire/framework';
 import type { TFunction } from '@foxxie/i18n';
-import type { ClientEvents, GuildMember, MessageEmbed } from 'discord.js';
+import { ClientEvents, GuildMember, MessageEmbed } from 'discord.js';
+import type { APIEmbed } from 'discord-api-types/v10';
 
 export abstract class AutomationListener<T extends keyof ClientEvents | symbol = ''> extends Listener<T> {
     private matchRegex = /{user\.(mention|name|tag|discrim|position|createdat|joinedat)}|{guild(\.(splash|count))?}/g;
@@ -14,7 +14,7 @@ export abstract class AutomationListener<T extends keyof ClientEvents | symbol =
         member: GuildMember,
         t: TFunction,
         message: string | null,
-        embed: MessageEmbed | null,
+        embed: APIEmbed | null,
         defaultMsg: string
     ): [MessageEmbed[], string | null] {
         const embeds: MessageEmbed[] = [];
@@ -61,7 +61,9 @@ export abstract class AutomationListener<T extends keyof ClientEvents | symbol =
         });
     }
 
-    private prepareEmbed(embed: TypeOfEmbed, member: GuildMember, t: TFunction) {
+    private prepareEmbed(embedData: APIEmbed, member: GuildMember, t: TFunction) {
+        const embed = new MessageEmbed(embedData);
+
         embed.setColor(embed.color || member.guild.me?.displayColor || BrandingColors.Primary).setThumbnail(member.displayAvatarURL({ dynamic: true }));
 
         if (embed.description) embed.setDescription(this.format(embed.description, member, t));
