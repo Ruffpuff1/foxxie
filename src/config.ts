@@ -39,7 +39,7 @@ function parsePresenceActivity(): ActivitiesOptions[] {
 
     return [
         {
-            name: EnvParse.string('TIMEZONE'),
+            name: EnvParse.string('CLIENT_PRESENCE_NAME'),
             type: 'LISTENING'
         }
     ];
