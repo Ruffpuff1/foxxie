@@ -30,6 +30,12 @@ export const enum Schedules {
     EndTempRestrictEmbed = 'endTemprestrictembed'
 }
 
+export const enum Urls {
+    Disboard = 'https://disboard.org/',
+    Haste = 'https://paste.ruffpuff.dev',
+    Repo = 'https://github.com/Ruffpuff1/foxxie'
+}
+
 export const emojis = {
     success: '<:Check:916529451536363633>',
     error: '<:Cross:916529423430344754>',
@@ -64,3 +70,19 @@ export const commit = async () =>
         .json()
         .then((data: any) => data.sha.substring(0, 7))
         .catch(() => null);
+
+export const allowedInviteIds = [
+    // ID for `The Corner Store`, Foxxie's home server.
+    '761512748898844702',
+    /* Below are official Discord servers. DDevs, Testers, Townhall, DAPI, Demo Server, and Poker Night. */
+    '613425648685547541',
+    '197038439483310086',
+    '169256939211980800',
+    '81384788765712384',
+    '670065151621332992',
+    '831646372519346186',
+    // Discord.JS server
+    '222078108977594368',
+    // Typescript Server
+    '508357248330760243'
+];

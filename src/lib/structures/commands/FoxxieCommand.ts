@@ -39,33 +39,33 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
         if (options.guarded) this.guarded = true;
     }
 
-    // public addAllowedGuildsPrecondition(options: FoxxieCommand.Options): void {
-    //     if (options.allowedGuilds?.length) {
-    //         this.preconditions.append({
-    //             name: 'AllowedGuilds',
-    //             context: { allowedGuilds: options.allowedGuilds }
-    //         });
-    //     }
-    // }
+    public addAllowedGuildsPrecondition(options: FoxxieCommand.Options): void {
+        if (options.allowedGuilds?.length) {
+            this.preconditions.append({
+                name: 'AllowedGuilds',
+                context: { allowedGuilds: options.allowedGuilds }
+            });
+        }
+    }
 
-    // public addPermissionLevels(options: FoxxieCommand.Options) {
-    //     switch (options.permissionLevel) {
-    //         case PermissionLevels.Everyone:
-    //             this.preconditions.append('Everyone');
-    //             break;
-    //         case PermissionLevels.Moderator:
-    //             this.preconditions.append('Moderator');
-    //             break;
-    //         case PermissionLevels.Administrator:
-    //             this.preconditions.append('Administrator');
-    //             break;
-    //         case PermissionLevels.BotOwner:
-    //             this.preconditions.append('BotOwner');
-    //             break;
-    //         default:
-    //             this.preconditions.append('Everyone');
-    //     }
-    // }
+    public addPermissionLevels(options: FoxxieCommand.Options) {
+        switch (options.permissionLevel) {
+            case PermissionLevels.Everyone:
+                this.preconditions.append('Everyone');
+                break;
+            case PermissionLevels.Moderator:
+                this.preconditions.append('Moderator');
+                break;
+            case PermissionLevels.Administrator:
+                this.preconditions.append('Administrator');
+                break;
+            case PermissionLevels.BotOwner:
+                this.preconditions.append('BotOwner');
+                break;
+            default:
+                this.preconditions.append('Everyone');
+        }
+    }
 
     public async messagePreParse(message: Message, parameters: string, context: MessageCommandContext): Promise<FoxxieCommand.Args> {
         const parser = new Lexure.Parser(this.lexer.setInput(parameters).lex()).setUnorderedStrategy(this.strategy);

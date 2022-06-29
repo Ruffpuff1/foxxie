@@ -23,7 +23,6 @@ services:
     image: 'redis:alpine'
     networks:
       - foxxie
-      - kettu
     ports:
       - '8287:8287'
     volumes:

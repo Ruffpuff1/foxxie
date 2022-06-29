@@ -2,6 +2,8 @@
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';
+import { getHaste } from '#utils/API/haste';
+import { Urls } from '#utils/constants';
 import { isThenable } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
@@ -58,23 +60,21 @@ export class UserCommand extends FoxxieCommand {
             );
         }
 
-        // TODO:reese@reeseharlak.com:
-        //
-        // if (output.length > 2000 || args.getOption('output') === OutputType.Paste) {
-        //     const key = await getHaste(result);
-        //     if (args.getFlags(...msgFlags)) {
-        //         output = `${Urls.Haste}/${key}`;
-        //         return send(message, output);
-        //     }
-        //     return send(
-        //         message,
-        //         args.t(LanguageKeys.Commands.Admin.EvalHaste, {
-        //             time,
-        //             output: `${Urls.Haste}/${key}`,
-        //             footer
-        //         })
-        //     );
-        // }
+        if (output.length > 2000 || args.getOption('output') === OutputType.Paste) {
+            const key = await getHaste(result);
+            if (args.getFlags(...msgFlags)) {
+                output = `${Urls.Haste}/${key}`;
+                return send(message, output);
+            }
+            return send(
+                message,
+                args.t(LanguageKeys.Commands.Admin.EvalHaste, {
+                    time,
+                    output: `${Urls.Haste}/${key}`,
+                    footer
+                })
+            );
+        }
 
         if (args.getFlags(...msgFlags)) output = result;
         return send(message, output);
