@@ -1,7 +1,7 @@
 import type { MongoDB, TaskStore, ModerationEntity, GuildEntity, SerializerStore } from '#lib/database';
 import type { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import type { FoxxieCommand, RedisManager, InviteManager, WorkerManager } from '#lib/structures';
+import type { FoxxieCommand, RedisManager, InviteManager, WorkerManager, ScheduleManager } from '#lib/structures';
 import type { LanguageString, ColorData } from './Utils';
 import { Events } from './Events';
 import type { GuildMessage, TypeOfEmbed } from './Discord';
@@ -36,6 +36,7 @@ declare module '@sapphire/pieces' {
     interface Container {
         db: MongoDB;
         redis: RedisManager | null;
+        schedule: ScheduleManager;
         workers: WorkerManager;
     }
 

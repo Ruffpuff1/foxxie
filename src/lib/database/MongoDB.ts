@@ -1,9 +1,9 @@
 import type { Connection, Repository } from 'typeorm';
-import { GuildEntity, ModerationEntity, StarEntity } from './entities';
+import { GuildEntity, ModerationEntity, ScheduleEntity, StarEntity } from './entities';
 import { ClientRepository, MemberRepository, GuildRepository } from './repository';
 import type { Message } from 'discord.js';
 import { BrandingColors } from '#utils/constants';
-import { SerializerStore } from './structures';
+import { SerializerStore, TaskStore } from './structures';
 
 export class MongoDB {
     public readonly connection: Connection;
@@ -16,9 +16,13 @@ export class MongoDB {
 
     public readonly moderations: Repository<ModerationEntity>;
 
+    public readonly schedules: Repository<ScheduleEntity>;
+
     public readonly starboards: Repository<StarEntity>;
 
     public serializers = new SerializerStore();
+
+    public tasks = new TaskStore();
 
     public constructor(connection: Connection) {
         this.connection = connection;
@@ -26,6 +30,7 @@ export class MongoDB {
         this.guilds = connection.getCustomRepository(GuildRepository);
         this.members = connection.getCustomRepository(MemberRepository);
         this.moderations = connection.getRepository(ModerationEntity);
+        this.schedules = connection.getRepository(ScheduleEntity);
         this.starboards = connection.getRepository(StarEntity);
     }
 
@@ -41,5 +46,6 @@ export interface MongoDB {
     readonly guilds: GuildRepository<GuildEntity>;
     readonly members: MemberRepository;
     readonly moderation: ModerationEntity;
+    readonly schedules: Repository<ScheduleEntity>;
     readonly starboards: Repository<StarEntity>;
 }

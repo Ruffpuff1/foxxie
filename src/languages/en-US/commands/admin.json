@@ -1,0 +1,7 @@
+{
+    "evalConsole": "**Output**:\nWas sent to the console on **{{name}}**...\n\n**Type**:{{footer}}\n{{time}}",
+    "evalDescription": "Allows you evaluate JavaScript code straight from Discord.",
+    "evalError": "**Error**:{{output}}\n**Type**:{{type}}\n{{time}}",
+    "evalHaste": "**Output**:\nWas too long... sent the result to paste: <{{output}}>\n\n**Type**:{{footer}}\n{{time}}",
+    "evalOutput": "**Output**:{{output}}\n**Type**:{{type}}\n{{time}}"
+}

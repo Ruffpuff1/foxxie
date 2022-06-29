@@ -9,3 +9,4 @@ export * as Preconditions from './Preconditions';
 export * as Serializers from './Serializers';
 export * as Settings from './Settings';
 export * as System from './System';
+export * as Tasks from './Tasks';

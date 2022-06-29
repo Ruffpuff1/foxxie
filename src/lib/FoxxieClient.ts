@@ -5,7 +5,7 @@ import { magentaBright } from 'colorette';
 import { Enumerable } from '@sapphire/decorators';
 import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import { InviteManager, RedisManager, WorkerManager } from './structures';
+import { InviteManager, RedisManager, ScheduleManager, WorkerManager } from './structures';
 import { isDev } from '@ruffpuff/utilities';
 import { EnvParse } from '@foxxie/env';
 
@@ -27,6 +27,8 @@ export default class FoxxieClient extends SapphireClient {
 
         container.workers = new WorkerManager(3);
 
+        container.schedule = new ScheduleManager();
+
         container.redis = EnvParse.boolean('REDIS_ENABLED')
             ? new RedisManager({
                   host: process.env.REDIS_HOST,
@@ -40,6 +42,8 @@ export default class FoxxieClient extends SapphireClient {
     public async login(): Promise<string> {
         const { shardCount } = clientOptions;
         container.logger.info(`${magentaBright('Gateway:')} Logging in with ${shardCount ?? 1} shard${(shardCount ?? 1) > 1 ? 's' : ''}`);
+
+        await container.schedule.init();
 
         return super.login();
     }

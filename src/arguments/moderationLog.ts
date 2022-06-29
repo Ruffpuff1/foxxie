@@ -8,7 +8,7 @@ export default class UserArgument extends Argument<number> {
         const latest = context.args.t(LanguageKeys.Arguments.Latest);
         if (parameter.toLowerCase() === latest) {
             const id = await getModeration(context.message.guild!).getCurrentId();
-            if (id === 0) return this.error({ parameter, identifier: LanguageKeys.Arguments.ModerationLogNone })
+            if (id === 0) return this.error({ parameter, identifier: LanguageKeys.Arguments.ModerationLogNone });
 
             return this.ok(id);
         }
