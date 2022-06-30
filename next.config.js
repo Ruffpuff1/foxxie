@@ -72,6 +72,21 @@ const nextConfig = {
                 permanent: false
             },
             {
+                source: '/developers',
+                destination: 'https://developers.reese.cafe',
+                permanent: false
+            },
+            {
+                source: '/apis',
+                destination: 'https://developers.reese.cafe',
+                permanent: false
+            },
+            {
+                source: '/kiko',
+                destination: 'https://kiko.gg',
+                permanent: false
+            },
+            {
                 source: '/celestia',
                 destination: 'https://developers.reese.cafe/celestia',
                 permanent: false
