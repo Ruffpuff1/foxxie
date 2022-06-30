@@ -42,6 +42,11 @@ const nextConfig = {
                 permanent: false
             },
             {
+                source: '/community/disboard',
+                destination: 'https://disboard.org/server/761512748898844702',
+                permanent: false
+            },
+            {
                 source: '/kofi',
                 destination: 'https://ko-fi.com/ruffpuff',
                 permanent: false
