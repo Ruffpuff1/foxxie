@@ -6,7 +6,7 @@ export default function HomeTagline() {
     return (
         <h4 className='text-center text-gray-700 md:ml-56 md:text-start'>
             {translations.home.tag}{' '}
-            <a className='hover:text-blue-500' href='https://ruffpuff.dev/music'>
+            <a className='hover:text-blue-500' href='https://reese.cafe/music'>
                 {translations.home.musician}
             </a>
             .

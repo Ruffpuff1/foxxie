@@ -17,7 +17,7 @@ export default function HomeSocials() {
             <Icon url='https://twitter.com/reeseharlak' text={tooltips.twitter}>
                 <SiTwitter />
             </Icon>
-            <Icon url='mailto:reese@ruffpuff.dev' text={tooltips.email}>
+            <Icon url='mailto:reese@reese.cafe' text={tooltips.email}>
                 <SiGmail />
             </Icon>
         </ul>

@@ -18,7 +18,7 @@ export default function Navbar() {
                 <button
                     onClick={e => {
                         e.preventDefault();
-                        return router.push(hasLocale ? `https://about.ruffpuff.dev/${hl}` : 'https://about.ruffpuff.dev', undefined, { shallow: true });
+                        return router.push(hasLocale ? `https://about.reese.cafe/${hl}` : 'https://about.reese.cafe', undefined, { shallow: true });
                     }}
                     className='rounded-md py-2 px-3 text-sm hover:underline'
                 >
@@ -27,7 +27,7 @@ export default function Navbar() {
                 <button
                     onClick={e => {
                         e.preventDefault();
-                        return router.push(hasLocale ? `https://about.ruffpuff.dev/${hl}/projects` : 'https://about.ruffpuff.dev/projects', undefined, { shallow: true });
+                        return router.push(hasLocale ? `https://about.reese.cafe/${hl}/projects` : 'https://about.reese.cafe/projects', undefined, { shallow: true });
                     }}
                     className='rounded-md py-2 px-3 text-sm hover:underline'
                 >

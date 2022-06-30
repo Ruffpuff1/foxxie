@@ -21,7 +21,7 @@ export default function FoxxieDiscordServerPanel() {
                     <div className='flex flex-col items-center'>
                         <Image
                             alt='The Corner Store server icon'
-                            src='https://cdn.reeseharlak.com/tcs.gif'
+                            src='https://cdn.reese.cafe/tcs.gif'
                             width={48}
                             height={48}
                             className='flex h-12 w-12 items-center justify-center rounded-3xl transition-all duration-300 group-hover:cursor-pointer group-hover:rounded-xl'
@@ -33,7 +33,7 @@ export default function FoxxieDiscordServerPanel() {
                     <div className='h-[40px] w-[5px] rounded-r-md bg-white text-white opacity-100'>.</div>
                     <div className='flex flex-col items-center'>
                         <Image
-                            src='https://cdn.reeseharlak.com/foxxie.png'
+                            src='https://cdn.reese.cafe/foxxie.png'
                             alt="Foxxie's place server icon"
                             width={48}
                             height={48}

@@ -9,7 +9,7 @@ const Home: NextPage = () => {
     return (
         <div>
             <Head>
-                <link rel='icon' href='https://cdn.ruffpuff.dev/reese.jpg' />
+                <link rel='icon' href='https://cdn.reese.cafe/reese.jpg' />
                 <meta name='theme-color' content='#000000' />
             </Head>
             <NextSeo

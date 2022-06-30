@@ -7,7 +7,7 @@ const nextConfig = {
     },
     trailingSlash: true,
     images: {
-        domains: ['cdn.reeseharlak.com']
+        domains: ['cdn.reese.cafe']
     },
     redirects: async () => {
         return [
@@ -23,17 +23,17 @@ const nextConfig = {
             },
             {
                 source: '/about',
-                destination: 'https://about.ruffpuff.dev',
+                destination: 'https://about.reese.cafe',
                 permanent: false
             },
             {
                 source: '/contact',
-                destination: 'https://about.ruffpuff.dev/contact-me',
+                destination: 'https://about.reese.cafe/contact-me',
                 permanent: false
             },
             {
                 source: '/projects',
-                destination: 'https://about.ruffpuff.dev/projects',
+                destination: 'https://about.reese.cafe/projects',
                 permanent: false
             },
             {
@@ -53,17 +53,17 @@ const nextConfig = {
             },
             {
                 source: '/newtab',
-                destination: 'https://newtab.ruffpuff.dev',
+                destination: 'https://newtab.reese.cafe',
                 permanent: false
             },
             {
                 source: '/contact',
-                destination: 'https://about.ruffpuff.dev/contact-me',
+                destination: 'https://about.reese.cafe/contact-me',
                 permanent: false
             },
             {
                 source: '/cdn',
-                destination: 'https://cdn.ruffpuff.dev',
+                destination: 'https://cdn.reese.cafe',
                 permanent: false
             },
             {
@@ -73,7 +73,7 @@ const nextConfig = {
             },
             {
                 source: '/celestia',
-                destination: 'https://celestia.ruffpuff.dev',
+                destination: 'https://developers.reese.cafe/celestia',
                 permanent: false
             }
         ];

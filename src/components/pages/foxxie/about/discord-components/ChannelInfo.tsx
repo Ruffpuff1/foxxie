@@ -12,16 +12,16 @@ import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
 export default function ChannelInfo() {
     return (
         <DiscordMessages className='rounded-sm duration-500 lg:rounded-lg'>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg'>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.reese.cafe/reese.jpg'>
                 .info channel
             </DiscordMessage>
-            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.ruffpuff.dev/foxxie.png' author='Foxxie' bot>
+            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.reese.cafe/foxxie.png' author='Foxxie' bot>
                 <DiscordEmbed
                     slot='embeds'
-                    authorImage='https://cdn.ruffpuff.dev/tcs.gif'
+                    authorImage='https://cdn.reese.cafe/tcs.gif'
                     authorName='staff・commands'
                     color='#5A66F2'
-                    thumbnail='https://cdn.ruffpuff.dev/tcs.gif'
+                    thumbnail='https://cdn.reese.cafe/tcs.gif'
                 >
                     <DiscordEmbedDescription slot='description'>
                         staff・commands was created on <DiscordTime>September 21, 2021</DiscordTime> (<DiscordTime>9 months ago</DiscordTime>)
@@ -49,7 +49,7 @@ export default function ChannelInfo() {
                     </DiscordEmbedFields>
                 </DiscordEmbed>
             </DiscordMessage>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg'>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.reese.cafe/reese.jpg'>
                 {foxxieFeatures.find(f => f.name === 'channel-info')!.description}
             </DiscordMessage>
         </DiscordMessages>

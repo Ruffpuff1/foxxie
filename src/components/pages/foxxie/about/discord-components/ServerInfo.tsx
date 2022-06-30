@@ -13,17 +13,17 @@ import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
 export default function ServerInfo() {
     return (
         <DiscordMessages className='rounded-sm duration-500 lg:rounded-lg'>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg'>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.reese.cafe/reese.jpg'>
                 .info server
             </DiscordMessage>
-            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.ruffpuff.dev/foxxie.png' author='Foxxie' bot>
+            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.reese.cafe/foxxie.png' author='Foxxie' bot>
                 <DiscordEmbed
                     slot='embeds'
-                    authorImage='https://cdn.ruffpuff.dev/tcs.gif'
+                    authorImage='https://cdn.reese.cafe/tcs.gif'
                     authorName='The Corner Store [761512748898844702]'
                     authorUrl='https://discord.com/servers/761512748898844702'
                     color='#0F52BA'
-                    thumbnail='https://cdn.ruffpuff.dev/tcs.gif'
+                    thumbnail='https://cdn.reese.cafe/tcs.gif'
                 >
                     <DiscordEmbedDescription slot='description'>
                         Created by <strong>Ruffpuff#0017</strong> on <DiscordTime>October 2, 2020</DiscordTime> (<DiscordTime>1 year ago</DiscordTime>)<br />
@@ -75,7 +75,7 @@ export default function ServerInfo() {
                     </DiscordEmbedFields>
                 </DiscordEmbed>
             </DiscordMessage>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.ruffpuff.dev/reese.jpg'>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.reese.cafe/reese.jpg'>
                 {foxxieFeatures.find(f => f.name === 'server-info')!.description}
             </DiscordMessage>
         </DiscordMessages>
