@@ -33,6 +33,15 @@ export default function Navbar() {
                 >
                     {nav.projects}
                 </button>
+                <button
+                    onClick={e => {
+                        e.preventDefault();
+                        return router.push(hasLocale ? `https://about.reese.cafe/${hl}/contact-me` : 'https://about.reese.cafe/contact-me', undefined, { shallow: true });
+                    }}
+                    className='rounded-md py-2 px-3 text-sm hover:underline'
+                >
+                    Contact
+                </button>
             </div>
         </header>
     );
