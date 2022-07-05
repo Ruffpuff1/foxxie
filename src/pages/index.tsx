@@ -4,12 +4,13 @@ import Head from 'next/head';
 import HomeFooter from '../components/ui/HomeFooter';
 import Navbar from '../components/ui/Navbar';
 import Homepage from '../components/pages/Homepage';
+import { Images } from '../assets/images';
 
 const Home: NextPage = () => {
     return (
         <div>
             <Head>
-                <link rel='icon' href='https://cdn.reese.cafe/reese.jpg' />
+                <link rel='icon' href={Images.Reese} />
                 <meta name='theme-color' content='#000000' />
             </Head>
             <NextSeo

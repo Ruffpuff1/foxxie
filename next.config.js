@@ -5,11 +5,11 @@ const nextConfig = {
     reactStrictMode: true,
     i18n: {
         defaultLocale: 'en_us',
-        locales: ['en_us', 'es_mx', 'fr_fr']
+        locales: ['en_us', 'es_mx']
     },
     trailingSlash: true,
     images: {
-        domains: ['cdn.reese.cafe']
+        domains: ['reese.cafe', 'cdn.reese.cafe']
     },
     rewrites: async () => {
         return [

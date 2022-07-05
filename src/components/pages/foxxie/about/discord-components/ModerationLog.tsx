@@ -1,11 +1,12 @@
 import { DiscordEmbed, DiscordEmbedDescription, DiscordEmbedFooter, DiscordMessage, DiscordMessages } from '@skyra/discord-components-react';
 import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
+import { Images } from '../../../../../assets/images';
 
 export default function ModerationLog() {
     return (
         <DiscordMessages lightTheme={false} className='rounded-sm duration-500 lg:rounded-lg'>
-            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.reese.cafe/foxxie.png' author='Foxxie' bot>
-                <DiscordEmbed slot='embeds' authorImage='https://cdn.reese.cafe/foxxie.png' authorName='Banned User' color='#FF5C5C'>
+            <DiscordMessage roleColor='#5965f2' avatar={Images.Foxxie} author='Foxxie' bot>
+                <DiscordEmbed slot='embeds' authorImage={Images.Foxxie} authorName='Banned User' color='#FF5C5C'>
                     <DiscordEmbedDescription slot='description'>
                         <strong>User</strong>: <code>nums#1627</code> (956351036212260884)
                         <br />
@@ -20,7 +21,7 @@ export default function ModerationLog() {
                     </DiscordEmbedFooter>
                 </DiscordEmbed>
             </DiscordMessage>
-            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.reese.cafe/foxxie.png' author='Foxxie' bot>
+            <DiscordMessage roleColor='#5965f2' avatar={Images.Foxxie} author='Foxxie' bot>
                 <DiscordEmbed slot='embeds' authorImage='https://cdn.reese.cafe/justin.gif' authorName='Banned User' color='#FF5C5C'>
                     <DiscordEmbedDescription slot='description'>
                         <strong>User</strong>: <code>J_TOKEN$#5925</code> (980251029482385408)
@@ -34,7 +35,7 @@ export default function ModerationLog() {
                     </DiscordEmbedFooter>
                 </DiscordEmbed>
             </DiscordMessage>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.reese.cafe/reese.jpg'>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar={Images.Reese}>
                 {foxxieFeatures.find(f => f.name === 'moderation-log')!.description}
             </DiscordMessage>
         </DiscordMessages>

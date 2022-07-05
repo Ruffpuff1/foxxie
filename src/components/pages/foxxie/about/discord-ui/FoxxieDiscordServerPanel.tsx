@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { SiDiscord } from 'react-icons/si';
+import { Images } from '../../../../../assets/images';
 
 export default function FoxxieDiscordServerPanel() {
     return (
@@ -21,7 +22,7 @@ export default function FoxxieDiscordServerPanel() {
                     <div className='flex flex-col items-center'>
                         <Image
                             alt='The Corner Store server icon'
-                            src='https://cdn.reese.cafe/tcs.gif'
+                            src={Images.TheCornerStore}
                             width={48}
                             height={48}
                             className='flex h-12 w-12 items-center justify-center rounded-3xl transition-all duration-300 group-hover:cursor-pointer group-hover:rounded-xl'
@@ -33,7 +34,7 @@ export default function FoxxieDiscordServerPanel() {
                     <div className='h-[40px] w-[5px] rounded-r-md bg-white text-white opacity-100'>.</div>
                     <div className='flex flex-col items-center'>
                         <Image
-                            src='https://cdn.reese.cafe/foxxie.png'
+                            src={Images.Foxxie}
                             alt="Foxxie's place server icon"
                             width={48}
                             height={48}

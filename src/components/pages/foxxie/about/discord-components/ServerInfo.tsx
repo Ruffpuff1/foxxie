@@ -9,21 +9,22 @@ import {
     DiscordTime
 } from '@skyra/discord-components-react';
 import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
+import { Images } from '../../../../../assets/images';
 
 export default function ServerInfo() {
     return (
         <DiscordMessages className='rounded-sm duration-500 lg:rounded-lg'>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.reese.cafe/reese.jpg'>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar={Images.Reese}>
                 .info server
             </DiscordMessage>
-            <DiscordMessage roleColor='#5965f2' avatar='https://cdn.reese.cafe/foxxie.png' author='Foxxie' bot>
+            <DiscordMessage roleColor='#5965f2' avatar={Images.Foxxie} author='Foxxie' bot>
                 <DiscordEmbed
                     slot='embeds'
-                    authorImage='https://cdn.reese.cafe/tcs.gif'
+                    authorImage={Images.TheCornerStore}
                     authorName='The Corner Store [761512748898844702]'
                     authorUrl='https://discord.com/servers/761512748898844702'
                     color='#0F52BA'
-                    thumbnail='https://cdn.reese.cafe/tcs.gif'
+                    thumbnail={Images.TheCornerStore}
                 >
                     <DiscordEmbedDescription slot='description'>
                         Created by <strong>Ruffpuff#0017</strong> on <DiscordTime>October 2, 2020</DiscordTime> (<DiscordTime>1 year ago</DiscordTime>)<br />
@@ -75,7 +76,7 @@ export default function ServerInfo() {
                     </DiscordEmbedFields>
                 </DiscordEmbed>
             </DiscordMessage>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar='https://cdn.reese.cafe/reese.jpg'>
+            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar={Images.Reese}>
                 {foxxieFeatures.find(f => f.name === 'server-info')!.description}
             </DiscordMessage>
         </DiscordMessages>
