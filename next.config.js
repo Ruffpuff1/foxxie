@@ -1,3 +1,5 @@
+const redirects = require('./redirects');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
@@ -9,74 +11,16 @@ const nextConfig = {
     images: {
         domains: ['cdn.reese.cafe']
     },
-    redirects: async () => {
+    rewrites: async () => {
         return [
             {
-                source: '/twitter',
-                destination: 'https://twitter.com/reeseharlak',
-                permanent: false
-            },
-            {
-                source: '/github',
-                destination: 'https://github.com/Ruffpuff1',
-                permanent: false
-            },
-            {
-                source: '/about',
-                destination: 'https://about.reese.cafe',
-                permanent: false
-            },
-            {
-                source: '/contact',
-                destination: 'https://about.reese.cafe/contact-me',
-                permanent: false
-            },
-            {
-                source: '/projects',
-                destination: 'https://about.reese.cafe/projects',
-                permanent: false
-            },
-            {
-                source: '/community',
-                destination: 'https://discord.gg/ZAZ4yRezC7',
-                permanent: false
-            },
-            {
-                source: '/community/disboard',
-                destination: 'https://disboard.org/server/761512748898844702',
-                permanent: false
-            },
-            {
-                source: '/kofi',
-                destination: 'https://ko-fi.com/ruffpuff',
-                permanent: false
-            },
-            {
-                source: '/newtab',
-                destination: 'https://newtab.reese.cafe',
-                permanent: false
-            },
-            {
-                source: '/contact',
-                destination: 'https://about.reese.cafe/contact-me',
-                permanent: false
-            },
-            {
-                source: '/cdn',
-                destination: 'https://cdn.reese.cafe',
-                permanent: false
-            },
-            {
-                source: '/kiko',
-                destination: 'https://kiko.gg',
-                permanent: false
-            },
-            {
-                source: '/celestia',
-                destination: 'https://developers.reese.cafe/celestia',
-                permanent: false
+                source: '/images/:slug(.{1,}\\.[A-z]{1,})',
+                destination: 'https://cdn.reese.cafe/:slug'
             }
         ];
+    },
+    redirects: async () => {
+        return redirects;
     }
 };
 
