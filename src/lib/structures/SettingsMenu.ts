@@ -170,6 +170,7 @@ export class SettingsMenu {
 
     private async onReaction(reaction: LLRCData): Promise<void> {
         if (reaction.userId !== this.message.author.id) return;
+
         this.llrc?.setTime(TIMEOUT);
         if (reaction.emoji.name === EMOJIS.STOP) {
             this.llrc?.end();

@@ -14,6 +14,7 @@ import type { InterpolationOptions } from 'i18next';
 import type { LogLevel } from '@sapphire/framework';
 import { localeMap } from '#languages';
 import { Iso6391Enum } from '@foxxie/i18n-codes';
+import { cast } from '@ruffpuff/utilities';
 
 config({
     path: join(rootFolder, '.env')
@@ -164,11 +165,11 @@ function getFormatters(): Formatter[] {
         },
         {
             name: 'verificationlevel',
-            format: (value, lng) => getT(lng as LocaleString)(`guilds/verificationLevels:${value}`)
+            format: (value, lng) => getT(cast<LocaleString>(lng))(`guilds/verificationLevels:${value}`)
         },
         {
             name: 'permissions',
-            format: (value, lng) => getT(lng as LocaleString)(`guilds/permissions:${value}`)
+            format: (value, lng) => getT(cast<LocaleString>(lng))(`guilds/permissions:${value}`)
         },
         {
             name: 'dateshort',
@@ -240,7 +241,7 @@ export const clientOptions: ClientOptions = {
     caseInsensitivePrefixes: true,
     allowedMentions: { parse: ['users'] },
     logger: {
-        level: EnvParse.int('LOG_LEVEL') as LogLevel
+        level: cast<LogLevel>(EnvParse.int('LOG_LEVEL'))
     },
     intents: [
         GatewayIntentBits.Guilds,

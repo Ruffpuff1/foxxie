@@ -524,6 +524,9 @@ export class GuildEntity extends BaseEntity {
     @Column('varchar', { name: 'raidChannel', nullable: true, length: 19 })
     public raidChannel: Snowflake | null = null;
 
+    @Column('jsonb', { name: 'reactionRoles', default: () => "'[]'::JSONB" })
+    public reactionRoles: ReactionRole[] = [];
+
     @ConfigurableKey({
         description: LanguageKeys.Settings.RolesEmbedRestrict,
         name: 'roles.embed-restrict',
@@ -677,4 +680,11 @@ export interface Tag {
     color: number;
     aliases: string[];
     content: string;
+}
+
+export interface ReactionRole {
+    messageId: string;
+    roleId: string;
+    channelId: string;
+    emoji: string;
 }

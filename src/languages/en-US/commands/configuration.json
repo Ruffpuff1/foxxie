@@ -21,6 +21,6 @@
     "confReset": "{{SUCCESS}} The key **{{key}}** has been reset to: `{{value}}`",
     "confServer": "**Server Setting {{key}}**\n{{list}}",
     "confUpdated": "{{SUCCESS}} Successfully updated the key **{{key}}**: `{{response}}`",
-    "confUsage": "<menu>",
+    "confUsage": "<menu | set | add | show | remove | reset> (key) (value)",
     "confValidationChooseKey": "{{ERROR}} You can't configure a group, please choose one of the following keys: {{keys, and}}."
 }
