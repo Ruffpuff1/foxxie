@@ -1,6 +1,6 @@
 import { toTitleCase } from '@ruffpuff/utilities';
 import { SiDiscord } from 'react-icons/si';
-import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
+import { foxxieFeatures } from '../../../../../../assets/foxxieFeatureData';
 
 export default function FoxxieFeaturesList() {
     return (

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { SiDiscord } from 'react-icons/si';
-import { Images } from '../../../../../assets/images';
+import { Images } from '../../../../../../assets/images';
 
 export default function FoxxieDiscordServerPanel() {
     return (

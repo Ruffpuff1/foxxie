@@ -6,3 +6,7 @@ export enum Images {
     RuffGiggle = 'https://reese.cafe/images/branding/foxxie/ruff_giggle_128x128.png',
     TheCornerStore = 'https://reese.cafe/images/branding/foxxie/the_corner_store_128x128.gif'
 }
+
+export enum Colors {
+    RuffGray = '#898489'
+}

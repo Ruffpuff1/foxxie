@@ -27,3 +27,33 @@ html {
        width: calc(100% - 312px);
     }
 }
+
+.jump-link {
+    margin-top: -80px;
+    padding-top: 80px;
+}
+
+.project-menu {
+    transition: height 0.3s ease;
+}
+
+#navbar {
+    transition: top 0.3s;
+}
+
+.slide-step {
+    transition: transform 0.8s ease, opacity 0.3s ease 0.8s;
+}
+
+.scale-btn {
+    transition: transform 0.3s ease;
+}
+
+#hire-description-textarea {
+    transition: width 0.5s ease;
+    @apply max-h-56;
+}
+
+.hide-s {
+    overflow-y: hidden;
+}

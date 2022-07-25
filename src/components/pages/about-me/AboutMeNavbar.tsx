@@ -1,4 +1,4 @@
-import BaseNavbar, { Link } from './BaseNavbar';
+import BaseNavbar, { Link } from '../../ui/BaseNavbar';
 
 const Links: Link[] = [
     {
@@ -15,10 +15,10 @@ const Links: Link[] = [
     }
 ];
 
-export default function Navbar() {
+export default function AboutMeNavbar() {
     return (
         <>
-            <BaseNavbar links={Links} title='.cafe' href='/' />
+            <BaseNavbar links={Links} title=' About' href='/about' />
         </>
     );
 }

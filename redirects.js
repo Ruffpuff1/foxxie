@@ -1,4 +1,4 @@
-const subdomains = ['about', 'apis', 'celestia', 'cdn', 'developers', 'newtab'].map(subdomainRedirect);
+const subdomains = ['apis', 'celestia', 'cdn', 'developers', 'newtab'].map(subdomainRedirect);
 
 function subdomainRedirect(key) {
     return {
@@ -10,6 +10,11 @@ function subdomainRedirect(key) {
 
 module.exports = [
     ...subdomains,
+    {
+        source: '/about',
+        destination: '/about-me',
+        permanent: false
+    },
     {
         source: '/twitter',
         destination: 'https://twitter.com/reeseharlak',
@@ -43,6 +48,11 @@ module.exports = [
     {
         source: '/kofi',
         destination: 'https://ko-fi.com/ruffpuff',
+        permanent: false
+    },
+    {
+        source: '/foxxie',
+        destination: '/foxxie/about',
         permanent: false
     }
 ];

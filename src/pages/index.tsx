@@ -1,17 +1,17 @@
 import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
+import { Colors, Images } from '../assets/images';
+import HomeAboutSection from '../components/pages/home/HomeAboutSection';
+import Main from '../components/ui/Main';
 import Head from 'next/head';
-import HomeFooter from '../components/ui/HomeFooter';
-import Navbar from '../components/ui/Navbar';
-import Homepage from '../components/pages/Homepage';
-import { Images } from '../assets/images';
+import HomeTopSection from '../components/pages/home/HomeTopSection';
 
 const Home: NextPage = () => {
     return (
-        <div>
+        <>
             <Head>
                 <link rel='icon' href={Images.Reese} />
-                <meta name='theme-color' content='#000000' />
+                <meta name='theme-color' content={Colors.RuffGray} />
             </Head>
             <NextSeo
                 title='Reese Harlak - My Personal Website'
@@ -21,10 +21,13 @@ const Home: NextPage = () => {
                     description: "Hi I'm Reese, a web developer and musician."
                 }}
             />
-            <Navbar />
-            <Homepage />
-            <HomeFooter />
-        </div>
+
+            <Main>
+                <HomeTopSection />
+                <HomeAboutSection />
+                {/* <section className='flex h-[900px] flex-col items-center justify-center'></section> */}
+            </Main>
+        </>
     );
 };
 

@@ -1,6 +1,6 @@
 import { DiscordEmbed, DiscordEmbedDescription, DiscordEmbedFooter, DiscordMessage, DiscordMessages } from '@skyra/discord-components-react';
-import { foxxieFeatures } from '../../../../../assets/foxxieFeatureData';
-import { Images } from '../../../../../assets/images';
+import { foxxieFeatures } from '../../../../../../assets/foxxieFeatureData';
+import { Images } from '../../../../../../assets/images';
 
 export default function ModerationLog() {
     return (
