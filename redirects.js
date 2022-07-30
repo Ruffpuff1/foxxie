@@ -1,4 +1,4 @@
-const subdomains = ['apis', 'celestia', 'cdn', 'developers', 'newtab'].map(subdomainRedirect);
+const subdomains = ['apis', 'celestia', 'developers', 'newtab'].map(subdomainRedirect);
 
 function subdomainRedirect(key) {
     return {
@@ -32,12 +32,17 @@ module.exports = [
     },
     {
         source: '/projects',
-        destination: 'https://about.reese.cafe/projects',
+        destination: 'https://reese.cafe/my-work',
         permanent: false
     },
     {
         source: '/community',
         destination: 'https://discord.gg/ZAZ4yRezC7',
+        permanent: false
+    },
+    {
+        source: '/cdn/:path*',
+        destination: '/images/:path*',
         permanent: false
     },
     {

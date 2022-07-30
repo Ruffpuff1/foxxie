@@ -16,7 +16,6 @@ export default function useVisibility<Element extends HTMLElement>(): [boolean, 
             return;
         }
         const { top } = currentElement.current.getBoundingClientRect();
-        console.log(top);
         setIsVisible(top <= 55 && top >= -550);
         setAtBottom(top <= -200);
     };
