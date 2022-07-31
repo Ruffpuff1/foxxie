@@ -1,7 +1,8 @@
-import React, { createContext, ReactNode, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { where, onSnapshot, query, Timestamp } from 'firebase/firestore';
 import { database } from '../utils/firebase';
 import { useAuth } from './useAuth';
+import { useRouter } from 'next/router';
 
 const defaultList = { id: '', userId: null, name: 'tasks', sortBy: 'my-order' };
 
@@ -94,17 +95,50 @@ export function useTodo(): [TodoTask[], TodoList[]] {
     return [tasks.tasks || [], tasks.lists || []];
 }
 
-export const TodoContext = createContext({
+export const SidebarContext = createContext({
     showTodo: false,
+    showPomo: false,
+    setShowPomo: (b: boolean) => {
+        /** */
+    },
     setShowTodo: (b: boolean) => {
         /* */
     }
 });
 
-export function TodoProvider({ children }: { children: ReactNode }) {
-    const [showTodo, setShowTodo] = useState(false);
+export function SidebarProvider({ children }: { children: ReactNode }) {
+    const router = useRouter();
+    const [showTodo, sShowTodo] = useState(false);
+    const [showPomo, sShowPomo] = useState(false);
 
-    const ctx = useMemo(() => ({ showTodo, setShowTodo }), [showTodo]);
+    const setShowPomo = useCallback(
+        (v: boolean) => {
+            if (v && showTodo) {
+                sShowTodo(false);
+            }
 
-    return <TodoContext.Provider value={ctx}>{children}</TodoContext.Provider>;
+            sShowPomo(v);
+        },
+        [showTodo]
+    );
+
+    const setShowTodo = useCallback(
+        (v: boolean) => {
+            if (v && showPomo) {
+                sShowPomo(false);
+            }
+
+            sShowTodo(v);
+        },
+        [showPomo]
+    );
+
+    useEffect(() => {
+        if (router.query.panel === 'todo') setShowTodo(true);
+        if (router.query.panel === 'pomo') setShowPomo(true);
+    }, [router.query.panel, setShowPomo, setShowTodo]);
+
+    const ctx = useMemo(() => ({ showTodo, setShowTodo, showPomo, setShowPomo }), [showTodo, showPomo, setShowPomo, setShowTodo]);
+
+    return <SidebarContext.Provider value={ctx}>{children}</SidebarContext.Provider>;
 }

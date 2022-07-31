@@ -34,7 +34,7 @@ export default function Navbar({ hide }: { hide: boolean }) {
             <header className={`foxxie-navbar fixed z-40 w-full bg-white ${scrolled ? 'border-b border-b-gray-200 shadow-md' : ''} ${hide ? 'top-[-75px]' : 'top-0'}`}>
                 <div className='flex items-center justify-between px-3 py-2'>
                     <button onClick={() => router.push('/foxxie/about')} className='group flex items-center space-x-3 rounded-md p-2 duration-300 hover:bg-gray-100'>
-                        <Image aria-hidden='true' src='https://cdn.reese.cafe/icons/foxxie.png' width={30} height={30} alt="Foxxie's logo" />
+                        <Image aria-hidden='true' src='https://reese.cafe/images/icons/foxxie.png' width={30} height={30} alt="Foxxie's logo" />
                         <h1 className='flex items-center space-x-2'>
                             <span className='text-xl font-[500] text-gray-600 group-hover:text-gray-900'>Foxxie</span>
                         </h1>

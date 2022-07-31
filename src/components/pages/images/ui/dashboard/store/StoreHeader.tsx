@@ -1,5 +1,6 @@
 import { useAuth } from '@hooks/useAuth';
 import { Folder } from '@hooks/useFolder';
+import { SidebarContext } from '@hooks/useTodo';
 import { FileClickContext } from '@providers/FileClickProvider';
 import { useContext } from 'react';
 import FileDelete from '../files/FileDelete';
@@ -7,6 +8,7 @@ import FolderBreadCrumbs from '../folders/FolderBreadCrumbs';
 
 export default function StoreHeader({ folder }: { folder: Folder | null }) {
     const { showDetails, file } = useContext(FileClickContext);
+    const { showTodo, showPomo } = useContext(SidebarContext);
     const [user] = useAuth();
 
     return (
@@ -14,7 +16,11 @@ export default function StoreHeader({ folder }: { folder: Folder | null }) {
             {user && <FolderBreadCrumbs currentFolder={folder} />}
 
             {showDetails && (
-                <div className='lg:mr-14'>
+                <div
+                    className={`delay-200 duration-200 lg:delay-[0ms] ${
+                        showTodo || showPomo ? 'translate-x-[14rem] lg:mr-96 lg:translate-x-[2rem]' : 'translate-x-0 lg:mr-16'
+                    }`}
+                >
                     <ul className='flex items-center justify-center space-x-2 text-[#767676] lg:space-x-3'>
                         <li>
                             <h2>{file.name}</h2>

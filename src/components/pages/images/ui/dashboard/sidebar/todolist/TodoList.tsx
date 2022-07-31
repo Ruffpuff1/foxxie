@@ -1,4 +1,4 @@
-import { TodoContext, useTodo } from '@hooks/useTodo';
+import { SidebarContext, useTodo } from '@hooks/useTodo';
 import { useContext, useEffect, useState } from 'react';
 import { MdAddTask, MdClose, MdKeyboardArrowDown } from 'react-icons/md';
 import TodoItem from './todoitem/TodoItem';
@@ -12,7 +12,7 @@ export default function TodoList() {
     const [showComplete, setShowComplete] = useState(false);
     const [taskList, setTaskList] = useState(() => localStorage.getItem('selected-task-list') || 'tasks');
 
-    const { showTodo, setShowTodo } = useContext(TodoContext);
+    const { showTodo, setShowTodo } = useContext(SidebarContext);
     const [todos, todoLists] = useTodo();
 
     const [sortBy, setSortBy] = useState(todoLists.find(l => l.name === taskList)?.sortBy as string);

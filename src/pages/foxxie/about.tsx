@@ -16,7 +16,7 @@ const About: NextPage = () => {
     return (
         <>
             <Head>
-                <link rel='icon' href='https://cdn.reese.cafe/icons/foxxie.png' />
+                <link rel='icon' href='https://reese.cafe/icons/foxxie.png' />
                 <meta name='theme-color' content='#000000' />
             </Head>
             <NextSeo

@@ -1,11 +1,11 @@
 import AuthInformation from '@auth/AuthInformation';
 import Image from 'next/image';
-import { TodoContext } from '@hooks/useTodo';
+import { SidebarContext } from '@hooks/useTodo';
 import { useContext } from 'react';
 import { AuthProvider } from '@hooks/useAuth';
 
 export default function Navbar() {
-    const { showTodo } = useContext(TodoContext);
+    const { showTodo, showPomo } = useContext(SidebarContext);
 
     return (
         <header className='fixed top-0 right-0 z-[0.4] flex w-full items-center justify-between border-b border-b-gray-200 bg-white px-2 py-1 shadow-md duration-200 sm:shadow-sm md:px-3'>
@@ -17,7 +17,7 @@ export default function Navbar() {
             </div>
 
             <AuthProvider>
-                <AuthInformation signOutPath='/images' shiftLeft={showTodo} />
+                <AuthInformation signOutPath='/images' shiftLeft={showTodo || showPomo} />
             </AuthProvider>
         </header>
     );

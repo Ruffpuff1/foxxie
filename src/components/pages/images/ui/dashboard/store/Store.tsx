@@ -6,18 +6,18 @@ import { NextSeo } from 'next-seo';
 import { toTitleCase } from '@ruffpuff/utilities';
 import { useFolder } from '@hooks/useFolder';
 import { useAuth } from '@hooks/useAuth';
-import { TodoContext } from '@hooks/useTodo';
+import { SidebarContext } from '@hooks/useTodo';
 import { FileClickProvider } from '@providers/FileClickProvider';
 
 export default function Store() {
-    const { showTodo } = useContext(TodoContext);
+    const { showTodo, showPomo } = useContext(SidebarContext);
 
     const [id] = useId();
     const [{ folder, childFolders, childFiles, sharedFolders }] = useFolder(id);
     const [user] = useAuth();
 
     return (
-        <div className={`duration-200 ease-in lg:ml-[15rem] ${showTodo ? 'lg:mr-0 lg:w-[60%]' : 'lg:mr-[3rem] lg:w-full'}`}>
+        <div className={`duration-200 ease-in lg:ml-[15rem] ${showTodo || showPomo ? 'lg:mr-0 lg:w-[60%]' : 'lg:mr-[3rem] lg:w-full'}`}>
             <NextSeo title={`${folder?.name && folder.name !== 'Root' && user ? toTitleCase(folder.name) : 'My Files'} - Cdn`} />
 
             <FileClickProvider>

@@ -22,7 +22,7 @@ export default function ModerationLog() {
                 </DiscordEmbed>
             </DiscordMessage>
             <DiscordMessage roleColor='#5965f2' avatar={Images.Foxxie} author='Foxxie' bot>
-                <DiscordEmbed slot='embeds' authorImage='https://cdn.reese.cafe/justin.gif' authorName='Banned User' color='#FF5C5C'>
+                <DiscordEmbed slot='embeds' authorImage='https://reese.cafe/images/justin.gif' authorName='Banned User' color='#FF5C5C'>
                     <DiscordEmbedDescription slot='description'>
                         <strong>User</strong>: <code>J_TOKEN$#5925</code> (980251029482385408)
                         <br />

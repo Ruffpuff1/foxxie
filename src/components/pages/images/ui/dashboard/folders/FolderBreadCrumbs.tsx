@@ -8,16 +8,11 @@ export default function FolderBreadCrumbs({ currentFolder }: Props) {
     const path = [currentFolder === RootFolder ? null : { name: 'Root', id: '' }, ...(currentFolder?.path || [])].filter(a => a !== null) as FolderPath[];
 
     const router = useRouter();
-    const [showRemaining, setShowRemaining] = useState(false);
 
     const first = path[0];
     const noFirst = path.slice(1);
     const display = noFirst.length >= 3 ? [noFirst[noFirst.length - 1]] : noFirst;
     const remaining = noFirst.length >= 3 ? noFirst.slice(0, -1) : null;
-
-    const openRemaining = () => {
-        setShowRemaining(!showRemaining);
-    };
 
     return (
         <div className='ml-2 flex items-center justify-center space-x-3 lg:ml-4'>
@@ -34,21 +29,7 @@ export default function FolderBreadCrumbs({ currentFolder }: Props) {
                     <h2>/</h2>
                 </div>
             )}
-            {remaining && remaining.length && (
-                <div className='flex items-center justify-center space-x-1'>
-                    <button
-                        onClick={() => {
-                            openRemaining();
-                        }}
-                        className={`rounded-md py-1 px-3 text-center text-xl font-semibold duration-500 ${
-                            currentFolder?.name === first.name ? 'text-gray-400 hover:bg-gray-300' : 'text-gray-600 hover:bg-gray-200'
-                        }`}
-                    >
-                        ...
-                    </button>
-                    <h2>/</h2>
-                </div>
-            )}
+            {remaining && remaining.length && <FolderDots links={remaining} currentFolder={currentFolder!} first={first} />}
 
             {display.map(folder => {
                 return (
@@ -73,7 +54,6 @@ export default function FolderBreadCrumbs({ currentFolder }: Props) {
             )}
 
             <SharedPeopleButton currentFolder={currentFolder} />
-            <FolderDots show={showRemaining} links={remaining} />
         </div>
     );
 }

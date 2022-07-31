@@ -3,7 +3,7 @@ import { Colors } from '@assets/images';
 import Head from 'next/head';
 import Navbar from '@images/ui/Navbar';
 import Dashboard from '@images/ui/dashboard/Dashboard';
-import { TodoProvider } from '@hooks/useTodo';
+import { SidebarProvider } from '@hooks/useTodo';
 
 const Images: NextPage = () => {
     return (
@@ -13,10 +13,10 @@ const Images: NextPage = () => {
                 <meta name='theme-color' content={Colors.RuffGray} />
             </Head>
 
-            <TodoProvider>
+            <SidebarProvider>
                 <Navbar />
                 <Dashboard />
-            </TodoProvider>
+            </SidebarProvider>
         </>
     );
 };
