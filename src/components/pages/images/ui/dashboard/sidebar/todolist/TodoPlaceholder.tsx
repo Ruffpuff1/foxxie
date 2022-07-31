@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '@hooks/useAuth';
 import { useClickOutside } from '@ruffpuff/usehooks';
 
-export default function TodoPlaceholder(props: { setPlaceholder: (p: string) => void; list: string }) {
+export default function TodoPlaceholder(props: { placeholder: string; setPlaceholder: (p: string) => void; list: string }) {
     const [name, setName] = useState('');
     const [editText, setEditText] = useState(true);
 
@@ -41,8 +41,8 @@ export default function TodoPlaceholder(props: { setPlaceholder: (p: string) => 
     };
 
     return (
-        <li className='h-[65px] py-1 px-3 duration-200 hover:bg-gray-200'>
-            <div className='flex items-start justify-start space-x-4'>
+        <li className={`overflow-y-hidden py-1 px-3 duration-200 hover:bg-gray-200`}>
+            <div className={`flex items-start justify-start space-x-4 duration-200 ${props.placeholder ? 'h-[55px]' : 'h-0'}`}>
                 <input className='mt-1 h-4 w-4 rounded-full' type='checkbox' />
                 <div className='flex w-full flex-col space-y-1'>
                     <button

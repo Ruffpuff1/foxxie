@@ -1,13 +1,13 @@
 import { TodoContext, useTodo } from '@hooks/useTodo';
 import { useContext, useState } from 'react';
-import { MdAddTask } from 'react-icons/md';
-import { IoMdClose } from 'react-icons/io';
+import { MdAddTask, MdClose, MdKeyboardArrowDown } from 'react-icons/md';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import TodoItem from './TodoItem';
 import TodoPlaceholder from './TodoPlaceholder';
 import TaskListSelector from './TaskListSelector';
+import TodoComplete from './TodoComplete';
 
-export default function Todolist() {
+export default function TodoList() {
     const [placeholder, setPlaceholder] = useState('');
     const [showComplete, setShowComplete] = useState(false);
     const [taskList, setTaskList] = useState('tasks');
@@ -17,6 +17,11 @@ export default function Todolist() {
 
     const complete = todos.filter(t => t.completed);
     const notComplete = todos.filter(t => !t.completed);
+
+    const completeListHeight = showComplete ? complete.filter(a => a.list === taskList).length * 37 + 53 : 53;
+    const notCompleteHeight = notComplete.filter(a => a.list === taskList).length * 65 + (placeholder ? 65 : 0);
+
+    console.log(notCompleteHeight);
 
     return (
         <div className={`fixed top-0 right-0 z-[4] h-full whitespace-nowrap bg-white pt-3 pr-0 shadow-lg duration-200 ease-in ${showTodo ? 'w-[288px]' : 'w-0'}`}>
@@ -33,7 +38,7 @@ export default function Todolist() {
                             setShowTodo(false);
                         }}
                     >
-                        <IoMdClose />
+                        <MdClose />
                     </button>
                 </div>
                 <div className='flex items-center justify-between'>
@@ -59,21 +64,48 @@ export default function Todolist() {
                     </button>
                 </div>
             </div>
+
+            <div style={{ height: `${notCompleteHeight}px` }} className='max-h-[650px] overflow-y-auto bg-red-500 pb-8 duration-200 ease-in'>
+                <ul>
+                    <TodoPlaceholder placeholder={placeholder} list={taskList} key={placeholder} setPlaceholder={setPlaceholder} />
+                    {notComplete
+                        .filter(a => a.list === taskList)
+                        .sort((a, b) => a.completeBy.toDate().getTime() - b.completeBy.toDate().getTime())
+                        .map(td => {
+                            return <TodoItem todo={td} key={td.id} />;
+                        })}
+                </ul>
+            </div>
+
             <div
-                style={{ height: `${notComplete.filter(a => a.list === taskList).length * 65 + (placeholder ? 65 : 0)}px` }}
-                className='mb-5 h-[65px] overflow-y-auto duration-200 ease-in'
+                style={{
+                    height: complete.filter(a => a.list === taskList).length ? `${completeListHeight}px` : '0px'
+                }}
+                className='fixed bottom-0 right-0 max-h-[201px] w-72 bg-white duration-200'
             >
-                {Boolean(notComplete.filter(a => a.list === taskList)) && (
+                <div className='flex items-center justify-between border-y border-y-gray-200 px-2 py-[12px]'>
+                    <h2>Completed ({complete.filter(a => a.list === taskList).length})</h2>
+                    <button
+                        aria-label={`${showComplete ? 'Close' : 'Open'} completed tasks`}
+                        className={`p-1 text-xl duration-200 ${showComplete ? '' : 'rotate-180'}`}
+                        onClick={() => {
+                            setShowComplete(!showComplete);
+                        }}
+                    >
+                        <MdKeyboardArrowDown />
+                    </button>
+                </div>
+
+                <div className={`max-h-[145px] overflow-y-auto duration-200 ${showComplete ? 'mb-2' : 'mb-0'}`}>
                     <ul>
-                        {placeholder && <TodoPlaceholder list={taskList} key={placeholder} setPlaceholder={setPlaceholder} />}
-                        {notComplete
+                        {complete
                             .filter(a => a.list === taskList)
                             .sort((a, b) => a.completeBy.toDate().getTime() - b.completeBy.toDate().getTime())
                             .map(td => {
-                                return <TodoItem todo={td} key={td.id} />;
+                                return <TodoComplete todo={td} key={td.id} />;
                             })}
                     </ul>
-                )}
+                </div>
             </div>
         </div>
     );

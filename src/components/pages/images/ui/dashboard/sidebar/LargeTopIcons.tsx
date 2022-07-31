@@ -11,9 +11,9 @@ export default function LargeTopIcons({ setOpen, open }: { open: boolean; setOpe
     return (
         <>
             <div
-                className={`fixed top-16 right-0 hidden h-[93vh] flex-col items-center justify-between overflow-x-hidden border bg-white py-3 duration-200 ease-in lg:flex ${
-                    open ? 'w-[60px]' : 'w-0'
-                } ${showTodo ? 'right-72' : ''}`}
+                className={`fixed top-16 right-0 flex h-[93vh] w-0 flex-col items-center justify-between overflow-x-hidden border bg-white py-3 duration-200 ease-in ${
+                    open ? 'lg:w-[60px]' : 'w-0'
+                } ${showTodo ? 'right-[286px]' : ''}`}
             >
                 <div role='tablist'>
                     <div className='border-b-200 mx-1 flex flex-col items-center space-y-1 border-b pb-2'>
@@ -30,7 +30,7 @@ export default function LargeTopIcons({ setOpen, open }: { open: boolean; setOpe
                         <TodoToggle />
 
                         <div
-                            className={`fixed top-28 h-11 w-2 rounded-md bg-[#FFB74F] duration-200 ease-in ${
+                            className={`fixed top-28 h-11 w-0 rounded-md bg-[#FFB74F] duration-200 ease-in lg:w-2 ${
                                 showTodo ? 'right-[17.75rem] opacity-100' : 'right-0 opacity-0'
                             }`}
                         />

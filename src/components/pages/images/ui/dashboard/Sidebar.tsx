@@ -1,7 +1,7 @@
 import { useAuth } from '@hooks/useAuth';
 import { useState } from 'react';
 import LargeTopIcons from './sidebar/LargeTopIcons';
-import Todolist from './sidebar/todolist/Todolist';
+import TodoList from './sidebar/todolist/TodoList';
 
 export default function Sidebar() {
     const [open, setOpen] = useState(true);
@@ -12,7 +12,7 @@ export default function Sidebar() {
             {user && (
                 <>
                     <LargeTopIcons open={open} setOpen={setOpen} />
-                    <Todolist />
+                    <TodoList />
                 </>
             )}
         </>
