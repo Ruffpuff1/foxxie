@@ -3,7 +3,7 @@ import { where, onSnapshot, query, Timestamp } from 'firebase/firestore';
 import { database } from '../utils/firebase';
 import { useAuth } from './useAuth';
 
-const defaultList = { id: '', userId: null, name: 'tasks' };
+const defaultList = { id: '', userId: null, name: 'tasks', sortBy: 'my-order' };
 
 function reducer(state: Payload, { type, payload }: { type: Actions; payload: Payload }) {
     switch (type) {
@@ -47,6 +47,7 @@ export interface TodoTask {
 export interface TodoList {
     id: string;
     userId: string | null;
+    sortBy: string;
     name: string;
 }
 
@@ -57,7 +58,7 @@ export function useTodo(): [TodoTask[], TodoList[]] {
 
     const [tasks, dispatch] = useReducer(reducer, {
         tasks: [],
-        lists: [{ id: '', userId: id, name: 'tasks' }]
+        lists: [{ id: '', userId: id, name: 'tasks', sortBy: 'my-order' }]
     });
 
     useEffect(() => {

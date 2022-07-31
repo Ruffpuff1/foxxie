@@ -1,11 +1,8 @@
 import { NextPage } from 'next';
 import { Colors } from '@assets/images';
-import { AuthProvider } from '@hooks/useAuth';
-import { IdProvider } from '@providers/IdProvider';
 import Head from 'next/head';
 import Navbar from '@images/ui/Navbar';
 import Dashboard from '@images/ui/dashboard/Dashboard';
-import { FileClickProvider } from '@providers/FileClickProvider';
 import { TodoProvider } from '@hooks/useTodo';
 
 const Folder: NextPage = () => {
@@ -16,16 +13,10 @@ const Folder: NextPage = () => {
                 <meta name='theme-color' content={Colors.RuffGray} />
             </Head>
 
-            <AuthProvider>
-                <IdProvider>
-                    <FileClickProvider>
-                        <TodoProvider>
-                            <Navbar />
-                            <Dashboard />
-                        </TodoProvider>
-                    </FileClickProvider>
-                </IdProvider>
-            </AuthProvider>
+            <TodoProvider>
+                <Navbar />
+                <Dashboard />
+            </TodoProvider>
         </>
     );
 };

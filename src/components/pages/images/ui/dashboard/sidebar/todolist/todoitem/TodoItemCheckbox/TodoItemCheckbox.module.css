@@ -1,0 +1,31 @@
+.button_wrapper {
+    @apply flex items-center justify-center rounded-full p-1 hover:bg-gray-200;
+}
+
+.button {
+    @apply flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#5f6368] duration-200 hover:border-none;
+}
+
+.check {
+    @apply absolute text-3xl font-[500] text-blue-500;
+}
+
+.check_show {
+    @apply opacity-100;
+}
+
+.check_hide {
+    @apply opacity-0;
+}
+
+.tooltip {
+    @apply absolute flex h-[26px] items-center justify-center bg-black bg-opacity-60 px-1 py-[2px] text-xs text-white delay-200 duration-200;
+}
+
+.tooltip_hide {
+    @apply mt-5 w-0 opacity-0;
+}
+
+.tooltip_show {
+    @apply mt-7 w-28 opacity-100;
+}

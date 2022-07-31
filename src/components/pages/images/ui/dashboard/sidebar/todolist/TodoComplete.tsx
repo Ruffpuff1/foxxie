@@ -2,7 +2,6 @@
 import { database } from '@utils/firebase';
 import { deleteDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { MdCheck, MdDeleteOutline } from 'react-icons/md';
-import { HiOutlineTrash } from 'react-icons/hi';
 import { TodoTask } from 'src/hooks/useTodo';
 import { useState } from 'react';
 
@@ -37,7 +36,7 @@ export default function TodoComplete({ todo }: { todo: TodoTask }) {
 
     return (
         <li
-            className='py-2 px-3 duration-200 hover:bg-gray-200'
+            className='bg-white py-2 px-3 duration-200 hover:bg-gray-200'
             onMouseEnter={() => {
                 setShowTrash(true);
             }}
@@ -51,7 +50,7 @@ export default function TodoComplete({ todo }: { todo: TodoTask }) {
                         <MdCheck />
                     </h2>
                 </button>
-                <div className='flex w-full flex-col space-y-1'>
+                <div className='flex w-[250px] flex-col space-y-1 overflow-x-hidden text-ellipsis whitespace-nowrap'>
                     <h2 className='flex-wrap text-sm font-[400] line-through'>{todo.text}</h2>
                 </div>
                 <button aria-label='Delete task' onClick={() => deleteTask()} className={`pr-2 ${showTrash ? '' : 'opacity-0'}`}>

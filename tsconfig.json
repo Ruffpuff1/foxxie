@@ -18,6 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "downlevelIteration": true,
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
@@ -29,6 +30,9 @@
       ],
       "@assets/*": [
         "src/assets/*"
+      ],
+      "@auth/*": [
+        "src/components/auth/*"
       ],
       "@hooks/*": [
         "src/hooks/*"

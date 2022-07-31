@@ -6,7 +6,7 @@ import { MdAdd, MdCheck, MdKeyboardArrowDown } from 'react-icons/md';
 import { TodoList } from 'src/hooks/useTodo';
 import TaskListCreator from './TaskListCreator';
 
-export default function TaskListSelector(props: { list: string; lists: TodoList[]; setList: (l: string) => void }) {
+export default function TaskListSelector(props: Props) {
     const [showList, setShowList] = useState(false);
     const lists = props.lists.map(t => t.name);
 
@@ -44,7 +44,7 @@ export default function TaskListSelector(props: { list: string; lists: TodoList[
                 style={{ height: showList ? `${40 + lists.length * 40}px` : '0px' }}
                 className={`bg-white ${
                     showList ? 'border py-1' : 'border-none py-0'
-                } fixed top-16 right-[5.3rem] w-48 overflow-y-hidden rounded-md border-gray-200 shadow-md duration-200 ease-in`}
+                } fixed top-16 right-[5.3rem] z-[10] w-48 overflow-y-hidden rounded-md border-gray-200 shadow-md duration-200 ease-in`}
             >
                 <ul className='border-b border-b-gray-200'>
                     {lists.map(l => {
@@ -62,6 +62,8 @@ export default function TaskListSelector(props: { list: string; lists: TodoList[
                                         onClick={() => {
                                             setShowList(false);
                                             props.setList(l);
+
+                                            if (window) window.localStorage.setItem('selected-task-list', l);
                                         }}
                                     >
                                         <h2 className='text-sm'>{l === 'tasks' ? 'Your Tasks' : l}</h2>
@@ -91,4 +93,10 @@ export default function TaskListSelector(props: { list: string; lists: TodoList[
             <TaskListCreator show={showCreate} setShow={setShowCreate} />
         </div>
     );
+}
+
+interface Props {
+    list: string;
+    lists: TodoList[];
+    setList: (l: string) => void;
 }

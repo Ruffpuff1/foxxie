@@ -94,6 +94,7 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                         </h2>
                     </button>
                 </div>
+
                 <div className='pt-5'>
                     <div className='flex items-center justify-between px-4'>
                         <h2 className='text-sm font-[500]'>Day</h2>

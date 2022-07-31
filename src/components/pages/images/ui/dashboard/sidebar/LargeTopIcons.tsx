@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { IoMdArrowDropright } from 'react-icons/io';
-import { TodoContext } from 'src/hooks/useTodo';
+import { MdArrowRight } from 'react-icons/md';
+import { TodoContext } from '@hooks/useTodo';
 import TodoToggle from '../toggles/TodoToggle';
 
 export default function LargeTopIcons({ setOpen, open }: { open: boolean; setOpen: (b: boolean) => void }) {
@@ -49,7 +49,7 @@ export default function LargeTopIcons({ setOpen, open }: { open: boolean; setOpe
                     }}
                 >
                     <h2 className='text-xl'>
-                        <IoMdArrowDropright className={open ? '' : 'rotate-180'} />
+                        <MdArrowRight className={open ? '' : 'rotate-180'} />
                     </h2>
                 </button>
             </div>

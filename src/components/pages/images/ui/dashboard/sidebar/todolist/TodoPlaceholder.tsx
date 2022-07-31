@@ -41,7 +41,7 @@ export default function TodoPlaceholder(props: { placeholder: string; setPlaceho
     };
 
     return (
-        <li className={`overflow-y-hidden py-1 px-3 duration-200 hover:bg-gray-200`}>
+        <li className={`overflow-y-hidden px-3 duration-200 hover:bg-gray-200 ${props.placeholder ? ' py-1' : ''}`}>
             <div className={`flex items-start justify-start space-x-4 duration-200 ${props.placeholder ? 'h-[55px]' : 'h-0'}`}>
                 <input className='mt-1 h-4 w-4 rounded-full' type='checkbox' />
                 <div className='flex w-full flex-col space-y-1'>
