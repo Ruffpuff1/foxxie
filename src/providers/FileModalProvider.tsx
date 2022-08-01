@@ -12,12 +12,16 @@ export const FileModalContext = createContext<Context>({
     }
 });
 
-export function FileModalProvider({ children }: { children: ReactNode; }) {
+export function FileModalProvider({ children }: { children: ReactNode }) {
     const [showRename, setShowRename] = useState(false);
 
-    const ctx = useMemo(() => ({
-        showRename, setShowRename
-    }), [showRename]);
+    const ctx = useMemo(
+        () => ({
+            showRename,
+            setShowRename
+        }),
+        [showRename]
+    );
 
     return <FileModalContext.Provider value={ctx}>{children}</FileModalContext.Provider>;
 }

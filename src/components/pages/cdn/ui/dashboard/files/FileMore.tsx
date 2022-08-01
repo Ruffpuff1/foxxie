@@ -4,7 +4,7 @@ import { MdDriveFileRenameOutline, MdMoreVert } from 'react-icons/md';
 import { useClickOutside } from '@ruffpuff/usehooks';
 import { FileModalContext } from '@providers/FileModalProvider';
 
-export default function FileMore({ currentFolder }: { currentFolder: Folder; }) {
+export default function FileMore({ currentFolder }: { currentFolder: Folder }) {
     const [showPanel, setShowPanel] = useState(false);
 
     const { setShowRename, showRename } = useContext(FileModalContext);
@@ -26,8 +26,9 @@ export default function FileMore({ currentFolder }: { currentFolder: Folder; }) 
                 </button>
 
                 <div
-                    className={`fixed top-11 right-6 w-80 rounded-md border bg-white py-2 shadow-lg duration-200 ease-in ${showPanel ? 'h-96 opacity-100' : 'h-0 opacity-0'
-                        }`}
+                    className={`fixed top-11 right-6 w-80 rounded-md border bg-white py-2 shadow-lg duration-200 ease-in ${
+                        showPanel ? 'h-96 opacity-100' : 'h-0 opacity-0'
+                    }`}
                 >
                     <button
                         onClick={() => {
