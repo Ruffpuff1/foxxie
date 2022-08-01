@@ -50,3 +50,16 @@ export const projects: Project[][] = [
         }
     ]
 ];
+
+export const latestWorks: Project[] = [
+    {
+        name: "Read about Orange County's Bowers Museum",
+        icon: 'https://reese.cafe/images/icons/museum.png',
+        homepage: '/arts-and-culture/museum/Ym93ZXJzLW1'
+    },
+    {
+        name: 'Learn about gay pride with my MLM history display',
+        icon: 'https://reese.cafe/images/icons/rainbow.png',
+        homepage: '/arts-and-culture/story/mlm-pride'
+    }
+];

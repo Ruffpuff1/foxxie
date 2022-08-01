@@ -1,0 +1,24 @@
+{
+    "paintings": [
+        {
+            "id": "VGhlIERlYXR",
+            "name": "The Death of Hyacinthos",
+            "museumId": "bXVzw6llIHN",
+            "bgColor": "#CDE9EC",
+            "date": "1801",
+            "description": "The Death of Hyacinthos, sometimes referred to as The Death of Hyacinth, is an oil painting completed by Jean Broc in 1801. This is Broc's most famous work and is considered to be drawn from the Metamorphoses by Ovid. It is a depiction of the dead Hyacinthos cradled by his lover, the Greek god Apollo.\n\nIn front of them is the discus which caused Hyacinth's death, which was thrown by Apollo himself. The discus had been blown off course by the west wind Zephyrus, who was also in love with young Hyacinthos and was jealous of Apollo. From Hayacinthos' blood sprang the Hyacinth flower which bears his name.",
+            "creatorId": "SmVhbiBCcm9",
+            "creditLine": "Musée Sainte-Croix, Poitiers",
+            "creatorDisplayName": "Jean Broc (English, 1722 - 1803)",
+            "entities": ["SmVhbiBCcm9", "RnJhbmNl", "YXBvbGxv"],
+            "locationCreated": "France",
+            "physicalDimensions": "height: 175 cm (68.8 in); width: 120 cm (47.2 in)",
+            "termsOfUse": "Public Domain",
+            "number": "899.3.1",
+            "externalLink": "https://en.wikipedia.org/wiki/The_Death_of_Hyacinthos",
+            "culture": "French",
+            "classification": "Painting",
+            "medium": "Oil on canvas"
+        }
+    ]
+}

@@ -1,0 +1,331 @@
+{
+    "museums": [
+        {
+            "id": "Ym93ZXJzLW1",
+            "address": "2002 N Main St, Santa Ana, CA 92706",
+            "closedOn": [
+                "Mondays",
+                "Fourth of July",
+                "Thanksgiving",
+                "Christmas",
+                "New Years's Day"
+            ],
+            "description": "The Bowers Museum is an art museum located in Santa Ana, California. The museum's permanent collection includes more than 100,000 objects, and features notable strengths in the areas of pre-Columbian Mesoamerica, Native American art, the art of Asia, Africa, and Oceania, and California plein-air painting.",
+            "director": "Peter C. Keller",
+            "founded": "1936",
+            "hours": {
+                "tues": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "wed": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "thur": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "fri": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "sat": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "sun": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                }
+            },
+            "location": "Santa Ana, United States",
+            "map": "!1m18!1m12!1m3!1d3316.8939780883493!2d-117.8703340847097!3d33.76340548068549!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80dcd9b0ee8e99a5%3A0xcc6a99837550f6b2!2sBowers%20Museum!5e0!3m2!1sen!2sus!4v1658912434955!5m2!1sen!2sus",
+            "name": "Bowers Museum",
+            "phone": 7145673600,
+            "price": {
+                "Members and Children Under 12": "Free",
+                "Adults": "$15",
+                "Seniors (Age 62+) and Students (12+)": "$12"
+            },
+            "regions": [
+                "orange-county",
+                "southern-california"
+            ],
+            "socials": {
+                "facebook": "bowersmuseum",
+                "instagram": "bowersmuseum",
+                "twitter": "bowersmuseum",
+                "youtube": "bowersmuseum"
+            },
+            "tag": "Art museum in Santa Ana, California",
+            "website": "https://bowers.org"
+        },
+        {
+            "id": "Y2FsaWZvcm5",
+            "address": "700 Exposition Park Drive Los Angeles, CA 90037",
+            "description": "The California Science Center is a state agency and museum located in Exposition Park, Los Angeles, next to the Natural History Museum of Los Angeles County and the University of Southern California.",
+            "director": "Jeffrey N. Rudolph",
+            "founded": "1951",
+            "hours": {
+                "mon": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "tues": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "wed": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "thur": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "fri": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "sat": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "sun": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                }
+            },
+            "location": "Los Angeles, United States",
+            "map": "!1m18!1m12!1m3!1d3307.080042078028!2d-118.28775716272153!3d34.01615632193886!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x1e38dfc7ae1bb572!2sCalifornia%20Science%20Center!5e0!3m2!1sen!2sus!4v1658925158328!5m2!1sen!2sus",
+            "name": "California Science Center",
+            "phone": 3237243623,
+            "price": "Free",
+            "regions": [
+                "los-angeles",
+                "southern-california"
+            ],
+            "socials": {
+                "facebook": "CaliforniaScienceCenter",
+                "instagram": "californiasciencecenter",
+                "twitter": "casciencecenter",
+                "youtube": "calsciencecenter"
+            },
+            "tag": "Museum in Los Angeles, California",
+            "website": "https://californiasciencecenter.org/"
+        },
+        {
+            "id": "aGlsYmVydC1",
+            "address": "167 N Atchison St, Orange, CA 92866",
+            "description": "The Hilbert Museum of California Art is a U.S. museum located at Chapman University in Orange, California. The museum's collection consists of more than 1,000 paintings - primarily watercolors and oil paintings by artists of the California Scene Painting movement.",
+            "director": "Mary Platt",
+            "founded": "2016",
+            "hours": {
+                "tues": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "wed": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "thur": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "fri": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "sat": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                }
+            },
+            "location": "Orange, United States",
+            "map": "!1m18!1m12!1m3!1d3315.90343358469!2d-117.8587848847091!3d33.78899178067833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80dcd9de70592503%3A0x10dfcd713a37b0a1!2sHilbert%20Museum%20of%20California%20Art!5e0!3m2!1sen!2sus!4v1658929986124!5m2!1sen!2sus",
+            "name": "Hilbert Museum of California Art",
+            "phone": 7145165880,
+            "price": "Free with Advance Online Reservation",
+            "regions": [
+                "orange-county",
+                "southern-california"
+            ],
+            "tag": "Museum in Orange, California",
+            "website": "https://www.hilbertmuseum.com/"
+        },
+        {
+            "id": "aHVudGluZ3R",
+            "address": "411 Olive Ave, Huntington Beach, CA 92648",
+            "description": "The International Surfing Museum is a non-profit, 501 museum in Huntington Beach, Orange County, California. The museum's goal is to preserve the history of the surfing culture throughout the globe. It is dedicated to Duke Kahanamoku, who is generally regarded as the person who popularized the modern sport of surfing.",
+            "director": "Natalie Kotsch",
+            "founded": "1987",
+            "hours": {
+                "tues": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "fri": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "sat": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "sun": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                }
+            },
+            "location": "Huntington Beach, United States",
+            "map": "!1m18!1m12!1m3!1d3315.90343358469!2d-117.8587848847091!3d33.78899178067833!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80dcd9de70592503%3A0x10dfcd713a37b0a1!2sHilbert%20Museum%20of%20California%20Art!5e0!3m2!1sen!2sus!4v1658929986124!5m2!1sen!2sus",
+            "name": "Huntington Beach International Surfing Museum",
+            "phone": 7149603483,
+            "price": "Free",
+            "regions": [
+                "orange-county",
+                "southern-california"
+            ],
+            "socials": {
+                "facebook": "InternationalSurfingMuseum",
+                "instagram": "international_surfing_museum",
+                "twitter": "HBSurfingMuseum"
+            },
+            "tag": "Museum in Huntington Beach, California",
+            "website": "https://www.huntingtonbeachsurfingmuseum.org/"
+        },
+        {
+            "id": "dGhlLWdldHR",
+            "address": "17985 E Pacific Coast Hwy, Pacific Palisades, CA 90272",
+            "description": "The Getty Villa is at the easterly end of the Malibu coast in the Pacific Palisades neighborhood of Los Angeles, California, United States.",
+            "director": "",
+            "founded": "1974",
+            "hours": {
+                "mon": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "wed": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "thur": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "fri": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "sat": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                },
+                "sun": {
+                    "open": "10:00 am",
+                    "close": "5:00 pm"
+                }
+            },
+            "location": "Los Angeles, United States",
+            "map": "!1m18!1m12!1m3!1d2273.988182591975!2d-118.56493669126802!3d34.045801007043664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xe4f98965af6ca4b0!2sThe%20Getty%20Villa!5e0!3m2!1sen!2sus!4v1658953809304!5m2!1sen!2sus",
+            "name": "The Getty Villa",
+            "phone": 3104407300,
+            "price": "Free",
+            "regions": [
+                "los-angeles",
+                "southern-california"
+            ],
+            "tag": "Museum in Los Angeles, California",
+            "website": "http://www.getty.edu/visit/"
+        },
+        {
+            "id": "bmFzYQ==",
+            "address": "300 E St SW Washington, DC 20546",
+            "description": "The National Aeronautics and Space Administration is an independent agency of the US federal government responsible for the civil space program, aeronautics research, and space research.",
+            "director": "Vanessa E. Wyche",
+            "founded": "July 29th 1989",
+            "hours": {
+                "mon": {
+                    "open": "8:30 AM",
+                    "close": "4:00 pm"
+                },
+                "tues": {
+                    "open": "8:30 AM",
+                    "close": "4:00 pm"
+                },
+                "wed": {
+                    "open": "8:30 AM",
+                    "close": "4:00 pm"
+                },
+                "thur": {
+                   "open": "8:30 AM",
+                    "close": "4:00 pm"
+                },
+                "fri": {
+                    "open": "8:30 AM",
+                    "close": "4:00 pm"
+                }
+            },
+            "location": "Washington D.C., United States",
+            "map": "!1m14!1m8!1m3!1d18829.980079318517!2d-77.01789275924196!3d38.883076749079834!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x676e7adc4032899b!2sNASA!5e0!3m2!1sen!2sus!4v1659092437078!5m2!1sen!2sus",
+            "name": "NASA",
+            "phone": 2023580001,
+            "price": {
+                "Child (ages 3 & younger)": "Free",
+                "Kid (ages 4-11)": "$24.95",
+                "Adult (ages 12 & older)": "$29.95",
+                "Senior (ages 65 & older)": "$27.95"
+            },
+            "regions": [
+                "washington-dc"
+            ],
+            "tag": "Government agency",
+            "website": "https://nasa.gov"
+        },
+        {
+            "id": "bXVzw6llIHN",
+            "address": "61 Rue St Simplicien, 86000 Poitiers, France",
+            "description": "The Musée Sainte-Croix is the largest museum in Poitiers, France. Planned by the architect poitevin Jean Monge and built in 1974, it stands at the site of the former Abbaye Sainte-Croix, which was moved to Saint-Benoît, Vienne. It is a constructed of concrete and glass, in the 1970s style.",
+            "director": "",
+            "founded": "1974",
+            "hours": {
+                "tues": {
+                    "open": "10:00 AM",
+                    "close": "8:00 pm"
+                },
+                "wed": {
+                    "open": "10:00 AM",
+                    "close": "6:00 pm"
+                },
+                "thur": {
+                   "open": "10:00 AM",
+                    "close": "6:00 pm"
+                },
+                "fri": {
+                    "open": "10:00 AM",
+                    "close": "6:00 pm"
+                },
+                "sat": {
+                    "open": "10:00 AM",
+                    "close": "6:00 pm"
+                },
+                "sun": {
+                    "open": "10:00 AM",
+                    "close": "6:00 pm"
+                }
+            },
+            "location": "Poitiers, France",
+            "map": "!1m14!1m8!1m3!1d3720.386601021972!2d0.34716428067462335!3d46.578820694478054!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xe0fb7fb211bd567d!2sMus%C3%A9e%20Sainte-Croix!5e0!3m2!1sen!2sus!4v1659180691493!5m2!1sen!2sus",
+            "name": "Musée Sainte-Croix",
+            "phone": 33549410753,
+            "price": "Free",
+            "regions": [
+                "france"
+            ],
+            "tag": "Museum in Poitiers, France",
+            "website": "https://www.poitiers.fr/c__231_977__Accueil_musee_Sainte_Croix.html"
+        }
+    ]
+}

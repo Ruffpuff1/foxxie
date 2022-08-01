@@ -1,0 +1,7 @@
+.wrapper {
+    @apply flex max-h-[360px] w-full items-center justify-center overflow-y-hidden bg-gray-100 bg-cover bg-center bg-no-repeat;
+}
+
+.img {
+    @apply h-full w-full;
+}

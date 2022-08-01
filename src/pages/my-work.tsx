@@ -3,9 +3,10 @@ import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import { Colors, Images } from '../assets/images';
 import Head from 'next/head';
-import AboutMeMain from '../components/pages/about-me/AboutMeMain';
-import AllProjects from '../components/pages/my-work/all-projects/AllProjects';
-import WorkHeader from '../components/pages/my-work/header/WorkHeader';
+import AboutMeMain from '@about-me/AboutMeMain';
+import AllProjects from '@my-work/all-projects/AllProjects';
+import WorkHeader from '@my-work/header/WorkHeader';
+import WorkLatest from '@my-work/WorkLatest';
 
 const AboutMe: NextPage = () => {
     return (
@@ -25,6 +26,7 @@ const AboutMe: NextPage = () => {
 
             <AboutMeMain>
                 <WorkHeader />
+                <WorkLatest />
                 <AllProjects />
             </AboutMeMain>
         </>

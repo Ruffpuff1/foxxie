@@ -10,8 +10,51 @@ html {
     scroll-behavior: smooth;
 }
 
+.trs {
+    transition: width .3s cubic-bezier(0.24,1,0.32,1);
+}
+
 .foxxie-main-panel {
     width: 100%;
+}
+
+.no-drag {
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scroll {
+    -ms-overflow-style: none;
+    scrollbar-height: none;
+}
+
+.mus-card {
+    animation-duration: 0.2s;
+  animation-delay: 0.5s;
+  animation-name: animate-fade;
+  animation-timing-function: cubic-bezier(.26,.53,.74,1.48);
+  animation-fill-mode: backwards;
+}
+
+.mus-card-reverse {
+    animation-duration: 0.2s;
+  animation-delay: 0.5s;
+  animation-name: animate-fade;
+  animation-timing-function: cubic-bezier(.26,.53,.74,1.48);
+  animation-fill-mode: backwards;
+  animation-direction: reverse;
+}
+
+@keyframes animate-fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .foxxie-navbar {
@@ -56,4 +99,10 @@ html {
 
 .hide-s {
     overflow-y: hidden;
+}
+
+.card {
+    background-image: url('https://i.pinimg.com/originals/86/69/7e/86697e05d21d06f4d84eb946d015417e.jpg');
+    backdrop-filter: blur(20px);
+    @apply bg-contain bg-no-repeat;
 }
