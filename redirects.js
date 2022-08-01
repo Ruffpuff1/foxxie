@@ -42,12 +42,7 @@ module.exports = [
     },
     {
         source: '/images/:path*',
-        destination: '/api/images/:path*',
-        permanent: false
-    },
-    {
-        source: '/images',
-        destination: '/cdn',
+        destination: '/cdn/:path*',
         permanent: false
     },
     {
