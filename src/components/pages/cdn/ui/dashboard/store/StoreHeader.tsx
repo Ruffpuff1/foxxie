@@ -8,7 +8,7 @@ import FolderBreadCrumbs from '../folders/FolderBreadCrumbs';
 
 export default function StoreHeader({ folder }: { folder: Folder | null }) {
     const { showDetails, file } = useContext(FileClickContext);
-    const { showTodo, showPomo } = useContext(SidebarContext);
+    const { showTodo } = useContext(SidebarContext);
     const [user] = useAuth();
 
     return (
@@ -18,7 +18,7 @@ export default function StoreHeader({ folder }: { folder: Folder | null }) {
             {showDetails && (
                 <div
                     className={`delay-200 duration-200 lg:delay-[0ms] ${
-                        showTodo || showPomo ? 'translate-x-[14rem] lg:mr-96 lg:translate-x-[2rem]' : 'translate-x-0 lg:mr-16'
+                        showTodo ? 'translate-x-[14rem] lg:mr-96 lg:translate-x-[2rem]' : 'translate-x-0 lg:mr-16'
                     }`}
                 >
                     <ul className='flex items-center justify-center space-x-2 text-[#767676] lg:space-x-3'>

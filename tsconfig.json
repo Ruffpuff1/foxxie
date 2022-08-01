@@ -34,11 +34,11 @@
       "@auth/*": [
         "src/components/auth/*"
       ],
+      "@cdn/*": [
+        "src/components/pages/cdn/*"
+      ],
       "@hooks/*": [
         "src/hooks/*"
-      ],
-      "@images/*": [
-        "src/components/pages/images/*"
       ],
       "@my-work/*": [
         "src/components/pages/my-work/*"

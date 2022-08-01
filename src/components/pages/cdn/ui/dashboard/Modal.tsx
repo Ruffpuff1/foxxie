@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 export default function Modal({ open, children }: Props) {
     return (
-        <div className={`fixed top-0 left-0 z-[10] h-full w-full flex-col items-center bg-black bg-opacity-50 px-10 pt-5 ${open ? 'flex' : 'hidden'}`}>
+        <div className={`fixed top-0 left-0 z-[100] h-full w-full flex-col items-center bg-black bg-opacity-50 px-10 pt-5 ${open ? 'flex' : 'hidden'}`}>
             <div className='w-full max-w-[800px] rounded-md bg-white p-5 shadow-md'>{children}</div>
         </div>
     );

@@ -7,14 +7,15 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { AuthContext } from '@hooks/useAuth';
 import { useClickOutside } from '@ruffpuff/usehooks';
 
-export default function TodoDatePicker({ show, date: d, setShow, text }: { text: string; show: boolean; date: Date; setShow: (b: boolean) => void }) {
+export default function TodoDatePicker({ show, date: d, setShow, text }: { text: string; show: boolean; date: Date | null; setShow: (b: boolean) => void; }) {
     const router = useRouter();
     const [date, setDate] = useState(d);
     const [showDateInput, setShowDateInput] = useState(false);
-    const [numDay, setDay] = useState(date.getDate());
+    const [numDay, setDay] = useState(date?.getDate() || new Date().getDate());
     const user = useContext(AuthContext);
 
-    const toDate = (d: Date, options?: Intl.DateTimeFormatOptions) => {
+    const toDate = (d: Date | null, options?: Intl.DateTimeFormatOptions) => {
+        if (d === null) return '';
         return new Intl.DateTimeFormat('en-US', options).format(d);
     };
 
@@ -25,14 +26,14 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
     const [inputRef] = useClickOutside<HTMLInputElement>(() => {
         setShowDateInput(false);
 
-        const dd = new Date(date);
+        const dd = date ? new Date(date) : new Date();
         dd.setDate(numDay);
         setDate(dd);
     }, [showDateInput]);
 
     const reset = () => {
         setDate(d);
-        setDay(d.getDate());
+        setDay(d?.getDate() || new Date().getDate());
     };
 
     const setTaskDate = async () => {
@@ -43,7 +44,7 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
 
             if (existingFile) {
                 await updateDoc(existingFile.ref, {
-                    completeBy: Timestamp.fromDate(date)
+                    completeBy: date ? Timestamp.fromDate(date) : null
                 });
             }
         });
@@ -58,11 +59,11 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                 <div className='flex items-center justify-between px-4 pt-4'>
                     <button
                         onClick={() => {
-                            const monthNum = date.getMonth();
-                            const dt = new Date(date);
+                            const monthNum = date?.getMonth() || new Date().getMonth();
+                            const dt = date ? new Date(date) : new Date();
 
                             if (monthNum === 0) {
-                                dt.setFullYear(date.getFullYear() - 1);
+                                dt.setFullYear(date ? (date.getFullYear() - 1) : new Date().getFullYear() - 1);
                             }
 
                             dt.setMonth(monthNum === 0 ? 11 : monthNum - 1);
@@ -78,11 +79,11 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                     </h2>
                     <button
                         onClick={() => {
-                            const monthNum = date.getMonth();
-                            const dt = new Date(date);
+                            const monthNum = date ? date.getMonth() : new Date().getMonth();
+                            const dt = date ? new Date(date) : new Date();
 
                             if (monthNum === 11) {
-                                dt.setFullYear(date.getFullYear() + 1);
+                                dt.setFullYear(date ? date.getFullYear() + 1 : new Date().getFullYear());
                             }
 
                             dt.setMonth(monthNum === 11 ? 0 : monthNum + 1);
@@ -116,7 +117,7 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                                 }}
                                 className='w-20 text-sm font-[500]'
                                 min={1}
-                                max={getMax(date.getMonth())}
+                                max={getMax(date ? date.getMonth() : new Date().getMonth())}
                                 value={numDay}
                             />
                         </button>

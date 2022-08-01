@@ -30,7 +30,7 @@ export default function TodoPlaceholder(props: { placeholder: string; setPlaceho
         const ts = Timestamp.fromDate(new Date());
 
         return addDoc(database.todos, {
-            completeBy: ts,
+            completeBy: null,
             completed: false,
             createdAt: ts,
             list: props.list,
@@ -62,9 +62,6 @@ export default function TodoPlaceholder(props: { placeholder: string; setPlaceho
                         className={`flex-wrap text-sm font-[400] ${editText ? '' : 'hidden'}`}
                         type='text'
                     />
-                    <div className='w-3/5 rounded-full border border-gray-200 bg-white px-3 py-1'>
-                        <h3 className='text-[11px]'>{formatDate(new Date())}</h3>
-                    </div>
                 </div>
             </div>
         </li>

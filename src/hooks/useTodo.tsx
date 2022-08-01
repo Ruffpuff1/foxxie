@@ -1,12 +1,12 @@
-import React, { createContext, ReactNode, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { createContext, ReactNode, useEffect, useMemo, useReducer, useState } from 'react';
 import { where, onSnapshot, query, Timestamp } from 'firebase/firestore';
-import { database } from '../utils/firebase';
+import { database } from '@utils/firebase';
 import { useAuth } from './useAuth';
 import { useRouter } from 'next/router';
 
 const defaultList = { id: '', userId: null, name: 'tasks', sortBy: 'my-order' };
 
-function reducer(state: Payload, { type, payload }: { type: Actions; payload: Payload }) {
+function reducer(state: Payload, { type, payload }: { type: Actions; payload: Payload; }) {
     switch (type) {
         case Actions.SetTasks:
             return {
@@ -35,13 +35,14 @@ interface Payload {
 }
 
 export interface TodoTask {
-    completeBy: Timestamp;
+    completeBy: Timestamp | null;
     completed: boolean;
     createdAt: Timestamp;
     list: 'tasks' | string;
     subtasks: string[];
     text: string;
     userId: string;
+    details: string | null;
     id: string;
 }
 
@@ -97,48 +98,20 @@ export function useTodo(): [TodoTask[], TodoList[]] {
 
 export const SidebarContext = createContext({
     showTodo: false,
-    showPomo: false,
-    setShowPomo: (b: boolean) => {
-        /** */
-    },
     setShowTodo: (b: boolean) => {
         /* */
     }
 });
 
-export function SidebarProvider({ children }: { children: ReactNode }) {
+export function SidebarProvider({ children }: { children: ReactNode; }) {
     const router = useRouter();
-    const [showTodo, sShowTodo] = useState(false);
-    const [showPomo, sShowPomo] = useState(false);
-
-    const setShowPomo = useCallback(
-        (v: boolean) => {
-            if (v && showTodo) {
-                sShowTodo(false);
-            }
-
-            sShowPomo(v);
-        },
-        [showTodo]
-    );
-
-    const setShowTodo = useCallback(
-        (v: boolean) => {
-            if (v && showPomo) {
-                sShowPomo(false);
-            }
-
-            sShowTodo(v);
-        },
-        [showPomo]
-    );
+    const [showTodo, setShowTodo] = useState(false);
 
     useEffect(() => {
         if (router.query.panel === 'todo') setShowTodo(true);
-        if (router.query.panel === 'pomo') setShowPomo(true);
-    }, [router.query.panel, setShowPomo, setShowTodo]);
+    }, [router.query.panel, setShowTodo]);
 
-    const ctx = useMemo(() => ({ showTodo, setShowTodo, showPomo, setShowPomo }), [showTodo, showPomo, setShowPomo, setShowTodo]);
+    const ctx = useMemo(() => ({ showTodo, setShowTodo }), [showTodo, setShowTodo]);
 
     return <SidebarContext.Provider value={ctx}>{children}</SidebarContext.Provider>;
 }

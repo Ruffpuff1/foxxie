@@ -11,7 +11,8 @@ export default function TaskListCreator({ show, setShow }: { show: boolean; setS
     const onDone = async () => {
         await addDoc(database.todoLists, {
             name,
-            userId: user?.uid
+            userId: user?.uid,
+            sortBy: 'my-order'
         });
 
         setShow(false);

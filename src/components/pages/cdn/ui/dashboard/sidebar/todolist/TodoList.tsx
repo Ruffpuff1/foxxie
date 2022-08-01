@@ -39,7 +39,9 @@ export default function TodoList() {
     const notCompleteOnList = notComplete.filter(a => a.list === taskList);
     const completeOnList = complete.filter(a => a.list === taskList);
 
-    const formatDate = (d: Date) => {
+    const formatDate = (d: Date | null) => {
+        if (d === null) return null;
+
         const now = Date.now();
         if (now > d.getTime()) return 'PAST';
 
@@ -52,7 +54,7 @@ export default function TodoList() {
 
     const sortDates = sortBy === 'date';
 
-    const dates = [...new Set(notCompleteOnList.map(c => formatDate(c.completeBy.toDate())))];
+    const dates = [...new Set(notCompleteOnList.map(c => formatDate(c.completeBy?.toDate() || null)).filter(a => a !== null))] as string[];
     console.log(dates);
 
     return (
@@ -108,7 +110,7 @@ export default function TodoList() {
 
                 <ul className={`overflow-hidden ${sortDates ? 'h-0' : 'h-auto'}`}>
                     {notCompleteOnList
-                        .sort((a, b) => a.completeBy.toDate().getTime() - b.completeBy.toDate().getTime())
+                        .sort((a, b) => a.completeBy?.toDate().getTime() || 0 - (b.completeBy?.toDate().getTime() || 0))
                         .map(td => {
                             return <TodoItem sortBy={sortBy} todo={td} key={td.id} />;
                         })}
@@ -123,8 +125,8 @@ export default function TodoList() {
 
                             <ul className={`overflow-y-hidden duration-200 ${sortDates ? 'h-auto' : 'h-0'}`}>
                                 {notCompleteOnList
-                                    .filter(c => formatDate(c.completeBy.toDate()) === d)
-                                    .sort((a, b) => a.completeBy.toDate().getTime() - b.completeBy.toDate().getTime())
+                                    .filter(c => formatDate(c.completeBy?.toDate() || null) === d)
+                                    .sort((a, b) => a.completeBy?.toDate().getTime() || 0 - (b.completeBy?.toDate().getTime() || 0))
                                     .map(td => {
                                         return <TodoItem sortBy={sortBy} todo={td} key={td.id} />;
                                     })}
@@ -156,7 +158,7 @@ export default function TodoList() {
                 <div className={`max-h-[295px] overflow-y-auto duration-200 ${showComplete ? 'mb-2' : 'mb-0'}`}>
                     <ul>
                         {completeOnList
-                            .sort((a, b) => a.completeBy.toDate().getTime() - b.completeBy.toDate().getTime())
+                            .sort((a, b) => a.completeBy?.toDate().getTime() || 0 - (b.completeBy?.toDate().getTime() || 0))
                             .map(td => {
                                 return <TodoComplete todo={td} key={td.id} />;
                             })}

@@ -5,7 +5,7 @@ import { useContext } from 'react';
 import { AuthProvider } from '@hooks/useAuth';
 
 export default function Navbar() {
-    const { showTodo, showPomo } = useContext(SidebarContext);
+    const { showTodo } = useContext(SidebarContext);
 
     return (
         <header className='fixed top-0 right-0 z-[0.4] flex w-full items-center justify-between border-b border-b-gray-200 bg-white px-2 py-1 shadow-md duration-200 sm:shadow-sm md:px-3'>
@@ -17,7 +17,7 @@ export default function Navbar() {
             </div>
 
             <AuthProvider>
-                <AuthInformation signOutPath='/images' shiftLeft={showTodo || showPomo} />
+                <AuthInformation signOutPath='/images' shiftLeft={showTodo} />
             </AuthProvider>
         </header>
     );

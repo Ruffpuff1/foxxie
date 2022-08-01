@@ -1,6 +1,5 @@
 import { useAuth } from '@hooks/useAuth';
 import Icons from './sidebar/icons/Icons';
-import Pomo from './sidebar/pomo/Pomo';
 import TodoList from './sidebar/todolist/TodoList';
 
 export default function Sidebar() {
@@ -12,7 +11,6 @@ export default function Sidebar() {
                 <>
                     <Icons />
                     <TodoList />
-                    <Pomo />
                 </>
             )}
         </>

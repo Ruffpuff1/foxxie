@@ -41,8 +41,8 @@ module.exports = [
         permanent: false
     },
     {
-        source: '/cdn/:path*',
-        destination: '/images/:path*',
+        source: '/images/:path*',
+        destination: '/cdn/:path*',
         permanent: false
     },
     {
