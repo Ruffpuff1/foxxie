@@ -19,7 +19,7 @@ export default function FolderBreadCrumbs({ currentFolder }: Props) {
             {first && (
                 <div className='flex items-center justify-center space-x-1'>
                     <a
-                        href='/images'
+                        href='/cdn'
                         className={`rounded-md py-1 px-3 duration-500 ${
                             currentFolder?.name === first.name ? 'text-gray-400 hover:bg-gray-300' : 'text-gray-600 hover:bg-gray-200'
                         }`}
@@ -35,7 +35,7 @@ export default function FolderBreadCrumbs({ currentFolder }: Props) {
                 return (
                     <div key={folder.id} className='flex items-center justify-center space-x-1'>
                         <button
-                            onClick={() => router.push(`/images/folder?id=${folder.id}`, undefined, { shallow: true })}
+                            onClick={() => router.push(`/cdn/folder?id=${folder.id}`, undefined, { shallow: true })}
                             className={`rounded-md py-1 px-3 duration-500 ${
                                 currentFolder?.name === folder.name ? 'text-gray-400 hover:bg-gray-300' : 'text-gray-600 hover:bg-gray-200'
                             }`}
