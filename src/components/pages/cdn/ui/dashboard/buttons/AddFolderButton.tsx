@@ -37,7 +37,7 @@ export default function AddFolderButton({ currentFolder }: { currentFolder: null
     }
 
     return (
-        <div>
+        <div className='w-full py-2 px-4'>
             <button
                 className='flex w-full items-center justify-start space-x-2'
                 onClick={() => {

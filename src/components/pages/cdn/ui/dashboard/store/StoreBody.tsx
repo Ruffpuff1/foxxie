@@ -7,7 +7,7 @@ export default function StoreBody(props: FolderData) {
     const [{ sharedFiles }] = useFolder(props.folder?.id, props.folder);
     const [user, { message }] = useAuth();
 
-    if (!user) {
+    if (!user && message === 'no-valid') {
         return (
             <div className='px-20 pb-10 pt-20'>
                 <h1 className='text-2xl font-[450]'>Error :/</h1>

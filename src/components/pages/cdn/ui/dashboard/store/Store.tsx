@@ -7,7 +7,6 @@ import { toTitleCase } from '@ruffpuff/utilities';
 import { useFolder } from '@hooks/useFolder';
 import { useAuth } from '@hooks/useAuth';
 import { SidebarContext } from '@hooks/useTodo';
-import { FileClickProvider } from '@providers/FileClickProvider';
 
 export default function Store() {
     const { showTodo } = useContext(SidebarContext);
@@ -20,10 +19,8 @@ export default function Store() {
         <div className={`duration-200 ease-in lg:ml-[15rem] ${showTodo ? 'lg:mr-0 lg:w-[60%]' : 'lg:mr-[3rem] lg:w-full'}`}>
             <NextSeo title={`${folder?.name && folder.name !== 'Root' && user ? toTitleCase(folder.name) : 'My Files'} - Cdn`} />
 
-            <FileClickProvider>
-                <StoreHeader folder={folder} />
-                <StoreBody folder={folder} childFiles={childFiles} childFolders={childFolders} sharedFolders={sharedFolders} />
-            </FileClickProvider>
+            <StoreHeader folder={folder} />
+            <StoreBody folder={folder} childFiles={childFiles} childFolders={childFolders} sharedFolders={sharedFolders} />
         </div>
     );
 }

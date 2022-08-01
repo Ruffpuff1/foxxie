@@ -26,6 +26,11 @@ module.exports = [
         permanent: false
     },
     {
+        source: '/todo',
+        destination: '/cdn?panel=todo',
+        permanent: false
+    },
+    {
         source: '/contact',
         destination: 'https://about.reese.cafe/contact-me',
         permanent: false

@@ -32,7 +32,7 @@ export default function FileDelete({ currentFolder }: { currentFolder: Folder })
 
     return (
         <li>
-            <button onClick={deleteFile} className='rounded-full p-[2px] text-2xl text-[#767676] duration-200 hover:bg-gray-200 hover:text-black'>
+            <button onClick={deleteFile} className='rounded-full p-[4px] text-2xl text-[#767676] duration-200 hover:bg-gray-200 hover:text-black'>
                 <MdDeleteOutline />
             </button>
         </li>

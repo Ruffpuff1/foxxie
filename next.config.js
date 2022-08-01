@@ -47,11 +47,11 @@ const nextConfig = {
         return [
             {
                 source: '/images/:slug(.{1,})',
-                destination: '/api/images/:slug'
+                destination: '/api/cdn/:slug'
             },
             {
                 source: '/cdn/:slug(.{1,})',
-                destination: '/api/images/:slug'
+                destination: '/api/cdn/:slug'
             }
         ];
     },

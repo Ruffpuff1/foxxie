@@ -4,6 +4,7 @@ import { SidebarContext } from '@hooks/useTodo';
 import { FileClickContext } from '@providers/FileClickProvider';
 import { useContext } from 'react';
 import FileDelete from '../files/FileDelete';
+import FileMore from '../files/FileMore';
 import FolderBreadCrumbs from '../folders/FolderBreadCrumbs';
 
 export default function StoreHeader({ folder }: { folder: Folder | null }) {
@@ -22,6 +23,7 @@ export default function StoreHeader({ folder }: { folder: Folder | null }) {
                             <h2>{file.name}</h2>
                         </li>
                         <FileDelete currentFolder={folder!} />
+                        <FileMore currentFolder={folder!} />
                     </ul>
                 </div>
             )}

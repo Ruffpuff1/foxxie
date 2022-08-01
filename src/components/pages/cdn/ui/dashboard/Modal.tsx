@@ -2,22 +2,24 @@ import { ReactNode } from 'react';
 
 export default function Modal({ open, children }: Props) {
     return (
-        <div className={`fixed top-0 left-0 z-[100] h-full w-full flex-col items-center bg-black bg-opacity-50 px-10 pt-5 ${open ? 'flex' : 'hidden'}`}>
-            <div className='w-full max-w-[800px] rounded-md bg-white p-5 shadow-md'>{children}</div>
+        <div
+            className={`fixed top-0 right-0 z-[200] h-screen w-screen flex-col items-center justify-center bg-black bg-opacity-50 px-10 pt-5 ${open ? 'flex' : 'hidden'}`}
+        >
+            <div className='w-full max-w-[600px] rounded-md bg-white p-5 shadow-lg'>{children}</div>
         </div>
     );
 }
 
 Modal.Header = function Header({ children }: { children: ReactNode }) {
     return (
-        <header className='flex items-start text-xl font-semibold'>
+        <header className='flex items-start text-xl font-[400] tracking-wide text-[#444]'>
             <h1>{children}</h1>
         </header>
     );
 };
 
 Modal.Body = function Body({ children }: { children: ReactNode }) {
-    return <div className='py-10'>{children}</div>;
+    return <div className='py-5'>{children}</div>;
 };
 
 Modal.Footer = function Footer({ children }: { children: ReactNode }) {

@@ -9,7 +9,7 @@ export default function LargeTopIcons({ setOpen, open }: { open: boolean; setOpe
     return (
         <>
             <div
-                className={`fixed top-16 right-0 flex h-[93vh] w-0 flex-col items-start justify-between overflow-x-hidden border bg-white py-3 pl-1 duration-200 ease-in ${
+                className={`fixed top-16 right-0 flex h-[93vh] w-0 flex-col items-start justify-between overflow-x-hidden border bg-white opacity-0 duration-200 ease-in lg:py-3 lg:pl-1 lg:opacity-100 ${
                     open ? 'lg:w-[60px]' : 'w-0'
                 } ${showTodo ? 'lg:w-[340px]' : ''}`}
             >
