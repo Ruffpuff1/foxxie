@@ -5,6 +5,7 @@ import { useClickOutside } from '@ruffpuff/usehooks';
 import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import AddFileButton from './buttons/AddFileButton/AddFileButton';
+import AddFolderButton from './buttons/AddFolderButton';
 
 export default function Panel() {
     const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +50,9 @@ export default function Panel() {
             >
                 {Boolean(owned || folder === RootFolder) && (
                     <ul id='new-list' className={folder === RootFolder ? '' : 'rounded-none border-b border-b-gray-200 pb-1'}>
-                        <li className='w-full rounded-md duration-200 hover:bg-gray-200'></li>
+                        <li className='w-full rounded-md duration-200 hover:bg-gray-200'>
+                            <AddFolderButton currentFolder={folder} />
+                        </li>
                         <li className='w-full rounded-md duration-200 hover:bg-gray-200'>
                             <AddFileButton currentFolder={folder} />
                         </li>

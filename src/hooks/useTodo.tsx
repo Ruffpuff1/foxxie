@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 const defaultList = { id: '', userId: null, name: 'tasks', sortBy: 'my-order' };
 
-function reducer(state: Payload, { type, payload }: { type: Actions; payload: Payload; }) {
+function reducer(state: Payload, { type, payload }: { type: Actions; payload: Payload }) {
     switch (type) {
         case Actions.SetTasks:
             return {
@@ -103,7 +103,7 @@ export const SidebarContext = createContext({
     }
 });
 
-export function SidebarProvider({ children }: { children: ReactNode; }) {
+export function SidebarProvider({ children }: { children: ReactNode }) {
     const router = useRouter();
     const [showTodo, setShowTodo] = useState(false);
 

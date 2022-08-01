@@ -41,11 +41,6 @@ module.exports = [
         permanent: false
     },
     {
-        source: '/images/:path*',
-        destination: '/api/images/:path*',
-        permanent: false
-    },
-    {
         source: '/community/disboard',
         destination: 'https://disboard.org/server/761512748898844702',
         permanent: false

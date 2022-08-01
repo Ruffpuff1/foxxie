@@ -46,7 +46,11 @@ const nextConfig = {
     rewrites: async () => {
         return [
             {
-                source: '/images/:slug(.{1,}\\.[A-z]{1,})',
+                source: '/images/:slug(.{1,})',
+                destination: '/api/images/:slug'
+            },
+            {
+                source: '/cdn/:slug(.{1,})',
                 destination: '/api/images/:slug'
             }
         ];

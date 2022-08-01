@@ -22,7 +22,8 @@ export function useAuth(): [User | null, Required<Payload>] {
 
     const [state, dispatch] = useReducer(reducer, {
         user: defaultUser,
-        users: []
+        users: [],
+        message: ''
     });
 
     useEffect(() => {
@@ -57,7 +58,10 @@ export function useAuth(): [User | null, Required<Payload>] {
         });
     }, []);
 
-    return [isValid(currentUser) ? currentUser : null, state as Required<Payload>];
+    const valid = isValid(currentUser);
+    state.message = currentUser ? (valid ? '' : 'no-valid') : 'no-login';
+
+    return [valid ? currentUser : null, state as Required<Payload>];
 }
 
 function reducer(state: Payload, { type, payload }: { type: Actions; payload: Payload }) {
@@ -86,6 +90,7 @@ const enum Actions {
 interface Payload {
     user?: UserData;
     users?: UserData[];
+    message?: string;
 }
 
 export interface UserData {

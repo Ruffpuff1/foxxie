@@ -16,11 +16,7 @@ export default function StoreHeader({ folder }: { folder: Folder | null }) {
             {user && <FolderBreadCrumbs currentFolder={folder} />}
 
             {showDetails && (
-                <div
-                    className={`delay-200 duration-200 lg:delay-[0ms] ${
-                        showTodo ? 'translate-x-[14rem] lg:mr-96 lg:translate-x-[2rem]' : 'translate-x-0 lg:mr-16'
-                    }`}
-                >
+                <div className={`delay-200 duration-200 lg:delay-[0ms] ${showTodo ? 'translate-x-[14rem] lg:mr-96 lg:translate-x-[2rem]' : 'translate-x-0 lg:mr-16'}`}>
                     <ul className='flex items-center justify-center space-x-2 text-[#767676] lg:space-x-3'>
                         <li>
                             <h2>{file.name}</h2>

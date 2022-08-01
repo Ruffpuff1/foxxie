@@ -7,7 +7,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { AuthContext } from '@hooks/useAuth';
 import { useClickOutside } from '@ruffpuff/usehooks';
 
-export default function TodoDatePicker({ show, date: d, setShow, text }: { text: string; show: boolean; date: Date | null; setShow: (b: boolean) => void; }) {
+export default function TodoDatePicker({ show, date: d, setShow, text }: { text: string; show: boolean; date: Date | null; setShow: (b: boolean) => void }) {
     const router = useRouter();
     const [date, setDate] = useState(d);
     const [showDateInput, setShowDateInput] = useState(false);
@@ -63,7 +63,7 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                             const dt = date ? new Date(date) : new Date();
 
                             if (monthNum === 0) {
-                                dt.setFullYear(date ? (date.getFullYear() - 1) : new Date().getFullYear() - 1);
+                                dt.setFullYear(date ? date.getFullYear() - 1 : new Date().getFullYear() - 1);
                             }
 
                             dt.setMonth(monthNum === 0 ? 11 : monthNum - 1);

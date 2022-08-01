@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { MdImage, MdArrowBack, MdArrowDropUp } from 'react-icons/md';
 import { File, Folder } from '@hooks/useFolder';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { useDoubleClick } from '@hooks/useDoubleClick';
 import { FileClickContext } from '@providers/FileClickProvider';
 
@@ -39,6 +38,8 @@ export default function Photo({ photo, folder }: Props) {
 
     const href = `${folder?.path ? `${folder.path.map(p => p.name).join('/')}/` : '/'}${folder?.name && folder.name !== 'Root' ? `${folder.name}/` : ''}${photo.name}`;
 
+    console.log(href, folder.path);
+
     return (
         <div>
             {showPreview && (
@@ -55,15 +56,13 @@ export default function Photo({ photo, folder }: Props) {
                             </button>
                         </div>
                         <div>
-                            <Link href={href}>
-                                <a
-                                    href={href}
-                                    className='flex items-center justify-center space-x-1 rounded-md bg-opacity-10 duration-500 hover:cursor-pointer hover:bg-black'
-                                >
-                                    <h2>Open</h2>
-                                    <MdArrowDropUp className='mt-1 text-xl' />
-                                </a>
-                            </Link>
+                            <button
+                                onClick={() => router.push(href)}
+                                className='flex items-center justify-center space-x-1 rounded-md bg-opacity-10 duration-500 hover:cursor-pointer hover:bg-black'
+                            >
+                                <h2>Open</h2>
+                                <MdArrowDropUp className='mt-1 text-xl' />
+                            </button>
                         </div>
                     </header>
 

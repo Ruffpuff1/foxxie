@@ -9,6 +9,8 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
     const split = id.split('.');
     const [name, format] = split;
 
+    console.log(id, folderName);
+
     const refrence = query(database.files, where('name', '==', `${name}.${format}`));
 
     const folderRef = query(database.folders, where('name', '==', `${folderName}`));

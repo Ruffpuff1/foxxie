@@ -2,7 +2,7 @@ import { database, storage } from '@utils/firebase';
 import { query, where, getDocs, addDoc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useContext, useState } from 'react';
-import { MdOutlineCreateNewFolder } from 'react-icons/md';
+import { MdOutlineFileUpload } from 'react-icons/md';
 import { AuthContext } from 'src/hooks/useAuth';
 import { Folder, RootFolder } from 'src/hooks/useFolder';
 import Modal from '../../Modal';
@@ -84,7 +84,7 @@ export default function AddFileButton({ currentFolder }: { currentFolder: null |
                     handleOpen();
                 }}
             >
-                <MdOutlineCreateNewFolder className={styles.folder_icon} />
+                <MdOutlineFileUpload className={styles.folder_icon} />
                 <span className={styles.button_text}>File upload</span>
             </button>
             <Modal open={open}>
