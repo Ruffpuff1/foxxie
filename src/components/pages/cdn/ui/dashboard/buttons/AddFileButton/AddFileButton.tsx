@@ -4,11 +4,11 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useContext, useState } from 'react';
 import { MdOutlineFileUpload } from 'react-icons/md';
 import { AuthContext } from '@hooks/useAuth';
-import { Folder, RootFolder } from '@hooks/useFolder';
+import { Folder } from '@hooks/useFolder';
 import Modal from '../../Modal';
 import styles from './AddFileButton.module.css';
 
-export default function AddFileButton({ currentFolder }: { currentFolder: null | Folder; }) {
+export default function AddFileButton({ currentFolder }: { currentFolder: null | Folder }) {
     const [open, setOpen] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const [name, setName] = useState('');
@@ -110,10 +110,7 @@ export default function AddFileButton({ currentFolder }: { currentFolder: null |
                     >
                         Close
                     </Modal.Button>
-                    <Modal.Button
-                        className={styles.upload_button}
-                        onClick={() => handleSubmit()}
-                    >
+                    <Modal.Button className={styles.upload_button} onClick={() => handleSubmit()}>
                         Upload
                     </Modal.Button>
                 </Modal.Footer>

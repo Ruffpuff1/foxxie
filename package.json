@@ -16,6 +16,7 @@
     "@ruffpuff/utilities": "^4.0.0",
     "@skyra/discord-components-core": "^3.4.0",
     "@skyra/discord-components-react": "^3.4.0",
+    "ahooks": "^3.6.2",
     "firebase": "^9.9.1",
     "next": "12.2.3",
     "next-seo": "^5.5.0",

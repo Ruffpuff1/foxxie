@@ -15,7 +15,7 @@ export default function Header() {
                 onMouseLeave={() => {
                     setHover(false);
                 }}
-                src='https://reese.cafe/images/branding/reese/reese-and-rain.jpeg'
+                src='https://reese.cafe/images/assets/reese/reese-and-rain.jpeg'
                 className='h-full w-full rounded-md md:h-1/3 md:w-1/2'
                 alt='My friend and I at the park - 2021'
             />

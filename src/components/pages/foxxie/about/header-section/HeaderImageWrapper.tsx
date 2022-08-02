@@ -8,7 +8,7 @@ export default function HeaderImageWrapper({ children }: { children: ReactNode }
 
             <img
                 className='flex flex-col items-center rounded-xl shadow-2xl md:h-[400px] md:w-[700px]'
-                src='https://reese.cafe/images/branding/foxxie/user_info.png'
+                src='https://reese.cafe/images/assets/foxxie/user_info.png'
                 alt='Foxxie user info'
             />
         </div>

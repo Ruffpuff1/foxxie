@@ -19,7 +19,7 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
     const set = new Set(folders.map(f => f.id));
 
     const files = (await getDocs(refrence)).docs.map(d => d.data());
-    const file = files.find(f => set.has(f.folderId));
+    const file = files.find(f => set.has(f.folderId) || f.folderId === null);
 
     if (!file) {
         res.redirect('/404');

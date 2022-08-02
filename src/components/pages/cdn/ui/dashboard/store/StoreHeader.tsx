@@ -2,6 +2,8 @@ import { useAuth } from '@hooks/useAuth';
 import { Folder } from '@hooks/useFolder';
 import { SidebarContext } from '@hooks/useTodo';
 import { FileClickContext } from '@providers/FileClickProvider';
+import { FileModalContext } from '@providers/FileModalProvider';
+import { useKeyPress } from 'ahooks';
 import { useContext } from 'react';
 import FileDelete from '../files/FileDelete';
 import FileMore from '../files/FileMore';
@@ -11,6 +13,12 @@ export default function StoreHeader({ folder }: { folder: Folder | null }) {
     const { showDetails, file } = useContext(FileClickContext);
     const { showTodo } = useContext(SidebarContext);
     const [user] = useAuth();
+
+    const { setShowRename } = useContext(FileModalContext);
+
+    useKeyPress('N', () => {
+        if (file && showDetails) setShowRename(true);
+    });
 
     return (
         <header className='fixed top-16 right-0 z-[0.4] mx-1 flex w-full items-center justify-between border-y border-y-gray-200 bg-white py-[10px] lg:w-[calc(100%-240px)]'>
