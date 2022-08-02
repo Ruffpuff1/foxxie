@@ -9,7 +9,7 @@ export default function HomeAboutSection() {
             {/* <div className='bg-blue-500 md:hidden w-[2px] h-60' /> */}
             <img width={414} height={414} className='hidden md:block' src='https://reese.cafe/images/assets/reese/reese.jpg' alt='Me' />
             <div className='flex flex-col items-center md:block'>
-                <img width={340} height={340} src='https://reese.cafe/images/assets/reese/reese.jpg' className='mb-5 md:hidden' alt='Me' />
+                <img width={340} height={340} src='https://reese.cafe/images/assets/reese/reese.jpeg' className='mb-5 md:hidden' alt='Me' />
                 <h2 className='text-3xl font-[400] text-gray-600'>About me</h2>
                 <p className='text-gray-700'>Read a bit about me and what I like to do.</p>
                 <button

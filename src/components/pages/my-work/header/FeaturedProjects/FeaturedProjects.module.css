@@ -1,0 +1,23 @@
+.wrapper {
+    @apply mt-20 flex-col md:mt-0 md:flex md:items-center;
+}
+
+.top_two_wrapper {
+    @apply flex flex-col justify-center space-y-10 md:flex-row md:items-center md:space-x-10;
+}
+
+.box_header_section {
+    @apply bg-gray-100 py-4 px-5;
+}
+
+.box_header {
+    @apply flex items-center justify-center text-xl;
+}
+
+.box_button {
+    @apply w-[265px] rounded-md border border-gray-300 duration-150 hover:shadow-md;
+}
+
+.box_button_bottom {
+    @apply mt-10 w-[265px] rounded-md border border-gray-300 duration-150 hover:shadow-md;
+}

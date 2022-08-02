@@ -16,5 +16,13 @@ export interface Story {
     name: string;
     id: string;
     assets?: string[];
+    steps?: Step[];
+    mode?: 'sliding';
     creatorDisplayName: string;
+}
+
+export interface Step {
+    header: string;
+    description: string;
+    img: string | null;
 }

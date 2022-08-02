@@ -1,4 +1,4 @@
-import FeaturedProjects from './FeaturedProjects';
+import FeaturedProjects from './FeaturedProjects/FeaturedProjects';
 import Header from './Header';
 
 export default function WorkHeader() {

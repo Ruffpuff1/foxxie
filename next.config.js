@@ -52,6 +52,10 @@ const nextConfig = {
             {
                 source: '/cdn/:slug(.{1,})',
                 destination: '/api/cdn/:slug'
+            },
+            {
+                source: '/arts-and-culture/:path*',
+                destination: '/404'
             }
         ];
     },

@@ -12,11 +12,11 @@ export default function WorkLatest() {
                         <a
                             key={work.homepage}
                             href={work.homepage}
-                            className='flex items-center rounded-md p-1 duration-200 hover:bg-blue-50 lg:items-start lg:justify-between'
+                            className='flex items-center overflow-y-hidden rounded-md rounded-l-none pr-2 duration-200 hover:bg-blue-50 lg:items-start lg:justify-between'
                         >
                             <img className='h-14 w-14' height={56} width={56} src={work.icon} alt={work.name} />
                             <div className='ml-6'>
-                                <h4 className='text-xl text-[#202124]'>{work.name}</h4>
+                                <h4 className='text-xl text-[#202124] text-ellipsis'>{`${work.name.length > 62 ? `${work.name.slice(0, 66).trim()}...` : work.name}`}</h4>
                             </div>
                         </a>
                     );

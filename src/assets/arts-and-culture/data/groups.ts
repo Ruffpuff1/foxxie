@@ -5,11 +5,12 @@ import { paintings } from './Paintings/Paintings';
 import { photographs } from './Photographs/Photographs';
 import { prideStories } from './PrideStories/PrideStories';
 import { sculptures } from './Sculptures/Sculptures';
+import { stories } from './Stories/Stories';
 
 const museums: Museum[] = [];
 const exhibits: Exhibit[] = [];
 
 const assets = [...nasas, ...photographs, ...sculptures, ...paintings];
-const storys = [...prideStories];
+const storys = [...prideStories, ...stories];
 
 export { museums, exhibits, assets, sculptures, storys, nasas, paintings, entities, photographs, prideStories };

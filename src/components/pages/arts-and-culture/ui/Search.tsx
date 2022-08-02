@@ -1,5 +1,5 @@
 import { DataType, dataFuzzySearch } from '@assets/arts-and-culture/data/searching';
-import { Museum, Exhibit, Asset, PrideStory, Entity } from '@assets/arts-and-culture/structures';
+import { Museum, Exhibit, Asset, PrideStory, Entity, Story } from '@assets/arts-and-culture/structures';
 import { useClickOutside } from '@ruffpuff/usehooks';
 import React, { useState } from 'react';
 import {
@@ -9,6 +9,7 @@ import {
     MdLocationOn,
     MdOutlineAccountBalance,
     MdOutlineAccountCircle,
+    MdOutlineAutoStories,
     MdOutlineLooks,
     MdOutlinePhoto,
     MdOutlineWallpaper
@@ -96,6 +97,7 @@ function getIcon(result: DataType) {
     if (result instanceof Exhibit) return <MdOutlineWallpaper className='text-2xl text-[#80868b]' />;
     if (result instanceof Asset) return <MdOutlinePhoto className='text-2xl text-[#80868b]' />;
     if (result instanceof PrideStory) return <MdOutlineLooks className='text-2xl text-[#80868b]' />;
+    if (result instanceof Story) return <MdOutlineAutoStories className='text-2xl text-[#80868b]' />;
     if (result instanceof Entity && (result.type === 'person' || result.type === 'figure')) return <MdOutlineAccountCircle className='text-2xl text-[#80868b]' />;
     if (result instanceof Entity && result.type === 'location') return <MdLocationOn className='text-2xl text-[#80868b]' />;
 }
