@@ -11,8 +11,8 @@ export default function FolderBreadCrumbs({ currentFolder }: Props) {
 
     const first = path[0];
     const noFirst = path.slice(1);
-    const display = noFirst.length >= 3 ? [noFirst[noFirst.length - 1]] : noFirst;
-    const remaining = noFirst.length >= 3 ? noFirst.slice(0, -1) : null;
+    const display = noFirst.length >= 2 ? [noFirst[noFirst.length - 1]] : noFirst;
+    const remaining = noFirst.length >= 2 ? noFirst.slice(0, -1) : null;
 
     return (
         <div className='ml-2 flex items-center justify-center space-x-3 lg:ml-4'>

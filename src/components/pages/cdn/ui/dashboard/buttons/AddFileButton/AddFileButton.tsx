@@ -3,26 +3,30 @@ import { query, where, getDocs, addDoc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useContext, useState } from 'react';
 import { MdOutlineFileUpload } from 'react-icons/md';
-import { AuthContext } from 'src/hooks/useAuth';
-import { Folder, RootFolder } from 'src/hooks/useFolder';
+import { AuthContext } from '@hooks/useAuth';
+import { Folder, RootFolder } from '@hooks/useFolder';
 import Modal from '../../Modal';
 import styles from './AddFileButton.module.css';
 
-export default function AddFileButton({ currentFolder }: { currentFolder: null | Folder }) {
+export default function AddFileButton({ currentFolder }: { currentFolder: null | Folder; }) {
     const [open, setOpen] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const [name, setName] = useState('');
     const user = useContext(AuthContext);
 
-    function handleSubmit() {
+    async function handleSubmit() {
         if (file === null || currentFolder === null) return;
-
         const fileName = (name || file.name).replace(/ /g, '-');
 
-        const path = currentFolder.path.map(p => p.name).join('/');
-        const filePath = currentFolder === RootFolder ? `${path ? `${path}/` : ''}${fileName}` : `${path ? `${path}/` : ''}${currentFolder.name}/${fileName}`;
+        const uploadedFileRef = await addDoc(database.files, {
+            url: null,
+            name: fileName,
+            createdAt: database.getTimestamp(),
+            folderId: currentFolder.id,
+            userId: user!.uid
+        });
 
-        const uploadRef = ref(storage, `/files/${user!.uid}/${filePath}`);
+        const uploadRef = ref(storage, `/files/${user!.uid}/${uploadedFileRef.id}`);
         const uploadTask = uploadBytesResumable(uploadRef, file);
 
         uploadTask.on(
@@ -35,20 +39,12 @@ export default function AddFileButton({ currentFolder }: { currentFolder: null |
             },
             async () => {
                 await getDownloadURL(uploadTask.snapshot.ref).then(async url => {
-                    const q = query(database.folders, where('name', '==', fileName), where('userId', '==', user!.uid), where('folderId', '==', currentFolder.id));
+                    const q = query(database.files, where('name', '==', fileName), where('userId', '==', user!.uid), where('folderId', '==', currentFolder.id));
 
                     await getDocs(q).then(async existingFiles => {
                         const existingFile = existingFiles.docs[0];
                         if (existingFile) {
                             await updateDoc(existingFile.ref, { url });
-                        } else {
-                            await addDoc(database.files, {
-                                url,
-                                name: fileName,
-                                createdAt: database.getTimestamp(),
-                                folderId: currentFolder.id,
-                                userId: user!.uid
-                            });
                         }
                     });
                 });
@@ -116,9 +112,7 @@ export default function AddFileButton({ currentFolder }: { currentFolder: null |
                     </Modal.Button>
                     <Modal.Button
                         className={styles.upload_button}
-                        onClick={() => {
-                            handleSubmit();
-                        }}
+                        onClick={() => handleSubmit()}
                     >
                         Upload
                     </Modal.Button>

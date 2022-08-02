@@ -3,10 +3,9 @@ import { deleteDoc, getDocs, query, where } from 'firebase/firestore';
 import { useContext } from 'react';
 import { ref, deleteObject } from 'firebase/storage';
 import { FileClickContext } from '@providers/FileClickProvider';
-import { Folder, RootFolder } from '@hooks/useFolder';
 import { MdDeleteOutline } from 'react-icons/md';
 
-export default function FileDelete({ currentFolder }: { currentFolder: Folder }) {
+export default function FileDelete() {
     const { file, setFile, setShowDetails } = useContext(FileClickContext);
 
     const deleteFile = async () => {
@@ -17,11 +16,7 @@ export default function FileDelete({ currentFolder }: { currentFolder: Folder })
 
             if (existingFile) {
                 await deleteDoc(existingFile.ref);
-
-                const path = currentFolder.path.map(p => p.name).join('/');
-                const filePath = currentFolder === RootFolder ? `${path ? `${path}/` : ''}${file.name}` : `${path ? `${path}/` : ''}${currentFolder.name}/${file.name}`;
-
-                const docRef = ref(storage, `/files/${file!.userId}/${filePath}`);
+                const docRef = ref(storage, `/files/${file!.userId}/${existingFile.id}`);
 
                 await deleteObject(docRef);
                 setShowDetails(false);

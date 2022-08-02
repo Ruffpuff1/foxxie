@@ -22,7 +22,7 @@ export default function StoreHeader({ folder }: { folder: Folder | null }) {
                         <li>
                             <h2>{file.name}</h2>
                         </li>
-                        <FileDelete currentFolder={folder!} />
+                        <FileDelete />
                         <FileMore currentFolder={folder!} />
                     </ul>
                 </div>
