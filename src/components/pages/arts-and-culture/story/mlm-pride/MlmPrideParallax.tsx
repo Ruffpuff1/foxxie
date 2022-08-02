@@ -133,7 +133,7 @@ export default function MlmPrideParallax({ story }: { story: Story }) {
                         </section>
                     </ParallaxLayer>
 
-                    <ParallaxLayer sticky={{ start: 12.3, end: 13 }}>
+                    <ParallaxLayer sticky={{ start: 12.3, end: 13.5 }}>
                         <Footer art={story.assets!} />
                     </ParallaxLayer>
                 </Parallax>

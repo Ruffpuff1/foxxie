@@ -17,7 +17,7 @@ export default function Navbar({ visible, show, hide, back }: Props) {
     return (
         <>
             <header
-                className={`fixed ${show === false ? 'top-[-20rem]' : 'top-0'} z-[40] flex h-[56px] w-full items-center justify-between py-1 shadow-lg duration-200 ${
+                className={`fixed ${show === false ? 'top-[-20rem]' : 'top-0'} z-[40] flex h-[60px] w-full items-center justify-between py-1 shadow-lg duration-200 ${
                     visible ? 'bg-white text-[#444444]' : 'bg-transparent text-white'
                 }`}
             >

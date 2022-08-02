@@ -69,7 +69,7 @@ export default function WorldMap() {
                 <div className={styles.map_box_p_container}>
                     <img
                         className={`${styles.greece_image} ${expandGreece && mapVisible ? styles.in : styles.out}`}
-                        src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/The_Death_of_Hyacinthos.jpg/440px-The_Death_of_Hyacinthos.jpg'
+                        src='https://reese.cafe/images/assets/arts-and-culture/assets/paintings/VGhlIERlYXR.jpg'
                         alt='The Death of Hyacinthos by Jean Broc (1801)'
                     />
 
@@ -94,7 +94,7 @@ export default function WorldMap() {
 
                     <img
                         className={`${styles.map_box_img} ${expandAsia && mapVisible ? styles.in : styles.out}`}
-                        src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/A_youth_about_to_penetrate_a_compliant_boy%2C_on_a_elegant_ter_Wellcome_V0047308.jpg/200px-A_youth_about_to_penetrate_a_compliant_boy%2C_on_a_elegant_ter_Wellcome_V0047308.jpg'
+                        src='https://reese.cafe/images/assets/arts-and-culture/assets/paintings/QSB5b3V0aCBhYm.jpg'
                         alt='Two young men about to have relations. Qing China, date unknown.'
                     />
 
@@ -146,7 +146,7 @@ export default function WorldMap() {
                 <div className={styles.map_box_p_container}>
                     <img
                         className={`${styles.africa_image} ${expandAfrica && mapVisible ? styles.in : styles.out}`}
-                        src='https://reese.cafe/images/assets/arts-and-culture/assets/photographs/bWFzdGFiYS1/base.jpg'
+                        src='https://reese.cafe/images/assets/arts-and-culture/assets/photographs/bWFzdGFiYS1.jpg'
                         width={667}
                         height={500}
                         alt='Khnumhotep and Niankhkhnum nose-kissing'

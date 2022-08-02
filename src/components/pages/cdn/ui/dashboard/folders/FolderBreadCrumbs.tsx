@@ -1,5 +1,4 @@
 import { Folder, FolderPath, RootFolder } from '@hooks/useFolder';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import FolderDots from './FolderDots';
 import SharedPeopleButton from './SharedPeopleButton';

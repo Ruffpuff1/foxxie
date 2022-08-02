@@ -38,8 +38,6 @@ export default function Photo({ photo, folder }: Props) {
 
     const href = `${folder?.path ? `${folder.path.map(p => p.name).join('/')}/` : '/'}${folder?.name && folder.name !== 'Root' ? `${folder.name}/` : ''}${photo.name}`;
 
-    console.log(href, folder.path);
-
     return (
         <div>
             {showPreview && (

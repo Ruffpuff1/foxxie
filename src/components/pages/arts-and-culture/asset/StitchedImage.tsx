@@ -120,7 +120,7 @@ export default function StitchedImage({ art }: { art: Asset }) {
                 >
                     <img
                         className='md:h-[440px]'
-                        src={`https://reese.cafe/images/assets/arts-and-culture/assets/${art.type}s/${art.id}/base.jpg`}
+                        src={`https://reese.cafe/images/assets/arts-and-culture/assets/${art.type}s/${art.id}.jpg`}
                         alt={art.description || `${art.name} by ${art.creatorDisplayName}`}
                     />
                 </button>

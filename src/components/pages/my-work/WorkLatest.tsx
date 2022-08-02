@@ -16,7 +16,7 @@ export default function WorkLatest() {
                         >
                             <img className='h-14 w-14' height={56} width={56} src={work.icon} alt={work.name} />
                             <div className='ml-6'>
-                                <h4 className='text-xl text-[#202124] text-ellipsis'>{`${work.name.length > 62 ? `${work.name.slice(0, 66).trim()}...` : work.name}`}</h4>
+                                <h4 className='text-ellipsis text-xl text-[#202124]'>{`${work.name.length > 62 ? `${work.name.slice(0, 66).trim()}...` : work.name}`}</h4>
                             </div>
                         </a>
                     );

@@ -30,7 +30,7 @@ export default function Items({ art, title }: { art: Asset[]; title?: string }) 
                                                     >
                                                         <a
                                                             href={`/arts-and-culture/asset/${a.id}`}
-                                                            className='relative block w-full overflow-hidden bg-cover bg-top bg-no-repeat pt-[calc(100%+1.6px)]'
+                                                            className='relative block w-full bg-cover bg-top bg-no-repeat pt-[calc(100%+1.6px)]'
                                                             style={{
                                                                 backgroundImage: `url('${a.image}')`
                                                             }}

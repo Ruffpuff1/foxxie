@@ -12,7 +12,7 @@ export default function AddFolderButton({ currentFolder }: { currentFolder: null
     async function handleSubmit() {
         if (currentFolder === null) return;
 
-        const path = [...currentFolder.path];
+        const path = [...currentFolder?.path];
 
         if (currentFolder !== RootFolder) {
             path.push({ name: currentFolder.name, id: currentFolder.id });

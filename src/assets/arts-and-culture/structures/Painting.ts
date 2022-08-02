@@ -1,7 +1,7 @@
 import { Asset } from './Asset';
 
 export class Painting extends Asset implements Painting {
-    public image = `https://reese.cafe/images/assets/arts-and-culture/assets/${this.type}s/${this.id}/base.jpg`;
+    public image = `https://reese.cafe/images/assets/arts-and-culture/assets/paintings/${this.id}.jpg`;
 
     public type = `painting`;
 

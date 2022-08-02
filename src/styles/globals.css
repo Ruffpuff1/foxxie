@@ -106,3 +106,23 @@ html {
     backdrop-filter: blur(20px);
     @apply bg-contain bg-no-repeat;
 }
+
+.slide {
+    @apply overflow-x-hidden;
+    animation: 2s ease 1s 1 slideIn;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(15rem)
+  }
+  20% {
+    transform: translateX(9.5rem)
+  }
+  30% {
+    transform: translateX(9.5rem)
+  }
+  100% {
+    transform: translateX(0rem)
+  }
+}

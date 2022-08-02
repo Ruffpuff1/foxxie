@@ -59,10 +59,5 @@ module.exports = [
         source: '/foxxie',
         destination: '/foxxie/about',
         permanent: false
-    },
-    {
-        source: '/pride',
-        destination: '/arts-and-culture/story/mlm-pride',
-        permanent: false
     }
 ];

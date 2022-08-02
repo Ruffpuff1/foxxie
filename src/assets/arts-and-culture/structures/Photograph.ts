@@ -1,9 +1,9 @@
 import { Asset } from './Asset';
 
 export class Photograph extends Asset implements Photograph {
-    public image = `https://reese.cafe/images/assets/arts-and-culture/assets/${this.type}s/${this.id}/base.jpg`;
-
     public type = `photograph`;
+
+    public image = `https://reese.cafe/images/assets/arts-and-culture/assets/photographs/${this.id}.jpg`;
 
     public constructor(data: Photograph) {
         super(data);

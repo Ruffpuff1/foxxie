@@ -5,7 +5,7 @@ import { assets } from '@assets/arts-and-culture/data';
 
 export default function Footer({ art }: { art: string[] }) {
     return (
-        <footer id='footer' className='flex h-[100vh] flex-col items-center bg-white pt-20'>
+        <footer id='footer' className='mb-20 flex h-[100vh] flex-col items-center bg-white pt-20'>
             <div className='h-[1px] w-96 bg-gray-200' />
 
             <div className='mt-10 flex w-96 flex-col'>
@@ -28,7 +28,7 @@ export default function Footer({ art }: { art: string[] }) {
 
             <div className='mt-36' />
 
-            <Items title='Featured' art={assets.filter(a => art?.includes(a.id))} />
+            <Items title='Featured Assets' art={assets.filter(a => art?.includes(a.id))} />
         </footer>
     );
 }
