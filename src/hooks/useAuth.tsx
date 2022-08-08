@@ -1,8 +1,8 @@
 import { isValid } from '@utils/constants';
+import { auth, database } from '@utils/firebase';
 import { User } from 'firebase/auth';
 import { onSnapshot, query } from 'firebase/firestore';
-import { useContext, useState, useEffect, ReactNode, createContext, useReducer } from 'react';
-import { auth, database } from '@utils/firebase';
+import { createContext, ReactNode, useContext, useEffect, useReducer, useState } from 'react';
 
 const defaultGoogle: Google = {
     displayName: '',

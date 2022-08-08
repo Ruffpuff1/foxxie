@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, RefObject } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 
 /**
  * Check if an element is in viewport

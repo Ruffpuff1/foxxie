@@ -5,9 +5,10 @@ import clsx from 'clsx';
 
 const Timeline = forwardRef(function Timeline({ scroll }: Props, ref: ForwardedRef<IParallax>) {
     if (typeof ref === 'function' || !ref) return null;
+    const end = 6;
 
     return (
-        <div className={clsx(styles.wrap, scroll > 0.9 && scroll < 5 ? styles.wrap_pop : styles.wrap_down)}>
+        <div className={clsx(styles.wrap, scroll > 0.9 && scroll < end ? styles.wrap_pop : styles.wrap_down)}>
             <div className={styles.inner_wrap}>
                 <button
                     className={clsx(styles.year_2021, {

@@ -20,6 +20,6 @@ const Links: Link[] = [
     // }
 ];
 
-export default function Navbar() {
-    return <NavbarBase home='/about-me' title=' About' links={Links} />;
+export default function Navbar({ hide = false }: { hide?: boolean }) {
+    return <NavbarBase hide={hide} home='/about-me' title=' About' links={Links} />;
 }

@@ -6,7 +6,7 @@ import { detectLocale } from 'src/util/intl';
 import useNavbarScroll from '@hooks/useNavbarScroll';
 import { useState } from 'react';
 
-export default function Navbar({ links, title = '.cafe', home = '/' }: Props) {
+export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Props) {
     const router = useRouter();
     const [stick, scrolled] = useNavbarScroll();
     const [showPanel, setShowPanel] = useState(false);
@@ -19,7 +19,7 @@ export default function Navbar({ links, title = '.cafe', home = '/' }: Props) {
                     [styles.header_scrolled]: scrolled,
                     [styles.header_not_scrolled]: !scrolled,
                     [styles.header_stick]: stick,
-                    [styles.header_not_stick]: !stick
+                    [styles.header_not_stick]: !stick || hide
                 })}
             >
                 <div className={styles.header_content}>
@@ -104,6 +104,7 @@ export default function Navbar({ links, title = '.cafe', home = '/' }: Props) {
 }
 
 export interface Props {
+    hide?: boolean;
     home?: string;
     links: Link[];
     title?: string;

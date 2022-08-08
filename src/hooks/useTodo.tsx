@@ -1,8 +1,8 @@
-import React, { createContext, ReactNode, useEffect, useMemo, useReducer, useState } from 'react';
-import { where, onSnapshot, query, Timestamp } from 'firebase/firestore';
 import { database } from '@utils/firebase';
-import { useAuth } from './useAuth';
+import { onSnapshot, query, Timestamp, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
+import { createContext, ReactNode, useEffect, useMemo, useReducer, useState } from 'react';
+import { useAuth } from './useAuth';
 
 const defaultList = { id: '', userId: null, name: 'tasks', sortBy: 'my-order' };
 

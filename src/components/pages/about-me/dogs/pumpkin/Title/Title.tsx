@@ -7,7 +7,7 @@ const Title = forwardRef(function Title(_: Record<never, never>, ref: ForwardedR
     return (
         <ParallaxLayer offset={0} style={{ height: '90%' }}>
             <div className={styles.title_card}>
-                <h1>Pumpkin</h1>
+                <h1>Pumpkin Through the Years</h1>
 
                 <div className={styles.scroll_wrapper}>
                     <h2>Scroll to explore</h2>
