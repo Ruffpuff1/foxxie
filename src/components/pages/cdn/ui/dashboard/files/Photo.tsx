@@ -4,6 +4,7 @@ import { File, Folder } from '@hooks/useFolder';
 import { useRouter } from 'next/router';
 import { useDoubleClick } from '@hooks/useDoubleClick';
 import { FileClickContext } from '@providers/FileClickProvider';
+import clsx from 'clsx';
 
 export default function Photo({ photo, folder }: Props) {
     const [showPreview, setShowPreview] = useState(false);
@@ -37,6 +38,7 @@ export default function Photo({ photo, folder }: Props) {
     );
 
     const href = `${folder?.path ? `${folder.path.map(p => p.name).join('/')}/` : '/'}${folder?.name && folder.name !== 'Root' ? `${folder.name}/` : ''}${photo.name}`;
+    const highlight = file?.name === photo.name && showDetails;
 
     return (
         <div>
@@ -77,15 +79,17 @@ export default function Photo({ photo, folder }: Props) {
                     onClick={() => {
                         click();
                     }}
-                    className={`rounded-md border ${file?.name === photo.name && showDetails ? 'border-blue-200' : ''} mb-2 ml-2`}
+                    className={clsx('mb-2 ml-2 rounded-md border', {
+                        'border-blue-200': highlight
+                    })}
                 >
                     <div className='overflow-hidden border-b bg-cover' style={{ backgroundImage: `url('${photo.url}')` }}>
                         <div className='h-40 w-40 md:h-60 md:w-60' />
                     </div>
 
-                    <div className={`${file?.name === photo.name && showDetails ? 'bg-blue-100' : 'bg-white'} flex items-center space-x-2 py-2 px-4 text-sm md:py-3`}>
+                    <div className={clsx('flex items-center space-x-2 py-2 px-4 text-sm md:py-3', highlight ? 'bg-blue-100' : 'bg-white')}>
                         <MdImage className='text-2xl text-[#D93025]' />
-                        <h2 className={`${file?.name === photo.name && showDetails ? 'text-blue-500' : ''}`}>{photo.name}</h2>
+                        <h2 className={clsx({ 'text-blue-500': highlight })}>{photo.name}</h2>
                     </div>
                 </button>
             </div>

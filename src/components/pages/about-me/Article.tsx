@@ -11,7 +11,7 @@ export default function Article() {
     const bDur = calcYears(birth).toFixed(2);
 
     return (
-        <section className='mt-3 mb-36 flex flex-col items-center space-y-8 px-16 text-center md:px-96'>
+        <section className='mt-3 mb-36 flex flex-col items-center space-y-8 px-16 text-center lg:px-96'>
             <p>
                 Hi, my name is Reese. I go by <Pronouns /> pronouns and am a {bDur} year old web developer and musician from California.
             </p>

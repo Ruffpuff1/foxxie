@@ -1,4 +1,5 @@
-import { DiscordEmbed, DiscordEmbedDescription, DiscordEmbedFooter, DiscordMessage, DiscordMessages } from '@skyra/discord-components-react';
+import { DiscordEmbed, DiscordEmbedDescription, DiscordEmbedFooter, DiscordMessages } from '@skyra/discord-components-react';
+import DiscordMessage from 'src/components/discord/DiscordMessage/DiscordMessage';
 import { foxxieFeatures } from '../../../../../../assets/foxxieFeatureData';
 import { Images } from '../../../../../../assets/images';
 
@@ -22,7 +23,7 @@ export default function ModerationLog() {
                 </DiscordEmbed>
             </DiscordMessage>
             <DiscordMessage roleColor='#5965f2' avatar={Images.Foxxie} author='Foxxie' bot>
-                <DiscordEmbed slot='embeds' authorImage='https://reese.cafe/images/justin.gif' authorName='Banned User' color='#FF5C5C'>
+                <DiscordEmbed slot='embeds' authorImage='https://reese.cafe/images/assets/foxxie/justin.gif' authorName='Banned User' color='#FF5C5C'>
                     <DiscordEmbedDescription slot='description'>
                         <strong>User</strong>: <code>J_TOKEN$#5925</code> (980251029482385408)
                         <br />
@@ -35,7 +36,7 @@ export default function ModerationLog() {
                     </DiscordEmbedFooter>
                 </DiscordEmbed>
             </DiscordMessage>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar={Images.Reese}>
+            <DiscordMessage roleColor='#898489' author='Reese' avatar={Images.Reese}>
                 {foxxieFeatures.find(f => f.name === 'moderation-log')!.description}
             </DiscordMessage>
         </DiscordMessages>

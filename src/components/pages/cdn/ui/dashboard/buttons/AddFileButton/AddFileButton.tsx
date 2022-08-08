@@ -7,6 +7,7 @@ import { AuthContext } from '@hooks/useAuth';
 import { Folder } from '@hooks/useFolder';
 import Modal from '../../Modal';
 import styles from './AddFileButton.module.css';
+import Tooltip from '@mui/material/Tooltip';
 
 export default function AddFileButton({ currentFolder }: { currentFolder: null | Folder }) {
     const [open, setOpen] = useState(false);
@@ -74,15 +75,20 @@ export default function AddFileButton({ currentFolder }: { currentFolder: null |
 
     return (
         <div className={styles.wrapper}>
-            <button
-                className={styles.button}
-                onClick={() => {
-                    handleOpen();
-                }}
-            >
-                <MdOutlineFileUpload className={styles.folder_icon} />
-                <span className={styles.button_text}>File upload</span>
-            </button>
+            <Tooltip id='file-upload-tooltip' title='Upload a new file'>
+                <button
+                    aria-labelledby='file-upload-tooltip'
+                    className={styles.button}
+                    onClick={() => {
+                        handleOpen();
+                    }}
+                >
+                    <MdOutlineFileUpload aria-hidden className={styles.folder_icon} />
+                    <span aria-hidden className={styles.button_text}>
+                        File upload
+                    </span>
+                </button>
+            </Tooltip>
             <Modal open={open}>
                 <Modal.Header>Upload file</Modal.Header>
                 <Modal.Body>

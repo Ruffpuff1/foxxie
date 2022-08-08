@@ -10,13 +10,17 @@
     "format": "prettier --write src && eslint src --fix"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
     "@foxxie/fetch": "^0.0.4",
+    "@mui/material": "^5.9.3",
     "@react-spring/parallax": "^9.5.2",
     "@ruffpuff/usehooks": "^1.0.3",
     "@ruffpuff/utilities": "^4.0.0",
     "@skyra/discord-components-core": "^3.4.0",
     "@skyra/discord-components-react": "^3.4.0",
     "ahooks": "^3.6.2",
+    "clsx": "^1.2.1",
     "firebase": "^9.9.1",
     "next": "12.2.3",
     "next-seo": "^5.5.0",

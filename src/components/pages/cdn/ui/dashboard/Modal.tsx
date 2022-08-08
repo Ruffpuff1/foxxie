@@ -1,9 +1,13 @@
+import clsx from 'clsx';
 import { ReactNode } from 'react';
 
 export default function Modal({ open, children }: Props) {
     return (
         <div
-            className={`fixed top-0 right-0 z-[200] h-screen w-screen flex-col items-center justify-center bg-black bg-opacity-50 px-10 pt-5 ${open ? 'flex' : 'hidden'}`}
+            className={clsx(
+                'fixed top-0 right-0 z-[200] h-screen w-screen flex-col items-center justify-center bg-black bg-opacity-50 px-10 pt-5',
+                open ? 'flex' : 'hidden'
+            )}
         >
             <div className='w-full max-w-[600px] rounded-md bg-white p-5 shadow-lg'>{children}</div>
         </div>
@@ -32,7 +36,7 @@ Modal.Button = function Button({ children, onClick, className }: { children: Rea
             onClick={() => {
                 onClick();
             }}
-            className={`rounded-md border-2 border-transparent py-2 px-4 text-white duration-500 hover:shadow-md ${className && className}`}
+            className={clsx('rounded-md border-2 border-transparent py-2 px-4 text-white duration-500 hover:shadow-md', className)}
         >
             {children}
         </button>

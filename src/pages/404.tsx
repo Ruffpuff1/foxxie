@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import Main from '../components/ui/Main';
+import Main from '../components/pages/home/Main';
 import useLocale from '../hooks/useLocale';
 
 const NotFound: NextPage = () => {

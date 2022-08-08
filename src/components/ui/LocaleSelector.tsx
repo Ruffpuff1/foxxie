@@ -15,7 +15,7 @@ export default function LocaleSelector() {
             }}
             className='rounded-md bg-transparent p-3 text-sm hover:cursor-pointer hover:bg-gray-200 md:text-lg'
         >
-            {['en_us', 'es_mx', 'fr_fr'].map(loc => {
+            {['en_us', 'es_mx'].map(loc => {
                 return (
                     <option key={loc} value={loc}>
                         {getName(loc)}
@@ -30,8 +30,6 @@ function getName(loc: string) {
     switch (loc) {
         case 'es_mx':
             return 'Español';
-        case 'fr_fr':
-            return 'Français';
         case 'en_us':
             return 'English';
     }

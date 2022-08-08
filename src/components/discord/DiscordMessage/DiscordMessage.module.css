@@ -1,0 +1,113 @@
+.discord_message {
+    color: #dcddde;
+	display: flex;
+	flex-direction: column;
+	font-size: 0.9em;
+	font-family: Whitney, Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	padding: 0px 1em;
+
+	position: relative;
+	word-wrap: break-word;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+	user-select: text;
+	-webkit-box-flex: 0;
+	-ms-flex: 0 0 auto;
+	flex: 0 0 auto;
+	padding-right: 0;
+	min-height: 1.375rem;
+	padding-right: 48px !important;
+	margin-top: 1.0625rem;
+}
+
+.discord_message_inner {
+    display: flex;
+	position: relative;
+	-webkit-box-flex: 0;
+	-ms-flex: 0 0 auto;
+	flex: 0 0 auto;
+}
+
+.discord_message a:hover {
+	text-decoration: underline;
+}
+
+.discord_author_avatar {
+    margin-right: 16px;
+	margin-top: 5px;
+	min-width: 40px;
+	z-index: 1;
+}
+
+.discord_author_avatar img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+}
+
+.discord_message_content {
+    width: 100%;
+    line-height: 160%;
+    font-weight: normal;
+    padding-top: 2px;
+}
+
+.discord_message_body {
+    font-size: 1rem;
+    font-weight: 400;
+    word-break: break-word;
+    position: relative;
+}
+
+.discord_message_body strong {
+	font-weight: 700;
+}
+
+.discord_message_body em {
+	font-style: italic;
+}
+
+.discord_message_body u {
+	text-decoration-color: rgb(220, 221, 222);
+	text-decoration-line: underline;
+	text-decoration-style: solid;
+	text-decoration-thickness: auto;
+}
+
+.discord_message_body pre {
+	border: 1px solid #202225;
+	border-radius: 4px;
+}
+
+.discord_message_body code {
+	background: #2f3136;
+	white-space: break-spaces;
+	font-family: Consolas, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono,
+		Liberation Mono, Nimbus Mono L, Monaco, Courier New, Courier, monospace;
+}
+
+.discord_message:hover .discord_message_timestamp {
+	color: #99aab5;
+}
+
+.discord_message:first-child {
+	margin-top: 0.5rem;
+}
+
+.discord_message:last-child {
+	margin-bottom: 0.5rem;
+	border-bottom-width: 0;
+}
+
+.discord_message_markup {
+	font-size: 1rem;
+	line-height: 1.375rem;
+	word-wrap: break-word;
+	user-select: text;
+	font-weight: 400;
+}
+
+.discord_message:hover {
+	background-color: rgba(4, 4, 5, 0.07);
+}

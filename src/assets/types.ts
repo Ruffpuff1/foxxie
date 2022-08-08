@@ -1,4 +1,4 @@
-export type Locale = 'en_us' | 'es_mx' | 'fr_fr';
+export type Locale = 'en_us' | 'es_mx';
 
 export interface Translations {
     home: {

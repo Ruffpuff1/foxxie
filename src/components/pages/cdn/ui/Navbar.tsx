@@ -2,7 +2,6 @@ import AuthInformation from '@auth/AuthInformation';
 import Image from 'next/image';
 import { SidebarContext } from '@hooks/useTodo';
 import { useContext } from 'react';
-import { AuthProvider } from '@hooks/useAuth';
 
 export default function Navbar() {
     const { showTodo } = useContext(SidebarContext);
@@ -16,9 +15,7 @@ export default function Navbar() {
                 </a>
             </div>
 
-            <AuthProvider>
-                <AuthInformation signOutPath='/cdn' shiftLeft={showTodo} />
-            </AuthProvider>
+            <AuthInformation signOutPath='/cdn' shiftLeft={showTodo} />
         </header>
     );
 }

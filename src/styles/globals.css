@@ -57,6 +57,16 @@ html {
   100% { opacity: 1; }
 }
 
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  80% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.sign-in {
+  animation: .4s ease 0s 1 fadeIn;
+}
+
 .foxxie-navbar {
     transition: top 0.3s, box-shadow 0.3s, border-bottom 0.3s;
 }
@@ -78,10 +88,6 @@ html {
 
 .project-menu {
     transition: height 0.3s ease;
-}
-
-#navbar {
-    transition: top 0.3s;
 }
 
 .slide-step {
@@ -109,7 +115,7 @@ html {
 
 .slide {
     @apply overflow-x-hidden;
-    animation: 2s ease 1s 1 slideIn;
+    animation: 2s ease 0s 1 slideIn;
 }
 
 @keyframes slideIn {
@@ -125,4 +131,13 @@ html {
   100% {
     transform: translateX(0rem)
   }
+}
+
+.hori-cont {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hori-cont::-webkit-scrollbar {
+  display: none; 
 }

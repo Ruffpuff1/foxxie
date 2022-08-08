@@ -5,6 +5,7 @@ import { useClickOutside } from '@ruffpuff/usehooks';
 import { FileModalContext } from '@providers/FileModalProvider';
 import { FileClickContext } from '@providers/FileClickProvider';
 import { useRouter } from 'next/router';
+import clsx from 'clsx';
 
 export default function FileMore({ currentFolder }: { currentFolder: Folder }) {
     const router = useRouter();
@@ -32,9 +33,10 @@ export default function FileMore({ currentFolder }: { currentFolder: Folder }) {
                 </button>
 
                 <div
-                    className={`fixed top-11 right-6 w-80 rounded-md border bg-white py-2 shadow-lg duration-200 ease-in ${
+                    className={clsx(
+                        'fixed top-11 right-6 w-80 rounded-md border bg-white py-2 shadow-lg duration-200 ease-in',
                         showPanel ? 'h-96 opacity-100' : 'h-0 opacity-0'
-                    }`}
+                    )}
                 >
                     <div className='w-full border-b'>
                         <button

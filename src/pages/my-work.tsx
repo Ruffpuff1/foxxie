@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import { Colors, Images } from '../assets/images';
 import Head from 'next/head';
-import AboutMeMain from '@about-me/AboutMeMain';
+import AboutMain from '@about-me/AboutMain';
 import AllProjects from '@my-work/all-projects/AllProjects';
 import WorkHeader from '@my-work/header/WorkHeader';
 import WorkLatest from '@my-work/WorkLatest';
@@ -24,11 +24,11 @@ const AboutMe: NextPage = () => {
                 }}
             />
 
-            <AboutMeMain>
+            <AboutMain>
                 <WorkHeader />
                 <WorkLatest />
                 <AllProjects />
-            </AboutMeMain>
+            </AboutMain>
         </>
     );
 };

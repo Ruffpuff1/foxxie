@@ -4,6 +4,7 @@ import { database, auth } from '@utils/firebase';
 import { Folder, RootFolder } from '@hooks/useFolder';
 import { MdOutlineCreateNewFolder } from 'react-icons/md';
 import Modal from '../Modal';
+import { Tooltip } from '@mui/material';
 
 export default function AddFolderButton({ currentFolder }: { currentFolder: null | Folder }) {
     const [name, setName] = useState('');
@@ -38,15 +39,20 @@ export default function AddFolderButton({ currentFolder }: { currentFolder: null
 
     return (
         <div className='w-full py-2 px-4'>
-            <button
-                className='flex w-full items-center justify-start space-x-2'
-                onClick={() => {
-                    setOpen(true);
-                }}
-            >
-                <MdOutlineCreateNewFolder className='text-3xl font-[400]' />
-                <h2 className='text-base font-[450] tracking-wide'>Folder</h2>
-            </button>
+            <Tooltip id='create-folder-tooltip' title='Create a new folder'>
+                <button
+                    aria-labelledby='create-folder-tooltip'
+                    className='flex w-full items-center justify-start space-x-2'
+                    onClick={() => {
+                        setOpen(true);
+                    }}
+                >
+                    <MdOutlineCreateNewFolder aria-hidden className='text-3xl font-[400]' />
+                    <h2 aria-hidden className='text-base font-[450] tracking-wide'>
+                        Folder
+                    </h2>
+                </button>
+            </Tooltip>
             <Modal open={open}>
                 <Modal.Header>Folder Name</Modal.Header>
                 <Modal.Body>

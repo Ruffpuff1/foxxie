@@ -53,10 +53,10 @@ const nextConfig = {
                 source: '/cdn/:slug(.{1,})',
                 destination: '/api/cdn/:slug'
             },
-            // {
-            //     source: '/arts-and-culture/:path*',
-            //     destination: '/404'
-            // }
+            {
+                source: '/intl/en_us/:path*',
+                destination: '/:path*'
+            }
         ];
     },
     redirects: async () => {

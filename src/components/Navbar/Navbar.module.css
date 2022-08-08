@@ -1,0 +1,102 @@
+.header {
+    transition: top 0.3s;
+    @apply fixed z-40 flex w-full items-center justify-between space-x-4 bg-white px-2;
+}
+
+.header_scrolled {
+    @apply border-b-gray-400 border-b shadow-md;
+}
+
+.header_not_scrolled {
+    @apply border-b border-b-gray-400 lg:border-b-0;
+}
+
+.header_stick {
+    @apply top-0;
+}
+
+.header_not_stick {
+    @apply top-[-75px];
+}
+
+.button_wrapper {
+    @apply flex items-center justify-start;
+}
+
+.button_wrapper button {
+    @apply block rounded-full p-2 duration-200 hover:bg-gray-100 lg:hidden text-2xl;
+}
+
+.title_wrapper {
+    @apply flex items-center rounded-md pl-[20px] hover:bg-gray-100;
+}
+
+.logo {
+    @apply box-border flex h-[64px] items-center text-[22px] leading-[30px];
+}
+
+.title {
+    @apply box-border flex items-center font-[400] tracking-[-0.3px] pr-[12px] text-[22px] leading-[28px] text-[#5f6368] hover:underline;
+}
+
+.links_wrapper {
+    @apply hidden items-center justify-center space-x-6 px-4 lg:flex lg:pl-[40px] lg:pt-[3px];
+}
+
+.links_nav {
+    height: 100%;
+    display: block;
+}
+
+.links_ul {
+   height: 100%;
+   display: flex;
+}
+
+.header_content {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-rows: 1fr auto;
+    grid-column: 2/3;
+}
+
+.nav_item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+    margin-right: 20px;
+}
+
+@media (min-width: 1024px) {
+    .nav_item {
+        margin-right: 40px;
+    }
+}
+
+.nav_item a {
+    font-size: 16px;
+    box-sizing: border-box;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: .1px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+    color: rgb(95 99 104);
+}
+
+.nav_item_active {
+    color: rgb(32 33 36) !important;
+}
+
+.nav_item_active:after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 3px;
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(59 130 246);
+}

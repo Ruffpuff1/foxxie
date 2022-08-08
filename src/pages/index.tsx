@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import { Colors, Images } from '../assets/images';
 import HomeAboutSection from '../components/pages/home/HomeAboutSection';
-import Main from '../components/ui/Main';
+import Main from '../components/pages/home/Main';
 import Head from 'next/head';
 import HomeTopSection from '../components/pages/home/HomeTopSection';
 

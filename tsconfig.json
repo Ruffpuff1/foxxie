@@ -19,7 +19,6 @@
     "downlevelIteration": true,
     "jsx": "preserve",
     "incremental": true,
-    "downlevelIteration": true,
     "baseUrl": ".",
     "rootDir": ".",
     "paths": {
@@ -38,6 +37,12 @@
       "@cdn/*": [
         "src/components/pages/cdn/*"
       ],
+      "@developers/*": [
+        "src/components/pages/developers/*"
+      ],
+      "@foxxie/*": [
+        "src/components/pages/foxxie/*"
+      ],
       "@hooks/*": [
         "src/hooks/*"
       ],
@@ -46,6 +51,9 @@
       ],
       "@providers/*": [
         "src/providers/*"
+      ],
+      "@style-guide/*": [
+        "src/components/pages/developers/style-guide/*"
       ],
       "@ui/*": [
         "src/components/ui/*"

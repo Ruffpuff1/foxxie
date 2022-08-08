@@ -1,6 +1,6 @@
 import { useContext, useEffect, useReducer } from 'react';
 import { doc, getDoc, where, orderBy, onSnapshot, query } from 'firebase/firestore';
-import { database } from '../utils/firebase';
+import { database } from '@utils/firebase';
 import { AuthContext } from './useAuth';
 
 export const RootFolder: Folder = {

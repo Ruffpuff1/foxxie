@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import { Colors, Images } from '../assets/images';
 import Head from 'next/head';
-import AboutMeMain from '../components/pages/about-me/AboutMeMain';
+import AboutMain from '../components/pages/about-me/AboutMain';
 import Contacts from '../components/pages/contact-me/Contacts';
 
 const ContactMe: NextPage = () => {
@@ -23,12 +23,12 @@ const ContactMe: NextPage = () => {
                 }}
             />
 
-            <AboutMeMain>
+            <AboutMain>
                 <div className='mt-36 flex flex-col items-center'>
                     <h1 className='text-2xl md:text-4xl'>Contact me</h1>
                 </div>
                 <Contacts />
-            </AboutMeMain>
+            </AboutMain>
         </>
     );
 };

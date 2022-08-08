@@ -54,17 +54,7 @@ export const projects: Project[][] = [
 export const latestWorks: Project[] = [
     {
         name: 'Working on the Kiko Discord bot, a public bot for customizing your server',
-        icon: 'https://reese.cafe/images/assets/kiko/kiko_avatar.png',
+        icon: 'https://reese.cafe/images/assets/kiko/kiko_chibi.png',
         homepage: 'https://kiko.gg'
     }
-    // {
-    //     name: "Read about Orange County's Bowers Museum",
-    //     icon: 'https://reese.cafe/images/icons/museum.png',
-    //     homepage: '/arts-and-culture/museum/Ym93ZXJzLW1'
-    // },
-    // {
-    //     name: 'Learn about gay pride with my MLM history display',
-    //     icon: 'https://reese.cafe/images/icons/rainbow.png',
-    //     homepage: '/arts-and-culture/story/mlm-pride'
-    // }
 ];

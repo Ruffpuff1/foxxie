@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
+import clsx from 'clsx';
 
 export default function Header() {
     const [hover, setHover] = useState(false);
@@ -19,7 +20,13 @@ export default function Header() {
                 className='h-full w-full rounded-md md:h-1/3 md:w-1/2'
                 alt='My friend and I at the park - 2021'
             />
-            <span className={`mt-1 text-sm duration-200 ${hover ? '' : 'opacity-20'}`}>My friend and I at the park - 2021</span>
+            <span
+                className={clsx('mt-1 text-sm duration-200', {
+                    'opacity-20': !hover
+                })}
+            >
+                My friend and I at the park - 2021
+            </span>
         </section>
     );
 }

@@ -1,12 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
-import { Colors, Images } from '../../assets/images';
+import { Colors, Images } from '@assets/images';
 import Head from 'next/head';
-import AboutMeMain from '../../components/pages/about-me/AboutMeMain';
-import Header from '../../components/pages/about-me/Header';
-import Article from '../../components/pages/about-me/Article';
+import AboutMain from '@about-me/AboutMain';
+import Header from '@about-me/Header';
+import Article from '@about-me/Article';
 
 const AboutMe: NextPage = () => {
     return (
@@ -24,10 +22,10 @@ const AboutMe: NextPage = () => {
                 }}
             />
 
-            <AboutMeMain>
+            <AboutMain>
                 <Header />
                 <Article />
-            </AboutMeMain>
+            </AboutMain>
         </>
     );
 };

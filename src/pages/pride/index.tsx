@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import Main from '@ui/Main';
+import Main from 'src/components/pages/home/Main';
 import Image from 'next/image';
 import Head from 'next/head';
 

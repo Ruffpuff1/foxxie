@@ -3,6 +3,7 @@ import { addDoc, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
 import { auth, database, GoogleAuth } from '@utils/firebase';
 import Image from 'next/image';
+import clsx from 'clsx';
 
 export default function AuthInformation({ signOutPath, shiftLeft }: Props) {
     const [, user] = useAuth();
@@ -43,12 +44,15 @@ export default function AuthInformation({ signOutPath, shiftLeft }: Props) {
             {user?.user.google.photoURL ? (
                 <button
                     onClick={() => signOut()}
-                    className={`flex items-center justify-center rounded-full p-1 duration-200 ease-in hover:bg-gray-100 ${shiftLeft ? 'mr-[18rem]' : 'mr-0'}`}
+                    className={clsx('flex items-center justify-center rounded-full p-1 hover:bg-gray-100', {
+                        'mr-[18rem]': shiftLeft,
+                        'mr-0': !shiftLeft
+                    })}
                 >
-                    <Image height={32} width={32} src={user.user.google.photoURL} className='rounded-full' alt={`Click to sign out of account`} />
+                    <Image height={32} width={32} src={user.user.google.photoURL} className='rounded-full' alt='Click to sign out of account' />
                 </button>
             ) : (
-                <button onClick={() => signIn()} className='rounded-md bg-blue-500 px-5 py-2 text-white hover:shadow-md'>
+                <button onClick={() => signIn()} className='sign-in rounded-md bg-white px-5 py-2 text-blue-500 hover:shadow-md'>
                     Sign In
                 </button>
             )}

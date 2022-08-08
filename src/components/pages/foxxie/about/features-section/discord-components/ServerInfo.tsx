@@ -4,17 +4,17 @@ import {
     DiscordEmbedField,
     DiscordEmbedFields,
     DiscordMention,
-    DiscordMessage,
     DiscordMessages,
     DiscordTime
 } from '@skyra/discord-components-react';
+import DiscordMessage from 'src/components/discord/DiscordMessage/DiscordMessage';
 import { foxxieFeatures } from '../../../../../../assets/foxxieFeatureData';
 import { Images } from '../../../../../../assets/images';
 
 export default function ServerInfo() {
     return (
         <DiscordMessages className='rounded-sm duration-500 lg:rounded-lg'>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar={Images.Reese}>
+            <DiscordMessage roleColor='#898489' author='Reese' avatar={Images.Reese}>
                 .info server
             </DiscordMessage>
             <DiscordMessage roleColor='#5965f2' avatar={Images.Foxxie} author='Foxxie' bot>
@@ -27,7 +27,7 @@ export default function ServerInfo() {
                     thumbnail={Images.TheCornerStore}
                 >
                     <DiscordEmbedDescription slot='description'>
-                        Created by <strong>Ruffpuff#0017</strong> on <DiscordTime>October 2, 2020</DiscordTime> (<DiscordTime>1 year ago</DiscordTime>)<br />
+                        Created by <strong>Reese#3563</strong> on <DiscordTime>October 2, 2020</DiscordTime> (<DiscordTime>1 year ago</DiscordTime>)<br />
                         <i>&quot;The Corner Store is a small shop on the side of the road that has many goods for you to buy.&quot;</i>
                     </DiscordEmbedDescription>
                     <DiscordEmbedFields slot='fields'>
@@ -76,7 +76,7 @@ export default function ServerInfo() {
                     </DiscordEmbedFields>
                 </DiscordEmbed>
             </DiscordMessage>
-            <DiscordMessage roleColor='#898489' author='Ruffpuff' avatar={Images.Reese}>
+            <DiscordMessage roleColor='#898489' author='Reese' avatar={Images.Reese}>
                 {foxxieFeatures.find(f => f.name === 'server-info')!.description}
             </DiscordMessage>
         </DiscordMessages>
