@@ -1,0 +1,7 @@
+.button {
+    @apply flex items-center space-x-[-15px] duration-500 hover:ml-2;
+}
+
+.arrow {
+    @apply text-2xl text-blue-500;
+}

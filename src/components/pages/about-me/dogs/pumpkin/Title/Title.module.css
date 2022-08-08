@@ -1,0 +1,19 @@
+.title_card {
+    @apply mt-60 flex h-screen flex-col items-center justify-start;
+}
+
+.title_card h1 {
+    @apply text-4xl text-black;
+}
+
+.scroll_wrapper {
+    @apply mt-14 flex flex-col items-center;
+}
+
+.scroll_wrapper h2 {
+    @apply text-[.9rem] font-[400];
+}
+
+.button_wrapper {
+    @apply mt-3 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-[2.5px] border-blue-500 bg-white opacity-100 delay-200 duration-500 hover:h-[4rem] hover:w-[4rem];
+}

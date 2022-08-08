@@ -13,11 +13,11 @@ const Links: Link[] = [
     {
         text: 'My work',
         path: '/my-work'
-    },
-    {
-        text: 'Pumpkin',
-        path: '/about-me/dogs/pumpkin'
     }
+    // {
+    //     text: 'Pumpkin',
+    //     path: '/about-me/dogs/pumpkin'
+    // }
 ];
 
 export default function Navbar() {

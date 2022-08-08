@@ -1,0 +1,39 @@
+.wrap {
+    @apply fixed left-[50%] pointer-events-auto ml-[-40%] flex h-[60px] w-[80%] select-none items-center px-10 rounded-full bg-[#F2F2F2] text-center align-middle text-lg text-gray-700 duration-300;
+}
+
+.wrap_pop {
+    bottom: 5rem;
+}
+
+.wrap_down {
+    bottom: -5rem;
+}
+
+.inner_wrap {
+    @apply fixed w-[80%] left-[50%] ml-[-40%] flex items-center px-10;
+}
+
+.year_2021 {
+    @apply mr-2 duration-200;
+}
+
+.year_2022 {
+    @apply ml-4;
+}
+
+.year_selected {
+    @apply text-blue-500;
+}
+
+.point {
+    @apply h-[5px] ml-2 duration-200 rounded-full w-[5px];
+}
+
+.point_no_select {
+    @apply bg-gray-300;
+}
+
+.point_select {
+    @apply bg-blue-500;
+}

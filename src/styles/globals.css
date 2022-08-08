@@ -132,12 +132,3 @@ html {
     transform: translateX(0rem)
   }
 }
-
-.hori-cont {
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.hori-cont::-webkit-scrollbar {
-  display: none; 
-}

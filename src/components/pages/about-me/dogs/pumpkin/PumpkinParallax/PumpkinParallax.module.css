@@ -1,0 +1,13 @@
+.no_point {
+    pointer-events: none;
+}
+
+.horizontal_container {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+  overflow-y: hidden;
+}
+
+.horizontal_container::-webkit-scrollbar {
+  display: none; 
+}
