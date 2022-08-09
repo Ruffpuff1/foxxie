@@ -1,0 +1,64 @@
+.img_wrap {
+    @apply translate-x-20 lg:translate-x-0;
+}
+
+.img {
+    background-image: url('https://reese.cafe/images/assets/reese/pumpkin/pumpkin_apr_24_2022.jpg');
+    @apply mb-60 h-[125.5px] w-[233.5px] bg-cover bg-center bg-no-repeat p-2 duration-[800ms] md:h-[225.5px] md:w-[333.5px] lg:h-[325.5px] lg:w-[433.5px];
+}
+
+.img_base {
+    transform: scale(1) translate(0px, 0px);
+}
+
+.img_skew {
+    transform: skew(-.8deg, -.8deg) scale(.95) translate(-2px, 5px);
+}
+
+.p {
+    @apply p-1 text-[.125rem] text-[#4F4F4F];
+}
+
+.p_hide {
+    visibility: hidden;
+}
+
+.plus {
+    @apply mt-1 ml-1 text-xl text-purple-500 delay-500 duration-500;
+}
+
+.plus_hide {
+    @apply hidden opacity-0;
+}
+
+.button {
+    @apply ml-2 origin-bottom-right border border-purple-200 duration-[600ms];
+}
+
+.button_more {
+    @apply h-10 w-14 scale-[6] rounded-md bg-purple-200;
+}
+
+.button_less {
+    @apply h-8 w-8 rounded-xl bg-transparent;
+}
+
+.button_wrap {
+    @apply absolute right-[-4rem] bottom-[15rem] z-40 flex select-none items-center duration-[800ms] lg:right-44;
+}
+
+.button_wrap_skew {
+    transform: translate(-2px, 5px);
+}
+
+.button_wrap_base {
+    transform: translate(0px, 0px);
+}
+
+.dot {
+    @apply h-3 w-3 rounded-full bg-purple-500;
+}
+
+.header {
+    @apply ml-2 inline text-lg font-[400] leading-[1.3] text-[#333333];
+}

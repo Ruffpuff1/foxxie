@@ -12,3 +12,15 @@
 .horizontal_container::-webkit-scrollbar {
   display: none; 
 }
+
+.year {
+  @apply fixed top-10 left-[calc(50%-70px)] flex h-12 w-36 select-none items-center justify-center rounded-full bg-blue-500 text-center align-middle text-4xl text-white duration-1000;
+}
+
+.year_hide {
+  opacity: 0;
+}
+
+.year_show {
+  opacity: 1;
+}

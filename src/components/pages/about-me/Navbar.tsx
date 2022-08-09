@@ -1,5 +1,4 @@
-import { default as NavbarBase } from '../../Navbar/Navbar';
-import { Link } from '../../ui/BaseNavbar';
+import { default as NavbarBase, Link } from '../../ui/Navbar/Navbar';
 
 const Links: Link[] = [
     {

@@ -1,0 +1,16 @@
+.button_wrap {
+    @apply pointer-events-auto fixed right-1 top-96 z-10 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-[2.5px] border-blue-500 bg-white duration-500 hover:h-[4rem] hover:w-[4rem] lg:right-20;
+}
+
+.wrap_visible {
+    @apply scale-100 opacity-100 delay-[1.5s];
+}
+
+.wrap_no_vis {
+    opacity: 0;
+    @apply scale-0;
+}
+
+.no_point {
+    pointer-events: none;
+}

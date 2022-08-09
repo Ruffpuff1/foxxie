@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import HomeFooter from '../../ui/HomeFooter';
-import Navbar from './HireNavbar';
+import Navbar from './Navbar';
 
 export default function HireMain({ children, className }: { children: ReactNode; name?: string; className?: string; baseUrl?: string }) {
     return (

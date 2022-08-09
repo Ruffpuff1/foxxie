@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Navbar, { Link } from 'src/components/Navbar/Navbar';
+import Navbar, { Link } from '@ui/Navbar/Navbar';
 import HomeFooter from '../../ui/HomeFooter';
 
 const links: Link[] = [

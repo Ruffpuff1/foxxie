@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import { Colors, Images } from '@assets/images';
 import Head from 'next/head';
-import PumpkinParallax from '@about-me/dogs/pumpkin/PumpkinParallax/PumpkinParallax';
+import PumpkinParallax from '@about-me/dogs/pumpkin/ui/PumpkinParallax/PumpkinParallax';
 
 const Pumpkin: NextPage = () => {
     return (

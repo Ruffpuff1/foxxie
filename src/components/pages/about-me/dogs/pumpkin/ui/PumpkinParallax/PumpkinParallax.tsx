@@ -1,10 +1,12 @@
 import Navbar from '@about-me/Navbar';
 import useWheel from '@hooks/useWheel';
 import { IParallax, Parallax, ParallaxLayer } from '@react-spring/parallax';
+import clsx from 'clsx';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import LayerButtons from '../LayerButtons/LayerButtons';
-import Layer2022One from '../pictures/Layer2022One/Layer2022One';
+import Layer2022One from '../../layers/Layer2022One/Layer2022One';
+import Layer2022Two from '../../layers/Layer2022Two/Layer2022Two';
+import LayerButtons from '../../layers/LayerButtons/LayerButtons';
 import Timeline from '../Timeline/Timeline';
 import Title from '../Title/Title';
 import styles from './PumpkinParallax.module.css';
@@ -55,24 +57,19 @@ export default function PumpkinParallax() {
                 <ParallaxLayer className={styles.no_point} sticky={{ start: 1, end: 5 }}>
                     <Timeline ref={ref} scroll={scroll} />
                 </ParallaxLayer>
+
                 <ParallaxLayer className={styles.no_point} sticky={{ start: 1, end: endOf2021 }}>
-                    <div
-                        className={`fixed top-10 left-[calc(50%-70px)] flex h-12 w-36 select-none items-center justify-center rounded-full bg-blue-500 text-center align-middle text-4xl text-white duration-300 ${
-                            scroll > 0.9 && scroll < endOf2021 ? 'scale-100' : 'scale-0'
-                        }`}
-                    >
+                    <div className={clsx(styles.year, scroll > 0.9 && scroll < endOf2021 + 0.5 ? styles.year_show : styles.year_hide)}>
                         <span>2021</span>
                     </div>
                 </ParallaxLayer>
+
                 <ParallaxLayer className={styles.no_point} sticky={{ start: endOf2021, end: endOf2022 }}>
-                    <div
-                        className={`fixed top-10 left-[calc(50%-70px)] flex h-12 w-36 select-none items-center justify-center rounded-full bg-blue-500 text-center align-middle text-4xl text-white duration-300 ${
-                            scroll > 3.9 && scroll < endOf2022 ? 'scale-100' : 'scale-0'
-                        }`}
-                    >
+                    <div className={clsx(styles.year, scroll > 3.9 && scroll < endOf2022 + 0.5 ? styles.year_show : styles.year_hide)}>
                         <span>2022</span>
                     </div>
                 </ParallaxLayer>
+
                 <Title ref={ref} />
 
                 <ParallaxLayer offset={1} style={{ height: '90%' }}>
@@ -120,6 +117,7 @@ export default function PumpkinParallax() {
                 </ParallaxLayer>
 
                 <Layer2022One />
+                <Layer2022Two />
                 <LayerButtons scroll={scroll} ref={ref} />
             </Parallax>
         </>

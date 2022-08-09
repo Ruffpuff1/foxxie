@@ -1,9 +1,9 @@
-import { signInWithPopup, signOut as signOutFirebase } from 'firebase/auth';
-import { addDoc, getDocs, query, where } from 'firebase/firestore';
 import { useAuth } from '@hooks/useAuth';
 import { auth, database, GoogleAuth } from '@utils/firebase';
-import Image from 'next/image';
 import clsx from 'clsx';
+import { signInWithPopup, signOut as signOutFirebase } from 'firebase/auth';
+import { addDoc, getDocs, query, where } from 'firebase/firestore';
+import Image from 'next/image';
 
 export default function AuthInformation({ signOutPath, shiftLeft }: Props) {
     const [, user] = useAuth();
