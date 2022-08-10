@@ -2,12 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 html {
     height: 100%;
     overflow-x: hidden;
     scroll-behavior: smooth;
+    @apply font-open-sans !important;
 }
 
 .trs {
@@ -100,7 +101,7 @@ html {
 
 #hire-description-textarea {
     transition: width 0.5s ease;
-    @apply max-h-56;
+    max-height: 14rem;
 }
 
 .hide-s {
@@ -110,11 +111,12 @@ html {
 .card {
     background-image: url('https://i.pinimg.com/originals/86/69/7e/86697e05d21d06f4d84eb946d015417e.jpg');
     backdrop-filter: blur(20px);
-    @apply bg-contain bg-no-repeat;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .slide {
-    @apply overflow-x-hidden;
+    background-repeat: no-repeat;
     animation: 2s ease 0s 1 slideIn;
 }
 
@@ -123,10 +125,10 @@ html {
     transform: translateX(15rem)
   }
   20% {
-    transform: translateX(9.5rem)
+    transform: translateX(10.5rem)
   }
   30% {
-    transform: translateX(9.5rem)
+    transform: translateX(10.5rem)
   }
   100% {
     transform: translateX(0rem)

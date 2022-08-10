@@ -1,15 +1,15 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import { TodoTask } from '@hooks/useTodo';
 import { useClickOutside } from '@ruffpuff/usehooks';
+import { days, hours, minutes, years } from '@ruffpuff/utilities';
 import { database } from '@utils/firebase';
 import { getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useState } from 'react';
-import { TodoTask } from '@hooks/useTodo';
+import { MdNotes } from 'react-icons/md';
 import TodoDatePicker from '../TodoDatePicker';
 import TodoItemCheckbox from './TodoItemCheckbox/TodoItemCheckbox';
-import { days, hours, minutes, years } from '@ruffpuff/utilities';
-import { MdNotes } from 'react-icons/md';
 
 const formatDuration = (d: Date) => {
     const now = Date.now();
@@ -154,7 +154,7 @@ export default function TodoItem({ todo, sortBy }: { todo: TodoTask; sortBy: str
                         defaultValue={todo.text}
                         maxLength={200}
                         style={{ height: `${l * 20}px` }}
-                        className={`max-h-[80px] min-h-[18px] w-full max-w-[200px] resize-none flex-wrap break-words bg-transparent px-1 align-top text-base font-[400] leading-[20px] duration-200 focus:outline-none`}
+                        className={`max-h-[80px] min-h-[18px] w-full max-w-[200px] resize-none flex-wrap break-words bg-transparent px-1 align-top text-base font-normal leading-[20px] duration-200 focus:outline-none`}
                     />
 
                     {todo.completeBy && (
@@ -162,7 +162,7 @@ export default function TodoItem({ todo, sortBy }: { todo: TodoTask; sortBy: str
                             onClick={() => {
                                 setShowDatePicker(true);
                             }}
-                            className={`flex items-center justify-center overflow-y-hidden rounded-full bg-white px-[10px] text-[12px] font-[500] duration-200 hover:bg-gray-200 ${
+                            className={`flex items-center justify-center overflow-y-hidden rounded-full bg-white px-[10px] text-[12px] font-medium duration-200 hover:bg-gray-200 ${
                                 inPast ? 'text-red-600' : 'text-[#5f6368]'
                             } ${showDate ? 'mt-2 h-[25px] border border-gray-200 py-[3px]' : 'mt-0 h-0 py-0'}`}
                         >
@@ -190,7 +190,7 @@ export default function TodoItem({ todo, sortBy }: { todo: TodoTask; sortBy: str
                                 defaultValue={todo.details || undefined}
                                 placeholder='Details'
                                 style={{ height: `${dl * 13}px` }}
-                                className={`mt-1 max-h-[65px] min-h-[24px] resize-none break-words bg-transparent px-1 py-[2px] align-top text-[13px] font-[400] leading-[10px] duration-200 focus:outline-none ${
+                                className={`mt-1 max-h-[65px] min-h-[24px] resize-none break-words bg-transparent px-1 py-[2px] align-top text-[13px] font-normal leading-[10px] duration-200 focus:outline-none ${
                                     editDetails ? 'w-[180px]' : 'w-[148px]'
                                 }`}
                             />

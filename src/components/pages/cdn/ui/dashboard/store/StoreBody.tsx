@@ -11,7 +11,7 @@ export default function StoreBody(props: FolderData) {
         return (
             <div className='px-20 pb-10 pt-20'>
                 <h1 className='text-2xl font-[450]'>Error :/</h1>
-                <h2 className='text-xl font-[400]'>{parseMessage(message)}</h2>
+                <h2 className='text-xl font-normal'>{parseMessage(message)}</h2>
             </div>
         );
     }

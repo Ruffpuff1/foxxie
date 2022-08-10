@@ -1,7 +1,6 @@
-import { AuthProvider } from '@hooks/useAuth';
 import { FileClickProvider } from '@providers/FileClickProvider';
-import { IdProvider } from '@providers/IdProvider';
 import { FileModalProvider } from '@providers/FileModalProvider';
+import { IdProvider } from '@providers/IdProvider';
 import Modals from './modals/Modals';
 import Panel from './Panel';
 import Sidebar from './Sidebar';

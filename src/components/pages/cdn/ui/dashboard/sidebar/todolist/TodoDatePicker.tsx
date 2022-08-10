@@ -1,11 +1,11 @@
+import { AuthContext } from '@hooks/useAuth';
+import { useClickOutside } from '@ruffpuff/usehooks';
 import { database } from '@utils/firebase';
 import { getDocs, query, Timestamp, updateDoc, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
-import { AuthContext } from '@hooks/useAuth';
-import { useClickOutside } from '@ruffpuff/usehooks';
 
 export default function TodoDatePicker({ show, date: d, setShow, text }: { text: string; show: boolean; date: Date | null; setShow: (b: boolean) => void }) {
     const router = useRouter();
@@ -74,7 +74,7 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                             <MdKeyboardArrowLeft />
                         </h2>
                     </button>
-                    <h2 className='text-sm font-[500]'>
+                    <h2 className='text-sm font-medium'>
                         {month} {year}
                     </h2>
                     <button
@@ -98,7 +98,7 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
 
                 <div className='pt-5'>
                     <div className='flex items-center justify-between px-4'>
-                        <h2 className='text-sm font-[500]'>Day</h2>
+                        <h2 className='text-sm font-medium'>Day</h2>
 
                         <button
                             className={`rounded-md py-1 px-2 duration-500 hover:bg-gray-200 ${showDateInput ? 'hidden' : ''}`}
@@ -106,7 +106,7 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                                 setShowDateInput(true);
                             }}
                         >
-                            <h3 className='text-sm font-[500]'>{day}</h3>
+                            <h3 className='text-sm font-medium'>{day}</h3>
                         </button>
                         <button className={`${showDateInput ? '' : 'hidden'}`}>
                             <input
@@ -115,7 +115,7 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                                 onChange={e => {
                                     setDay(parseInt(e.target.value, 10));
                                 }}
-                                className='w-20 text-sm font-[500]'
+                                className='w-20 text-sm font-medium'
                                 min={1}
                                 max={getMax(date ? date.getMonth() : new Date().getMonth())}
                                 value={numDay}
@@ -127,7 +127,7 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                 <div className='mt-20 border-t border-t-gray-200'>
                     <div className='flex items-center justify-between px-4 pt-2'>
                         <button className='rounded-full p-1 duration-500 hover:bg-gray-200'>
-                            <h3 className='text-sm font-[500]'>
+                            <h3 className='text-sm font-medium'>
                                 <HiOutlineTrash />
                             </h3>
                         </button>
@@ -139,10 +139,10 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
                                 }}
                                 className='rounded-md py-1 px-2 duration-500 hover:bg-gray-200'
                             >
-                                <h3 className='text-sm font-[500]'>Cancel</h3>
+                                <h3 className='text-sm font-medium'>Cancel</h3>
                             </button>
                             <button onClick={() => setTaskDate()} className='rounded-md py-1 px-2 duration-500 hover:bg-gray-200'>
-                                <h3 className='text-sm font-[500] text-blue-500'>Done</h3>
+                                <h3 className='text-sm font-medium text-blue-500'>Done</h3>
                             </button>
                         </div>
                     </div>

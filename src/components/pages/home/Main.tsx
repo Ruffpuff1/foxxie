@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
 import Navbar, { Link } from '@ui/Navbar/Navbar';
-import HomeFooter from '../../ui/HomeFooter';
+import { ReactNode } from 'react';
+import HomeFooter from '@ui/HomeFooter';
 
 const links: Link[] = [
     {
@@ -13,7 +13,7 @@ const links: Link[] = [
     }
 ];
 
-export default function Main({ children, className, name, baseUrl }: { children: ReactNode; name?: string; className?: string; baseUrl?: string }) {
+export default function Main({ children, className }: { children: ReactNode; className?: string }) {
     return (
         <>
             <Navbar links={links} />

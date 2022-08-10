@@ -1,15 +1,15 @@
-import ModerationLog from '../discord-components/ModerationLog';
-import UserInfo from '../discord-components/UserInfo';
-import ServerInfo from '../discord-components/ServerInfo';
-import RoleInfo from '../discord-components/RoleInfo';
 import ChannelInfo from '../discord-components/ChannelInfo';
+import ModerationLog from '../discord-components/ModerationLog';
+import RoleInfo from '../discord-components/RoleInfo';
+import ServerInfo from '../discord-components/ServerInfo';
+import UserInfo from '../discord-components/UserInfo';
 
 export default function FoxxieDiscordChatSection({ section }: { section: string }) {
     return (
         <div className='foxxie-main-panel bg-[#37393F]'>
             <div className='flex h-[48px] items-center justify-start space-x-2 px-5 shadow-md'>
                 <span className='font-ptSans text-2xl italic text-gray-400'>#</span>
-                <span className='font-ptSans text-base font-[500] text-[#DCDDDE]'>{section}</span>
+                <span className='font-ptSans text-base font-medium text-[#DCDDDE]'>{section}</span>
             </div>
             {getComponent(section)}
         </div>

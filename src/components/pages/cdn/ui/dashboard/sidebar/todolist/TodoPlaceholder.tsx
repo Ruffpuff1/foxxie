@@ -1,8 +1,8 @@
+import { AuthContext } from '@hooks/useAuth';
+import { useClickOutside } from '@ruffpuff/usehooks';
 import { database } from '@utils/firebase';
 import { addDoc, Timestamp } from 'firebase/firestore';
 import { useContext, useState } from 'react';
-import { AuthContext } from '@hooks/useAuth';
-import { useClickOutside } from '@ruffpuff/usehooks';
 
 export default function TodoPlaceholder(props: { placeholder: string; setPlaceholder: (p: string) => void; list: string }) {
     const [name, setName] = useState('');
@@ -46,7 +46,7 @@ export default function TodoPlaceholder(props: { placeholder: string; setPlaceho
                 <input className='mt-1 h-4 w-4 rounded-full' type='checkbox' />
                 <div className='flex w-full flex-col space-y-1'>
                     <button
-                        className={`cursor-pointer flex-wrap text-sm font-[400] ${editText ? 'hidden' : ''}`}
+                        className={`cursor-pointer flex-wrap text-sm font-normal ${editText ? 'hidden' : ''}`}
                         onClick={() => {
                             setEditText(true);
                         }}
@@ -59,7 +59,7 @@ export default function TodoPlaceholder(props: { placeholder: string; setPlaceho
                         }}
                         ref={inputRef}
                         placeholder='Title'
-                        className={`flex-wrap text-sm font-[400] ${editText ? '' : 'hidden'}`}
+                        className={`flex-wrap text-sm font-normal ${editText ? '' : 'hidden'}`}
                         type='text'
                     />
                 </div>

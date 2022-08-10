@@ -35,10 +35,6 @@ const nextConfig = {
         return config;
     },
     reactStrictMode: true,
-    i18n: {
-        defaultLocale: 'en_us',
-        locales: ['en_us', 'es_mx']
-    },
     trailingSlash: true,
     images: {
         domains: ['reese.cafe', 'lh3.googleusercontent.com']
@@ -54,7 +50,19 @@ const nextConfig = {
                 destination: '/api/cdn/:slug'
             },
             {
+                source: '/intl/en_us',
+                destination: '/'
+            },
+            {
                 source: '/intl/en_us/:path*',
+                destination: '/:path*'
+            },
+            {
+                source: '/intl/es_mx',
+                destination: '/'
+            },
+            {
+                source: '/intl/es_mx/:path*',
                 destination: '/:path*'
             }
         ];

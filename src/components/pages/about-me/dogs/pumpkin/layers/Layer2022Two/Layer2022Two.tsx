@@ -8,7 +8,7 @@ export default function Layer2022Two() {
             <div className={styles.wrap}>
                 <div className='mb-60 flex items-center'>
                     <div className='h-3 w-3 rounded-full bg-blue-500' />
-                    <h2 className='ml-2 inline whitespace-nowrap text-lg font-[400] leading-[1.3] text-[#333333]'>Pumpkin&apos;s first Birthday</h2>
+                    <h2 className='ml-2 inline whitespace-nowrap text-lg font-normal leading-[1.3] text-[#333333]'>Pumpkin&apos;s first Birthday</h2>
                 </div>
 
                 <Hawaii2022 />

@@ -1,25 +1,20 @@
+import HomeAboutSection from '@home/HomeAboutSection';
+import HomeTopSection from '@home/HomeTopSection';
+import Main from '@home/Main';
+import useLocale from '@hooks/useLocale';
+import Meta from '@ui/Meta';
 import type { NextPage } from 'next';
-import { NextSeo } from 'next-seo';
-import { Colors, Images } from '../assets/images';
-import HomeAboutSection from '../components/pages/home/HomeAboutSection';
-import Main from '../components/pages/home/Main';
-import Head from 'next/head';
-import HomeTopSection from '../components/pages/home/HomeTopSection';
 
 const Home: NextPage = () => {
+    const [translations] = useLocale();
+
     return (
         <>
-            <Head>
-                <link rel='icon' href={Images.Reese} />
-                <meta name='theme-color' content={Colors.RuffGray} />
-            </Head>
-            <NextSeo
-                title='Reese Harlak - My Personal Website'
-                description="Hi I'm Reese, a web developer and musician."
-                openGraph={{
-                    title: 'Reese Harlak - My Personal Website',
-                    description: "Hi I'm Reese, a web developer and musician."
-                }}
+            <Meta
+                title={translations.home.title}
+                description={translations.home.description}
+                keywords={['reese', 'reese harlak', 'web', 'react', 'next.js', 'developer', 'student', 'music']}
+                subject='The homepage of my website.'
             />
 
             <Main>

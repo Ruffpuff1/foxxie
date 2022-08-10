@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { database } from '@utils/firebase';
 import { deleteDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { useState } from 'react';
 import { MdCheck, MdDeleteOutline } from 'react-icons/md';
 import { TodoTask } from 'src/hooks/useTodo';
-import { useState } from 'react';
 
 export default function TodoComplete({ todo }: { todo: TodoTask }) {
     const [showTrash, setShowTrash] = useState(false);
@@ -51,7 +51,7 @@ export default function TodoComplete({ todo }: { todo: TodoTask }) {
                     </h2>
                 </button>
                 <div className='flex w-[250px] flex-col space-y-1 overflow-x-hidden text-ellipsis whitespace-nowrap'>
-                    <h2 className='flex-wrap text-sm font-[400] line-through'>{todo.text}</h2>
+                    <h2 className='flex-wrap text-sm font-normal line-through'>{todo.text}</h2>
                 </div>
                 <button aria-label='Delete task' onClick={() => deleteTask()} className={`pr-2 ${showTrash ? '' : 'opacity-0'}`}>
                     <MdDeleteOutline className='text-xl' />

@@ -16,7 +16,7 @@ export default function Modal({ open, children }: Props) {
 
 Modal.Header = function Header({ children }: { children: ReactNode }) {
     return (
-        <header className='flex items-start text-xl font-[400] tracking-wide text-[#444]'>
+        <header className='flex items-start text-xl font-normal tracking-wide text-[#444]'>
             <h1>{children}</h1>
         </header>
     );

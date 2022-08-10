@@ -36,7 +36,7 @@ export default function Arizona2022() {
                 className='absolute top-40 right-40 z-40 flex select-none items-center duration-[800ms] lg:right-0 lg:left-40 lg:top-[17rem]'
             >
                 <div className='h-3 w-3 rounded-full bg-blue-500' />
-                <h2 className='ml-2 inline whitespace-nowrap text-lg font-[400] leading-[1.3] text-[#333333]'>Trip to Arizona</h2>
+                <h2 className='ml-2 inline whitespace-nowrap text-lg font-normal leading-[1.3] text-[#333333]'>Trip to Arizona</h2>
 
                 <div
                     id='more-arizona-btn'

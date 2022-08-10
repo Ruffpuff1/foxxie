@@ -11,7 +11,7 @@
 }
 
 .folder_icon {
-    @apply text-3xl font-[400];
+    @apply text-3xl font-normal;
 }
 
 .add_file_name_input {

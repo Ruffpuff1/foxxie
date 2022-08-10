@@ -1,30 +1,41 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
+import CardsSection from '@foxxie/about/cards-section/CardsSection';
+import FeaturesLink from '@foxxie/about/features-section/FeaturesLink';
+import FeaturesSection from '@foxxie/about/features-section/FeaturesSection';
+import HeaderSection from '@foxxie/about/header-section/HeaderSection';
+import FoxxieMain from '@foxxie/about/ui/FoxxieMain';
+import Separator from '@foxxie/about/ui/Separator';
+import Meta from '@ui/Meta';
 import type { NextPage } from 'next';
-import Head from 'next/head';
-import { NextSeo } from 'next-seo';
-import FoxxieMain from '../../components/pages/foxxie/about/ui/FoxxieMain';
-import FeaturesSection from '../../components/pages/foxxie/about/features-section/FeaturesSection';
-import HeaderSection from '../../components/pages/foxxie/about/header-section/HeaderSection';
 import { useState } from 'react';
-import Separator from '../../components/pages/foxxie/about/ui/Separator';
-import FeaturesLink from '../../components/pages/foxxie/about/features-section/FeaturesLink';
-import CardsSection from '../../components/pages/foxxie/about/cards-section/CardsSection';
 
 const About: NextPage = () => {
     const [isVisible, setIsVisible] = useState(false);
 
     return (
         <>
-            <Head>
-                <link rel='icon' href='https://reese.cafe/icons/foxxie.png' />
-                <meta name='theme-color' content='#000000' />
-            </Head>
-            <NextSeo
+            <Meta
                 title='Foxxie: A tool for building Discord communities'
                 description='Foxxie is a Discord bot for building community servers. With advanced moderation, information, and utility commands.'
-                openGraph={{
-                    title: 'Foxxie - A tool for building Discord communities',
-                    description: 'Foxxie is a Discord bot for building community servers. With advanced moderation, information, and utility commands.'
+                keywords={[
+                    'reese',
+                    'reese harlak',
+                    'web',
+                    'react',
+                    'next.js',
+                    'developer',
+                    'foxxie',
+                    'fox',
+                    'discord',
+                    'moderation',
+                    'the corner store',
+                    'community',
+                    'community server'
+                ]}
+                subject='Site for Foxxie, a moderation Discord bot'
+                image={{
+                    image: 'https://reese.cafe/images/icons/foxxie.png',
+                    alt: 'A geometric Fox',
+                    format: 'image/png'
                 }}
             />
 

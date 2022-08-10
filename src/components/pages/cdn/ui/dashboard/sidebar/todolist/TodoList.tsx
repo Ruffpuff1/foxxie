@@ -1,11 +1,11 @@
 import { SidebarContext, useTodo } from '@hooks/useTodo';
 import { useContext, useEffect, useState } from 'react';
 import { MdAddTask, MdClose, MdKeyboardArrowDown } from 'react-icons/md';
-import TodoItem from './todoitem/TodoItem';
-import TodoPlaceholder from './TodoPlaceholder';
 import TaskListSelector from './TaskListSelector';
 import TodoComplete from './TodoComplete';
+import TodoItem from './todoitem/TodoItem';
 import TodoListOptions from './todolistoptions/TodoListOptions';
+import TodoPlaceholder from './TodoPlaceholder';
 
 export default function TodoList() {
     const [placeholder, setPlaceholder] = useState('');
@@ -120,7 +120,7 @@ export default function TodoList() {
                     return (
                         <div key={d}>
                             <div className={`my-2 overflow-y-hidden ${d === 'PAST' ? 'text-red-600' : ''} ${sortDates ? 'h-[14px]' : 'h-0'}`}>
-                                <h3 className='px-4 text-[11px] font-[500] uppercase leading-[16px] tracking-[.8px]'>{d}</h3>
+                                <h3 className='px-4 text-[11px] font-medium uppercase leading-[16px] tracking-[.8px]'>{d}</h3>
                             </div>
 
                             <ul className={`overflow-y-hidden duration-200 ${sortDates ? 'h-auto' : 'h-0'}`}>

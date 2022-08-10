@@ -10,8 +10,8 @@ export default function LocaleSelector() {
             name='language'
             id='language'
             value={getValue(hl)}
-            onChange={async e => {
-                return router.push(router.asPath, undefined, { locale: e.target.value });
+            onChange={e => {
+                return router.push(`intl/${e.target.value}/${router.pathname}`);
             }}
             className='rounded-md bg-transparent p-3 text-sm hover:cursor-pointer hover:bg-gray-200 md:text-lg'
         >

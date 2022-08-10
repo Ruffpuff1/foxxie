@@ -4,7 +4,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                ptSans: ['Roboto', 'sans-serif']
+                'open-sans': ['Open Sans', 'sans-serif']
             }
         },
         screens: {

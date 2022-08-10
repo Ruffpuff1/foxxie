@@ -1,10 +1,10 @@
-import clsx from 'clsx';
-import styles from './Navbar.module.css';
-import { useRouter } from 'next/router';
-import { MdClose, MdMenu } from 'react-icons/md';
-import { detectLocale } from 'src/util/intl';
 import useNavbarScroll from '@hooks/useNavbarScroll';
+import Link from '@ui/Link/Link';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { MdClose, MdMenu } from 'react-icons/md';
+import styles from './Navbar.module.css';
 
 export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Props) {
     const router = useRouter();
@@ -33,20 +33,17 @@ export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Pro
                         </button>
                     </div>
 
-                    <button onClick={() => router.push(home)} className={styles.title_wrapper}>
+                    <Link href={home} className={styles.title_wrapper}>
                         <div style={{ marginRight: title.startsWith(' ') ? '8px' : '0px' }} className={styles.logo}>
                             Reese
                         </div>
                         <div className={styles.title}>{title}</div>
-                    </button>
+                    </Link>
 
                     <div className={styles.links_wrapper}>
                         <nav className={styles.links_nav}>
                             <ul className={styles.links_ul}>
                                 {links.map(link => {
-                                    const loc = detectLocale(router.asPath);
-                                    const href = loc ? `/intl/${loc}${link.path}` : link.path;
-
                                     return (
                                         <li
                                             key={link.path}
@@ -54,7 +51,7 @@ export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Pro
                                                 [styles.nav_item_active]: link.path === router.pathname
                                             })}
                                         >
-                                            <a href={href}>{link.text}</a>
+                                            <Link href={link.path}>{link.text}</Link>
                                         </li>
                                     );
                                 })}
@@ -74,7 +71,9 @@ export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Pro
                         }}
                         className='flex items-center pl-[20px]'
                     >
-                        <div className='box-border flex h-[64px] items-center pr-[8px] text-[22px] leading-[30px]'>Reese</div>
+                        <div className='box-border flex h-[64px] items-center text-[22px] leading-[30px]' style={{ marginRight: title.startsWith(' ') ? '8px' : '0px' }}>
+                            Reese
+                        </div>
                         <div className={styles.title}>{title}</div>
                     </button>
                     <button
@@ -91,9 +90,9 @@ export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Pro
                     {links.map(link => {
                         return (
                             <li key={link.text} className='h-full w-full py-5 pl-5 duration-200 hover:bg-gray-100'>
-                                <a href={link.path} className='h-full w-full'>
+                                <Link href={link.path} className='h-full'>
                                     {link.text}
-                                </a>
+                                </Link>
                             </li>
                         );
                     })}

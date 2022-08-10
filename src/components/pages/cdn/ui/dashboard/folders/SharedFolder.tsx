@@ -12,7 +12,7 @@ export default function SharedFolder({ folder }: { folder: FolderType }) {
                 className='flex w-[13rem] items-center justify-start space-x-2 rounded-md border py-3 pl-4 md:w-[16rem]'
             >
                 <MdFolderShared className='text-xl' style={{ color: folder.color! }} />
-                <h2 className='text-sm font-[500]'>{folder.name.length > 20 ? `${folder.name.slice(0, 20)}...` : folder.name}</h2>
+                <h2 className='text-sm font-medium'>{folder.name.length > 20 ? `${folder.name.slice(0, 20)}...` : folder.name}</h2>
             </a>
         </Link>
     );

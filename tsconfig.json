@@ -25,6 +25,9 @@
       "@about-me/*": [
         "src/components/pages/about-me/*"
       ],
+      "@api/*": [
+        "src/pages/api/*"
+      ],
       "@arts-culture/*": [
         "src/components/pages/arts-and-culture/*"
       ],
@@ -37,11 +40,20 @@
       "@cdn/*": [
         "src/components/pages/cdn/*"
       ],
+      "@contact-me/*": [
+        "src/components/pages/contact-me/*"
+      ],
       "@developers/*": [
         "src/components/pages/developers/*"
       ],
       "@foxxie/*": [
         "src/components/pages/foxxie/*"
+      ],
+      "@hire/*": [
+        "src/components/pages/hire/*"
+      ],
+      "@home/*": [
+        "src/components/pages/home/*"
       ],
       "@hooks/*": [
         "src/hooks/*"
@@ -57,6 +69,9 @@
       ],
       "@ui/*": [
         "src/components/ui/*"
+      ],
+      "@util/*": [
+        "src/util/*"
       ],
       "@utils/*": [
         "src/utils/*"

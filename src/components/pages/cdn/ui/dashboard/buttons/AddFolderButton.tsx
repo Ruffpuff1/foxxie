@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { addDoc } from 'firebase/firestore';
-import { database, auth } from '@utils/firebase';
 import { Folder, RootFolder } from '@hooks/useFolder';
+import { Tooltip } from '@mui/material';
+import { auth, database } from '@utils/firebase';
+import { addDoc } from 'firebase/firestore';
+import { useState } from 'react';
 import { MdOutlineCreateNewFolder } from 'react-icons/md';
 import Modal from '../Modal';
-import { Tooltip } from '@mui/material';
 
 export default function AddFolderButton({ currentFolder }: { currentFolder: null | Folder }) {
     const [name, setName] = useState('');
@@ -47,7 +47,7 @@ export default function AddFolderButton({ currentFolder }: { currentFolder: null
                         setOpen(true);
                     }}
                 >
-                    <MdOutlineCreateNewFolder aria-hidden className='text-3xl font-[400]' />
+                    <MdOutlineCreateNewFolder aria-hidden className='text-3xl font-normal' />
                     <h2 aria-hidden className='text-base font-[450] tracking-wide'>
                         Folder
                     </h2>

@@ -11,7 +11,7 @@
 }
 
 .scroll_wrapper h2 {
-    @apply text-[.9rem] font-[400];
+    @apply text-[.9rem] font-normal;
 }
 
 .button_wrapper {

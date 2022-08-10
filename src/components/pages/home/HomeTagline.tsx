@@ -1,4 +1,5 @@
-import useLocale from '../../../hooks/useLocale';
+import useLocale from '@hooks/useLocale';
+import Link from '@ui/Link/Link';
 
 export default function HomeTagline() {
     const [translations] = useLocale();
@@ -6,9 +7,9 @@ export default function HomeTagline() {
     return (
         <h4 className='text-center text-gray-700'>
             {translations.home.tag}{' '}
-            <a className='hover:text-blue-500' href='https://reese.cafe/music'>
+            <Link className='duration-200 hover:text-blue-500' href='/music'>
                 {translations.home.musician}
-            </a>
+            </Link>
             .
         </h4>
     );

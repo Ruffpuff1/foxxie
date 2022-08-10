@@ -60,5 +60,5 @@
 }
 
 .header {
-    @apply ml-2 inline text-lg font-[400] leading-[1.3] text-[#333333];
+    @apply ml-2 inline text-lg font-normal leading-[1.3] text-[#333333];
 }

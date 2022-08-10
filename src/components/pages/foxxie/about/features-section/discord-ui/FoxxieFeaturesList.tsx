@@ -8,7 +8,7 @@ export default function FoxxieFeaturesList() {
             <div className='foxxie-main-panel bg-[#37393F]'>
                 <div className='flex h-[48px] items-center justify-start space-x-2 px-5 shadow-md'>
                     <span className='text-2xl italic text-gray-400'>#</span>
-                    <span className='text-base font-[500] text-[#DCDDDE]'>foxxies-features</span>
+                    <span className='text-base font-medium text-[#DCDDDE]'>foxxies-features</span>
                 </div>
 
                 <div className='py-4'>
@@ -22,7 +22,7 @@ export default function FoxxieFeaturesList() {
                         {foxxieFeatures.map(feature => {
                             return (
                                 <div key={feature.name} className='border-b-[#202225]'>
-                                    <h3 className='text-xl font-[500] text-[#DCDDDE]'>{toTitleCase(feature.name.replace('-', ' '))}</h3>
+                                    <h3 className='text-xl font-medium text-[#DCDDDE]'>{toTitleCase(feature.name.replace('-', ' '))}</h3>
                                     <p className='text-sm text-[#DCDDDE]'>{feature.description}</p>
                                 </div>
                             );

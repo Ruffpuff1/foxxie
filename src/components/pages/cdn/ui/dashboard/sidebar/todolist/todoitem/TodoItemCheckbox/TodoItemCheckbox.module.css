@@ -7,7 +7,7 @@
 }
 
 .check {
-    @apply absolute text-3xl font-[500] text-blue-500;
+    @apply absolute text-3xl font-medium text-blue-500;
 }
 
 .check_show {

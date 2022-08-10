@@ -1,17 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+import { WebsiteType } from '@api/message';
+import HireMain from '@hire/HireMain';
+import EmailStep from '@hire/steps/EmailStep';
+import NameStep from '@hire/steps/NameStep';
+import NumberPagesStep from '@hire/steps/NumberPagesStep';
+import OtherDescriptionStep from '@hire/steps/OtherDescriptionStep';
+import SiteTypeStep from '@hire/steps/SiteTypeStep';
+import Meta from '@ui/Meta';
 import type { NextPage } from 'next';
-import { NextSeo } from 'next-seo';
-import { Colors, Images } from '../../assets/images';
 import { useState } from 'react';
-import { WebsiteType } from '../api/message';
-import Head from 'next/head';
-import HireMain from '../../components/pages/hire/HireMain';
-import EmailStep from '../../components/pages/hire/steps/EmailStep';
-import SiteTypeStep from '../../components/pages/hire/steps/SiteTypeStep';
-import NameStep from '../../components/pages/hire/steps/NameStep';
-import NumberPagesStep from '../../components/pages/hire/steps/NumberPagesStep';
-import OtherDescriptionStep from '../../components/pages/hire/steps/OtherDescriptionStep';
 
 const Hire: NextPage = () => {
     const [step, setStep] = useState('1');
@@ -62,18 +58,7 @@ const Hire: NextPage = () => {
 
     return (
         <>
-            <Head>
-                <link rel='icon' href={Images.Reese} />
-                <meta name='theme-color' content={Colors.RuffGray} />
-            </Head>
-            <NextSeo
-                title='Hire Me - Reese Harlak'
-                description=''
-                openGraph={{
-                    title: 'Hire Me - Reese Harlak',
-                    description: ''
-                }}
-            />
+            <Meta title='Hire Me - Reese Harlak' description='' noRobots />
 
             <HireMain className='mt-96'>
                 <div>

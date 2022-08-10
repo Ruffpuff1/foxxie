@@ -1,4 +1,4 @@
-import { default as BaseNavbar } from '../../ui/Navbar/Navbar'
+import { default as BaseNavbar } from '../../ui/Navbar/Navbar';
 
 const Links: Link[] = [
     {
@@ -16,9 +16,7 @@ const Links: Link[] = [
 ];
 
 export default function Navbar() {
-    return (
-        <BaseNavbar  links={Links} title=' Design' home='/hire'  />
-    );
+    return <BaseNavbar links={Links} title=' Design' home='/hire' />;
 }
 
 interface Link {
