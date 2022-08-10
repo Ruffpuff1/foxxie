@@ -1,19 +1,18 @@
 import useLocale from '@hooks/useLocale';
-import { useRouter } from 'next/router';
+import clsx from 'clsx';
 import { ReactNode } from 'react';
 
 /**
  * Handles dynamic intl linking.
  */
 export default function Link({ children, className, href }: Props) {
-    const router = useRouter();
     const [, hl] = useLocale();
-    const link = hl === 'en_us' ? href : `intl/${hl}/${href}`;
+    const link = hl === 'en_us' ? href : `/intl/${hl}${href}`;
 
     return (
-        <button role='link' onClick={() => router.push(link)} className={className}>
+        <a href={link} className={clsx('inline-block', className)}>
             {children}
-        </button>
+        </a>
     );
 }
 
