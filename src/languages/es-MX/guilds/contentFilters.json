@@ -1,5 +1,5 @@
 {
-    "DISABLED": "No escané los mensajes",
-    "MEMBERS_WITHOUT_ROLES": "Escanea mensajes de los miembros sin roles",
-    "ALL_MEMBERS": "Escanea mensajes de todos los miembros"
+    "DISABLED": "No escanear ningún mensaje",
+    "MEMBERS_WITHOUT_ROLES": "Escanear mensajes de miembros sin rol",
+    "ALL_MEMBERS": "Escanear mensajes por todos los miembros"
 }
