@@ -1,11 +1,11 @@
 {
-    "helpDescription": "",
-    "helpMenu": "",
+    "helpDescription": "Ver todos mis comandos, o el menú de ayuda para un comando específico.",
+    "helpMenu": "Comandos de {{name}}",
     "helpTitles": {
-        "usage": ""
+        "usage": "Uso"
     },
-    "helpUsage": "",
-    "ping": "",
-    "pingDescription": "",
-    "pingPong": ""
+    "helpUsage": "(Comando)",
+    "ping": "¿Ping?",
+    "pingDescription": "Ejecuta una prueba de conexión a mi base de datos y Discord.",
+    "pingPong": "¡Pong! Total {{roundTrip}}ms (Latencia de Discord: {{wsPing}}ms. Conexión de la base de datos: {{dbPing}}ms)"
 }
