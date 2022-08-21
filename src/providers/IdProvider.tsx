@@ -1,5 +1,6 @@
+import { useQuery } from '@reeseharlak/usehooks';
 import { useRouter } from 'next/router';
-import { useContext, useState, useEffect, ReactNode, createContext } from 'react';
+import { createContext, ReactNode, useContext } from 'react';
 
 export const IdContext = createContext<{ id: string | null; routeId: (id: string) => Promise<boolean> }>({
     id: null,
@@ -10,12 +11,7 @@ export const IdContext = createContext<{ id: string | null; routeId: (id: string
 
 export function IdProvider({ children }: { children: ReactNode }) {
     const router = useRouter();
-
-    const [id, setId] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (router.query.id) setId(router.query.id as string);
-    }, [router.query.id]);
+    const id = useQuery('id');
 
     const routeId = (id: string) => router.push(router.pathname, { query: { id } }, { shallow: true });
 

@@ -1,3 +1,5 @@
+import { Icons } from './images';
+
 interface Project {
     name: string;
     icon: string;
@@ -23,7 +25,7 @@ export const projects: Project[][] = [
         },
         {
             name: 'Developers',
-            icon: 'https://reese.cafe/images/icons/developers.png',
+            icon: Icons.Developers,
             homepage: '/developers'
         }
     ],

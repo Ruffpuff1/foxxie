@@ -1,20 +1,24 @@
-import { AuthContext } from '@hooks/useAuth';
-import { useClickOutside } from '@ruffpuff/usehooks';
-import { database } from '@utils/firebase';
+import { useAuth } from '@hooks/useAuth';
+import { useClickOutside } from '@reeseharlak/usehooks';
+import { database } from '@util/firebase';
 import { addDoc, Timestamp } from 'firebase/firestore';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
 export default function TodoPlaceholder(props: { placeholder: string; setPlaceholder: (p: string) => void; list: string }) {
     const [name, setName] = useState('');
     const [editText, setEditText] = useState(true);
 
-    const user = useContext(AuthContext);
+    const [user] = useAuth();
 
-    const [inputRef] = useClickOutside<HTMLInputElement>(() => {
-        setEditText(false);
-        props.setPlaceholder('');
-        return name === '' ? undefined : addTodo();
-    }, [editText]);
+    useClickOutside(
+        () => {
+            setEditText(false);
+            props.setPlaceholder('');
+            return name === '' ? undefined : addTodo();
+        },
+        'todo-placeholder',
+        [editText]
+    );
 
     const formatDate = (d: Date) => {
         return new Intl.DateTimeFormat('en-US', {
@@ -57,7 +61,7 @@ export default function TodoPlaceholder(props: { placeholder: string; setPlaceho
                         onChange={e => {
                             setName(e.target.value);
                         }}
-                        ref={inputRef}
+                        id='todo-placeholder'
                         placeholder='Title'
                         className={`flex-wrap text-sm font-normal ${editText ? '' : 'hidden'}`}
                         type='text'

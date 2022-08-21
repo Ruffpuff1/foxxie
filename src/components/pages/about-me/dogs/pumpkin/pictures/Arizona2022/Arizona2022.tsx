@@ -1,31 +1,10 @@
-import useHover from '@hooks/useHover';
+import { useHover } from '@reeseharlak/usehooks';
 import clsx from 'clsx';
-import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
 export default function Arizona2022() {
-    const [azHover, setAzHover] = useState(false);
-    const [showMoreAz, setShowMoreAz] = useState(false);
-
-    useHover(
-        'pumpkin_mar_28_2022',
-        () => {
-            setAzHover(true);
-        },
-        () => {
-            setAzHover(false);
-        }
-    );
-
-    useHover(
-        'more-arizona-btn',
-        () => {
-            setShowMoreAz(true);
-        },
-        () => {
-            setShowMoreAz(false);
-        }
-    );
+    const azHover = useHover('pumpkin_mar_28_2022');
+    const showMoreAz = useHover('more-arizona-btn');
 
     return (
         <div>

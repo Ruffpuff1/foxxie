@@ -1,18 +1,16 @@
-import { AuthContext } from '@hooks/useAuth';
-import { useClickOutside } from '@ruffpuff/usehooks';
-import { database } from '@utils/firebase';
+import { useAuth } from '@hooks/useAuth';
+import { useClickOutside } from '@reeseharlak/usehooks';
+import { database } from '@util/firebase';
 import { getDocs, query, Timestamp, updateDoc, where } from 'firebase/firestore';
-import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useRef, useState } from 'react';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 
 export default function TodoDatePicker({ show, date: d, setShow, text }: { text: string; show: boolean; date: Date | null; setShow: (b: boolean) => void }) {
-    const router = useRouter();
     const [date, setDate] = useState(d);
     const [showDateInput, setShowDateInput] = useState(false);
     const [numDay, setDay] = useState(date?.getDate() || new Date().getDate());
-    const user = useContext(AuthContext);
+    const [user] = useAuth();
 
     const toDate = (d: Date | null, options?: Intl.DateTimeFormatOptions) => {
         if (d === null) return '';
@@ -23,13 +21,19 @@ export default function TodoDatePicker({ show, date: d, setShow, text }: { text:
     const year = toDate(date, { year: 'numeric' });
     const day = toDate(date, { day: 'numeric', weekday: 'short' });
 
-    const [inputRef] = useClickOutside<HTMLInputElement>(() => {
-        setShowDateInput(false);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-        const dd = date ? new Date(date) : new Date();
-        dd.setDate(numDay);
-        setDate(dd);
-    }, [showDateInput]);
+    useClickOutside(
+        () => {
+            setShowDateInput(false);
+
+            const dd = date ? new Date(date) : new Date();
+            dd.setDate(numDay);
+            setDate(dd);
+        },
+        inputRef,
+        [showDateInput]
+    );
 
     const reset = () => {
         setDate(d);

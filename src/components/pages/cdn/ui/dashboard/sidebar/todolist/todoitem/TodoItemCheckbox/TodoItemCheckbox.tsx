@@ -1,5 +1,5 @@
 import { TodoTask } from '@hooks/useTodo';
-import { database } from '@utils/firebase';
+import { database } from '@util/firebase';
 import { getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useState } from 'react';
 import { MdCheck } from 'react-icons/md';

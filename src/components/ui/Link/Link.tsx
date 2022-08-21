@@ -1,23 +1,27 @@
 import useLocale from '@hooks/useLocale';
 import clsx from 'clsx';
-import { ReactNode } from 'react';
+import { AriaRole, forwardRef, ReactNode, RefObject } from 'react';
 
 /**
  * Handles dynamic intl linking.
  */
-export default function Link({ children, className, href }: Props) {
+const Link = forwardRef(function Link({ children, className, href, id, role }: Props, ref) {
     const [, hl] = useLocale();
     const link = hl === 'en_us' ? href : `/intl/${hl}${href}`;
 
     return (
-        <a href={link} className={clsx('inline-block', className)}>
+        <a ref={ref as RefObject<HTMLAnchorElement>} id={id} href={link} className={clsx('inline-block', className)} role={role}>
             {children}
         </a>
     );
-}
+});
+
+export default Link;
 
 interface Props {
     children: ReactNode;
+    id?: string;
     className?: string;
     href: string;
+    role?: AriaRole;
 }

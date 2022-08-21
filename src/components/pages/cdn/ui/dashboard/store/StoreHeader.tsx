@@ -4,10 +4,12 @@ import { SidebarContext } from '@hooks/useTodo';
 import { FileClickContext } from '@providers/FileClickProvider';
 import { FileModalContext } from '@providers/FileModalProvider';
 import { useKeyPress } from 'ahooks';
+import dynamic from 'next/dynamic';
 import { useContext } from 'react';
-import FileDelete from '../files/FileDelete';
-import FileMore from '../files/FileMore';
-import FolderBreadCrumbs from '../folders/FolderBreadCrumbs';
+
+const FileDelete = dynamic(() => import('../files/FileDelete'));
+const FileMore = dynamic(() => import('../files/FileMore'));
+const FolderBreadCrumbs = dynamic(() => import('../folders/FolderBreadCrumbs'));
 
 export default function StoreHeader({ folder }: { folder: Folder | null }) {
     const { showDetails, file } = useContext(FileClickContext);

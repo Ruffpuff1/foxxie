@@ -1,6 +1,6 @@
 import Navbar from '@about-me/Navbar';
-import useWheel from '@hooks/useWheel';
 import { IParallax, Parallax, ParallaxLayer } from '@react-spring/parallax';
+import { useWheel } from '@reeseharlak/usehooks';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';

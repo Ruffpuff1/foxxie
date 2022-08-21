@@ -2,11 +2,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { TodoTask } from '@hooks/useTodo';
-import { useClickOutside } from '@ruffpuff/usehooks';
+import { useClickOutside } from '@reeseharlak/usehooks';
 import { days, hours, minutes, years } from '@ruffpuff/utilities';
-import { database } from '@utils/firebase';
+import { database } from '@util/firebase';
 import { getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { MdNotes } from 'react-icons/md';
 import TodoDatePicker from '../TodoDatePicker';
 import TodoItemCheckbox from './TodoItemCheckbox/TodoItemCheckbox';
@@ -62,20 +62,38 @@ export default function TodoItem({ todo, sortBy }: { todo: TodoTask; sortBy: str
 
     const showDate = sortBy !== 'date' && !open;
 
-    const [textareaRef] = useClickOutside<HTMLTextAreaElement>(() => {
-        setEditText(false);
-        return name === '' ? undefined : updateName();
-    }, [editText]);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const [textarea2Ref] = useClickOutside<HTMLTextAreaElement>(() => {
-        setEditDetails(false);
-        return updateDetails();
-    }, [editDetails]);
+    useClickOutside(
+        () => {
+            setEditText(false);
+            return name === '' ? undefined : updateName();
+        },
+        textareaRef,
+        [editText]
+    );
 
-    const [liRef] = useClickOutside<HTMLLIElement>(() => {
-        setOpen(false);
-        if (editDetails) setEditDetails(false);
-    }, [open]);
+    const textarea2Ref = useRef<HTMLTextAreaElement>(null);
+
+    useClickOutside(
+        () => {
+            setEditDetails(false);
+            return updateDetails();
+        },
+        textarea2Ref,
+        [editDetails]
+    );
+
+    const liRef = useRef<HTMLLIElement>(null);
+
+    useClickOutside(
+        () => {
+            setOpen(false);
+            if (editDetails) setEditDetails(false);
+        },
+        liRef,
+        [open]
+    );
 
     const date = todo.completeBy?.toDate() || null;
 

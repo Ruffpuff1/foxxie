@@ -1,22 +1,25 @@
-import Navbar, { Link } from '@ui/Navbar/Navbar';
-import { ReactNode } from 'react';
+import useLocale from '@hooks/useLocale';
 import HomeFooter from '@ui/HomeFooter';
-
-const links: Link[] = [
-    {
-        path: '/',
-        text: 'Home'
-    },
-    {
-        path: '/contact-me',
-        text: 'Contact'
-    }
-];
+import Navbar from '@ui/Navbar/Navbar';
+import { ReactNode } from 'react';
 
 export default function Main({ children, className }: { children: ReactNode; className?: string }) {
+    const [{ home }] = useLocale();
+
     return (
         <>
-            <Navbar links={links} />
+            <Navbar
+                links={[
+                    {
+                        path: '/',
+                        text: home.nav.home
+                    },
+                    {
+                        path: '/contact-me',
+                        text: home.nav.contact
+                    }
+                ]}
+            />
 
             {children}
 

@@ -3,6 +3,10 @@
     @apply fixed z-40 flex w-full items-center justify-between space-x-4 bg-white px-2;
 }
 
+.header_border_bottom {
+    @apply border-b-gray-400 border-b shadow-md;
+}
+
 .header_scrolled {
     @apply border-b-gray-400 border-b shadow-md;
 }
@@ -31,12 +35,20 @@
     @apply flex items-center rounded-md pl-[20px] hover:bg-gray-100;
 }
 
+.title_wrapper_no_hov {
+    @apply hover:bg-transparent;
+}
+
 .logo {
     @apply box-border flex h-[64px] items-center text-[22px] leading-[30px];
 }
 
 .title {
     @apply box-border flex items-center font-normal tracking-[-0.3px] pr-[12px] text-[22px] leading-[28px] text-[#5f6368] hover:underline;
+}
+
+.title_no_underline {
+    @apply hover:no-underline;
 }
 
 .links_wrapper {

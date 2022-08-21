@@ -1,6 +1,6 @@
-import home from './home';
-import notFound from './notFound';
+import { Translations } from '@assets/locales/types';
+import TranslationData from './translations.json';
 
-const enUS = { home, notFound };
+const enUS: Translations = TranslationData;
 
 export default enUS;

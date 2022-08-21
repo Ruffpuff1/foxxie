@@ -1,6 +1,7 @@
+import { Icons } from '@assets/images';
 import Image from 'next/image';
-import styles from './FeaturedProjects.module.css';
 import { useRouter } from 'next/router';
+import styles from './FeaturedProjects.module.css';
 
 const Featured: Project[] = [
     {
@@ -9,7 +10,7 @@ const Featured: Project[] = [
         header: 'Easily build and manage communities with Foxxie'
     },
     {
-        icon: 'https://reese.cafe/images/icons/developers.png',
+        icon: Icons.Developers,
         url: '/developers',
         header: 'Developer tooling, guides, and REST APIs'
     },

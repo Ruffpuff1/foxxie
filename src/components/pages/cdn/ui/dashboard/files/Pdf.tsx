@@ -1,10 +1,10 @@
-import { useDoubleClick } from '@hooks/useDoubleClick';
+import { File, Folder } from '@hooks/useFolder';
+import { FileClickContext } from '@providers/FileClickProvider';
+import { useDoubleClick } from '@reeseharlak/usehooks';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { MdPictureAsPdf } from 'react-icons/md';
-import { FileClickContext } from '@providers/FileClickProvider';
-import { File, Folder } from 'src/hooks/useFolder';
-import clsx from 'clsx';
 
 export default function Pdf({ file, folder }: { file: File; folder: Folder | null }) {
     const path = `/${folder?.path ? `${folder.path.map(p => p.name).join('/')}/` : ''}${folder?.name && folder.name !== 'Root' ? `${folder.name}/` : ''}${file.name}`;

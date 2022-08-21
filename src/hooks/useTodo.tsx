@@ -1,6 +1,6 @@
-import { database } from '@utils/firebase';
+import { useQuery } from '@reeseharlak/usehooks';
+import { database } from '@util/firebase';
 import { onSnapshot, query, Timestamp, where } from 'firebase/firestore';
-import { useRouter } from 'next/router';
 import { createContext, ReactNode, useEffect, useMemo, useReducer, useState } from 'react';
 import { useAuth } from './useAuth';
 
@@ -57,6 +57,7 @@ export function useTodo(): [TodoTask[], TodoList[]] {
     const [user] = useAuth();
 
     const id = user?.uid || null;
+    console.log(id);
 
     const [tasks, dispatch] = useReducer(reducer, {
         tasks: [],
@@ -104,12 +105,12 @@ export const SidebarContext = createContext({
 });
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-    const router = useRouter();
     const [showTodo, setShowTodo] = useState(false);
+    const panel = useQuery('panel');
 
     useEffect(() => {
-        if (router.query.panel === 'todo') setShowTodo(true);
-    }, [router.query.panel, setShowTodo]);
+        if (panel === 'todo') setShowTodo(true);
+    }, [panel, setShowTodo]);
 
     const ctx = useMemo(() => ({ showTodo, setShowTodo }), [showTodo, setShowTodo]);
 

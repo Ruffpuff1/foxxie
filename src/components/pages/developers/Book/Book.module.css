@@ -1,0 +1,33 @@
+.wrapper {
+    @apply bg-white h-[calc(100%-64px)] w-0 overflow-x-hidden duration-200 lg:w-[270px] fixed top-[64px] z-[2] left-0 shadow-xl;
+}
+
+.input_wrapper {
+    @apply bg-white flex mb-[12px] p-[24px] border-b-[#dadce0] border-b;
+}
+
+.input_wrapper input {
+    @apply bg-[#f1f3f4] text-[16px] placeholder:text-[16px] w-full px-[32px] h-[32px];
+}
+
+.wrapper nav {
+    @apply text-[13px] block rounded;
+}
+
+.book_ul {
+    padding-bottom: 56px;
+}
+
+.book_ul li {
+    margin: 0px;
+    line-height: 16px;
+    width: 100%;
+}
+
+.book_link {
+    @apply rounded-r-xl py-1 pl-[24px] hover:bg-gray-100 pr-[8px] font-[500] w-full inline-block;
+}
+
+.book_link_selected {
+    @apply bg-blue-100 text-blue-500 hover:bg-blue-100;
+}

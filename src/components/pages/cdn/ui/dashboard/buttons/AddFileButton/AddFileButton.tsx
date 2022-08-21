@@ -1,19 +1,20 @@
-import { database, storage } from '@utils/firebase';
-import { query, where, getDocs, addDoc, updateDoc } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { useContext, useState } from 'react';
-import { MdOutlineFileUpload } from 'react-icons/md';
-import { AuthContext } from '@hooks/useAuth';
+import { useAuth } from '@hooks/useAuth';
 import { Folder } from '@hooks/useFolder';
+import Tooltip from '@mui/material/Tooltip';
+import { useToggle } from '@reeseharlak/usehooks';
+import { database, storage } from '@util/firebase';
+import { addDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useState } from 'react';
+import { MdOutlineFileUpload } from 'react-icons/md';
 import Modal from '../../Modal';
 import styles from './AddFileButton.module.css';
-import Tooltip from '@mui/material/Tooltip';
 
 export default function AddFileButton({ currentFolder }: { currentFolder: null | Folder }) {
-    const [open, setOpen] = useState(false);
+    const [open, { setFalse, setTrue }] = useToggle(false);
     const [file, setFile] = useState<File | null>(null);
     const [name, setName] = useState('');
-    const user = useContext(AuthContext);
+    const [user] = useAuth();
 
     async function handleSubmit() {
         if (file === null || currentFolder === null) return;
@@ -52,7 +53,7 @@ export default function AddFileButton({ currentFolder }: { currentFolder: null |
             }
         );
 
-        setOpen(false);
+        setFalse();
         setFile(null);
         setName('');
     }
@@ -65,24 +66,14 @@ export default function AddFileButton({ currentFolder }: { currentFolder: null |
 
     function handleClose() {
         setFile(null);
-        setOpen(false);
+        setFalse();
         setName('');
-    }
-
-    function handleOpen() {
-        setOpen(true);
     }
 
     return (
         <div className={styles.wrapper}>
             <Tooltip id='file-upload-tooltip' title='Upload a new file'>
-                <button
-                    aria-labelledby='file-upload-tooltip'
-                    className={styles.button}
-                    onClick={() => {
-                        handleOpen();
-                    }}
-                >
+                <button aria-labelledby='file-upload-tooltip' className={styles.button} onClick={setTrue}>
                     <MdOutlineFileUpload aria-hidden className={styles.folder_icon} />
                     <span aria-hidden className={styles.button_text}>
                         File upload

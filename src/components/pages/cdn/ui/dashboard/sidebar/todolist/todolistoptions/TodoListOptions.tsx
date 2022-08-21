@@ -1,16 +1,20 @@
 import { useAuth } from '@hooks/useAuth';
 import { TodoList, TodoTask } from '@hooks/useTodo';
-import { useClickOutside } from '@ruffpuff/usehooks';
-import { database } from '@utils/firebase';
+import { useClickOutside } from '@reeseharlak/usehooks';
+import { database } from '@util/firebase';
 import { deleteDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useState } from 'react';
 import { MdCheck, MdMoreVert } from 'react-icons/md';
 
 export default function TodoListOptions({ list, setTaskList, lists, listTodos, setSortBy, sortBy }: Props) {
     const [showListOptions, setShowListOptions] = useState(false);
-    const [divRef] = useClickOutside<HTMLDivElement>(() => {
-        if (showListOptions) setShowListOptions(false);
-    });
+    useClickOutside(
+        () => {
+            setShowListOptions(false);
+        },
+        'todo-tasklist-options',
+        [showListOptions]
+    );
 
     const [user] = useAuth();
 
@@ -57,7 +61,7 @@ export default function TodoListOptions({ list, setTaskList, lists, listTodos, s
     };
 
     return (
-        <div ref={divRef}>
+        <div id='todo-tasklist-options'>
             <button
                 aria-label='View list options'
                 onClick={() => {

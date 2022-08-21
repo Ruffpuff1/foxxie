@@ -6,13 +6,13 @@ import Meta from '@ui/Meta';
 import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
-    const [translations] = useLocale();
+    const [{ home }] = useLocale();
 
     return (
         <>
             <Meta
-                title={translations.home.title}
-                description={translations.home.description}
+                title={home.title}
+                description={home.description}
                 keywords={['reese', 'reese harlak', 'web', 'react', 'next.js', 'developer', 'student', 'music']}
                 subject='The homepage of my website.'
             />

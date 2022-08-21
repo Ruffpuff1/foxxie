@@ -1,7 +1,7 @@
-import { useContext, useEffect, useReducer } from 'react';
-import { doc, getDoc, where, orderBy, onSnapshot, query } from 'firebase/firestore';
-import { database } from '@utils/firebase';
-import { AuthContext } from './useAuth';
+import { database } from '@util/firebase';
+import { doc, getDoc, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { useEffect, useReducer } from 'react';
+import { useAuth } from './useAuth';
 
 export const RootFolder: Folder = {
     name: 'Root',
@@ -106,7 +106,7 @@ export function useFolder(folderId: string | null = null, folder: Folder | null 
         sharedFolders: [],
         sharedFiles: []
     });
-    const user = useContext(AuthContext);
+    const [user] = useAuth();
     const id = user?.uid || null;
 
     useEffect(() => {

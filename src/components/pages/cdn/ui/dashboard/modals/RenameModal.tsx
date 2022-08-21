@@ -1,6 +1,6 @@
 import { FileClickContext } from '@providers/FileClickProvider';
 import { FileModalContext } from '@providers/FileModalProvider';
-import { database } from '@utils/firebase';
+import { database } from '@util/firebase';
 import { getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useState, useContext } from 'react';
 import Modal from '../Modal';

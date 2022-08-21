@@ -10,3 +10,7 @@ export enum Images {
 export enum Colors {
     RuffGray = '#898489'
 }
+
+export enum Icons {
+    Developers = 'https://reese.cafe/images/icons/developers.png'
+}

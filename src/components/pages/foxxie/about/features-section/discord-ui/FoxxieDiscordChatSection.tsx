@@ -1,8 +1,10 @@
-import ChannelInfo from '../discord-components/ChannelInfo';
-import ModerationLog from '../discord-components/ModerationLog';
-import RoleInfo from '../discord-components/RoleInfo';
-import ServerInfo from '../discord-components/ServerInfo';
-import UserInfo from '../discord-components/UserInfo';
+import dynamic from 'next/dynamic';
+
+const ChannelInfo = dynamic(() => import('../discord-components/ChannelInfo'));
+const ModerationLog = dynamic(() => import('../discord-components/ModerationLog'));
+const RoleInfo = dynamic(() => import('../discord-components/RoleInfo'));
+const ServerInfo = dynamic(() => import('../discord-components/ServerInfo'));
+const UserInfo = dynamic(() => import('../discord-components/UserInfo'));
 
 export default function FoxxieDiscordChatSection({ section }: { section: string }) {
     return (

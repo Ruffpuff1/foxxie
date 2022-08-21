@@ -1,26 +1,29 @@
 import { useAuth } from '@hooks/useAuth';
 import { RootFolder, useFolder } from '@hooks/useFolder';
 import useId from '@providers/IdProvider';
-import { useClickOutside } from '@ruffpuff/usehooks';
+import { useClickOutside, useToggle } from '@reeseharlak/usehooks';
 import clsx from 'clsx';
-import { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
-import AddFileButton from './buttons/AddFileButton/AddFileButton';
-import AddFolderButton from './buttons/AddFolderButton';
+
+const AddFolderButton = dynamic(() => import('./buttons/AddFolderButton'), { ssr: false });
+const AddFileButton = dynamic(() => import('./buttons/AddFileButton/AddFileButton'), { ssr: false });
 
 export default function Panel() {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, { setFalse, toggle }] = useToggle(false);
+    useClickOutside(setFalse, 'cdn-create-menu');
 
     const [user] = useAuth();
     const [id] = useId();
-
     const [{ folder }] = useFolder(id);
 
     const owned = user?.uid === folder?.userId;
+    const [show, setShow] = useState(false);
 
-    const [divRef] = useClickOutside<HTMLDivElement>(() => {
-        setIsOpen(false);
-    });
+    useEffect(() => {
+        setShow(Boolean(owned || folder === RootFolder));
+    }, [setShow, owned, folder]);
 
     return (
         <>
@@ -30,9 +33,7 @@ export default function Panel() {
                         <button
                             aria-labelledby='new-label'
                             className='rounded-full border border-gray-200 px-7 py-3 shadow-md duration-200 hover:shadow-lg'
-                            onClick={() => {
-                                setIsOpen(!isOpen);
-                            }}
+                            onClick={toggle}
                         >
                             <h2 className='flex items-center justify-between space-x-1'>
                                 <MdAdd className='text-4xl font-semibold text-blue-500 duration-500 hover:text-black' />
@@ -44,13 +45,13 @@ export default function Panel() {
             </div>
 
             <div
-                ref={divRef}
+                id='cdn-create-menu'
                 className={clsx(
                     'fixed top-[5rem] left-3 w-72 rounded-md border-2 border-gray-100 border-opacity-50 bg-white py-3 shadow-lg duration-200 ease-in-out',
                     isOpen ? 'z-[1] opacity-100' : 'z-[-4] opacity-0'
                 )}
             >
-                {Boolean(owned || folder === RootFolder) && (
+                {show ? (
                     <ul
                         id='new-list'
                         className={clsx({
@@ -64,7 +65,7 @@ export default function Panel() {
                             <AddFileButton currentFolder={folder} />
                         </li>
                     </ul>
-                )}
+                ) : null}
             </div>
         </>
     );

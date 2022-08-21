@@ -1,15 +1,29 @@
 import useNavbarScroll from '@hooks/useNavbarScroll';
-import Link from '@ui/Link/Link';
+import { useClickOutside } from '@reeseharlak/usehooks';
 import clsx from 'clsx';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { MdClose, MdMenu } from 'react-icons/md';
 import styles from './Navbar.module.css';
 
-export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Props) {
+const NavbarLanguageSelector = dynamic(() => import('./NavbarLanguageSelector'), { ssr: false });
+const Image = dynamic(() => import('next/image'), { ssr: false });
+const Link = dynamic(() => import('@ui/Link/Link'), { ssr: false });
+const AuthInformation = dynamic(() => import('@auth/AuthInformation/AuthInformation'), { ssr: false });
+
+export default function Navbar({ links, stat, closeId, title = '.cafe', hide, home = '/', auth, children, locale, menu, border, icon, noHoverIndicators }: Props) {
     const router = useRouter();
     const [stick, scrolled] = useNavbarScroll();
     const [showPanel, setShowPanel] = useState(false);
+
+    useClickOutside(
+        () => {
+            setShowPanel(false);
+        },
+        'navbar-popout-panel',
+        [showPanel]
+    );
 
     return (
         <>
@@ -17,9 +31,10 @@ export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Pro
                 id='navbar'
                 className={clsx(styles.header, {
                     [styles.header_scrolled]: scrolled,
-                    [styles.header_not_scrolled]: !scrolled,
-                    [styles.header_stick]: stick,
-                    [styles.header_not_stick]: !stick || hide
+                    [styles.header_not_scrolled]: !scrolled || stat,
+                    [styles.header_stick]: stick || stat,
+                    [styles.header_not_stick]: (!stick || hide) && !stat,
+                    [styles.header_border_bottom]: border
                 })}
             >
                 <div className={styles.header_content}>
@@ -33,38 +48,75 @@ export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Pro
                         </button>
                     </div>
 
-                    <Link href={home} className={styles.title_wrapper}>
+                    <Link
+                        href={home}
+                        className={clsx(styles.title_wrapper, {
+                            [styles.title_wrapper_no_hov]: noHoverIndicators
+                        })}
+                    >
+                        {icon && (
+                            <div className='mr-[12px] flex items-center'>
+                                <Image height={32} width={32} src={icon} alt={title} />
+                            </div>
+                        )}
                         <div style={{ marginRight: title.startsWith(' ') ? '8px' : '0px' }} className={styles.logo}>
                             Reese
                         </div>
-                        <div className={styles.title}>{title}</div>
+                        <div
+                            className={clsx(styles.title, {
+                                [styles.title_no_underline]: noHoverIndicators
+                            })}
+                        >
+                            {title}
+                        </div>
                     </Link>
 
-                    <div className={styles.links_wrapper}>
-                        <nav className={styles.links_nav}>
-                            <ul className={styles.links_ul}>
-                                {links.map(link => {
-                                    return (
-                                        <li
-                                            key={link.path}
-                                            className={clsx(styles.nav_item, {
-                                                [styles.nav_item_active]: link.path === router.pathname
-                                            })}
-                                        >
-                                            <Link href={link.path}>{link.text}</Link>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </nav>
-                    </div>
+                    {!children && (
+                        <div className={styles.links_wrapper}>
+                            <nav className={styles.links_nav}>
+                                <ul className={styles.links_ul}>
+                                    {links.map(link => {
+                                        return (
+                                            <li
+                                                key={link.path}
+                                                className={clsx(styles.nav_item, {
+                                                    [styles.nav_item_active]: link.path === router.pathname
+                                                })}
+                                            >
+                                                <Link href={link.path}>{link.text}</Link>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </nav>
+                        </div>
+                    )}
+
+                    {children && <div className={styles.links_wrapper}>{children}</div>}
                 </div>
+
+                {locale || auth ? (
+                    <div className='flex items-center space-x-2'>
+                        {locale && <NavbarLanguageSelector closeId={closeId} />}
+
+                        {auth && (
+                            <div className='flex items-center'>
+                                <AuthInformation signOutPath='/developers' />
+                            </div>
+                        )}
+                    </div>
+                ) : null}
             </header>
 
-            <div className={`fixed top-0 z-[50] h-full w-full bg-black bg-opacity-30 ${showPanel ? 'block' : 'hidden'}`} />
+            <div className={`fixed top-0 z-[50] h-full w-full bg-black bg-opacity-30 ${showPanel ? 'block lg:hidden' : 'hidden'}`} />
 
-            <div className={`fixed top-0 left-0 z-[60] h-full overflow-x-hidden whitespace-nowrap bg-white duration-200 ${showPanel ? 'w-80' : 'w-0'}`}>
-                <div className='flex items-center justify-start shadow-md'>
+            <div
+                id='navbar-popout-panel'
+                className={`fixed top-0 z-[60] h-full overflow-x-hidden whitespace-nowrap bg-white duration-300 ${
+                    showPanel ? 'left-0 w-80 lg:left-[-20rem] lg:w-0' : 'left-[-20rem] w-0'
+                }`}
+            >
+                <div className='flex items-center justify-between shadow-md'>
                     <button
                         onClick={() => {
                             setShowPanel(false);
@@ -74,10 +126,16 @@ export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Pro
                         <div className='box-border flex h-[64px] items-center text-[22px] leading-[30px]' style={{ marginRight: title.startsWith(' ') ? '8px' : '0px' }}>
                             Reese
                         </div>
-                        <div className={styles.title}>{title}</div>
+                        <div
+                            className={clsx(styles.title, {
+                                [styles.title_no_underline]: noHoverIndicators
+                            })}
+                        >
+                            {title}
+                        </div>
                     </button>
                     <button
-                        className='ml-24 block rounded-full p-2 duration-200 hover:bg-gray-100 lg:hidden'
+                        className='mr-4 block rounded-full p-2 duration-200 hover:bg-gray-100 lg:hidden'
                         onClick={() => {
                             setShowPanel(false);
                         }}
@@ -98,6 +156,8 @@ export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Pro
                     })}
                 </ul>
             </div>
+
+            {menu && <>{menu}</>}
         </>
     );
 }
@@ -105,8 +165,17 @@ export default function Navbar({ links, title = '.cafe', hide, home = '/' }: Pro
 export interface Props {
     hide?: boolean;
     home?: string;
+    border?: boolean;
+    icon?: string;
+    noHoverIndicators?: boolean;
+    auth?: boolean;
     links: Link[];
     title?: string;
+    stat?: boolean;
+    closeId?: string;
+    locale?: boolean;
+    menu?: ReactNode;
+    children?: ReactNode;
 }
 
 export interface Link {

@@ -1,6 +1,8 @@
-import Image from 'next/image';
-import VerifiedTick from '../svgs/VerifiedTick';
+import dynamic from 'next/dynamic';
 import styles from './AuthorInfo.module.css';
+
+const Image = dynamic(() => import('next/image'));
+const VerifiedTick = dynamic(() => import('../svgs/VerifiedTick'));
 
 export interface Props {
     author: string;

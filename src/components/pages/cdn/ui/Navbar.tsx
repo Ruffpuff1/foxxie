@@ -1,4 +1,4 @@
-import AuthInformation from '@auth/AuthInformation';
+import AuthInformation from '@auth/AuthInformation/AuthInformation';
 import Image from 'next/image';
 import { SidebarContext } from '@hooks/useTodo';
 import { useContext } from 'react';

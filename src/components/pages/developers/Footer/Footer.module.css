@@ -1,0 +1,19 @@
+.footer {
+    @apply w-full bg-white shadow-lg;
+}
+
+.not_full {
+    @apply lg:pl-[270px];
+}
+
+.link_wrap {
+    @apply flex py-6 px-8 text-[14.5px] text-gray-500 items-start flex-col justify-center space-y-4 leading-[20px] border-b;
+}
+
+.link_wrap h3 {
+    @apply text-[16px] text-gray-800 leading-[26px];
+}
+
+.link {
+    @apply hover:text-blue-500 duration-200;
+}

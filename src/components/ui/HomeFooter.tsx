@@ -36,6 +36,11 @@ export default function HomeFooter({ className }: { className?: string }) {
                             </Link>
                         </li>
                         <li className='text-gray-700 duration-200 hover:text-gray-600'>
+                            <Link className='text-[16px] font-medium' href='/developers'>
+                                Developers
+                            </Link>
+                        </li>
+                        <li className='text-gray-700 duration-200 hover:text-gray-600'>
                             <Link className='text-[16px] font-medium' href='/foxxie/about'>
                                 Foxxie
                             </Link>

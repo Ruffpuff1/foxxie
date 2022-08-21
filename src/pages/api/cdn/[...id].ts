@@ -1,4 +1,4 @@
-import { database } from '@utils/firebase';
+import { database } from '@util/firebase';
 import { query, where, getDocs } from 'firebase/firestore';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -8,8 +8,6 @@ export default async function Handler(req: NextApiRequest, res: NextApiResponse)
 
     const split = id.split('.');
     const [name, format] = split;
-
-    console.log(id, folderName);
 
     const refrence = query(database.files, where('name', '==', `${name}.${format}`));
 

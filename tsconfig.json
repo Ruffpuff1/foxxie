@@ -72,10 +72,7 @@
       ],
       "@util/*": [
         "src/util/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
+      ]
     },
   },
   "include": [

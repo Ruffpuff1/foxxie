@@ -1,12 +1,12 @@
-import { useClickOutside } from '@ruffpuff/usehooks';
-import { database } from '@utils/firebase';
+import { useAuth } from '@hooks/useAuth';
+import { useClickOutside } from '@reeseharlak/usehooks';
+import { database } from '@util/firebase';
 import { addDoc } from 'firebase/firestore';
-import { useContext, useState } from 'react';
-import { AuthContext } from 'src/hooks/useAuth';
+import { useState } from 'react';
 
 export default function TaskListCreator({ show, setShow }: { show: boolean; setShow: (b: boolean) => void }) {
     const [name, setName] = useState('');
-    const user = useContext(AuthContext);
+    const [user] = useAuth();
 
     const onDone = async () => {
         await addDoc(database.todoLists, {
@@ -24,13 +24,11 @@ export default function TaskListCreator({ show, setShow }: { show: boolean; setS
         setName('');
     };
 
-    const [divRef] = useClickOutside<HTMLDivElement>(() => {
-        onClose();
-    });
+    useClickOutside(onClose, 'todo-tasklist-creator');
 
     return (
         <div className={`fixed top-0 right-0 z-[6] flex h-full w-72 items-center justify-center bg-black bg-opacity-30 ${show ? '' : 'hidden'}`}>
-            <div ref={divRef} className='flex h-36 w-60 flex-col justify-evenly rounded-md bg-white py-2 pl-4 shadow-md'>
+            <div id='todo-tasklist-creator' className='flex h-36 w-60 flex-col justify-evenly rounded-md bg-white py-2 pl-4 shadow-md'>
                 <h2 className='text-sm'>Create a new list</h2>
                 <div>
                     <input

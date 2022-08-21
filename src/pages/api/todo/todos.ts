@@ -1,5 +1,5 @@
-import { database } from '@utils/firebase';
-import { query, where, getDocs } from 'firebase/firestore';
+import { database } from '@util/firebase';
+import { getDocs, query, where } from 'firebase/firestore';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function Handler(req: NextApiRequest, res: NextApiResponse) {

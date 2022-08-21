@@ -1,7 +1,9 @@
 import { Folder, FolderPath, RootFolder } from '@hooks/useFolder';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import FolderDots from './FolderDots';
 import SharedPeopleButton from './SharedPeopleButton';
+
+const FolderDots = dynamic(() => import('./FolderDots'));
 
 export default function FolderBreadCrumbs({ currentFolder }: Props) {
     const path = [currentFolder === RootFolder ? null : { name: 'Root', id: '' }, ...(currentFolder?.path || [])].filter(a => a !== null) as FolderPath[];

@@ -1,32 +1,11 @@
-import useHover from '@hooks/useHover';
+import { useHover } from '@reeseharlak/usehooks';
 import clsx from 'clsx';
-import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import styles from './LosAngeles2022.module.css';
 
 export default function LosAngeles2022() {
-    const [showMoreLa, setShowMoreLa] = useState(false);
-    const [laHover, setLaHover] = useState(false);
-
-    useHover(
-        'pumpkin_apr_24_2022',
-        () => {
-            setLaHover(true);
-        },
-        () => {
-            setLaHover(false);
-        }
-    );
-
-    useHover(
-        'more-la-btn',
-        () => {
-            setShowMoreLa(true);
-        },
-        () => {
-            setShowMoreLa(false);
-        }
-    );
+    const laHover = useHover('pumpkin_apr_24_2022');
+    const showMoreLa = useHover('more-la-btn');
 
     return (
         <div>

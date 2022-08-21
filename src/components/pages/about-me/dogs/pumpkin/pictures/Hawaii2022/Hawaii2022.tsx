@@ -1,31 +1,10 @@
-import useHover from '@hooks/useHover';
+import { useHover } from '@reeseharlak/usehooks';
 import clsx from 'clsx';
-import { useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
 export default function Hawaii2022() {
-    const [hwHover, setHwHover] = useState(false);
-    const [showMoreHw, setShowMoreHw] = useState(false);
-
-    useHover(
-        'pumpkin_jul_9_2022',
-        () => {
-            setHwHover(true);
-        },
-        () => {
-            setHwHover(false);
-        }
-    );
-
-    useHover(
-        'more-hawaii-btn',
-        () => {
-            setShowMoreHw(true);
-        },
-        () => {
-            setShowMoreHw(false);
-        }
-    );
+    const hwHover = useHover('pumpkin_jul_9_2022');
+    const showMoreHw = useHover('more-hawaii-btn');
 
     return (
         <div>

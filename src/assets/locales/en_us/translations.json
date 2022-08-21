@@ -1,0 +1,55 @@
+{
+    "aboutMe": {
+        "description": "",
+        "nav": {
+            "about": "About",
+            "contact": "Contact",
+            "myWork": "My work"
+        },
+        "title": "About Me - Reese Harlak"
+    },
+    "developers": {
+        "breadcrumbs": {
+            "duration": "Duration",
+            "home": "Home",
+            "packages": "Packages"
+        },
+        "book": {
+            "methods": "Methods",
+            "overview": "Overview",
+            "types": "Types"
+        },
+        "copyright": {
+            "intl": "Intl translations by their",
+            "licensed": ". Licensed under the",
+            "mitLicense": "MIT License",
+            "respectiveAuthors": "respective authors",
+            "start": "Unless otherwise noted, the text on this page is Copyright © 2022 Reese Harlak &"
+        },
+        "description": "",
+        "onThisPage": "On this page",
+        "nav": {
+            "learn": "Learn",
+            "packages": "Packages"
+        },
+        "title": "Developers: Tooling and APIs"
+    },
+    "filter": "Filter",
+    "home": {
+        "aboutMe": "About me",
+        "aboutMeTag": "Read a bit about me and what I like to do.",
+        "description": "Hi I' m Reese, a Typescript web developer and musician.",
+        "hi": "Hi I'm",
+        "musician": "musician",
+        "nav": {
+            "contact": "Contact",
+            "home": "Home"
+        },
+        "tag": "A sixteen-year-old web developer and",
+        "title": "Reese Harlak - My Personal Website"
+    },
+    "notFound": {
+        "tag": "I couldn't find the page you were looking for, click here to go home."
+    },
+    "readNow": "Read now"
+}

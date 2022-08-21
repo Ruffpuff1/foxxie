@@ -1,8 +1,9 @@
 const redirects = require('./redirects');
 const path = require('path');
 const loaderUtils = require('loader-utils');
+const withPlugins = require('next-compose-plugins');
+const withBundleAnalyzer = require('@next/bundle-analyzer');
 
-// based on https://github.com/vercel/next.js/blob/0af3b526408bae26d6b3f8cab75c4229998bf7cb/packages/next/build/webpack/config/blocks/css/loaders/getCssModuleLocalIdent.ts
 const hashOnlyIdent = (context, _, exportName) =>
     loaderUtils
         .getHashDigest(
@@ -25,10 +26,6 @@ const nextConfig = {
                 rule.use.forEach(moduleLoader => {
                     if (moduleLoader.loader?.includes('css-loader') && !moduleLoader.loader?.includes('postcss-loader'))
                         moduleLoader.options.modules.getLocalIdent = hashOnlyIdent;
-
-                    // earlier below statements were sufficient:
-                    // delete moduleLoader.options.modules.getLocalIdent;
-                    // moduleLoader.options.modules.localIdentName = '[hash:base64:6]';
                 });
             });
 
@@ -41,6 +38,10 @@ const nextConfig = {
     },
     rewrites: async () => {
         return [
+            {
+                source: '/apis/:path*',
+                destination: '/api/:path*'
+            },
             {
                 source: '/images/:slug(.{1,})',
                 destination: '/api/cdn/:slug'
@@ -72,4 +73,4 @@ const nextConfig = {
     }
 };
 
-module.exports = nextConfig;
+module.exports = withPlugins([withBundleAnalyzer({ enabled: process.env.ANALYZE === 'true' })], nextConfig);

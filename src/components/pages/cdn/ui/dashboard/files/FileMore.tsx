@@ -1,34 +1,26 @@
-import { useContext, useState } from 'react';
 import { Folder } from '@hooks/useFolder';
-import { MdDriveFileRenameOutline, MdMoreVert, MdSaveAlt } from 'react-icons/md';
-import { useClickOutside } from '@ruffpuff/usehooks';
-import { FileModalContext } from '@providers/FileModalProvider';
 import { FileClickContext } from '@providers/FileClickProvider';
-import { useRouter } from 'next/router';
+import { FileModalContext } from '@providers/FileModalProvider';
+import { useClickOutside, useToggle } from '@reeseharlak/usehooks';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { MdDriveFileRenameOutline, MdMoreVert, MdSaveAlt } from 'react-icons/md';
 
 export default function FileMore({ currentFolder }: { currentFolder: Folder }) {
     const router = useRouter();
 
-    const [showPanel, setShowPanel] = useState(false);
+    const [showPanel, { setFalse, toggle }] = useToggle();
     const { file } = useContext(FileClickContext);
     const { setShowRename, showRename } = useContext(FileModalContext);
-
-    const [liRef] = useClickOutside<HTMLLIElement>(() => {
-        setShowPanel(false);
-    }, [showPanel, !showRename]);
+    useClickOutside(setFalse, 'cdn-file-more-list', [showPanel, !showRename]);
 
     const url = `/cdn/${currentFolder?.parentId ? `${currentFolder.path.map(p => p.name).join('/')}/` : ''}${currentFolder?.name}/${file.name}`;
 
     return (
         <>
-            <li ref={liRef}>
-                <button
-                    onClick={() => {
-                        setShowPanel(!showPanel);
-                    }}
-                    className='rounded-full p-[4px] text-2xl text-[#767676] duration-200 hover:bg-gray-200 hover:text-black'
-                >
+            <li id='cdn-file-more-list'>
+                <button onClick={toggle} className='rounded-full p-[4px] text-2xl text-[#767676] duration-200 hover:bg-gray-200 hover:text-black'>
                     <MdMoreVert />
                 </button>
 

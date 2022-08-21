@@ -11,46 +11,8 @@ html {
     @apply font-open-sans !important;
 }
 
-.trs {
-    transition: width .3s cubic-bezier(0.24,1,0.32,1);
-}
-
 .foxxie-main-panel {
     width: 100%;
-}
-
-.no-drag {
-    -webkit-user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
-
-.no-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scroll {
-    -ms-overflow-style: none;
-    scrollbar-height: none;
-}
-
-.mus-card {
-    animation-duration: 0.2s;
-  animation-delay: 0.5s;
-  animation-name: animate-fade;
-  animation-timing-function: cubic-bezier(.26,.53,.74,1.48);
-  animation-fill-mode: backwards;
-}
-
-.mus-card-reverse {
-    animation-duration: 0.2s;
-  animation-delay: 0.5s;
-  animation-name: animate-fade;
-  animation-timing-function: cubic-bezier(.26,.53,.74,1.48);
-  animation-fill-mode: backwards;
-  animation-direction: reverse;
 }
 
 @keyframes animate-fade {
@@ -102,10 +64,6 @@ html {
 #hire-description-textarea {
     transition: width 0.5s ease;
     max-height: 14rem;
-}
-
-.hide-s {
-    overflow-y: hidden;
 }
 
 .card {

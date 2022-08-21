@@ -55,7 +55,6 @@ export default function TodoList() {
     const sortDates = sortBy === 'date';
 
     const dates = [...new Set(notCompleteOnList.map(c => formatDate(c.completeBy?.toDate() || null)).filter(a => a !== null))] as string[];
-    console.log(dates);
 
     return (
         <div className={`fixed top-0 right-0 z-[4] h-full whitespace-nowrap bg-white pt-3 pr-0 shadow-lg duration-200 ease-in ${showTodo ? 'w-[288px]' : 'w-0'}`}>

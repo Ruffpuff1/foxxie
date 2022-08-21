@@ -1,6 +1,6 @@
 import { File, Folder } from 'src/hooks/useFolder';
 import Pdf from './Pdf';
-import Photo from './Photo';
+import Photo from './Photo/Photo';
 
 export default function Files({ childFiles, folder }: { childFiles: File[]; folder: Folder | null }) {
     return (

@@ -1,4 +1,4 @@
-const subdomains = ['apis', 'celestia', 'developers', 'newtab'].map(subdomainRedirect);
+const subdomains = ['celestia', 'newtab'].map(subdomainRedirect);
 
 function subdomainRedirect(key) {
     return {

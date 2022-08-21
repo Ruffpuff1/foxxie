@@ -3,7 +3,7 @@ import { useSize } from 'ahooks';
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
-const PumpkinParallax = dynamic(() => import('@about-me/dogs/pumpkin/ui/PumpkinParallax/PumpkinParallax'));
+const PumpkinParallax = dynamic(() => import('@about-me/dogs/pumpkin/ui/PumpkinParallax/PumpkinParallax'), { ssr: false });
 
 const Pumpkin: NextPage = () => {
     const size = useSize(() => document.querySelector('body'));

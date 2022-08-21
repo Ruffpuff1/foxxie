@@ -1,31 +1,22 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+import { useScroll } from '@reeseharlak/usehooks';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MdLibraryBooks, MdPolicy, MdQuestionAnswer, MdSearch, MdSettingsSuggest } from 'react-icons/md';
 
 export default function Navbar({ hide }: { hide: boolean }) {
     const router = useRouter();
-
     const [scrolled, setScrolled] = useState(false);
-
-    useEffect(() => {
-        const handleScoll = () => {
-            if (window.scrollY === 0) {
-                setScrolled(false);
-            } else {
-                setScrolled(true);
-            }
-        };
-
-        window.addEventListener('scroll', handleScoll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScoll);
-        };
-    }, [scrolled]);
-
     const [showItems, setShowItems] = useState(false);
+
+    useScroll(() => {
+        if (window.scrollY === 0) {
+            setScrolled(false);
+        } else {
+            setScrolled(true);
+        }
+    }, [scrolled]);
 
     return (
         <>

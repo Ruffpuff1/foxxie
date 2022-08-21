@@ -1,6 +1,6 @@
-import home from './home';
-import notFound from './notFound';
+import { Translations } from '@assets/locales/types';
+import TranslationData from './translations.json';
 
-const esMX = { home, notFound };
+const esMX: Translations = TranslationData;
 
 export default esMX;

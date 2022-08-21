@@ -1,12 +1,14 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import { database } from '@utils/firebase';
+import { useHover } from '@reeseharlak/usehooks';
+import { database } from '@util/firebase';
 import { deleteDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { useState } from 'react';
+import { useRef } from 'react';
 import { MdCheck, MdDeleteOutline } from 'react-icons/md';
 import { TodoTask } from 'src/hooks/useTodo';
 
 export default function TodoComplete({ todo }: { todo: TodoTask }) {
-    const [showTrash, setShowTrash] = useState(false);
+    const liRef = useRef<HTMLLIElement>(null);
+    const showTrash = useHover(liRef);
 
     const unCompleteTask = async () => {
         const q = query(database.todos, where('text', '==', todo.text), where('userId', '==', todo.userId));
@@ -35,15 +37,7 @@ export default function TodoComplete({ todo }: { todo: TodoTask }) {
     };
 
     return (
-        <li
-            className='bg-white py-2 px-3 duration-200 hover:bg-gray-200'
-            onMouseEnter={() => {
-                setShowTrash(true);
-            }}
-            onMouseLeave={() => {
-                setShowTrash(false);
-            }}
-        >
+        <li className='bg-white py-2 px-3 duration-200 hover:bg-gray-200' ref={liRef}>
             <div className='flex h-auto items-start justify-start space-x-4'>
                 <button aria-label='Mark as not complete' onClick={() => unCompleteTask()}>
                     <h2 className='text-xl text-blue-500'>

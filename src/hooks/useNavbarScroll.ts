@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useScroll } from '@reeseharlak/usehooks';
+import { useState } from 'react';
 
 /**
  * @link https://www.w3schools.com/howto/howto_js_navbar_hide_scroll.asp
@@ -7,35 +8,27 @@ import { useEffect, useState } from 'react';
 export default function useNavbarScroll(): [boolean, boolean] {
     const [stick, setStick] = useState(true);
     const [scrolled, setScrolled] = useState(false);
+    const [prevScrollPos, setPrevScrollPos] = useState(0);
 
-    useEffect(() => {
-        let prevScrollPos = window.scrollY;
-        const handleScoll = () => {
-            const currentScroll = window.scrollY;
+    useScroll(() => {
+        const currentScroll = window.scrollY;
 
-            if (prevScrollPos > currentScroll) {
-                setStick(true);
-            } else {
-                setStick(false);
-            }
+        if (prevScrollPos > currentScroll) {
+            setStick(true);
+        } else {
+            setStick(false);
+        }
 
-            if (window.scrollY === 0) setStick(true);
+        if (window.scrollY === 0) setStick(true);
 
-            if (window.scrollY === 0) {
-                setScrolled(false);
-            } else {
-                setScrolled(true);
-            }
+        if (window.scrollY === 0) {
+            setScrolled(false);
+        } else {
+            setScrolled(true);
+        }
 
-            prevScrollPos = currentScroll;
-        };
-
-        window.addEventListener('scroll', handleScoll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScoll);
-        };
-    }, [stick, scrolled]);
+        setPrevScrollPos(currentScroll);
+    }, [stick, scrolled, prevScrollPos]);
 
     return [stick, scrolled];
 }

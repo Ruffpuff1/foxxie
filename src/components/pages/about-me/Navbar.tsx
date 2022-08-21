@@ -1,24 +1,28 @@
-import { default as NavbarBase, Link } from '../../ui/Navbar/Navbar';
-
-const Links: Link[] = [
-    {
-        text: 'About',
-        path: '/about-me'
-    },
-    {
-        text: 'Contact',
-        path: '/contact-me'
-    },
-    {
-        text: 'My work',
-        path: '/my-work'
-    }
-    // {
-    //     text: 'Pumpkin',
-    //     path: '/about-me/dogs/pumpkin'
-    // }
-];
+import useLocale from '@hooks/useLocale';
+import { default as NavbarBase } from '@ui/Navbar/Navbar';
 
 export default function Navbar({ hide = false }: { hide?: boolean }) {
-    return <NavbarBase hide={hide} home='/about-me' title=' About' links={Links} />;
+    const [{ aboutMe }] = useLocale();
+
+    return (
+        <NavbarBase
+            links={[
+                {
+                    text: aboutMe.nav.about,
+                    path: '/about-me'
+                },
+                {
+                    text: aboutMe.nav.contact,
+                    path: '/contact-me'
+                },
+                {
+                    text: aboutMe.nav.myWork,
+                    path: '/my-work'
+                }
+            ]}
+            home='/about-me'
+            title=' About'
+            hide={hide}
+        />
+    );
 }

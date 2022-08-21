@@ -1,6 +1,6 @@
-import { useClickOutside } from '@ruffpuff/usehooks';
+import { useClickOutside, useHover } from '@reeseharlak/usehooks';
 import { toTitleCase } from '@ruffpuff/utilities';
-import { sleep } from '@utils/constants';
+import { sleep } from '@util/utils';
 import { useState } from 'react';
 import { MdAdd, MdCheck, MdKeyboardArrowDown } from 'react-icons/md';
 import { TodoList } from 'src/hooks/useTodo';
@@ -10,13 +10,17 @@ export default function TaskListSelector(props: Props) {
     const [showList, setShowList] = useState(false);
     const lists = props.lists.map(t => t.name);
 
-    const [showPlus, setShowPlus] = useState(false);
+    const showPlus = useHover('todo-new-list-button');
     const [showCreate, setShowCreate] = useState(false);
     const [darkBg, setDarkBg] = useState(false);
 
-    const [divRef] = useClickOutside<HTMLDivElement>(() => {
-        setShowList(false);
-    }, [showList]);
+    useClickOutside(
+        () => {
+            setShowList(false);
+        },
+        'todo-tasklist-selector',
+        [showList]
+    );
 
     const setUpCreate = async () => {
         setDarkBg(true);
@@ -26,7 +30,7 @@ export default function TaskListSelector(props: Props) {
     };
 
     return (
-        <div ref={divRef}>
+        <div id='todo-tasklist-selector'>
             <button
                 aria-label={`${showList ? 'Close' : 'Open'} your task lists current: ${props.list === 'tasks' ? 'Your Tasks' : toTitleCase(props.list)}`}
                 className={`flex items-center justify-center space-x-1 rounded-md p-1 hover:bg-gray-200 ${showList ? 'bg-gray-200' : ''}`}
@@ -74,13 +78,8 @@ export default function TaskListSelector(props: Props) {
                     })}
                 </ul>
                 <button
-                    onMouseEnter={() => {
-                        setShowPlus(true);
-                    }}
-                    onMouseLeave={() => {
-                        setShowPlus(false);
-                    }}
-                    onClick={() => setUpCreate()}
+                    id='todo-new-list-button'
+                    onClick={setUpCreate}
                     className={`flex w-full justify-between rounded-md py-2 px-3 duration-500 hover:bg-gray-200 ${darkBg ? 'bg-gray-400' : ''}`}
                 >
                     <h2 className='text-sm'>Create new list</h2>

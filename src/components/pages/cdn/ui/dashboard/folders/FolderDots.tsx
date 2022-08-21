@@ -1,24 +1,19 @@
-import { useClickOutside } from '@ruffpuff/usehooks';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { MdFolder } from 'react-icons/md';
 import { Folder, FolderPath } from '@hooks/useFolder';
+import { useClickOutside, useToggle } from '@reeseharlak/usehooks';
+import { useRouter } from 'next/router';
+import { MdFolder } from 'react-icons/md';
 
 export default function FolderDots(props: { links: FolderPath[] | null; currentFolder: Folder; first: FolderPath }) {
     const router = useRouter();
-    const [showRemaining, setShowRemaining] = useState(false);
+    const [showRemaining, { toggle, setFalse }] = useToggle(false);
 
-    const [divRef] = useClickOutside<HTMLDivElement>(() => {
-        setShowRemaining(false);
-    }, [showRemaining]);
+    useClickOutside(setFalse, 'cdn-folder-dots', [showRemaining]);
 
     return (
         <>
-            <div className='flex items-center justify-center space-x-1' ref={divRef}>
+            <div className='flex items-center justify-center space-x-1' id='cdn-folder-dots'>
                 <button
-                    onClick={() => {
-                        setShowRemaining(!showRemaining);
-                    }}
+                    onClick={toggle}
                     className={`rounded-md py-1 px-3 text-center text-xl font-semibold duration-500 ${
                         props.currentFolder?.name === props.first.name ? 'text-gray-400 hover:bg-gray-300' : 'text-gray-600 hover:bg-gray-200'
                     }`}

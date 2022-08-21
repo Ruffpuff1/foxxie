@@ -1,6 +1,8 @@
 import { useAuth } from '@hooks/useAuth';
-import Icons from './sidebar/icons/Icons';
-import TodoList from './sidebar/todolist/TodoList';
+import dynamic from 'next/dynamic';
+
+const Icons = dynamic(() => import('./sidebar/icons/Icons'));
+const TodoList = dynamic(() => import('./sidebar/todolist/TodoList'));
 
 export default function Sidebar() {
     const [user] = useAuth();

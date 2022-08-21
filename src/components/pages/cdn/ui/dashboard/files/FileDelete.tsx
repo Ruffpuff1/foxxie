@@ -1,4 +1,4 @@
-import { database, storage } from '@utils/firebase';
+import { database, storage } from '@util/firebase';
 import { deleteDoc, getDocs, query, where } from 'firebase/firestore';
 import { useContext } from 'react';
 import { ref, deleteObject } from 'firebase/storage';

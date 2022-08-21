@@ -1,6 +1,7 @@
 import { Folder, RootFolder } from '@hooks/useFolder';
 import { Tooltip } from '@mui/material';
-import { auth, database } from '@utils/firebase';
+import { useToggle } from '@reeseharlak/usehooks';
+import { auth, database } from '@util/firebase';
 import { addDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { MdOutlineCreateNewFolder } from 'react-icons/md';
@@ -8,7 +9,7 @@ import Modal from '../Modal';
 
 export default function AddFolderButton({ currentFolder }: { currentFolder: null | Folder }) {
     const [name, setName] = useState('');
-    const [open, setOpen] = useState(false);
+    const [open, { setFalse, setTrue }] = useToggle(false);
 
     async function handleSubmit() {
         if (currentFolder === null) return;
@@ -29,24 +30,18 @@ export default function AddFolderButton({ currentFolder }: { currentFolder: null
         });
 
         setName('');
-        setOpen(false);
+        setFalse();
     }
 
     function handleClose() {
         setName('');
-        setOpen(false);
+        setFalse();
     }
 
     return (
         <div className='w-full py-2 px-4'>
             <Tooltip id='create-folder-tooltip' title='Create a new folder'>
-                <button
-                    aria-labelledby='create-folder-tooltip'
-                    className='flex w-full items-center justify-start space-x-2'
-                    onClick={() => {
-                        setOpen(true);
-                    }}
-                >
+                <button aria-labelledby='create-folder-tooltip' className='flex w-full items-center justify-start space-x-2' onClick={setTrue}>
                     <MdOutlineCreateNewFolder aria-hidden className='text-3xl font-normal' />
                     <h2 aria-hidden className='text-base font-[450] tracking-wide'>
                         Folder

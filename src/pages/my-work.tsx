@@ -5,7 +5,7 @@ import WorkLatest from '@my-work/WorkLatest';
 import Meta from '@ui/Meta';
 import type { NextPage } from 'next';
 
-const AboutMe: NextPage = () => {
+const MyWork: NextPage = () => {
     return (
         <>
             <Meta
@@ -24,4 +24,4 @@ const AboutMe: NextPage = () => {
     );
 };
 
-export default AboutMe;
+export default MyWork;

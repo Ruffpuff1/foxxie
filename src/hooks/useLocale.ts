@@ -1,6 +1,6 @@
 import enUS from '@assets/locales/en_us';
 import esMX from '@assets/locales/es_mx';
-import { Locale, Translations } from '@assets/types';
+import { Locale, Translations } from '@assets/locales/types';
 import { detectLocale } from '@util/intl';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
