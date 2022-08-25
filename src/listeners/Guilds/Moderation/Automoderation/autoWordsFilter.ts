@@ -1,17 +1,17 @@
-import { Events, EventArgs, GuildMessage } from '#lib/types';
-import { Listener, ListenerOptions } from '@sapphire/framework';
-import { ApplyOptions } from '@sapphire/decorators';
-import { deleteMessage, getModeration, isModerator, isSendableChannel, sendTemporaryMessage } from '#utils/Discord';
+import type { Word } from '#lib/database';
 import { GuildSettings } from '#lib/database';
-import { isDev, seconds } from '@ruffpuff/utilities';
-import { IncomingType, ModerationBitField, ModerationFlagBits, OutgoingWordFilterPayload, ModerationHardActionFlags, OutputType } from '#lib/structures';
+import { LanguageKeys } from '#lib/i18n';
+import { IncomingType, ModerationBitField, ModerationFlagBits, ModerationHardActionFlags, OutgoingWordFilterPayload, OutputType } from '#lib/structures';
+import { EventArgs, Events, GuildMessage } from '#lib/types';
+import { Colors } from '#utils/constants';
+import { deleteMessage, getModeration, isModerator, isSendableChannel, sendTemporaryMessage } from '#utils/Discord';
+import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
 import type { TFunction } from '@foxxie/i18n';
+import { isDev, seconds } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
+import { Listener, ListenerOptions } from '@sapphire/framework';
 import { Message, MessageEmbed } from 'discord.js';
-import { Colors } from '#utils/constants';
-import { LanguageKeys } from '#lib/i18n';
-import type { SendOptions } from '#utils/moderation';
-import type { Word } from '#lib/database';
 
 @ApplyOptions<ListenerOptions>({
     event: Events.UserMessage,
@@ -77,10 +77,10 @@ export class UserListener extends Listener<Events.UserMessage> {
     }
 
     private async onKick(msg: GuildMessage, t: TFunction) {
-        await this.container.redis!.pinsertex(`guild:${msg.guild.id}:kick:${msg.member.id}`, seconds(20), '');
+        await this.container.redis!.pinsertex(`guild:${msg.guild.id}:kick:${msg.author.id}`, seconds(20), '');
         return getModeration(msg.guild).actions.kick(
             {
-                userId: msg.member.id,
+                userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
                 reason: t(LanguageKeys.Automod.WordReason)
@@ -90,11 +90,11 @@ export class UserListener extends Listener<Events.UserMessage> {
     }
 
     private async onSoftBan(msg: GuildMessage, t: TFunction) {
-        await this.container.redis!.pinsertex(`guild:${msg.guild.id}:ban:${msg.member.id}`, seconds(20), '');
-        await this.container.redis!.pinsertex(`guild:${msg.guild.id}:unban:${msg.member.id}`, seconds(20), '');
+        await this.container.redis!.pinsertex(`guild:${msg.guild.id}:ban:${msg.author.id}`, seconds(20), '');
+        await this.container.redis!.pinsertex(`guild:${msg.guild.id}:unban:${msg.author.id}`, seconds(20), '');
         return getModeration(msg.guild).actions.softban(
             {
-                userId: msg.member.id,
+                userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
                 reason: t(LanguageKeys.Automod.WordReason)
@@ -105,10 +105,10 @@ export class UserListener extends Listener<Events.UserMessage> {
     }
 
     private async onBan(msg: GuildMessage, t: TFunction, duration: number | null) {
-        await this.container.redis!.pinsertex(`guild:${msg.guild.id}:ban:${msg.member.id}`, seconds(20), '');
+        await this.container.redis!.pinsertex(`guild:${msg.guild.id}:ban:${msg.author.id}`, seconds(20), '');
         return getModeration(msg.guild).actions.ban(
             {
-                userId: msg.member.id,
+                userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
                 reason: t(LanguageKeys.Automod.WordReason),
@@ -125,7 +125,7 @@ export class UserListener extends Listener<Events.UserMessage> {
 
         return getModeration(msg.guild).actions.mute(
             {
-                userId: msg.member.id,
+                userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
                 reason: t(LanguageKeys.Automod.WordReason),
