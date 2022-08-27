@@ -12,7 +12,7 @@ const Pumpkin: NextPage = () => {
         <>
             <Meta
                 title='Pumpkin Through the Years'
-                description='Here are my most prevelent projects. All designed to help make our lives easier, and show off my work.'
+                description='This is a timeline of my dog Pumpkin. Explore from when we got her to now.'
                 keywords={['reese', 'reese harlak', 'web', 'react', 'next.js', 'developer', 'my dog', 'pumpkin']}
                 subject='My dog pumpkin'
                 image={{

@@ -7,7 +7,7 @@ import { AriaRole, forwardRef, ReactNode, RefObject } from 'react';
  */
 const Link = forwardRef(function Link({ children, className, href, id, role }: Props, ref) {
     const [, hl] = useLocale();
-    const link = hl === 'en_us' ? href : `/intl/${hl}${href}`;
+    const link = href.startsWith('/') ? (hl === 'en_us' ? href : `/intl/${hl}${href}`) : href;
 
     return (
         <a ref={ref as RefObject<HTMLAnchorElement>} id={id} href={link} className={clsx('inline-block', className)} role={role}>

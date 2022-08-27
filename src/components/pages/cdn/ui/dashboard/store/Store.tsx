@@ -1,17 +1,17 @@
 import { useAuth } from '@hooks/useAuth';
 import { useFolder } from '@hooks/useFolder';
 import { SidebarContext } from '@hooks/useTodo';
-import useId from '@providers/IdProvider';
 import { toTitleCase } from '@ruffpuff/utilities';
 import Meta from '@ui/Meta';
+import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import StoreBody from './StoreBody';
 import StoreHeader from './StoreHeader';
 
 export default function Store() {
     const { showTodo } = useContext(SidebarContext);
-    const [id] = useId();
-    const [{ folder, childFolders, childFiles, sharedFolders }] = useFolder(id);
+    const router = useRouter();
+    const [{ folder, childFolders, childFiles, sharedFolders }] = useFolder(router.query.id as string | undefined);
     const [user] = useAuth();
 
     return (

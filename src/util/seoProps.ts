@@ -27,7 +27,6 @@ export const DefaultSeoProps = (title: string, description: string, { image, alt
             ]
         },
         canonical: BaseUrl,
-        twitter: { cardType: 'summary_large_image' },
         additionalMetaTags: [
             { name: 'url', content: BaseUrl },
             { name: 'indentifier-URL', content: BaseUrl },

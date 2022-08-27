@@ -3,6 +3,7 @@ import { projects } from '../../../../assets/projects';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { MdExpandMore } from 'react-icons/md';
+import Link from '@ui/Link/Link';
 
 export default function ProjectsList() {
     const router = useRouter();
@@ -27,14 +28,14 @@ export default function ProjectsList() {
                         <li key={idx} className='mx-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'>
                             {list.map(p => {
                                 return (
-                                    <button
+                                    <Link
                                         key={p.name}
-                                        onClick={() => router.push(p.homepage)}
-                                        className='project-box flex w-full items-center justify-start space-x-3 border-t py-5 hover:rounded-md hover:bg-gray-50 md:w-[95%] lg:w-[90%]'
+                                        href={p.homepage}
+                                        className='project-box flex w-full items-center justify-start space-x-3 border-t py-5 hover:rounded-md hover:bg-gray-50 active:rounded-sm active:border-blue-500 active:text-blue-500 md:w-[95%] lg:w-[90%]'
                                     >
                                         <Image src={p.icon} width={40} height={40} alt='' />
                                         <h3 className='text-lg'>{p.name}</h3>
-                                    </button>
+                                    </Link>
                                 );
                             })}
                         </li>

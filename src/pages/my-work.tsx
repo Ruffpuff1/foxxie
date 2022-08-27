@@ -1,4 +1,4 @@
-import AboutMain from '@about-me/AboutMain';
+import Main from '@home/Main';
 import AllProjects from '@my-work/all-projects/AllProjects';
 import WorkHeader from '@my-work/header/WorkHeader';
 import WorkLatest from '@my-work/WorkLatest';
@@ -15,11 +15,11 @@ const MyWork: NextPage = () => {
                 subject='My work'
             />
 
-            <AboutMain>
+            <Main>
                 <WorkHeader />
                 <WorkLatest />
                 <AllProjects />
-            </AboutMain>
+            </Main>
         </>
     );
 };

@@ -1,5 +1,5 @@
-import AboutMain from '@about-me/AboutMain';
 import Contacts from '@contact-me/Contacts';
+import Main from '@home/Main';
 import Meta from '@ui/Meta';
 import type { NextPage } from 'next';
 
@@ -13,12 +13,12 @@ const ContactMe: NextPage = () => {
                 subject='My work'
             />
 
-            <AboutMain>
+            <Main>
                 <div className='mt-36 flex flex-col items-center'>
                     <h1 className='text-2xl md:text-4xl'>Contact me</h1>
                 </div>
                 <Contacts />
-            </AboutMain>
+            </Main>
         </>
     );
 };
