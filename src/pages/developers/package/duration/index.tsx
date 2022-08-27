@@ -5,11 +5,12 @@ import Package from '@developers/Package/Package';
 import Subsection from '@developers/Subsection';
 import useLocale from '@hooks/useLocale';
 import Meta from '@ui/Meta';
+import { durationPackageFuzzySearchEnUS, durationPackageFuzzySearchEsMX, durationPackageSearchEnUS, durationPackageSearchEsMX } from '@util/searching';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 
 const Duration: NextPage = () => {
-    const [{ developers }] = useLocale();
+    const [{ book }, hl] = useLocale();
     const [dateString, setDateString] = useState('');
     const [dateString2, setDateString2] = useState('');
 
@@ -27,8 +28,9 @@ const Duration: NextPage = () => {
                 boxes={exclude(DurationPackageBoxes, 'title', 'overview')}
                 crumbs={DurationPackageBreadCrumbs}
                 description='Duration is a formatting package that takes natural date strings and converts them to JavaScript Dates or timestamps.'
-                header={developers.book.overview}
+                header={book.overview}
                 pageList={DurationPackagePageList}
+                search={hl === 'en_us' ? durationPackageFuzzySearchEnUS : durationPackageFuzzySearchEsMX}
             >
                 <Subsection id='installation' header='Installation'>
                     <p className='my-[16px]'>With yarn:</p>

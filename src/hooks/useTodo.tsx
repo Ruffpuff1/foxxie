@@ -57,7 +57,6 @@ export function useTodo(): [TodoTask[], TodoList[]] {
     const [user] = useAuth();
 
     const id = user?.uid || null;
-    console.log(id);
 
     const [tasks, dispatch] = useReducer(reducer, {
         tasks: [],

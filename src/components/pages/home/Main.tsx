@@ -3,7 +3,7 @@ import HomeFooter from '@ui/HomeFooter';
 import Navbar from '@ui/Navbar/Navbar';
 import { ReactNode } from 'react';
 
-export default function Main({ children, className }: { children: ReactNode; className?: string }) {
+export default function Main({ children, className, footer = true }: { children: ReactNode; className?: string; footer?: boolean }) {
     const [{ home }] = useLocale();
 
     return (
@@ -23,7 +23,7 @@ export default function Main({ children, className }: { children: ReactNode; cla
 
             {children}
 
-            <HomeFooter className={className} />
+            {footer && <HomeFooter className={className} />}
         </>
     );
 }

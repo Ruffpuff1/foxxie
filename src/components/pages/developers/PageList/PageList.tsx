@@ -3,17 +3,16 @@ import { useScroll } from '@reeseharlak/usehooks';
 import clsx from 'clsx';
 import { useState } from 'react';
 
-export default function PageList({ items, className }: Props) {
+export default function PageList({ items, className, color }: Props) {
     const [height, setHeight] = useState(0);
     const [{ developers }] = useLocale();
 
     useScroll(setHeight, undefined, 'devsite-body');
-
     console.log(height);
 
     return (
         <div id='page-list' className={clsx(className, 'select-none')}>
-            <ul className='border-l-[4px] border-l-blue-700 pl-[12px] text-sm'>
+            <ul className={clsx('border-l-[4px] pl-[12px] text-sm', color ? color : 'border-l-blue-700')}>
                 <li>
                     <h2 className='font-semibold'>{developers.onThisPage}</h2>
                 </li>
@@ -39,6 +38,7 @@ export default function PageList({ items, className }: Props) {
 interface Props {
     items: ListItem[];
     className?: string;
+    color?: string;
 }
 
 export interface ListItem {

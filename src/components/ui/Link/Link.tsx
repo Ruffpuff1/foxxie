@@ -23,5 +23,6 @@ interface Props {
     id?: string;
     className?: string;
     href: string;
+    noBr?: boolean;
     role?: AriaRole;
 }

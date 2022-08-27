@@ -12,5 +12,6 @@ export enum Colors {
 }
 
 export enum Icons {
+    Celestia = 'https://reese.cafe/images/icons/star.png',
     Developers = 'https://reese.cafe/images/icons/developers.png'
 }

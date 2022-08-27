@@ -12,7 +12,22 @@ const Image = dynamic(() => import('next/image'), { ssr: false });
 const Link = dynamic(() => import('@ui/Link/Link'), { ssr: false });
 const AuthInformation = dynamic(() => import('@auth/AuthInformation/AuthInformation'), { ssr: false });
 
-export default function Navbar({ links, stat, closeId, title = '.cafe', hide, home = '/', auth, children, locale, menu, border, icon, noHoverIndicators }: Props) {
+export default function Navbar({
+    links,
+    stat,
+    closeId,
+    title = '.cafe',
+    hide,
+    home = '/',
+    noReese,
+    auth,
+    children,
+    locale,
+    menu,
+    border,
+    icon,
+    noHoverIndicators
+}: Props) {
     const router = useRouter();
     const [stick, scrolled] = useNavbarScroll();
     const [showPanel, setShowPanel] = useState(false);
@@ -50,22 +65,32 @@ export default function Navbar({ links, stat, closeId, title = '.cafe', hide, ho
 
                     <Link
                         href={home}
-                        className={clsx(styles.title_wrapper, {
-                            [styles.title_wrapper_no_hov]: noHoverIndicators
-                        })}
+                        className={clsx(
+                            styles.title_wrapper,
+                            {
+                                [styles.title_wrapper_no_hov]: noHoverIndicators
+                            },
+                            'w-full max-w-[19rem] duration-200 sm:max-w-[50rem]'
+                        )}
                     >
                         {icon && (
                             <div className='mr-[12px] flex items-center'>
-                                <Image height={32} width={32} src={icon} alt={title} />
+                                <Image height={32} width={32} src={icon} alt={title?.toString()} />
                             </div>
                         )}
-                        <div style={{ marginRight: title.startsWith(' ') ? '8px' : '0px' }} className={styles.logo}>
-                            Reese
-                        </div>
+                        {!noReese && (
+                            <div style={{ marginRight: title?.toString().startsWith(' ') ? '8px' : '0px' }} className={styles.logo}>
+                                Reese
+                            </div>
+                        )}
                         <div
-                            className={clsx(styles.title, {
-                                [styles.title_no_underline]: noHoverIndicators
-                            })}
+                            className={clsx(
+                                styles.title,
+                                {
+                                    [styles.title_no_underline]: noHoverIndicators
+                                },
+                                'h-[64px] w-[110px] overflow-hidden text-ellipsis whitespace-nowrap duration-200 sm:w-auto'
+                            )}
                         >
                             {title}
                         </div>
@@ -123,13 +148,22 @@ export default function Navbar({ links, stat, closeId, title = '.cafe', hide, ho
                         }}
                         className='flex items-center pl-[20px]'
                     >
-                        <div className='box-border flex h-[64px] items-center text-[22px] leading-[30px]' style={{ marginRight: title.startsWith(' ') ? '8px' : '0px' }}>
-                            Reese
-                        </div>
+                        {!noReese && (
+                            <div
+                                className='box-border flex h-[64px] items-center text-[22px] leading-[30px]'
+                                style={{ marginRight: title?.toString().startsWith(' ') ? '8px' : '0px' }}
+                            >
+                                Reese
+                            </div>
+                        )}
                         <div
-                            className={clsx(styles.title, {
-                                [styles.title_no_underline]: noHoverIndicators
-                            })}
+                            className={clsx(
+                                styles.title,
+                                {
+                                    [styles.title_no_underline]: noHoverIndicators
+                                },
+                                'h-[64px]'
+                            )}
                         >
                             {title}
                         </div>
@@ -157,7 +191,7 @@ export default function Navbar({ links, stat, closeId, title = '.cafe', hide, ho
                 </ul>
             </div>
 
-            {menu && <>{menu}</>}
+            {menu && <>{typeof menu === 'function' ? menu(stick) : menu}</>}
         </>
     );
 }
@@ -170,11 +204,12 @@ export interface Props {
     noHoverIndicators?: boolean;
     auth?: boolean;
     links: Link[];
-    title?: string;
+    noReese?: boolean;
+    title?: string | ReactNode;
     stat?: boolean;
     closeId?: string;
     locale?: boolean;
-    menu?: ReactNode;
+    menu?: ReactNode | ((stick: boolean) => ReactNode);
     children?: ReactNode;
 }
 

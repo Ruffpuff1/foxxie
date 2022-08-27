@@ -5,10 +5,11 @@ import Package from '@developers/Package/Package';
 import Subsection from '@developers/Subsection';
 import useLocale from '@hooks/useLocale';
 import Meta from '@ui/Meta';
+import { durationPackageFuzzySearchEnUS, durationPackageFuzzySearchEsMX } from '@util/searching';
 import type { NextPage } from 'next';
 
 const Types: NextPage = () => {
-    const [{ developers }] = useLocale();
+    const [{ book }, hl] = useLocale();
 
     return (
         <>
@@ -19,8 +20,9 @@ const Types: NextPage = () => {
                 boxes={exclude(DurationPackageBoxes, 'title', 'types')}
                 crumbs={DurationPackageBreadCrumbs}
                 description=''
-                header={developers.book.types}
+                header={book.types}
                 pageList={DurationPackageTypesPageList}
+                search={hl === 'en_us' ? durationPackageFuzzySearchEnUS : durationPackageFuzzySearchEsMX}
             >
                 <Subsection id='unix' header='Unix'>
                     <Code>

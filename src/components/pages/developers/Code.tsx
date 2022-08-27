@@ -1,4 +1,6 @@
-import { ReactNode } from 'react';
+import { cast } from '@ruffpuff/utilities';
+import Link from '@ui/Link/Link';
+import { ReactElement, ReactNode } from 'react';
 
 export default function Code({ children, commandLine, lang = 'tsx' }: Props) {
     if (commandLine) {
@@ -14,13 +16,14 @@ export default function Code({ children, commandLine, lang = 'tsx' }: Props) {
 
     return (
         <div className='m-[16px]'>
-            <pre className='max-w-[80ch] overflow-x-scroll break-words bg-[#f1f3f4] p-[24px] font-mono text-[14px]'>{parse(children)}</pre>
+            <pre className='max-w-[80ch] overflow-x-scroll break-words bg-[#f1f3f4] p-[24px] font-mono text-[14px]'>{parse(children, lang)}</pre>
         </div>
     );
 }
 
-function parse(children: ReactNode) {
-    const result = Array.isArray(children) ? children.map(parseJSXTSX) : parseJSXTSX(children);
+function parse(children: ReactNode, lang: Props['lang'] = 'jsx') {
+    const method = lang === 'json' ? parseJson : parseJSXTSX;
+    const result = Array.isArray(children) ? children.map(children => method(children)) : method(children);
     return result;
 }
 
@@ -120,8 +123,85 @@ function parseJSXTSX(children: ReactNode) {
     );
 }
 
+function parseJson(children: ReactNode): ReactElement | null {
+    const baseString = children?.toString();
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    if (typeof children === 'object' && Reflect.has(cast<object>(children), 'props')) {
+        const elm = cast<ReactElement>(children);
+
+        if (Reflect.has(elm.props, 'href')) {
+            const href = Reflect.get(elm.props, 'href') as string;
+            const noBr = Reflect.get(elm.props, 'noBr') === true;
+            const className = Reflect.get(elm.props, 'className') as string | undefined;
+
+            return (
+                <>
+                    <Link href={href} className={className}>
+                        {parseJson(elm.props.children)}
+                    </Link>
+                    {!noBr && <br />}
+                </>
+            );
+        }
+
+        return parseJson(elm.props.children);
+    }
+
+    if (baseString === ' ') return <br key={baseString} />;
+    if (baseString === '<tab>') return <span>&ensp;</span>;
+
+    const string = baseString?.trim();
+    if (!string) return null;
+
+    if (string === '{')
+        return (
+            <span key={string}>
+                <span className='text-[#015CC5]'>{'{'}</span>
+                <br />
+            </span>
+        );
+
+    if (string === '}')
+        return (
+            <span key={string}>
+                <br />
+                <span className='text-[#015CC5]'>{'}'}</span>
+            </span>
+        );
+
+    const ktReg = /(?<key>[A-z]+): (?<type>[A-z \|]+);/;
+    const ktResult = ktReg.exec(string);
+
+    if (ktResult !== null) {
+        const { key, type } = ktResult.groups!;
+
+        return (
+            <span key={string}>
+                <span className='text-[#015CC5]'>{key}</span>:<span className='text-[#022F62]'> {type}</span>;
+                <br />
+            </span>
+        );
+    }
+
+    const kReg = /(?<key>[A-z]+): ?/;
+    const kResult = kReg.exec(string);
+
+    if (kResult !== null) {
+        const { key } = kResult.groups!;
+
+        return (
+            <span key={string}>
+                <span className='text-[#015CC5]'>{key}</span>:{' '}
+            </span>
+        );
+    }
+
+    return <span key={string}>{`${string} `}</span>;
+}
+
 interface Props {
     children: ReactNode;
     commandLine?: boolean;
-    lang?: 'tsx' | 'jsx';
+    lang?: 'tsx' | 'jsx' | 'json';
 }

@@ -8,16 +8,47 @@
         },
         "title": "Sobre mí - Reese Harlak"
     },
+    "book": {
+            "coffee": "Café",
+            "coffeeBeansEnum": "Granos de Café Enumeración",
+            "coffeeMilkEnum": "Leche de Café Enumeración",
+            "coffeeSugarEnum": "Azucar de Café Enumeración",
+            "errors": "",
+            "introduction": "",
+            "gamesEnum": "Juegos Enumeración",
+            "genderEnum": "Género Enumeración",
+            "kkSliderSongs": "Canciones de K.K. Slider",
+            "personalitiesEnum": "Personalidades Enumeración",
+            "speciesEnum": "Especies Enumeración",
+            "methods": "Funciónes",
+            "overview": "Introducción",
+            "types": "Tipos",
+            "villager": ""
+        },
     "developers": {
         "breadcrumbs": {
             "duration": "Duración",
             "home": "Inicio",
             "packages": "Paquetes"
         },
-        "book": {
-            "methods": "Funciónes",
-            "overview": "Introducción",
-            "types": "Tipos"
+        "celestia": {
+            "api": {
+                "description": "",
+                "documentation": "Documentación",
+                "documentationDescription": "Lea la documentación de toda la API. Los puntos finales, estructuras y errores.",
+                "getStarted": "Empezar",
+                "getStartedDescription": "Obtén información sobre cómo usar la API.",
+                "title": "API de Aldeano"
+            },
+            "description": "",
+            "developers": "Desarrolladores",
+            "home": "Inicio",
+            "refrence": "Refrencio",
+            "title": "Animal Crossing API | Celestia",
+            "villagerRefrence": {
+                "coffee": "Objeto que representa la solicitud de café de un aldeano en Animal Crossing New Leaf.",
+                "coffeeBeanEnum": "El Enumeración de los tipos de granos de café."
+            }
         },
         "copyright": {
             "intl": "Traducciones internacionales de sus",
@@ -27,6 +58,12 @@
             "start": "A menos que se indique lo contrario, el texto de esta página es Copyright © 2022 Reese Harlak &"
         },
         "description": "",
+        "footer": {
+            "blog": "Blog",
+            "contactUs": "Contactarnos",
+            "privacy": "Privacidad",
+            "terms": "Condiciones"
+        },
         "onThisPage": "En esta página",
         "nav": {
             "learn": "Aprender",

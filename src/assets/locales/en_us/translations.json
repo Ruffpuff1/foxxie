@@ -8,16 +8,47 @@
         },
         "title": "About Me - Reese Harlak"
     },
+    "book": {
+        "coffee": "Coffee",
+        "coffeeBeansEnum": "Coffee Beans Enum",
+        "coffeeMilkEnum": "Coffee Milk Enum",
+        "coffeeSugarEnum": "Coffee Sugar Enum",
+        "errors": "Errors",
+        "gamesEnum": "Games Enum",
+        "genderEnum": "Gender Enum",
+        "introduction": "Introduction",
+        "kkSliderSongs": "K.K. Slider Songs",
+        "personalitiesEnum": "Personalities Enum",
+        "speciesEnum": "Species Enum",
+        "methods": "Methods",
+        "overview": "Overview",
+        "types": "Types",
+        "villager": "Villager"
+    },
     "developers": {
         "breadcrumbs": {
             "duration": "Duration",
             "home": "Home",
             "packages": "Packages"
         },
-        "book": {
-            "methods": "Methods",
-            "overview": "Overview",
-            "types": "Types"
+        "celestia": {
+            "api": {
+                "description": "",
+                "documentation": "Documentation",
+                "documentationDescription": "Read the documentation for the entire API. It's endpoints, structures, and errors.",
+                "getStarted": "Get Started",
+                "getStartedDescription": "Learn how to use the API.",
+                "title": "Villager API"
+            },
+            "description": "",
+            "developers": "Developers",
+            "home": "Home",
+            "refrence": "Refrence",
+            "title": "Animal Crossing API | Celestia",
+            "villagerRefrence": {
+                "coffee": "Object representing a Villager's Coffee request in Animal Crossing New Leaf.",
+                "coffeeBeanEnum": "The enum of coffee bean types."
+            }
         },
         "copyright": {
             "intl": "Intl translations by their",
@@ -27,6 +58,12 @@
             "start": "Unless otherwise noted, the text on this page is Copyright © 2022 Reese Harlak &"
         },
         "description": "",
+        "footer": {
+            "blog": "Blog",
+            "contactUs": "Contact Us",
+            "privacy":"Privacy",
+            "terms": "Terms"
+        },
         "onThisPage": "On this page",
         "nav": {
             "learn": "Learn",

@@ -6,11 +6,12 @@ import Subsection from '@developers/Subsection';
 import useLocale from '@hooks/useLocale';
 import Link from '@ui/Link/Link';
 import Meta from '@ui/Meta';
+import { durationPackageFuzzySearchEnUS, durationPackageFuzzySearchEsMX } from '@util/searching';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 
 const Methods: NextPage = () => {
-    const [{ developers }] = useLocale();
+    const [{ book }, hl] = useLocale();
     const [dateString, setDateString] = useState('');
 
     useEffect(() => {
@@ -26,8 +27,9 @@ const Methods: NextPage = () => {
                 boxes={exclude(DurationPackageBoxes, 'title', 'methods')}
                 crumbs={DurationPackageBreadCrumbs}
                 description='This page goes over the methods that exist on the Duration class. They can be imported from the package and used on the class.'
-                header={developers.book.methods}
+                header={book.methods}
                 pageList={DurationPackageMethodPageList}
+                search={hl === 'en_us' ? durationPackageFuzzySearchEnUS : durationPackageFuzzySearchEsMX}
             >
                 <Subsection id='to-duration' header='toDuration()'>
                     <p className='my-[16px]'>
