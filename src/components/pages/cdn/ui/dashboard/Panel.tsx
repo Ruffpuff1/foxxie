@@ -14,7 +14,7 @@ export default function Panel() {
     const [isOpen, { setFalse, toggle }] = useToggle(false);
     useClickOutside(setFalse, 'cdn-create-menu');
 
-    const [user] = useAuth();
+    const [user, { message }] = useAuth();
     const [id] = useId();
     const [{ folder }] = useFolder(id);
 
@@ -28,7 +28,7 @@ export default function Panel() {
     return (
         <>
             <div className='fixed top-16 left-0 z-[1] hidden h-[92vh] justify-start border-r border-t bg-white lg:flex lg:w-60'>
-                {user && (
+                {user && message !== 'no-valid' && (
                     <div className='ml-5 mt-5'>
                         <button
                             aria-labelledby='new-label'

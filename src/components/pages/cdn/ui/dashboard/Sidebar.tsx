@@ -5,11 +5,11 @@ const Icons = dynamic(() => import('./sidebar/icons/Icons'));
 const TodoList = dynamic(() => import('./sidebar/todolist/TodoList'));
 
 export default function Sidebar() {
-    const [user] = useAuth();
+    const [user, { message }] = useAuth();
 
     return (
         <>
-            {user && (
+            {user && message !== 'no-valid' && (
                 <>
                     <Icons />
                     <TodoList />
