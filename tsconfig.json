@@ -58,6 +58,9 @@
       "@hooks/*": [
         "src/hooks/*"
       ],
+      "@music/*": [
+        "src/components/pages/music/*"
+      ],
       "@my-work/*": [
         "src/components/pages/my-work/*"
       ],

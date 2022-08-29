@@ -85,6 +85,22 @@
         "tag": "A sixteen-year-old web developer and",
         "title": "Reese Harlak - My Personal Website"
     },
+    "music": {
+        "concertArchive": "Concert Archive",
+        "description": "",
+        "music": "Music",
+        "orchestra": {
+            "bass": "Bass",
+            "cello": "Cello",
+            "concertMaster": "Concert Master",
+            "orchestra": "Orchestra",
+            "piano": "Piano",
+            "solo": "Solo",
+            "viola": "Viola",
+            "violin": "Violin"
+        },
+        "title": ""
+    },
     "notFound": {
         "tag": "I couldn't find the page you were looking for, click here to go home."
     },

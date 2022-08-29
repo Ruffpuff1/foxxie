@@ -13,7 +13,7 @@ export function IdProvider({ children }: { children: ReactNode }) {
     const router = useRouter();
     const id = useQuery('id');
 
-    const routeId = (id: string) => router.push(router.pathname, { query: { id } }, { shallow: true });
+    const routeId = (i: string) => router.push(router.pathname, { query: { id: i } }, { shallow: true });
 
     return <IdContext.Provider value={{ id, routeId }}>{children}</IdContext.Provider>;
 }

@@ -1,9 +1,9 @@
 import { useAuth } from '@hooks/useAuth';
 import { RootFolder, useFolder } from '@hooks/useFolder';
-import useId from '@providers/IdProvider';
 import { useClickOutside, useToggle } from '@reeseharlak/usehooks';
 import clsx from 'clsx';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
@@ -15,8 +15,8 @@ export default function Panel() {
     useClickOutside(setFalse, 'cdn-create-menu');
 
     const [user, { message }] = useAuth();
-    const [id] = useId();
-    const [{ folder }] = useFolder(id);
+    const router = useRouter();
+    const [{ folder }] = useFolder(router.query.id as string | undefined);
 
     const owned = user?.uid === folder?.userId;
     const [show, setShow] = useState(false);

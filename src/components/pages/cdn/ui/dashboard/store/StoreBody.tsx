@@ -11,11 +11,13 @@ export default function StoreBody(props: FolderData) {
 
     if (message === 'no-valid') {
         return (
-            <div className='mx-20 p-2 flex w-[80%] shadow-sm items-center space-x-2 mb-10 mt-20 bg-white border'>
+            <div className='mx-20 mb-10 mt-20 flex w-[80%] items-center space-x-2 border bg-white p-2 shadow-sm'>
                 <MdInfo className='text-2xl text-blue-500' />
-                <div className='text-base font-normal flex items-center space-x-2'>
+                <div className='flex items-center space-x-2 text-base font-normal'>
                     <h2>Your current account can&apos;t use Cdn. To continue, switch to an account with Cdn privileges.</h2>
-                    <Link blue popup href='/support/cdn'>Learn More</Link>
+                    <Link blue popup href='/support/cdn'>
+                        Learn More
+                    </Link>
                 </div>
             </div>
         );

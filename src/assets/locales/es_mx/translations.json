@@ -85,6 +85,22 @@
         "tag": "Un desarrollador web de dieciséis años y",
         "title": "Reese Harlak - Mi Sitio Web Personal"
     },
+    "music": {
+        "concertArchive": "Archivo de Conciertos",
+        "description": "",
+        "music": "Música",
+        "orchestra": {
+            "bass": "Contrabajo",
+            "cello": "Violonchelo",
+            "concertMaster": "Concertino",
+            "orchestra": "Orquesta",
+            "piano": "Piano",
+            "solo": "Solo",
+            "viola": "Viola",
+            "violin": "Violín"
+        },
+        "title": ""
+    },
     "notFound": {
         "tag": "No pude encontrar la página que estabas buscando, haz clic aquí para ir a casa."
     },

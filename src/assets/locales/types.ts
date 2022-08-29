@@ -1,3 +1,4 @@
+import { InstrumentKey } from '@assets/music/performers';
 import { AddBook, AddDescription, Join, Meta, Spread } from '@util/utility-types';
 
 export type Locale = 'en_us' | 'es_mx';
@@ -29,6 +30,14 @@ export type Translations = Spread<
                 Join<'aboutMe' | 'aboutMeTag' | 'hi' | 'musician' | 'tag'>,
                 {
                     nav: Join<'contact' | 'home'>;
+                }
+            >
+        >;
+        music: Meta<
+            Spread<
+                Join<'concertArchive' | 'music'>,
+                {
+                    orchestra: Join<'orchestra' | InstrumentKey | 'solo' | 'concertMaster'>;
                 }
             >
         >;

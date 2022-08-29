@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { MdArrowDropDown, MdLanguage } from 'react-icons/md';
 
-export default function NavbarLanguageSelector({ closeId }: { closeId?: string }) {
+export default function NavbarLanguageSelector({ closeId, padSide }: { closeId?: string; padSide?: boolean }) {
     const router = useRouter();
     const [, hl] = useLocale();
 
@@ -46,8 +46,9 @@ export default function NavbarLanguageSelector({ closeId }: { closeId?: string }
             <div
                 id='nav-language'
                 className={clsx(
-                    'absolute top-[64px] right-[59px] max-h-[304px] overflow-y-auto overflow-x-hidden rounded-md rounded-t-none border bg-white py-0 font-[400] text-[#3c4043] shadow-lg duration-200',
+                    'absolute top-[64px] max-h-[304px] overflow-y-auto overflow-x-hidden rounded-md rounded-t-none border bg-white py-0 font-[400] text-[#3c4043] shadow-lg duration-200',
                     showMenu ? 'opacity-100' : 'opacity-0',
+                    padSide ? 'right-[59px]' : 'right-[12px]',
                     {
                         'pointer-events-none': !showMenu
                     }
@@ -56,7 +57,7 @@ export default function NavbarLanguageSelector({ closeId }: { closeId?: string }
                 <ul role='presentation' className='m-0 block p-0'>
                     <li role='presentation' className={clsx('m-0 min-w-full pl-[8px] pr-[38px] text-[14px]', hl === 'en_us' ? 'bg-[#e8f0fe]' : 'hover:bg-gray-100')}>
                         <a
-                            href={`/intl/en_us${router.pathname}`}
+                            href={`/intl/en_us${router.asPath.replace(/\/intl\/(es_mx|en_us)/, '')}`}
                             role='menuitem'
                             className='flex min-h-[48px] items-center justify-start overflow-hidden text-ellipsis whitespace-nowrap break-words px-[16px]'
                         >
@@ -66,7 +67,7 @@ export default function NavbarLanguageSelector({ closeId }: { closeId?: string }
 
                     <li role='presentation' className={clsx('m-0 min-w-full pl-[8px] pr-[38px] text-[14px]', hl === 'es_mx' ? 'bg-[#e8f0fe]' : 'hover:bg-gray-100')}>
                         <a
-                            href={`/intl/es_mx${router.pathname}`}
+                            href={`/intl/es_mx${router.asPath.replace(/\/intl\/(es_mx|en_us)/, '')}`}
                             role='menuitem'
                             className='flex min-h-[48px] items-center justify-start overflow-hidden text-ellipsis whitespace-nowrap break-words px-[16px]'
                         >

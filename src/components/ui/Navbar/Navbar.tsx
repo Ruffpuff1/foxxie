@@ -87,9 +87,10 @@ export default function Navbar({
                             className={clsx(
                                 styles.title,
                                 {
-                                    [styles.title_no_underline]: noHoverIndicators
+                                    [styles.title_no_underline]: noHoverIndicators,
+                                    'w-[110px] overflow-hidden': auth && locale
                                 },
-                                'h-[64px] w-[110px] overflow-hidden text-ellipsis whitespace-nowrap duration-200 sm:w-auto'
+                                'h-[64px] text-ellipsis whitespace-nowrap duration-200 sm:w-auto'
                             )}
                         >
                             {title}
@@ -122,7 +123,7 @@ export default function Navbar({
 
                 {locale || auth ? (
                     <div className='flex items-center space-x-2'>
-                        {locale && <NavbarLanguageSelector closeId={closeId} />}
+                        {locale && <NavbarLanguageSelector padSide={auth} closeId={closeId} />}
 
                         {auth && (
                             <div className='flex items-center'>
