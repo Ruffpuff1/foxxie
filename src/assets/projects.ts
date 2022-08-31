@@ -41,14 +41,14 @@ export const projects: Project[][] = [
             homepage: '/kettu'
         },
         {
+            name: 'Music',
+            icon: 'https://reese.cafe/images/icons/violin.png',
+            homepage: '/music'
+        },
+        {
             name: 'Newtab',
             icon: 'https://reese.cafe/images/icons/tabs.png',
             homepage: 'https://newtab.reese.cafe'
-        },
-        {
-            name: 'Todo',
-            icon: 'https://reese.cafe/images/icons/todo.png',
-            homepage: '/todo'
         }
     ],
     [
@@ -56,6 +56,11 @@ export const projects: Project[][] = [
             name: 'Rsehrk Links',
             icon: 'https://reese.cafe/images/icons/link.png',
             homepage: '/rsehrk'
+        },
+        {
+            name: 'Todo',
+            icon: 'https://reese.cafe/images/icons/todo.png',
+            homepage: '/todo'
         }
     ]
 ];

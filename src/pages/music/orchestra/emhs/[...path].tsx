@@ -8,7 +8,7 @@ import Meta from '@ui/Meta';
 import clsx from 'clsx';
 import type { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 
-const Festival2022: NextPage<Props> = ({ concert }) => {
+const Emhs: NextPage<Props> = ({ concert }) => {
     const [{ developers, music }] = useLocale();
     const [currentSong, setSong] = useConcertSong(concert.songs);
 
@@ -151,4 +151,4 @@ export const getStaticPaths: GetStaticPaths = () => {
     };
 };
 
-export default Festival2022;
+export default Emhs;

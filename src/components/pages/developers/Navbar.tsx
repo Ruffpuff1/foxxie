@@ -13,46 +13,46 @@ const apiItems: MenuItem[] = [
     {
         href: '/developers/celestia',
         text: 'Celestia'
-    },
-    {
-        href: '/developers/stardrop',
-        text: 'Stardrop'
-    },
-    {
-        href: '/developers/todo',
-        text: 'Todo'
     }
+    // {
+    //     href: '/developers/stardrop',
+    //     text: 'Stardrop'
+    // },
+    // {
+    //     href: '/developers/todo',
+    //     text: 'Todo'
+    // }
 ];
 
 const packageItems: MenuItem[] = [
     {
         href: '/developers/package/duration',
         text: 'Duration'
-    },
-    {
-        href: '/developers/package/env',
-        text: 'Env'
-    },
-    {
-        href: '/developers/package/eslint-config',
-        text: 'Eslint Config'
-    },
-    {
-        href: '/developers/package/fetch',
-        text: 'Fetch'
-    },
-    {
-        href: '/developers/package/sanitize',
-        text: 'Sanitize'
-    },
-    {
-        href: '/developers/package/usehooks',
-        text: 'Usehooks'
-    },
-    {
-        href: '/developers/package/utilities',
-        text: 'Utilities'
     }
+    // {
+    //     href: '/developers/package/env',
+    //     text: 'Env'
+    // },
+    // {
+    //     href: '/developers/package/eslint-config',
+    //     text: 'Eslint Config'
+    // },
+    // {
+    //     href: '/developers/package/fetch',
+    //     text: 'Fetch'
+    // },
+    // {
+    //     href: '/developers/package/sanitize',
+    //     text: 'Sanitize'
+    // },
+    // {
+    //     href: '/developers/package/usehooks',
+    //     text: 'Usehooks'
+    // },
+    // {
+    //     href: '/developers/package/utilities',
+    //     text: 'Utilities'
+    // }
 ];
 
 export default function Navbar() {

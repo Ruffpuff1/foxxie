@@ -37,7 +37,7 @@ export const emhsFestival2022Orchestra: Concert[] = [
             name: 'El Modena High School',
             href: 'emhs'
         },
-        playlistUrl: 'rsehrk.com/emhsorcfstvl2022pl',
+        playlistUrl: 'rsehrk.com/EmhsOrchestraFestival2022Playlist',
         name: 'Festival 2022 Concert',
         path: 'concert/2022/festival'
     },
@@ -84,7 +84,7 @@ export const emhsFestival2022Orchestra: Concert[] = [
             name: 'El Modena High School',
             href: 'emhs'
         },
-        playlistUrl: 'rsehrk.com/emhsorcspr2022pl',
+        playlistUrl: 'rsehrk.com/EmhsOrchestraSpring2022Playlist',
         name: 'Spring 2022 Concert',
         path: 'concert/2022/spring'
     }

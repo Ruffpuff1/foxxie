@@ -3,7 +3,7 @@ import Meta from '@ui/Meta';
 import Navbar from '@ui/Navbar/Navbar';
 import type { NextPage } from 'next';
 
-const Music: NextPage = () => {
+const Orchestra: NextPage = () => {
     return (
         <>
             <Meta title='Orchestra' description='' icon='https://reese.cafe/images/icons/violin.png' noRobots />
@@ -38,4 +38,4 @@ const Music: NextPage = () => {
     );
 };
 
-export default Music;
+export default Orchestra;
