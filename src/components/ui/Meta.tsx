@@ -10,7 +10,16 @@ const DefaultImg: Img = {
     format: 'image/jpeg'
 };
 
-export default function Meta({ color, icon, image = DefaultImg, noRobots, keywords, subject, title, description }: Props) {
+export default function Meta({
+    color,
+    icon,
+    image = icon ? { image: icon, alt: '', format: 'image/png' } : DefaultImg,
+    noRobots,
+    keywords,
+    subject,
+    title,
+    description
+}: Props) {
     const [, hl] = useLocale();
 
     return (

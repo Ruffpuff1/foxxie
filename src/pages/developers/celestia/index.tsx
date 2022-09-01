@@ -13,7 +13,7 @@ const Celestia: NextPage = () => {
         <>
             <Meta title={celestia.title} description={celestia.description} icon={Icons.Celestia} noRobots />
 
-            <Navbar />
+            <Navbar noYellowLinks />
 
             <div className='h-[100vh] pt-[4rem]'>
                 <div className='flex h-[32rem] w-full items-start justify-between px-10 pt-28'>

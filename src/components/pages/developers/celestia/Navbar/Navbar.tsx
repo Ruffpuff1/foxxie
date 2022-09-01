@@ -5,7 +5,7 @@ import { default as BaseNavbar } from '@ui/Navbar/Navbar';
 import clsx from 'clsx';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 
-export default function Navbar({ noBottom = false, title = '' }) {
+export default function Navbar({ noBottom = false, title = '', noYellowLinks = false }) {
     const [{ developers }] = useLocale();
     const { celestia } = developers;
 
@@ -42,9 +42,13 @@ export default function Navbar({ noBottom = false, title = '' }) {
                             stick ? 'top-[3.9rem]' : 'top-0'
                         )}
                     >
-                        <Link href='/developers/celestia'>{celestia.home}</Link>
+                        {!noYellowLinks && (
+                            <>
+                                <Link href='/developers/celestia/api'>{celestia.home}</Link>
 
-                        <Link href='/developers/celestia/api'>{celestia.refrence}</Link>
+                                <Link href='/developers/celestia/api/reference'>{celestia.refrence}</Link>
+                            </>
+                        )}
                     </div>
                 );
             }}

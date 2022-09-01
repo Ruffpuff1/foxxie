@@ -27,7 +27,7 @@ export default function HomeFooter({ className }: { className?: string }) {
                     </ul>
                 </div>
 
-                <div className='flex flex-col items-start py-6 px-4'>
+                {/* <div className='flex flex-col items-start py-6 px-4'>
                     <h2 className='text-[16px] font-medium'>Projects</h2>
                     <ul className='mt-5 space-y-3'>
                         <li className='text-gray-700 duration-200 hover:text-gray-600'>
@@ -46,7 +46,7 @@ export default function HomeFooter({ className }: { className?: string }) {
                             </Link>
                         </li>
                     </ul>
-                </div>
+                </div> */}
             </div>
 
             <div className='flex items-center justify-start space-x-3'>

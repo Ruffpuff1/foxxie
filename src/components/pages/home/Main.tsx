@@ -17,11 +17,11 @@ export default function Main({ children, className, footer = true }: { children:
                     {
                         path: '/contact-me',
                         text: home.nav.contact
-                    },
-                    {
-                        text: aboutMe.nav.myWork,
-                        path: '/my-work'
                     }
+                    // {
+                    //     text: aboutMe.nav.myWork,
+                    //     path: '/my-work'
+                    // }
                 ]}
             />
 

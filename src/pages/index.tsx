@@ -1,4 +1,3 @@
-import HomeAboutSection from '@home/HomeAboutSection';
 import HomeTopSection from '@home/HomeTopSection';
 import Main from '@home/Main';
 import useLocale from '@hooks/useLocale';
@@ -19,8 +18,6 @@ const Home: NextPage = () => {
 
             <Main>
                 <HomeTopSection />
-                <HomeAboutSection />
-                {/* <section className='flex h-[900px] flex-col items-center justify-center'></section> */}
             </Main>
         </>
     );
