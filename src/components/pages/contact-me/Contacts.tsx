@@ -7,8 +7,8 @@ const ContactsData: Contact[][] = [
             description: (
                 <>
                     If you are looking to contact me, the best way is at{' '}
-                    <a href='mailto:reese@reese.cafe' className='text-gray-500 underline hover:text-gray-400'>
-                        reese@reese.cafe
+                    <a href='mailto:reese@withreese.com' className='text-gray-500 underline hover:text-gray-400'>
+                        reese@withreese.com
                     </a>
                     .
                 </>
@@ -47,20 +47,6 @@ const ContactsData: Contact[][] = [
                     Like what I do? Consider supporting me on{' '}
                     <a href='https://ko-fi.com/Ruffpuff1' className='text-gray-500 underline hover:text-gray-400'>
                         Ko-fi
-                    </a>
-                    .
-                </>
-            )
-        }
-    ],
-    [
-        {
-            header: 'Discord',
-            description: (
-                <>
-                    Want to talk more? Join my community Discord server:{' '}
-                    <a href='https://reese.cafe/community' className='text-gray-500 underline hover:text-gray-400'>
-                        The Corner Store
                     </a>
                     .
                 </>
