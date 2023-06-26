@@ -1,6 +1,1 @@
-{
-    "caseDescription": "Ver un caso de moderación anterior de su servidor.",
-    "caseNoExist": "{{ERROR}} Un caso de moderación con el id `{{id}}` no existe en este servidor.",
-    "caseUsage": "[Id de caso | \"nuevo\"]",
-    "reasonUsage": "[Id de caso | \"nuevo\"] [razón]"
-}
+{}
