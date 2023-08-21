@@ -5,6 +5,8 @@
     "actionFilterInvites_other": "Invitaciones filtradas",
     "actionFilterWords": "Palabra filtrada",
     "actionMemberJoin": "Miembro unido",
+    "actionMemberLeave": "Miembro dejado",
+    "actionMemberScreening": "Miembro verificado",
     "argsAttachment": "**Adjuntos**: {{attachments}}",
     "argsChannel": "**Ubicación**: {{channel.name, code}} ({{channel.id}})",
     "argsCreated": "**Creado**: {{date, fulldate}} ({{date, duration}})",
@@ -16,11 +18,11 @@
     "argsMessage": "**Mensaje**: {{content}}",
     "argsMessageCount": "**Mensajes**: {{count, number}} enviado",
     "argsMessages": "**Antes de que**: {{old}}\n**después**: {{new}}",
-    "argsModerator": "**Moderador**: {{mod.tag, code}} ({{mod.id}})",
+    "argsModerator": "**Moderador**: {{mod.username, code}} ({{mod.id}})",
     "argsPosition": "**Posición**: {{position, ordinal}}",
     "argsReason": "**Razón**: {{reason}}",
     "argsRefrence": "**Refrencia**: [#{{id, number}}]({{url}})",
     "argsTimeTaken": "**Tiempo**: {{time, remaining}}",
-    "argsUser": "**Usuario**: {{user.tag, code}} ({{user.id}})",
+    "argsUser": "**Usuario**: {{user.username, code}} ({{user.id}})",
     "attachment": "Adjunto"
 }

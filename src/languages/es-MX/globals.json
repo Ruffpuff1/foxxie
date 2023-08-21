@@ -32,7 +32,7 @@
     "remaining": "{{value, remaining}}",
     "resetOptions": [
         "ninguno",
-        "",
+        "reajustar",
         "por defecto"
     ],
     "time": "{{value, time}}",
