@@ -1,7 +1,0 @@
-{
-    "birthdayMessageAge": "Todos desean {member} le un cumpleaños muy feliz. ¡Cumplen {age} hoy! :cake:",
-    "birthdayMessage": "¡Todos desean {member} les a un cumpleaños muy feliz! :cake:",
-    "birthdayYearOlder": "un año mayor",
-    "reminderToChannelWithUser": "¡Que tal {{user}}! En **{{time, fulldatetime}}** querías que te recordara:\\n> *{{text}}*",
-    "reminderToDM": ":mailbox_with_mail: ¡Tienes correo!\\nEn **{{time, fulldatetime}}** querías que te recordara:\\n> *{{text}}*"
-}

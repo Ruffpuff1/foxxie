@@ -9,5 +9,5 @@
     "arrowParens": "avoid",
     "parser": "typescript",
     "useTabs": false,
-    "printWidth": 170
+    "printWidth": 130
 }
