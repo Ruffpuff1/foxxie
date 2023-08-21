@@ -1,0 +1,21 @@
+{
+
+    "banDescription": "Ban a member from your server so they can no longer return.",
+    "banSuccess": "{{SUCCESS}} Successfully banned {{users, and}}, creating case {{range}}.",
+    "banSuccess_other": "{{SUCCESS}} Successfully banned {{users, and}}, creating cases {{range}}.",
+    "banUsage": "[...users] (time) (reason) {--days=} {--refrence=}",
+    "caseDescription": "View a prior moderation case from your server.",
+    "caseNoExist": "{{ERROR}} A moderation case with the id `{{id}}` doesn't exist in this server.",
+    "caseUsage": "[caseId | \"latest\"]",
+    "guildBansEmpty": "{{ERROR}} This server doesn't have any banned members.",
+    "guildBansNotFound": "{{ERROR}} That member doesn't seem to be banned in this server.",
+    "kickDescription": "Kick a member from your server.",
+    "kickSuccess": "{{SUCCESS}} Successfully kicked {{users, and}}, creating case {{range}}.",
+    "kickSuccess_other": "{{SUCCESS}} Successfully kicked {{users, and}}, creating cases {{range}}.",
+    "reasonDescription": "Edit the reason for a moderation case in your server.",
+    "reasonSuccess": "{{SUCCESS}} Changed the case's reason to `{{reason}}`.",
+    "reasonUsage": "[caseId | \"latest\"] [reason]",
+    "unbanDescription": "Unban members from your server",
+    "unbanSuccess": "{{SUCCESS}} Successfully unbanned {{users, and}}, creating case {{range}}.",
+    "unbanSuccess_other": "{{SUCCESS}} Successfully unbanned {{users, and}}, creating cases {{range}}."
+}

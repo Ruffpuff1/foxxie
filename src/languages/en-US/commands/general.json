@@ -1,0 +1,50 @@
+{
+    "aboutDescription": "View basic information about me.",
+    "aboutSummary": "{{version}} is a bot created for [The Corner Store]({{TCS}}), with advanced moderation, utilities, and configuration. Foxxie is made to best support community servers and everything they may need to foster a healthy enviroment.\n\nHe's built on top of [Sapphire Framework](https://sapphirejs.dev/), a \"plug-and-play\" object-oriented-framework made for the [Discord.js library](https://discord.js.org/).\n\nCreated **{{created, fulldate}}** a whole **{{created, duration}}**. Right now he's taking care of about **{{userCount, number}} users**, with more every day!\n\nTo learn more about Foxxie and how he may process your data you can refer to our [privacy policy]({{privacy}}).",
+    "avatarDescription": "Get an image of a user's avatar.",
+    "helpDescription": "View all of my commands, or the help menu for a specific command.",
+    "helpMenu": "{{name}}'s commands",
+    "helpTitles": {
+        "usage": "Usage"
+    },
+    "helpUsage": "(Command)",
+    "infoServerChannels": "{{channels, channellist}}",
+    "infoServerCreated": "Created by **{{owner}}** on {{created, fulldate}} ({{created, duration}})",
+    "infoServerDescription": "I'll show information about yours or any other server I'm in.",
+    "infoServerEmojis": "Static: **{{static}}**\nAnimated: **{{animated}}**",
+    "infoServerMessages": "{{messages, number}} messages sent.",
+    "infoServerMembers": "{{size, number}} (cached: {{cache, number}})",
+    "infoServerRolesAndMore": "{{count}} more.",
+    "infoServerSecurity": "Verification level: {{filter, verificationlevel}}\nExplicit filter: {{content, contentfilter}}",
+    "infoServerTitles": {
+        "channels": "• Channel",
+        "channels_other": "• Channels ({{count}})",
+        "emojis": "• Emoji",
+        "emojis_other": "• Emojis ({{count}})",
+        "members": "• Members",
+        "roles": "• Role",
+        "roles_other": "• Roles ({{count}})",
+        "security": "• Security",
+        "stats": "• Statistics"
+    },
+
+    "infoUserDiscordJoin": "Joined Discord on {{created, fulldate}} ({{created, duration}})",
+    "infoUserGuildCreate": "Created {{name}} on {{joined, fulldate}} ({{joined, duration}})",
+    "infoUserGuildJoin": "Joined {{name}} on {{joined, fulldate}} ({{joined, duration}})",
+    "infoUserMessages": "{{messages, numbercompact}} messages sent.",
+    "infoUserTitles": {
+        "about": "• Statistics",
+        "notes": "• Note",
+        "notes_other": "• Notes",
+        "roles": "• Role",
+        "roles_other": "• Roles ({{count, number}})",
+        "warnings": "• Warning",
+        "warnings_other": "• Warnings ({{count, number}})"
+    },
+    "ping": "Ping?",
+    "pingDescription": "Runs a connection test to my database and Discord.",
+    "pingPong": "Pong! Took {{roundTrip}}ms (Discord Latency: {{wsPing}}ms. Database Connection: {{dbPing}}ms)",
+    "statsDescription": "Provides some details about me and my stats.",
+    "statsMenu": "**My current statistics!**\n• {{memoryPercent}}% of RAM ({{memoryUsed}} / {{totalmemory}} MB) and\n• {{cpuUsage}}% of CPU ({{cpuCount}}c @ {{cpuSpeed}}GHz).\n**I've been running**\n• As of {{uptime, duration}} on {{process}} (shard {{shard}} / {{shardTotal}})\n• Using {{deps, and}}."
+
+}

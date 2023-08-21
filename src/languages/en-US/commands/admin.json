@@ -1,0 +1,16 @@
+{
+    "evalConsole": "**Output**:\nWas sent to the console on **{{name}}**...\n\n**Type**:{{footer}}\n{{time}}",
+    "evalDescription": "Allows you evaluate JavaScript code straight from Discord.",
+    "evalError": "**Error**:{{output}}\n**Type**:{{type}}\n{{time}}",
+    "evalHaste": "**Output**:\nWas too long... sent the result to paste: <{{output}}>\n\n**Type**:{{footer}}\n{{time}}",
+    "evalOutput": "**Output**:{{output}}\n**Type**:{{type}}\n{{time}}",
+    "reload": "{{SUCCESS}} Reloaded {{type}}: {{name}}. (Took: {{time}})",
+    "reloadAll": "{{SUCCESS}} Reloaded all {{type}}. (Took: {{time}})",
+    "reloadDescription": "Hot-reload a piece.",
+    "reloadEverything": "{{SUCCESS}} Reloaded everything. (Took: {{time}})",
+    "reloadLanguage": "{{SUCCESS}} Reloaded language resource: {{language}}. (Took: {{time}})",
+    "serverlistDescription": "Show a list of my servers.",
+    "serverlistFooter": "{{count}} total servers\nPage -",
+    "serverlistMembers": "members",
+    "serverlistTitle": "Servers using {{name}}"
+}
