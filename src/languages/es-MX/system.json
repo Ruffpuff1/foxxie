@@ -1,6 +1,7 @@
 {
     "commandCancel": "",
     "dmWarn": "",
+    "fetchBansFail": "",
     "footer": "",
     "messageLoading": [
         "",

@@ -1,11 +1,48 @@
 {
+    "aboutDescription": "",
+    "aboutSummary": "",
+    "avatarDescription": "",
     "helpDescription": "Ver todos mis comandos, o el menú de ayuda para un comando específico.",
     "helpMenu": "Comandos de {{name}}",
     "helpTitles": {
         "usage": "Uso"
     },
     "helpUsage": "(Comando)",
+    "infoServerChannels": "",
+    "infoServerCreated": "",
+    "infoServerDescription": "",
+    "infoServerEmojis": "",
+    "infoServerMessages": "",
+    "infoServerMembers": "",
+    "infoServerRolesAndMore": "",
+    "infoServerSecurity": "",
+    "infoServerTitles": {
+        "channels": "",
+        "channels_other": "",
+        "emojis": "",
+        "emojis_other": "",
+        "members": "",
+        "roles": "",
+        "roles_other": "",
+        "security": "",
+        "stats": ""
+    },
+    "infoUserDiscordJoin": "",
+    "infoUserGuildCreate": "",
+    "infoUserGuildJoin": "",
+    "infoUserMessages": "",
+    "infoUserTitles": {
+        "about": "",
+        "notes": "",
+        "notes_other": "",
+        "roles": "",
+        "roles_other": "",
+        "warnings": "",
+        "warnings_other": ""
+    },
     "ping": "¿Ping?",
     "pingDescription": "Ejecuta una prueba de conexión a mi base de datos y Discord.",
-    "pingPong": "¡Pong! Total {{roundTrip}}ms (Latencia de Discord: {{wsPing}}ms. Conexión de la base de datos: {{dbPing}}ms)"
+    "pingPong": "¡Pong! Total {{roundTrip}}ms (Latencia de Discord: {{wsPing}}ms. Conexión de la base de datos: {{dbPing}}ms)",
+    "statsDescription": "",
+    "statsMenu": ""
 }
