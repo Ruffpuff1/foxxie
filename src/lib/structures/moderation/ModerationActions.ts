@@ -1,9 +1,9 @@
 import { api } from '#external/Api';
-import { GuildSettings, ModerationEntity } from '#lib/database';
+import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import type { GuildMessage, PartialModerationEntityWithRoleIdExtraData } from '#lib/types';
+import type { GuildMessage } from '#lib/types';
 import { getModeration, getPersistRoles, messagePrompt } from '#utils/Discord';
-import { BrandingColors } from '#utils/constants';
+import { BrandingColors, Colors } from '#utils/constants';
 import { SendOptions, TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 import { handleDiscordAPIError } from '#utils/transformers';
 import { floatPromise } from '#utils/util';
@@ -13,11 +13,10 @@ import { UserError, container } from '@sapphire/framework';
 import { isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
 import type { APIGuildChannel, APIOverwrite, ChannelType } from 'discord-api-types/v9';
 import { Guild, GuildChannel, MessageEmbed, PermissionOverwriteOptions, PermissionOverwrites, Role } from 'discord.js';
-import { Warn } from '../../database';
+import { Warn } from '../../database/entities/Warn';
 import {
     RoleKey,
     RolePermissionOverwriteOptionField,
-    RoleSettingsKey,
     permissionOverwrites,
     roleData,
     roleLanguageKeys
@@ -96,18 +95,16 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async mute(
-        rawOptions: PartialModerationEntityWithRoleIdExtraData,
-        sendOptions: SendOptions
-    ): Promise<ModerationEntity> {
+    public async mute(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Mute);
         const moderationLog = this.create(options);
+        const roleId = await acquireSettings(rawOptions.guildId!, GuildSettings.Roles.Muted);
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Mute);
 
         try {
-            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(rawOptions.extraData.roleId).put({ reason });
+            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(roleId!).put({ reason });
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             throw new UserError({
@@ -120,24 +117,18 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async unmute(
-        rawOptions: PartialModerationEntityWithRoleIdExtraData,
-        sendOptions: SendOptions
-    ): Promise<ModerationEntity> {
+    public async unmute(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.UnMute);
         const moderationLog = this.create(options);
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Mute);
+        const roleId = await acquireSettings(rawOptions.guildId!, GuildSettings.Roles.Muted);
 
         try {
-            await api()
-                .guilds(this.guild.id)
-                .members(moderationLog.userId!)
-                .roles(rawOptions.extraData.roleId)
-                .delete({ reason });
+            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(roleId!).delete({ reason });
 
-            await this.removePersistPunish(rawOptions.extraData.roleId, moderationLog.userId!);
+            await this.removePersistPunish(roleId!, moderationLog.userId!);
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             throw new UserError({
@@ -150,18 +141,17 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async restrictEmbed(
-        rawOptions: PartialModerationEntityWithRoleIdExtraData,
-        sendOptions: SendOptions
-    ): Promise<ModerationEntity> {
+    public async restrictEmbed(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.RestrictEmbed);
         const moderationLog = this.create(options);
+
+        const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.EmbedRestrict);
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.RestrictEmbed);
 
         try {
-            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(rawOptions.extraData.roleId).put({ reason });
+            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(roleId!).put({ reason });
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             throw new UserError({
@@ -174,24 +164,18 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async unRestrictEmbed(
-        rawOptions: PartialModerationEntityWithRoleIdExtraData,
-        sendOptions: SendOptions
-    ): Promise<ModerationEntity> {
+    public async unRestrictEmbed(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.UnRestrictEmbed);
         const moderationLog = this.create(options);
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.RestrictEmbed);
+        const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.EmbedRestrict);
 
         try {
-            await api()
-                .guilds(this.guild.id)
-                .members(moderationLog.userId!)
-                .roles(rawOptions.extraData.roleId)
-                .delete({ reason });
+            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(roleId!).delete({ reason });
 
-            await this.removePersistPunish(rawOptions.extraData.roleId, moderationLog.userId!);
+            await this.removePersistPunish(roleId!, moderationLog.userId!);
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             throw new UserError({
@@ -300,7 +284,7 @@ export class ModerationActions {
             guildId: this.guild.id
         });
 
-        const member = await container.db.members.ensure(options.userId!, options.guildId!);
+        const member = await container.db.members.ensure(options.userId!, this.guild.id);
         member.warnings.push(warning);
         await member.save();
 
@@ -389,11 +373,7 @@ export class ModerationActions {
         return log;
     }
 
-    public async setUpRole(
-        msg: GuildMessage,
-        settingsKey: RoleSettingsKey = GuildSettings.Roles.Muted,
-        key?: RoleKey
-    ): Promise<void> {
+    public async setUpRole(msg: GuildMessage, settingsKey: ModerationSetupRestriction, key?: RoleKey): Promise<Role> {
         if (this.guild.roles.cache.size >= 250)
             throw new UserError({
                 identifier: LanguageKeys.Listeners.Errors.TooManyRoles
@@ -483,7 +463,7 @@ export class ModerationActions {
         };
     }
 
-    private async initRole(msg: GuildMessage, settingsKey: RoleSettingsKey, key?: RoleKey): Promise<void> {
+    private async initRole(msg: GuildMessage, settingsKey: ModerationSetupRestriction, key?: RoleKey): Promise<Role> {
         const t = await container.db.guilds.acquire(this.guild.id, s => s.getLanguage());
 
         const languageKeys = roleLanguageKeys.get(key ?? RoleKey.Muted)!;
@@ -498,24 +478,18 @@ export class ModerationActions {
             ...data,
             name: lang.name,
             position: this.guild.me?.roles.highest.position || 0,
-            reason: lang.reason
+            reason: lang.reason,
+            color: Colors.Restricted
         });
 
         await container.db.guilds.write(this.guild.id, settings => (settings[settingsKey] = role.id));
 
-        if (
-            await messagePrompt(
-                msg,
-                t(lang.init, {
-                    role: role.name,
-                    channels: this.manageableChannelCount,
-                    permissions: this.displayPermissions(key ?? RoleKey.Muted)
-                })
-            )
-        ) {
+        if (await messagePrompt(msg, lang.init)) {
             await this.updateCategories(role, key ?? RoleKey.Muted);
             await this.updateTextOrVoice(role, key ?? RoleKey.Muted);
         }
+
+        return role;
     }
 
     private async updateTextOrVoice(role: Role, key: RoleKey): Promise<void> {
@@ -584,4 +558,9 @@ export class ModerationActions {
     private get persistRoles() {
         return getPersistRoles(this.guild);
     }
+}
+
+export const enum ModerationSetupRestriction {
+    All = 'rolesMuted',
+    Embed = 'rolesEmbedRestrict'
 }

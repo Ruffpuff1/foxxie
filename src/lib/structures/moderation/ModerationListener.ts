@@ -1,13 +1,13 @@
 import { GuildEntity, GuildSettings } from '#lib/database';
 import { Events, GuildMessage } from '#lib/types';
-import type { CustomGet, TFunction } from '@foxxie/i18n';
 import { getModeration, isModerator, isSendableChannel } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
+import type { CustomGet, TFunction } from '@foxxie/i18n';
 import { isDev, seconds } from '@ruffpuff/utilities';
 import { Listener, ListenerOptions, PieceContext } from '@sapphire/framework';
 import type { Awaitable, PickByValue } from '@sapphire/utilities';
-import { ModerationBitField, ModerationHardActionFlags, ModerationFlagBits } from './ModerationBitfield';
+import { ModerationBitField, ModerationFlagBits, ModerationHardActionFlags } from './ModerationBitfield';
 
 export abstract class ModerationListener extends Listener {
     private readonly keyEnabled: PickByValue<GuildEntity, boolean>;
@@ -52,7 +52,12 @@ export abstract class ModerationListener extends Listener {
     protected abstract onAlert(message: GuildMessage, language: TFunction, value: unknown): Awaitable<unknown>;
     protected abstract onLog(message: GuildMessage, language: TFunction, value: unknown): Awaitable<unknown>;
 
-    private async processSoftPunishment(msg: GuildMessage, language: TFunction, bitField: ModerationBitField, checked: unknown): Promise<void> {
+    private async processSoftPunishment(
+        msg: GuildMessage,
+        language: TFunction,
+        bitField: ModerationBitField,
+        checked: unknown
+    ): Promise<void> {
         if (bitField.has(ModerationFlagBits.Delete)) {
             await floatPromise(this.onDelete(msg, language, checked) as Promise<unknown>);
         }
@@ -155,8 +160,7 @@ export abstract class ModerationListener extends Listener {
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
                 reason: t(this.reasonLanguageKey),
-                duration,
-                extraData: { roleId }
+                duration
             },
             await this.getDmOptions(msg)
         );

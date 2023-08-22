@@ -1,13 +1,13 @@
 import { LanguageKeys } from '#lib/i18n';
 import type { GuildMessage } from '#lib/types';
+import { floatPromise } from '#utils/util';
 import type { CustomFunctionGet, CustomGet, TOptionsBase } from '@foxxie/i18n';
 import { minutes, randomArray } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
-import type { Message, MessageOptions, UserResolvable } from 'discord.js';
-import { send } from '@sapphire/plugin-editable-commands';
-import { setTimeout as sleep } from 'node:timers/promises';
-import { floatPromise } from '#utils/util';
 import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
+import { container } from '@sapphire/framework';
+import { send } from '@sapphire/plugin-editable-commands';
+import type { Message, MessageOptions, UserResolvable } from 'discord.js';
+import { setTimeout as sleep } from 'node:timers/promises';
 
 /**
  * Deletes a message immediately.
@@ -79,7 +79,9 @@ export async function messagePrompt(message: Message, options: AskYesNoOptions |
     if (typeof options === 'string') options = { content: options };
 
     const response = await send(message, options);
-    return canReact(response.channel) ? askYesOrNo(message, response, options) : askConfirmationMessage(message, response, options);
+    return canReact(response.channel)
+        ? askYesOrNo(message, response, options)
+        : askConfirmationMessage(message, response, options);
 }
 
 export async function askYesOrNo(message: Message, response: Message, options: AskYesNoOptions): Promise<boolean | null> {
@@ -107,10 +109,45 @@ export async function askYesOrNo(message: Message, response: Message, options: A
  * @param timer The timer in which the message should be deleted, using {@link deleteMessage}.
  * @returns The response message.
  */
-export async function sendTemporaryMessage(message: Message, options: string | MessageOptions, timer = minutes(1)): Promise<Message> {
+export async function sendTemporaryMessage(
+    message: Message,
+    options: string | MessageOptions,
+    timer = minutes(1)
+): Promise<Message> {
     if (typeof options === 'string') options = { content: options };
 
     const response = (await send(message, options)) as Message;
     await floatPromise(deleteMessage(response, timer));
     return response;
+}
+
+export async function promptForMessage(
+    message: Message,
+    sendOptions: string | MessageOptions,
+    time = minutes(1)
+): Promise<string | null> {
+    await send(message, sendOptions);
+
+    const responses = await message.channel.awaitMessages({ filter: msg => msg.author === message.author, time, max: 1 });
+    const content = responses.size === 0 ? null : responses.first()!.content;
+
+    if (content) floatPromise(deleteMessage(responses.first()!));
+
+    return content;
+}
+
+/**
+ * Determine whether the sent message is one of the Boost message notification types.
+ * @param message The message to check.
+ * @returns boolean
+ */
+export function isBoostMessage(message: Message): boolean {
+    const boostMessageTypes = [
+        'USER_PREMIUM_GUILD_SUBSCRIPTION',
+        'USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1',
+        'USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2',
+        'USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3'
+    ];
+
+    return boostMessageTypes.includes(message.type);
 }

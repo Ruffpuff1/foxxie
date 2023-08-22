@@ -15,7 +15,10 @@ export class UserTask extends ModerationTask {
         const me = await this.fetchMe(guild);
         if (!me.permissions.has(PermissionFlagsBits.ManageRoles)) return null;
 
-        const [roleId, t] = await this.container.db.guilds.acquire(guild.id, settings => [settings[GuildSettings.Roles.Muted], settings.getLanguage()]);
+        const [roleId, t] = await this.container.db.guilds.acquire(guild.id, settings => [
+            settings[GuildSettings.Roles.Muted],
+            settings.getLanguage()
+        ]);
         if (!roleId) return null;
 
         const reason = t(LanguageKeys.Moderation.Unmute, this.ctx(data.duration));
@@ -26,8 +29,7 @@ export class UserTask extends ModerationTask {
                 moderatorId: data.moderatorId,
                 channelId: data.channelId,
                 refrence: data.caseId,
-                reason,
-                extraData: { roleId }
+                reason
             },
             await this.getDmData(guild)
         );

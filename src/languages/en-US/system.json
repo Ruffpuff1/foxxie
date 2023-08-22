@@ -10,5 +10,7 @@
         "{{LOADING}} I'll get that right up for you, want some ice too?",
         "{{LOADING}} Hey chef! We got a new order!"
     ],
+    "prefixReminder": "Heyo! My prefix for this server is: {{prefixes, codeand}}",
+    "prefixReminder_other": "Hey there! My prefixes for this server are: {{prefixes, codeand}}",
     "queryFail": "{{ERROR}} I couldn't find any data from the server about that query, please try again."
 }

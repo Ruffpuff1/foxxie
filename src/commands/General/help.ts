@@ -6,8 +6,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { send } from '@sapphire/plugin-editable-commands';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import type { Message } from 'discord.js';
-import { MessageEmbed } from 'discord.js';
+import { Message, MessageEmbed } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['h', 'commands'],
@@ -30,10 +29,12 @@ export default class UserCommand extends FoxxieCommand {
     private async fullHelp(message: GuildMessage, args: FoxxieCommand.Args) {
         const embed = new MessageEmbed() //
             .setAuthor({ name: args.t(LanguageKeys.Commands.General.HelpMenu, { name: this.container.client.user?.username }) })
-            .setColor(message.guild.me!.displayColor);
+            .setColor(message.guild.me!.displayColor || BrandingColors.Primary);
 
         const commands = this.container.stores.get('commands');
-        const categories = [...new Set(this.container.stores.get('commands').map(c => c.category!))].filter(c => c !== 'Admin');
+        const categories = [...new Set(this.container.stores.get('commands').map(c => c.category!))]
+            .filter(c => c !== 'Admin')
+            .sort((a, b) => a.localeCompare(b));
 
         for (const category of categories)
             embed.addField(

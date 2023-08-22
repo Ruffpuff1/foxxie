@@ -1,6 +1,11 @@
 import type { RoleLanguageKeyData } from '#lib/types';
 import { FT, T } from '@foxxie/i18n';
 
+export const ActionSharedRoleSetupExisting = T('moderation:actionSharedRoleSetupExisting');
+export const ActionSharedRoleSetupExistingName = T('moderation:actionSharedRoleSetupExistingName');
+export const ActionsharedRoleSetupNew = T('moderation:actionSharedRoleSetupNew');
+export const ActionSharedRoleSetupNoMessage = T('moderation:actionSharedRoleSetupNoMessage');
+export const ActionSharedRoleSetupSuccess = FT<{ role: string }>('moderation:actionSharedRoleSetupSuccess');
 export const Ban = T('moderation:ban');
 export const Dm = FT<
     {
@@ -38,9 +43,12 @@ export const NoReason = T('moderation:noReason');
 export const Purge = T('moderation:purge');
 export const Nickname = T('moderation:nickname');
 export const RestrictEmbed = T('moderation:restrictEmbed');
-export const RoleSetupEmbedRestrict = FT<{ channels: number; permissions: string[] }, RoleLanguageKeyData>('moderation:roleSetupEmbedRestrict');
+export const RestrictLowLevel = T('moderation:restrictLowLevel');
+export const RoleSetupEmbedRestrict = FT<{ channels: number; permissions: string[] }, RoleLanguageKeyData>(
+    'moderation:roleSetupEmbedRestrict'
+);
 export const RoleSetupMute = FT<{ channels: number; permissions: string[] }, RoleLanguageKeyData>('moderation:roleSetupMute');
-export const SoftBan = T('moderation:softban');
+export const SoftBan = T('moderation:softBan');
 export const TempBan = T('moderation:tempBan');
 export const TempMute = T('moderation:tempMute');
 export const TempNickname = T('moderation:tempNickname');

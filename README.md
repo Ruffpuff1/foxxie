@@ -1,5 +1,3 @@
-**Hi, please be aware that this repository is barely being worked on at the moment, pull requests or issues may not be seen for a while.**
-
 <div align='center'>
   <img src='https://cdn.ruffpuff.dev/foxxie.png' width='140' height='140' />
   <h1>Foxxie ⚡️</h1>

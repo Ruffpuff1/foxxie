@@ -1,5 +1,5 @@
+import { execSync } from 'child_process';
 import type { PostProcessorModule } from 'i18next';
-import { fetch } from '@foxxie/fetch';
 
 export const rootFolder = process.cwd();
 
@@ -14,7 +14,8 @@ export const enum Colors {
     TheCornerStoreStarboard = 0xfff59f,
     BlurpleOld = 0x7289db,
     Blurple = 0x5865f2,
-    Disboard = 0x25b8b8
+    Disboard = 0x25b8b8,
+    Restricted = 1579292
 }
 
 export const enum BrandingColors {
@@ -65,11 +66,9 @@ export const helpUsagePostProcessor: PostProcessorModule = {
     }
 };
 
-export const commit = async () =>
-    fetch('https://api.github.com/repos/Ruffpuff1/foxxie/commits/main') //
-        .json()
-        .then((data: any) => data.sha.substring(0, 7))
-        .catch(() => null);
+export const commit = () => {
+    return execSync('git log -1 --date-order --format=format:"%h - %s"').toString().split('-');
+};
 
 export const allowedInviteIds = [
     // ID for `The Corner Store`, Foxxie's home server.

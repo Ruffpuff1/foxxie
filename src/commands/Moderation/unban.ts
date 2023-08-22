@@ -14,7 +14,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
     duration: false,
     requiredClientPermissions: [PermissionFlagsBits.BanMembers],
     memberOnly: false,
-    options: ['refrence'],
+    options: ['reference'],
     successKey: LanguageKeys.Commands.Moderation.UnbanSuccess
 })
 export class UserCommand extends ModerationCommand {
@@ -40,7 +40,7 @@ export class UserCommand extends ModerationCommand {
                 moderatorId: message.author.id,
                 duration: context.duration,
                 reason: context.reason,
-                refrence: context.args.getOption('refrence') ? Number(context.args.getOption('refrence')) : null
+                refrence: context.args.getOption('reference') ? Number(context.args.getOption('reference')) : null
             },
             await this.getDmData(message, context)
         );

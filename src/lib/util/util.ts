@@ -1,7 +1,8 @@
 import { acquireSettings } from '#lib/database';
 import { GuildMessage } from '#lib/types';
-import { isThenable } from '@ruffpuff/utilities';
+import { isNumber, isThenable } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
+import { SnowflakeUtil } from 'discord.js';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
 
 /**
@@ -39,4 +40,9 @@ export function getServerDetails() {
         version: process.env.CLIENT_VERSION!,
         totalShards: container.client.options.shardCount || 1
     };
+}
+
+export function idToTimestamp(id: string | number): number | null {
+    if (isNumber(id)) return null;
+    return SnowflakeUtil.deconstruct(id as string).timestamp;
 }

@@ -48,9 +48,8 @@ export class UserListener extends Listener<Events.UserMessage> {
         if (!found) return;
 
         const bitfield = new ModerationBitField(found.softPunish);
-        await this.processSoftPunishment(msg, t, bitfield, processed);
 
-        await this.processHardPunishment(msg, t, found);
+        await Promise.all([this.processSoftPunishment(msg, t, bitfield, processed), this.processHardPunishment(msg, t, found)]);
     }
 
     private async processHardPunishment(msg: GuildMessage, t: TFunction, found: Word) {
@@ -139,8 +138,7 @@ export class UserListener extends Listener<Events.UserMessage> {
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
                 reason: t(LanguageKeys.Automod.WordReason),
-                duration,
-                extraData: { roleId }
+                duration
             },
             await this.getDmOptions(msg)
         );

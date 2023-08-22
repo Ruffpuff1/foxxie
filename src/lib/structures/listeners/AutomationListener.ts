@@ -33,8 +33,6 @@ export abstract class AutomationListener<T extends keyof ClientEvents | symbol =
                     return member.toString();
                 case Matches.Name:
                     return member.displayName;
-                case Matches.Tag:
-                    return member.user.tag;
                 case Matches.Discrim:
                     return member.user.discriminator;
                 case Matches.Guild:

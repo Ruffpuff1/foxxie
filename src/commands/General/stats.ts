@@ -18,7 +18,7 @@ import { getServerDetails } from '#utils/util';
 export class UserCommand extends FoxxieCommand {
     public async messageRun(msg: Message, args: FoxxieCommand.Args): Promise<void> {
         const hash = await commit();
-        const head = hash ? ` [${hash}]` : '';
+        const head = hash ? ` [${hash[0].trim()}]` : '';
 
         const {
             uptime,
@@ -53,7 +53,7 @@ export class UserCommand extends FoxxieCommand {
             .setAuthor({
                 name: `${this.client.user?.username} v${process.env.VERSION_NUM}${isDev() ? '-dev' : ''}${head}`,
                 iconURL: this.client.user?.displayAvatarURL({ format: 'png', size: 2048 }),
-                url: `https://github.com/FoxxieBot/foxxie/commit/${hash}`
+                url: `https://gitlab.com/Ruffpuff1/foxxie/-/tree/${hash[0]}`
             })
             .setDescription(stats)
             .setColor(args.color)

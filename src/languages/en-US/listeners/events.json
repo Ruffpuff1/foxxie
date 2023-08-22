@@ -1,0 +1,10 @@
+{
+    "boostMessageDefault": "**{user.name}** just boosted the server, we now have {boost.count} boosts!",
+    "highlightAttachment": "Message has an attachment. Click **[here]({{url}})** to see it.",
+    "highlightJumpTo": "Click here to jump to the message.",
+    "highlightContentWord": "Your highlight **{{word}}** was sent by **{{author}}** in {{channel}}.",
+    "highlightEmbed": "Message has an embed. Click **[here]({{url}})** to see the message.",
+    "highlightSize": "The message's content was too large. Click **[here]({{url}})** to view it.",
+    "goodbyeDefault": "**{user.username}** left the server :(",
+    "welcomeDefault": "{user.mention} just joined the server! Welcome!"
+}

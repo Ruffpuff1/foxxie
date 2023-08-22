@@ -1,5 +1,4 @@
 {
-
     "banDescription": "Ban a member from your server so they can no longer return.",
     "banSuccess": "{{SUCCESS}} Successfully banned {{users, and}}, creating case {{range}}.",
     "banSuccess_other": "{{SUCCESS}} Successfully banned {{users, and}}, creating cases {{range}}.",
@@ -12,10 +11,22 @@
     "kickDescription": "Kick a member from your server.",
     "kickSuccess": "{{SUCCESS}} Successfully kicked {{users, and}}, creating case {{range}}.",
     "kickSuccess_other": "{{SUCCESS}} Successfully kicked {{users, and}}, creating cases {{range}}.",
+    "muteDescription": "Mute a member from your server so that they can no longer talk.",
+    "muteSuccess": "{{SUCCESS}} Successfully muted {{users, and}}, creating case {{range}}.",
+    "muteSuccess_other": "{{SUCCESS}} Successfully muted {{users, and}}, creating cases {{range}}.",
     "reasonDescription": "Edit the reason for a moderation case in your server.",
     "reasonSuccess": "{{SUCCESS}} Changed the case's reason to `{{reason}}`.",
     "reasonUsage": "[caseId | \"latest\"] [reason]",
+    "restrictEmbedDescription": "Restrict embeding for members of your server, preventing them from embeding links such as GIFs.",
+    "restrictEmbedSuccess": "{{SUCCESS}} Successfully embed restricted {{users, and}}, creating case {{range}}.",
+    "restrictEmbedSuccess_other": "{{SUCCESS}} Successfully embed restricted {{users, and}}, creating cases {{range}}.",
     "unbanDescription": "Unban members from your server",
     "unbanSuccess": "{{SUCCESS}} Successfully unbanned {{users, and}}, creating case {{range}}.",
-    "unbanSuccess_other": "{{SUCCESS}} Successfully unbanned {{users, and}}, creating cases {{range}}."
+    "unbanSuccess_other": "{{SUCCESS}} Successfully unbanned {{users, and}}, creating cases {{range}}.",
+    "unmuteDescription": "Unmute members of your server so they can talk again.",
+    "unmuteSuccess": "{{SUCCESS}} Successfully unmuted {{users, and}}, creating case {{range}}.",
+    "unmuteSuccess_other": "{{SUCCESS}} Successfully unmuted {{users, and}}, creating cases {{range}}.",
+    "unRestrictEmbedDescription": "Remove embed restrictions for members of your server, allowing them to embed links again.",
+    "unRestrictEmbedSuccess": "{{SUCCESS}} Successfully restored embed permissions for {{users, and}}, creating case {{range}}.",
+    "unRestrictEmbedSuccess_other": "{{SUCCESS}} Successfully restored embed permissions for {{users, and}}, creating cases {{range}}."
 }
