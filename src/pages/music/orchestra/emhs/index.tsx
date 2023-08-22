@@ -7,20 +7,20 @@ import type { NextPage } from 'next';
 const Emhs: NextPage = () => {
     return (
         <>
-            <Meta title='El Modena High School Orchestra' description='' icon='https://reese.cafe/images/icons/violin.png' noRobots />
+            <Meta title='El Modena High School Orchestra' description='' icon='https://rsehrk.com/images/icons/violin.png' noRobots />
 
             <Navbar
                 noHoverIndicators
                 home='/music'
                 links={[{ path: '/music/orchestra', text: 'Orchestra' }]}
                 title=' Music'
-                icon='https://reese.cafe/images/icons/violin.png'
+                icon='https://rsehrk.com/images/icons/violin.png'
             />
 
             <div>
                 <div
                     className='mt-[64px] flex flex-col items-center justify-center bg-gray-50 bg-cover bg-no-repeat p-28 text-gray-50 md:h-[90vh]'
-                    style={{ backgroundImage: `url('https://reese.cafe/images/assets/music/orchestra-banners/emhs.jpg')` }}
+                    style={{ backgroundImage: `url('https://rsehrk.com/images/assets/music/orchestra-banners/emhs.jpg')` }}
                 >
                     <h1 className='select-none text-3xl md:text-5xl'>The El Modena High School Orchestra</h1>
                     <Link

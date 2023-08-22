@@ -63,7 +63,7 @@ export const emhsFestival2022Performers: Performer[] = [
         name: 'Reese Harlak',
         instrument: 'violin',
         violinPosition: 2,
-        img: 'https://reese.cafe/images/assets/reese/reese.jpeg'
+        img: 'https://rsehrk.com/images/assets/reese/reese.jpeg'
     },
     {
         name: 'Javier Hernandez',

@@ -12,16 +12,16 @@ const Rsehrk: NextPage = () => {
             <Meta
                 title='Rsehrk Links: Link Shortener'
                 description='Rsehrk links are shortened links that go to my projects, services, and websites I deem useful.'
-                image={{ image: 'https://reese.cafe/images/icons/link.png', format: 'png', alt: 'Link' }}
+                image={{ image: 'https://rsehrk.com/images/icons/link.png', format: 'png', alt: 'Link' }}
                 noRobots
             />
 
-            <Navbar title=' Rsehrk Links' noReese icon='https://reese.cafe/images/icons/link.png' noHoverIndicators links={[]} />
+            <Navbar title=' Rsehrk Links' noReese icon='https://rsehrk.com/images/icons/link.png' noHoverIndicators links={[]} />
 
             <div className='ml-60 mt-36 flex flex-col items-start'>
                 <h1 className='text-lg font-[550]'>About rsehrk.com</h1>
                 <p className='mt-5 text-sm text-gray-500'>
-                    Rsehrk.com is a private link shortener service used for quick linking to different <span className='font-[550]'>reese.cafe</span> sites.
+                    Rsehrk.com is a private link shortener service used for quick linking to different <span className='font-[550]'>rsehrk.com</span> sites.
                 </p>
                 <p className='mt-5 text-sm text-gray-500'>Any &quot;rsehrk.com&quot; site will send you to a website I own or I deem useful.</p>
             </div>

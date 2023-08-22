@@ -22,7 +22,7 @@ export default function ConcertArchiveNavbar() {
                     <span className='ml-[8px] hidden md:block'>{music.concertArchive}</span>
                 </>
             }
-            icon='https://reese.cafe/images/icons/violin.png'
+            icon='https://rsehrk.com/images/icons/violin.png'
         />
     );
 }

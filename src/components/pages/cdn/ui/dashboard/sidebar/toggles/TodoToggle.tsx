@@ -1,7 +1,7 @@
-import { useContext } from 'react';
-import { SidebarContext } from 'src/hooks/useTodo';
 import Tooltip from '@mui/material/Tooltip';
 import Image from 'next/image';
+import { useContext } from 'react';
+import { SidebarContext } from 'src/hooks/useTodo';
 
 export default function TodoToggle() {
     const { showTodo, setShowTodo } = useContext(SidebarContext);
@@ -17,7 +17,7 @@ export default function TodoToggle() {
                     setShowTodo(!showTodo);
                 }}
             >
-                <Image id='todo-icon' aria-hidden height={28} className='m-1' width={28} src='https://reese.cafe/images/icons/todo.png' alt='Todo' />
+                <Image id='todo-icon' aria-hidden height={28} className='m-1' width={28} src='https://rsehrk.com/images/icons/todo.png' alt='Todo' />
             </button>
         </Tooltip>
     );

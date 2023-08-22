@@ -43,7 +43,7 @@ export default function Arizona2022() {
                 <div
                     style={{
                         transform: azHover ? 'skew(.8deg, .8deg) scale(.95) translate(2px, -5px) ' : 'scale(1) translate(0px, 0px)',
-                        backgroundImage: `url('https://reese.cafe/images/assets/reese/pumpkin/pumpkin_mar_28_2022.jpg')`
+                        backgroundImage: `url('https://rsehrk.com/images/assets/reese/pumpkin/pumpkin_mar_28_2022.jpg')`
                     }}
                     id='pumpkin_mar_28_2022'
                     className='h-[125.5px] w-[234px] bg-cover bg-center bg-no-repeat p-2 duration-[800ms] md:h-[225.5px] md:w-[334px] lg:h-[325.5px] lg:w-[434px]'

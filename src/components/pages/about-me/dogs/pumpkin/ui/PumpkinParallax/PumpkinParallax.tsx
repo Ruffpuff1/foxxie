@@ -75,43 +75,43 @@ export default function PumpkinParallax() {
                 <ParallaxLayer offset={1} style={{ height: '90%' }}>
                     <div
                         style={{
-                            backgroundImage: `url('https://reese.cafe/images/assets/reese/pumpkin/timeline/timeline_2021_1.svg')`
+                            backgroundImage: `url('https://rsehrk.com/images/assets/reese/pumpkin/timeline/timeline_2021_1.svg')`
                         }}
                         className='mx-20 flex h-screen items-center justify-center bg-cover bg-center bg-no-repeat lg:mx-0'
                     >
-                        <Image src='https://reese.cafe/images/assets/reese/pumpkin/pumpkin_sep_19_2021.jpg' alt='' width={727} height={545} />
+                        <Image src='https://rsehrk.com/images/assets/reese/pumpkin/pumpkin_sep_19_2021.jpg' alt='' width={727} height={545} />
                     </div>
                 </ParallaxLayer>
 
                 <ParallaxLayer offset={2} style={{ height: '90%' }}>
                     <div
                         style={{
-                            backgroundImage: `url('https://reese.cafe/images/assets/reese/pumpkin/timeline/timeline_2021_2.svg')`
+                            backgroundImage: `url('https://rsehrk.com/images/assets/reese/pumpkin/timeline/timeline_2021_2.svg')`
                         }}
                         className='my-20 flex h-full items-center justify-between bg-cover bg-center bg-no-repeat px-10 lg:p-40'
                     >
                         <div className='p-2'>
-                            <Image src='https://reese.cafe/images/assets/reese/pumpkin/pumpkin_oct_4_2021.jpg' alt='' className='' width={597 / 2} height={796 / 2} />
+                            <Image src='https://rsehrk.com/images/assets/reese/pumpkin/pumpkin_oct_4_2021.jpg' alt='' className='' width={597 / 2} height={796 / 2} />
                         </div>
 
                         <div className='mb-60 p-2'>
-                            <Image src='https://reese.cafe/cdn/assets/reese/pumpkin/pumpkin_oct_5_2021.jpg' alt='' width={727 / 2} height={561 / 2} />
+                            <Image src='https://rsehrk.com/cdn/assets/reese/pumpkin/pumpkin_oct_5_2021.jpg' alt='' width={727 / 2} height={561 / 2} />
                         </div>
                     </div>
                 </ParallaxLayer>
                 <ParallaxLayer offset={3} style={{ height: '90%' }}>
                     <div
                         style={{
-                            backgroundImage: `url('https://reese.cafe/cdn/assets/reese/pumpkin/timeline/timeline_2021_3.svg')`
+                            backgroundImage: `url('https://rsehrk.com/cdn/assets/reese/pumpkin/timeline/timeline_2021_3.svg')`
                         }}
                         className='my-20 flex h-full items-center justify-between bg-cover bg-center bg-no-repeat px-10 lg:p-40'
                     >
                         <div className='p-2'>
-                            <Image src='https://reese.cafe/images/assets/reese/pumpkin/pumpkin_oct_31_2021.jpg' alt='' className='' width={597 / 2} height={796 / 2} />
+                            <Image src='https://rsehrk.com/images/assets/reese/pumpkin/pumpkin_oct_31_2021.jpg' alt='' className='' width={597 / 2} height={796 / 2} />
                         </div>
 
                         <div className='mb-60 p-2'>
-                            <Image src='https://reese.cafe/cdn/assets/reese/pumpkin/pumpkin_dec_23_2021.jpg' alt='' width={803 / 2} height={796 / 2} />
+                            <Image src='https://rsehrk.com/cdn/assets/reese/pumpkin/pumpkin_dec_23_2021.jpg' alt='' width={803 / 2} height={796 / 2} />
                         </div>
                     </div>
                 </ParallaxLayer>

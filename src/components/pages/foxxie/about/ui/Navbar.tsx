@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { MdLibraryBooks, MdPolicy, MdQuestionAnswer, MdSearch, MdSettingsSuggest } from 'react-icons/md';
 
-export default function Navbar({ hide }: { hide: boolean }) {
+export default function Navbar({ hide }: { hide: boolean; }) {
     const router = useRouter();
     const [scrolled, setScrolled] = useState(false);
     const [showItems, setShowItems] = useState(false);
@@ -25,7 +25,7 @@ export default function Navbar({ hide }: { hide: boolean }) {
             <header className={`foxxie-navbar fixed z-40 w-full bg-white ${scrolled ? 'border-b border-b-gray-200 shadow-md' : ''} ${hide ? 'top-[-75px]' : 'top-0'}`}>
                 <div className='flex items-center justify-between px-3 py-2'>
                     <button onClick={() => router.push('/foxxie/about')} className='group flex items-center space-x-3 rounded-md p-2 duration-300 hover:bg-gray-100'>
-                        <Image aria-hidden='true' src='https://reese.cafe/images/icons/foxxie.png' width={30} height={30} alt="Foxxie's logo" />
+                        <Image aria-hidden='true' src='https://rsehrk.com/images/icons/foxxie.png' width={30} height={30} alt="Foxxie's logo" />
                         <h1 className='flex items-center space-x-2'>
                             <span className='text-xl font-medium text-gray-600 group-hover:text-gray-900'>Foxxie</span>
                         </h1>
@@ -41,9 +41,8 @@ export default function Navbar({ hide }: { hide: boolean }) {
                         className='flex items-center space-x-3'
                     >
                         <ul
-                            className={`hidden items-center space-x-10 overflow-x-hidden whitespace-nowrap text-xs text-gray-600 duration-300 sm:flex md:text-sm ${
-                                showItems ? 'w-[500px] opacity-100' : 'w-0 opacity-0'
-                            }`}
+                            className={`hidden items-center space-x-10 overflow-x-hidden whitespace-nowrap text-xs text-gray-600 duration-300 sm:flex md:text-sm ${showItems ? 'w-[500px] opacity-100' : 'w-0 opacity-0'
+                                }`}
                         >
                             <li>
                                 <a href='/foxxie/commands' className='flex items-center space-x-2 font-[550] duration-200 hover:text-gray-500 hover:underline'>

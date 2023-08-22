@@ -1,10 +1,10 @@
 export enum Images {
-    Foxxie = 'https://reese.cafe/images/assets/foxxie/foxxie.png',
-    Kettu = 'https://reese.cafe/images/assets/foxxie/kettu.png',
-    PermsEnabled = 'https://reese.cafe/images/assets/foxxie/perms_enabled.png',
-    Reese = 'https://reese.cafe/images/assets/reese/reese.jpeg',
-    RuffGiggle = 'https://reese.cafe/images/assets/foxxie/ruff_giggle.png',
-    TheCornerStore = 'https://reese.cafe/images/assets/foxxie/the_corner_store.gif'
+    Foxxie = 'https://rsehrk.com/images/assets/foxxie/foxxie.png',
+    Kettu = 'https://rsehrk.com/images/assets/foxxie/kettu.png',
+    PermsEnabled = 'https://rsehrk.com/images/assets/foxxie/perms_enabled.png',
+    Reese = 'https://rsehrk.com/images/assets/reese/reese.jpeg',
+    RuffGiggle = 'https://rsehrk.com/images/assets/foxxie/ruff_giggle.png',
+    TheCornerStore = 'https://rsehrk.com/images/assets/foxxie/the_corner_store.gif'
 }
 
 export enum Colors {
@@ -12,6 +12,6 @@ export enum Colors {
 }
 
 export enum Icons {
-    Celestia = 'https://reese.cafe/images/icons/star.png',
-    Developers = 'https://reese.cafe/images/icons/developers.png'
+    Celestia = 'https://rsehrk.com/images/icons/star.png',
+    Developers = 'https://rsehrk.com/images/icons/developers.png'
 }

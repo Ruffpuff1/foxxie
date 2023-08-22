@@ -44,7 +44,7 @@ export default function Hawaii2022() {
                 <div
                     style={{
                         transform: hwHover ? 'skew(.8deg, .8deg) scale(.95) translate(2px, -5px) ' : 'scale(1) translate(0px, 0px)',
-                        backgroundImage: `url('https://reese.cafe/images/assets/reese/pumpkin/pumpkin_jul_9_2022.jpg')`
+                        backgroundImage: `url('https://rsehrk.com/images/assets/reese/pumpkin/pumpkin_jul_9_2022.jpg')`
                     }}
                     id='pumpkin_jul_9_2022'
                     className='h-[144px] w-[188px] bg-cover bg-center bg-no-repeat p-2 duration-[800ms] md:h-[241px] md:w-[288px] lg:h-[341px] lg:w-[388px]'

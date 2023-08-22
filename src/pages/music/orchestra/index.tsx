@@ -6,14 +6,14 @@ import type { NextPage } from 'next';
 const Orchestra: NextPage = () => {
     return (
         <>
-            <Meta title='Orchestra' description='' icon='https://reese.cafe/images/icons/violin.png' noRobots />
+            <Meta title='Orchestra' description='' icon='https://rsehrk.com/images/icons/violin.png' noRobots />
 
             <Navbar
                 noHoverIndicators
                 home='/music'
                 links={[{ path: '/music/orchestra', text: 'Orchestra' }]}
                 title=' Music'
-                icon='https://reese.cafe/images/icons/violin.png'
+                icon='https://rsehrk.com/images/icons/violin.png'
             />
 
             <div className='mt-20 flex flex-col items-start justify-start'>
@@ -23,7 +23,7 @@ const Orchestra: NextPage = () => {
                     <Link href='/music/orchestra/emhs' className='h-80 w-72 overflow-hidden rounded-b-md border bg-white duration-200 hover:rounded-t-md hover:shadow-lg'>
                         <div
                             className='h-32 bg-cover bg-no-repeat'
-                            style={{ backgroundImage: `url('https://reese.cafe/images/assets/music/orchestra-banners/emhs.jpg')` }}
+                            style={{ backgroundImage: `url('https://rsehrk.com/images/assets/music/orchestra-banners/emhs.jpg')` }}
                         />
 
                         <div className='p-2'>

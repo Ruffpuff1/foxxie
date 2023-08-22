@@ -1,7 +1,7 @@
 import { Colors } from '@assets/images';
 import { NextSeoProps } from 'next-seo';
 
-export const BaseUrl = 'https://reese.cafe';
+export const BaseUrl = 'https://rsehrk.com';
 
 interface Img {
     image: string;
@@ -39,9 +39,9 @@ export const DefaultSeoProps = (title: string, description: string, { image, alt
             { name: 'subject', content: subject },
             { name: 'robots', content: 'archive,follow,imageindex,index,odp,snippet,translate' },
             { name: 'googlebot', content: 'index,follow' },
-            { name: 'author', content: `Reese Harlak <reese@reese.cafe>` },
-            { name: 'owner', content: `Reese Harlak <reese@reese.cafe>` },
-            { name: 'designer', content: `Reese Harlak <reese@reese.cafe>` },
+            { name: 'author', content: `Reese Harlak <reese@rsehrk.com>` },
+            { name: 'owner', content: `Reese Harlak <reese@rsehrk.com>` },
+            { name: 'designer', content: `Reese Harlak <reese@rsehrk.com>` },
             { name: 'target', content: 'all' },
             { name: 'audience', content: 'all' },
             { name: 'coverage', content: 'Worldwide' },

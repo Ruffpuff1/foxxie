@@ -16,7 +16,7 @@ const Pumpkin: NextPage = () => {
                 keywords={['reese', 'reese harlak', 'web', 'react', 'next.js', 'developer', 'my dog', 'pumpkin']}
                 subject='My dog pumpkin'
                 image={{
-                    image: 'https://reese.cafe/cdn/assets/reese/pumpkin/pumpkin_oct_4_2021.jpg',
+                    image: 'https://rsehrk.com/cdn/assets/reese/pumpkin/pumpkin_oct_4_2021.jpg',
                     alt: 'Pumpkin excited',
                     format: 'image/jpg'
                 }}

@@ -15,7 +15,7 @@ export default function FoxxieFooter() {
                     Reese Harlak{' '}
                 </a>
                 <span>&</span>
-                <a href='mailto:rain.anguiano@reese.cafe' className={styles.link}>
+                <a href='mailto:rain.anguiano@rsehrk.com' className={styles.link}>
                     {' '}
                     Rain Anguiano
                 </a>

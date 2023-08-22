@@ -5,7 +5,7 @@ import styles from './FeaturedProjects.module.css';
 
 const Featured: Project[] = [
     {
-        icon: 'https://reese.cafe/images/icons/foxxie.png',
+        icon: 'https://rsehrk.com/images/icons/foxxie.png',
         url: '/foxxie/about',
         header: 'Easily build and manage communities with Foxxie'
     },
@@ -15,7 +15,7 @@ const Featured: Project[] = [
         header: 'Developer tooling, guides, and REST APIs'
     },
     {
-        icon: 'https://reese.cafe/images/icons/todo.png',
+        icon: 'https://rsehrk.com/images/icons/todo.png',
         url: '/todo',
         header: 'Keep track of tasks with todo'
     }

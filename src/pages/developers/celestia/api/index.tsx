@@ -40,8 +40,8 @@ const API: NextPage = () => {
 
                             <div className='mt-5'>
                                 <h2 className='text-sm font-[500] md:text-base'>Endpoint:</h2>
-                                <Link popup className='text-sm hover:underline md:text-base' href={`https://celestia.apis.reese.cafe/villagers/${villager.key}`}>
-                                    celestia.apis.reese.cafe/villagers/{villager.key}
+                                <Link popup className='text-sm hover:underline md:text-base' href={`https://celestia.apis.rsehrk.com/villagers/${villager.key}`}>
+                                    celestia.apis.rsehrk.com/villagers/{villager.key}
                                 </Link>
                             </div>
 

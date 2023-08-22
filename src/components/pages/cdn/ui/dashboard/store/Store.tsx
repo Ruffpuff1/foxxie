@@ -19,7 +19,7 @@ export default function Store() {
             <Meta
                 title={`${folder?.name && folder.name !== 'Root' && user ? toTitleCase(folder.name) : 'My Files'} - Cdn`}
                 description='Your files'
-                icon='https://reese.cafe/images/icons/upload.png'
+                icon='https://rsehrk.com/images/icons/upload.png'
                 noRobots
             />
 

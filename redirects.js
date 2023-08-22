@@ -3,7 +3,7 @@ const subdomains = ['newtab'].map(subdomainRedirect);
 function subdomainRedirect(key) {
     return {
         source: `/${key}`,
-        destination: `https://${key}.reese.cafe`,
+        destination: `https://${key}.rsehrk.com`,
         permanent: false
     };
 }
@@ -32,21 +32,26 @@ module.exports = [
     },
     {
         source: '/contact',
-        destination: 'https://about.reese.cafe/contact-me',
+        destination: 'https://about.rsehrk.com/contact-me',
         permanent: false
     },
     {
         source: '/projects',
-        destination: 'https://reese.cafe/my-work',
+        destination: 'https://rsehrk.com/my-work',
         permanent: false
     },
     {
-        source: '/community',
-        destination: 'https://discord.gg/ZAZ4yRezC7',
+        source: '/tcs',
+        destination: 'https://discord.gg/YAze6hAvEV',
         permanent: false
     },
     {
-        source: '/community/disboard',
+        source: '/the-corner-store/join',
+        destination: 'https://discord.gg/YAze6hAvEV',
+        permanent: false
+    },
+    {
+        source: '/the-corner-store/disboard',
         destination: 'https://disboard.org/server/761512748898844702',
         permanent: false
     },

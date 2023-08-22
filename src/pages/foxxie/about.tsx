@@ -33,7 +33,7 @@ const About: NextPage = () => {
                 ]}
                 subject='Site for Foxxie, a moderation Discord bot'
                 image={{
-                    image: 'https://reese.cafe/images/icons/foxxie.png',
+                    image: 'https://rsehrk.com/images/icons/foxxie.png',
                     alt: 'A geometric Fox',
                     format: 'image/png'
                 }}

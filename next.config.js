@@ -34,7 +34,7 @@ const nextConfig = {
     reactStrictMode: true,
     trailingSlash: true,
     images: {
-        domains: ['reese.cafe', 'lh3.googleusercontent.com']
+        domains: ['rsehrk.com', 'lh3.googleusercontent.com']
     },
     rewrites: async () => {
         return [

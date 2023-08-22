@@ -17,7 +17,7 @@ const Emhs: NextPage<Props> = ({ concert }) => {
             <Meta
                 title={`${currentSong.title} - ${concert.name} - ${music.concertArchive}`}
                 description={`An archive of ${concert.school}'s ${concert.name} orchestra concert.`}
-                icon='https://reese.cafe/images/icons/violin.png'
+                icon='https://rsehrk.com/images/icons/violin.png'
                 noRobots
             />
 

@@ -5,14 +5,14 @@ import type { NextPage } from 'next';
 const Music: NextPage = () => {
     return (
         <>
-            <Meta title='Music' description='' icon='https://reese.cafe/images/icons/violin.png' noRobots />
+            <Meta title='Music' description='' icon='https://rsehrk.com/images/icons/violin.png' noRobots />
 
             <Navbar
                 noHoverIndicators
                 home='/music'
                 links={[{ path: '/music/orchestra', text: 'Orchestra' }]}
                 title=' Music'
-                icon='https://reese.cafe/images/icons/violin.png'
+                icon='https://rsehrk.com/images/icons/violin.png'
             />
         </>
     );

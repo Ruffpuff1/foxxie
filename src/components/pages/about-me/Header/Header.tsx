@@ -13,7 +13,7 @@ export default function Header() {
                 id='about-me-banner-img'
                 height={380}
                 className={styles.banner_img}
-                src='https://reese.cafe/images/assets/reese/reese-and-rain.jpeg'
+                src='https://rsehrk.com/images/assets/reese/reese-and-rain.jpeg'
                 alt='My friend and I at the park - 2021'
             />
             <span
