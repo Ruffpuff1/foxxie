@@ -1,5 +1,11 @@
 {
-    "abortOptions": ["parar", "cancelar", "abortar", "fin", "hecho"],
+    "abortOptions": [
+        "parar",
+        "cancelar",
+        "abortar",
+        "fin",
+        "hecho"
+    ],
     "and": "{{value, and}}",
     "any": "alguno",
     "case": "caso",
@@ -24,7 +30,11 @@
     "numberOrdinal": "{{value, ordinal}}",
     "other": "otro",
     "remaining": "{{value, remaining}}",
-    "resetOptions": ["ninguno", "reajustar", "por defecto"],
+    "resetOptions": [
+        "ninguno",
+        "reajustar",
+        "por defecto"
+    ],
     "time": "{{value, time}}",
     "unknown": "desconocido",
     "version": "",
