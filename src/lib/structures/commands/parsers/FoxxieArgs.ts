@@ -17,7 +17,14 @@ export class FoxxieArgs extends Args {
     public color: number;
 
     // eslint-disable-next-line max-params
-    public constructor(message: Message, command: FoxxieCommand, parser: LexureArgs, context: MessageCommandContext, t: TFunction, color: number) {
+    public constructor(
+        message: Message,
+        command: FoxxieCommand,
+        parser: LexureArgs,
+        context: MessageCommandContext,
+        t: TFunction,
+        color: number
+    ) {
         super(message, command as unknown as MessageCommand, parser, context);
         this.color = color;
         this.t = t;
@@ -26,7 +33,9 @@ export class FoxxieArgs extends Args {
     public acquire<K1 extends K>(paths: readonly [K1] | K1): Promise<V[K1]>;
     public acquire<K1 extends K, K2 extends K>(paths: readonly [K1, K2]): Promise<[V[K1], V[K2]]>;
     public acquire<K1 extends K, K2 extends K, K3 extends K>(paths: readonly [K1, K2, K3]): Promise<[V[K1], V[K2], V[K3]]>;
-    public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K>(paths: readonly [K1, K2, K3, K4]): Promise<[V[K1], V[K2], V[K3], V[K4]]>;
+    public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K>(
+        paths: readonly [K1, K2, K3, K4]
+    ): Promise<[V[K1], V[K2], V[K3], V[K4]]>;
     public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K>(
         paths: readonly [K1, K2, K3, K4, K5]
     ): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5]]>;
@@ -39,11 +48,28 @@ export class FoxxieArgs extends Args {
         paths: readonly [K1, K2, K3, K4, K5, K6, K7]
     ): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5], V[K6], V[K7]]>;
 
-    public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K, K6 extends K, K7 extends K, K8 extends K>(
-        paths: readonly [K1, K2, K3, K4, K5, K6, K7, K8]
-    ): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5], V[K6], V[K7], V[K8]]>;
+    public acquire<
+        K1 extends K,
+        K2 extends K,
+        K3 extends K,
+        K4 extends K,
+        K5 extends K,
+        K6 extends K,
+        K7 extends K,
+        K8 extends K
+    >(paths: readonly [K1, K2, K3, K4, K5, K6, K7, K8]): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5], V[K6], V[K7], V[K8]]>;
 
-    public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K, K6 extends K, K7 extends K, K8 extends K, K9 extends K>(
+    public acquire<
+        K1 extends K,
+        K2 extends K,
+        K3 extends K,
+        K4 extends K,
+        K5 extends K,
+        K6 extends K,
+        K7 extends K,
+        K8 extends K,
+        K9 extends K
+    >(
         paths: readonly [K1, K2, K3, K4, K5, K6, K7, K8, K9]
     ): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5], V[K6], V[K7], V[K8], V[K9]]>;
 
@@ -56,8 +82,12 @@ export class FoxxieArgs extends Args {
 
     public write<K1 extends K>(pairs: readonly [[K1, V[K1]]]): Promise<void>;
     public write<K1 extends K, K2 extends K>(pairs: readonly [[K1, V[K1]], [K2, V[K2]]]): Promise<void>;
-    public write<K1 extends K, K2 extends K, K3 extends K>(pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]]]): Promise<void>;
-    public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K>(pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]]]): Promise<void>;
+    public write<K1 extends K, K2 extends K, K3 extends K>(
+        pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]]]
+    ): Promise<void>;
+    public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K>(
+        pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]]]
+    ): Promise<void>;
     public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K>(
         pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]], [K5, V[K5]]]
     ): Promise<void>;
@@ -74,8 +104,28 @@ export class FoxxieArgs extends Args {
         pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]], [K5, V[K5]], [K6, V[K6]], [K7, V[K7]], [K8, V[K8]]]
     ): Promise<void>;
 
-    public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K, K6 extends K, K7 extends K, K8 extends K, K9 extends K>(
-        pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]], [K5, V[K5]], [K6, V[K6]], [K7, V[K7]], [K8, V[K8]], [K9, V[K9]]]
+    public write<
+        K1 extends K,
+        K2 extends K,
+        K3 extends K,
+        K4 extends K,
+        K5 extends K,
+        K6 extends K,
+        K7 extends K,
+        K8 extends K,
+        K9 extends K
+    >(
+        pairs: readonly [
+            [K1, V[K1]],
+            [K2, V[K2]],
+            [K3, V[K3]],
+            [K4, V[K4]],
+            [K5, V[K5]],
+            [K6, V[K6]],
+            [K7, V[K7]],
+            [K8, V[K8]],
+            [K9, V[K9]]
+        ]
     ): Promise<void>;
 
     public write<KX extends K>(pairs: readonly [KX, V[KX]][]): Promise<void>;

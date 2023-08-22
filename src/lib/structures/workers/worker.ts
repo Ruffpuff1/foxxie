@@ -49,9 +49,14 @@ function handleHighlight(message: RunHighlightPayload<HighlightTypeEnum>): Outgo
         case HighlightTypeEnum.Word:
             {
                 const split = content.toLowerCase().split(/\s*\b\s*/);
-                for (const { word, userId } of message.highlights.filter(word => word.type === HighlightTypeEnum.Word) as Highlight<HighlightTypeEnum.Word>[]) {
+                for (const { word, userId } of message.highlights.filter(
+                    word => word.type === HighlightTypeEnum.Word
+                ) as Highlight<HighlightTypeEnum.Word>[]) {
                     if (!split.includes(word.toLowerCase())) continue;
-                    const parsed = content.replace(new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), match => `__${match}__`);
+                    const parsed = content.replace(
+                        new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
+                        match => `__${match}__`
+                    );
                     if (userId === authorId) continue;
                     data.results.push({ userId, content: parsed, trigger: word });
                 }
@@ -59,7 +64,9 @@ function handleHighlight(message: RunHighlightPayload<HighlightTypeEnum>): Outgo
             break;
         case HighlightTypeEnum.Regex:
             {
-                for (const { word, userId } of message.highlights.filter(word => word.type === HighlightTypeEnum.Regex) as Highlight<HighlightTypeEnum.Regex>[]) {
+                for (const { word, userId } of message.highlights.filter(
+                    word => word.type === HighlightTypeEnum.Regex
+                ) as Highlight<HighlightTypeEnum.Regex>[]) {
                     if (!word.test(content)) continue;
                     const parsed = content.trim().replace(word, match => {
                         if (match.trim().length > 0) return `__${match}__`;

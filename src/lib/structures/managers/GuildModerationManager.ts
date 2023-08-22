@@ -1,8 +1,8 @@
-import { ModerationActions } from '../moderation';
-import { Collection, Guild } from 'discord.js';
-import { container } from '@sapphire/framework';
 import { ModerationEntity } from '#database/entities/ModerationEntity';
 import type FoxxieClient from '#lib/FoxxieClient';
+import { container } from '@sapphire/framework';
+import { Collection, Guild } from 'discord.js';
+import { ModerationActions } from '../moderation';
 
 export class GuildModerationManager extends Collection<number, ModerationEntity> {
     public guild: Guild | null = null;
@@ -25,7 +25,7 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
 
     public async getCurrentId() {
         if (this._count === null) {
-            const cases = await container.db.moderations.find({ guildId: this.guild!.id });
+            const cases = await container.db.moderations.find({ where: { guildId: this.guild?.id } });
             this._count = cases.length ?? 0;
         }
 
@@ -39,11 +39,13 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
     public async fetch(id: number): Promise<ModerationEntity | null>;
     public async fetch(id: string | number[]): Promise<Collection<number, ModerationEntity>>;
     public async fetch(id?: null): Promise<this>;
-    public async fetch(id?: number | number[] | null | string): Promise<ModerationEntity | null | Collection<number, ModerationEntity> | this> {
+    public async fetch(
+        id?: number | number[] | null | string
+    ): Promise<ModerationEntity | null | Collection<number, ModerationEntity> | this> {
         if (!id) {
             const entries = await container.db.moderations.find({
                 where: {
-                    guildId: { equals: this.guild!.id }
+                    guildId: this.guild?.id
                 }
             });
             return this._cache(entries.map(data => new ModerationEntity(data).setup(this)));
@@ -52,7 +54,7 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         if (typeof id === 'string') {
             const entries = await container.db.moderations.find({
                 where: {
-                    userId: { equals: id }
+                    userId: id
                 }
             });
             return this._cache(entries.map(data => new ModerationEntity(data).setup(this)));
@@ -97,7 +99,10 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         return this._cache(data, 'insert');
     }
 
-    private _cache(entries: ModerationEntity | ModerationEntity[], type?: string): Collection<number, ModerationEntity> | ModerationEntity | null {
+    private _cache(
+        entries: ModerationEntity | ModerationEntity[],
+        type?: string
+    ): Collection<number, ModerationEntity> | ModerationEntity | null {
         if (!entries) return null;
 
         const parsedEntries = Array.isArray(entries) ? entries : [entries];

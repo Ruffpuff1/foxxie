@@ -50,7 +50,10 @@ export class UserListener extends ModerationListener {
         this.container.client.emit(Events.GuildMessageLog, msg.guild, GuildSettings.Channels.Logs.FilterWords, () =>
             new MessageEmbed()
                 .setColor(Colors.Red)
-                .setAuthor({ name: t(LanguageKeys.Guilds.Logs.ActionFilterInvites, { count: invites.length }), iconURL: msg.member.displayAvatarURL({ dynamic: true }) })
+                .setAuthor({
+                    name: t(LanguageKeys.Guilds.Logs.ActionFilterInvites, { count: invites.length }),
+                    iconURL: msg.member.displayAvatarURL({ dynamic: true })
+                })
                 .setDescription(
                     [
                         t(LanguageKeys.Guilds.Logs.ArgsUser, { user: msg.author }),

@@ -46,5 +46,4 @@
     "pingPong": "Pong! Took {{roundTrip}}ms (Discord Latency: {{wsPing}}ms. Database Connection: {{dbPing}}ms)",
     "statsDescription": "Provides some details about me and my stats.",
     "statsMenu": "**My current statistics!**\n• {{memoryPercent}}% of RAM ({{memoryUsed}} / {{totalmemory}} MB) and\n• {{cpuUsage}}% of CPU ({{cpuCount}}c @ {{cpuSpeed}}GHz).\n**I've been running**\n• As of {{uptime, duration}} on {{process}} (shard {{shard}} / {{shardTotal}})\n• Using {{deps, and}}."
-
 }

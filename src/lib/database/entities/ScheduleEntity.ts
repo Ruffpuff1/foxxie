@@ -103,7 +103,9 @@ export class ScheduleEntity extends BaseEntity {
 
         if (response !== null) return { ...response, entry: this };
 
-        return this.recurring ? { entry: this, type: ResponseType.Update, value: this.recurring.next() } : { entry: this, type: ResponseType.Finished };
+        return this.recurring
+            ? { entry: this, type: ResponseType.Update, value: this.recurring.next() }
+            : { entry: this, type: ResponseType.Finished };
     }
 
     public resume() {

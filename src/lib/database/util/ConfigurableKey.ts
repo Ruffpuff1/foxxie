@@ -145,4 +145,5 @@ function hydrateType(type: ColumnType) {
 }
 
 type OptionalKeys = 'name' | 'type' | 'inclusive' | 'maximum' | 'minimum' | 'array' | 'default' | 'dashboardOnly';
-type ConfigurableKeyOptions = Omit<ConfigurableKeyValueOptions, 'target' | 'property' | OptionalKeys> & Partial<Pick<ConfigurableKeyValueOptions, OptionalKeys>>;
+type ConfigurableKeyOptions = Omit<ConfigurableKeyValueOptions, 'target' | 'property' | OptionalKeys> &
+    Partial<Pick<ConfigurableKeyValueOptions, OptionalKeys>>;

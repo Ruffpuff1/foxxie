@@ -37,7 +37,10 @@ export class UserCommand extends FoxxieCommand {
 
     private async reloadEverything(t: TFunction): Promise<string> {
         const timer = new Stopwatch();
-        await Promise.all([i18next.reloadResources([...i18next.languages.values()]), ...[...this.container.stores.map(store => store.loadAll())]]);
+        await Promise.all([
+            i18next.reloadResources([...i18next.languages.values()]),
+            ...[...this.container.stores.map(store => store.loadAll())]
+        ]);
 
         return t(LanguageKeys.Commands.Admin.ReloadEverything, {
             time: timer.stop().toString()

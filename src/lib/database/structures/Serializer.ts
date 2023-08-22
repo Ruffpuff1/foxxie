@@ -46,7 +46,10 @@ export abstract class Serializer<T> extends AliasPiece {
      * @param value The value to parsed.
      * @param context The context for the key.
      */
-    public abstract parse(args: Serializer.Args, context: SerializerUpdateContext): SerializerResult<T> | AsyncSerializerResult<T>;
+    public abstract parse(
+        args: Serializer.Args,
+        context: SerializerUpdateContext
+    ): SerializerResult<T> | AsyncSerializerResult<T>;
 
     /**
      * Check whether or not the value is valid.
@@ -105,7 +108,11 @@ export abstract class Serializer<T> extends AliasPiece {
      * @param language The language that is used for this context
      */
     // eslint-disable-next-line complexity
-    protected minOrMax(value: T, length: number, { entry: { minimum, maximum, inclusive, name }, t }: SerializerUpdateContext): SerializerResult<T> {
+    protected minOrMax(
+        value: T,
+        length: number,
+        { entry: { minimum, maximum, inclusive, name }, t }: SerializerUpdateContext
+    ): SerializerResult<T> {
         if (minimum !== null && maximum !== null) {
             if ((length >= minimum && length <= maximum && inclusive) || (length > minimum && length < maximum && !inclusive)) {
                 return this.ok(value);
@@ -113,10 +120,15 @@ export abstract class Serializer<T> extends AliasPiece {
 
             if (minimum === maximum) {
                 return this.error(
-                    t(inclusive ? LanguageKeys.Serializers.MinMaxExactlyInclusive : LanguageKeys.Serializers.MinMaxExactlyExclusive, {
-                        name,
-                        min: minimum
-                    })
+                    t(
+                        inclusive
+                            ? LanguageKeys.Serializers.MinMaxExactlyInclusive
+                            : LanguageKeys.Serializers.MinMaxExactlyExclusive,
+                        {
+                            name,
+                            min: minimum
+                        }
+                    )
                 );
             }
 

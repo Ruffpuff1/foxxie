@@ -7,7 +7,11 @@ export function isGuildOwner(member: GuildMember): boolean {
 
 export function isModerator(member: GuildMember | undefined): boolean {
     if (!member) return false;
-    return isGuildOwner(member) || member.permissions.has(PermissionFlagsBits.BanMembers) || member.permissions.has(PermissionFlagsBits.ModerateMembers);
+    return (
+        isGuildOwner(member) ||
+        member.permissions.has(PermissionFlagsBits.BanMembers) ||
+        member.permissions.has(PermissionFlagsBits.ModerateMembers)
+    );
 }
 
 export function isAdmin(member: GuildMember | undefined): boolean {

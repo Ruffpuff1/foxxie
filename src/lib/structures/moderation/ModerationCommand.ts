@@ -123,7 +123,9 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
             const myRolePos = message.guild?.me?.roles.highest.position;
 
             if (!myRolePos || targetRolePos >= myRolePos) {
-                throw context.args.t(LanguageKeys.Listeners.Errors.ModerationRoleBot, { target: `**${context.target.username}**` });
+                throw context.args.t(LanguageKeys.Listeners.Errors.ModerationRoleBot, {
+                    target: `**${context.target.username}**`
+                });
             }
 
             const mod = message.guild.members.cache.get(message.author.id);

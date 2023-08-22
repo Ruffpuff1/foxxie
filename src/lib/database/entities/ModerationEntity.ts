@@ -1,15 +1,22 @@
+import type FoxxieClient from '#lib/FoxxieClient';
+import { LanguageKeys } from '#lib/i18n';
 import type { GuildModerationManager } from '#lib/structures';
-import { MetaData, metadata, ModerationManagerDescriptionData, ModerationScheule, TypeMetadata, TypeVariationAppealNames } from '#utils/moderation';
+import { Events } from '#lib/types';
+import {
+    MetaData,
+    metadata,
+    ModerationManagerDescriptionData,
+    ModerationScheule,
+    TypeMetadata,
+    TypeVariationAppealNames
+} from '#utils/moderation';
+import { messageLink } from '#utils/transformers';
 import { resolveToNull, Time, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { Guild, GuildChannel, MessageEmbed, User } from 'discord.js';
-import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import { Events } from '#lib/types';
 import type { TFunction } from 'i18next';
+import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { GuildEntity, GuildSettings } from '..';
-import { LanguageKeys } from '#lib/i18n';
-import type FoxxieClient from '#lib/FoxxieClient';
-import { messageLink } from '#utils/transformers';
 
 @Entity('moderation', { schema: 'public' })
 export class ModerationEntity extends BaseEntity {
@@ -119,7 +126,7 @@ export class ModerationEntity extends BaseEntity {
         if (this.createdAt) return null;
         this.createdAt = new Date();
 
-        const cases = await container.db.moderations.find({ guildId: this.guildId });
+        const cases = await container.db.moderations.find({ where: { guildId: this.guildId! } });
 
         this.caseId = cases.length + 1;
         this.#manager?.insert(this);
@@ -131,7 +138,10 @@ export class ModerationEntity extends BaseEntity {
     public edit(data: ModerationManagerDescriptionData | Record<string, unknown> = {}): ModerationEntity {
         const dataWithType = {
             ...data,
-            type: ModerationEntity.getTypeFromDuration(this.type as number, (data as ModerationManagerDescriptionData).duration ?? this.duration)
+            type: ModerationEntity.getTypeFromDuration(
+                this.type as number,
+                (data as ModerationManagerDescriptionData).duration ?? this.duration
+            )
         };
         const clone = this.clone();
         try {
@@ -191,7 +201,9 @@ export class ModerationEntity extends BaseEntity {
 
     public async fetchLogChannel(): Promise<GuildChannel | null> {
         if (this.#logChannel) return this.#logChannel;
-        const channel = this.logChannelId ? ((await resolveToNull((this.guild as Guild).channels.fetch(this.logChannelId))) as GuildChannel) : null;
+        const channel = this.logChannelId
+            ? ((await resolveToNull((this.guild as Guild).channels.fetch(this.logChannelId))) as GuildChannel)
+            : null;
 
         if (channel) this.#logChannel = channel;
 
@@ -200,7 +212,9 @@ export class ModerationEntity extends BaseEntity {
 
     public async fetchChannel(): Promise<GuildChannel | null> {
         if (this.#channel) return this.#channel;
-        const channel = this.channelId ? ((await resolveToNull((this.guild as Guild).channels.fetch(this.channelId))) as GuildChannel) : null;
+        const channel = this.channelId
+            ? ((await resolveToNull((this.guild as Guild).channels.fetch(this.channelId))) as GuildChannel)
+            : null;
 
         if (channel) this.#channel = channel;
 
@@ -221,7 +235,10 @@ export class ModerationEntity extends BaseEntity {
     }
 
     private async fetchDescriptionData(_moderator: User): Promise<string[]> {
-        const [prefix, t] = await container.db.guilds.acquire(this.guildId!, settings => [settings[GuildSettings.Prefix], settings.getLanguage()]);
+        const [prefix, t] = await container.db.guilds.acquire(this.guildId!, settings => [
+            settings[GuildSettings.Prefix],
+            settings.getLanguage()
+        ]);
 
         const [_users, _channel] = await Promise.all([this.fetchUser(), this.fetchChannel()]);
         const fillReason = t(LanguageKeys.Moderation.FillReason, { prefix, count: this.caseId });
@@ -234,7 +251,10 @@ export class ModerationEntity extends BaseEntity {
             _moderator ? t(LanguageKeys.Guilds.Logs.ArgsModerator, { mod: _moderator }) : null,
             t(LanguageKeys.Guilds.Logs.ArgsReason, { reason: this.reason ?? fillReason }),
             refrence
-                ? t(LanguageKeys.Guilds.Logs.ArgsRefrence, { id: this.refrence, url: messageLink(this.guildId!, refrence.logChannelId!, refrence.logMessageId!) })
+                ? t(LanguageKeys.Guilds.Logs.ArgsRefrence, {
+                      id: this.refrence,
+                      url: messageLink(this.guildId!, refrence.logChannelId!, refrence.logMessageId!)
+                  })
                 : null,
             this.duration ? t(LanguageKeys.Guilds.Logs.ArgsDuration, { duration: this.createdTimestamp + this.duration }) : null
         ].filter(a => Boolean(a)) as string[];
@@ -256,7 +276,8 @@ export class ModerationEntity extends BaseEntity {
 
     public get metadata(): MetaData {
         const data = metadata.get(this.type as number);
-        if (typeof data === 'undefined') throw new Error(`Inexistent metadata for '0b${this.type?.toString(2).padStart(8, '0')}'.`);
+        if (typeof data === 'undefined')
+            throw new Error(`Inexistent metadata for '0b${this.type?.toString(2).padStart(8, '0')}'.`);
         return data;
     }
 

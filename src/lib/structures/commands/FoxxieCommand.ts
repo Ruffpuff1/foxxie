@@ -67,7 +67,11 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
         }
     }
 
-    public async messagePreParse(message: Message, parameters: string, context: MessageCommandContext): Promise<FoxxieCommand.Args> {
+    public async messagePreParse(
+        message: Message,
+        parameters: string,
+        context: MessageCommandContext
+    ): Promise<FoxxieCommand.Args> {
         const parser = new Lexure.Parser(this.lexer.setInput(parameters).lex()).setUnorderedStrategy(this.strategy);
         const args = new Lexure.Args(parser.parse());
         const [t, color] = await Promise.all([

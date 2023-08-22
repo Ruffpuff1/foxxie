@@ -128,7 +128,11 @@ export const TypeVariationAppealNames: Record<string, ModerationScheule> = {
     RestrictEmbed: Schedules.EndTempRestrictEmbed
 };
 
-export type ModerationScheule = Schedules.EndTempBan | Schedules.EndTempMute | Schedules.EndTempNick | Schedules.EndTempRestrictEmbed;
+export type ModerationScheule =
+    | Schedules.EndTempBan
+    | Schedules.EndTempMute
+    | Schedules.EndTempNick
+    | Schedules.EndTempRestrictEmbed;
 
 export interface ModerationManagerDescriptionData {
     type: string;

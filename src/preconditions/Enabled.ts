@@ -24,8 +24,10 @@ export class UserPrecondition extends Precondition {
             GuildSettings.CommandChannels
         ]);
 
-        if (disabledChannels.includes(msg.channel.id) && !isModerator(msg.member!)) return this.error({ context: { silent: true } });
-        if (commandChannels.length && !commandChannels.includes(msg.channel.id) && !isModerator(msg.member!)) return this.error({ context: { silent: true } });
+        if (disabledChannels.includes(msg.channel.id) && !isModerator(msg.member!))
+            return this.error({ context: { silent: true } });
+        if (commandChannels.length && !commandChannels.includes(msg.channel.id) && !isModerator(msg.member!))
+            return this.error({ context: { silent: true } });
 
         const matched = disabledCommands.find(key => this.matchCommand(command, key));
         if (matched && !isModerator(msg.member!))

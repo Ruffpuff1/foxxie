@@ -9,7 +9,11 @@ export const enum OutputType {
     FilterNoContent
 }
 
-export type OutgoingPayload = OutgoingHeartbeatPayload | OutgoingUnknownCommandPayload | OutgoingHighlightPayload | OutgoingWordFilterPayload;
+export type OutgoingPayload =
+    | OutgoingHeartbeatPayload
+    | OutgoingUnknownCommandPayload
+    | OutgoingHighlightPayload
+    | OutgoingWordFilterPayload;
 
 export interface OutgoingHeartbeatPayload {
     type: OutputType.Heartbeat;

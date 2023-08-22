@@ -12,7 +12,10 @@ export function isSendableChannel(channel: GuildTextBasedChannelTypes): boolean 
     return channel.permissionsFor(channel.guild.me!).has(sendMessages);
 }
 
-export async function fetchChannel<T = GuildTextBasedChannel>(resolvable: GuildResolvable, key: PickByValue<GuildEntity, Snowflake | null>) {
+export async function fetchChannel<T = GuildTextBasedChannel>(
+    resolvable: GuildResolvable,
+    key: PickByValue<GuildEntity, Snowflake | null>
+) {
     const guild = container.client.guilds.resolve(resolvable)!;
 
     const channelId = await container.db.guilds.acquire(guild.id, key);

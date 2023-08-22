@@ -18,7 +18,10 @@ export class UserListener extends Listener<Events.GuildMemberRemove> {
             new MessageEmbed()
                 .setColor(Colors.Red)
                 .setTimestamp()
-                .setAuthor({ name: t(LanguageKeys.Guilds.Logs.ActionMemberLeave), iconURL: member.displayAvatarURL({ dynamic: true }) })
+                .setAuthor({
+                    name: t(LanguageKeys.Guilds.Logs.ActionMemberLeave),
+                    iconURL: member.displayAvatarURL({ dynamic: true })
+                })
                 .setDescription(
                     [
                         t(LanguageKeys.Guilds.Logs.ArgsUser, { user: member.user }),

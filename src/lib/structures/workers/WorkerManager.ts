@@ -1,5 +1,12 @@
 import { cpus } from 'node:os';
-import type { HighlightTypeEnum, IncomingPayload, OutgoingHighlightPayload, OutgoingWordFilterPayload, RunHighlightPayload, RunWordFilterPayload } from './types';
+import type {
+    HighlightTypeEnum,
+    IncomingPayload,
+    OutgoingHighlightPayload,
+    OutgoingWordFilterPayload,
+    RunHighlightPayload,
+    RunWordFilterPayload
+} from './types';
 import { WorkerHandler } from './WorkerHandler';
 
 export class WorkerManager {
@@ -16,7 +23,10 @@ export class WorkerManager {
     }
 
     public async send(data: Omit<RunWordFilterPayload, 'id'>, delay?: number | null): Promise<OutgoingWordFilterPayload>;
-    public async send(data: Omit<RunHighlightPayload<HighlightTypeEnum>, 'id'>, delay?: number | null): Promise<OutgoingHighlightPayload>;
+    public async send(
+        data: Omit<RunHighlightPayload<HighlightTypeEnum>, 'id'>,
+        delay?: number | null
+    ): Promise<OutgoingHighlightPayload>;
     public async send(data: Omit<IncomingPayload, 'id'>, delay?: number | null) {
         return this.getWorker().send(data, delay);
     }

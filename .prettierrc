@@ -7,7 +7,6 @@
     "trailingComma": "none",
     "jsxSingleQuote": true,
     "arrowParens": "avoid",
-    "parser": "typescript",
     "useTabs": false,
     "printWidth": 130
 }

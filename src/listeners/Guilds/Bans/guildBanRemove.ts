@@ -13,7 +13,9 @@ import { TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 export class UserListener extends Listener<Events.GuildBanRemove> {
     public async run(...[ban]: EventArgs<Events.GuildBanRemove>): Promise<void> {
         const moderation = getModeration(ban.guild);
-        const deleted = this.container.redis ? await this.container.redis!.del(`guild:${ban.guild.id}:unban:${ban.user.id}`) : null;
+        const deleted = this.container.redis
+            ? await this.container.redis!.del(`guild:${ban.guild.id}:unban:${ban.user.id}`)
+            : null;
 
         if (deleted) return;
         await sleep(seconds(5));

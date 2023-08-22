@@ -229,10 +229,16 @@ interface ApiChannelsChannelMessagesMessageReactionsEmoji {
     delete(): Promise<RESTDeleteAPIChannelMessageReactionResult>;
 
     (userId: '@me'): ApiChannelsChannelMessagesMessageReactionsEmojiMe;
-    <T extends R<ApiChannelsChannelMessagesMessageReactionsEmojiMe>>(userId: '@me', key: T): ApiChannelsChannelMessagesMessageReactionsEmojiMe[T];
+    <T extends R<ApiChannelsChannelMessagesMessageReactionsEmojiMe>>(
+        userId: '@me',
+        key: T
+    ): ApiChannelsChannelMessagesMessageReactionsEmojiMe[T];
 
     (userId: string): ApiChannelsChannelMessagesMessageReactionsEmojiUser;
-    <T extends R<ApiChannelsChannelMessagesMessageReactionsEmojiUser>>(userId: string, key: T): ApiChannelsChannelMessagesMessageReactionsEmojiUser[T];
+    <T extends R<ApiChannelsChannelMessagesMessageReactionsEmojiUser>>(
+        userId: string,
+        key: T
+    ): ApiChannelsChannelMessagesMessageReactionsEmojiUser[T];
 }
 
 /**
@@ -278,7 +284,10 @@ interface ApiChannelsChannelMessagesBulkDelete {
      * Any message IDs given that do not exist or are invalid will count towards the minimum and maximum message count
      * (currently 2 and 100 respectively). Additionally, duplicated IDs will only be counted once.
      */
-    post(data: { data: RESTPostAPIChannelMessagesBulkDeleteJSONBody; reason: string }): Promise<RESTPostAPIChannelMessagesBulkDeleteResult>;
+    post(data: {
+        data: RESTPostAPIChannelMessagesBulkDeleteJSONBody;
+        reason: string;
+    }): Promise<RESTPostAPIChannelMessagesBulkDeleteResult>;
 }
 
 interface ApiChannelsChannelPermissions {
@@ -1150,7 +1159,9 @@ interface ApiWebhooksWebhookTokenGitHub {
      * Sends a message with the GitHub format.
      * @url https://discord.com/developers/docs/resources/webhook#execute-githubcompatible-webhook
      */
-    post(data: RESTPostAPIWebhookWithTokenGitHubQuery): Promise<RESTPostAPIWebhookWithTokenGitHubResult | RESTPostAPIWebhookWithTokenGitHubWaitResult>;
+    post(
+        data: RESTPostAPIWebhookWithTokenGitHubQuery
+    ): Promise<RESTPostAPIWebhookWithTokenGitHubResult | RESTPostAPIWebhookWithTokenGitHubWaitResult>;
 }
 interface ApiMethods {
     // eslint-disable-next-line @typescript-eslint/ban-types

@@ -48,7 +48,10 @@ export const roleData = new Map<RoleKey, RoleData>([
     ]
 ]);
 
-export const roleLanguageKeys = new Map<RoleKey, CustomFunctionGet<string, { channels: number; permissions: string[] }, RoleLanguageKeyData>>([
+export const roleLanguageKeys = new Map<
+    RoleKey,
+    CustomFunctionGet<string, { channels: number; permissions: string[] }, RoleLanguageKeyData>
+>([
     [RoleKey.Muted, LanguageKeys.Moderation.RoleSetupMute],
     [RoleKey.Embed, LanguageKeys.Moderation.RoleSetupEmbedRestrict]
 ]);
@@ -66,7 +69,14 @@ export const permissionOverwrites = new Map<RoleKey, RolePermissionOverwriteOpti
                     SEND_MESSAGES_IN_THREADS: false,
                     CONNECT: false
                 },
-                permissions: new Permissions(['SEND_MESSAGES', 'ADD_REACTIONS', 'CREATE_PUBLIC_THREADS', 'CREATE_PRIVATE_THREADS', 'SEND_MESSAGES_IN_THREADS', 'CONNECT'])
+                permissions: new Permissions([
+                    'SEND_MESSAGES',
+                    'ADD_REACTIONS',
+                    'CREATE_PUBLIC_THREADS',
+                    'CREATE_PRIVATE_THREADS',
+                    'SEND_MESSAGES_IN_THREADS',
+                    'CONNECT'
+                ])
             },
             text: {
                 options: {
@@ -77,7 +87,13 @@ export const permissionOverwrites = new Map<RoleKey, RolePermissionOverwriteOpti
                     SEND_MESSAGES_IN_THREADS: false,
                     USE_APPLICATION_COMMANDS: false
                 },
-                permissions: new Permissions(['SEND_MESSAGES', 'ADD_REACTIONS', 'CREATE_PUBLIC_THREADS', 'CREATE_PRIVATE_THREADS', 'SEND_MESSAGES_IN_THREADS'])
+                permissions: new Permissions([
+                    'SEND_MESSAGES',
+                    'ADD_REACTIONS',
+                    'CREATE_PUBLIC_THREADS',
+                    'CREATE_PRIVATE_THREADS',
+                    'SEND_MESSAGES_IN_THREADS'
+                ])
             },
             voice: {
                 options: {

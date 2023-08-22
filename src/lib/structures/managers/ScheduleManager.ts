@@ -101,8 +101,8 @@ export class ScheduleManager {
     }
 
     private async _handleResponses(responses: readonly ResponseValue[]) {
-        const { connection } = container.db;
-        const queryRunner = connection.createQueryRunner();
+        const { dataSource } = container.db;
+        const queryRunner = dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
 

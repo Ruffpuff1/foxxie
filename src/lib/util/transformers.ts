@@ -1,6 +1,9 @@
 import { DiscordAPIError } from 'discord.js';
 
-export function channelLink<G extends string, C extends string>(guildId: G, channelId: C): `https://discord.com/channels/${G}/${C}` {
+export function channelLink<G extends string, C extends string>(
+    guildId: G,
+    channelId: C
+): `https://discord.com/channels/${G}/${C}` {
     return `https://discord.com/channels/${guildId}/${channelId}`;
 }
 
@@ -11,7 +14,11 @@ export function channelLink<G extends string, C extends string>(guildId: G, chan
  * @param messageId The id of the message
  * @returns string
  */
-export function messageLink<G extends string, C extends string, M extends string>(guildId: G, channelId: C, messageId: M): `https://discord.com/channels/${G}/${C}/${M}` {
+export function messageLink<G extends string, C extends string, M extends string>(
+    guildId: G,
+    channelId: C,
+    messageId: M
+): `https://discord.com/channels/${G}/${C}/${M}` {
     return `https://discord.com/channels/${guildId}/${channelId}/${messageId}`;
 }
 

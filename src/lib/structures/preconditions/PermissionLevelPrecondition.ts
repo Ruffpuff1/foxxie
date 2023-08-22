@@ -1,4 +1,11 @@
-import { Identifiers, PieceContext, Precondition, PreconditionContext, PreconditionOptions, PreconditionResult } from '@sapphire/framework';
+import {
+    Identifiers,
+    PieceContext,
+    Precondition,
+    PreconditionContext,
+    PreconditionOptions,
+    PreconditionResult
+} from '@sapphire/framework';
 import { clientOwners } from '#root/config';
 import type { GuildMember } from 'discord.js';
 import { acquireSettings, GuildSettings } from '#lib/database';
@@ -37,7 +44,11 @@ export abstract class PermissionLevelPrecondition extends Precondition {
         return this.handle(message, command, context);
     }
 
-    protected abstract handle(message: GuildMessage, command: FoxxieCommand, context: PermissionLevelPrecondition.Context): PermissionLevelPrecondition.Result;
+    protected abstract handle(
+        message: GuildMessage,
+        command: FoxxieCommand,
+        context: PermissionLevelPrecondition.Context
+    ): PermissionLevelPrecondition.Result;
 
     private shouldRun(member: GuildMember, command: FoxxieCommand) {
         if (command.guarded) return false;

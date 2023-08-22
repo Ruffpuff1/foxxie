@@ -13,14 +13,20 @@ export class UserListener extends Listener<Events.GuildMemberUpdate> {
     public async run(...[previous, next]: EventArgs<Events.GuildMemberUpdate>): Promise<void> {
         if (!(previous.pending && !next.pending)) return;
         // fetch t and settings.
-        const [t, settings] = await this.container.db.guilds.acquire(next.guild.id, settings => [settings.getLanguage(), settings]);
+        const [t, settings] = await this.container.db.guilds.acquire(next.guild.id, settings => [
+            settings.getLanguage(),
+            settings
+        ]);
 
         // emit the member join event once screening passes.
         this.container.client.emit(Events.GuildMemberJoin, next, settings);
         // emit the logging event for screening logs.
         this.container.client.emit(Events.GuildMessageLog, next.guild, GuildSettings.Channels.Logs.MemberScreening, () =>
             new MessageEmbed()
-                .setAuthor({ name: t(LanguageKeys.Guilds.Logs.ActionMemberScreening), iconURL: next.displayAvatarURL({ dynamic: true }) })
+                .setAuthor({
+                    name: t(LanguageKeys.Guilds.Logs.ActionMemberScreening),
+                    iconURL: next.displayAvatarURL({ dynamic: true })
+                })
                 .setTimestamp()
                 .setColor(Colors.Yellow)
                 .setDescription(

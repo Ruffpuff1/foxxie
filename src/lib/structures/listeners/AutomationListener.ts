@@ -62,7 +62,9 @@ export abstract class AutomationListener<T extends keyof ClientEvents | symbol =
     private prepareEmbed(embedData: APIEmbed, member: GuildMember, t: TFunction) {
         const embed = new MessageEmbed(embedData);
 
-        embed.setColor(embed.color || member.guild.me?.displayColor || BrandingColors.Primary).setThumbnail(member.displayAvatarURL({ dynamic: true }));
+        embed
+            .setColor(embed.color || member.guild.me?.displayColor || BrandingColors.Primary)
+            .setThumbnail(member.displayAvatarURL({ dynamic: true }));
 
         if (embed.description) embed.setDescription(this.format(embed.description, member, t));
 

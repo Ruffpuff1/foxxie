@@ -1,15 +1,15 @@
-import { EntityRepository, FindOneOptions, Repository } from 'typeorm';
-import { GuildEntity } from '../entities';
 import { LockQueue, RWLock } from '@foxxie/lock-queue';
-import { Collection } from 'discord.js';
 import { container } from '@sapphire/framework';
+import { Collection } from 'discord.js';
+import { FindOneOptions } from 'typeorm';
+import { GuildEntity } from '../entities';
+import { CustomRepository } from './CustomRepository';
 
 export interface SettingsCollectionCallback<T extends GuildEntity, R> {
     (entity: T): Promise<R> | R;
 }
 
-@EntityRepository(GuildEntity)
-export class GuildRepository<T extends GuildEntity> extends Repository<GuildEntity> {
+export class GuildRepository<T extends GuildEntity> extends CustomRepository<GuildEntity> {
     public cache = new Collection<string, T>();
 
     private readonly locks = new LockQueue();
@@ -17,7 +17,7 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
     private readonly queue = new Map<string, Promise<T>>();
 
     public async ensure(id: string, options: FindOneOptions<GuildEntity> = {}): Promise<GuildEntity> {
-        const previous = await this.findOne({ id, ...options });
+        const previous = await this.repository.findOne({ where: { id, ...options } });
         if (previous) return previous;
 
         const data = new GuildEntity();
@@ -28,7 +28,10 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
 
     public acquire<K1 extends keyof T>(key: string, paths: readonly [K1]): Promise<[T[K1]]>;
     public acquire<K1 extends keyof T, K2 extends keyof T>(key: string, paths: readonly [K1, K2]): Promise<[T[K1], T[K2]]>;
-    public acquire<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T>(key: string, paths: readonly [K1, K2, K3]): Promise<[T[K1], T[K2], T[K3]]>;
+    public acquire<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T>(
+        key: string,
+        paths: readonly [K1, K2, K3]
+    ): Promise<[T[K1], T[K2], T[K3]]>;
 
     public acquire<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T>(
         key: string,
@@ -40,15 +43,24 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
         paths: readonly [K1, K2, K3, K4, K5]
     ): Promise<[T[K1], T[K2], T[K3], T[K4], T[K5]]>;
 
-    public acquire<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T, K6 extends keyof T>(
-        key: string,
-        paths: readonly [K1, K2, K3, K4, K5, K6]
-    ): Promise<[T[K1], T[K2], T[K3], T[K4], T[K5], T[K6]]>;
+    public acquire<
+        K1 extends keyof T,
+        K2 extends keyof T,
+        K3 extends keyof T,
+        K4 extends keyof T,
+        K5 extends keyof T,
+        K6 extends keyof T
+    >(key: string, paths: readonly [K1, K2, K3, K4, K5, K6]): Promise<[T[K1], T[K2], T[K3], T[K4], T[K5], T[K6]]>;
 
-    public acquire<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T, K6 extends keyof T, K7 extends keyof T>(
-        key: string,
-        paths: readonly [K1, K2, K3, K4, K5, K6, K7]
-    ): Promise<[T[K1], T[K2], T[K3], T[K4], T[K5], T[K6], T[K7]]>;
+    public acquire<
+        K1 extends keyof T,
+        K2 extends keyof T,
+        K3 extends keyof T,
+        K4 extends keyof T,
+        K5 extends keyof T,
+        K6 extends keyof T,
+        K7 extends keyof T
+    >(key: string, paths: readonly [K1, K2, K3, K4, K5, K6, K7]): Promise<[T[K1], T[K2], T[K3], T[K4], T[K5], T[K6], T[K7]]>;
 
     public acquire<
         K1 extends keyof T,
@@ -59,7 +71,10 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
         K6 extends keyof T,
         K7 extends keyof T,
         K8 extends keyof T
-    >(key: string, paths: readonly [K1, K2, K3, K4, K5, K6, K7, K8]): Promise<[T[K1], T[K2], T[K3], T[K4], T[K5], T[K6], T[K7], T[K8]]>;
+    >(
+        key: string,
+        paths: readonly [K1, K2, K3, K4, K5, K6, K7, K8]
+    ): Promise<[T[K1], T[K2], T[K3], T[K4], T[K5], T[K6], T[K7], T[K8]]>;
 
     public acquire<
         K1 extends keyof T,
@@ -71,13 +86,19 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
         K7 extends keyof T,
         K8 extends keyof T,
         K9 extends keyof T
-    >(key: string, paths: readonly [K1, K2, K3, K4, K5, K6, K7, K8, K9]): Promise<[T[K1], T[K2], T[K3], T[K4], T[K5], T[K6], T[K7], T[K8], T[K9]]>;
+    >(
+        key: string,
+        paths: readonly [K1, K2, K3, K4, K5, K6, K7, K8, K9]
+    ): Promise<[T[K1], T[K2], T[K3], T[K4], T[K5], T[K6], T[K7], T[K8], T[K9]]>;
 
     public acquire<K extends keyof T>(key: string, paths: readonly K[]): Promise<T[K][]>;
     public acquire<K extends keyof T>(key: string, path: K): Promise<T[K]>;
     public acquire<R>(key: string, cb: SettingsCollectionCallback<T, R>): Promise<R>;
     public acquire(key: string): Promise<T>;
-    public async acquire<R>(key: string, list?: keyof T | readonly (keyof T)[] | SettingsCollectionCallback<T, R>): Promise<T | unknown[] | unknown> {
+    public async acquire<R>(
+        key: string,
+        list?: keyof T | readonly (keyof T)[] | SettingsCollectionCallback<T, R>
+    ): Promise<T | unknown[] | unknown> {
         const lock = this.locks.acquire(key);
         try {
             await lock.readLock();
@@ -101,7 +122,10 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
 
     public write<K1 extends keyof T>(key: string, pairs: readonly [[K1, T[K1]]]): Promise<void>;
     public write<K1 extends keyof T, K2 extends keyof T>(key: string, pairs: readonly [[K1, T[K1]], [K2, T[K2]]]): Promise<void>;
-    public write<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T>(key: string, pairs: readonly [[K1, T[K1]], [K2, T[K2]], [K3, T[K3]]]): Promise<void>;
+    public write<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T>(
+        key: string,
+        pairs: readonly [[K1, T[K1]], [K2, T[K2]], [K3, T[K3]]]
+    ): Promise<void>;
 
     public write<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T>(
         key: string,
@@ -113,12 +137,24 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
         pairs: readonly [[K1, T[K1]], [K2, T[K2]], [K3, T[K3]], [K4, T[K4]], [K5, T[K5]]]
     ): Promise<void>;
 
-    public write<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T, K6 extends keyof T>(
-        key: string,
-        pairs: readonly [[K1, T[K1]], [K2, T[K2]], [K3, T[K3]], [K4, T[K4]], [K5, T[K5]], [K6, T[K6]]]
-    ): Promise<void>;
+    public write<
+        K1 extends keyof T,
+        K2 extends keyof T,
+        K3 extends keyof T,
+        K4 extends keyof T,
+        K5 extends keyof T,
+        K6 extends keyof T
+    >(key: string, pairs: readonly [[K1, T[K1]], [K2, T[K2]], [K3, T[K3]], [K4, T[K4]], [K5, T[K5]], [K6, T[K6]]]): Promise<void>;
 
-    public write<K1 extends keyof T, K2 extends keyof T, K3 extends keyof T, K4 extends keyof T, K5 extends keyof T, K6 extends keyof T, K7 extends keyof T>(
+    public write<
+        K1 extends keyof T,
+        K2 extends keyof T,
+        K3 extends keyof T,
+        K4 extends keyof T,
+        K5 extends keyof T,
+        K6 extends keyof T,
+        K7 extends keyof T
+    >(
         key: string,
         pairs: readonly [[K1, T[K1]], [K2, T[K2]], [K3, T[K3]], [K4, T[K4]], [K5, T[K5]], [K6, T[K6]], [K7, T[K7]]]
     ): Promise<void>;
@@ -132,7 +168,10 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
         K6 extends keyof T,
         K7 extends keyof T,
         K8 extends keyof T
-    >(key: string, pairs: readonly [[K1, T[K1]], [K2, T[K2]], [K3, T[K3]], [K4, T[K4]], [K5, T[K5]], [K6, T[K6]], [K7, T[K7]], [K8, T[K8]]]): Promise<void>;
+    >(
+        key: string,
+        pairs: readonly [[K1, T[K1]], [K2, T[K2]], [K3, T[K3]], [K4, T[K4]], [K5, T[K5]], [K6, T[K6]], [K7, T[K7]], [K8, T[K8]]]
+    ): Promise<void>;
 
     public write<
         K1 extends keyof T,
@@ -144,11 +183,27 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
         K7 extends keyof T,
         K8 extends keyof T,
         K9 extends keyof T
-    >(key: string, pairs: readonly [[K1, T[K1]], [K2, T[K2]], [K3, T[K3]], [K4, T[K4]], [K5, T[K5]], [K6, T[K6]], [K7, T[K7]], [K8, T[K8]], [K9, T[K9]]]): Promise<void>;
+    >(
+        key: string,
+        pairs: readonly [
+            [K1, T[K1]],
+            [K2, T[K2]],
+            [K3, T[K3]],
+            [K4, T[K4]],
+            [K5, T[K5]],
+            [K6, T[K6]],
+            [K7, T[K7]],
+            [K8, T[K8]],
+            [K9, T[K9]]
+        ]
+    ): Promise<void>;
 
     public write<K extends keyof T>(key: string, pairs: readonly [K, T[K]][]): Promise<void>;
     public write<R>(key: string, cb: SettingsCollectionCallback<T, R>): Promise<R>;
-    public async write<R>(key: string, changes: readonly [keyof T, T[keyof T]][] | SettingsCollectionCallback<T, R>): Promise<R | undefined> {
+    public async write<R>(
+        key: string,
+        changes: readonly [keyof T, T[keyof T]][] | SettingsCollectionCallback<T, R>
+    ): Promise<R | undefined> {
         const lock = this.locks.acquire(key);
 
         await lock.writeLock();
@@ -173,7 +228,7 @@ export class GuildRepository<T extends GuildEntity> extends Repository<GuildEnti
 
     public async fetch(key: string): Promise<T> {
         const { guilds } = container.db;
-        const existing = <T>await guilds.findOne({ id: key });
+        const existing = <T>await guilds.findOne({ where: { id: key } });
         if (existing) {
             this.cache.set(key, existing);
             return existing;

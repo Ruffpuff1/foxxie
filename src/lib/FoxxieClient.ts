@@ -41,7 +41,9 @@ export default class FoxxieClient extends SapphireClient {
 
     public async login(): Promise<string> {
         const { shardCount } = clientOptions;
-        container.logger.info(`${magentaBright('Gateway:')} Logging in with ${shardCount ?? 1} shard${(shardCount ?? 1) > 1 ? 's' : ''}`);
+        container.logger.info(
+            `${magentaBright('Gateway:')} Logging in with ${shardCount ?? 1} shard${(shardCount ?? 1) > 1 ? 's' : ''}`
+        );
 
         await container.schedule.init();
 

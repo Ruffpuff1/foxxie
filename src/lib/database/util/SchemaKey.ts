@@ -134,5 +134,15 @@ export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implemen
 
 export type ConfigurableKeyValueOptions = Pick<
     SchemaKey,
-    'description' | 'maximum' | 'minimum' | 'inclusive' | 'name' | 'property' | 'target' | 'type' | 'array' | 'default' | 'dashboardOnly'
+    | 'description'
+    | 'maximum'
+    | 'minimum'
+    | 'inclusive'
+    | 'name'
+    | 'property'
+    | 'target'
+    | 'type'
+    | 'array'
+    | 'default'
+    | 'dashboardOnly'
 >;

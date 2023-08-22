@@ -82,7 +82,10 @@ export class UserListener extends Listener<Events.UserMessage> {
     private makeEmbed(previous: string[][], msg: GuildMessage, t: TFunction, match: HighlightReturnData) {
         const embed = new MessageEmbed()
             .setColor(msg.guild.me!.displayColor || BrandingColors.Primary)
-            .setAuthor({ name: `${msg.author.username} [${msg.author.id}]`, iconURL: msg.member?.displayAvatarURL({ dynamic: true }) })
+            .setAuthor({
+                name: `${msg.author.username} [${msg.author.id}]`,
+                iconURL: msg.member?.displayAvatarURL({ dynamic: true })
+            })
             .setDescription(`**[${t(LanguageKeys.Listeners.Events.HighlightJumpTo)}](${msg.url})**`)
             .setTimestamp();
 

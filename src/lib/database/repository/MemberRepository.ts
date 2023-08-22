@@ -1,10 +1,10 @@
+import { FindOneOptions } from 'typeorm';
 import { MemberEntity } from '../entities';
-import { EntityRepository, FindOneOptions, Repository } from 'typeorm';
+import { CustomRepository } from './CustomRepository';
 
-@EntityRepository(MemberEntity)
-export class MemberRepository extends Repository<MemberEntity> {
+export class MemberRepository extends CustomRepository<MemberEntity> {
     public async ensure(id: string, guildId: string, options: FindOneOptions<MemberEntity> = {}): Promise<MemberEntity> {
-        const previous = await this.findOne({ id, guildId, ...options });
+        const previous = await this.findOne({ where: { id, guildId, ...options } });
         if (previous) return previous;
 
         const data = new MemberEntity();

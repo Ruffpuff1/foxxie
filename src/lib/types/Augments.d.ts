@@ -22,7 +22,11 @@ declare module 'discord.js' {
     interface ClientEvents {
         [Events.BotMessage]: [message: GuildMessage];
         [Events.GuildMemberJoin]: [member: GuildMember, settings: GuildEntity];
-        [Events.GuildMessageLog]: [guild: Guild, key: PickByValue<GuildEntity, Snowflake | null>, makeEmbed: (t: TFunction) => Awaitable<TypeOfEmbed | MessageOptions>];
+        [Events.GuildMessageLog]: [
+            guild: Guild,
+            key: PickByValue<GuildEntity, Snowflake | null>,
+            makeEmbed: (t: TFunction) => Awaitable<TypeOfEmbed | MessageOptions>
+        ];
         [Events.MessageCommandLogging]: [message: Message, command: FoxxieCommand];
         [Events.ModerationEntryAdd]: [entry: ModerationEntity];
         [Events.ModerationEntryEdit]: [old: ModerationEntity, entry: ModerationEntity];

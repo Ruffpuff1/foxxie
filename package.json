@@ -1,6 +1,6 @@
 {
   "name": "foxxie",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "Foxxie bot, a Discord bot for Moderation, Utility, and Information.",
   "main": "./dist/src/Foxxie.js",
   "scripts": {
@@ -59,9 +59,10 @@
     "i18next": "^21.6.16",
     "ioredis": "^5.0.3",
     "lexure": "^0.17.0",
-    "mongodb": "^3.7.3",
+    "mongodb": "^5.8.0",
+    "saslprep": "^1.0.3",
     "skia-canvas": "^0.9.29",
-    "typeorm": "^0.2.45"
+    "typeorm": "^0.3.17"
   },
   "devDependencies": {
     "@foxxie/eslint-config": "^0.0.2",

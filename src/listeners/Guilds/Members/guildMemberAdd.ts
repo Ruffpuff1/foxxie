@@ -7,7 +7,10 @@ export class UserListener extends Listener<Events.GuildMemberAdd> {
     public async run(...[member]: EventArgs<Events.GuildMemberAdd>): Promise<void> {
         if (member.pending) return;
 
-        const [muteRoleId, settings] = await this.container.db.guilds.acquire(member.guild.id, settings => [settings[GuildSettings.Roles.Muted], settings]);
+        const [muteRoleId, settings] = await this.container.db.guilds.acquire(member.guild.id, settings => [
+            settings[GuildSettings.Roles.Muted],
+            settings
+        ]);
         if (muteRoleId) {
             const persistRoles = getPersistRoles(member.guild);
 
