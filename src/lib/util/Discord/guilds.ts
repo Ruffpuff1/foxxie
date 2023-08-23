@@ -1,10 +1,12 @@
 import { GuildModerationManager, PersistRoleManager } from '#lib/structures';
+import { StarboardManager } from '#lib/structures/managers/StarboardManager';
 import { container, fromAsync, isErr } from '@sapphire/framework';
 import type { Guild, GuildAuditLogsAction, GuildAuditLogsEntry, GuildResolvable } from 'discord.js';
 
 interface GuildUtilities {
     readonly moderation: GuildModerationManager;
     readonly persistRoles: PersistRoleManager;
+    readonly starboard: StarboardManager;
 }
 
 const cache = new WeakMap<Guild, GuildUtilities>();
@@ -16,7 +18,8 @@ function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 
     const entry: GuildUtilities = {
         moderation: new GuildModerationManager(guild!),
-        persistRoles: new PersistRoleManager(guild!)
+        persistRoles: new PersistRoleManager(guild!),
+        starboard: new StarboardManager(guild!)
     };
 
     cache.set(guild!, entry);
@@ -26,6 +29,7 @@ function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 
 export const getModeration = getProperty('moderation');
 export const getPersistRoles = getProperty('persistRoles');
+export const getStarboard = getProperty('starboard');
 
 function getProperty<K extends keyof GuildUtilities>(property: K) {
     return (resolvable: GuildResolvable): GuildUtilities[K] => getGuildUtilities(resolvable)[property];

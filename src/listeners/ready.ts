@@ -54,8 +54,8 @@ export class UserListener extends Listener<Events.Ready> {
                         )}`,
                         String.raw`${pad}[${success}] Gateway`,
                         String.raw`${pad}[${success}] Moderation`,
+                        String.raw`${pad}[${this.container.redis ? success : failed}] Redis`,
                         String.raw`${pad}[${this.store.has('rawMessageReactionAddStarboard') ? success : failed}] Starboard`,
-                        '',
                         String.raw`${this.isDev ? `${pad}</> DEVELOPMENT MODE` : ''}`
                     ]
                 })

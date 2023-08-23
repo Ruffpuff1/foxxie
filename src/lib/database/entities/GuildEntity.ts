@@ -561,6 +561,33 @@ export class GuildEntity extends BaseEntity {
     @Column('varchar', { name: 'rolesMuted', nullable: true, length: 19 })
     public rolesMuted: Snowflake | null = null;
 
+    @ConfigurableKey({
+        description: LanguageKeys.Settings.StarboardChannel,
+        name: 'starboard.channel',
+        type: 'textchannel'
+    })
+    @Column('varchar', { name: 'starboardChannel', nullable: true, length: 19 })
+    public starboardChannel: Snowflake | null = null;
+
+    @Column('varchar', { name: 'starboardEmoji', array: true })
+    public starboardEmojis: string[] = [];
+
+    @ConfigurableKey({
+        description: LanguageKeys.Settings.StarboardMinimum,
+        name: 'starboard.minimum',
+        type: 'number'
+    })
+    @Column('smallint', { name: 'starboardMinimum', default: 3 })
+    public starboardMinimum: number = 3;
+
+    @ConfigurableKey({
+        description: LanguageKeys.Settings.StarboardSelfStar,
+        name: 'starboard.self-star',
+        type: 'boolean'
+    })
+    @Column('boolean', { name: 'starboardSelfStar', default: true })
+    public starboardSelfStar: boolean = true;
+
     @Column('jsonb', { name: 'tags', default: () => "'[]'::JSONB" })
     public tags: Tag[] = [];
 

@@ -1,16 +1,16 @@
-import type { LLRCData } from '#external/LongLivingReactionCollector';
-import { getEmojiString } from '#utils/Discord';
-import { ApplyOptions } from '@sapphire/decorators';
-import { canReadMessages, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
-import { Listener, ListenerOptions } from '@sapphire/framework';
-import { GatewayDispatchEvents, GatewayMessageReactionAddDispatch } from 'discord-api-types/v10';
+import { LLRCData } from "#external/LongLivingReactionCollector";
+import { getEmojiString } from "#utils/Discord";
+import { ApplyOptions } from "@sapphire/decorators";
+import { canReadMessages, isGuildBasedChannel } from "@sapphire/discord.js-utilities";
+import { Listener, ListenerOptions } from "@sapphire/framework";
+import { GatewayDispatchEvents, GatewayMessageReactionRemoveDispatch } from "discord-api-types/v10";
 
 @ApplyOptions<ListenerOptions>({
-    event: GatewayDispatchEvents.MessageReactionAdd,
+    event: GatewayDispatchEvents.MessageReactionRemove,
     emitter: 'ws'
 })
 export class FoxxieListener extends Listener {
-    public run(raw: GatewayMessageReactionAddDispatch['d']): void {
+    public run(raw: GatewayMessageReactionRemoveDispatch['d']): void {
         const channel = this.container.client.channels.cache.get(raw.channel_id);
         if (!channel || !isGuildBasedChannel(channel) || !canReadMessages(channel)) return;
 
@@ -30,13 +30,9 @@ export class FoxxieListener extends Listener {
             userId: raw.user_id
         };
 
-        for (const llrc of this.container.client.llrCollectors) {
-            llrc.send(data);
-        }
-
         const emoji = getEmojiString(data.emoji);
         if (emoji === null) return;
 
-        this.container.client.emit('rawReactionAdd', data, emoji);
+        this.container.client.emit('rawReactionRemove', data, emoji);
     }
 }

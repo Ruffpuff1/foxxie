@@ -21,6 +21,7 @@ export class UserListener extends Listener {
         if (!guild) return;
 
         await this.runReactionRole(userId, messageId, guild, emoji);
+        
     }
 
     private async runReactionRole(userId: string, messageId: string, guild: Guild, emoji: APIEmoji): Promise<void> {

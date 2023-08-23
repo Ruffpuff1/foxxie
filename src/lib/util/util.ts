@@ -1,8 +1,10 @@
+import { api } from '#external/Api';
 import { acquireSettings } from '#lib/database';
 import { GuildMessage } from '#lib/types';
 import { isNumber, isThenable } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { SnowflakeUtil } from 'discord.js';
+import { APIUser } from 'discord-api-types/v10';
+import { Message, SnowflakeUtil } from 'discord.js';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
 
 /**
@@ -45,4 +47,80 @@ export function getServerDetails() {
 export function idToTimestamp(id: string | number): number | null {
     if (isNumber(id)) return null;
     return SnowflakeUtil.deconstruct(id as string).timestamp;
+}
+
+export async function fetchReactionUsers(channelId: string, messageId: string, reactions: string[]) {
+    const users: Set<string> = new Set();
+    let rawUsers: APIUser[] = [];
+
+    for (const reaction of reactions) {
+        do {
+            rawUsers = await api()
+                .channels(channelId)
+                .messages(messageId)
+                .reactions(reaction)
+                .get({ query: { limit: 100, after: rawUsers.length ? rawUsers[rawUsers.length - 1].id : undefined } });
+            for (const user of rawUsers) users.add(user.id);
+        } while (rawUsers.length === 100);
+    }
+
+    return users;
+}
+
+export function snowflakeAge(snowflake: string) {
+    const { timestamp } = SnowflakeUtil.deconstruct(snowflake);
+    return Math.max(Date.now() - Number(timestamp), 0);
+}
+
+export interface ImageAttachment {
+    url: string;
+    proxyURL: string;
+    height: number;
+    width: number;
+}
+
+export const IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp)$/i;
+
+export function getAttachment(message: Message): ImageAttachment | null {
+    if (message.attachments.size) {
+        const attachment = message.attachments.find(att => IMAGE_EXTENSION.test(att.url));
+        if (attachment) {
+            return {
+                url: attachment.url,
+                proxyURL: attachment.proxyURL,
+                height: attachment.height!,
+                width: attachment.width!
+            };
+        }
+    }
+
+    for (const embed of message.embeds) {
+        if (embed.type === 'image') {
+            return {
+                url: embed.thumbnail!.url,
+                proxyURL: embed.thumbnail!.proxyURL!,
+                height: embed.thumbnail!.height!,
+                width: embed.thumbnail!.width!
+            };
+        }
+        if (embed.image) {
+            return {
+                url: embed.image.url,
+                proxyURL: embed.image.proxyURL!,
+                height: embed.image.height!,
+                width: embed.image.width!
+            };
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Get the image url from a message.
+ * @param message The Message instance to get the image url from
+ */
+export function getImage(message: Message): string | null {
+    const attachment = getAttachment(message);
+    return attachment ? attachment.proxyURL || attachment.url : null;
 }
