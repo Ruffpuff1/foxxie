@@ -1,24 +1,24 @@
+import { api } from '#external/Api';
+import { LLRCData, LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import {
-    configurableGroups,
-    isSchemaGroup,
-    acquireSettings,
-    remove,
     SchemaGroup,
     SchemaKey,
+    acquireSettings,
+    configurableGroups,
+    isSchemaGroup,
+    remove,
     set,
     writeSettings
 } from '#lib/database';
-import { api } from '#external/Api';
 import { LanguageKeys } from '#lib/i18n';
-import { GuildMessage, Events } from '#lib/types';
-import { floatPromise } from '#utils/util';
+import { Events, GuildMessage } from '#lib/types';
 import { deleteMessage, sendLoadingMessage } from '#utils/Discord';
-import { LLRCData, LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
+import { floatPromise } from '#utils/util';
+import type { TFunction } from '@foxxie/i18n';
+import { ZeroWidthSpace, deepClone, minutes } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { deepClone, minutes, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import { DiscordAPIError, MessageCollector, MessageEmbed } from 'discord.js';
-import type { TFunction } from '@foxxie/i18n';
 import * as Lexure from 'lexure';
 import { FoxxieArgs, FoxxieCommand } from './commands';
 
@@ -254,7 +254,7 @@ export class SettingsMenu {
     private async tryUpdate(action: UpdateType, args: FoxxieArgs | null = null, value: unknown = null) {
         try {
             const key = this.schema as SchemaKey;
-            const [oldValue, skipped] = await writeSettings(this.message.guild, async settings => {
+            const [oldValue, skipped] = await writeSettings(this.message.guild.id, async settings => {
                 const oldValue = deepClone(settings[key.property]);
 
                 switch (action) {

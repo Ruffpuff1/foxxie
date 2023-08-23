@@ -1,8 +1,8 @@
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationCommand } from '#lib/structures';
-import { GuildMessage } from '#lib/types';
 import { getModeration } from '#utils/Discord';
 import { resolveKey } from '#utils/util';
+import { seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { fromAsync } from '@sapphire/framework';
 import { ArgumentTypes } from '@sapphire/utilities';
@@ -18,7 +18,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
     successKey: LanguageKeys.Commands.Moderation.UnbanSuccess
 })
 export class UserCommand extends ModerationCommand {
-    public async prehandle(message: GuildMessage) {
+    public async prehandle(...[message, context]: ArgumentTypes<ModerationCommand['prehandle']>) {
         const result = await fromAsync(message.guild.bans.fetch());
         const bans = result.success ? result.value.map(ban => ban.user.id) : null;
 
@@ -29,6 +29,12 @@ export class UserCommand extends ModerationCommand {
         if (bans.length === 0) {
             throw await resolveKey(message, LanguageKeys.Commands.Moderation.GuildBansEmpty);
         }
+
+        await Promise.all(
+            context.targets.map(
+                user => this.container.redis?.pinsertex(`guild:${message.guild.id}:unban:${user.id}`, seconds(20), '')
+            )
+        );
 
         return { bans };
     }

@@ -8,7 +8,8 @@
     "start": "node .",
     "dev": "yarn build && yarn start",
     "lint": "prettier --write src --ext mjs,js,ts",
-    "start:docker": "docker-compose up --build foxxie"
+    "start:docker": "docker-compose up --build foxxie",
+    "docker-rebuild": "docker build -t ruffpuff/foxxie:latest . --no-cache"
   },
   "contributors": [
     "Ruffpuff1 <reese@reeseharlak.com>",
@@ -73,7 +74,8 @@
     "@typescript-eslint/eslint-plugin": "6.4.0",
     "@typescript-eslint/parser": "6.4.0",
     "eslint": "8.47.0",
-    "prettier": "^3.0.2"
+    "prettier": "^3.0.2",
+    "typescript": "5.1.6"
   },
   "imports": {
     "#database/*": "./dist/src/lib/database/*.js",

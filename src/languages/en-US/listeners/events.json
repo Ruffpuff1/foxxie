@@ -1,5 +1,6 @@
 {
-    "boostMessageDefault": "**{user.name}** just boosted the server, we now have {boost.count} boosts!",
+    "boostMessageDefault": "**{user.name}** just boosted the server, we now have {boost.count} boost!",
+    "boostMessageDefault_other": "**{user.name}** just boosted the server, we now have {boost.count} boosts!",
     "highlightAttachment": "Message has an attachment. Click **[here]({{url}})** to see it.",
     "highlightJumpTo": "Click here to jump to the message.",
     "highlightContentWord": "Your highlight **{{word}}** was sent by **{{author}}** in {{channel}}.",

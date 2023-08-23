@@ -1,4 +1,4 @@
-import { LockQueue, RWLock } from '@foxxie/lock-queue';
+import { LockQueue } from '@foxxie/lock-queue';
 import { container } from '@sapphire/framework';
 import { Collection } from 'discord.js';
 import { FindOneOptions } from 'typeorm';
@@ -207,7 +207,8 @@ export class GuildRepository<T extends GuildEntity> extends CustomRepository<Gui
         const lock = this.locks.acquire(key);
 
         await lock.writeLock();
-        const found = this.cache.get(key) || (await this.unlockOnThrow(this.processFetch(key), lock));
+        const cached = this.cache.get(key);
+        const found = cached || await this.processFetch(key);
 
         try {
             if (typeof changes === 'function') {
@@ -228,6 +229,7 @@ export class GuildRepository<T extends GuildEntity> extends CustomRepository<Gui
 
     public async fetch(key: string): Promise<T> {
         const { guilds } = container.db;
+
         const existing = <T>await guilds.findOne({ where: { id: key } });
         if (existing) {
             this.cache.set(key, existing);
@@ -257,12 +259,12 @@ export class GuildRepository<T extends GuildEntity> extends CustomRepository<Gui
         }
     }
 
-    private unlockOnThrow(promise: Promise<T>, lock: RWLock) {
-        try {
-            return promise;
-        } catch (error) {
-            lock.unlock();
-            throw error;
-        }
-    }
+    // private unlockOnThrow(promise: Promise<T>, lock: RWLock) {
+    //     try {
+    //         return promise;
+    //     } catch (error) {
+    //         lock.unlock();
+    //         throw error;
+    //     }
+    // }
 }

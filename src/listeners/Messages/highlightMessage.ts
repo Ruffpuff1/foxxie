@@ -4,7 +4,7 @@ import { HighlightReturnData, HighlightTypeEnum, IncomingType } from '#lib/struc
 import { EventArgs, Events, GuildMessage } from '#lib/types';
 import { BrandingColors } from '#utils/constants';
 import { floatPromise } from '#utils/util';
-import { resolveToNull } from '@ruffpuff/utilities';
+import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
@@ -12,8 +12,8 @@ import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { Message, MessageEmbed, Util } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.UserMessage
-    // enabled: !isDev()
+    event: Events.UserMessage,
+    enabled: !isDev()
 })
 export class UserListener extends Listener<Events.UserMessage> {
     public async run(...[msg]: EventArgs<Events.UserMessage>): Promise<void> {

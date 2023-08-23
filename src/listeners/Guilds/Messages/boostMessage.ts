@@ -75,7 +75,7 @@ export class UserListener extends AutomationListener<Events.SystemMessage> {
             t,
             message,
             embed,
-            t(LanguageKeys.Listeners.Events.BoostMessageDefault)
+            t(LanguageKeys.Listeners.Events.BoostMessageDefault, { count: msg.guild.premiumSubscriptionCount! })
         );
         await floatPromise(
             channel.send({

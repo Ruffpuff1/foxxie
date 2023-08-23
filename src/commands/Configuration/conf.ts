@@ -1,12 +1,11 @@
 import { configurableGroups, isSchemaGroup, isSchemaKey, remove, reset, SchemaKey, set } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand, SettingsMenu } from '#lib/structures';
+import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage, PermissionLevels } from '#lib/types';
 import { inlineCode } from '@discordjs/builders';
 import { filter, map, toTitleCase } from '@ruffpuff/utilities';
-import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
+import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
-import { PermissionFlagsBits } from 'discord-api-types/v10';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['config', 'settings'],
@@ -14,17 +13,17 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
     description: LanguageKeys.Commands.Configuration.ConfDescription,
     permissionLevel: PermissionLevels.Administrator,
     usage: LanguageKeys.Commands.Configuration.ConfUsage,
-    subCommands: [{ input: 'menu', default: true }, { input: 'add', output: 'set' }, 'set', 'show', 'remove', 'reset']
+    subCommands: [{ input: 'add', output: 'set' }, 'set', { input: 'show', default: true }, 'remove', 'reset']
 })
 export default class UserCommand extends FoxxieCommand {
-    @RequiresClientPermissions([
-        PermissionFlagsBits.EmbedLinks,
-        PermissionFlagsBits.ManageMessages,
-        PermissionFlagsBits.AddReactions
-    ])
-    public menu(message: GuildMessage, args: FoxxieCommand.Args, context: FoxxieCommand.Context) {
-        return new SettingsMenu(message, args.t).init(context);
-    }
+    // @RequiresClientPermissions([
+    //     PermissionFlagsBits.EmbedLinks,
+    //     PermissionFlagsBits.ManageMessages,
+    //     PermissionFlagsBits.AddReactions
+    // ])
+    // public menu(message: GuildMessage, args: FoxxieCommand.Args, context: FoxxieCommand.Context) {
+    //     return new SettingsMenu(message, args.t).init(context);
+    // }
 
     public async set(message: GuildMessage, args: FoxxieCommand.Args) {
         const [key, schemaKey] = await this.fetchKey(args);

@@ -1,13 +1,13 @@
 import { GuildEntity, GuildSettings, writeSettings } from '#lib/database';
 import { EventArgs, Events } from '#lib/types';
-import { minutes } from '@ruffpuff/utilities';
+import { isDev, minutes } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import type { GuildMember } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
     event: Events.StatsMessage,
-    enabled: false
+    enabled: !isDev()
 })
 export class UserListener extends Listener<Events.StatsMessage> {
     public timeout = minutes(5);

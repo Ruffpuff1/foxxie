@@ -22,7 +22,7 @@ import { Message, MessageEmbed } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
     event: Events.UserMessage,
-    enabled: isDev()
+    enabled: !isDev()
 })
 export class UserListener extends Listener<Events.UserMessage> {
     public async run(...[msg]: EventArgs<Events.UserMessage>): Promise<void> {

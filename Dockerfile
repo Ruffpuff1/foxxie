@@ -2,13 +2,15 @@ FROM node:18
 
 WORKDIR /
 
-COPY package*.json .
+COPY package.json .
+COPY yarn.lock .
+COPY tsconfig.json tsconfig.json
+COPY .git/ .git/
 
 RUN yarn install
 
 COPY scripts/ scripts/
 COPY src/ src/
-COPY tsconfig.json tsconfig.json
 
 RUN yarn build
 
