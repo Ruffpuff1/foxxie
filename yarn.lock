@@ -963,10 +963,10 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-discord-api-types@0.36.1:
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.36.1.tgz#f6df24c090535bf2e5aea577f906f9aa4a9fe63b"
-  integrity sha512-PTDinUU574hXA9Ko9wrftL1iww1raNiRVKjuPIWQ5Li1g7vQPArpZWw9x01kh/IXLPdzSAJ6H8T0eAYzxzFzIg==
+discord-api-types@0.37.55:
+  version "0.37.55"
+  resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.37.55.tgz#d2024dc6e191829b598e6f9fd4a39e39b2282739"
+  integrity sha512-XIf8AELxg76AH1WzrgB5ziFyIxSs4tLK1XGjFs4oE6t7M7r1B0Chdylaz76ALhvRXAUBGHGFXu/pKAa5Q+LbQg==
 
 discord-api-types@^0.33.3:
   version "0.33.5"
