@@ -296,11 +296,11 @@ export class ModerationEntity extends BaseEntity {
     public get appealTaskName(): ModerationScheule | null {
         if (!this.duration) return null;
         switch (this.title) {
-            case 'tempMute':
+            case 'TempMute':
                 return TypeVariationAppealNames.Mute;
-            case 'tempBan':
+            case 'TempBan':
                 return TypeVariationAppealNames.Ban;
-            case 'tempNickname':
+            case 'TempNickname':
                 return TypeVariationAppealNames.Nickname;
             default:
                 return null;
