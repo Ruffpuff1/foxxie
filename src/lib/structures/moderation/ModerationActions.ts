@@ -25,7 +25,7 @@ import {
 export class ModerationActions {
     public constructor(public guild: Guild) {}
 
-    public async ban(rawOptions: Partial<ModerationEntity>, days: number, sendOptions: SendOptions): Promise<ModerationEntity> {
+    public async ban(rawOptions: RawOptions, days: number, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Ban);
         const moderationLog = this.create(options);
 
@@ -42,7 +42,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async unban(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
+    public async unban(rawOptions: RawOptions, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.UnBan);
         const moderationLog = this.create(options);
 
@@ -58,7 +58,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async kick(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
+    public async kick(rawOptions: RawOptions, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Kick);
         const moderationLog = this.create(options);
 
@@ -72,11 +72,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async softban(
-        rawOptions: Partial<ModerationEntity>,
-        days: number,
-        sendOptions: SendOptions
-    ): Promise<ModerationEntity> {
+    public async softban(rawOptions: RawOptions, days: number, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.SoftBan);
         const moderationLog = this.create(options);
 
@@ -95,10 +91,10 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async mute(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
+    public async mute(rawOptions: RawOptions, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Mute);
         const moderationLog = this.create(options);
-        const roleId = await acquireSettings(rawOptions.guildId!, GuildSettings.Roles.Muted);
+        const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.Muted);
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Mute);
@@ -117,13 +113,13 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async unmute(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
+    public async unmute(rawOptions: RawOptions, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.UnMute);
         const moderationLog = this.create(options);
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Mute);
-        const roleId = await acquireSettings(rawOptions.guildId!, GuildSettings.Roles.Muted);
+        const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.Muted);
 
         try {
             await api().guilds(this.guild.id).members(moderationLog.userId!).roles(roleId!).delete({ reason });
@@ -141,7 +137,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async restrictEmbed(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
+    public async restrictEmbed(rawOptions: RawOptions, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.RestrictEmbed);
         const moderationLog = this.create(options);
 
@@ -164,7 +160,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async unRestrictEmbed(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
+    public async unRestrictEmbed(rawOptions: RawOptions, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.UnRestrictEmbed);
         const moderationLog = this.create(options);
 
@@ -188,7 +184,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async prune(rawOptions: Partial<ModerationEntity>, messages: string[]): Promise<ModerationEntity> {
+    public async prune(rawOptions: RawOptions, messages: string[]): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Prune);
         const moderationLog = this.create(options);
 
@@ -217,7 +213,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async lock(rawOptions: Partial<ModerationEntity>): Promise<ModerationEntity> {
+    public async lock(rawOptions: RawOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Lock);
         const moderationLog = this.create(options);
 
@@ -245,7 +241,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async unlock(rawOptions: Partial<ModerationEntity>): Promise<ModerationEntity> {
+    public async unlock(rawOptions: RawOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.UnLock);
         const moderationLog = this.create(options);
 
@@ -273,7 +269,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async warn(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity> {
+    public async warn(rawOptions: RawOptions, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Warning);
         const moderationLog = this.create(options);
 
@@ -292,7 +288,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async unwarn(rawOptions: Partial<ModerationEntity>, sendOptions: SendOptions): Promise<ModerationEntity | null> {
+    public async unwarn(rawOptions: RawOptions, sendOptions: SendOptions): Promise<ModerationEntity | null> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.UnWarn);
         const moderationLog = this.create(options);
 
@@ -300,11 +296,7 @@ export class ModerationActions {
         return moderationLog.create();
     }
 
-    public async setNickname(
-        rawOptions: Partial<ModerationEntity>,
-        sendOptions: SendOptions,
-        nickname: string
-    ): Promise<ModerationEntity> {
+    public async setNickname(rawOptions: RawOptions, sendOptions: SendOptions, nickname: string): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.SetNickname);
         const moderationLog = this.create(options);
 
@@ -332,11 +324,7 @@ export class ModerationActions {
         return (await moderationLog.create())!;
     }
 
-    public async unNickname(
-        rawOptions: Partial<ModerationEntity>,
-        sendOptions: SendOptions,
-        nickname: string
-    ): Promise<ModerationEntity> {
+    public async unNickname(rawOptions: RawOptions, sendOptions: SendOptions, nickname: string): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.UnNickname);
         const moderationLog = this.create(options);
 
@@ -543,7 +531,7 @@ export class ModerationActions {
         return output;
     }
 
-    private static fillOptions(rawOptions: Partial<ModerationEntity>, type: number): Partial<ModerationEntity> {
+    private static fillOptions(rawOptions: RawOptions, type: number): Partial<ModerationEntity> {
         const options = { reason: null, ...rawOptions, type };
         if (isNullishOrEmpty(options.reason)) options.reason = null;
         if (isNullishOrEmpty(options.moderatorId)) options.moderatorId = process.env.CLIENT_ID;
@@ -564,3 +552,5 @@ export const enum ModerationSetupRestriction {
     All = 'rolesMuted',
     Embed = 'rolesEmbedRestrict'
 }
+
+export type RawOptions = Partial<ModerationEntity>;
