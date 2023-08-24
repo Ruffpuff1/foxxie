@@ -1,9 +1,9 @@
-import { Events, EventArgs } from '#lib/types';
-import { Listener, ListenerOptions } from '@sapphire/framework';
-import { ApplyOptions } from '@sapphire/decorators';
 import { GuildSettings } from '#lib/database';
+import { EventArgs, Events } from '#lib/types';
 import { fetchChannel, getModeration } from '#utils/Discord';
 import type { ModerationScheule } from '#utils/moderation';
+import { ApplyOptions } from '@sapphire/decorators';
+import { Listener, ListenerOptions } from '@sapphire/framework';
 
 @ApplyOptions<ListenerOptions>({
     event: Events.ModerationEntryAdd
@@ -40,7 +40,7 @@ export class UserListener extends Listener<Events.ModerationEntryAdd> {
         const taskName = entry.duration ? entry.appealTaskName : null;
         if (!taskName) return;
 
-        await this.container.schedule.add<ModerationScheule>(taskName, entry.duration!, {
+        await this.container.schedule.add<ModerationScheule>(taskName, entry.createdTimestamp + entry.duration!, {
             data: {
                 caseId: entry.caseId,
                 userId: entry.userId!,

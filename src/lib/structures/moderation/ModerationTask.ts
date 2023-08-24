@@ -1,8 +1,8 @@
-import type { Guild } from 'discord.js';
 import { GuildSettings, PartialResponseValue, ResponseType, Task } from '#lib/database';
 import { LockQueue } from '@foxxie/lock-queue';
-import { container } from '@sapphire/framework';
 import { seconds } from '@ruffpuff/utilities';
+import { container } from '@sapphire/framework';
+import type { Guild } from 'discord.js';
 
 export abstract class ModerationTask<T = unknown> extends Task {
     private readonly locks = new LockQueue();
@@ -26,7 +26,7 @@ export abstract class ModerationTask<T = unknown> extends Task {
     }
 
     protected async fetchMe(guild: Guild) {
-        return guild.me === null ? guild.members.fetch(process.env.CLIENT_ID!) : guild.me;
+        return guild.members.fetch(process.env.CLIENT_ID!);
     }
 
     protected async getDmData(guild: Guild): Promise<{ send: boolean }> {

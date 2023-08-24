@@ -29,6 +29,7 @@ export class UserTask extends ModerationTask {
                 moderatorId: data.moderatorId,
                 channelId: data.channelId,
                 refrence: data.caseId,
+                guildId: guild.id,
                 reason
             },
             await this.getDmData(guild)

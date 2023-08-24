@@ -1,9 +1,9 @@
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationData, ModerationTask } from '#lib/structures';
-import { Schedules } from '#utils/constants';
 import { getModeration } from '#utils/Discord';
-import { ApplyOptions } from '@sapphire/decorators';
+import { Schedules } from '#utils/constants';
 import { getT } from '@foxxie/i18n';
+import { ApplyOptions } from '@sapphire/decorators';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 import type { Guild } from 'discord.js';
 
@@ -24,6 +24,7 @@ export class UserTask extends ModerationTask {
                 moderatorId: data.moderatorId,
                 channelId: data.channelId,
                 refrence: data.caseId,
+                guildId: guild.id,
                 reason
             },
             await this.getDmData(guild)
