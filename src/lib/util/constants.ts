@@ -52,8 +52,29 @@ export const emojis = {
     reactions: {
         no: '916529423430344754',
         yes: '916529451536363633'
-    }
+    },
+    ruffThink: '<:RuffThink:910209205636579421>'
 };
+
+export const enum BadgeEmojis {
+    Bot = '<:Bot:1144539023415718009>',
+    VerifiedBot = '<:VerifiedBot:1144539025869373540>',
+    ActiveDeveloper = '<:activedev:1144525267537231872>',
+    ModAlumni = '<:ModAlumni:1144541044113940510>',
+    Staff = '<:Staff:1144541041702227979>',
+    VerifiedDev = '<:VerifiedBotDeveloper:1144541045598720170>',
+    HttpBot = '<:httpbot:1144545349965455370>',
+    Partner = '<:PartneredServerOwner:1144552591620046868>',
+    Brilliance = '<:HypesquadBrilliance:1144552588470141039>',
+    Bravery = '<:HypesquadBravery:1144552590168838154>',
+    Balance = '<:HypesquadBalance:1144552586565914685>',
+    HypeSquadEvents = '<:HypesquadEvents:1144555463682297977>',
+    Nitro = '<:Nitro:1144556247908102224>',
+    Boost = '<:Boost:1144556254761603122>',
+    BugHunt1 = '<:BugHunter1:1144557276707950623>',
+    BugHunt2 = '<:BugHunter2:1144557274443022347>',
+    EarlySupporter = '<:EarlySupporter:1144553854072016987>'
+}
 
 export const helpUsagePostProcessor: PostProcessorModule = {
     type: 'postProcessor',
