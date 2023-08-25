@@ -14,7 +14,7 @@ export class UserListener extends Listener<Events.ModerationEntryAdd> {
     }
 
     private async sendMessage(...[entry]: Parameters<UserListener['run']>): Promise<void> {
-        const channel = await fetchChannel(entry.guild!, GuildSettings.Channels.Logs.Moderation);
+        const channel = await fetchChannel(entry.guildId!, GuildSettings.Channels.Logs.Moderation);
         const moderation = getModeration(entry.guild!);
 
         if (!channel) {
@@ -31,7 +31,8 @@ export class UserListener extends Listener<Events.ModerationEntryAdd> {
             entry.logMessageId = sent.id;
 
             await entry.save();
-        } catch {
+        } catch (error) {
+            console.log(error)
             moderation._count! -= 1;
         }
     }
