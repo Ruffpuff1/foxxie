@@ -17,6 +17,7 @@ export async function fetchChannel<T = GuildTextBasedChannel>(
     key: PickByValue<GuildEntity, Snowflake | null>
 ) {
     const guild = container.client.guilds.resolve(resolvable)!;
+    if (!guild) return null;
 
     const channelId = await container.db.guilds.acquire(guild.id, key);
     if (!channelId) return null;

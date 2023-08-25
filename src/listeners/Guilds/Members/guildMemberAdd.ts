@@ -1,8 +1,14 @@
 import { GuildSettings } from '#lib/database';
 import { EventArgs, Events } from '#lib/types';
 import { getPersistRoles } from '#utils/Discord';
+import { isDev } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 
+@ApplyOptions<Listener.Options>({
+    event: Events.GuildMemberAdd,
+    enabled: !isDev()
+})
 export class UserListener extends Listener<Events.GuildMemberAdd> {
     public async run(...[member]: EventArgs<Events.GuildMemberAdd>): Promise<void> {
         if (member.pending) return;

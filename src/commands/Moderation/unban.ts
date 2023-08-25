@@ -45,7 +45,9 @@ export class UserCommand extends ModerationCommand {
                 userId: context.target.id,
                 moderatorId: message.author.id,
                 duration: context.duration,
+                channelId: message.channel.id,
                 reason: context.reason,
+                guildId: message.guild.id,
                 refrence: context.args.getOption('reference') ? Number(context.args.getOption('reference')) : null
             },
             await this.getDmData(message, context)

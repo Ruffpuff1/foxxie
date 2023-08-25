@@ -4,13 +4,14 @@ import { AutomationListener } from '#lib/structures';
 import { EventArgs, Events } from '#lib/types';
 import { fetchChannel, getPersistRoles } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
-import { resolveToNull } from '@ruffpuff/utilities';
+import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import type { GuildMember } from 'discord.js';
 
 @ApplyOptions<AutomationListener.Options>({
-    event: Events.GuildMemberJoin
+    event: Events.GuildMemberJoin,
+    enabled: !isDev()
 })
 export class UserListener extends AutomationListener<Events.GuildMemberJoin> {
     public async run(...[member, settings]: EventArgs<Events.GuildMemberJoin>): Promise<void> {

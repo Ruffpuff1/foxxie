@@ -79,6 +79,7 @@ export class UserListener extends Listener<Events.UserMessage> {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
+                guildId: msg.guild.id,
                 reason: t(LanguageKeys.Automod.WordReason)
             },
             await this.getDmOptions(msg)
@@ -92,6 +93,7 @@ export class UserListener extends Listener<Events.UserMessage> {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
+                guildId: msg.guild.id,
                 reason: t(LanguageKeys.Automod.WordReason)
             },
             await this.getDmOptions(msg)
@@ -106,6 +108,7 @@ export class UserListener extends Listener<Events.UserMessage> {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
+                guildId: msg.guild.id,
                 reason: t(LanguageKeys.Automod.WordReason)
             },
             1,
@@ -120,6 +123,7 @@ export class UserListener extends Listener<Events.UserMessage> {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
+                guildId: msg.guild.id,
                 reason: t(LanguageKeys.Automod.WordReason),
                 duration
             },
@@ -129,6 +133,7 @@ export class UserListener extends Listener<Events.UserMessage> {
     }
 
     private async onMute(msg: GuildMessage, t: TFunction, duration: number | null) {
+        await this.container.redis!.pinsertex(`guild:${msg.guild.id}:mute:${msg.member.id}`, seconds(20), '');
         const roleId = await this.container.db.guilds.acquire(msg.guild.id, GuildSettings.Roles.Muted);
         if (!roleId) return;
 
@@ -137,6 +142,7 @@ export class UserListener extends Listener<Events.UserMessage> {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
                 channelId: msg.channel.id,
+                guildId: msg.guild.id,
                 reason: t(LanguageKeys.Automod.WordReason),
                 duration
             },

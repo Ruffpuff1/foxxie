@@ -1,13 +1,14 @@
+import type FoxxieClient from '#lib/FoxxieClient';
+import type { MongoDB } from '#lib/database';
+import { DetailedDescription, PermissionLevels } from '#lib/types';
+import { clientOwners } from '#root/config';
+import { CustomFunctionGet } from '@foxxie/i18n';
+import { seconds } from '@ruffpuff/utilities';
 import { CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserError } from '@sapphire/framework';
 import { SubCommandPluginCommand } from '@sapphire/plugin-subcommands';
 import type { Message } from 'discord.js';
 import * as Lexure from 'lexure';
-import { clientOwners } from '#root/config';
-import { HelpDisplayData, PermissionLevels } from '#lib/types';
-import type FoxxieClient from '#lib/FoxxieClient';
-import type { MongoDB } from '#lib/database';
 import { FoxxieArgs } from './parsers';
-import { seconds } from '@ruffpuff/utilities';
 
 export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand<FoxxieArgs, FoxxieCommand> {
     public readonly guarded: boolean;
@@ -19,6 +20,14 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
     public usage: string | null = null;
 
     public permissionLevel: PermissionLevels;
+
+    public declare detailedDescription: CustomFunctionGet<
+        string,
+        {
+            prefix: string;
+        },
+        DetailedDescription
+    >;
 
     public constructor(context: PieceContext, options: FoxxieCommand.Options) {
         super(context, {
@@ -35,6 +44,7 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
         this.hidden = options.hidden ?? false;
         this.allowedGuilds = options.allowedGuilds ?? [];
         this.permissionLevel = options.permissionLevel ?? PermissionLevels.Everyone;
+        this.detailedDescription = options.detailedDescription!;
 
         if (options.guarded) this.guarded = true;
     }
@@ -115,8 +125,13 @@ export namespace FoxxieCommand {
         usage?: string;
         allowedGuilds?: string[];
         permissionLevel?: PermissionLevels;
-
-        detailedDescription?: HelpDisplayData | string;
+        detailedDescription?: CustomFunctionGet<
+            string,
+            {
+                prefix: string;
+            },
+            DetailedDescription
+        >;
     };
 
     export type Args = FoxxieArgs;
@@ -130,5 +145,11 @@ export type FoxxieCommandOptions = SubCommandPluginCommand.Options & {
     allowedGuilds?: string[];
     permissionLevel?: PermissionLevels;
 
-    detailedDescription?: HelpDisplayData | string;
+    detailedDescription?: CustomFunctionGet<
+        string,
+        {
+            prefix: string;
+        },
+        DetailedDescription
+    >;
 };

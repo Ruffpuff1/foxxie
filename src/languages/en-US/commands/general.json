@@ -5,7 +5,8 @@
     "helpDescription": "View all of my commands, or the help menu for a specific command.",
     "helpMenu": "{{name}}'s commands",
     "helpTitles": {
-        "usage": "Usage"
+        "examples": "• Examples",
+        "usage": "• Usage"
     },
     "helpUsage": "(Command)",
     "infoServerChannels": "{{channels, channellist}}",

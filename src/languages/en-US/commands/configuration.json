@@ -22,5 +22,25 @@
     "confServer": "**Server Settings {{key}}**\n{{list}}",
     "confUpdated": "{{SUCCESS}} Successfully updated the key **{{key}}**: `{{response}}`",
     "confUsage": "<menu | set | add | show | remove | reset> (key) (value)",
-    "confValidationChooseKey": "{{ERROR}} You can't configure a group, please choose one of the following keys: {{keys, and}}."
+    "confValidationChooseKey": "{{ERROR}} You can't configure a group, please choose one of the following keys: {{keys, and}}.",
+    "highlightDetailedDescription": {
+        "description": "Configure my highlighter features in this server.",
+        "usage": "{{prefix}}highlight [words]",
+        "subcommands": [
+            {
+                "command": "words",
+                "description": [
+                    "Allows you to view and configure the words you get highlighted for in this server.",
+                    "",
+                    "• **List**: Shows you the current list of words you are highlighting.",
+                    "• **Add**: Allows you to add words to your highlight list, they must be less that 50 characters though!"
+                ],
+                "examples": [
+                    "{{prefix}}highlight words list",
+                    "{{prefix}}highlight words add ruff",
+                    "{{prefix}}highlight words remove ruffy"
+                ]
+            }
+        ]
+    }
 }

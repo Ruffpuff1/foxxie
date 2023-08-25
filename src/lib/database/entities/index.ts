@@ -1,5 +1,6 @@
 export * from './ClientEntity';
 export * from './GuildEntity';
+export * from './Highlight';
 export * from './MemberEntity';
 export * from './ModerationEntity';
 export * from './Note';

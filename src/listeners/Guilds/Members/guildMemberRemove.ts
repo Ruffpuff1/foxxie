@@ -5,11 +5,12 @@ import { fetchChannel, getPersistRoles } from '#utils/Discord';
 import { AutomationListener } from '#lib/structures';
 import type { GuildMember } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
-import { resolveToNull } from '@ruffpuff/utilities';
+import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { floatPromise } from '#utils/util';
 
 @ApplyOptions<AutomationListener.Options>({
-    event: Events.GuildMemberRemove
+    event: Events.GuildMemberRemove,
+    enabled: !isDev()
 })
 export class UserAutomationAutomationListener extends AutomationListener<Events.GuildMemberRemove> {
     public async run(...[member]: EventArgs<Events.GuildMemberRemove>): Promise<void> {

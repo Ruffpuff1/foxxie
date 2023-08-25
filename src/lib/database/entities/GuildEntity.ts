@@ -19,6 +19,7 @@ import {
     PrimaryColumn
 } from 'typeorm';
 import { ConfigurableKey } from '../util';
+import { Highlight } from './Highlight';
 
 @Entity('guild', { schema: 'public' })
 export class GuildEntity extends BaseEntity {
@@ -281,7 +282,7 @@ export class GuildEntity extends BaseEntity {
     @Column('boolean', { name: 'eventsMuteRemove', default: true })
     public eventsMuteRemove = true;
 
-    @Column('jsonb', { name: 'highlights', default: () => "'[]'::JSONB" })
+    @Column()
     public highlights: Highlight<HighlightTypeEnum>[] = [];
 
     @ConfigurableKey({
@@ -610,7 +611,7 @@ export class GuildEntity extends BaseEntity {
         this.entityLoad();
     }
 
-    public getUserHighlight(user: UserResolvable): Highlight<HighlightTypeEnum.Regex | HighlightTypeEnum.Word>[] {
+    public getUserHighlight(user: UserResolvable): Highlight<HighlightTypeEnum>[] {
         const userId = container.client.users.resolveId(user);
         return this.highlights.filter(highlight => highlight.userId === userId);
     }
@@ -658,12 +659,6 @@ export interface Word {
     softPunish: number;
     hardPunish: number;
     hardPunishDuration: number | null;
-}
-
-export interface Highlight<T extends HighlightTypeEnum> {
-    word: T extends HighlightTypeEnum.Regex ? RegExp : string;
-    userId: string;
-    type: T;
 }
 
 export interface Tag {

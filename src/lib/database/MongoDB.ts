@@ -40,7 +40,7 @@ export class MongoDB {
     }
 
     public fetchColor(msg: Message): number {
-        return msg.guild?.me?.displayColor || msg.member?.displayColor || BrandingColors.Primary;
+        return msg.member?.displayColor || msg.guild?.me?.displayColor || BrandingColors.Primary;
     }
 }
 
