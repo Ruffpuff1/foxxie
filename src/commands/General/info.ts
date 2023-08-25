@@ -3,9 +3,10 @@ import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import type { GuildMessage } from '#lib/types';
 import { isGuildOwner, sendLoadingMessage } from '#utils/Discord';
-import { BrandingColors } from '#utils/constants';
+import { BrandingColors, emojis } from '#utils/constants';
 import { floatPromise } from '#utils/util';
 import { EmbedAuthorData } from '@discordjs/builders';
+import { EnvParse } from '@foxxie/env';
 import { TFunction } from '@foxxie/i18n';
 import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -58,7 +59,9 @@ export default class UserCommand extends FoxxieCommand {
                 iconURL: user.displayAvatarURL({ dynamic: true })
             });
 
-        embed.addField(titles.about, about.join('\n'));
+        const owners = EnvParse.array('CLIENT_OWNERS');
+
+        embed.addField(`${titles.about}${owners.includes(user.id) ? ` ${emojis.ruffThink}` : ''}`, about.join('\n'));
 
         if (member) this.addRoles(embed, member, args.t);
         await this.addNotes(embed, args.t, settings.member);
