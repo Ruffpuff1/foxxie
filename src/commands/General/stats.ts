@@ -13,7 +13,7 @@ import { getServerDetails } from '#utils/util';
     aliases: ['up', 'uptime'],
     description: LanguageKeys.Commands.General.StatsDescription,
     requiredClientPermissions: PermissionFlagsBits.EmbedLinks,
-    detailedDescription: LanguageKeys.Commands.General.StatsDetailedDescription
+    // detailedDescription: LanguageKeys.Commands.General.StatsDetailedDescription
 })
 export class UserCommand extends FoxxieCommand {
     public async messageRun(msg: Message, args: FoxxieCommand.Args): Promise<void> {

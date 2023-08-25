@@ -5,9 +5,11 @@ import { acquireSettings, GuildSettings } from '#lib/database';
 import { Colors } from '#utils/constants';
 import { MessageEmbed } from 'discord.js';
 import { LanguageKeys } from '#lib/i18n';
+import { isDev } from '@ruffpuff/utilities';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.GuildMemberRemove
+    event: Events.GuildMemberRemove,
+    enabled: !isDev()
 })
 export class UserListener extends Listener<Events.GuildMemberRemove> {
     public async run(...[member]: EventArgs<Events.GuildMemberRemove>): Promise<void> {

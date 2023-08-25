@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -b",
     "start": "node .",
-    "dev": "yarn build && yarn start",
+    "dev": "yarn build && yarn start NODE_ENV=development",
     "lint": "prettier --write src --ext mjs,js,ts",
     "start:docker": "docker-compose up --build foxxie",
     "docker-rebuild": "docker build -t ruffpuff/foxxie:latest . --no-cache"

@@ -2,12 +2,14 @@ import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { EventArgs, Events } from '#lib/types';
 import { Colors } from '#utils/constants';
+import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { MessageEmbed } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.GuildMemberUpdate
+    event: Events.GuildMemberUpdate,
+    enabled: !isDev()
 })
 export class UserListener extends Listener<Events.GuildMemberUpdate> {
     public async run(...[previous, next]: EventArgs<Events.GuildMemberUpdate>): Promise<void> {

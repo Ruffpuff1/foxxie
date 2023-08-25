@@ -1,14 +1,15 @@
 import { GuildSettings, acquireSettings } from '#lib/database';
 import { floatPromise } from '#utils/util';
-import { resolveToNull } from '@ruffpuff/utilities';
+import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { APIEmoji, GatewayDispatchEvents, GatewayMessageReactionAddDispatch } from 'discord-api-types/v10';
 import type { Guild } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: GatewayDispatchEvents.MessageReactionRemove,
-    emitter: 'ws'
+    event: GatewayDispatchEvents.MessageReactionAdd,
+    emitter: 'ws',
+    enabled: !isDev()
 })
 export class UserListener extends Listener {
     public async run({
@@ -21,7 +22,6 @@ export class UserListener extends Listener {
         if (!guild) return;
 
         await this.runReactionRole(userId, messageId, guild, emoji);
-        
     }
 
     private async runReactionRole(userId: string, messageId: string, guild: Guild, emoji: APIEmoji): Promise<void> {
@@ -40,7 +40,7 @@ export class UserListener extends Listener {
             const role = guild.roles.cache.get(reactionRole.roleId);
             if (!role) continue;
 
-            await floatPromise(member.roles.remove(role.id));
+            await floatPromise(member.roles.add(role.id));
         }
     }
 }

@@ -3,20 +3,22 @@ import { GuildSettings, StarEntity, acquireSettings, writeSettings } from '#lib/
 import { StarboardManager } from '#lib/structures/managers/StarboardManager';
 import { SerializedEmoji, getStarboard, isStarboardEmoji } from '#utils/Discord';
 import { snowflakeAge } from '#utils/util';
+import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { GuildTextBasedChannelTypes, canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { isNullishOrZero } from '@sapphire/utilities';
 import type { TextChannel } from 'discord.js';
 
-@ApplyOptions<ListenerOptions>({ event: 'rawReactionRemove' })
+@ApplyOptions<ListenerOptions>({ event: 'rawReactionAdd', enabled: !isDev() })
 export class UserListener extends Listener {
     public async run(data: LLRCData, emojiId: SerializedEmoji) {
         if (isNsfwChannel(data.channel)) return;
 
-        const [channel, emoji] = await acquireSettings(data.guild, [
+        const [channel, emoji, selfStar] = await acquireSettings(data.guild, [
             GuildSettings.Starboard.Channel,
-            GuildSettings.Starboard.Emojis
+            GuildSettings.Starboard.Emojis,
+            GuildSettings.Starboard.SelfStar
         ]);
 
         // If there is no channel, or channel is the starboard channel, or the emoji isn't the starboard one, skip:
@@ -44,7 +46,7 @@ export class UserListener extends Listener {
         const sMessage = previousEntity
             ? await this.fetchPrevious(previousEntity, starboard)
             : await starboard.fetch(data.channel, data.messageId);
-        if (sMessage) await sMessage.decrement(data.userId);
+        if (sMessage) await sMessage.increment(data.userId, selfStar);
     }
 
     private async fetchPrevious(previousEntity: StarEntity, starboard: StarboardManager) {

@@ -10,8 +10,19 @@ export type WelcomeCacheKey = `welcome:${Snowflake}:${Snowflake}`;
 export type KickKey = `guild:${Snowflake}:kick:${Snowflake}`;
 export type BanKey = `guild:${Snowflake}:ban:${Snowflake}`;
 export type UnbanKey = `guild:${Snowflake}:unban:${Snowflake}`;
+export type MuteKey = `guild:${Snowflake}:mute:${Snowflake}`;
+export type UnMuteKey = `guild:${Snowflake}:unmute:${Snowflake}`;
 
-export type RedisKeys = KickKey | BanKey | UnbanKey | MessageDeleteKey | RaidCacheKey | RaidMessageKey | WelcomeCacheKey;
+export type RedisKeys =
+    | KickKey
+    | BanKey
+    | UnbanKey
+    | MessageDeleteKey
+    | RaidCacheKey
+    | RaidMessageKey
+    | WelcomeCacheKey
+    | UnMuteKey
+    | MuteKey;
 
 export type RedisData<K extends RedisKeys> = K extends MessageDeleteKey ? `${Snowflake},${string},${Snowflake}` : string;
 

@@ -2,12 +2,14 @@ import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { EventArgs, Events, GuildMessage } from '#lib/types';
 import { Colors } from '#utils/constants';
+import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { MessageEmbed } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.UserMessage
+    event: Events.UserMessage,
+    enabled: !isDev()
 })
 export class UserListener extends Listener<Events.UserMessage> {
     public async run(...[msg]: EventArgs<Events.UserMessage>): Promise<void> {

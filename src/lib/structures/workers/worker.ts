@@ -58,7 +58,7 @@ function handleHighlight(message: RunHighlightPayload<HighlightTypeEnum>): Outgo
                         match => `__${match}__`
                     );
                     if (userId === authorId) continue;
-                    data.results.push({ userId, content: parsed, trigger: word });
+                    data.results.push({ userId: userId!, content: parsed, trigger: word });
                 }
             }
             break;
@@ -73,7 +73,7 @@ function handleHighlight(message: RunHighlightPayload<HighlightTypeEnum>): Outgo
                         return match;
                     });
                     if (userId === authorId) continue;
-                    data.results.push({ userId, content: parsed, trigger: word.toString() });
+                    data.results.push({ userId: userId!, content: parsed, trigger: word.toString() });
                 }
             }
             break;

@@ -1,9 +1,9 @@
+import { PaginatedMessage } from '#external/PaginatedMessage';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';
 import { chunk } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { Message, MessageEmbed, Util } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
@@ -11,7 +11,7 @@ import { Message, MessageEmbed, Util } from 'discord.js';
     permissionLevel: PermissionLevels.BotOwner,
     guarded: true,
     description: LanguageKeys.Commands.Admin.ServerlistDescription,
-    detailedDescription: LanguageKeys.Commands.Admin.ServerlistDetailedDescription
+    // detailedDescription: LanguageKeys.Commands.Admin.ServerlistDetailedDescription
 })
 export class UserCommand extends FoxxieCommand {
     public async messageRun(msg: Message, args: FoxxieCommand.Args): Promise<void> {
@@ -25,8 +25,7 @@ export class UserCommand extends FoxxieCommand {
         const display = new PaginatedMessage({ template });
         display.pageIndexPrefix = args.t(LanguageKeys.Commands.Admin.ServerlistFooter, { count: this.client.guilds.cache.size });
 
-        const pages = chunk(
-            this.client.guilds.cache
+        const guildArray = this.client.guilds.cache
                 .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
                 .map(r => r)
                 .map((guild, idx) =>
@@ -36,9 +35,9 @@ export class UserCommand extends FoxxieCommand {
                         `[${guild.id}] | **${guild.memberCount}**`,
                         `${args.t(LanguageKeys.Commands.Admin.ServerlistMembers)}`
                     ].join(' ')
-                ),
-            10
-        );
+                )
+
+        const pages = chunk(guildArray, 10);
 
         for (const page of pages) display.addPageEmbed(embed => embed.setDescription(page.join('\n')));
         await display.run(msg);

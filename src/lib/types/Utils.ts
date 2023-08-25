@@ -22,6 +22,25 @@ export interface HelpDisplayData {
     permissions?: string;
 }
 
+export interface DetailedDescription {
+    description: string;
+    usage?: string;
+    arguments?: ArgumentDescription[];
+    examples?: string[]
+    subcommands?: SubcommandDescription[];
+}
+
+export interface ArgumentDescription {
+    name: string;
+    description: string;
+}
+
+export interface SubcommandDescription {
+    command: string;
+    description: string | string[];
+    examples: string[];
+}
+
 export const enum PermissionLevels {
     Everyone = 0,
     Moderator = 6,

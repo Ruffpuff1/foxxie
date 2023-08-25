@@ -17,7 +17,7 @@ export const DonateHeader = T('commands/general:donateHeader');
 
 export const HelpDescription = T('commands/general:helpDescription');
 export const HelpMenu = FT<{ name: string }>('commands/general:helpMenu');
-export const HelpTitles = T<{ usage: string }>('commands/general:helpTitles');
+export const HelpTitles = T<{ examples: string; usage: string }>('commands/general:helpTitles');
 export const HelpUsage = T('commands/general:helpUsage');
 
 export const InfoChannelArchived = FT<{ time: Date }>('commands/general:infoChannelArchived');

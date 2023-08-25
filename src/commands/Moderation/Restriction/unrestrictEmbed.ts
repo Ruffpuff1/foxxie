@@ -25,6 +25,7 @@ export class UserCommand extends ModerationRoleCommand {
                 userId: context.target.id,
                 moderatorId: message.author.id,
                 reason: context.reason,
+                channelId: message.channel.id,
                 guildId: message.guild.id,
                 refrence: context.args.getOption('reference') ? Number(context.args.getOption('reference')) : null
             },

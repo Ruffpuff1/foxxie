@@ -8,8 +8,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
 
 @ApplyOptions<ModerationCommand.Options>({
     aliases: ['b'],
-    description: LanguageKeys.Commands.Moderation.BanDescription,
-    usage: LanguageKeys.Commands.Moderation.BanUsage,
+    detailedDescription: LanguageKeys.Commands.Moderation.BanDetailedDescription,
     duration: true,
     requiredClientPermissions: [PermissionFlagsBits.BanMembers],
     memberOnly: false,
@@ -31,8 +30,10 @@ export class UserCommand extends ModerationCommand {
             {
                 userId: context.target.id,
                 moderatorId: message.author.id,
+                channelId: message.channel.id,
                 duration: context.duration,
                 reason: context.reason,
+                guildId: message.guild.id,
                 refrence: context.args.getOption('reference') ? Number(context.args.getOption('reference')) : null
             },
             Number(context.args.getOption('days')),

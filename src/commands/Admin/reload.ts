@@ -12,7 +12,7 @@ import { TFunction } from 'i18next';
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['r'],
     description: LanguageKeys.Commands.Admin.ReloadDescription,
-    detailedDescription: LanguageKeys.Commands.Admin.ReloadDetailedDescription,
+    // detailedDescription: LanguageKeys.Commands.Admin.ReloadDetailedDescription,
     permissionLevel: PermissionLevels.BotOwner
 })
 export class UserCommand extends FoxxieCommand {

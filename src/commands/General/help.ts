@@ -1,9 +1,10 @@
+import { PaginatedMessage } from '#external/PaginatedMessage';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import type { GuildMessage } from '#lib/types';
 import { BrandingColors } from '#utils/constants';
+import { bold, inlineCode } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { send } from '@sapphire/plugin-editable-commands';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { Message, MessageEmbed } from 'discord.js';
@@ -57,11 +58,61 @@ export default class UserCommand extends FoxxieCommand {
             .setAuthor({ name: `${command.name}${command.aliases.length ? ` (${command.aliases.join(', ')})` : ''}` });
 
         const embed = new MessageEmbed() //
-            .setDescription(args.t(command.description))
-            .addField(titles.usage, `\`${prefix}${command.name}${command.usage ? ` ${args.t(command.usage)}` : ''}\``);
+            .setDescription(
+                command.detailedDescription ? args.t(command.detailedDescription).description : args.t(command.description)
+            )
+            .addField(
+                titles.usage,
+                inlineCode(
+                    command.detailedDescription
+                        ? args.t(command.detailedDescription, { prefix }).usage!
+                        : `${prefix}${command.name}${command.usage ? ` ${args.t(command.usage)}` : ''}`
+                )
+            );
 
         const display = new PaginatedMessage({ template }) //
             .addPageEmbed(() => embed);
+
+        if (!command.detailedDescription) return display.run(message);
+
+        const detailed = args.t(command.detailedDescription, { prefix });
+
+        if (detailed.arguments || detailed.examples) {
+            display.addPageEmbed(e => {
+                if (detailed.examples?.length) {
+                    e.addField(titles.examples, detailed.examples.map(inlineCode).join('\n')).setAuthor({
+                        name: `${command.name} → examples`
+                    });
+                }
+
+                if (detailed.arguments?.length) {
+                    e.setDescription(
+                        detailed.arguments!.map(arg => `• ${bold(arg.name)}: ${arg.description}`).join('\n')
+                    ).setAuthor({
+                        name: `${command.name} → arguments`
+                    });
+                }
+
+                return e;
+            });
+        }
+
+        if (!detailed.subcommands) return display.run(message);
+
+        const subCommands = detailed.subcommands;
+
+        if (subCommands.length) {
+            for (const subCommand of subCommands) {
+                display.addPageEmbed(e =>
+                    e //
+                        .setDescription(
+                            Array.isArray(subCommand.description) ? subCommand.description.join('\n') : subCommand.description
+                        )
+                        .setAuthor({ name: `${command.name} → ${subCommand.command}` })
+                        .addField(titles.examples, subCommand.examples.map(e => inlineCode(e)).join('\n'))
+                );
+            }
+        }
 
         return display.run(message);
     }
