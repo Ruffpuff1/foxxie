@@ -1,0 +1,42 @@
+{
+  "name": "@foxxie/celestia-api-types",
+  "version": "1.0.0",
+  "description": "Typings for Foxxie's Animal Crossing API",
+  "scripts": {
+    "build": "tsup",
+    "lint": "prettier --write src && eslint src --ext mjs,js,ts --fix",
+    "test": "jest --pass-with-no-tests --collect-coverage --verbose"
+  },
+  "main": "dist/index.js",
+  "module": "./dist/index.mjs",
+  "typings": "./dist/index.d.ts",
+  "contributors": [
+    "Reese Harlak <h@reese.gay>"
+  ],
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
+  "directories": {
+    "lib": "src"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": "https://github.com/Ruffpuff1/foxxie",
+  "author": "Reese Harlak",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@ruffpuff/eslint-config": "1.1.0",
+    "@types/jest": "^28.1.2",
+    "@types/node": "^18.0.0",
+    "eslint": "^8.17.0",
+    "jest": "^28.1.1",
+    "prettier": "^2.7.1",
+    "ts-jest": "^28.0.5",
+    "ts-node": "^10.8.1",
+    "tsup": "^6.1.2",
+    "typescript": "4.7.4"
+  }
+}
