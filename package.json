@@ -1,0 +1,23 @@
+{
+  "name": "foxxie",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "nx": "16.7.4",
+    "nx-cloud": "latest"
+  },
+  "scripts": {
+    "build": "nx run-many -t build",
+    "lint": "nx run-many -t lint",
+    "graph": "nx graph"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ruffpuff1/foxxie.git"
+  },
+  "author": "Reese Harlak <reese@reese.gay>",
+  "license": "MIT"
+}

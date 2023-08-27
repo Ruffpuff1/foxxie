@@ -26,7 +26,7 @@ export interface DetailedDescription {
     description: string;
     usage?: string;
     arguments?: ArgumentDescription[];
-    examples?: string[]
+    examples?: string[];
     subcommands?: SubcommandDescription[];
 }
 

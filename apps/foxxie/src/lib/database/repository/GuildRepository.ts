@@ -208,7 +208,7 @@ export class GuildRepository<T extends GuildEntity> extends CustomRepository<Gui
 
         await lock.writeLock();
         const cached = this.cache.get(key);
-        const found = cached || await this.processFetch(key);
+        const found = cached || (await this.processFetch(key));
 
         try {
             if (typeof changes === 'function') {

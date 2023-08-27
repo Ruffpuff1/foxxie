@@ -85,7 +85,7 @@ export class Request {
 
         this.coreOptions = {};
 
-        this.timeoutDuration = 30000
+        this.timeoutDuration = 30000;
 
         this.redirects = 20;
     }

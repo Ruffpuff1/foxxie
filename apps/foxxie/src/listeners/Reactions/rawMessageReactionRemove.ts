@@ -1,9 +1,9 @@
-import { LLRCData } from "#external/LongLivingReactionCollector";
-import { getEmojiString } from "#utils/Discord";
-import { ApplyOptions } from "@sapphire/decorators";
-import { canReadMessages, isGuildBasedChannel } from "@sapphire/discord.js-utilities";
-import { Listener, ListenerOptions } from "@sapphire/framework";
-import { GatewayDispatchEvents, GatewayMessageReactionRemoveDispatch } from "discord-api-types/v10";
+import { LLRCData } from '#external/LongLivingReactionCollector';
+import { getEmojiString } from '#utils/Discord';
+import { ApplyOptions } from '@sapphire/decorators';
+import { canReadMessages, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
+import { Listener, ListenerOptions } from '@sapphire/framework';
+import { GatewayDispatchEvents, GatewayMessageReactionRemoveDispatch } from 'discord-api-types/v10';
 
 @ApplyOptions<ListenerOptions>({
     event: GatewayDispatchEvents.MessageReactionRemove,

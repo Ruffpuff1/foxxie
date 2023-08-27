@@ -12,7 +12,7 @@ import { getServerDetails } from '#utils/util';
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['up', 'uptime'],
     description: LanguageKeys.Commands.General.StatsDescription,
-    requiredClientPermissions: PermissionFlagsBits.EmbedLinks,
+    requiredClientPermissions: PermissionFlagsBits.EmbedLinks
     // detailedDescription: LanguageKeys.Commands.General.StatsDetailedDescription
 })
 export class UserCommand extends FoxxieCommand {

@@ -24,11 +24,7 @@
                 "description": "The optional case to refrence in the moderation log. This can be the number of a prior moderation case."
             }
         ],
-        "examples": [
-            "{{prefix}}ban @Ruffpuff",
-            "{{prefix}}ban @Boom 2d",
-            "{{prefix}}ban @ArEo --days=7 --refrence=245"
-        ]
+        "examples": ["{{prefix}}ban @Ruffpuff", "{{prefix}}ban @Boom 2d", "{{prefix}}ban @ArEo --days=7 --refrence=245"]
     },
     "banSuccess": "{{SUCCESS}} Successfully banned {{users, and}}, creating case {{range}}.",
     "banSuccess_other": "{{SUCCESS}} Successfully banned {{users, and}}, creating cases {{range}}.",
@@ -54,10 +50,7 @@
                 "description": "The optional case to refrence in the moderation log. This can be the number of a prior moderation case."
             }
         ],
-        "examples": [
-            "{{prefix}}kick @Ruffpuff",
-            "{{prefix}}kick @Boom --refrence=69"
-        ]
+        "examples": ["{{prefix}}kick @Ruffpuff", "{{prefix}}kick @Boom --refrence=69"]
     },
     "kickSuccess": "{{SUCCESS}} Successfully kicked {{users, and}}, creating case {{range}}.",
     "kickSuccess_other": "{{SUCCESS}} Successfully kicked {{users, and}}, creating cases {{range}}.",
@@ -82,11 +75,7 @@
                 "description": "The optional case to refrence in the moderation log. This can be the number of a prior moderation case."
             }
         ],
-        "examples": [
-            "{{prefix}}mute @Ruffpuff",
-            "{{prefix}}mute @Boom 2d",
-            "{{prefix}}mute @_waindrop_ --refrence=245"
-        ]
+        "examples": ["{{prefix}}mute @Ruffpuff", "{{prefix}}mute @Boom 2d", "{{prefix}}mute @_waindrop_ --refrence=245"]
     },
     "muteSuccess": "{{SUCCESS}} Successfully muted {{users, and}}, creating case {{range}}.",
     "muteSuccess_other": "{{SUCCESS}} Successfully muted {{users, and}}, creating cases {{range}}.",

@@ -26,4 +26,6 @@ export const ConfUpdated = FT<{ key: string; response: string }>('commands/confi
 export const ConfUsage = T('commands/configuration:confUsage');
 export const ConfValidationChooseKey = FT<{ keys: string[] }>('commands/configuration:confValidationChooseKey');
 
-export const HighlightDetailedDescription = FT<{ prefix: string }, DetailedDescription>('commands/configuration:highlightDetailedDescription');
+export const HighlightDetailedDescription = FT<{ prefix: string }, DetailedDescription>(
+    'commands/configuration:highlightDetailedDescription'
+);

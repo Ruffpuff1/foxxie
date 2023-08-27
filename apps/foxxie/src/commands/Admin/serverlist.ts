@@ -10,7 +10,7 @@ import { Message, MessageEmbed, Util } from 'discord.js';
     aliases: ['sl'],
     permissionLevel: PermissionLevels.BotOwner,
     guarded: true,
-    description: LanguageKeys.Commands.Admin.ServerlistDescription,
+    description: LanguageKeys.Commands.Admin.ServerlistDescription
     // detailedDescription: LanguageKeys.Commands.Admin.ServerlistDetailedDescription
 })
 export class UserCommand extends FoxxieCommand {
@@ -26,16 +26,16 @@ export class UserCommand extends FoxxieCommand {
         display.pageIndexPrefix = args.t(LanguageKeys.Commands.Admin.ServerlistFooter, { count: this.client.guilds.cache.size });
 
         const guildArray = this.client.guilds.cache
-                .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
-                .map(r => r)
-                .map((guild, idx) =>
-                    [
-                        `${args.t(LanguageKeys.Globals.NumberFormat, { value: idx + 1 })}.`,
-                        Util.escapeMarkdown(guild.name),
-                        `[${guild.id}] | **${guild.memberCount}**`,
-                        `${args.t(LanguageKeys.Commands.Admin.ServerlistMembers)}`
-                    ].join(' ')
-                )
+            .sort((a, b) => a.joinedTimestamp - b.joinedTimestamp)
+            .map(r => r)
+            .map((guild, idx) =>
+                [
+                    `${args.t(LanguageKeys.Globals.NumberFormat, { value: idx + 1 })}.`,
+                    Util.escapeMarkdown(guild.name),
+                    `[${guild.id}] | **${guild.memberCount}**`,
+                    `${args.t(LanguageKeys.Commands.Admin.ServerlistMembers)}`
+                ].join(' ')
+            );
 
         const pages = chunk(guildArray, 10);
 
