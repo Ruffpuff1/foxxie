@@ -352,9 +352,7 @@
     tslib "^2.6.0"
 
 "@sapphire/plugin-logger@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@sapphire/plugin-logger/-/plugin-logger-2.2.1.tgz#95f30dea6f17d519ac65fea1db01d4bcace4bc19"
-  integrity sha512-jaj7RPZ4cm5a4BbapdG20FBDlwRuNHwr/9R97xdML5h1yb4m65WPVZdWHrrjAD79sFwAtFMUfAhHtZMinziWgQ==
+  version "2.2.3"
   dependencies:
     "@sapphire/time-utilities" "^1.7.3"
     colorette "^2.0.16"
