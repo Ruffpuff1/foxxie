@@ -32,7 +32,7 @@ export class UserListener extends Listener<Events.ModerationEntryAdd> {
 
             await entry.save();
         } catch (error) {
-            console.log(error)
+            console.log(error);
             moderation._count! -= 1;
         }
     }

@@ -917,7 +917,7 @@ export class PaginatedMessage {
                 if (handler.index === handler.pages.length - 1) handler.index = 0;
                 else ++handler.index;
             }
-        },
+        }
     ];
 
     /**

@@ -14,5 +14,5 @@ export function isDisboard(input: Message | User | GuildMember): boolean {
 
 export function getUserDisplayName(user: User): string {
     const discrim = user.discriminator === '0' ? null : user.discriminator;
-    return `${user.username}${discrim ? `#${user.discriminator}` : ''}`
+    return `${user.username}${discrim ? `#${user.discriminator}` : ''}`;
 }
