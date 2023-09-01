@@ -1,12 +1,12 @@
-import { FoxxieEvents, EventArgs } from '#lib/types';
-import { ApplyOptions } from '@sapphire/decorators';
-import { acquireSettings, GuildSettings } from '#lib/database';
-import { fetchChannel, getPersistRoles } from '#utils/Discord';
-import { AutomationListener } from '#lib/structures';
-import type { GuildMember } from 'discord.js';
+import { GuildSettings, acquireSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { isDev, resolveToNull } from '@ruffpuff/utilities';
+import { AutomationListener } from '#lib/structures';
+import { EventArgs, FoxxieEvents } from '#lib/types';
+import { fetchChannel, getPersistRoles } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
+import { cast, isDev, resolveToNull } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
+import type { GuildMember } from 'discord.js';
 
 @ApplyOptions<AutomationListener.Options>({
     event: FoxxieEvents.GuildMemberRemove,
@@ -36,7 +36,7 @@ export class UserAutomationAutomationListener extends AutomationListener<FoxxieE
 
         /* retrive content */
         const [embeds, content] = this.retriveAutomationContent(
-            member as GuildMember,
+            cast<GuildMember>(member),
             t,
             message,
             embed,

@@ -1,3 +1,4 @@
+import { cast } from '@ruffpuff/utilities';
 import { Column, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
 export class Note {
@@ -8,7 +9,7 @@ export class Note {
     public guildId: string | null = null;
 
     @Column('varchar', { array: true, default: process.env.CLIENT_ID })
-    public authorId: string = process.env.CLIENT_ID as string;
+    public authorId: string = cast<string>(process.env.CLIENT_ID);
 
     @Column('varchar', { nullable: true, length: 2000, default: () => 'null' })
     public reason: string | null = null;

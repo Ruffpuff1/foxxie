@@ -5,7 +5,7 @@ import { FoxxieCommand, HighlightTypeEnum } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
 import { getUserDisplayName } from '#utils/Discord';
 import { inlineCode } from '@discordjs/builders';
-import { resolveToNull } from '@ruffpuff/utilities';
+import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
@@ -36,8 +36,10 @@ export class UserCommand extends FoxxieCommand {
         const userHighlights = highlights.filter(hl => hl.userId === message.author.id);
         if (!userHighlights.length) this.error('u have no highlights lmao');
 
-        const regexes = userHighlights.filter(hl => hl.type === HighlightTypeEnum.Regex) as Highlight<HighlightTypeEnum.Regex>[];
-        const words = userHighlights.filter(hl => hl.type === HighlightTypeEnum.Word) as Highlight<HighlightTypeEnum.Word>[];
+        const regexes = cast<Highlight<HighlightTypeEnum.Regex>[]>(
+            userHighlights.filter(hl => hl.type === HighlightTypeEnum.Regex)
+        );
+        const words = cast<Highlight<HighlightTypeEnum.Word>[]>(userHighlights.filter(hl => hl.type === HighlightTypeEnum.Word));
 
         const embed = new EmbedBuilder()
             .setAuthor({

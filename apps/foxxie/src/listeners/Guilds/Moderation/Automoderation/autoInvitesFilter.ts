@@ -6,6 +6,7 @@ import { FoxxieEvents, GuildMessage } from '#lib/types';
 import { allowedInviteIds, Colors } from '#utils/constants';
 import { deleteMessage, sendTemporaryMessage } from '#utils/Discord';
 import { Message, EmbedBuilder } from 'discord.js';
+import { cast } from '@ruffpuff/utilities';
 
 @ApplyOptions<ModerationListener.Options>({
     keyEnabled: GuildSettings.Moderation.Auto.InvitesEnabled,
@@ -45,7 +46,7 @@ export class UserListener extends ModerationListener {
     }
 
     protected onLog(...[msg, t, value]: Parameters<ModerationListener['onLog']>): void {
-        const invites = value as string[];
+        const invites = cast<string[]>(value);
 
         this.container.client.emit(FoxxieEvents.GuildMessageLog, msg.guild, GuildSettings.Channels.Logs.FilterWords, () =>
             new EmbedBuilder()

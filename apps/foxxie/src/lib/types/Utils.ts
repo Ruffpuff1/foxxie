@@ -59,7 +59,11 @@ export interface RoleLanguageKeyData {
 
 export type PartialModerationModelWithRoleIdExtraData = Partial<ModerationEntity> & { extraData: { roleId: string } };
 
-export type EventArgs<T extends EventKey> = T extends keyof ClientEvents ? ClientEvents[T] : T extends keyof FoxxieEvents ? FoxxieEvents[T] : never;
+export type EventArgs<T extends EventKey> = T extends keyof ClientEvents
+    ? ClientEvents[T]
+    : T extends keyof FoxxieEvents
+    ? FoxxieEvents[T]
+    : never;
 
 export interface ColorData {
     hex: string;
@@ -69,4 +73,4 @@ export interface ColorData {
     base10: number;
 }
 
-type EventKey = keyof ClientEvents | keyof FoxxieEvents
+type EventKey = keyof ClientEvents | keyof FoxxieEvents;

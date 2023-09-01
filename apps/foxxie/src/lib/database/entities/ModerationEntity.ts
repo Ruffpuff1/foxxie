@@ -12,7 +12,7 @@ import {
 } from '#utils/moderation';
 import { messageLink } from '#utils/transformers';
 import type { TFunction } from '@foxxie/i18n';
-import { resolveToNull, Time, toTitleCase } from '@ruffpuff/utilities';
+import { cast, resolveToNull, Time, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { EmbedBuilder, Guild, GuildChannel, User } from 'discord.js';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
@@ -48,7 +48,7 @@ export class ModerationEntity extends BaseEntity {
     public guildId: string | null = null;
 
     @Column('varchar', { length: 19, default: process.env.CLIENT_ID })
-    public moderatorId: string = process.env.CLIENT_ID as string;
+    public moderatorId: string = cast<string>(process.env.CLIENT_ID);
 
     @Column('varchar', { nullable: true, length: 2000, default: () => 'null' })
     public reason: string | null = null;
@@ -79,7 +79,7 @@ export class ModerationEntity extends BaseEntity {
 
         if (data) {
             Object.assign(this, data);
-            this.type = ModerationEntity.getTypeFromDuration(this.type as number, this.duration);
+            this.type = ModerationEntity.getTypeFromDuration(cast<number>(this.type), this.duration);
         }
     }
 
@@ -90,7 +90,7 @@ export class ModerationEntity extends BaseEntity {
     }
 
     public clone(): ModerationEntity {
-        return new ModerationEntity(this).setup(this.#manager as GuildModerationManager);
+        return new ModerationEntity(this).setup(cast<GuildModerationManager>(this.#manager));
     }
 
     public equals(other: ModerationEntity): boolean {
@@ -139,8 +139,8 @@ export class ModerationEntity extends BaseEntity {
         const dataWithType = {
             ...data,
             type: ModerationEntity.getTypeFromDuration(
-                this.type as number,
-                (data as ModerationManagerDescriptionData).duration ?? this.duration
+                cast<number>(this.type),
+                cast<ModerationManagerDescriptionData>(data).duration ?? this.duration
             )
         };
         const clone = this.clone();
@@ -165,7 +165,7 @@ export class ModerationEntity extends BaseEntity {
 
     public async prepareEmbed(): Promise<EmbedBuilder> {
         const moderator = await this.fetchModerator();
-        const description = await this.fetchDescriptionData(moderator as User);
+        const description = await this.fetchDescriptionData(cast<User>(moderator));
         const [title, t] = await this.formatUtils();
         const caseT = toTitleCase(t(LanguageKeys.Globals.CaseT));
 
@@ -202,7 +202,7 @@ export class ModerationEntity extends BaseEntity {
     public async fetchLogChannel(): Promise<GuildChannel | null> {
         if (this.#logChannel) return this.#logChannel;
         const channel = this.logChannelId
-            ? ((await resolveToNull((this.guild as Guild).channels.fetch(this.logChannelId))) as GuildChannel)
+            ? cast<GuildChannel>(await resolveToNull(cast<Guild>(this.guild).channels.fetch(this.logChannelId)))
             : null;
 
         if (channel) this.#logChannel = channel;
@@ -213,7 +213,7 @@ export class ModerationEntity extends BaseEntity {
     public async fetchChannel(): Promise<GuildChannel | null> {
         if (this.#channel) return this.#channel;
         const channel = this.channelId
-            ? ((await resolveToNull((this.guild as Guild).channels.fetch(this.channelId))) as GuildChannel)
+            ? cast<GuildChannel>(await resolveToNull(cast<Guild>(this.guild).channels.fetch(this.channelId)))
             : null;
 
         if (channel) this.#channel = channel;
@@ -245,19 +245,23 @@ export class ModerationEntity extends BaseEntity {
 
         const refrence = this.refrence ? await this.fetchRefrenceCase(this.refrence) : null;
 
-        return [
-            _users ? t(LanguageKeys.Guilds.Logs.ArgsUser, { user: _users }) : null,
-            _channel ? t(LanguageKeys.Guilds.Logs.ArgsChannel, { channel: _channel }) : null,
-            _moderator ? t(LanguageKeys.Guilds.Logs.ArgsModerator, { mod: _moderator }) : null,
-            t(LanguageKeys.Guilds.Logs.ArgsReason, { reason: this.reason ?? fillReason }),
-            refrence
-                ? t(LanguageKeys.Guilds.Logs.ArgsRefrence, {
-                      id: this.refrence,
-                      url: messageLink(this.guildId!, refrence.logChannelId!, refrence.logMessageId!)
-                  })
-                : null,
-            this.duration ? t(LanguageKeys.Guilds.Logs.ArgsDuration, { duration: this.createdTimestamp + this.duration }) : null
-        ].filter(a => Boolean(a)) as string[];
+        return cast<string[]>(
+            [
+                _users ? t(LanguageKeys.Guilds.Logs.ArgsUser, { user: _users }) : null,
+                _channel ? t(LanguageKeys.Guilds.Logs.ArgsChannel, { channel: _channel }) : null,
+                _moderator ? t(LanguageKeys.Guilds.Logs.ArgsModerator, { mod: _moderator }) : null,
+                t(LanguageKeys.Guilds.Logs.ArgsReason, { reason: this.reason ?? fillReason }),
+                refrence
+                    ? t(LanguageKeys.Guilds.Logs.ArgsRefrence, {
+                          id: this.refrence,
+                          url: messageLink(this.guildId!, refrence.logChannelId!, refrence.logMessageId!)
+                      })
+                    : null,
+                this.duration
+                    ? t(LanguageKeys.Guilds.Logs.ArgsDuration, { duration: this.createdTimestamp + this.duration })
+                    : null
+            ].filter(a => Boolean(a))
+        );
     }
 
     private async fetchRefrenceCase(caseId: number) {
@@ -271,11 +275,11 @@ export class ModerationEntity extends BaseEntity {
     }
 
     public get client(): FoxxieClient {
-        return container.client as FoxxieClient;
+        return cast<FoxxieClient>(container.client);
     }
 
     public get metadata(): MetaData {
-        const data = metadata.get(this.type as number);
+        const data = metadata.get(cast<number>(this.type));
         if (typeof data === 'undefined')
             throw new Error(`Inexistent metadata for '0b${this.type?.toString(2).padStart(8, '0')}'.`);
         return data;

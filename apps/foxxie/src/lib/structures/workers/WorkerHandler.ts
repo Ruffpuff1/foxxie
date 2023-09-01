@@ -1,13 +1,14 @@
 import { rootFolder } from '#utils/constants';
+import { cast } from '@ruffpuff/utilities';
 import { AsyncQueue } from '@sapphire/async-queue';
-import { Worker } from 'node:worker_threads';
-import { join } from 'node:path';
-import { cyan } from 'colorette';
 import { container } from '@sapphire/framework';
+import { cyan } from 'colorette';
 import { once } from 'node:events';
+import { join } from 'node:path';
+import { Worker } from 'node:worker_threads';
+import type { OutgoingUnknownCommandPayload } from '.';
 import { WorkerResponse } from './WorkerResponse';
 import type { IncomingPayload, OutgoingPayload } from './types';
-import type { OutgoingUnknownCommandPayload } from '.';
 
 export class WorkerHandler {
     private worker!: Worker;
@@ -19,6 +20,12 @@ export class WorkerHandler {
     private queue = new AsyncQueue();
 
     private response = new WorkerResponse();
+
+    private static readonly workerLoader = join(rootFolder, 'scripts', 'workerLoader.js');
+
+    private static readonly filename = join(__dirname, `worker.js`);
+
+    private static readonly maximumId = Number.MAX_SAFE_INTEGER;
 
     public constructor() {
         this.spawn();
@@ -67,7 +74,7 @@ export class WorkerHandler {
     private handle(message: OutgoingPayload) {
         if (message.type === 0) return;
 
-        this.response.resolve((message as OutgoingUnknownCommandPayload).id, message);
+        this.response.resolve(cast<OutgoingUnknownCommandPayload>(message).id, message);
     }
 
     private handlerOnline() {
@@ -90,10 +97,4 @@ export class WorkerHandler {
     public get remaining() {
         return this.queue.remaining;
     }
-
-    private static readonly workerLoader = join(rootFolder, 'scripts', 'workerLoader.js');
-
-    private static readonly filename = join(__dirname, `worker.js`);
-
-    private static readonly maximumId = Number.MAX_SAFE_INTEGER;
 }

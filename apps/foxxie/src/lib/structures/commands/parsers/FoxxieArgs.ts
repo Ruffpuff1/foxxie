@@ -1,6 +1,7 @@
 import { acquireSettings, GuildEntity, SettingsCollectionCallback, writeSettings } from '#lib/database';
 import { fetch, HttpMethodEnum } from '@foxxie/fetch';
 import { TFunction } from '@foxxie/i18n';
+import { cast } from '@ruffpuff/utilities';
 import { Args, MessageCommand, MessageCommandContext, Result, UserError } from '@sapphire/framework';
 import { ArgumentStream } from '@sapphire/lexure';
 import type { Message } from 'discord.js';
@@ -24,7 +25,7 @@ export class FoxxieArgs extends Args {
         t: TFunction,
         color: number
     ) {
-        super(message, command as unknown as MessageCommand, parser, context);
+        super(message, cast<MessageCommand>(command), parser, context);
         this.color = color;
         this.t = t;
     }

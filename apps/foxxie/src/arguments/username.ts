@@ -1,3 +1,4 @@
+import { cast } from '@ruffpuff/utilities';
 import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 import type { GuildMember, Message, User } from 'discord.js';
 
@@ -22,6 +23,6 @@ export class UserArgument extends Argument<User> {
     }
 
     public get user() {
-        return this.store.get('user') as Argument<User>;
+        return cast<Argument<User>>(this.store.get('user'));
     }
 }

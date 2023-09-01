@@ -3,7 +3,7 @@ import { GuildSettings, StarEntity, acquireSettings, writeSettings } from '#lib/
 import { StarboardManager } from '#lib/structures/managers/StarboardManager';
 import { SerializedEmoji, getStarboard, isStarboardEmoji } from '#utils/Discord';
 import { snowflakeAge } from '#utils/util';
-import { isDev } from '@ruffpuff/utilities';
+import { cast, isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { GuildTextBasedChannelTypes, canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
 import { Listener, ListenerOptions } from '@sapphire/framework';
@@ -29,7 +29,7 @@ export class UserListener extends Listener {
         // If the channel is ignored, skip:
         if ([''].includes(data.channel.id)) return;
 
-        const starboardChannel = data.guild.channels.cache.get(channel) as TextChannel | undefined;
+        const starboardChannel = cast<TextChannel | undefined>(data.guild.channels.cache.get(channel));
         if (typeof starboardChannel === 'undefined' || !canSendMessages(starboardChannel)) {
             await writeSettings(data.guild, [[GuildSettings.Starboard.Channel, null]]);
             return;
@@ -51,7 +51,7 @@ export class UserListener extends Listener {
     private async fetchPrevious(previousEntity: StarEntity, starboard: StarboardManager) {
         const previousChannel = previousEntity ? await this.container.client.channels.fetch(previousEntity.channelId) : null;
         if (previousChannel && previousEntity)
-            return starboard.fetch(previousChannel as GuildTextBasedChannelTypes, previousEntity?.messageId);
+            return starboard.fetch(cast<GuildTextBasedChannelTypes>(previousChannel), previousEntity?.messageId);
         return null;
     }
 }

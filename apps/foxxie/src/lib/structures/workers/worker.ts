@@ -1,5 +1,6 @@
 import type { Highlight } from '#lib/database';
-import { seconds } from '@ruffpuff/utilities';
+import { sanitize } from '@foxxie/sanitize';
+import { cast, seconds } from '@ruffpuff/utilities';
 import { isMainThread, parentPort } from 'node:worker_threads';
 import {
     HighlightTypeEnum,
@@ -12,7 +13,6 @@ import {
     RunHighlightPayload,
     RunWordFilterPayload
 } from './types';
-import { sanitize } from '@foxxie/sanitize';
 
 if (isMainThread || parentPort === null) throw new Error('This worker can only be ran using worker_threads.');
 
@@ -37,7 +37,7 @@ function handleMessage(message: IncomingPayload): OutgoingPayload {
         case IncomingType.RunWordFilter:
             return runWordFilter(message);
         default:
-            return { id: (message as Record<string, number>).id, type: OutputType.Unknown };
+            return { id: cast<Record<string, number>>(message).id, type: OutputType.Unknown };
     }
 }
 
@@ -49,9 +49,9 @@ function handleHighlight(message: RunHighlightPayload<HighlightTypeEnum>): Outgo
         case HighlightTypeEnum.Word:
             {
                 const split = content.toLowerCase().split(/\s*\b\s*/);
-                for (const { word, userId } of message.highlights.filter(
-                    word => word.type === HighlightTypeEnum.Word
-                ) as Highlight<HighlightTypeEnum.Word>[]) {
+                for (const { word, userId } of cast<Highlight<HighlightTypeEnum.Word>[]>(
+                    message.highlights.filter(word => word.type === HighlightTypeEnum.Word)
+                )) {
                     if (!split.includes(word.toLowerCase())) continue;
                     const parsed = content.replace(
                         new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
@@ -64,9 +64,9 @@ function handleHighlight(message: RunHighlightPayload<HighlightTypeEnum>): Outgo
             break;
         case HighlightTypeEnum.Regex:
             {
-                for (const { word, userId } of message.highlights.filter(
-                    word => word.type === HighlightTypeEnum.Regex
-                ) as Highlight<HighlightTypeEnum.Regex>[]) {
+                for (const { word, userId } of cast<Highlight<HighlightTypeEnum.Regex>[]>(
+                    message.highlights.filter(word => word.type === HighlightTypeEnum.Regex)
+                )) {
                     if (!word.test(content)) continue;
                     const parsed = content.trim().replace(word, match => {
                         if (match.trim().length > 0) return `__${match}__`;

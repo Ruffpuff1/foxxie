@@ -1,5 +1,6 @@
 import { LanguageKeys } from '#lib/i18n';
 import type { FoxxieArgs } from '#lib/structures';
+import { cast } from '@ruffpuff/utilities';
 import { container, UserError } from '@sapphire/framework';
 import type { GuildResolvable } from 'discord.js';
 import type { ISchemaValue, SchemaGroup, SchemaKey } from '.';
@@ -152,7 +153,7 @@ export function isSchemaKey(groupOrKey: ISchemaValue): groupOrKey is SchemaKey {
 export async function set(settings: GuildEntity, key: SchemaKey, args: FoxxieArgs) {
     const parsed = await key.parse(settings, args);
     if (key.array) {
-        const values = settings[key.property] as any[];
+        const values = cast<any[]>(settings[key.property]);
         const { serializer } = key;
         const index = values.findIndex(value => serializer.equals(value, parsed));
         if (index === -1) values.push(parsed);
@@ -178,7 +179,7 @@ export async function set(settings: GuildEntity, key: SchemaKey, args: FoxxieArg
 export async function remove(settings: GuildEntity, key: SchemaKey, args: FoxxieArgs) {
     const parsed = await key.parse(settings, args);
     if (key.array) {
-        const values = settings[key.property] as any[];
+        const values = cast<any[]>(settings[key.property]);
         const { serializer } = key;
         const index = values.findIndex(value => serializer.equals(value, parsed));
         if (index === -1) {

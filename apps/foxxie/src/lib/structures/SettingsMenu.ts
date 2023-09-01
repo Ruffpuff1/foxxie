@@ -14,7 +14,7 @@ import { FoxxieEvents, GuildMessage } from '#lib/types';
 import { deleteMessage, sendLoadingMessage } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import type { TFunction } from '@foxxie/i18n';
-import { ZeroWidthSpace, deepClone, minutes } from '@ruffpuff/utilities';
+import { ZeroWidthSpace, cast, deepClone, minutes } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { ArgumentStream } from '@sapphire/lexure';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
@@ -64,7 +64,7 @@ export class SettingsMenu {
     }
 
     public async init(context: FoxxieCommand.Context): Promise<void> {
-        this.response = (await sendLoadingMessage(this.message)) as GuildMessage;
+        this.response = cast<GuildMessage>(await sendLoadingMessage(this.message));
         await this.response.react(EMOJIS.STOP);
         this.llrc = new LongLivingReactionCollector()
             .setListener(this.onReaction.bind(this))
@@ -74,7 +74,7 @@ export class SettingsMenu {
             filter: msg => msg.author!.id === this.message.author.id
         });
 
-        this.messageCollector.on('collect', msg => this.onMessage(msg as GuildMessage, context));
+        this.messageCollector.on('collect', msg => this.onMessage(cast<GuildMessage>(msg), context));
         await this._renderResponse();
     }
 
@@ -114,12 +114,12 @@ export class SettingsMenu {
 
             const [value, serialized, language] = await acquireSettings(this.message.guild, settings => {
                 const language = settings.getLanguage();
-                const key = this.schema as SchemaKey;
+                const key = cast<SchemaKey>(this.schema);
                 return [settings[key.property], key.display(settings, language), language];
             });
             this.t = language;
             description.push(t(this.schema.description), '', t(LanguageKeys.Commands.Configuration.ConfMenuRenderUpdate));
-            if (this.schema.array && (value as unknown[]).length)
+            if (this.schema.array && cast<unknown[]>(value).length)
                 description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderRemove));
             if (this.updatedValue) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderReset));
             if (this.updatedValue) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderUndo));
@@ -153,14 +153,14 @@ export class SettingsMenu {
         if (isSchemaGroup(this.schema)) {
             const schema = this.schema.get(message.content.toLowerCase());
             if (schema && !schema.dashboardOnly) {
-                this.schema = schema as SchemaKey | SchemaGroup;
+                this.schema = cast<SchemaKey | SchemaGroup>(schema);
                 this.oldValue = undefined;
             } else {
                 this.errorMessage = this.t(LanguageKeys.Commands.Configuration.ConfMenuInvalidKey);
             }
         } else {
             //                                                                                                           parser context
-            const conf = container.stores.get('commands').get('conf') as FoxxieCommand;
+            const conf = cast<FoxxieCommand>(container.stores.get('commands').get('conf'));
             // @ts-expect-error lexer is a private property.
             const lexureParser = new Lexure.Parser(conf.lexer.setInput(message.content).lex());
             const lexureArgs = new ArgumentStream(lexureParser.parse());
@@ -232,7 +232,7 @@ export class SettingsMenu {
                 this.response = null;
                 this.llrc?.end();
             } else {
-                this.message.client.emit(FoxxieEvents.Error, error as Error);
+                this.message.client.emit(FoxxieEvents.Error, cast<Error>(error));
             }
         }
     }
@@ -247,14 +247,14 @@ export class SettingsMenu {
                 this.response = null;
                 this.llrc?.end();
             } else {
-                this.message.client.emit(FoxxieEvents.Error, error as Error);
+                this.message.client.emit(FoxxieEvents.Error, cast<Error>(error));
             }
         }
     }
 
     private async tryUpdate(action: UpdateType, args: FoxxieArgs | null = null, value: unknown = null) {
         try {
-            const key = this.schema as SchemaKey;
+            const key = cast<SchemaKey>(this.schema);
             const [oldValue, skipped] = await writeSettings(this.message.guild.id, async settings => {
                 const oldValue = deepClone(settings[key.property]);
 
@@ -296,7 +296,7 @@ export class SettingsMenu {
         if (this.updatedValue) {
             await this.tryUpdate(UpdateType.Replace, null, this.oldValue);
         } else {
-            const key = this.schema as SchemaKey;
+            const key = cast<SchemaKey>(this.schema);
             this.errorMessage = this.t(LanguageKeys.Commands.Configuration.ConfMenuNoChange, {
                 key: key.name
             });

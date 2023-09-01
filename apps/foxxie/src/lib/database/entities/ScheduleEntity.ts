@@ -4,6 +4,7 @@
  */
 import type { ScheduleManager } from '#lib/structures';
 import { FoxxieEvents } from '#lib/types/Events';
+import { cast } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';
 import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
@@ -94,7 +95,7 @@ export class ScheduleEntity extends BaseEntity {
         this.#running = true;
         let response: PartialResponseValue | null = null;
         try {
-            response = (await task.run({ ...(this.data ?? {}), id: this.id })) as PartialResponseValue | null;
+            response = cast<PartialResponseValue | null>(await task.run({ ...(this.data ?? {}), id: this.id }));
         } catch (error) {
             container.client.emit(FoxxieEvents.TaskError, error, { piece: task, entity: this });
         }

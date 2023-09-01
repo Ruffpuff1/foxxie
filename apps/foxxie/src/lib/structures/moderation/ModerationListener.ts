@@ -4,7 +4,7 @@ import { getModeration, isModerator, isSendableChannel } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
 import type { CustomGet, TFunction } from '@foxxie/i18n';
-import { isDev, seconds } from '@ruffpuff/utilities';
+import { cast, isDev, seconds } from '@ruffpuff/utilities';
 import { Listener, ListenerOptions, PieceContext } from '@sapphire/framework';
 import type { Awaitable, PickByValue } from '@sapphire/utilities';
 import { ModerationBitField, ModerationFlagBits, ModerationHardActionFlags } from './ModerationBitfield';
@@ -59,15 +59,15 @@ export abstract class ModerationListener extends Listener {
         checked: unknown
     ): Promise<void> {
         if (bitField.has(ModerationFlagBits.Delete)) {
-            await floatPromise(this.onDelete(msg, language, checked) as Promise<unknown>);
+            await floatPromise(cast<Promise<unknown>>(this.onDelete(msg, language, checked)));
         }
 
         if (bitField.has(ModerationFlagBits.Alert) && isSendableChannel(msg.channel)) {
-            await floatPromise(this.onAlert(msg, language, checked) as Promise<unknown>);
+            await floatPromise(cast<Promise<unknown>>(this.onAlert(msg, language, checked)));
         }
 
         if (bitField.has(ModerationFlagBits.Log)) {
-            await floatPromise(this.onLog(msg, language, checked) as Promise<unknown>);
+            await floatPromise(cast<Promise<unknown>>(this.onLog(msg, language, checked)));
         }
     }
 

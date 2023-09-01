@@ -1,6 +1,7 @@
 import { GuildSettings, acquireSettings } from '#lib/database';
 import { StarEntity } from '#lib/database/entities/StarEntity';
 import type { GuildMessage } from '#lib/types';
+import { cast } from '@ruffpuff/utilities';
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
@@ -50,7 +51,7 @@ export class StarboardManager extends Collection<string, StarEntity> {
     public async getStarboardChannel() {
         const channelId = await acquireSettings(this.guild, GuildSettings.Starboard.Channel);
         if (isNullish(channelId)) return null;
-        return (this.guild.channels.cache.get(channelId) ?? null) as TextChannel | null;
+        return cast<TextChannel | null>(this.guild.channels.cache.get(channelId) ?? null);
     }
 
     /**
@@ -81,7 +82,7 @@ export class StarboardManager extends Collection<string, StarEntity> {
     }
 
     private async fetchEntry(channel: GuildTextBasedChannelTypes, messageId: string): Promise<StarEntity | null> {
-        const message = (await channel.messages.fetch(messageId).catch(() => null)) as GuildMessage | null;
+        const message = cast<GuildMessage | null>(await channel.messages.fetch(messageId).catch(() => null));
         if (!message) return null;
 
         const { starboards } = container.db;

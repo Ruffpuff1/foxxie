@@ -8,7 +8,7 @@ import { floatPromise, resolveEmbedField } from '#utils/util';
 import { EmbedAuthorData } from '@discordjs/builders';
 import { EnvParse } from '@foxxie/env';
 import { TFunction } from '@foxxie/i18n';
-import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
+import { cast, resolveToNull, toTitleCase } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Argument } from '@sapphire/framework';
 import { ChannelType, EmbedBuilder, Guild, GuildMember, Role, User } from 'discord.js';
@@ -24,7 +24,7 @@ const GUILDROLESORT = (x: Role, y: Role) => Number(y.position > x.position) || N
 })
 export default class UserCommand extends FoxxieCommand {
     public async messageRun(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
-        const msg = (await sendLoadingMessage(message)) as GuildMessage;
+        const msg = cast<GuildMessage>(await sendLoadingMessage(message));
         const arg = await this.resolveArgument(message, args);
 
         await this.buildDisplay(message, args, { msg, arg });

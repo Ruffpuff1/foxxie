@@ -6,7 +6,7 @@ import { clientOwners } from '#root/config';
 import { Colors, rootFolder } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';
 import type { TFunction } from '@foxxie/i18n';
-import { ZeroWidthSpace } from '@ruffpuff/utilities';
+import { ZeroWidthSpace, cast } from '@ruffpuff/utilities';
 import { Args, ArgumentError, Command, Identifiers, Listener, MessageCommandErrorPayload, UserError } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { codeBlock, cutText } from '@sapphire/utilities';
@@ -35,7 +35,7 @@ export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
         }
 
         if (error instanceof DiscordAPIError || error instanceof HTTPError) {
-            if (this.isSilencedError(args, error as FoxxieError)) return null;
+            if (this.isSilencedError(args, cast<FoxxieError>(error))) return null;
             client.emit(FoxxieEvents.Error, error);
         } else {
             logger.warn(`${this.getWarning(message)} (${message.author.id}) | ${error.constructor.name}`);
@@ -100,7 +100,7 @@ export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
             message,
             t(identifier, {
                 ...error,
-                ...(error.context as Record<string, unknown>),
+                ...cast<Record<string, unknown>>(error.context),
                 argument,
                 parameter: cutText(parameter, 50),
                 prefix: process.env.CLIENT_PREFIX
@@ -113,15 +113,15 @@ export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
 
         if (error.identifier === Identifiers.ArgsMissing)
             (error.context as any) = {
-                ...(error.context as any),
-                context: (error.context as { command: FoxxieCommand }).command.name
+                ...cast<any>(error.context),
+                context: cast<{ command: FoxxieCommand }>(error.context).command.name
             };
 
         const identifier = translate(error.identifier);
         return this.send(
             message,
             args.t(identifier, {
-                ...(error.context as any),
+                ...cast<any>(error.context),
                 prefix: args.commandContext.commandPrefix
             })
         );

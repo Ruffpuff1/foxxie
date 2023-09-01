@@ -1,7 +1,7 @@
 import { LanguageKeys } from '#lib/i18n';
 import type { FoxxieArgs } from '#lib/structures';
 import type { CustomGet, TFunction } from '@foxxie/i18n';
-import { toTitleCase } from '@ruffpuff/utilities';
+import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { NonNullObject, isNullish } from '@sapphire/utilities';
 import type { GuildEntity } from '../entities/GuildEntity';
@@ -75,7 +75,7 @@ export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implemen
         this.minimum = options.minimum;
         this.inclusive = options.inclusive ?? false;
         this.name = options.name;
-        this.property = options.property as K;
+        this.property = cast<K>(options.property);
         this.target = options.target;
         this.type = options.type;
         this.array = options.array;
@@ -103,7 +103,7 @@ export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implemen
         const context = this.getContext(settings, t);
 
         if (this.array) {
-            const values = settings[this.property] as readonly any[];
+            const values = cast<readonly any[]>(settings[this.property]);
             return isNullish(values) || values.length === 0
                 ? toTitleCase(t(LanguageKeys.Globals.None))
                 : `[ ${values.map(value => serializer.stringify(value, context)).join(' | ')} ]`;
@@ -127,7 +127,7 @@ export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implemen
     public get serializer(): Serializer<GuildEntity[K]> {
         const value = container.db.serializers.get(this.type);
         if (typeof value === 'undefined') throw new Error(`The serializer for '${this.type}' does not exist.`);
-        return value as Serializer<GuildEntity[K]>;
+        return cast<Serializer<GuildEntity[K]>>(value);
     }
 }
 

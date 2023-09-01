@@ -3,6 +3,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { GuildMessage } from '#lib/types';
 import { getModeration, isAdmin, messagePrompt, promptForMessage } from '#utils/Discord';
 import { bold } from '@discordjs/builders';
+import { cast } from '@ruffpuff/utilities';
 import { Argument, PieceContext } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { PickByValue } from '@sapphire/utilities';
@@ -12,6 +13,7 @@ import { ModerationCommand } from './ModerationCommand';
 
 export abstract class ModerationRoleCommand extends ModerationCommand {
     public readonly roleKey: PickByValue<GuildEntity, Snowflake | null>;
+
     public readonly setUpKey: ModerationSetupRestriction;
 
     public constructor(context: PieceContext, options: ModerationRoleCommand.Options) {
@@ -21,7 +23,7 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
     }
 
     private get role() {
-        return this.container.stores.get('arguments').get('role') as Argument<Role>;
+        return cast<Argument<Role>>(this.container.stores.get('arguments').get('role'));
     }
 
     public async messageRun(message: GuildMessage, args: ModerationCommand.Args, context: ModerationCommand.Context) {

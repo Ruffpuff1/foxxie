@@ -1,5 +1,6 @@
 import { LanguageKeys } from '#lib/i18n';
 import { getModeration } from '#utils/Discord';
+import { cast } from '@ruffpuff/utilities';
 import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 
 export default class UserArgument extends Argument<number> {
@@ -12,6 +13,8 @@ export default class UserArgument extends Argument<number> {
             return this.ok(id);
         }
 
-        return this.container.stores.get('arguments').get('integer')!.run(parameter, context) as Promise<ArgumentResult<number>>;
+        return cast<Promise<ArgumentResult<number>>>(
+            this.container.stores.get('arguments').get('integer')!.run(parameter, context)
+        );
     }
 }

@@ -2,7 +2,7 @@ import { LanguageKeys } from '#lib/i18n';
 import type { HighlightTypeEnum } from '#lib/structures/workers/types';
 import { create } from '#utils/regexCreator';
 import { TFunction, getT } from '@foxxie/i18n';
-import { arrayStrictEquals, minutes, years } from '@ruffpuff/utilities';
+import { arrayStrictEquals, cast, minutes, years } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import type { APIEmbed, LocaleString, Snowflake } from 'discord-api-types/v10';
 import type { Guild, UserResolvable } from 'discord.js';
@@ -616,7 +616,7 @@ export class GuildEntity extends BaseEntity {
     }
 
     public getLanguage(): TFunction {
-        return getT(this.language as LocaleString);
+        return getT(cast<LocaleString>(this.language));
     }
 
     @AfterLoad()
