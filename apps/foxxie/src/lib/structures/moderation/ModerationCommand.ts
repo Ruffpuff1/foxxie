@@ -1,7 +1,7 @@
 import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { GuildMessage, PermissionLevels } from '#lib/types';
-import { isGuildOwner, sendTemporaryMessage } from '#utils/Discord';
+import { isGuildOwner, maybeMe, sendTemporaryMessage } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { bold } from '@discordjs/builders';
 import { CustomFunctionGet } from '@foxxie/i18n';
@@ -42,12 +42,9 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
         this.successKey = options.successKey;
     }
 
-    public messageRun(
-        message: GuildMessage,
-        args: ModerationCommand.Args,
-        context: ModerationCommand.Context
-    ): Promise<GuildMessage | null>;
-    public async messageRun(message: GuildMessage, args: ModerationCommand.Args) {
+    public messageRun(message: GuildMessage, args: ModerationCommand.Args, context: ModerationCommand.Context): Promise<void>;
+
+    public async messageRun(message: GuildMessage, args: ModerationCommand.Args): Promise<void> {
         const resolved = await this.resolveTargets(args);
         const preHandled = await this.prehandle(message, resolved);
         const processed = [] as Array<{ log: ModerationEntity; target: User }>;
@@ -96,9 +93,7 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
             for (const e of errors) output.push(`└── ${e.error}`);
         }
 
-        if (output.length) sendTemporaryMessage(message, output.join('\n'), minutes(5));
-
-        return null;
+        if (output.length) await sendTemporaryMessage(message, output.join('\n'), minutes(5));
     }
 
     protected async checkModeratable(message: GuildMessage, context: HandledCommandContext<T>): Promise<GuildMember | null> {
@@ -120,7 +115,7 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
 
         if (member) {
             const targetRolePos = member.roles.highest.position;
-            const myRolePos = message.guild?.me?.roles.highest.position;
+            const myRolePos = maybeMe(message.guild)?.roles.highest.position;
 
             if (!myRolePos || targetRolePos >= myRolePos) {
                 throw context.args.t(LanguageKeys.Listeners.Errors.ModerationRoleBot, {
@@ -148,16 +143,6 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
         };
     }
 
-    private async resolveDuration(args: ModerationCommand.Args) {
-        if (args.finished) return null;
-        if (!this.duration) return null;
-
-        const result = await args.pickResult('timespan', { minimum: 0, maximum: years(5) });
-        if (result.success) return result.value;
-        if (result.error.identifier === LanguageKeys.Arguments.Duration) return null;
-        throw result.error;
-    }
-
     protected async getDmData(message: GuildMessage, context: HandledCommandContext): Promise<SendOptions> {
         return {
             send: context.args.getFlags('no-dm')
@@ -179,6 +164,16 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
         message: GuildMessage,
         context: HandledCommandContext<T>
     ): Promise<ModerationEntity> | ModerationEntity;
+
+    private async resolveDuration(args: ModerationCommand.Args) {
+        if (args.finished) return null;
+        if (!this.duration) return null;
+
+        const result = await args.pickResult('timespan', { minimum: 0, maximum: years(5) });
+        if (result.isOk()) return result.unwrap();
+        if (result.unwrapErr().identifier === LanguageKeys.Arguments.Duration) return null;
+        throw result.unwrapErr();
+    }
 }
 
 // eslint-disable-next-line no-redeclare

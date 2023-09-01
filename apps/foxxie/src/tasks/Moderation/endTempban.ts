@@ -3,8 +3,9 @@ import { ModerationData, ModerationTask } from '#lib/structures';
 import { getModeration } from '#utils/Discord';
 import { Schedules } from '#utils/constants';
 import { getT } from '@foxxie/i18n';
+import { seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { PermissionFlagsBits } from 'discord-api-types/v9';
+import { PermissionFlagsBits } from 'discord-api-types/v10';
 import type { Guild } from 'discord.js';
 
 @ApplyOptions<ModerationTask.Options>({
@@ -17,6 +18,8 @@ export class UserTask extends ModerationTask {
 
         const t = getT('en-US');
         const reason = t(LanguageKeys.Moderation.Unban, this.ctx(data.duration));
+
+        await this.container.redis?.pinsertex(`guild:${guild.id}:unban:${data.userId}`, seconds(20), '')
 
         await getModeration(guild).actions.unban(
             {

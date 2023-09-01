@@ -2,11 +2,12 @@ import { LanguageKeys } from '#lib/i18n';
 import type { GuildMessage } from '#lib/types';
 import { floatPromise } from '#utils/util';
 import type { CustomFunctionGet, CustomGet, TOptionsBase } from '@foxxie/i18n';
-import { minutes, randomArray } from '@ruffpuff/utilities';
+import { cast, minutes, randomArray } from '@ruffpuff/utilities';
 import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import type { Message, MessageOptions, UserResolvable } from 'discord.js';
+import type { Message, UserResolvable } from 'discord.js';
+import { MessageCreateOptions, MessageType } from 'discord.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 /**
@@ -50,7 +51,7 @@ export async function sendLoadingMessage(
     const translated = t<string[]>(key, args as TOptionsBase);
     const content = (Array.isArray(translated) ? randomArray(translated as any) : translated) as string;
 
-    return send(msg, { content });
+    return send(cast<Message>(msg), { content });
 }
 
 export const enum YesNo {
@@ -58,7 +59,7 @@ export const enum YesNo {
     No = '🇳'
 }
 
-export interface AskYesNoOptions extends MessageOptions {
+export interface AskYesNoOptions extends MessageCreateOptions {
     target?: UserResolvable;
     time?: number;
 }
@@ -75,7 +76,7 @@ async function askConfirmationMessage(message: Message, response: Message, optio
     return messages.size === 0 ? null : promptConfirmationMessageRegExp.test(messages.first()!.content);
 }
 
-export async function messagePrompt(message: Message, options: AskYesNoOptions | string): Promise<null | boolean> {
+export async function messagePrompt(message: Message | GuildMessage, options: AskYesNoOptions | string): Promise<null | boolean> {
     if (typeof options === 'string') options = { content: options };
 
     const response = await send(message, options);
@@ -111,7 +112,7 @@ export async function askYesOrNo(message: Message, response: Message, options: A
  */
 export async function sendTemporaryMessage(
     message: Message,
-    options: string | MessageOptions,
+    options: string | MessageCreateOptions,
     timer = minutes(1)
 ): Promise<Message> {
     if (typeof options === 'string') options = { content: options };
@@ -123,7 +124,7 @@ export async function sendTemporaryMessage(
 
 export async function promptForMessage(
     message: Message,
-    sendOptions: string | MessageOptions,
+    sendOptions: string | MessageCreateOptions,
     time = minutes(1)
 ): Promise<string | null> {
     await send(message, sendOptions);
@@ -143,10 +144,10 @@ export async function promptForMessage(
  */
 export function isBoostMessage(message: Message): boolean {
     const boostMessageTypes = [
-        'USER_PREMIUM_GUILD_SUBSCRIPTION',
-        'USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1',
-        'USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2',
-        'USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3'
+        MessageType.GuildBoost,
+        MessageType.GuildBoostTier1,
+        MessageType.GuildBoostTier2,
+        MessageType.GuildBoostTier3
     ];
 
     return boostMessageTypes.includes(message.type);

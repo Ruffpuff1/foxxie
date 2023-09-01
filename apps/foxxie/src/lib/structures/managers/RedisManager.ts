@@ -1,6 +1,6 @@
 import type { RedisData, RedisKeys, RedisValue } from '#lib/types';
 import { cast } from '@ruffpuff/utilities';
-import { from, isErr } from '@sapphire/framework';
+import { Result } from '@sapphire/result';
 import Redis, { RedisOptions } from 'ioredis';
 
 export class RedisManager extends Redis {
@@ -14,10 +14,10 @@ export class RedisManager extends Redis {
         if (string) {
             return cast<RedisValue<T>>(value);
         }
-        const result = from(() => JSON.parse(value!));
+        const result = Result.from(() => JSON.parse(value!));
 
-        if (isErr(result)) return cast<RedisValue<T>>(null);
-        return cast<RedisValue<T>>(result.value);
+        if (result.isErr()) return cast<RedisValue<T>>(null);
+        return cast<RedisValue<T>>(result.unwrap());
     }
 
     public async insert<T extends RedisKeys>(key: T, value: RedisData<T>, string = true) {

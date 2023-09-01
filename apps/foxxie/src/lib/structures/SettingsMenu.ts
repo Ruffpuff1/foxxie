@@ -1,4 +1,3 @@
-import { api } from '#external/Api';
 import { LLRCData, LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import {
     SchemaGroup,
@@ -11,15 +10,15 @@ import {
     writeSettings
 } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { Events, GuildMessage } from '#lib/types';
+import { FoxxieEvents, GuildMessage } from '#lib/types';
 import { deleteMessage, sendLoadingMessage } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import type { TFunction } from '@foxxie/i18n';
 import { ZeroWidthSpace, deepClone, minutes } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
+import { ArgumentStream } from '@sapphire/lexure';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
-import { DiscordAPIError, MessageCollector, MessageEmbed } from 'discord.js';
-import * as Lexure from 'lexure';
+import { DiscordAPIError, EmbedBuilder, ImageFormat, MessageCollector, Routes } from 'discord.js';
 import { FoxxieArgs, FoxxieCommand } from './commands';
 
 const EMOJIS = { BACK: '◀', STOP: '⏹' };
@@ -45,7 +44,7 @@ export class SettingsMenu {
 
     private llrc: LongLivingReactionCollector | null = null;
 
-    private readonly embed: MessageEmbed;
+    private readonly embed: EmbedBuilder;
 
     private response: GuildMessage | null = null;
 
@@ -55,12 +54,11 @@ export class SettingsMenu {
         this.message = message;
         this.t = language;
         this.schema = configurableGroups;
-        this.embed = new MessageEmbed().setAuthor({
+        this.embed = new EmbedBuilder().setAuthor({
             name: this.message.author.username,
             iconURL: this.message.author.displayAvatarURL({
                 size: 128,
-                format: 'png',
-                dynamic: true
+                extension: ImageFormat.PNG
             })
         });
     }
@@ -165,7 +163,7 @@ export class SettingsMenu {
             const conf = container.stores.get('commands').get('conf') as FoxxieCommand;
             // @ts-expect-error lexer is a private property.
             const lexureParser = new Lexure.Parser(conf.lexer.setInput(message.content).lex());
-            const lexureArgs = new Lexure.Args(lexureParser.parse());
+            const lexureArgs = new ArgumentStream(lexureParser.parse());
             const args = new FoxxieArgs(this.message, conf, lexureArgs, context, this.t, 0);
 
             const commandLowerCase = args.next().toLowerCase(); //
@@ -199,11 +197,14 @@ export class SettingsMenu {
     private async _removeReactionFromUser(reaction: string, userId: string) {
         if (!this.response) return;
         try {
-            return await api()
-                .channels(this.message.channel.id)
-                .messages(this.response.id)
-                .reactions(encodeURIComponent(reaction), userId === this.message.client.user!.id ? '@me' : userId)
-                .delete();
+            return await container.client.rest.delete(
+                Routes.channelMessageUserReaction(
+                    this.message.channel.id,
+                    this.response.id,
+                    encodeURIComponent(reaction),
+                    userId === this.message.client.user!.id ? '@me' : userId
+                )
+            );
         } catch (error) {
             if (error instanceof DiscordAPIError) {
                 if (error.code === RESTJSONErrorCodes.UnknownMessage) {
@@ -218,7 +219,7 @@ export class SettingsMenu {
             }
 
             // Log any other error
-            return this.message.client.emit(Events.Error, error);
+            return this.message.client.emit(FoxxieEvents.Error, error);
         }
     }
 
@@ -231,7 +232,7 @@ export class SettingsMenu {
                 this.response = null;
                 this.llrc?.end();
             } else {
-                this.message.client.emit(Events.Error, error as Error);
+                this.message.client.emit(FoxxieEvents.Error, error as Error);
             }
         }
     }
@@ -246,7 +247,7 @@ export class SettingsMenu {
                 this.response = null;
                 this.llrc?.end();
             } else {
-                this.message.client.emit(Events.Error, error as Error);
+                this.message.client.emit(FoxxieEvents.Error, error as Error);
             }
         }
     }

@@ -32,7 +32,7 @@ const enum OutputType {
     guarded: true
 })
 export class UserCommand extends FoxxieCommand {
-    public async messageRun(message: Message, args: FoxxieCommand.Args): Promise<Message | null> {
+    public async messageRun(message: Message, args: FoxxieCommand.Args): Promise<void> {
         const code = await args.rest('string');
         const { success, result, time, type } = await this.eval(message, args, code);
 
@@ -45,11 +45,11 @@ export class UserCommand extends FoxxieCommand {
             type: footer
         });
 
-        if (args.getFlags('s', 'silent')) return null;
+        if (args.getFlags('s', 'silent')) return;
         if (args.getOption('output') === OutputType.Console) {
             // eslint-disable-next-line no-console
             console.log(result);
-            return send(
+            await send(
                 message,
                 args.t(LanguageKeys.Commands.Admin.EvalConsole, {
                     time,
@@ -58,15 +58,17 @@ export class UserCommand extends FoxxieCommand {
                     name: hostname()
                 })
             );
+            return;
         }
 
         if (output.length > 2000 || args.getOption('output') === OutputType.Paste) {
             const key = await getHaste(result);
             if (args.getFlags(...msgFlags)) {
                 output = `${Urls.Haste}/${key}`;
-                return send(message, output);
+                await send(message, output);
+                return;
             }
-            return send(
+            await send(
                 message,
                 args.t(LanguageKeys.Commands.Admin.EvalHaste, {
                     time,
@@ -74,10 +76,11 @@ export class UserCommand extends FoxxieCommand {
                     footer
                 })
             );
+            return;
         }
 
         if (args.getFlags(...msgFlags)) output = result;
-        return send(message, output);
+        await send(message, output);
     }
 
     private async eval(message: Message, args: FoxxieCommand.Args, code: string) {

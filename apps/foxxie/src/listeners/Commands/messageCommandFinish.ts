@@ -1,9 +1,9 @@
 import type { FoxxieCommand } from '#lib/structures';
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { Listener } from '@sapphire/framework';
 
-export class UserListener extends Listener<Events.MessageCommandFinish> {
-    public async run(...[message, command]: EventArgs<Events.MessageCommandFinish>): Promise<void> {
-        this.container.client.emit(Events.MessageCommandLogging, message, command as FoxxieCommand);
+export class UserListener extends Listener<FoxxieEvents.MessageCommandFinish> {
+    public run(...[message, command]: EventArgs<FoxxieEvents.MessageCommandFinish>): void {
+        this.container.client.emit(FoxxieEvents.MessageCommandLogging, message, command as FoxxieCommand);
     }
 }

@@ -1,5 +1,6 @@
 import type { ModerationEntity } from '#lib/database';
 import type { ClientEvents } from 'discord.js';
+import { FoxxieEvents } from './Events';
 
 export type LanguageString = 'en-US' | 'es-MX';
 
@@ -58,7 +59,7 @@ export interface RoleLanguageKeyData {
 
 export type PartialModerationModelWithRoleIdExtraData = Partial<ModerationEntity> & { extraData: { roleId: string } };
 
-export type EventArgs<T extends keyof ClientEvents> = ClientEvents[T];
+export type EventArgs<T extends EventKey> = T extends keyof ClientEvents ? ClientEvents[T] : T extends keyof FoxxieEvents ? FoxxieEvents[T] : never;
 
 export interface ColorData {
     hex: string;
@@ -67,3 +68,5 @@ export interface ColorData {
     hsv: string;
     base10: number;
 }
+
+type EventKey = keyof ClientEvents | keyof FoxxieEvents

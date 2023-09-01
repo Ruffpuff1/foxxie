@@ -4,22 +4,26 @@ import { defaultStarboardEmojis } from '#utils/Discord';
 import { Colors } from '#utils/constants';
 import { fetchReactionUsers, floatPromise, getImage } from '#utils/util';
 import { bold } from '@discordjs/builders';
+import { TFunction } from '@foxxie/i18n';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { cutText, debounce, isNullish } from '@sapphire/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
-import { DiscordAPIError, HTTPError, MessageEmbed, TextBasedChannel } from 'discord.js';
-import { TFunction } from 'i18next';
+import { DiscordAPIError, EmbedBuilder, HTTPError, TextBasedChannel } from 'discord.js';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { GuildSettings, acquireSettings, writeSettings } from '..';
 
 @Entity('starboard', { schema: 'public' })
 export class StarEntity extends BaseEntity {
     #users = new Set<string>();
+
     #manager: StarboardManager = null!;
+
     #message: GuildMessage = null!;
+
     #starMessage: GuildMessage | null = null;
+
     #updateStarMessage = debounce(this.updateStarMessage.bind(this), { wait: 2500, maxWait: 10000 });
 
     @ObjectIdColumn()
@@ -47,25 +51,6 @@ export class StarEntity extends BaseEntity {
     public stars = 0;
 
     public lastUpdated = Date.now();
-
-    private get emoji() {
-        const { stars } = this;
-        if (stars < 5) return '⭐';
-        if (stars < 10) return '🌟';
-        if (stars < 25) return '💫';
-        if (stars < 100) return '✨';
-        if (stars < 200) return '🌠';
-        return '🌌';
-    }
-
-    private async color() {
-        const guild = container.client.guilds.cache.get(this.guildId);
-        if (!guild) return Colors.TheCornerStoreStarboard;
-        const member = await resolveToNull(guild.members.fetch(this.userId));
-        if (!member) return Colors.TheCornerStoreStarboard;
-
-        return member.displayColor || Colors.TheCornerStoreStarboard;
-    }
 
     public setup(manager: StarboardManager) {
         this.#manager = manager;
@@ -191,15 +176,24 @@ export class StarEntity extends BaseEntity {
         const color = await this.color();
 
         const message = this.#message;
-        return new MessageEmbed()
+        return new EmbedBuilder()
             .setAuthor({
                 name: message.member?.displayName || message.author.username,
-                iconURL: message.author.displayAvatarURL({ size: 128, dynamic: true })
+                iconURL: message.author.displayAvatarURL({ size: 128 })
             })
             .setColor(color)
             .setImage(getImage(message)!)
             .setDescription(await this.getContent(t));
         // .setImage(getImage(message)!);
+    }
+
+    private async color() {
+        const guild = container.client.guilds.cache.get(this.guildId);
+        if (!guild) return Colors.TheCornerStoreStarboard;
+        const member = await resolveToNull(guild.members.fetch(this.userId));
+        if (!member) return Colors.TheCornerStoreStarboard;
+
+        return member.displayColor || Colors.TheCornerStoreStarboard;
     }
 
     private async getContent(_: TFunction) {
@@ -297,5 +291,15 @@ export class StarEntity extends BaseEntity {
 
         this.#manager.syncMessageMap.set(this, promise);
         await promise;
+    }
+
+    private get emoji() {
+        const { stars } = this;
+        if (stars < 5) return '⭐';
+        if (stars < 10) return '🌟';
+        if (stars < 25) return '💫';
+        if (stars < 100) return '✨';
+        if (stars < 200) return '🌠';
+        return '🌌';
     }
 }

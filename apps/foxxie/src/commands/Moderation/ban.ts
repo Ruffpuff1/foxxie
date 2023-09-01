@@ -22,7 +22,6 @@ export class UserCommand extends ModerationCommand {
                 user => this.container.redis?.pinsertex(`guild:${message.guild.id}:ban:${user.id}`, seconds(20), '')
             )
         );
-        return;
     }
 
     public async handle(...[message, context]: ArgumentTypes<ModerationCommand['handle']>) {

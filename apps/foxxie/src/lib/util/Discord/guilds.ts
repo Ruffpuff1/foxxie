@@ -1,7 +1,7 @@
 import { GuildModerationManager, PersistRoleManager } from '#lib/structures';
 import { StarboardManager } from '#lib/structures/managers/StarboardManager';
-import { container, fromAsync, isErr } from '@sapphire/framework';
-import type { Guild, GuildAuditLogsAction, GuildAuditLogsEntry, GuildResolvable } from 'discord.js';
+import { Result, container } from '@sapphire/framework';
+import type { Guild, GuildAuditLogsEntry, GuildAuditLogsResolvable, GuildResolvable } from 'discord.js';
 
 interface GuildUtilities {
     readonly moderation: GuildModerationManager;
@@ -35,15 +35,15 @@ function getProperty<K extends keyof GuildUtilities>(property: K) {
     return (resolvable: GuildResolvable): GuildUtilities[K] => getGuildUtilities(resolvable)[property];
 }
 
-export async function fetchAuditEntry<T extends GuildAuditLogsAction>(
+export async function fetchAuditEntry<T extends GuildAuditLogsResolvable>(
     guild: Guild,
     type: T,
     cb: (result: GuildAuditLogsEntry<T>) => boolean = () => true
 ): Promise<GuildAuditLogsEntry<T> | null> {
-    const result = await fromAsync(guild.fetchAuditLogs({ type }));
+    const result = await Result.fromAsync(guild.fetchAuditLogs({ type }));
 
-    if (isErr(result)) return null;
-    const entry = result.value.entries.filter(cb).first();
+    if (result.isErr()) return null;
+    const entry = result.unwrap().entries.filter(cb).first();
     if (!entry) return null;
 
     return entry;

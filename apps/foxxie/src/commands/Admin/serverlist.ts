@@ -1,10 +1,10 @@
-import { PaginatedMessage } from '#external/PaginatedMessage';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';
 import { chunk } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Message, MessageEmbed, Util } from 'discord.js';
+import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { EmbedBuilder, Message, escapeMarkdown } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['sl'],
@@ -15,7 +15,7 @@ import { Message, MessageEmbed, Util } from 'discord.js';
 })
 export class UserCommand extends FoxxieCommand {
     public async messageRun(msg: Message, args: FoxxieCommand.Args): Promise<void> {
-        const template = new MessageEmbed()
+        const template = new EmbedBuilder()
             .setAuthor({
                 name: args.t(LanguageKeys.Commands.Admin.ServerlistTitle, { name: this.client.user!.username }),
                 iconURL: this.client.user!.displayAvatarURL()
@@ -31,7 +31,7 @@ export class UserCommand extends FoxxieCommand {
             .map((guild, idx) =>
                 [
                     `${args.t(LanguageKeys.Globals.NumberFormat, { value: idx + 1 })}.`,
-                    Util.escapeMarkdown(guild.name),
+                    escapeMarkdown(guild.name),
                     `[${guild.id}] | **${guild.memberCount}**`,
                     `${args.t(LanguageKeys.Commands.Admin.ServerlistMembers)}`
                 ].join(' ')

@@ -1,9 +1,7 @@
 import type { ModerationEntity } from '#lib/database';
-import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
-import type { CommandInteraction, Guild, GuildMember, Message, MessageEmbed } from 'discord.js';
+import type { CommandInteraction, EmbedBuilder, Guild, GuildMember, Message } from 'discord.js';
 
-export interface GuildMessage extends Message {
-    channel: GuildTextBasedChannelTypes;
+export interface GuildMessage extends Message<true> {
     readonly guild: Guild;
     readonly member: GuildMember;
 }
@@ -12,6 +10,6 @@ export interface GuildInteraction extends CommandInteraction {
     guild: Guild;
 }
 
-export type TypeOfEmbed = MessageEmbed;
+export type TypeOfEmbed = EmbedBuilder;
 
 export type PartialModerationEntityWithRoleIdExtraData = Partial<ModerationEntity> & { extraData: { roleId: string } };

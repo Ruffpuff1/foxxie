@@ -1,8 +1,8 @@
 import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { AutomationListener } from '#lib/structures';
-import { EventArgs, Events } from '#lib/types';
-import { fetchChannel, getPersistRoles } from '#utils/Discord';
+import { EventArgs, FoxxieEvents } from '#lib/types';
+import { fetchChannel, getPersistRoles, maybeMe } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -10,11 +10,11 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
 import type { GuildMember } from 'discord.js';
 
 @ApplyOptions<AutomationListener.Options>({
-    event: Events.GuildMemberJoin,
+    event: FoxxieEvents.GuildMemberJoin,
     enabled: !isDev()
 })
-export class UserListener extends AutomationListener<Events.GuildMemberJoin> {
-    public async run(...[member, settings]: EventArgs<Events.GuildMemberJoin>): Promise<void> {
+export class UserListener extends AutomationListener<FoxxieEvents.GuildMemberJoin> {
+    public async run(...[member, settings]: EventArgs<FoxxieEvents.GuildMemberJoin>): Promise<void> {
         const [message, embed, timer, shouldPersist, auto, bot, t] = [
             settings[GuildSettings.Messages.Welcome],
             settings[GuildSettings.Embeds.Welcome],
@@ -55,7 +55,7 @@ export class UserListener extends AutomationListener<Events.GuildMemberJoin> {
     }
 
     private async managePersistRoles(member: GuildMember) {
-        if (!member.guild.me?.permissions.has(PermissionFlagsBits.ManageRoles)) return;
+        if (!maybeMe(member.guild)?.permissions.has(PermissionFlagsBits.ManageRoles)) return;
 
         const roles = await getPersistRoles(member).fetch(member.id);
         if (!roles.length) return;

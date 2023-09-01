@@ -1,7 +1,7 @@
 import type FoxxieClient from '#lib/FoxxieClient';
 import { LanguageKeys } from '#lib/i18n';
 import type { GuildModerationManager } from '#lib/structures';
-import { Events } from '#lib/types';
+import { FoxxieEvents } from '#lib/types';
 import {
     MetaData,
     metadata,
@@ -11,10 +11,10 @@ import {
     TypeVariationAppealNames
 } from '#utils/moderation';
 import { messageLink } from '#utils/transformers';
+import type { TFunction } from '@foxxie/i18n';
 import { resolveToNull, Time, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { Guild, GuildChannel, MessageEmbed, User } from 'discord.js';
-import type { TFunction } from 'i18next';
+import { EmbedBuilder, Guild, GuildChannel, User } from 'discord.js';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { GuildEntity, GuildSettings } from '..';
 
@@ -131,7 +131,7 @@ export class ModerationEntity extends BaseEntity {
         this.caseId = cases.length + 1;
         this.#manager?.insert(this);
 
-        this.guild?.client.emit(Events.ModerationEntryAdd, this);
+        this.guild?.client.emit(FoxxieEvents.ModerationEntryAdd, this);
         return this;
     }
 
@@ -151,7 +151,7 @@ export class ModerationEntity extends BaseEntity {
             throw error;
         }
 
-        this.client?.emit(Events.ModerationEntryEdit, clone, this);
+        this.client?.emit(FoxxieEvents.ModerationEntryEdit, clone, this);
         return this;
     }
 
@@ -163,14 +163,14 @@ export class ModerationEntity extends BaseEntity {
         return moderator;
     }
 
-    public async prepareEmbed(): Promise<MessageEmbed> {
+    public async prepareEmbed(): Promise<EmbedBuilder> {
         const moderator = await this.fetchModerator();
         const description = await this.fetchDescriptionData(moderator as User);
         const [title, t] = await this.formatUtils();
         const caseT = toTitleCase(t(LanguageKeys.Globals.CaseT));
 
-        const embed = new MessageEmbed()
-            .setAuthor({ name: title, iconURL: moderator?.displayAvatarURL({ dynamic: true }) })
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: title, iconURL: moderator?.displayAvatarURL() })
             .setColor(this.color)
             .setTimestamp(this.createdTimestamp)
             .setDescription(description.join('\n'))

@@ -1,9 +1,9 @@
-import type { EventArgs, Events } from '#lib/types';
+import type { EventArgs, FoxxieEvents } from '#lib/types';
 import { Listener } from '@sapphire/framework';
 import { blue } from 'colorette';
 
-export class UserListener extends Listener<Events.MessageCommandLogging> {
-    public run(...[msg, command]: EventArgs<Events.MessageCommandLogging>): void {
+export class UserListener extends Listener<FoxxieEvents.MessageCommandLogging> {
+    public run(...[msg, command]: EventArgs<FoxxieEvents.MessageCommandLogging>): void {
         const shard = msg.guild ? msg.guild.shardId : 0;
         this.container.logger.debug(
             [

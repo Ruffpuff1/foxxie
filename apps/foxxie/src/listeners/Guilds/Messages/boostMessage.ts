@@ -1,23 +1,23 @@
 import { acquireSettings, GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { AutomationListener } from '#lib/structures';
-import { EventArgs, Events, GuildMessage } from '#lib/types';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
 import { fetchChannel, isBoostMessage } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
+import { TFunction } from '@foxxie/i18n';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { ListenerOptions } from '@sapphire/framework';
-import type { Guild, GuildMember, GuildTextBasedChannel } from 'discord.js';
-import { TFunction } from 'i18next';
+import { GuildPremiumTier, type Guild, type GuildMember, type GuildTextBasedChannel } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
     enabled: !isDev(),
-    event: Events.SystemMessage
+    event: FoxxieEvents.SystemMessage
 })
-export class UserListener extends AutomationListener<Events.SystemMessage> {
+export class UserListener extends AutomationListener<FoxxieEvents.SystemMessage> {
     private boostMatchRegex = /{boost\.(next|count|needed|tier|nextcount)}/g;
 
-    public async run(...[msg]: EventArgs<Events.SystemMessage>): Promise<void> {
+    public async run(...[msg]: EventArgs<FoxxieEvents.SystemMessage>): Promise<void> {
         if (!isBoostMessage(msg)) return;
 
         const channel = await fetchChannel(msg.guild, GuildSettings.Channels.Boost);
@@ -27,10 +27,22 @@ export class UserListener extends AutomationListener<Events.SystemMessage> {
     }
 
     protected nextTier = (guild: Guild) =>
-        guild.premiumTier === 'NONE' ? 1 : guild.premiumTier === 'TIER_1' ? 2 : guild.premiumTier === 'TIER_2' ? 3 : 3;
+        guild.premiumTier === GuildPremiumTier.None
+            ? 1
+            : guild.premiumTier === GuildPremiumTier.Tier1
+            ? 2
+            : guild.premiumTier === GuildPremiumTier.Tier2
+            ? 3
+            : 3;
 
     protected tierBoostCount = (guild: Guild) =>
-        guild.premiumTier === 'NONE' ? 2 : guild.premiumTier === 'TIER_1' ? 7 : guild.premiumTier === 'TIER_2' ? 14 : 14;
+        guild.premiumTier === GuildPremiumTier.None
+            ? 2
+            : guild.premiumTier === GuildPremiumTier.Tier1
+            ? 7
+            : guild.premiumTier === GuildPremiumTier.Tier2
+            ? 14
+            : 14;
 
     protected format(message: string, member: GuildMember, t: TFunction) {
         const replaced = message.replace(this.boostMatchRegex, match => {

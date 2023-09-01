@@ -3,8 +3,6 @@
     "GUILD_NEWS_short": "News: **{{count, number}}**",
     "GUILD_STAGE_VOICE": "Stage",
     "GUILD_STAGE_VOICE_short": "Stage: **{{count, number}}**",
-    "GUILD_STORE": "Store",
-    "GUILD_STORE_short": "Store: **{{count, number}}**",
     "GUILD_TEXT": "Text",
     "GUILD_TEXT_short": "Text: **{{count, number}}**",
     "GUILD_PUBLIC_THREAD": "Thread",

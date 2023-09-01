@@ -1,11 +1,10 @@
 import { GuildSettings, acquireSettings } from '#lib/database';
 import { StarEntity } from '#lib/database/entities/StarEntity';
 import type { GuildMessage } from '#lib/types';
-import Collection from '@discordjs/collection';
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
-import type { Guild, TextChannel } from 'discord.js';
+import { Collection, Guild, TextChannel } from 'discord.js';
 
 /**
  * The StarboardManager class that manages the starboard channel

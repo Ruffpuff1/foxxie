@@ -1,17 +1,17 @@
 import { GuildSettings, acquireSettings } from '#lib/database';
 import { GuildModerationManager } from '#lib/structures';
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { fetchAuditEntry, getModeration } from '#utils/Discord';
 import { TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
-import { seconds } from '@ruffpuff/utilities';
+import { cast, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { GuildMember } from 'discord.js';
+import { AuditLogEvent, GuildMember, User } from 'discord.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 
-@ApplyOptions<ListenerOptions>({ event: Events.GuildMemberUpdate })
+@ApplyOptions<ListenerOptions>({ event: FoxxieEvents.GuildMemberUpdate })
 export class UserListener extends Listener {
-    public async run(...[previous, next]: EventArgs<Events.GuildMemberUpdate>) {
+    public async run(...[previous, next]: EventArgs<FoxxieEvents.GuildMemberUpdate>) {
         const prevRoles = previous.roles.cache;
         const nextRoles = next.roles.cache;
         const moderation = getModeration(next.guild);
@@ -36,8 +36,8 @@ export class UserListener extends Listener {
             if (!nextRoles.has(key)) removed.push(role.id);
         }
 
-        if (added.includes(muteRole) && muteAdd) this.mute(next, moderation);
-        else if (removed.includes(muteRole) && muteRemove) this.unmute(next, moderation);
+        if (added.includes(muteRole) && muteAdd) return this.mute(next, moderation);
+        else if (removed.includes(muteRole) && muteRemove) return this.unmute(next, moderation);
     }
 
     private async mute(next: GuildMember, moderation: GuildModerationManager) {
@@ -47,7 +47,7 @@ export class UserListener extends Listener {
         if (deleted) return;
         await sleep(seconds(5));
 
-        const log = await fetchAuditEntry(next.guild, 'MEMBER_ROLE_UPDATE', log => log.target?.id === next.user.id);
+        const log = await fetchAuditEntry(next.guild, AuditLogEvent.MemberRoleUpdate, log => cast<User>(log.target)?.id === next.user.id);
         if (!log) return;
 
         const created = await moderation
@@ -70,7 +70,11 @@ export class UserListener extends Listener {
         if (deleted) return;
         await sleep(seconds(5));
 
-        const log = await fetchAuditEntry(next.guild, 'MEMBER_ROLE_UPDATE', log => log.target?.id === next.user.id);
+        const log = await fetchAuditEntry(
+            next.guild,
+            AuditLogEvent.MemberRoleUpdate,
+            log => cast<User>(log.target)?.id === next.user.id
+        );
         if (!log) return;
 
         const created = await moderation

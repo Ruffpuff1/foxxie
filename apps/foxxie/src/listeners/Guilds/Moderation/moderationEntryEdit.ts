@@ -1,14 +1,14 @@
-import { Events, EventArgs } from '#lib/types';
+import { FoxxieEvents, EventArgs } from '#lib/types';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { ApplyOptions } from '@sapphire/decorators';
 import { resolveToNull } from '@ruffpuff/utilities';
 import type { TextChannel } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.ModerationEntryEdit
+    event: FoxxieEvents.ModerationEntryEdit
 })
-export class UserListener extends Listener<Events.ModerationEntryEdit> {
-    public async run(...[old, entry]: EventArgs<Events.ModerationEntryEdit>): Promise<void[]> {
+export class UserListener extends Listener<FoxxieEvents.ModerationEntryEdit> {
+    public async run(...[old, entry]: EventArgs<FoxxieEvents.ModerationEntryEdit>): Promise<void[]> {
         return Promise.all([this.editMessage(old, entry)]);
     }
 

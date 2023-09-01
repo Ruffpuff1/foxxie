@@ -3,13 +3,15 @@ import { cast, resolveToNull } from '@ruffpuff/utilities';
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';
-import type { GuildResolvable, GuildTextBasedChannel, Snowflake } from 'discord.js';
+import { type GuildResolvable, type GuildTextBasedChannel, type Snowflake } from 'discord.js';
+import { maybeMe } from './members';
 import { sendMessages } from './permissions';
 
 export function isSendableChannel(channel: GuildTextBasedChannelTypes): boolean {
     if (!channel) return false;
     if (!channel.guild) return true;
-    return channel.permissionsFor(channel.guild.me!).has(sendMessages);
+    const me = maybeMe(channel.guild);
+    return me ? channel.permissionsFor(me).has(sendMessages) : false;
 }
 
 export async function fetchChannel<T = GuildTextBasedChannel>(

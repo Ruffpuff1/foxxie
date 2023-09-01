@@ -1,27 +1,27 @@
 import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { Colors } from '#utils/constants';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.GuildMemberRemove,
+    event: FoxxieEvents.GuildMemberRemove,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.GuildMemberRemove> {
-    public async run(...[member]: EventArgs<Events.GuildMemberRemove>): Promise<void> {
+export class UserListener extends Listener<FoxxieEvents.GuildMemberRemove> {
+    public async run(...[member]: EventArgs<FoxxieEvents.GuildMemberRemove>): Promise<void> {
         const entity = await this.container.db.members.ensure(member.id, member.guild.id);
 
-        this.container.client.emit(Events.GuildMessageLog, member.guild, GuildSettings.Channels.Logs.MemberLeave, t =>
-            new MessageEmbed()
+        this.container.client.emit(FoxxieEvents.GuildMessageLog, member.guild, GuildSettings.Channels.Logs.MemberLeave, t =>
+            new EmbedBuilder()
                 .setColor(Colors.Red)
                 .setTimestamp()
                 .setAuthor({
                     name: t(LanguageKeys.Guilds.Logs.ActionMemberLeave),
-                    iconURL: member.displayAvatarURL({ dynamic: true })
+                    iconURL: member.displayAvatarURL()
                 })
                 .setDescription(
                     [

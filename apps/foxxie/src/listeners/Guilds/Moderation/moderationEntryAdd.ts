@@ -1,15 +1,15 @@
 import { GuildSettings } from '#lib/database';
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { fetchChannel, getModeration } from '#utils/Discord';
 import type { ModerationScheule } from '#utils/moderation';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.ModerationEntryAdd
+    event: FoxxieEvents.ModerationEntryAdd
 })
-export class UserListener extends Listener<Events.ModerationEntryAdd> {
-    public async run(...[entry]: EventArgs<Events.ModerationEntryAdd>): Promise<void[]> {
+export class UserListener extends Listener<FoxxieEvents.ModerationEntryAdd> {
+    public async run(...[entry]: EventArgs<FoxxieEvents.ModerationEntryAdd>): Promise<void[]> {
         return Promise.all([this.sendMessage(entry), this.schedule(entry)]);
     }
 

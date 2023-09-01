@@ -11,11 +11,11 @@ import { GuildMember } from 'discord.js';
     permissionLevel: PermissionLevels.BotOwner
 })
 export class UserCommand extends FoxxieCommand {
-    public async messageRun(message: GuildMessage) {
+    public async messageRun(message: GuildMessage): Promise<void> {
         const members = await message.guild.members.fetch().then(m => [...m.values()]);
         const loading = await sendLoadingMessage(message);
 
-        const [flags, bots, nitros, employees] = await this.getBadgeCounts(members);
+        const [flags, bots, nitros, employees] = this.getBadgeCounts(members);
         let boosterCount = 0;
 
         if (message.guild.roles.premiumSubscriberRole) {
@@ -64,18 +64,18 @@ export class UserCommand extends FoxxieCommand {
                 }`
         ];
 
-        return loading.edit({ content: description.filter(i => !!i).join('\n') });
+        await loading.edit({ content: description.filter(i => Boolean(i)).join('\n') });
     }
 
-    async getBadgeCounts(members: GuildMember[]): Promise<[number[], number, number, string[]]> {
+    private getBadgeCounts(members: GuildMember[]): [number[], number, number, string[]] {
         let bots = 0;
         let nitros = 0;
         const employees = [];
         const flags: number[] = Array(26).fill(0);
 
-        for (let member of members) {
+        for (const member of members) {
             for (let i = 0; i < 26; i++) if (((member.user.flags?.bitfield ?? 0) & (1 << i)) === 1 << i) flags[i]++;
-            if ((member.user.flags?.bitfield! & 1) === 1) employees.push(`**${member.user.tag}**`);
+            if ((Number(member.user.flags?.bitfield) & 1) === 1) employees.push(`**${member.user.tag}**`);
 
             if (member.user.bot) bots++;
             if (member.user.avatar?.startsWith('a_') || member.user.banner) {

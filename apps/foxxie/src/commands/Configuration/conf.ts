@@ -13,7 +13,12 @@ import { send } from '@sapphire/plugin-editable-commands';
     description: LanguageKeys.Commands.Configuration.ConfDescription,
     permissionLevel: PermissionLevels.Administrator,
     usage: LanguageKeys.Commands.Configuration.ConfUsage,
-    subCommands: [{ input: 'add', output: 'set' }, 'set', { input: 'show', default: true }, 'remove', 'reset']
+    subcommands: [
+        { name: 'set', messageRun: 'set' },
+        { name: 'show', messageRun: 'show', default: true },
+        { name: 'remove', messageRun: 'remove' },
+        { name: 'reset', messageRun: 'reset' }
+    ]
 })
 export default class UserCommand extends FoxxieCommand {
     // @RequiresClientPermissions([

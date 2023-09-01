@@ -1,29 +1,28 @@
 import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { EventArgs, Events, GuildMessage } from '#lib/types';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
 import { Colors } from '#utils/constants';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { MessageEmbed } from 'discord.js';
+import { ChannelType, EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.UserMessage,
+    event: FoxxieEvents.UserMessage,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.UserMessage> {
-    public async run(...[msg]: EventArgs<Events.UserMessage>): Promise<void> {
-        if (msg.channel.type !== 'GUILD_VOICE') return;
-
-        await this.logMessage(msg);
+export class UserListener extends Listener<FoxxieEvents.UserMessage> {
+    public run(...[msg]: EventArgs<FoxxieEvents.UserMessage>): void {
+        if (msg.channel.type !== ChannelType.GuildVoice) return;
+        this.logMessage(msg);
     }
 
-    private async logMessage(message: GuildMessage): Promise<void> {
-        this.container.client.emit(Events.GuildMessageLog, message.guild, GuildSettings.Channels.Logs.MessageVoice, t =>
-            new MessageEmbed() //
+    private logMessage(message: GuildMessage): void {
+        this.container.client.emit(FoxxieEvents.GuildMessageLog, message.guild, GuildSettings.Channels.Logs.MessageVoice, t =>
+            new EmbedBuilder() //
                 .setAuthor({
                     name: 'Voice Message Sent',
-                    iconURL: message.member.avatarURL({ dynamic: true }) || message.author.avatarURL({ dynamic: true })!
+                    iconURL: message.member.avatarURL() || message.author.avatarURL()!
                 })
                 .setColor(Colors.Green)
                 .setTimestamp(message.createdTimestamp)

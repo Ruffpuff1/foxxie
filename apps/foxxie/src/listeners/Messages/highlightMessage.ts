@@ -1,22 +1,22 @@
 import { GuildSettings, Highlight, acquireSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { HighlightReturnData, HighlightTypeEnum, IncomingType } from '#lib/structures/workers/types';
-import { EventArgs, Events, GuildMessage } from '#lib/types';
-import { BrandingColors } from '#utils/constants';
-import { floatPromise } from '#utils/util';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
+import { maybeMe } from '#utils/Discord';
+import { floatPromise, resolveClientColor, resolveEmbedField } from '#utils/util';
+import { TFunction } from '@foxxie/i18n';
 import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
-import { PermissionFlagsBits } from 'discord-api-types/v9';
-import { Message, MessageEmbed, Util } from 'discord.js';
+import { PermissionFlagsBits } from 'discord-api-types/v10';
+import { EmbedBuilder, Message, escapeMarkdown } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.UserMessage,
+    event: FoxxieEvents.UserMessage,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.UserMessage> {
-    public async run(...[msg]: EventArgs<Events.UserMessage>): Promise<void> {
+export class UserListener extends Listener<FoxxieEvents.UserMessage> {
+    public async run(...[msg]: EventArgs<FoxxieEvents.UserMessage>): Promise<void> {
         if (!msg.content.length) return;
         const [highlights, t] = await acquireSettings(msg.guild, settings => [
             settings[GuildSettings.Highlights],
@@ -35,7 +35,7 @@ export class UserListener extends Listener<Events.UserMessage> {
         const actions: Promise<void>[] = [];
 
         const previousChannelMessages = [];
-        if (msg.channel.permissionsFor(msg.guild.me!).has(PermissionFlagsBits.ReadMessageHistory)) {
+        if (msg.channel.permissionsFor(maybeMe(msg.guild)!).has(PermissionFlagsBits.ReadMessageHistory)) {
             previousChannelMessages.push(...(await this.fetchMessages(msg, t)));
         }
 
@@ -80,22 +80,22 @@ export class UserListener extends Listener<Events.UserMessage> {
     }
 
     private makeEmbed(previous: string[][], msg: GuildMessage, t: TFunction, match: HighlightReturnData) {
-        const embed = new MessageEmbed()
-            .setColor(msg.guild.me!.displayColor || BrandingColors.Primary)
+        const embed = new EmbedBuilder()
+            .setColor(resolveClientColor(msg.guild))
             .setAuthor({
                 name: `${msg.author.username} [${msg.author.id}]`,
-                iconURL: msg.member?.displayAvatarURL({ dynamic: true })
+                iconURL: msg.member?.displayAvatarURL()
             })
             .setDescription(`**[${t(LanguageKeys.Listeners.Events.HighlightJumpTo)}](${msg.url})**`)
             .setTimestamp();
 
         if (previous.length) {
             for (const [, time, text] of previous) {
-                embed.addField(time, text);
+                embed.addFields(resolveEmbedField(time, text));
             }
         }
 
-        return embed.addField(this.formatMessageTimestamp(msg, t), this.formatMessage(msg, t, match));
+        return embed.addFields(resolveEmbedField(this.formatMessageTimestamp(msg, t), this.formatMessage(msg, t, match)));
     }
 
     private async fetchMessages(msg: GuildMessage, t: TFunction): Promise<string[][]> {
@@ -110,7 +110,7 @@ export class UserListener extends Listener<Events.UserMessage> {
     }
 
     private formatMessageTimestamp(msg: Message, t: TFunction): string {
-        return `**[${t(LanguageKeys.Globals.Time, { value: msg.createdAt })}] ${Util.escapeMarkdown(msg.author.username)}**:`;
+        return `**[${t(LanguageKeys.Globals.Time, { value: msg.createdAt })}] ${escapeMarkdown(msg.author.username)}**:`;
     }
 
     private formatMessage(message: Message, t: TFunction, match?: HighlightReturnData): string {

@@ -1,11 +1,11 @@
-import type { GuildEntity } from '../entities/GuildEntity';
-import type { SchemaKey } from '../util/SchemaKey';
 import { LanguageKeys, translate } from '#lib/i18n';
 import type { FoxxieArgs } from '#lib/structures';
-import { AliasPiece, AliasPieceOptions, ArgumentError, UserError } from '@sapphire/framework';
+import type { TFunction } from '@foxxie/i18n';
+import { AliasPiece, AliasPieceOptions, ArgumentError, ResultType, UserError } from '@sapphire/framework';
 import type { Awaitable } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
-import type { TFunction } from 'i18next';
+import type { GuildEntity } from '../entities/GuildEntity';
+import type { SchemaKey } from '../util/SchemaKey';
 
 export interface Ok<T> {
     success: true;
@@ -62,8 +62,8 @@ export abstract class Serializer<T> extends AliasPiece {
      * @param args The Args parser.
      * @param value The result to handle.
      */
-    protected result(args: Serializer.Args, value: Result<T, UserError>): SerializerResult<T> {
-        return value.success ? value : this.errorFromArgument(args, value.error);
+    protected result(args: Serializer.Args, value: ResultType<T>): SerializerResult<T> {
+        return value.isOk() ? { success: true, value: value.unwrap() } : this.errorFromArgument(args, value.unwrapErr());
     }
 
     /**

@@ -1,18 +1,18 @@
 import { GuildEntity, GuildSettings, writeSettings } from '#lib/database';
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { isDev, minutes } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import type { GuildMember } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.StatsMessage,
+    event: FoxxieEvents.StatsMessage,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.StatsMessage> {
+export class UserListener extends Listener<FoxxieEvents.StatsMessage> {
     public timeout = minutes(5);
 
-    public async run(...[guildId, member]: EventArgs<Events.StatsMessage>): Promise<void[]> {
+    public async run(...[guildId, member]: EventArgs<FoxxieEvents.StatsMessage>): Promise<void[]> {
         // if the member hasn't been in the server for five mintutes disgard the messages.
         if (Date.now() - member.joinedTimestamp! < this.timeout) return [];
 

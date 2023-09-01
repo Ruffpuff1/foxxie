@@ -1,24 +1,25 @@
-import { EventArgs, Events } from '#lib/types';
-import { Listener, ListenerOptions } from '@sapphire/framework';
-import { ApplyOptions } from '@sapphire/decorators';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { fetchAuditEntry, getModeration } from '#utils/Discord';
-import { setTimeout as sleep } from 'node:timers/promises';
-import { isDev, seconds } from '@ruffpuff/utilities';
 import { TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
+import { cast, isDev, seconds } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
+import { Listener, ListenerOptions } from '@sapphire/framework';
+import { AuditLogEvent, User } from 'discord.js';
+import { setTimeout as sleep } from 'node:timers/promises';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.GuildBanAdd,
+    event: FoxxieEvents.GuildBanAdd,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.GuildBanAdd> {
-    public async run(...[ban]: EventArgs<Events.GuildBanAdd>): Promise<void> {
+export class UserListener extends Listener<FoxxieEvents.GuildBanAdd> {
+    public async run(...[ban]: EventArgs<FoxxieEvents.GuildBanAdd>): Promise<void> {
         const moderation = getModeration(ban.guild);
         const deleted = this.container.redis ? await this.container.redis!.del(`guild:${ban.guild.id}:ban:${ban.user.id}`) : null;
 
         if (deleted) return;
         await sleep(seconds(5));
 
-        const log = await fetchAuditEntry(ban.guild, 'MEMBER_BAN_ADD', log => log.target?.id === ban.user.id);
+        const log = await fetchAuditEntry(ban.guild, AuditLogEvent.MemberBanAdd, log => cast<User>(log.target)?.id === ban.user.id);
         if (!log) return;
 
         const created = await moderation

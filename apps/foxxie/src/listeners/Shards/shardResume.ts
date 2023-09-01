@@ -1,11 +1,11 @@
 import { ShardListener } from '#lib/structures';
-import type { EventArgs, Events } from '#lib/types';
+import type { EventArgs, FoxxieEvents } from '#lib/types';
 import { yellow } from 'colorette';
 
-export class UserListener extends ShardListener<Events.ShardResume> {
+export class UserListener extends ShardListener<FoxxieEvents.ShardResume> {
     protected readonly title = yellow('Resumed');
 
-    public run(...[id, replayedEvents]: EventArgs<Events.ShardResume>) {
+    public run(...[id, replayedEvents]: EventArgs<FoxxieEvents.ShardResume>) {
         this.container.logger.debug(`${this.header(id)}: ${replayedEvents} events replayed.`);
     }
 }

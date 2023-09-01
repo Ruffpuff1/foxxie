@@ -1,10 +1,10 @@
-import { Message, GuildMember, User, MessageEmbed, DynamicImageFormat, AllowedImageSize } from 'discord.js';
+import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
+import type { GuildMessage } from '#lib/types';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
-import { LanguageKeys } from '#lib/i18n';
-import { PermissionFlagsBits } from 'discord-api-types/v9';
-import type { GuildMessage } from '#lib/types';
+import { PermissionFlagsBits } from 'discord-api-types/v10';
+import { EmbedBuilder, GuildMember, ImageExtension, ImageFormat, ImageSize, User } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['av', 'pfp'],
@@ -13,19 +13,16 @@ import type { GuildMessage } from '#lib/types';
     flags: ['u', 'user']
 })
 export class UserCommand extends FoxxieCommand {
-    public async messageRun(msg: GuildMessage, args: FoxxieCommand.Args): Promise<Message> {
+    public async messageRun(msg: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
         // fetch either the guildmember, user or self.
         const entity = await this.getEntity(msg, args);
-        const isAnimated = entity.avatar?.startsWith('a_');
 
-        this.format('png', entity);
+        this.format(ImageFormat.PNG, entity);
 
         const formats = [
-            this.format('png', entity),
-            this.format('jpg', entity),
-            this.format('jpeg', entity),
-            this.format('webp', entity),
-            isAnimated ? this.format('gif', entity) : null
+            this.format(ImageFormat.PNG, entity),
+            this.format(ImageFormat.JPEG, entity),
+            this.format(ImageFormat.WebP, entity)
         ]
             .filter(a => Boolean(a))
             .join(' | ');
@@ -33,26 +30,24 @@ export class UserCommand extends FoxxieCommand {
         const userAvatar =
             entity instanceof GuildMember
                 ? entity.user.displayAvatarURL({
-                      format: 'png',
-                      size: 2048,
-                      dynamic: true
+                      extension: ImageFormat.PNG,
+                      size: 2048
                   })
                 : entity.displayAvatarURL({
-                      format: 'png',
-                      size: 2048,
-                      dynamic: true
+                      extension: ImageFormat.PNG,
+                      size: 2048
                   });
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(args.color)
             .setAuthor({
                 name: `${entity instanceof GuildMember ? entity.user.username : entity.username} [${entity.id}]`,
                 iconURL: userAvatar
             })
             .setDescription(formats)
-            .setImage(entity.displayAvatarURL({ size: 2048, dynamic: true }));
+            .setImage(entity.displayAvatarURL({ size: 2048 }));
 
-        return send(msg, { embeds: [embed] });
+        await send(msg, { embeds: [embed] });
     }
 
     private async getEntity(msg: GuildMessage, args: FoxxieCommand.Args): Promise<GuildMember | User> {
@@ -69,7 +64,7 @@ export class UserCommand extends FoxxieCommand {
         return args.pick('member').catch(() => args.pick('username').catch(() => msg.member));
     }
 
-    private format(format: DynamicImageFormat, entity: GuildMember | User, size: AllowedImageSize = 2048) {
-        return `[${format.toUpperCase()}](${entity.displayAvatarURL({ format, size, dynamic: true })})`;
+    private format(extension: ImageExtension, entity: GuildMember | User, size: ImageSize = 2048) {
+        return `[${extension.toUpperCase()}](${entity.displayAvatarURL({ extension, size })})`;
     }
 }

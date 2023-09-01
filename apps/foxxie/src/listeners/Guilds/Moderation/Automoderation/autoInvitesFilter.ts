@@ -2,10 +2,10 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ModerationListener } from '#lib/structures';
 import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { Events, GuildMessage } from '#lib/types';
+import { FoxxieEvents, GuildMessage } from '#lib/types';
 import { allowedInviteIds, Colors } from '#utils/constants';
 import { deleteMessage, sendTemporaryMessage } from '#utils/Discord';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<ModerationListener.Options>({
     keyEnabled: GuildSettings.Moderation.Auto.InvitesEnabled,
@@ -47,12 +47,12 @@ export class UserListener extends ModerationListener {
     protected onLog(...[msg, t, value]: Parameters<ModerationListener['onLog']>): void {
         const invites = value as string[];
 
-        this.container.client.emit(Events.GuildMessageLog, msg.guild, GuildSettings.Channels.Logs.FilterWords, () =>
-            new MessageEmbed()
+        this.container.client.emit(FoxxieEvents.GuildMessageLog, msg.guild, GuildSettings.Channels.Logs.FilterWords, () =>
+            new EmbedBuilder()
                 .setColor(Colors.Red)
                 .setAuthor({
                     name: t(LanguageKeys.Guilds.Logs.ActionFilterInvites, { count: invites.length }),
-                    iconURL: msg.member.displayAvatarURL({ dynamic: true })
+                    iconURL: msg.member.displayAvatarURL()
                 })
                 .setDescription(
                     [

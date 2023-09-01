@@ -1,8 +1,8 @@
-import { Argument, ArgumentContext, Result, UserError } from '@sapphire/framework';
+import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 import type { GuildMember, Message, User } from 'discord.js';
 
 export class UserArgument extends Argument<User> {
-    public async run(parameter: string, context: ArgumentContext<User>): Promise<Result<User, UserError>> {
+    public async run(parameter: string, context: ArgumentContext<User>): Promise<ArgumentResult<User>> {
         const { message } = context;
         if (!message.guild) return this.user.run(parameter, context);
 

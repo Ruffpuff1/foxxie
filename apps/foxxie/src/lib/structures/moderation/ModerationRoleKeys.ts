@@ -2,7 +2,7 @@ import type { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import type { RoleLanguageKeyData } from '#lib/types';
 import type { CustomFunctionGet } from '@foxxie/i18n';
-import { PermissionOverwriteOptions, PermissionResolvable, Permissions } from 'discord.js';
+import { PermissionFlagsBits, PermissionOverwriteOptions, PermissionResolvable, PermissionsBitField } from 'discord.js';
 
 export const enum RoleKey {
     Muted,
@@ -24,7 +24,7 @@ export interface RolePermissionOverwriteOption {
 
 export interface RolePermissionOverwriteOptionField {
     options: PermissionOverwriteOptions;
-    permissions: Permissions;
+    permissions: PermissionResolvable;
 }
 
 export const roleData = new Map<RoleKey, RoleData>([
@@ -62,44 +62,43 @@ export const permissionOverwrites = new Map<RoleKey, RolePermissionOverwriteOpti
         {
             category: {
                 options: {
-                    SEND_MESSAGES: false,
-                    ADD_REACTIONS: false,
-                    CREATE_PUBLIC_THREADS: false,
-                    CREATE_PRIVATE_THREADS: false,
-                    SEND_MESSAGES_IN_THREADS: false,
-                    CONNECT: false
+                    SendMessages: false,
+                    AddReactions: false,
+                    CreatePublicThreads: false,
+                    CreatePrivateThreads: false,
+                    SendMessagesInThreads: false,
+                    Connect: false
                 },
-                permissions: new Permissions([
-                    'SEND_MESSAGES',
-                    'ADD_REACTIONS',
-                    'CREATE_PUBLIC_THREADS',
-                    'CREATE_PRIVATE_THREADS',
-                    'SEND_MESSAGES_IN_THREADS',
-                    'CONNECT'
+                permissions: new PermissionsBitField([
+                    PermissionFlagsBits.SendMessages,
+                    PermissionFlagsBits.AddReactions,
+                    PermissionFlagsBits.CreatePublicThreads,
+                    PermissionFlagsBits.CreatePrivateThreads,
+                    PermissionFlagsBits.SendMessagesInThreads,
+                    PermissionFlagsBits.Connect
                 ])
             },
             text: {
                 options: {
-                    SEND_MESSAGES: false,
-                    ADD_REACTIONS: false,
-                    CREATE_PUBLIC_THREADS: false,
-                    CREATE_PRIVATE_THREADS: false,
-                    SEND_MESSAGES_IN_THREADS: false,
-                    USE_APPLICATION_COMMANDS: false
+                    SendMessages: false,
+                    AddReactions: false,
+                    CreatePublicThreads: false,
+                    CreatePrivateThreads: false,
+                    SendMessagesInThreads: false
                 },
-                permissions: new Permissions([
-                    'SEND_MESSAGES',
-                    'ADD_REACTIONS',
-                    'CREATE_PUBLIC_THREADS',
-                    'CREATE_PRIVATE_THREADS',
-                    'SEND_MESSAGES_IN_THREADS'
+                permissions: new PermissionsBitField([
+                    PermissionFlagsBits.SendMessages,
+                    PermissionFlagsBits.AddReactions,
+                    PermissionFlagsBits.CreatePublicThreads,
+                    PermissionFlagsBits.CreatePrivateThreads,
+                    PermissionFlagsBits.SendMessagesInThreads
                 ])
             },
             voice: {
                 options: {
-                    CONNECT: false
+                    Connect: false
                 },
-                permissions: new Permissions(['CONNECT'])
+                permissions: new PermissionsBitField([PermissionFlagsBits.Connect])
             }
         }
     ],
@@ -108,15 +107,15 @@ export const permissionOverwrites = new Map<RoleKey, RolePermissionOverwriteOpti
         {
             category: {
                 options: {
-                    EMBED_LINKS: false
+                    EmbedLinks: false
                 },
-                permissions: new Permissions('EMBED_LINKS')
+                permissions: new PermissionsBitField(PermissionFlagsBits.EmbedLinks)
             },
             text: {
                 options: {
-                    EMBED_LINKS: false
+                    EmbedLinks: false
                 },
-                permissions: new Permissions('EMBED_LINKS')
+                permissions: new PermissionsBitField(PermissionFlagsBits.EmbedLinks)
             },
             voice: null
         }

@@ -1,18 +1,18 @@
 import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { Colors } from '#utils/constants';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.GuildMemberUpdate,
+    event: FoxxieEvents.GuildMemberUpdate,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.GuildMemberUpdate> {
-    public async run(...[previous, next]: EventArgs<Events.GuildMemberUpdate>): Promise<void> {
+export class UserListener extends Listener<FoxxieEvents.GuildMemberUpdate> {
+    public async run(...[previous, next]: EventArgs<FoxxieEvents.GuildMemberUpdate>): Promise<void> {
         if (!(previous.pending && !next.pending)) return;
         // fetch t and settings.
         const [t, settings] = await this.container.db.guilds.acquire(next.guild.id, settings => [
@@ -21,13 +21,13 @@ export class UserListener extends Listener<Events.GuildMemberUpdate> {
         ]);
 
         // emit the member join event once screening passes.
-        this.container.client.emit(Events.GuildMemberJoin, next, settings);
+        this.container.client.emit(FoxxieEvents.GuildMemberJoin, next, settings);
         // emit the logging event for screening logs.
-        this.container.client.emit(Events.GuildMessageLog, next.guild, GuildSettings.Channels.Logs.MemberScreening, () =>
-            new MessageEmbed()
+        this.container.client.emit(FoxxieEvents.GuildMessageLog, next.guild, GuildSettings.Channels.Logs.MemberScreening, () =>
+            new EmbedBuilder()
                 .setAuthor({
                     name: t(LanguageKeys.Guilds.Logs.ActionMemberScreening),
-                    iconURL: next.displayAvatarURL({ dynamic: true })
+                    iconURL: next.displayAvatarURL()
                 })
                 .setTimestamp()
                 .setColor(Colors.Yellow)

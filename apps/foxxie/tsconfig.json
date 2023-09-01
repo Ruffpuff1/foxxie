@@ -59,6 +59,7 @@
         }
     },
     "include": [
+        ".eslintrc.js",
         "./src/**/*",
         "./src/**/*.json"
     ]

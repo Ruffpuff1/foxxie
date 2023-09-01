@@ -1,6 +1,6 @@
 import { GuildSettings, PartialResponseValue, ResponseType, Task } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { Events, ScheduleData } from '#lib/types';
+import { FoxxieEvents, ScheduleData } from '#lib/types';
 import { Schedules } from '#utils/constants';
 import { fetchChannel } from '#utils/Discord';
 import { isDev, seconds } from '@ruffpuff/utilities';
@@ -38,11 +38,12 @@ export class UserTask extends Task {
         const base = embed ? '' : t(LanguageKeys.Tasks.DisboardDefault);
 
         if (embed) embeds.push(embed);
+        const content = message || base || undefined;
 
         try {
-            await channel.send({ content: message || base || null, embeds });
+            await channel.send({ content, embeds });
         } catch (error) {
-            this.container.client.emit(Events.Error, error);
+            this.container.client.emit(FoxxieEvents.Error, error);
         }
     }
 }

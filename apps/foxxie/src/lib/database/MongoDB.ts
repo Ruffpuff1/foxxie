@@ -1,3 +1,4 @@
+import { maybeMe } from '#utils/Discord';
 import { BrandingColors } from '#utils/constants';
 import type { Message } from 'discord.js';
 import type { DataSource, Repository } from 'typeorm';
@@ -40,7 +41,7 @@ export class MongoDB {
     }
 
     public fetchColor(msg: Message): number {
-        return msg.member?.displayColor || msg.guild?.me?.displayColor || BrandingColors.Primary;
+        return msg.member?.displayColor || maybeMe(msg.guild!)?.displayColor || BrandingColors.Primary;
     }
 }
 

@@ -3,7 +3,7 @@
  * @copyright 2019 Skyra Project
  */
 import type { ScheduleManager } from '#lib/structures';
-import { Events } from '#lib/types/Events';
+import { FoxxieEvents } from '#lib/types/Events';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';
 import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
@@ -96,7 +96,7 @@ export class ScheduleEntity extends BaseEntity {
         try {
             response = (await task.run({ ...(this.data ?? {}), id: this.id })) as PartialResponseValue | null;
         } catch (error) {
-            container.client.emit(Events.TaskError, error, { piece: task, entity: this });
+            container.client.emit(FoxxieEvents.TaskError, error, { piece: task, entity: this });
         }
 
         this.#running = false;

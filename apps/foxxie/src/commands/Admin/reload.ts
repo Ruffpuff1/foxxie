@@ -2,12 +2,10 @@ import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage, PermissionLevels } from '#lib/types';
 import { sendLoadingMessage } from '#utils/Discord';
-import { i18next } from '@foxxie/i18n';
+import { TFunction, i18next } from '@foxxie/i18n';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Piece, Store } from '@sapphire/framework';
 import { Stopwatch } from '@sapphire/stopwatch';
-import type { Message } from 'discord.js';
-import { TFunction } from 'i18next';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['r'],
@@ -16,21 +14,21 @@ import { TFunction } from 'i18next';
     permissionLevel: PermissionLevels.BotOwner
 })
 export class UserCommand extends FoxxieCommand {
-    public async messageRun(msg: GuildMessage, args: FoxxieCommand.Args): Promise<Message> {
+    public async messageRun(msg: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
         const loading = await sendLoadingMessage(msg);
         const content = await this.reloadAny(args);
-        return loading.edit(content);
+        await loading.edit(content);
     }
 
     private async reloadAny(args: FoxxieCommand.Args): Promise<string> {
         const language = await args.pickResult('language');
-        if (language.success) return this.reloadLanguage(args.t, language.value);
+        if (language.isOk()) return this.reloadLanguage(args.t, language.unwrap());
 
         const store = await args.pickResult('store');
-        if (store.success) return this.reloadStore(args.t, store.value);
+        if (store.isOk()) return this.reloadStore(args.t, store.unwrap());
 
         const piece = await args.pickResult('piece');
-        if (piece.success) return this.reloadPiece(args.t, piece.value!);
+        if (piece.isOk()) return this.reloadPiece(args.t, piece.unwrap());
 
         return this.reloadEverything(args.t);
     }

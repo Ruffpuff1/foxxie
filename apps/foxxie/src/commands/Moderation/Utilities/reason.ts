@@ -1,6 +1,6 @@
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
-import { Events, GuildMessage, PermissionLevels } from '#lib/types';
+import { FoxxieEvents, GuildMessage, PermissionLevels } from '#lib/types';
 import { getModeration } from '#utils/Discord';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
@@ -11,7 +11,7 @@ import { send } from '@sapphire/plugin-editable-commands';
     usage: LanguageKeys.Commands.Moderation.ReasonUsage
 })
 export default class UserCommand extends FoxxieCommand {
-    public async messageRun(message: GuildMessage, args: FoxxieCommand.Args) {
+    public async messageRun(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
         const caseId = await args.pick('moderationLog');
 
         const log = await getModeration(message.guild).fetch(caseId);
@@ -22,11 +22,11 @@ export default class UserCommand extends FoxxieCommand {
 
         clone.reason = reason;
 
-        this.client.emit(Events.ModerationEntryEdit, log, clone);
+        this.client.emit(FoxxieEvents.ModerationEntryEdit, log, clone);
 
         log.reason = reason;
         await log.save();
 
-        return send(message, args.t(LanguageKeys.Commands.Moderation.ReasonSuccess, { reason }));
+        await send(message, args.t(LanguageKeys.Commands.Moderation.ReasonSuccess, { reason }));
     }
 }

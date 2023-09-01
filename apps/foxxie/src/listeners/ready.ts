@@ -1,13 +1,12 @@
-import type { Events } from '#lib/types';
+import type { FoxxieEvents } from '#lib/types';
 import { createBanner } from '#utils/startBanner';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
 import { blue, gray, yellow } from 'colorette';
 import gradient from 'gradient-string';
-import i18next from 'i18next';
 
 @ApplyOptions<Listener.Options>({ once: true })
-export class UserListener extends Listener<Events.Ready> {
+export class UserListener extends Listener<FoxxieEvents.Ready> {
     private readonly style = this.isDev ? yellow : blue;
 
     public run() {
@@ -69,9 +68,7 @@ export class UserListener extends Listener<Events.Ready> {
         const last = stores.pop()!;
 
         for (const store of stores) logger.info(this.styleStore(store));
-        logger.info(
-            gray(`├─ Loaded ${this.style((i18next.options.preload as string[]).length.toString().padEnd(3, ' '))} languages.`)
-        );
+        logger.info(gray(`├─ Loaded ${this.style((2).toString().padEnd(3, ' '))} languages.`));
         logger.info(this.styleStore(last, true));
     }
 

@@ -1,5 +1,5 @@
 import { GuildEntity, GuildSettings } from '#lib/database';
-import { Events, GuildMessage } from '#lib/types';
+import { FoxxieEvents, GuildMessage } from '#lib/types';
 import { getModeration, isModerator, isSendableChannel } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
@@ -21,7 +21,7 @@ export abstract class ModerationListener extends Listener {
     private readonly reasonLanguageKey: CustomGet<string, string>;
 
     public constructor(context: PieceContext, options: ModerationListener.Options) {
-        super(context, { ...options, event: Events.UserMessage, enabled: !isDev() });
+        super(context, { ...options, event: FoxxieEvents.UserMessage, enabled: !isDev() });
 
         this.keyEnabled = options.keyEnabled;
         this.softPunishmentPath = options.softPunishmentPath;
