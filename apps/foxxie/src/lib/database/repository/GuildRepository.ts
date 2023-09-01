@@ -230,7 +230,7 @@ export class GuildRepository<T extends GuildEntity> extends CustomRepository<Gui
     public async fetch(key: string): Promise<T> {
         const { guilds } = container.db;
 
-        const existing = <T>await guilds.findOne({ where: { id: key } });
+        const existing = <T> await guilds.findOne({ where: { id: key } });
         if (existing) {
             this.cache.set(key, existing);
             return existing;

@@ -4,15 +4,14 @@ import { FoxxieCommand } from '#lib/structures';
 import type { GuildMessage } from '#lib/types';
 import { isGuildOwner, sendLoadingMessage } from '#utils/Discord';
 import { BrandingColors, emojis } from '#utils/constants';
-import { floatPromise } from '#utils/util';
+import { floatPromise, resolveEmbedField } from '#utils/util';
 import { EmbedAuthorData } from '@discordjs/builders';
 import { EnvParse } from '@foxxie/env';
 import { TFunction } from '@foxxie/i18n';
 import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
-import { Argument, isOk } from '@sapphire/framework';
-import { Guild, GuildMember, MessageEmbed, Role, User, type Message } from 'discord.js';
+import { Argument } from '@sapphire/framework';
+import { ChannelType, EmbedBuilder, Guild, GuildMember, Role, User } from 'discord.js';
 
 const serverOptions = ['guild', 'server'];
 const roleLimit = 10;
@@ -24,11 +23,11 @@ const GUILDROLESORT = (x: Role, y: Role) => Number(y.position > x.position) || N
     description: LanguageKeys.Commands.General.InfoDescription
 })
 export default class UserCommand extends FoxxieCommand {
-    public async messageRun(message: GuildMessage, args: FoxxieCommand.Args): Promise<Message | PaginatedMessage> {
+    public async messageRun(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
         const msg = (await sendLoadingMessage(message)) as GuildMessage;
         const arg = await this.resolveArgument(message, args);
 
-        return this.buildDisplay(message, args, { msg, arg });
+        await this.buildDisplay(message, args, { msg, arg });
     }
 
     private async buildDisplay(message: GuildMessage, args: FoxxieCommand.Args, { msg, arg }: DisplayProps) {
@@ -47,21 +46,23 @@ export default class UserCommand extends FoxxieCommand {
             })
         ];
 
-        let authorString = `${user.username} [${user.id}]`;
+        const authorString = `${user.username} [${user.id}]`;
         const member = await resolveToNull(msg.guild.members.fetch(user.id));
         if (member) this.addMemberData(member, about, args.t, settings.member.messageCount);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setColor(member?.displayColor || args.color)
-            .setThumbnail(member?.displayAvatarURL({ dynamic: true }) || user.displayAvatarURL({ dynamic: true }))
+            .setThumbnail(member?.displayAvatarURL() || user.displayAvatarURL())
             .setAuthor({
                 name: authorString,
-                iconURL: user.displayAvatarURL({ dynamic: true })
+                iconURL: user.displayAvatarURL()
             });
 
         const owners = EnvParse.array('CLIENT_OWNERS');
 
-        embed.addField(`${titles.about}${owners.includes(user.id) ? ` ${emojis.ruffThink}` : ''}`, about.join('\n'));
+        embed.addFields(
+            resolveEmbedField(`${titles.about}${owners.includes(user.id) ? ` ${emojis.ruffThink}` : ''}`, about.join('\n'))
+        );
 
         if (member) this.addRoles(embed, member, args.t);
         await this.addNotes(embed, args.t, settings.member);
@@ -70,7 +71,7 @@ export default class UserCommand extends FoxxieCommand {
         return msg.edit({ embeds: [embed], content: null });
     }
 
-    private addRoles(embed: MessageEmbed, member: GuildMember, t: TFunction) {
+    private addRoles(embed: EmbedBuilder, member: GuildMember, t: TFunction) {
         const arr = [...member.roles.cache.values()];
         arr.sort((a, b) => b.position - a.position);
 
@@ -91,11 +92,13 @@ export default class UserCommand extends FoxxieCommand {
             }, '');
 
         if (arr.length)
-            embed.addField(
-                t(LanguageKeys.Commands.General.InfoUserTitlesRoles, {
-                    count: arr.length - 1
-                }),
-                roleString.length ? roleString : toTitleCase(t(LanguageKeys.Globals.None))
+            embed.addFields(
+                resolveEmbedField(
+                    t(LanguageKeys.Commands.General.InfoUserTitlesRoles, {
+                        count: arr.length - 1
+                    }),
+                    roleString.length ? roleString : toTitleCase(t(LanguageKeys.Globals.None))
+                )
             );
     }
 
@@ -109,54 +112,62 @@ export default class UserCommand extends FoxxieCommand {
         );
     }
 
-    private async addWarnings(embed: MessageEmbed, t: TFunction, member: MemberEntity) {
-        const warnings = member.warnings;
+    private async addWarnings(embed: EmbedBuilder, t: TFunction, member: MemberEntity) {
+        const { warnings } = member;
         if (!warnings.length) return;
 
         for (const { authorId } of warnings) await floatPromise(this.client.users.fetch(authorId));
-        embed.addField(
-            t(LanguageKeys.Commands.General.InfoUserTitlesWarnings, {
-                count: warnings.length
-            }),
-            warnings
-                .map((w, i) => {
-                    const author = this.client.users.cache.get(w.authorId);
-                    const name = author?.username || t(LanguageKeys.Globals.Unknown);
-                    return [`${t(LanguageKeys.Globals.NumberFormat, { value: i + 1 })}.`, w.reason, `- **${name}**`].join(' ');
-                })
-                .join('\n')
+        embed.addFields(
+            resolveEmbedField(
+                t(LanguageKeys.Commands.General.InfoUserTitlesWarnings, {
+                    count: warnings.length
+                }),
+                warnings
+                    .map((w, i) => {
+                        const author = this.client.users.cache.get(w.authorId);
+                        const name = author?.username || t(LanguageKeys.Globals.Unknown);
+                        return [`${t(LanguageKeys.Globals.NumberFormat, { value: i + 1 })}.`, w.reason, `- **${name}**`].join(
+                            ' '
+                        );
+                    })
+                    .join('\n')
+            )
         );
     }
 
-    private async addNotes(embed: MessageEmbed, t: TFunction, member: MemberEntity) {
-        const notes = member.notes;
+    private async addNotes(embed: EmbedBuilder, t: TFunction, member: MemberEntity) {
+        const { notes } = member;
         if (!notes.length) return;
 
         for (const { authorId } of notes) await floatPromise(this.client.users.fetch(authorId));
-        embed.addField(
-            t(LanguageKeys.Commands.General.InfoUserTitlesNotes, {
-                count: notes.length
-            }),
-            notes
-                .map((n, i) => {
-                    const author = this.client.users.cache.get(n.authorId);
-                    const name = author?.username || t(LanguageKeys.Globals.Unknown);
-                    return [`${t(LanguageKeys.Globals.NumberFormat, { value: i + 1 })}.`, n.reason, `- **${name}**`].join(' ');
-                })
-                .join('\n')
+        embed.addFields(
+            resolveEmbedField(
+                t(LanguageKeys.Commands.General.InfoUserTitlesNotes, {
+                    count: notes.length
+                }),
+                notes
+                    .map((n, i) => {
+                        const author = this.client.users.cache.get(n.authorId);
+                        const name = author?.username || t(LanguageKeys.Globals.Unknown);
+                        return [`${t(LanguageKeys.Globals.NumberFormat, { value: i + 1 })}.`, n.reason, `- **${name}**`].join(
+                            ' '
+                        );
+                    })
+                    .join('\n')
+            )
         );
     }
 
     private async buildGuildDisplay(_: GuildMessage, args: FoxxieCommand.Args, { msg, arg: guild }: DisplayProps<Guild>) {
         const [messages, owner, color] = await this.fetchGuildData(guild);
         const titles = args.t(LanguageKeys.Commands.General.InfoServerTitles);
-        const channels = guild.channels.cache.filter(c => c.type !== 'GUILD_CATEGORY');
+        const channels = guild.channels.cache.filter(c => c.type !== ChannelType.GuildCategory);
         const none = toTitleCase(args.t(LanguageKeys.Globals.None));
         const { staticEmojis, animated, hasEmojis } = this.getGuildEmojiData(guild);
 
-        const embed = new MessageEmbed() //
+        const embed = new EmbedBuilder() //
             .setColor(color)
-            .setThumbnail(guild.iconURL({ dynamic: true })!)
+            .setThumbnail(guild.iconURL()!)
             .setAuthor(this.formatGuildTitle(guild))
             .setDescription(
                 [
@@ -173,35 +184,47 @@ export default class UserCommand extends FoxxieCommand {
         if (guild.id !== msg.guild.id) return msg.edit({ content: null, embeds: [embed] });
 
         embed //
-            .addField(
-                args.t(LanguageKeys.Commands.General.InfoServerTitlesRoles, { count: guild.roles.cache.size - 1 }),
-                this.getGuildRoles(guild, args.t)
+            .addFields(
+                resolveEmbedField(
+                    args.t(LanguageKeys.Commands.General.InfoServerTitlesRoles, { count: guild.roles.cache.size - 1 }),
+                    this.getGuildRoles(guild, args.t)
+                )
             )
-            .addField(
-                titles.members,
-                args.t(LanguageKeys.Commands.General.InfoServerMembers, {
-                    size: guild.memberCount,
-                    cache: guild.members.cache.size
-                }),
-                true
+            .addFields(
+                resolveEmbedField(
+                    titles.members,
+                    args.t(LanguageKeys.Commands.General.InfoServerMembers, {
+                        size: guild.memberCount,
+                        cache: guild.members.cache.size
+                    }),
+                    true
+                )
             )
-            .addField(
-                args.t(LanguageKeys.Commands.General.InfoServerTitlesChannels, { count: channels.size }),
-                args.t(LanguageKeys.Commands.General.InfoServerChannels, { channels }),
-                true
+            .addFields(
+                resolveEmbedField(
+                    args.t(LanguageKeys.Commands.General.InfoServerTitlesChannels, { count: channels.size }),
+                    args.t(LanguageKeys.Commands.General.InfoServerChannels, { channels }),
+                    true
+                )
             )
-            .addField(
-                args.t(LanguageKeys.Commands.General.InfoServerTitlesEmojis, { count: staticEmojis + animated }),
-                hasEmojis ? args.t(LanguageKeys.Commands.General.InfoServerEmojis, { static: staticEmojis, animated }) : none,
-                true
+            .addFields(
+                resolveEmbedField(
+                    args.t(LanguageKeys.Commands.General.InfoServerTitlesEmojis, { count: staticEmojis + animated }),
+                    hasEmojis ? args.t(LanguageKeys.Commands.General.InfoServerEmojis, { static: staticEmojis, animated }) : none,
+                    true
+                )
             )
-            .addField(titles.stats, args.t(LanguageKeys.Commands.General.InfoServerMessages, { messages }), true)
-            .addField(
-                titles.security,
-                args.t(LanguageKeys.Commands.General.InfoServerSecurity, {
-                    filter: guild.verificationLevel,
-                    content: guild.explicitContentFilter
-                })
+            .addFields(
+                resolveEmbedField(titles.stats, args.t(LanguageKeys.Commands.General.InfoServerMessages, { messages }), true)
+            )
+            .addFields(
+                resolveEmbedField(
+                    titles.security,
+                    args.t(LanguageKeys.Commands.General.InfoServerSecurity, {
+                        filter: guild.verificationLevel,
+                        content: guild.explicitContentFilter
+                    })
+                )
             );
 
         return msg.edit({ content: null, embeds: [embed] });
@@ -232,7 +255,7 @@ export default class UserCommand extends FoxxieCommand {
 
     private async fetchGuildData(guild: Guild): Promise<[number, GuildMember | null, number]> {
         const messages = await acquireSettings(guild, GuildSettings.MessageCount);
-        const me = await resolveToNull(guild.members.fetch(this.client.user?.id!));
+        const me = await resolveToNull(guild.members.fetch(EnvParse.string('CLIENT_ID')));
         const owner = await resolveToNull(guild.members.fetch(guild.ownerId));
 
         return [messages, owner, me?.displayColor || BrandingColors.Primary];
@@ -241,8 +264,8 @@ export default class UserCommand extends FoxxieCommand {
     private formatGuildTitle(guild: Guild): EmbedAuthorData {
         return {
             name: `${guild.name} [${guild.id}]`,
-            iconURL: guild.iconURL({ format: 'png', dynamic: true })!,
-            url: guild.vanityURLCode ? `https://discord.gg/${guild.vanityURLCode}` : ''
+            iconURL: guild.iconURL({ extension: 'png' }) || undefined,
+            url: guild.vanityURLCode ? `https://discord.gg/${guild.vanityURLCode}` : undefined
         };
     }
 
@@ -264,7 +287,7 @@ export default class UserCommand extends FoxxieCommand {
               } as unknown as Argument.Context<User>)
             : null;
 
-        if (userResult && isOk(userResult)) arg = userResult.value;
+        if (userResult?.isOk()) arg = userResult.unwrap();
         else arg = message.author;
 
         if (arg instanceof User) await floatPromise(arg.fetch());

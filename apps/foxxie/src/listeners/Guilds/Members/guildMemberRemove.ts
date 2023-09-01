@@ -1,4 +1,4 @@
-import { Events, EventArgs } from '#lib/types';
+import { FoxxieEvents, EventArgs } from '#lib/types';
 import { ApplyOptions } from '@sapphire/decorators';
 import { acquireSettings, GuildSettings } from '#lib/database';
 import { fetchChannel, getPersistRoles } from '#utils/Discord';
@@ -9,11 +9,11 @@ import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { floatPromise } from '#utils/util';
 
 @ApplyOptions<AutomationListener.Options>({
-    event: Events.GuildMemberRemove,
+    event: FoxxieEvents.GuildMemberRemove,
     enabled: !isDev()
 })
-export class UserAutomationAutomationListener extends AutomationListener<Events.GuildMemberRemove> {
-    public async run(...[member]: EventArgs<Events.GuildMemberRemove>): Promise<void> {
+export class UserAutomationAutomationListener extends AutomationListener<FoxxieEvents.GuildMemberRemove> {
+    public async run(...[member]: EventArgs<FoxxieEvents.GuildMemberRemove>): Promise<void> {
         const [message, embed, timer, persist, t] = await acquireSettings(member.guild, settings => [
             settings[GuildSettings.Messages.Goodbye],
             settings[GuildSettings.Embeds.Goodbye],

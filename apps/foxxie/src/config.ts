@@ -5,7 +5,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { emojis, rootFolder } from '#utils/constants';
 import { TimestampStyles, bold, time } from '@discordjs/builders';
 import { EnvParse } from '@foxxie/env';
-import { Formatter, getT, i18next, init } from '@foxxie/i18n';
+import { Formatter, TFunction, getT, i18next, init } from '@foxxie/i18n';
 import { Iso6391Enum } from '@foxxie/i18n-codes';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
@@ -14,15 +14,19 @@ import { DurationFormatAssetsTime, DurationFormatter } from '@sapphire/time-util
 import { GatewayIntentBits, type LocaleString } from 'discord-api-types/v10';
 import {
     ActivitiesOptions,
+    ActivityType,
+    ChannelType,
     ClientOptions,
     Collection,
-    ExplicitContentFilterLevel,
-    Formatters,
     GuildChannel,
-    WebhookClientData
+    GuildExplicitContentFilter,
+    Partials,
+    WebhookClientData,
+    codeBlock,
+    inlineCode
 } from 'discord.js';
 import { config } from 'dotenv-cra';
-import type { InterpolationOptions, TFunction } from 'i18next';
+import type { InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
 
 config({
@@ -33,7 +37,6 @@ export const formatDuration = (value: Date) => time(value, TimestampStyles.Relat
 export const formatLongDate = (value: Date) => time(value, TimestampStyles.LongDate);
 
 PaginatedMessage.defaultActions = [
-    PaginatedMessage.defaultActions[0], // select menu
     PaginatedMessage.defaultActions[2], // previous
     PaginatedMessage.defaultActions[5], // stop
     PaginatedMessage.defaultActions[3] // next
@@ -50,7 +53,7 @@ function parsePresenceActivity(): ActivitiesOptions[] {
     return [
         {
             name: EnvParse.string('CLIENT_PRESENCE_NAME'),
-            type: 'LISTENING'
+            type: ActivityType.Listening
         }
     ];
 }
@@ -105,12 +108,11 @@ function getInterpolation(): InterpolationOptions {
 }
 
 export function channelList(value: Collection<string, GuildChannel>, t: TFunction): string {
-    const textSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_TEXT' ? 1 : 0), 0);
-    const stageSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_STAGE_VOICE' ? 1 : 0), 0);
-    const storeSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_STORE' ? 1 : 0), 0);
-    const newsSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_NEWS' ? 1 : 0), 0);
-    const voiceSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_VOICE' ? 1 : 0), 0);
-    const pubThreadSize = value.reduce((acc, itm) => (acc += itm.type === 'GUILD_PUBLIC_THREAD' ? 1 : 0), 0);
+    const textSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.GuildText ? 1 : 0), 0);
+    const stageSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.GuildStageVoice ? 1 : 0), 0);
+    const newsSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.GuildAnnouncement ? 1 : 0), 0);
+    const voiceSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.GuildVoice ? 1 : 0), 0);
+    const pubThreadSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.PublicThread ? 1 : 0), 0);
 
     return (
         [
@@ -138,12 +140,6 @@ export function channelList(value: Collection<string, GuildChannel>, t: TFunctio
                       context: 'short'
                   })
                 : null,
-            storeSize
-                ? t(LanguageKeys.Guilds.Channels.GUILD_STORE, {
-                      count: storeSize,
-                      context: 'short'
-                  })
-                : null,
             pubThreadSize
                 ? t(LanguageKeys.Guilds.Channels.GUILD_PUBLIC_THREAD, {
                       count: pubThreadSize,
@@ -165,13 +161,11 @@ function getFormatters(): Formatter[] {
         {
             name: 'codeand',
             format: (value, lng) =>
-                new Intl.ListFormat(lng!, { type: 'conjunction' }).format(
-                    value.map((item: string) => Formatters.inlineCode(item))
-                )
+                new Intl.ListFormat(lng!, { type: 'conjunction' }).format(value.map((item: string) => inlineCode(item)))
         },
         {
             name: 'code',
-            format: value => Formatters.inlineCode(value)
+            format: value => inlineCode(value)
         },
         {
             name: 'or',
@@ -180,9 +174,7 @@ function getFormatters(): Formatter[] {
         {
             name: 'codeor',
             format: (value, lng) =>
-                new Intl.ListFormat(lng!, { type: 'disjunction' }).format(
-                    value.map((item: string) => Formatters.inlineCode(item))
-                )
+                new Intl.ListFormat(lng!, { type: 'disjunction' }).format(value.map((item: string) => inlineCode(item)))
         },
         {
             name: 'duration',
@@ -194,7 +186,7 @@ function getFormatters(): Formatter[] {
         },
         {
             name: 'codeblock',
-            format: value => Formatters.codeBlock('', value)
+            format: value => codeBlock('', value)
         },
         {
             name: 'datetime',
@@ -275,7 +267,7 @@ function getFormatters(): Formatter[] {
         },
         {
             name: 'contentfilter',
-            format: (value: ExplicitContentFilterLevel, lng) => getT(lng!)(LanguageKeys.Guilds.ContentFilters[value])
+            format: (value: GuildExplicitContentFilter, lng) => getT(lng!)(LanguageKeys.Guilds.ContentFilters.FilterArray[value])
         },
 
         {
@@ -315,7 +307,7 @@ export const clientOptions: ClientOptions = {
         activities: parsePresenceActivity(),
         status: 'idle'
     },
-    partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+    partials: [Partials.Message, Partials.Channel, Partials.Reaction],
     regexPrefix: parseRegexPrefix(),
     loadDefaultErrorListeners: false,
     loadMessageCommandListeners: true,
@@ -329,10 +321,11 @@ export const clientOptions: ClientOptions = {
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildBans,
+        GatewayIntentBits.GuildModeration,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.GuildVoiceStates,
-        GatewayIntentBits.DirectMessages
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent
     ]
 };

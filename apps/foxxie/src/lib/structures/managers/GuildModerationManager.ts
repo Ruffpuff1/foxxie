@@ -23,9 +23,9 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         return [...super.values()];
     }
 
-    public async getCurrentId() {
+    public async getCurrentId(guildId?: string | null) {
         if (this._count === null) {
-            const cases = await container.db.moderations.find({ where: { guildId: this.guild?.id } });
+            const cases = await container.db.moderations.find({ where: { guildId: guildId || this.guild?.id } });
             this._count = cases.length ?? 0;
         }
 

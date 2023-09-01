@@ -1,4 +1,4 @@
-export const enum Events {
+export const enum FoxxieEvents {
     AnalyticsPostStats = 'analyticsPostStats',
     AnalyticsSync = 'analyticsSync',
     BotMessage = 'botMessage',
@@ -12,7 +12,6 @@ export const enum Events {
     GuildMemberRemove = 'guildMemberRemove',
     GuildMemberUpdate = 'guildMemberUpdate',
     GuildMessageLog = 'guildMessageLog',
-    GuildMessageDeleteLog = 'messageDelete',
     GuildMessageUpdateLog = 'messageUpdate',
     ListenerError = 'listenerError',
     MentionPrefixOnly = 'mentionPrefixOnly',
@@ -21,7 +20,7 @@ export const enum Events {
     MessageCommandFinish = 'messageCommandFinish',
     MessageCommandLogging = 'messageCommandLogging',
     MessageCreate = 'messageCreate',
-    MessageDeleteResponse = 'messageDelete',
+    MessageDelete = 'messageDelete',
     ModerationEntryAdd = 'moderationEntryAdd',
     ModerationEntryEdit = 'moderationEntryEdit',
     PointsMember = 'pointsMember',

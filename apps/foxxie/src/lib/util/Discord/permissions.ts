@@ -1,4 +1,4 @@
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { Permissions } from 'discord.js';
+import { PermissionsBitField } from 'discord.js';
 
-export const sendMessages = new Permissions([PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]);
+export const sendMessages = new PermissionsBitField([PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages]);

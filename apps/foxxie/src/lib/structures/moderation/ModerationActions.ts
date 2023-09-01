@@ -1,18 +1,27 @@
-import { api } from '#external/Api';
 import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import type { GuildMessage } from '#lib/types';
-import { getModeration, getPersistRoles, messagePrompt } from '#utils/Discord';
-import { BrandingColors, Colors } from '#utils/constants';
+import { getModeration, getPersistRoles, maybeMe, messagePrompt } from '#utils/Discord';
+import { Colors } from '#utils/constants';
 import { SendOptions, TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 import { handleDiscordAPIError } from '#utils/transformers';
-import { floatPromise } from '#utils/util';
+import { floatPromise, resolveClientColor } from '#utils/util';
 import { chunk } from '@ruffpuff/utilities';
 import { isCategoryChannel, isNewsChannel, isStageChannel, isTextChannel, isVoiceChannel } from '@sapphire/discord.js-utilities';
 import { UserError, container } from '@sapphire/framework';
 import { isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
-import type { APIGuildChannel, APIOverwrite, ChannelType } from 'discord-api-types/v9';
-import { Guild, GuildChannel, MessageEmbed, PermissionOverwriteOptions, PermissionOverwrites, Role } from 'discord.js';
+import type { APIGuildChannel, ChannelType } from 'discord-api-types/v10';
+import {
+    EmbedBuilder,
+    Guild,
+    GuildChannel,
+    GuildTextBasedChannel,
+    OverwriteData,
+    PermissionOverwriteOptions,
+    PermissionOverwrites,
+    Role,
+    Routes
+} from 'discord.js';
 import { Warn } from '../../database/entities/Warn';
 import {
     RoleKey,
@@ -31,11 +40,10 @@ export class ModerationActions {
 
         await this.sendDM(moderationLog, sendOptions);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Ban);
-
         const reason = await this.fetchReason(moderationLog);
 
-        await api().guilds(this.guild.id).bans(moderationLog.userId!).put({
-            delete_message_days: days,
+        await this.guild.bans.create(moderationLog.userId, {
+            deleteMessageDays: days,
             reason
         });
 
@@ -49,9 +57,7 @@ export class ModerationActions {
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Ban);
         const reason = await this.fetchReason(moderationLog);
 
-        await api().guilds(this.guild.id).bans(moderationLog.userId!).delete({
-            reason
-        });
+        await this.guild.bans.remove(moderationLog.userId, reason);
 
         await this.sendDM(moderationLog, sendOptions);
 
@@ -65,9 +71,7 @@ export class ModerationActions {
         const reason = await this.fetchReason(moderationLog);
         await this.sendDM(moderationLog, sendOptions);
 
-        await api().guilds(this.guild.id).members(moderationLog.userId!).delete({
-            reason
-        });
+        await this.guild.members.kick(moderationLog.userId, reason);
 
         return (await moderationLog.create())!;
     }
@@ -79,14 +83,12 @@ export class ModerationActions {
         const reason = await this.fetchReason(moderationLog);
         await this.sendDM(moderationLog, sendOptions);
 
-        await api().guilds(this.guild.id).bans(moderationLog.userId!).put({
-            reason,
-            delete_message_days: days
-        });
-
-        await api().guilds(this.guild.id).bans(moderationLog.userId!).delete({
+        await this.guild.bans.create(moderationLog.userId, {
+            deleteMessageDays: days,
             reason
         });
+
+        await this.guild.bans.remove(moderationLog.userId, reason);
 
         return (await moderationLog.create())!;
     }
@@ -100,7 +102,8 @@ export class ModerationActions {
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Mute);
 
         try {
-            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(roleId!).put({ reason });
+            const member = this.guild.members.cache.get(moderationLog.userId);
+            await member?.roles.add(roleId!, reason);
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             throw new UserError({
@@ -122,8 +125,8 @@ export class ModerationActions {
         const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.Muted);
 
         try {
-            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(roleId!).delete({ reason });
-
+            const member = this.guild.members.cache.get(moderationLog.userId);
+            await member?.roles.remove(roleId!, reason);
             await this.removePersistPunish(roleId!, moderationLog.userId!);
         } catch (error) {
             const handled = handleDiscordAPIError(error);
@@ -147,7 +150,8 @@ export class ModerationActions {
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.RestrictEmbed);
 
         try {
-            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(roleId!).put({ reason });
+            const member = this.guild.members.cache.get(moderationLog.userId);
+            await member?.roles.add(roleId!, reason);
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             throw new UserError({
@@ -169,8 +173,8 @@ export class ModerationActions {
         const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.EmbedRestrict);
 
         try {
-            await api().guilds(this.guild.id).members(moderationLog.userId!).roles(roleId!).delete({ reason });
-
+            const member = this.guild.members.cache.get(moderationLog.userId);
+            await member?.roles.remove(roleId!, reason);
             await this.removePersistPunish(roleId!, moderationLog.userId!);
         } catch (error) {
             const handled = handleDiscordAPIError(error);
@@ -188,18 +192,9 @@ export class ModerationActions {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Prune);
         const moderationLog = this.create(options);
 
-        const reason = await this.fetchReason(moderationLog);
-
         for (const bulks of chunk(messages, 100)) {
             try {
-                await api()
-                    .channels(moderationLog.channelId!)
-                    .messages['bulk-delete'].post({
-                        data: {
-                            messages: bulks
-                        },
-                        reason
-                    });
+                await (this.guild.channels.cache.get(moderationLog.channelId!) as GuildTextBasedChannel)?.bulkDelete(bulks);
             } catch (error) {
                 const handled = handleDiscordAPIError(error);
                 if (handled.identifier)
@@ -218,17 +213,13 @@ export class ModerationActions {
         const moderationLog = this.create(options);
 
         const reason = await this.fetchReason(moderationLog);
-
-        const { allow, deny } = await this.resolvePermissions(moderationLog.channelId!, { SEND_MESSAGES: false });
+        const { allow, deny } = await this.resolvePermissions(moderationLog.channelId!, { SendMessages: false });
 
         try {
-            await api()
-                .channels(moderationLog.channelId!)
-                .permissions(this.guild.id)
-                .put({
-                    data: { allow: allow!, deny: deny!, type: 0 },
-                    reason
-                });
+            await (this.guild.channels.cache.get(moderationLog.channelId!) as GuildTextBasedChannel)?.edit({
+                permissionOverwrites: [{ allow, deny, type: 0, id: this.guild.id }],
+                reason
+            });
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             if (handled.identifier)
@@ -247,16 +238,13 @@ export class ModerationActions {
 
         const reason = await this.fetchReason(moderationLog);
 
-        const { allow, deny } = await this.resolvePermissions(moderationLog.channelId!, { SEND_MESSAGES: true });
+        const { allow, deny } = await this.resolvePermissions(moderationLog.channelId!, { SendMessages: true });
 
         try {
-            await api()
-                .channels(moderationLog.channelId!)
-                .permissions(this.guild.id)
-                .put({
-                    data: { allow: allow!, deny: deny!, type: 0 },
-                    reason
-                });
+            await (this.guild.channels.cache.get(moderationLog.channelId!) as GuildTextBasedChannel)?.edit({
+                permissionOverwrites: [{ allow, deny, type: 0, id: this.guild.id }],
+                reason
+            });
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             if (handled.identifier)
@@ -304,13 +292,7 @@ export class ModerationActions {
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Nickname);
 
         try {
-            await api()
-                .guilds(this.guild.id)
-                .members(moderationLog.userId!)
-                .patch({
-                    data: { nick: nickname },
-                    reason
-                });
+            await this.guild.members.cache.get(moderationLog.userId!)?.setNickname(nickname, reason);
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             if (handled.identifier)
@@ -332,13 +314,7 @@ export class ModerationActions {
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Nickname);
 
         try {
-            await api()
-                .guilds(this.guild.id)
-                .members(moderationLog.userId!)
-                .patch({
-                    data: { nick: nickname },
-                    reason
-                });
+            await this.guild.members.cache.get(moderationLog.userId!)?.setNickname(nickname, reason);
         } catch (error) {
             const handled = handleDiscordAPIError(error);
             if (handled.identifier)
@@ -388,7 +364,7 @@ export class ModerationActions {
         return entry;
     }
 
-    private async buildDMEmbed(entry: ModerationEntity): Promise<MessageEmbed> {
+    private async buildDMEmbed(entry: ModerationEntity): Promise<EmbedBuilder> {
         const moderator = await entry.fetchModerator();
         const t = await container.db.guilds.acquire(this.guild.id, settings => settings.getLanguage());
         const [name] = await entry.formatUtils();
@@ -401,13 +377,13 @@ export class ModerationActions {
 
         const titles = t(LanguageKeys.Moderation.Dm, obj);
 
-        return new MessageEmbed()
-            .setColor(entry.color || this.guild.me?.displayColor || BrandingColors.Primary)
+        return new EmbedBuilder()
+            .setColor(resolveClientColor(this.guild, entry.color))
             .setAuthor({
                 name,
-                iconURL: moderator?.displayAvatarURL({ dynamic: true })
+                iconURL: moderator?.displayAvatarURL()
             })
-            .setThumbnail(this.guild.iconURL({ dynamic: true })!)
+            .setThumbnail(this.guild.iconURL()!)
             .setDescription(
                 [
                     titles[entry.title as keyof typeof titles],
@@ -434,8 +410,10 @@ export class ModerationActions {
         return `${entry.duration ? `[Temp] ` : ''}${moderator?.tag} | ${entry.reason ?? t(LanguageKeys.Moderation.NoReason)}`;
     }
 
-    private async resolvePermissions(channelId: string, options: PermissionOverwriteOptions): Promise<Partial<APIOverwrite>> {
-        const rawChannel = (await api().channels(channelId).get()) as APIGuildChannel<ChannelType.GuildText>;
+    private async resolvePermissions(channelId: string, options: PermissionOverwriteOptions): Promise<OverwriteData> {
+        const rawChannel = (await this.guild.client.rest.get(
+            Routes.channel(channelId)
+        )) as APIGuildChannel<ChannelType.GuildText>;
         const { allow: prevAllow, deny: prevDeny } = rawChannel.permission_overwrites!.find(perms => perms.id === this.guild.id)!;
 
         const resolved = PermissionOverwrites.resolveOverwriteOptions(options, {
@@ -446,8 +424,9 @@ export class ModerationActions {
         const { allow, deny } = resolved;
 
         return {
-            allow: allow.bitfield.toString(),
-            deny: deny.bitfield.toString()
+            allow: allow.bitfield,
+            deny: deny.bitfield,
+            id: channelId
         };
     }
 
@@ -465,7 +444,7 @@ export class ModerationActions {
         const role = await this.guild.roles.create({
             ...data,
             name: lang.name,
-            position: this.guild.me?.roles.highest.position || 0,
+            position: maybeMe(this.guild)?.roles.highest.position || 0,
             reason: lang.reason,
             color: Colors.Restricted
         });

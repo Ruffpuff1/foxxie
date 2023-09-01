@@ -1,13 +1,13 @@
-import { FoxxieCommand } from '#lib/structures';
 import { LanguageKeys } from '#lib/i18n';
-import { ApplyOptions } from '@sapphire/decorators';
-import { Message, MessageEmbed } from 'discord.js';
+import { FoxxieCommand } from '#lib/structures';
 import { commit } from '#utils/constants';
-import { send } from '@sapphire/plugin-editable-commands';
-import { isDev } from '@ruffpuff/utilities';
-import { version as discordVersion } from 'discord.js/package.json';
-import { PermissionFlagsBits } from 'discord-api-types/v9';
 import { getServerDetails } from '#utils/util';
+import { isDev } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
+import { send } from '@sapphire/plugin-editable-commands';
+import { PermissionFlagsBits } from 'discord-api-types/v10';
+import { EmbedBuilder, Message } from 'discord.js';
+import { version as discordVersion } from 'discord.js/package.json';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['up', 'uptime'],
@@ -17,7 +17,7 @@ import { getServerDetails } from '#utils/util';
 })
 export class UserCommand extends FoxxieCommand {
     public async messageRun(msg: Message, args: FoxxieCommand.Args): Promise<void> {
-        const hash = await commit();
+        const hash = commit();
         const head = hash ? ` [${hash[0].trim()}]` : '';
 
         const {
@@ -49,17 +49,17 @@ export class UserCommand extends FoxxieCommand {
             cpuSpeed
         });
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setAuthor({
                 name: `${this.client.user?.username} v${process.env.VERSION_NUM}${isDev() ? '-dev' : ''}${head}`,
-                iconURL: this.client.user?.displayAvatarURL({ format: 'png', size: 2048 }),
+                iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 2048 }),
                 url: `https://gitlab.com/Ruffpuff1/foxxie/-/tree/${hash[0]}`
             })
             .setDescription(stats)
             .setColor(args.color)
             .setFooter({ text: `© ${process.env.COPYRIGHT_YEAR} ${this.container.client.user!.username}` });
 
-        await send(msg, { embeds: [embed] });
+        await send(msg, { embeds: [embed], content: null });
     }
 
     private get deps(): string[] {

@@ -13,7 +13,7 @@ export class ScheduleManager {
 
     public queue: ScheduleEntity[] = [];
 
-    private interval: NodeJS.Timer | null = null;
+    private interval: NodeJS.Timeout | null = null;
 
     public destroy() {
         this._clearInterval();

@@ -19,7 +19,7 @@ declare module '@foxxie/env' {
         VERSION_SIG: string;
         VERSION_NUM: string;
         COPYRIGHT_YEAR: string;
-        SENTRY_ENABLED: BooleanString;
+        [EnvKeys.SentryEnabled]: BooleanString;
 
         WEBHOOK_ERROR_ID: string;
         WEBHOOK_ERROR_TOKEN: string;
@@ -38,4 +38,8 @@ declare module '@foxxie/env' {
         PERSPECTIVE_TOKEN: string;
         SENTRY_TOKEN: string;
     }
+}
+
+export const enum EnvKeys {
+    SentryEnabled = 'SENTRY_ENABLED'
 }

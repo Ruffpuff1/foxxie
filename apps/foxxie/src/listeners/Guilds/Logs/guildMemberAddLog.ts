@@ -1,25 +1,25 @@
 import { GuildSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { Colors } from '#utils/constants';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.GuildMemberAdd,
+    event: FoxxieEvents.GuildMemberAdd,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.GuildMemberAdd> {
-    public async run(...[member]: EventArgs<Events.GuildMemberAdd>): Promise<void> {
-        this.container.client.emit(Events.GuildMessageLog, member.guild, GuildSettings.Channels.Logs.MemberJoin, t =>
-            new MessageEmbed()
+export class UserListener extends Listener<FoxxieEvents.GuildMemberAdd> {
+    public run(...[member]: EventArgs<FoxxieEvents.GuildMemberAdd>): void {
+        this.container.client.emit(FoxxieEvents.GuildMessageLog, member.guild, GuildSettings.Channels.Logs.MemberJoin, t =>
+            new EmbedBuilder()
                 .setColor(Colors.Green)
                 .setTimestamp(member.joinedTimestamp)
                 .setAuthor({
                     name: t(LanguageKeys.Guilds.Logs.ActionMemberJoin),
-                    iconURL: member.displayAvatarURL({ dynamic: true })
+                    iconURL: member.displayAvatarURL()
                 })
                 .setDescription(
                     [

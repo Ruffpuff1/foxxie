@@ -1,8 +1,8 @@
-import type { GuildEntity } from '../entities/GuildEntity';
+import type { TFunction } from '@foxxie/i18n';
 import { codeBlock, isNullish, toTitleCase } from '@sapphire/utilities';
 import { Collection } from 'discord.js';
-import type { TFunction } from 'i18next';
 import type { SchemaKey } from '.';
+import type { GuildEntity } from '../entities/GuildEntity';
 
 export type NonEmptyArray<T> = [T, ...T[]];
 

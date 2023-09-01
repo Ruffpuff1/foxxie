@@ -1,12 +1,12 @@
 import { acquireSettings } from '#lib/database';
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { fetchChannel } from '#utils/Discord';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
 import { Listener } from '@sapphire/framework';
-import { MessageEmbed, MessageOptions } from 'discord.js';
+import { EmbedBuilder, MessageCreateOptions } from 'discord.js';
 
-export class UserListener extends Listener<Events.GuildMessageLog> {
-    public async run(...[guild, key, makeEmbed]: EventArgs<Events.GuildMessageLog>): Promise<void> {
+export class UserListener extends Listener<FoxxieEvents.GuildMessageLog> {
+    public async run(...[guild, key, makeEmbed]: EventArgs<FoxxieEvents.GuildMessageLog>): Promise<void> {
         const channel = await fetchChannel(guild, key);
         if (!channel) return;
 
@@ -15,12 +15,12 @@ export class UserListener extends Listener<Events.GuildMessageLog> {
         const t = await acquireSettings(guild, s => s.getLanguage());
 
         const content = await makeEmbed(t);
-        const options: MessageOptions = content instanceof MessageEmbed ? { embeds: [content] } : content;
+        const options: MessageCreateOptions = content instanceof EmbedBuilder ? { embeds: [content] } : content;
 
         try {
             await channel.send(options);
         } catch (error) {
-            this.container.client.emit(Events.Error, error);
+            this.container.client.emit(FoxxieEvents.Error, error);
         }
     }
 }

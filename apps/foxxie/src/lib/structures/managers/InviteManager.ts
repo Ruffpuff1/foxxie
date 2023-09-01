@@ -1,6 +1,6 @@
-import { api } from '#external/Api';
 import { resolveToNull } from '@ruffpuff/utilities';
-import { Collection } from 'discord.js';
+import { container } from '@sapphire/framework';
+import { Collection, RESTGetAPIInviteResult, Routes } from 'discord.js';
 
 export class InviteManager extends Collection<string, InviteCode> {
     public async fetch(code: string, force = false) {
@@ -9,7 +9,7 @@ export class InviteManager extends Collection<string, InviteCode> {
             if (typeof previous !== 'undefined') return previous;
         }
 
-        const data = await resolveToNull(api().invites(code).get());
+        const data = await resolveToNull(container.client.rest.get(Routes.invite(code)) as Promise<RESTGetAPIInviteResult>);
         if (data === null) {
             const resolved: InviteCode = {
                 valid: false,

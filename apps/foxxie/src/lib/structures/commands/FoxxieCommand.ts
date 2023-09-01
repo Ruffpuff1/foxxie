@@ -5,12 +5,12 @@ import { clientOwners } from '#root/config';
 import { CustomFunctionGet } from '@foxxie/i18n';
 import { seconds } from '@ruffpuff/utilities';
 import { CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserError } from '@sapphire/framework';
-import { SubCommandPluginCommand } from '@sapphire/plugin-subcommands';
+import { ArgumentStream, Parser } from '@sapphire/lexure';
+import { Subcommand } from '@sapphire/plugin-subcommands';
 import type { Message } from 'discord.js';
-import * as Lexure from 'lexure';
 import { FoxxieArgs } from './parsers';
 
-export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand<FoxxieArgs, FoxxieCommand> {
+export abstract class FoxxieCommand<T = unknown> extends Subcommand<FoxxieArgs> {
     public readonly guarded: boolean;
 
     public hidden: boolean;
@@ -82,8 +82,8 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
         parameters: string,
         context: MessageCommandContext
     ): Promise<FoxxieCommand.Args> {
-        const parser = new Lexure.Parser(this.lexer.setInput(parameters).lex()).setUnorderedStrategy(this.strategy);
-        const args = new Lexure.Args(parser.parse());
+        const parser = new Parser().setUnorderedStrategy(this.strategy);
+        const args = new ArgumentStream(parser.run(this.lexer.run(parameters)));
         const [t, color] = await Promise.all([
             this.container.db.guilds.acquire(message.guild!.id, settings => settings.getLanguage()),
             this.container.db.fetchColor(message)
@@ -118,7 +118,7 @@ export abstract class FoxxieCommand<T = unknown> extends SubCommandPluginCommand
 // eslint-disable-next-line @typescript-eslint/no-namespace
 // eslint-disable-next-line no-redeclare
 export namespace FoxxieCommand {
-    export type Options = SubCommandPluginCommand.Options & {
+    export type Options = Subcommand.Options & {
         guarded?: boolean;
         hidden?: boolean;
         spam?: boolean;
@@ -138,7 +138,7 @@ export namespace FoxxieCommand {
     export type Context = MessageCommandContext;
 }
 
-export type FoxxieCommandOptions = SubCommandPluginCommand.Options & {
+export type FoxxieCommandOptions = Subcommand.Options & {
     guarded?: boolean;
     hidden?: boolean;
     spam?: boolean;

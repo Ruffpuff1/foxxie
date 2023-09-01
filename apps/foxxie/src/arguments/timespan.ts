@@ -1,10 +1,10 @@
-import { seconds } from '@ruffpuff/utilities';
-import { Argument, ArgumentContext, Result, UserError } from '@sapphire/framework';
-import { Duration } from '@sapphire/time-utilities';
 import { LanguageKeys } from '#lib/i18n';
+import { seconds } from '@ruffpuff/utilities';
+import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
+import { Duration } from '@sapphire/time-utilities';
 
 export class UserArgument extends Argument<number> {
-    public async run(parameter: string, context: ArgumentContext): Promise<Result<number, UserError>> {
+    public run(parameter: string, context: ArgumentContext): ArgumentResult<number> {
         const duration = this.parseParameter(parameter);
 
         if (!Number.isSafeInteger(duration)) {

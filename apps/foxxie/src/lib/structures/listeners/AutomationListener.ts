@@ -1,9 +1,9 @@
 import { LanguageKeys } from '#lib/i18n';
-import { BrandingColors } from '#utils/constants';
-import { Listener } from '@sapphire/framework';
+import { resolveClientColor } from '#utils/util';
 import type { TFunction } from '@foxxie/i18n';
-import { ClientEvents, GuildMember, MessageEmbed } from 'discord.js';
+import { Listener } from '@sapphire/framework';
 import type { APIEmbed } from 'discord-api-types/v10';
+import { APIEmbedField, ClientEvents, EmbedBuilder, GuildMember } from 'discord.js';
 
 export abstract class AutomationListener<T extends keyof ClientEvents | symbol = ''> extends Listener<T> {
     private matchRegex = /{user\.(mention|name|tag|discrim|position|createdat|joinedat)}|{guild(\.(splash|count))?}/g;
@@ -16,10 +16,10 @@ export abstract class AutomationListener<T extends keyof ClientEvents | symbol =
         message: string | null,
         embed: APIEmbed | null,
         defaultMsg: string
-    ): [MessageEmbed[], string | null] {
-        const embeds: MessageEmbed[] = [];
+    ): [APIEmbed[], string | undefined] {
+        const embeds: APIEmbed[] = [];
         const parsedMessage = this.format(message || defaultMsg, member, t);
-        const content = message ? parsedMessage : embed ? null : parsedMessage;
+        const content = message ? parsedMessage : embed ? undefined : parsedMessage;
 
         if (embed) embeds.push(this.prepareEmbed(embed, member, t));
 
@@ -59,35 +59,37 @@ export abstract class AutomationListener<T extends keyof ClientEvents | symbol =
         });
     }
 
-    private prepareEmbed(embedData: APIEmbed, member: GuildMember, t: TFunction) {
-        const embed = new MessageEmbed(embedData);
+    private prepareEmbed(embedData: APIEmbed, member: GuildMember, t: TFunction): APIEmbed {
+        const embed = new EmbedBuilder(embedData);
 
-        embed
-            .setColor(embed.color || member.guild.me?.displayColor || BrandingColors.Primary)
-            .setThumbnail(member.displayAvatarURL({ dynamic: true }));
+        embed.setColor(resolveClientColor(member.guild)).setThumbnail(member.displayAvatarURL());
 
-        if (embed.description) embed.setDescription(this.format(embed.description, member, t));
+        const embedResolved = embed.toJSON();
 
-        if (embed.title) embed.setTitle(this.format(embed.title, member, t));
+        if (embedResolved.description) embed.setDescription(this.format(embedResolved.description, member, t));
 
-        if (embed.footer?.text)
+        if (embedResolved.title) embed.setTitle(this.format(embedResolved.title, member, t));
+
+        if (embedResolved.footer?.text)
             embed.setFooter({
-                text: this.format(embed.footer.text, member, t),
-                iconURL: embed.footer.iconURL
+                text: this.format(embedResolved.footer.text, member, t),
+                iconURL: embedResolved.footer.icon_url
             });
 
-        let index = 0;
-        for (const field of embed.fields) {
-            embed.fields[index] = {
-                name: this.format(field.name, member, t),
-                value: this.format(field.value, member, t),
-                inline: field.inline
-            };
-
-            index++;
+        const fields: APIEmbedField[] = [];
+        if (embedResolved.fields) {
+            for (const field of embedResolved.fields) {
+                fields.push({
+                    name: this.format(field.name, member, t),
+                    value: this.format(field.value, member, t),
+                    inline: field.inline
+                });
+            }
         }
 
-        return embed;
+        embed.setFields(fields);
+
+        return embed.toJSON();
     }
 }
 

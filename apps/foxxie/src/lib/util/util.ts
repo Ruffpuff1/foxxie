@@ -1,11 +1,21 @@
-import { api } from '#external/Api';
 import { acquireSettings } from '#lib/database';
 import { GuildMessage } from '#lib/types';
 import { isNumber, isThenable } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { APIUser } from 'discord-api-types/v10';
-import { Message, SnowflakeUtil } from 'discord.js';
+import {
+    APIEmbedField,
+    ColorResolvable,
+    GuildResolvable,
+    Message,
+    RESTGetAPIChannelMessageReactionUsersResult,
+    Routes,
+    SnowflakeUtil,
+    makeURLSearchParams
+} from 'discord.js';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
+import { maybeMe } from './Discord';
+import { BrandingColors } from './constants';
 
 /**
  * Attaches a logging catch method to a promise, "floating it".
@@ -46,7 +56,7 @@ export function getServerDetails() {
 
 export function idToTimestamp(id: string | number): number | null {
     if (isNumber(id)) return null;
-    return SnowflakeUtil.deconstruct(id as string).timestamp;
+    return Number(SnowflakeUtil.deconstruct(id as string).timestamp);
 }
 
 export async function fetchReactionUsers(channelId: string, messageId: string, reactions: string[]) {
@@ -55,11 +65,9 @@ export async function fetchReactionUsers(channelId: string, messageId: string, r
 
     for (const reaction of reactions) {
         do {
-            rawUsers = await api()
-                .channels(channelId)
-                .messages(messageId)
-                .reactions(reaction)
-                .get({ query: { limit: 100, after: rawUsers.length ? rawUsers[rawUsers.length - 1].id : undefined } });
+            rawUsers = (await container.client.rest.get(Routes.channelMessageReaction(channelId, messageId, reaction), {
+                query: makeURLSearchParams({ limit: 100, after: rawUsers.length ? rawUsers[rawUsers.length - 1].id : undefined })
+            })) as RESTGetAPIChannelMessageReactionUsersResult;
             for (const user of rawUsers) users.add(user.id);
         } while (rawUsers.length === 100);
     }
@@ -95,14 +103,6 @@ export function getAttachment(message: Message): ImageAttachment | null {
     }
 
     for (const embed of message.embeds) {
-        if (embed.type === 'image') {
-            return {
-                url: embed.thumbnail!.url,
-                proxyURL: embed.thumbnail!.proxyURL!,
-                height: embed.thumbnail!.height!,
-                width: embed.thumbnail!.width!
-            };
-        }
         if (embed.image) {
             return {
                 url: embed.image.url,
@@ -123,4 +123,17 @@ export function getAttachment(message: Message): ImageAttachment | null {
 export function getImage(message: Message): string | null {
     const attachment = getAttachment(message);
     return attachment ? attachment.proxyURL || attachment.url : null;
+}
+
+export function resolveClientColor(resolveable: GuildResolvable, color?: ColorResolvable): ColorResolvable {
+    if (color) return color;
+
+    const me = maybeMe(resolveable);
+    if (!me) return BrandingColors.Primary;
+
+    return me.displayColor;
+}
+
+export function resolveEmbedField(name: string, text: string, inline: boolean = false): APIEmbedField {
+    return { name, value: text, inline };
 }

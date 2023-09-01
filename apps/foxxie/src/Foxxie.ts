@@ -7,6 +7,7 @@ import { EnvParse } from '@foxxie/env';
 import { container } from '@sapphire/framework';
 import { init } from '@sentry/node';
 import i18next from 'i18next';
+import { EnvKeys } from '#lib/types/Env';
 
 async function main() {
     await initI18n();
@@ -16,7 +17,7 @@ async function main() {
 
         i18next.use(helpUsagePostProcessor);
 
-        if (EnvParse.boolean('SENTRY_ENABLED')) {
+        if (EnvParse.boolean(EnvKeys.SentryEnabled)) {
             init({
                 dsn: process.env.SENTRY_TOKEN,
                 release: `Foxxie@${process.env.CLIENT_VERSION}`

@@ -1,18 +1,17 @@
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
+import type { GuildMessage } from '#lib/types';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
-import type { GuildMessage } from '#lib/types';
 import { Stopwatch } from '@sapphire/stopwatch';
-import type { Message } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['pong'],
     description: LanguageKeys.Commands.General.PingDescription
 })
 export default class UserCommand extends FoxxieCommand {
-    public async messageRun(message: GuildMessage, args: FoxxieCommand.Args): Promise<Message> {
-        const msg = await send(message, args.t(LanguageKeys.Commands.General.Ping));
+    public async messageRun(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
+        const msg = await send(message, { content: args.t(LanguageKeys.Commands.General.Ping), embeds: undefined });
 
         const stopwatch = new Stopwatch().start();
         await this.container.db.guilds.ensure(message.guild.id);
@@ -24,6 +23,6 @@ export default class UserCommand extends FoxxieCommand {
             dbPing: Math.round(stopwatch.duration)
         });
 
-        return send(message, content);
+        await send(message, content);
     }
 }

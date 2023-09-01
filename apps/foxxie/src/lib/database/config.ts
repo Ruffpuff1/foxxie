@@ -15,8 +15,6 @@ export async function config(): Promise<void> {
         password: process.env.MONGO_PASSWORD,
         entities: [ClientEntity, GuildEntity, MemberEntity, ModerationEntity, ScheduleEntity, StarEntity],
         authSource: 'admin',
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
         ssl: true,
         logging: true
     });

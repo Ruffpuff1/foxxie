@@ -4,7 +4,7 @@ import { getModeration } from '#utils/Discord';
 import { resolveKey } from '#utils/util';
 import { seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { fromAsync } from '@sapphire/framework';
+import { Result } from '@sapphire/result';
 import { ArgumentTypes } from '@sapphire/utilities';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 
@@ -19,8 +19,8 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
 })
 export class UserCommand extends ModerationCommand {
     public async prehandle(...[message, context]: ArgumentTypes<ModerationCommand['prehandle']>) {
-        const result = await fromAsync(message.guild.bans.fetch());
-        const bans = result.success ? result.value.map(ban => ban.user.id) : null;
+        const result = await Result.fromAsync(message.guild.bans.fetch());
+        const bans = result.isOk() ? result.unwrap().map(ban => ban.user.id) : null;
 
         if (bans === null) {
             throw await resolveKey(message, LanguageKeys.System.FetchBansFail);

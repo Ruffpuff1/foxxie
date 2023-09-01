@@ -5,7 +5,7 @@ import type { Awaitable } from '@sapphire/utilities';
 export class UserSerializer extends Serializer<string> {
     public async parse(args: Serializer.Args) {
         const result = await args.pickResult('command');
-        return result.success ? this.ok(result.value.name) : this.errorFromArgument(args, result.error);
+        return result.isOk() ? this.ok(result.unwrap().name) : this.errorFromArgument(args, result.unwrapErr());
     }
 
     public isValid(value: string, { t, entry }: SerializerUpdateContext): Awaitable<boolean> {

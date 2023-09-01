@@ -50,9 +50,9 @@ export default class FoxxieClient extends SapphireClient {
         return super.login();
     }
 
-    public destroy(): void {
+    public destroy(): Promise<void> {
         this.guildMemberFetchQueue.destroy();
-        super.destroy();
+        return super.destroy();
     }
 
     public get development() {

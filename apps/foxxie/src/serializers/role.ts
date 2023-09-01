@@ -5,7 +5,7 @@ import type { Awaitable } from '@sapphire/utilities';
 export class UserSerializer extends Serializer<string> {
     public async parse(args: Serializer.Args) {
         const role = await args.pickResult('role');
-        return role.success ? this.ok(role.value.id) : this.errorFromArgument(args, role.error);
+        return role.isOk() ? this.ok(role.unwrap().id) : this.errorFromArgument(args, role.unwrapErr());
     }
 
     public isValid(value: string, { t, entry, guild }: SerializerUpdateContext): Awaitable<boolean> {

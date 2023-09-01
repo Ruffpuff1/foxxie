@@ -1,16 +1,15 @@
+import { acquireSettings, GuildEntity, SettingsCollectionCallback, writeSettings } from '#lib/database';
 import { fetch, HttpMethodEnum } from '@foxxie/fetch';
-import { Args, MessageCommandContext, isOk, Result, UserError, MessageCommand } from '@sapphire/framework';
+import { TFunction } from '@foxxie/i18n';
+import { Args, MessageCommand, MessageCommandContext, Result, UserError } from '@sapphire/framework';
+import { ArgumentStream } from '@sapphire/lexure';
 import type { Message } from 'discord.js';
-import type { TFunction } from 'i18next';
-import type { Args as LexureArgs } from 'lexure';
-import { acquireSettings, GuildEntity, writeSettings, SettingsCollectionCallback } from '#lib/database';
 import type { FoxxieCommand } from '../FoxxieCommand';
 
 type K = keyof V;
 type V = GuildEntity;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class FoxxieArgs extends Args {
     public t: TFunction;
 
@@ -20,7 +19,7 @@ export class FoxxieArgs extends Args {
     public constructor(
         message: Message,
         command: FoxxieCommand,
-        parser: LexureArgs,
+        parser: ArgumentStream,
         context: MessageCommandContext,
         t: TFunction,
         color: number
@@ -36,6 +35,7 @@ export class FoxxieArgs extends Args {
     public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K>(
         paths: readonly [K1, K2, K3, K4]
     ): Promise<[V[K1], V[K2], V[K3], V[K4]]>;
+
     public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K>(
         paths: readonly [K1, K2, K3, K4, K5]
     ): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5]]>;
@@ -85,9 +85,11 @@ export class FoxxieArgs extends Args {
     public write<K1 extends K, K2 extends K, K3 extends K>(
         pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]]]
     ): Promise<void>;
+
     public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K>(
         pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]]]
     ): Promise<void>;
+
     public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K>(
         pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]], [K5, V[K5]]]
     ): Promise<void>;
@@ -149,7 +151,8 @@ export class FoxxieArgs extends Args {
         const values: string[] = [];
         const parts = this.parser
             .many()
-            .reduce((acc, token) => `${acc}${token.value}${token.trailing}`, '')
+            .unwrap()
+            .reduce((acc, token) => `${acc}${token.value}${token.leading}`, '')
             .split(delimiter);
 
         for (const part of parts) {
@@ -170,12 +173,12 @@ export class FoxxieArgs extends Args {
      */
     public nextSplit(options?: FoxxieArgs.NextSplitOptions) {
         const result = this.nextSplitResult(options);
-        if (isOk(result)) return result.value;
-        throw result.error;
+        if (result.isOk()) return result.unwrap();
+        throw result.unwrapErr();
     }
 }
 
-// eslint-disable-next-line no-redeclare
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface FoxxieArgs extends Args {
     command: MessageCommand;
     color: number;

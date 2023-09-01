@@ -9,7 +9,7 @@ import {
     OutgoingWordFilterPayload,
     OutputType
 } from '#lib/structures';
-import { EventArgs, Events, GuildMessage } from '#lib/types';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
 import { Colors } from '#utils/constants';
 import { deleteMessage, getModeration, isModerator, isSendableChannel, sendTemporaryMessage } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
@@ -18,14 +18,14 @@ import type { TFunction } from '@foxxie/i18n';
 import { isDev, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { Message, MessageEmbed } from 'discord.js';
+import { EmbedBuilder, Message } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.UserMessage,
+    event: FoxxieEvents.UserMessage,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.UserMessage> {
-    public async run(...[msg]: EventArgs<Events.UserMessage>): Promise<void> {
+export class UserListener extends Listener<FoxxieEvents.UserMessage> {
+    public async run(...[msg]: EventArgs<FoxxieEvents.UserMessage>): Promise<void> {
         const shouldRun = this.shouldRun(msg);
         if (!shouldRun) return;
 
@@ -178,12 +178,12 @@ export class UserListener extends Listener<Events.UserMessage> {
     }
 
     private onLog(msg: GuildMessage, t: TFunction, processed: OutgoingWordFilterPayload) {
-        this.container.client.emit(Events.GuildMessageLog, msg.guild, GuildSettings.Channels.Logs.FilterWords, () =>
-            new MessageEmbed()
+        this.container.client.emit(FoxxieEvents.GuildMessageLog, msg.guild, GuildSettings.Channels.Logs.FilterWords, () =>
+            new EmbedBuilder()
                 .setColor(Colors.Red)
                 .setAuthor({
                     name: t(LanguageKeys.Guilds.Logs.ActionFilterWords),
-                    iconURL: msg.member.displayAvatarURL({ dynamic: true })
+                    iconURL: msg.member.displayAvatarURL()
                 })
                 .setDescription(
                     [

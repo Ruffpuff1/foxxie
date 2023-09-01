@@ -1,25 +1,26 @@
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { fetchAuditEntry, getModeration } from '#utils/Discord';
 import { TypeCodes } from '#utils/moderation';
 import { idToTimestamp } from '#utils/util';
-import { isDev, seconds } from '@ruffpuff/utilities';
+import { cast, isDev, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
+import { AuditLogEvent, User } from 'discord.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 @ApplyOptions<ListenerOptions>({
     enabled: !isDev(),
-    event: Events.GuildMemberRemove
+    event: FoxxieEvents.GuildMemberRemove
 })
-export class UserListener extends Listener<Events.GuildMemberRemove> {
-    public async run(...[member]: EventArgs<Events.GuildMemberRemove>): Promise<void> {
+export class UserListener extends Listener<FoxxieEvents.GuildMemberRemove> {
+    public async run(...[member]: EventArgs<FoxxieEvents.GuildMemberRemove>): Promise<void> {
         const moderation = getModeration(member.guild);
         const deleted = await this.container.redis!.del(`guild:${member.guild.id}:kick:${member.id}`);
 
         if (deleted) return;
         await sleep(seconds(1.5));
 
-        const log = await fetchAuditEntry(member.guild, 'MEMBER_KICK', log => log.target?.id === member.id);
+        const log = await fetchAuditEntry(member.guild, AuditLogEvent.MemberKick, log => cast<User>(log.target)?.id === member.id);
         if (!log) return;
 
         if (Date.now() - idToTimestamp(log.id)! > seconds(15)) return;

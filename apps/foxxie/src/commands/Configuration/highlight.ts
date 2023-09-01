@@ -9,19 +9,16 @@ import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['hl'],
     requiredClientPermissions: PermissionFlagsBits.EmbedLinks,
     detailedDescription: LanguageKeys.Commands.Configuration.HighlightDetailedDescription,
-    subCommands: [
-        { input: 'words', default: true },
-        { input: 'list', output: 'words' }
-    ]
+    subcommands: [{ name: 'words', default: true, messageRun: 'words' }]
 })
 export class UserCommand extends FoxxieCommand {
-    public async words(message: GuildMessage, args: FoxxieCommand.Args) {
+    public async words(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
         const arg = args.finished ? WordsSubCommands.List : await args.pick('string');
         const highlights = await acquireSettings(message.guild, GuildSettings.Highlights);
 
@@ -42,22 +39,22 @@ export class UserCommand extends FoxxieCommand {
         const regexes = userHighlights.filter(hl => hl.type === HighlightTypeEnum.Regex) as Highlight<HighlightTypeEnum.Regex>[];
         const words = userHighlights.filter(hl => hl.type === HighlightTypeEnum.Word) as Highlight<HighlightTypeEnum.Word>[];
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setAuthor({
                 name: `Highlights for ${getUserDisplayName(message.author)}`,
-                iconURL: message.author.avatarURL({ dynamic: true })!
+                iconURL: message.author.avatarURL()!
             })
             .setColor(args.color);
 
         if (regexes.length) {
-            embed.addField('• Regexes', regexes.map(r => inlineCode(String(r.word))).join(', '));
+            embed.addFields([{ name: '• Regexes', value: regexes.map(r => inlineCode(String(r.word))).join(', ') }]);
         }
 
         if (words.length) {
-            embed.addField('• Words', words.map(r => inlineCode(String(r.word))).join(', '));
+            embed.addFields([{ name: '• Words', value: words.map(r => inlineCode(String(r.word))).join(', ') }]);
         }
 
-        return send(message, { embeds: [embed] });
+        await send(message, { embeds: [embed] });
     }
 
     private async wordsAdd(message: GuildMessage, args: FoxxieCommand.Args, highlights: Highlight<HighlightTypeEnum>[]) {
@@ -79,7 +76,7 @@ export class UserCommand extends FoxxieCommand {
             settings.highlights.push(highlight);
         });
 
-        return send(message, `Added word: ${inlineCode(wordToAdd.toLowerCase())}`);
+        await send(message, `Added word: ${inlineCode(wordToAdd.toLowerCase())}`);
     }
 }
 

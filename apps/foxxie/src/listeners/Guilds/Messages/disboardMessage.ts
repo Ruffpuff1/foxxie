@@ -1,4 +1,4 @@
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { Schedules } from '#utils/constants';
 import { isDisboard } from '#utils/Discord';
 import { hours, isDev } from '@ruffpuff/utilities';
@@ -6,14 +6,14 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.BotMessage,
+    event: FoxxieEvents.BotMessage,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.BotMessage> {
+export class UserListener extends Listener<FoxxieEvents.BotMessage> {
     private disboardRegex =
         /(?<prefix>Bump\sdone)!?\s:thumbsup:\s+Check\sit\sout\s\[on\sDISBOARD]\(https:\/\/disboard\.org(\/servers?)?(\/?(?<serverId>\d{17,19}))?\)\.?$/;
 
-    public async run(...[msg]: EventArgs<Events.BotMessage>): Promise<void> {
+    public async run(...[msg]: EventArgs<FoxxieEvents.BotMessage>): Promise<void> {
         if (!isDisboard(msg)) return;
 
         const [embed] = msg.embeds;

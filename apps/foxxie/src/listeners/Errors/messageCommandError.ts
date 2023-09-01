@@ -1,21 +1,26 @@
 import { LanguageKeys, translate } from '#lib/i18n';
 import type { FoxxieArgs, FoxxieCommand } from '#lib/structures';
-import { Events } from '#lib/types';
+import { FoxxieEvents } from '#lib/types';
+import { EnvKeys } from '#lib/types/Env';
 import { clientOwners } from '#root/config';
 import { Colors, rootFolder } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';
+import type { TFunction } from '@foxxie/i18n';
 import { ZeroWidthSpace } from '@ruffpuff/utilities';
 import { Args, ArgumentError, Command, Identifiers, Listener, MessageCommandErrorPayload, UserError } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { codeBlock, cutText } from '@sapphire/utilities';
 import { captureException } from '@sentry/node';
-import { RESTJSONErrorCodes } from 'discord-api-types/v9';
-import { DiscordAPIError, HTTPError, Message, MessageEmbed } from 'discord.js';
-import type { TFunction } from 'i18next';
+import { RESTJSONErrorCodes } from 'discord-api-types/v10';
+import { DiscordAPIError, EmbedBuilder, HTTPError, Message } from 'discord.js';
 
-const ignoredErrorCodes = [RESTJSONErrorCodes.UnknownChannel, RESTJSONErrorCodes.UnknownMessage];
+interface FoxxieError extends DiscordAPIError {
+    path?: string;
+}
 
-export class UserListener extends Listener<Events.MessageCommandError> {
+const ignoredErrorCodes: (number | string)[] = [RESTJSONErrorCodes.UnknownChannel, RESTJSONErrorCodes.UnknownMessage];
+
+export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
     public async run(error: Error, { message, command, parameters, args }: { args: FoxxieArgs } & MessageCommandErrorPayload) {
         // if the error is something that the user should be aware of, send them a message.
         if (typeof error === 'string') return this.stringError(message, args.t, error);
@@ -30,8 +35,8 @@ export class UserListener extends Listener<Events.MessageCommandError> {
         }
 
         if (error instanceof DiscordAPIError || error instanceof HTTPError) {
-            if (this.isSilencedError(args, error)) return null;
-            client.emit(Events.Error, error);
+            if (this.isSilencedError(args, error as FoxxieError)) return null;
+            client.emit(FoxxieEvents.Error, error);
         } else {
             logger.warn(`${this.getWarning(message)} (${message.author.id}) | ${error.constructor.name}`);
         }
@@ -42,15 +47,15 @@ export class UserListener extends Listener<Events.MessageCommandError> {
         try {
             await this.send(message, this.generateErrorMessage(args, error));
         } catch (err) {
-            client.emit(Events.Error, err);
+            client.emit(FoxxieEvents.Error, err);
         }
 
         return null;
     }
 
     private generateErrorMessage(args: Args, error: Error) {
-        if (clientOwners.includes(args.message.author.id)) return codeBlock('js', error.stack);
-        if (!EnvParse.boolean('SENTRY_ENABLED')) return args.t(LanguageKeys.Listeners.Errors.Unexpected);
+        if (clientOwners.includes(args.message.author.id) && error.stack) return codeBlock('js', error.stack);
+        if (!EnvParse.boolean(EnvKeys.SentryEnabled)) return args.t(LanguageKeys.Listeners.Errors.Unexpected);
 
         try {
             const report = captureException(error, {
@@ -60,16 +65,16 @@ export class UserListener extends Listener<Events.MessageCommandError> {
                 report
             });
         } catch (err) {
-            this.container.client.emit(Events.Error, err);
+            this.container.client.emit(FoxxieEvents.Error, err);
             return args.t(LanguageKeys.Listeners.Errors.Unexpected);
         }
     }
 
-    private isSilencedError(args: Args, error: DiscordAPIError | HTTPError) {
-        return ignoredErrorCodes.includes(error.code) || this.isDMReply(args, error);
+    private isSilencedError(args: Args, error: FoxxieError) {
+        return error.code ? ignoredErrorCodes.includes(error.code) : this.isDMReply(args, error);
     }
 
-    private isDMReply(args: Args, error: DiscordAPIError | HTTPError) {
+    private isDMReply(args: Args, error: FoxxieError) {
         if (error.code !== RESTJSONErrorCodes.CannotSendMessagesToThisUser) return false;
 
         if (args.message.guild !== null) return false;
@@ -128,12 +133,12 @@ export class UserListener extends Listener<Events.MessageCommandError> {
 
         const lines = [this.getLink(message.url), this.getCommand(command), this.getArgs(parameters), this.getError(error)];
 
-        if (error instanceof DiscordAPIError || error instanceof HTTPError) {
+        if (error instanceof DiscordAPIError) {
             lines.splice(2, 0, this.getPath(error), this.getCode(error));
         }
 
-        const embed = new MessageEmbed()
-            .setAuthor(`Error Encountered (${message.guild!.id})`)
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: `Error Encountered (${message.guild!.id})` })
             .setDescription(lines.join('\n'))
             .setColor(Colors.Red)
             .setTimestamp();
@@ -141,7 +146,7 @@ export class UserListener extends Listener<Events.MessageCommandError> {
         try {
             await hook.send({ embeds: [embed] });
         } catch (err) {
-            this.container.client.emit(Events.Error, err);
+            this.container.client.emit(FoxxieEvents.Error, err);
         }
 
         return null;
@@ -161,14 +166,14 @@ export class UserListener extends Listener<Events.MessageCommandError> {
     }
 
     private getError(error: Error) {
-        return `**Error**: ${codeBlock('js', error.stack || error)}`;
+        return `**Error**: ${codeBlock('js', error.stack || error.message)}`;
     }
 
-    private getPath(error: DiscordAPIError | HTTPError) {
+    private getPath(error: FoxxieError) {
         return `**Path**: ${error.method.toUpperCase()} ${error.path}`;
     }
 
-    private getCode(error: DiscordAPIError | HTTPError) {
+    private getCode(error: FoxxieError) {
         return `**Code**: ${error.code}`;
     }
 

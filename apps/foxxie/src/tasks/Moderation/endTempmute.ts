@@ -3,6 +3,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { ModerationData, ModerationTask } from '#lib/structures';
 import { Schedules } from '#utils/constants';
 import { getModeration } from '#utils/Discord';
+import { seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import type { Guild } from 'discord.js';
@@ -20,6 +21,8 @@ export class UserTask extends ModerationTask {
             settings.getLanguage()
         ]);
         if (!roleId) return null;
+
+        await this.container.redis?.pinsertex(`guild:${guild.id}:unmute:${data.userId}`, seconds(20), '')
 
         const reason = t(LanguageKeys.Moderation.Unmute, this.ctx(data.duration));
 

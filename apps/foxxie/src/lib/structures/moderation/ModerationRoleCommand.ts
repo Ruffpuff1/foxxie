@@ -42,8 +42,8 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
 
         if (await messagePrompt(message, t(LanguageKeys.Moderation.ActionSharedRoleSetupExisting))) {
             const role = await this.askForRole(message, args, context);
-            if (!role.success) return this.error(role.error);
-            await writeSettings(message.guild.id, settings => (settings[this.roleKey] = role.value.id));
+            if (!role.isOk()) return this.error(role.unwrapErr());
+            await writeSettings(message.guild.id, settings => (settings[this.roleKey] = role.unwrap().id));
         } else if (await messagePrompt(message, t(LanguageKeys.Moderation.ActionsharedRoleSetupNew))) {
             const role = await getModeration(message.guild).actions.setUpRole(message, this.setUpKey);
 

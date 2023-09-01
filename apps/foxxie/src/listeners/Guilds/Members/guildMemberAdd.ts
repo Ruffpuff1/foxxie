@@ -1,16 +1,16 @@
 import { GuildSettings } from '#lib/database';
-import { EventArgs, Events } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { getPersistRoles } from '#utils/Discord';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 
 @ApplyOptions<Listener.Options>({
-    event: Events.GuildMemberAdd,
+    event: FoxxieEvents.GuildMemberAdd,
     enabled: !isDev()
 })
-export class UserListener extends Listener<Events.GuildMemberAdd> {
-    public async run(...[member]: EventArgs<Events.GuildMemberAdd>): Promise<void> {
+export class UserListener extends Listener<FoxxieEvents.GuildMemberAdd> {
+    public async run(...[member]: EventArgs<FoxxieEvents.GuildMemberAdd>): Promise<void> {
         if (member.pending) return;
 
         const [muteRoleId, settings] = await this.container.db.guilds.acquire(member.guild.id, settings => [
@@ -24,6 +24,6 @@ export class UserListener extends Listener<Events.GuildMemberAdd> {
             if (memberRoles.includes(muteRoleId)) return;
         }
 
-        this.container.client.emit(Events.GuildMemberJoin, member, settings);
+        this.container.client.emit(FoxxieEvents.GuildMemberJoin, member, settings);
     }
 }

@@ -1,13 +1,12 @@
-import type { GuildEntity } from '../entities/GuildEntity';
-import type { ISchemaValue, SchemaGroup } from './SchemaGroup';
-import type { Serializer, SerializerUpdateContext } from '../structures/Serializer';
-import type { FoxxieArgs } from '#lib/structures';
-import type { CustomGet } from '@foxxie/i18n';
-import { container } from '@sapphire/framework';
-import { isNullish, NonNullObject } from '@sapphire/utilities';
-import type { TFunction } from 'i18next';
 import { LanguageKeys } from '#lib/i18n';
+import type { FoxxieArgs } from '#lib/structures';
+import type { CustomGet, TFunction } from '@foxxie/i18n';
 import { toTitleCase } from '@ruffpuff/utilities';
+import { container } from '@sapphire/framework';
+import { NonNullObject, isNullish } from '@sapphire/utilities';
+import type { GuildEntity } from '../entities/GuildEntity';
+import type { Serializer, SerializerUpdateContext } from '../structures/Serializer';
+import type { ISchemaValue, SchemaGroup } from './SchemaGroup';
 
 export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implements ISchemaValue {
     /**
