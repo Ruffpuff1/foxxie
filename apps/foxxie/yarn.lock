@@ -1157,9 +1157,7 @@ doctrine@^3.0.0:
     esutils "^2.0.2"
 
 dotenv-cra@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/dotenv-cra/-/dotenv-cra-3.0.2.tgz#ce1565aaa0bb21402f9e7f6f44c8f751ae35219c"
-  integrity sha512-4SJ1L6tAzAmRgBw7k6B7XaP8ARV8nFvQb2pfLC8Tiudz27auSgkzPPvtfLmmSg6jzhHtsQ6c/USNlqLfWE7mfg==
+  version "3.0.3"
   dependencies:
     dotenv "^10.0.0"
     dotenv-expand "^5.1.0"
