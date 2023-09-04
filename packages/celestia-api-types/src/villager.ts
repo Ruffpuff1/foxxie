@@ -1,3 +1,5 @@
+import { GamesEnum } from './game';
+
 export interface Villager {
     key: VillagerKey;
     keyJp: string;
@@ -80,7 +82,7 @@ export const SanrioVillagerArray: `${SanrioVillager}`[] = [
 
 export const VillagerKeyArray: `${VillagerKey}`[] = Object.keys(VillagerKey).map(key => VillagerKey[key]);
 
-export type Gender = 'Male' | 'Female';
+export type Gender = `${GenderEnum}`;
 
 export enum SpeciesEnum {
     Alligator = 'alligator',
@@ -137,17 +139,9 @@ export interface Birthday {
     zodiac: `${StarSignEnum}`;
 }
 
-export enum GamesEnum {
-    DoubutsuNoMori = 'dnm',
-    AnimalCrossing = 'ac',
-    WildWorld = 'ww',
-    CityFolk = 'cf',
-    NewLeaf = 'nl',
-    HappyHomeDesigner = 'hhd',
-    AmiiboFestival = 'af',
-    PocketCamp = 'pc',
-    NewHorizons = 'nh',
-    HappyHomeParadise = 'hhp'
+export enum GenderEnum {
+    Male = 'Male',
+    Female = 'Female'
 }
 
 export interface Coffee {

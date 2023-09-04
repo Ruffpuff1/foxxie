@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/celestia-api-types",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "Typings for Foxxie's Animal Crossing API",
   "scripts": {
     "build": "tsup",
@@ -11,7 +11,7 @@
   "module": "./dist/index.mjs",
   "typings": "./dist/index.d.ts",
   "contributors": [
-    "Reese Harlak <h@reese.gay>"
+    "Reese Harlak <reese@reese.gay>"
   ],
   "exports": {
     "import": "./dist/index.mjs",
