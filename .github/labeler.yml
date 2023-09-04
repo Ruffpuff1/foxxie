@@ -1,48 +1,40 @@
-- name: Labeler
-  uses: actions/labeler@v4.3.0
-            
-
-'Bot: Foxxie':
+"Bot: Foxxie":
   - apps/foxxie/*
   - apps/foxxie/**/*
 
-'Packages: fetch':
+"Packages: fetch":
   - packages/fetch/*
   - packages/fetch/**/*
 
-'Packages: fuzzysearch':
+"Packages: fuzzysearch":
   - packages/fuzzysearch/*
   - packages/fuzzysearch/**/*
 
-'Packages: lock-queue':
+"Packages: lock-queue":
   - packages/lock-queue/*
   - packages/lock-queue/**/*
 
-'Packages: eslint-config':
+"Packages: eslint-config":
   - packages/eslint-config/*
   - packages/eslint-config/**/*
 
-'Packages: stardrop':
+"Packages: stardrop":
   - packages/stardrop/*
   - packages/stardrop/**/*
 
-'Packages: types':
+"Packages: types":
   - packages/types/*
   - packages/types/**/*
 
-'GraphQL: stardrop':
-  - graphql/stardrop/*
-  - graphql/stardrop/**/*
-
-'I18n: en-US':
+"I18n: en-US":
   - apps/foxxie/src/languages/en-US/*
   - apps/foxxie/src/languages/en-US/**/*
 
-'I18n: es-MX':
+"I18n: es-MX":
   - apps/foxxie/src/languages/es-MX/*
   - apps/foxxie/src/languages/es-MX/**/*
 
-'Meta: Documentation':
+"Meta: Documentation":
   - README.md
   - LICENSE
   - apps/**/README.md
