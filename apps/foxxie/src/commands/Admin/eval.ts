@@ -8,7 +8,8 @@ import { isThenable } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
 import { Stopwatch } from '@sapphire/stopwatch';
-import { Formatters, Message } from 'discord.js';
+import { codeBlock } from '@sapphire/utilities';
+import { Message } from 'discord.js';
 import { hostname } from 'node:os';
 import { inspect } from 'node:util';
 
@@ -36,9 +37,9 @@ export class UserCommand extends FoxxieCommand {
         const code = await args.rest('string');
         const { success, result, time, type } = await this.eval(message, args, code);
 
-        const formatted = Formatters.codeBlock(args.getOption(...langOptions) ?? 'js', result);
+        const formatted = codeBlock(args.getOption(...langOptions) ?? 'js', result);
 
-        const footer = Formatters.codeBlock('ts', type.toString());
+        const footer = codeBlock('ts', type.toString());
         let output = args.t(LanguageKeys.Commands.Admin[`Eval${success ? 'Output' : 'Error'}`], {
             time,
             output: formatted,
