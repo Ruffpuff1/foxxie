@@ -92,7 +92,7 @@ export interface ImageAttachment {
     width: number;
 }
 
-export const IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp)$/i;
+export const IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp|mp4|mov)$/i;
 
 export function getAttachment(message: Message): ImageAttachment | null {
     if (message.attachments.size) {
