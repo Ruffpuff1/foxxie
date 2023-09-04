@@ -1,4 +1,5 @@
 import { LockQueue } from '@foxxie/lock-queue';
+import { cast } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { Collection } from 'discord.js';
 import { FindOneOptions } from 'typeorm';
@@ -230,7 +231,7 @@ export class GuildRepository<T extends GuildEntity> extends CustomRepository<Gui
     public async fetch(key: string): Promise<T> {
         const { guilds } = container.db;
 
-        const existing = <T> await guilds.findOne({ where: { id: key } });
+        const existing = <T>await guilds.findOne({ where: { id: key } });
         if (existing) {
             this.cache.set(key, existing);
             return existing;
@@ -243,7 +244,7 @@ export class GuildRepository<T extends GuildEntity> extends CustomRepository<Gui
         // @ts-ignore this line being weird.
         await guilds.save(created);
 
-        return created as T;
+        return cast<T>(created);
     }
 
     private async processFetch(key: string): Promise<T> {

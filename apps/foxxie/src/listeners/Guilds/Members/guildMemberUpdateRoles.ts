@@ -47,7 +47,11 @@ export class UserListener extends Listener {
         if (deleted) return;
         await sleep(seconds(5));
 
-        const log = await fetchAuditEntry(next.guild, AuditLogEvent.MemberRoleUpdate, log => cast<User>(log.target)?.id === next.user.id);
+        const log = await fetchAuditEntry(
+            next.guild,
+            AuditLogEvent.MemberRoleUpdate,
+            log => cast<User>(log.target)?.id === next.user.id
+        );
         if (!log) return;
 
         const created = await moderation

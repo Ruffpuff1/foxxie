@@ -1,4 +1,5 @@
 import { EmojiObject } from '#lib/types';
+import { cast } from '@ruffpuff/utilities';
 
 export type SerializedEmoji = string & { __TYPE__: 'SerializedEmoji' };
 
@@ -11,6 +12,6 @@ export function isStarboardEmoji(emojis: string[], reacted: string): boolean {
 }
 
 export function getEmojiString(emoji: EmojiObject): SerializedEmoji {
-    if (emoji.id) return `${emoji.animated ? 'a' : 's'}${emoji.id}` as SerializedEmoji;
-    return encodeURIComponent(emoji.name!) as SerializedEmoji;
+    if (emoji.id) return cast<SerializedEmoji>(`${emoji.animated ? 'a' : 's'}${emoji.id}`);
+    return cast<SerializedEmoji>(encodeURIComponent(emoji.name!));
 }

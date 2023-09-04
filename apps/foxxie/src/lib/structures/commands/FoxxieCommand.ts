@@ -3,7 +3,7 @@ import type { MongoDB } from '#lib/database';
 import { DetailedDescription, PermissionLevels } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { CustomFunctionGet } from '@foxxie/i18n';
-import { seconds } from '@ruffpuff/utilities';
+import { cast, seconds } from '@ruffpuff/utilities';
 import { CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserError } from '@sapphire/framework';
 import { ArgumentStream, Parser } from '@sapphire/lexure';
 import { Subcommand } from '@sapphire/plugin-subcommands';
@@ -107,7 +107,7 @@ export abstract class FoxxieCommand<T = unknown> extends Subcommand<FoxxieArgs> 
     }
 
     protected get client(): FoxxieClient {
-        return this.container.client as FoxxieClient;
+        return cast<FoxxieClient>(this.container.client);
     }
 
     protected get db(): MongoDB {

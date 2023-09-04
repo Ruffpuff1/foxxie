@@ -1,4 +1,5 @@
 import type { TFunction } from '@foxxie/i18n';
+import { cast } from '@ruffpuff/utilities';
 import { codeBlock, isNullish, toTitleCase } from '@sapphire/utilities';
 import { Collection } from 'discord.js';
 import type { SchemaKey } from '.';
@@ -30,14 +31,14 @@ export class SchemaGroup extends Collection<string, ISchemaValue> {
         const previous = this.get(key);
         if (previous) {
             if (previous instanceof SchemaGroup) {
-                return previous.add(tail as NonEmptyArray<string>, value);
+                return previous.add(cast<NonEmptyArray<string>>(tail), value);
             }
 
             throw new Error(`You cannot add '${key}' to a non-group entry.`);
         }
 
         const group = new SchemaGroup(`${this.name} / ${toTitleCase(key)}`, this);
-        group.add(tail as NonEmptyArray<string>, value);
+        group.add(cast<NonEmptyArray<string>>(tail), value);
         this.set(key, group);
         return group;
     }
@@ -61,12 +62,12 @@ export class SchemaGroup extends Collection<string, ISchemaValue> {
 
         const value = this.get(key);
         if (isNullish(value)) return null;
-        if (value instanceof SchemaGroup) return value.getPathArray(tail as NonEmptyArray<string>);
+        if (value instanceof SchemaGroup) return value.getPathArray(cast<NonEmptyArray<string>>(tail));
         return null;
     }
 
     public getPathString(key: string): ISchemaValue | null {
-        return this.getPathArray(key.split('.') as NonEmptyArray<string>);
+        return this.getPathArray(cast<NonEmptyArray<string>>(key.split('.')));
     }
 
     public display(settings: GuildEntity, language: TFunction) {

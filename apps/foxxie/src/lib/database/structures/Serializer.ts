@@ -1,6 +1,7 @@
 import { LanguageKeys, translate } from '#lib/i18n';
 import type { FoxxieArgs } from '#lib/structures';
 import type { TFunction } from '@foxxie/i18n';
+import { cast } from '@ruffpuff/utilities';
 import { AliasPiece, AliasPieceOptions, ArgumentError, ResultType, UserError } from '@sapphire/framework';
 import type { Awaitable } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
@@ -95,7 +96,7 @@ export abstract class Serializer<T> extends AliasPiece {
         return this.error(
             args.t(identifier, {
                 ...error,
-                ...(error.context as Record<string, unknown>),
+                ...cast<Record<string, unknown>>(error.context),
                 argument
             })
         );

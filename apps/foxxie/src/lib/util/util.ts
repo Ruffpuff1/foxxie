@@ -1,6 +1,6 @@
 import { acquireSettings } from '#lib/database';
 import { GuildMessage } from '#lib/types';
-import { isNumber, isThenable } from '@ruffpuff/utilities';
+import { cast, isNumber, isThenable } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { APIUser } from 'discord-api-types/v10';
 import {
@@ -56,7 +56,7 @@ export function getServerDetails() {
 
 export function idToTimestamp(id: string | number): number | null {
     if (isNumber(id)) return null;
-    return Number(SnowflakeUtil.deconstruct(id as string).timestamp);
+    return Number(SnowflakeUtil.deconstruct(cast<string>(id)).timestamp);
 }
 
 export async function fetchReactionUsers(channelId: string, messageId: string, reactions: string[]) {
@@ -65,9 +65,14 @@ export async function fetchReactionUsers(channelId: string, messageId: string, r
 
     for (const reaction of reactions) {
         do {
-            rawUsers = (await container.client.rest.get(Routes.channelMessageReaction(channelId, messageId, reaction), {
-                query: makeURLSearchParams({ limit: 100, after: rawUsers.length ? rawUsers[rawUsers.length - 1].id : undefined })
-            })) as RESTGetAPIChannelMessageReactionUsersResult;
+            rawUsers = cast<RESTGetAPIChannelMessageReactionUsersResult>(
+                await container.client.rest.get(Routes.channelMessageReaction(channelId, messageId, reaction), {
+                    query: makeURLSearchParams({
+                        limit: 100,
+                        after: rawUsers.length ? rawUsers[rawUsers.length - 1].id : undefined
+                    })
+                })
+            );
             for (const user of rawUsers) users.add(user.id);
         } while (rawUsers.length === 100);
     }

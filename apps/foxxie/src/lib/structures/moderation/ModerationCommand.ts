@@ -47,8 +47,8 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
     public async messageRun(message: GuildMessage, args: ModerationCommand.Args): Promise<void> {
         const resolved = await this.resolveTargets(args);
         const preHandled = await this.prehandle(message, resolved);
-        const processed = [] as Array<{ log: ModerationEntity; target: User }>;
-        const errors = [] as Array<{ error: Error | string; target: User }>;
+        const processed = cast<Array<{ log: ModerationEntity; target: User }>>([]);
+        const errors = cast<Array<{ error: Error | string; target: User }>>([]);
 
         const { targets, ...handledRaw } = resolved;
         const logChannelId = await acquireSettings(message.guild, GuildSettings.Channels.Logs.Moderation);
@@ -60,7 +60,7 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
                 const log = await this.handle(message, handled);
                 processed.push({ log, target });
             } catch (error) {
-                errors.push({ error: error as Error | string, target });
+                errors.push({ error: cast<Error | string>(error), target });
             }
         }
 

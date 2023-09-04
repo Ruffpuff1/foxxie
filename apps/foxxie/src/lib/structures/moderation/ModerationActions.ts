@@ -6,7 +6,7 @@ import { Colors } from '#utils/constants';
 import { SendOptions, TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 import { handleDiscordAPIError } from '#utils/transformers';
 import { floatPromise, resolveClientColor } from '#utils/util';
-import { chunk } from '@ruffpuff/utilities';
+import { cast, chunk } from '@ruffpuff/utilities';
 import { isCategoryChannel, isNewsChannel, isStageChannel, isTextChannel, isVoiceChannel } from '@sapphire/discord.js-utilities';
 import { UserError, container } from '@sapphire/framework';
 import { isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
@@ -194,7 +194,7 @@ export class ModerationActions {
 
         for (const bulks of chunk(messages, 100)) {
             try {
-                await (this.guild.channels.cache.get(moderationLog.channelId!) as GuildTextBasedChannel)?.bulkDelete(bulks);
+                await cast<GuildTextBasedChannel>(this.guild.channels.cache.get(moderationLog.channelId!))?.bulkDelete(bulks);
             } catch (error) {
                 const handled = handleDiscordAPIError(error);
                 if (handled.identifier)
@@ -216,7 +216,7 @@ export class ModerationActions {
         const { allow, deny } = await this.resolvePermissions(moderationLog.channelId!, { SendMessages: false });
 
         try {
-            await (this.guild.channels.cache.get(moderationLog.channelId!) as GuildTextBasedChannel)?.edit({
+            await cast<GuildTextBasedChannel>(this.guild.channels.cache.get(moderationLog.channelId!))?.edit({
                 permissionOverwrites: [{ allow, deny, type: 0, id: this.guild.id }],
                 reason
             });
@@ -241,7 +241,7 @@ export class ModerationActions {
         const { allow, deny } = await this.resolvePermissions(moderationLog.channelId!, { SendMessages: true });
 
         try {
-            await (this.guild.channels.cache.get(moderationLog.channelId!) as GuildTextBasedChannel)?.edit({
+            await cast<GuildTextBasedChannel>(this.guild.channels.cache.get(moderationLog.channelId!))?.edit({
                 permissionOverwrites: [{ allow, deny, type: 0, id: this.guild.id }],
                 reason
             });
@@ -386,7 +386,7 @@ export class ModerationActions {
             .setThumbnail(this.guild.iconURL()!)
             .setDescription(
                 [
-                    titles[entry.title as keyof typeof titles],
+                    titles[cast<keyof typeof titles>(entry.title)],
                     '```',
                     entry.reason ?? t(LanguageKeys.Moderation.NoReason),
                     '```'
@@ -411,9 +411,9 @@ export class ModerationActions {
     }
 
     private async resolvePermissions(channelId: string, options: PermissionOverwriteOptions): Promise<OverwriteData> {
-        const rawChannel = (await this.guild.client.rest.get(
-            Routes.channel(channelId)
-        )) as APIGuildChannel<ChannelType.GuildText>;
+        const rawChannel = cast<APIGuildChannel<ChannelType.GuildText>>(
+            await this.guild.client.rest.get(Routes.channel(channelId))
+        );
         const { allow: prevAllow, deny: prevDeny } = rawChannel.permission_overwrites!.find(perms => perms.id === this.guild.id)!;
 
         const resolved = PermissionOverwrites.resolveOverwriteOptions(options, {
@@ -515,7 +515,7 @@ export class ModerationActions {
         if (isNullishOrEmpty(options.reason)) options.reason = null;
         if (isNullishOrEmpty(options.moderatorId)) options.moderatorId = process.env.CLIENT_ID;
         if (isNullishOrZero(options.duration)) options.duration = null;
-        return options as ModerationEntity;
+        return cast<ModerationEntity>(options);
     }
 
     private get manageableChannelCount() {

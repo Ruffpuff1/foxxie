@@ -19,7 +19,11 @@ export class UserListener extends Listener<FoxxieEvents.GuildBanAdd> {
         if (deleted) return;
         await sleep(seconds(5));
 
-        const log = await fetchAuditEntry(ban.guild, AuditLogEvent.MemberBanAdd, log => cast<User>(log.target)?.id === ban.user.id);
+        const log = await fetchAuditEntry(
+            ban.guild,
+            AuditLogEvent.MemberBanAdd,
+            log => cast<User>(log.target)?.id === ban.user.id
+        );
         if (!log) return;
 
         const created = await moderation

@@ -3,6 +3,7 @@ import type FoxxieClient from '#lib/FoxxieClient';
 import { container } from '@sapphire/framework';
 import { Collection, Guild } from 'discord.js';
 import { ModerationActions } from '../moderation';
+import { cast } from '@ruffpuff/utilities';
 
 export class GuildModerationManager extends Collection<number, ModerationEntity> {
     public guild: Guild | null = null;
@@ -117,7 +118,7 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
     }
 
     public get client(): FoxxieClient {
-        return this.guild!.client as FoxxieClient;
+        return cast<FoxxieClient>(this.guild!.client);
     }
 
     public get latest(): null | undefined | ModerationEntity {

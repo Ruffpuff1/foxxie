@@ -3,7 +3,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage, PermissionLevels } from '#lib/types';
 import { inlineCode } from '@discordjs/builders';
-import { filter, map, toTitleCase } from '@ruffpuff/utilities';
+import { cast, filter, map, toTitleCase } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
 
@@ -124,6 +124,6 @@ export default class UserCommand extends FoxxieCommand {
             });
         }
 
-        return [value.name, value as SchemaKey] as const;
+        return [value.name, cast<SchemaKey>(value)] as const;
     }
 }

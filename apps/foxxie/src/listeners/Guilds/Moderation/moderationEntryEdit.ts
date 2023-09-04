@@ -1,7 +1,7 @@
-import { FoxxieEvents, EventArgs } from '#lib/types';
-import { Listener, ListenerOptions } from '@sapphire/framework';
+import { EventArgs, FoxxieEvents } from '#lib/types';
+import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { resolveToNull } from '@ruffpuff/utilities';
+import { Listener, ListenerOptions } from '@sapphire/framework';
 import type { TextChannel } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
@@ -21,7 +21,7 @@ export class UserListener extends Listener<FoxxieEvents.ModerationEntryEdit> {
         const logChannel = await resolveToNull(entry.guild!.channels.fetch(logChannelId));
         if (!logChannel) return;
 
-        const logMessage = await resolveToNull((logChannel as TextChannel).messages.fetch(logMessageId));
+        const logMessage = await resolveToNull(cast<TextChannel>(logChannel).messages.fetch(logMessageId));
         if (!logMessage) return;
 
         const embed = await entry.prepareEmbed();

@@ -4,6 +4,7 @@
  */
 import { Store } from '@sapphire/framework';
 import { Task } from './Task';
+import { cast } from '@ruffpuff/utilities';
 
 export class TaskStore extends Store<Task> {
     /**
@@ -11,7 +12,7 @@ export class TaskStore extends Store<Task> {
      * @param client The client that instantiates this store
      */
     public constructor() {
-        super(Task as any, { name: 'tasks' });
+        super(cast<any>(Task), { name: 'tasks' });
         this.container.client.stores.register(this);
     }
 }

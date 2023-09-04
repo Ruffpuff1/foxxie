@@ -20,7 +20,11 @@ export class UserListener extends Listener<FoxxieEvents.GuildMemberRemove> {
         if (deleted) return;
         await sleep(seconds(1.5));
 
-        const log = await fetchAuditEntry(member.guild, AuditLogEvent.MemberKick, log => cast<User>(log.target)?.id === member.id);
+        const log = await fetchAuditEntry(
+            member.guild,
+            AuditLogEvent.MemberKick,
+            log => cast<User>(log.target)?.id === member.id
+        );
         if (!log) return;
 
         if (Date.now() - idToTimestamp(log.id)! > seconds(15)) return;

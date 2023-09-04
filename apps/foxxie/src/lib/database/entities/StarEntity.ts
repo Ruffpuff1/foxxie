@@ -5,7 +5,7 @@ import { Colors } from '#utils/constants';
 import { fetchReactionUsers, floatPromise, getImage } from '#utils/util';
 import { bold } from '@discordjs/builders';
 import { TFunction } from '@foxxie/i18n';
-import { resolveToNull } from '@ruffpuff/utilities';
+import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { cutText, debounce, isNullish } from '@sapphire/utilities';
@@ -119,14 +119,14 @@ export class StarEntity extends BaseEntity {
         const channelId = await acquireSettings(this.#message.guild, GuildSettings.Starboard.Channel);
         if (isNullish(channelId)) return;
 
-        const channel = this.#message.guild.channels.cache.get(channelId) as GuildTextBasedChannelTypes | undefined;
+        const channel = cast<GuildTextBasedChannelTypes | undefined>(this.#message.guild.channels.cache.get(channelId));
         if (isNullish(channel)) {
             await writeSettings(this.#message.guild, [[GuildSettings.Starboard.Channel, null]]);
             return;
         }
 
         try {
-            this.#starMessage = (await channel.messages.fetch(this.starMessageId)) as GuildMessage;
+            this.#starMessage = cast<GuildMessage>(await channel.messages.fetch(this.starMessageId));
         } catch (error) {
             if (error instanceof DiscordAPIError) {
                 if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.remove();
@@ -216,7 +216,7 @@ export class StarEntity extends BaseEntity {
         ) {
             const referencedGuild = await container.client.guilds.fetch(message.reference.guildId);
             if (!referencedGuild) return null;
-            const referencedChannel = (await referencedGuild.channels.fetch(message.reference.channelId)) as TextBasedChannel;
+            const referencedChannel = cast<TextBasedChannel>(await referencedGuild.channels.fetch(message.reference.channelId));
 
             if (!referencedChannel) return null;
 
@@ -266,14 +266,14 @@ export class StarEntity extends BaseEntity {
 
         if (this.#message.author.bot) return;
 
-        const channel = this.#message.guild.channels.cache.get(channelId) as GuildTextBasedChannelTypes | undefined;
+        const channel = cast<GuildTextBasedChannelTypes | undefined>(this.#message.guild.channels.cache.get(channelId));
         if (!channel) return;
 
         const embed = await this.getEmbed(t);
         const promise = channel
             .send({ embeds: [embed] })
             .then(message => {
-                this.#starMessage = message as GuildMessage;
+                this.#starMessage = cast<GuildMessage>(message);
                 this.starMessageId = message.id;
             })
             .catch(error => {

@@ -48,8 +48,8 @@ export async function sendLoadingMessage(
     args = {}
 ): Promise<Message | GuildMessage> {
     const t = await container.db.guilds.acquire(msg.guild.id!, s => s.getLanguage());
-    const translated = t<string[]>(key, args as TOptionsBase);
-    const content = (Array.isArray(translated) ? randomArray(translated as any) : translated) as string;
+    const translated = t<string[]>(key, cast<TOptionsBase>(args));
+    const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
 
     return send(cast<Message>(msg), { content });
 }
@@ -117,7 +117,7 @@ export async function sendTemporaryMessage(
 ): Promise<Message> {
     if (typeof options === 'string') options = { content: options };
 
-    const response = (await send(message, options)) as Message;
+    const response = cast<Message>(await send(message, options));
     await floatPromise(deleteMessage(response, timer));
     return response;
 }
@@ -132,7 +132,7 @@ export async function promptForMessage(
     const responses = await message.channel.awaitMessages({ filter: msg => msg.author === message.author, time, max: 1 });
     const content = responses.size === 0 ? null : responses.first()!.content;
 
-    if (content) floatPromise(deleteMessage(responses.first()!));
+    if (content) await floatPromise(deleteMessage(responses.first()!));
 
     return content;
 }

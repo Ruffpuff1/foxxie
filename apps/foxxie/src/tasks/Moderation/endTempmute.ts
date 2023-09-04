@@ -22,7 +22,7 @@ export class UserTask extends ModerationTask {
         ]);
         if (!roleId) return null;
 
-        await this.container.redis?.pinsertex(`guild:${guild.id}:unmute:${data.userId}`, seconds(20), '')
+        await this.container.redis?.pinsertex(`guild:${guild.id}:unmute:${data.userId}`, seconds(20), '');
 
         const reason = t(LanguageKeys.Moderation.Unmute, this.ctx(data.duration));
 

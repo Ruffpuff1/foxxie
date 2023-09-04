@@ -19,7 +19,7 @@ export class UserTask extends ModerationTask {
         const t = getT('en-US');
         const reason = t(LanguageKeys.Moderation.Unban, this.ctx(data.duration));
 
-        await this.container.redis?.pinsertex(`guild:${guild.id}:unban:${data.userId}`, seconds(20), '')
+        await this.container.redis?.pinsertex(`guild:${guild.id}:unban:${data.userId}`, seconds(20), '');
 
         await getModeration(guild).actions.unban(
             {

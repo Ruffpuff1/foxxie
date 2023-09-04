@@ -1,9 +1,10 @@
-import type { GuildEntity } from '../entities/GuildEntity';
-import { ConfigurableKeyValueOptions, SchemaKey } from './SchemaKey';
-import { NonEmptyArray, SchemaGroup } from './SchemaGroup';
-import { Collection } from 'discord.js';
+import { cast } from '@ruffpuff/utilities';
 import { isFunction, isNumber, isPrimitive } from '@sapphire/utilities';
+import { Collection } from 'discord.js';
 import { ColumnOptions, ColumnType, getMetadataArgsStorage } from 'typeorm';
+import type { GuildEntity } from '../entities/GuildEntity';
+import { NonEmptyArray, SchemaGroup } from './SchemaGroup';
+import { ConfigurableKeyValueOptions, SchemaKey } from './SchemaKey';
 
 export const configurableKeys = new Collection<string, SchemaKey>();
 export const configurableGroups = new SchemaGroup();
@@ -11,10 +12,10 @@ export const configurableGroups = new SchemaGroup();
 export function ConfigurableKey(options: ConfigurableKeyOptions): PropertyDecorator {
     return (target, property) => {
         const storage = getMetadataArgsStorage();
-        const column = storage.columns.find(c => c.target === target.constructor && c.propertyName === (property as string));
+        const column = storage.columns.find(c => c.target === target.constructor && c.propertyName === cast<string>(property));
         if (!column) throw new Error('Cannot find the metadata column.');
 
-        const name = (options.name ?? column.options.name) as keyof GuildEntity;
+        const name = cast<keyof GuildEntity>(options.name ?? column.options.name);
         if (typeof name === 'undefined') throw new TypeError('The option "name" must be specified.');
 
         const isArray = options.array ?? column.options.array ?? false;
@@ -26,7 +27,7 @@ export function ConfigurableKey(options: ConfigurableKeyOptions): PropertyDecora
         const isDashboardOnly = options.dashboardOnly ?? false;
         const value = new SchemaKey({
             target: target.constructor,
-            property: property as keyof GuildEntity,
+            property: cast<keyof GuildEntity>(property),
             ...options,
             array: isArray,
             default: df,
@@ -38,8 +39,8 @@ export function ConfigurableKey(options: ConfigurableKeyOptions): PropertyDecora
             dashboardOnly: isDashboardOnly
         });
 
-        configurableKeys.set(property as keyof GuildEntity, value);
-        value.parent = configurableGroups.add(name.split('.') as NonEmptyArray<string>, value);
+        configurableKeys.set(cast<keyof GuildEntity>(property), value);
+        value.parent = configurableGroups.add(cast<NonEmptyArray<string>>(name.split('.')), value);
     };
 }
 

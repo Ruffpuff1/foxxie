@@ -1,7 +1,7 @@
 import { EventArgs, FoxxieEvents } from '#lib/types';
 import { Schedules } from '#utils/constants';
 import { isDisboard } from '#utils/Discord';
-import { hours, isDev } from '@ruffpuff/utilities';
+import { cast, hours, isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 
@@ -18,7 +18,7 @@ export class UserListener extends Listener<FoxxieEvents.BotMessage> {
 
         const [embed] = msg.embeds;
         /* test to make sure the embed is a success embed. */
-        if (!this.disboardRegex.test(embed?.description as string)) return;
+        if (!this.disboardRegex.test(cast<string>(embed?.description))) return;
 
         /* be sure to account for possible double bumps */
 
