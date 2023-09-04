@@ -2,7 +2,7 @@ import { StarboardManager } from '#lib/structures/managers/StarboardManager';
 import { GuildMessage } from '#lib/types';
 import { defaultStarboardEmojis } from '#utils/Discord';
 import { Colors } from '#utils/constants';
-import { fetchReactionUsers, floatPromise, getImage } from '#utils/util';
+import { fetchReactionUsers, floatPromise, getAttachment, getImage, isVideo } from '#utils/util';
 import { bold } from '@discordjs/builders';
 import { TFunction } from '@foxxie/i18n';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
@@ -176,6 +176,20 @@ export class StarEntity extends BaseEntity {
         const color = await this.color();
 
         const message = this.#message;
+        const attachment = getAttachment(message);
+        const video = isVideo(attachment);
+
+        if (video && attachment) {
+            return new EmbedBuilder()
+                .setAuthor({
+                    name: message.member?.displayName || message.author.username,
+                    iconURL: message.author.displayAvatarURL({ size: 128 })
+                })
+                .setColor(color)
+                .setImage(getImage(message)!)
+                .setDescription([await this.getContent(t), attachment.url].join('\n'));
+        }
+
         return new EmbedBuilder()
             .setAuthor({
                 name: message.member?.displayName || message.author.username,
@@ -184,7 +198,6 @@ export class StarEntity extends BaseEntity {
             .setColor(color)
             .setImage(getImage(message)!)
             .setDescription(await this.getContent(t));
-        // .setImage(getImage(message)!);
     }
 
     private async color() {
