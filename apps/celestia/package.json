@@ -2,6 +2,7 @@
   "name": "celestia",
   "version": "0.1.0",
   "private": true,
+  "author": "Reese Harlak <reese@reese.gay>",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
