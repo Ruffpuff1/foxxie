@@ -1,59 +1,12 @@
-- name: Labeler
-  uses: actions/labeler@v4.3.0
-            
+name: "Pull Request Labeler"
+on: [pull_request]
 
-'Bot: Foxxie':
-  - apps/foxxie/*
-  - apps/foxxie/**/*
-
-'Packages: fetch':
-  - packages/fetch/*
-  - packages/fetch/**/*
-
-'Packages: fuzzysearch':
-  - packages/fuzzysearch/*
-  - packages/fuzzysearch/**/*
-
-'Packages: lock-queue':
-  - packages/lock-queue/*
-  - packages/lock-queue/**/*
-
-'Packages: eslint-config':
-  - packages/eslint-config/*
-  - packages/eslint-config/**/*
-
-'Packages: stardrop':
-  - packages/stardrop/*
-  - packages/stardrop/**/*
-
-'Packages: types':
-  - packages/types/*
-  - packages/types/**/*
-
-'GraphQL: stardrop':
-  - graphql/stardrop/*
-  - graphql/stardrop/**/*
-
-'I18n: en-US':
-  - apps/foxxie/src/languages/en-US/*
-  - apps/foxxie/src/languages/en-US/**/*
-
-'I18n: es-MX':
-  - apps/foxxie/src/languages/es-MX/*
-  - apps/foxxie/src/languages/es-MX/**/*
-
-'Meta: Documentation':
-  - README.md
-  - LICENSE
-  - apps/**/README.md
-  - packages/**/README.md
-  - docker/**/README.md
-  - apps/README.md
-  - packages/README.md
-  - docker/README.md
-  - apps/**/CHANGELOG.md
-  - packages/**/CHANGELOG.md
-
-'Meta: Github':
-  - .github/*
-  - .github/**/*
+jobs:
+  triage:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/labeler@main
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        configuration-path: .github/labeler.yml
+        sync-labels: true
