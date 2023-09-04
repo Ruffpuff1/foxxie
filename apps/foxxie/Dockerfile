@@ -5,7 +5,7 @@ WORKDIR /
 COPY package.json .
 COPY yarn.lock .
 COPY tsconfig.json tsconfig.json
-COPY .git/ .git/
+COPY ../../.git/ ../../.git/
 
 RUN yarn install
 
