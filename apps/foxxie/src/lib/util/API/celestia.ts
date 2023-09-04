@@ -1,0 +1,231 @@
+import { LanguageKeys } from '#lib/i18n';
+import { BrandingColors, Urls } from '#utils/constants';
+import { resolveEmbedField } from '#utils/util';
+import {
+    CoffeeBeansEnum,
+    CoffeeMilkEnum,
+    CoffeeSugarEnum,
+    GamesEnum,
+    KKSliderSongs,
+    RouteRequestPayloads,
+    StarSignEnum,
+    Villager
+} from '@foxxie/celestia-api-types';
+import { fetch } from '@foxxie/fetch';
+import { TFunction } from '@foxxie/i18n';
+import { cast, toTitleCase } from '@ruffpuff/utilities';
+import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { EmbedBuilder } from 'discord.js';
+
+export async function fetchVillager(param: string): Promise<RouteRequestPayloads['CelestiaVillagersVillager']> {
+    try {
+        const data = await fetch(Urls.Celestia)
+            .path('api', 'villagers', param)
+            .json<RouteRequestPayloads['CelestiaVillagersVillager']>();
+
+        return data;
+    } catch {
+        return {
+            code: 404,
+            error: 'Villager not found'
+        };
+    }
+}
+
+export function buildVillagerDisplay(data: Villager, t: TFunction, color?: number) {
+    const none = t(LanguageKeys.Globals.None);
+    const titles = t(LanguageKeys.Commands.Fun.AnimalcrossingTitles);
+
+    const template = new EmbedBuilder() //
+        .setThumbnail(data.art) //
+        .setAuthor({ name: `${toTitleCase(data.key)} [${data.keyJp}]` })
+        .setFooter({ text: t(LanguageKeys.Commands.Fun.AnimalcrossingFooter) })
+        .setColor(color || BrandingColors.Primary);
+
+    const display = new PaginatedMessage({ template }) //
+        .addPageEmbed(embed =>
+            embed //
+                .addFields([
+                    resolveEmbedField(titles.personality, data.personality || none, true),
+                    resolveEmbedField(titles.species, data.species ? toTitleCase(data.species) : none, true),
+                    resolveEmbedField(titles.gender, data.gender, true),
+                    resolveEmbedField(
+                        t(`${LanguageKeys.Commands.Fun.AnimalcrossingTitles}.game`, { count: data.games.length }),
+                        t(LanguageKeys.Globals.And, { value: formatGames(cast<GamesEnum[]>(data.games)) })
+                    ),
+                    resolveEmbedField(titles.catchphrase, data.catchphrase || none, true),
+                    resolveEmbedField(titles.saying, data.favoriteSaying || none, true)
+                ])
+        );
+
+    if (data.coffeeRequest || data.siblings || data.skill || data.goal || data.song) {
+        display.addPageEmbed(embed => {
+            embed //
+                .addFields([
+                    resolveEmbedField(titles.siblings, data.siblings || none, true),
+                    resolveEmbedField(titles.skill, data.skill || none, true),
+                    resolveEmbedField(titles.goal, data.goal || none, true),
+                    resolveEmbedField(
+                        titles.coffee,
+                        data.coffeeRequest
+                            ? t(LanguageKeys.Commands.Fun.AnimalcrossingCoffee, {
+                                  beans: coffeeBeansEnumToString(cast<CoffeeBeansEnum>(data.coffeeRequest!.beans)),
+                                  milk: coffeeMilkEnumToString(cast<CoffeeMilkEnum>(data.coffeeRequest!.milk)),
+                                  sugar: coffeeSugarEnumToString(cast<CoffeeSugarEnum>(data.coffeeRequest!.sugar))
+                              })
+                            : none
+                    )
+                ]);
+
+            if (data.song)
+                embed.addFields(resolveEmbedField(titles.song, kKSliderSongEnumToString(cast<KKSliderSongs>(data.song)) || none));
+
+            return embed;
+        });
+    }
+
+    // if (data.amiiboCard?.length) {
+    //     for (const card of data.amiiboCard) {
+    //         display.addPageEmbed(embed =>
+    //             embed //
+    //                 .addField(titles.birthday, card.birthday, true)
+    //                 .addField(`**${getZodiacEmoji(card.starSign as StarSignEnum)} ${titles.zodiac}**`, card.starSign, true)
+    //                 .addField(titles.series, `${card.series}`, true)
+    //                 .setImage(card.art)
+    //         );
+    //     }
+    // }
+
+    return display;
+}
+
+export function formatGames(games: GamesEnum[]): string[] {
+    return games.map((game, i) => {
+        const bounday = i === 0 ? '*' : '';
+        return `${bounday}${gamesEnumToString(game)}${bounday}`;
+    });
+}
+
+export function gamesEnumToString(game: GamesEnum) {
+    switch (game) {
+        case GamesEnum.AmiiboFestival:
+            return 'Amiibo Festival';
+        case GamesEnum.AnimalCrossing:
+            return 'Animal Crossing';
+        case GamesEnum.CityFolk:
+            return 'City Folk';
+        case GamesEnum.DoubutsuNoMori:
+            return 'Dōbutsu no Mori';
+        case GamesEnum.HappyHomeDesigner:
+            return 'Happy Home Designer';
+        case GamesEnum.HappyHomeParadise:
+            return 'Happy Home Paradise';
+        case GamesEnum.NewHorizons:
+            return 'New Horizons';
+        case GamesEnum.NewLeaf:
+            return 'New Leaf';
+        case GamesEnum.PocketCamp:
+            return 'Pocket Camp';
+        case GamesEnum.WildWorld:
+            return 'Wild World';
+    }
+}
+
+export function kKSliderSongEnumToString(song: KKSliderSongs) {
+    switch (song) {
+        case KKSliderSongs.AnimalCity:
+            return 'Animal City';
+        case KKSliderSongs.CafeKK:
+            return 'Café K.K.';
+        case KKSliderSongs.Drivin:
+            return "Drivin'";
+        case KKSliderSongs.ForestLife:
+            return 'Forest Life';
+        case KKSliderSongs.GoKKRider:
+            return 'Go K.K. Rider';
+        case KKSliderSongs.ILoveYou:
+            return 'I love you';
+        case KKSliderSongs.KKLoveSong:
+            return 'K.K. Love Song';
+        case KKSliderSongs.KKRobotSynth:
+            return 'K.K. Robot synth';
+        case KKSliderSongs.MarineSong2001:
+            return 'Marine Song 2001';
+        case KKSliderSongs.MountainSong:
+            return 'Mountain Song';
+        case KKSliderSongs.MyPlace:
+            return 'My Place';
+        case KKSliderSongs.OnlyMe:
+            return 'Only Me';
+        case KKSliderSongs.SpringBlossoms:
+            return 'Spring Blossoms';
+        case KKSliderSongs.StaleCupcakes:
+            return 'Stale Cupcakes';
+        case KKSliderSongs.SteepHill:
+            return 'Steep Hill';
+        case KKSliderSongs.SurfinKK:
+            return "Surfin' K.K.";
+        case KKSliderSongs.TheKFunk:
+            return 'The K Funk';
+        case KKSliderSongs.ToTheEdge:
+            return 'To the edge';
+        case KKSliderSongs.TwoDaysAgo:
+            return 'Two Days ago';
+        case KKSliderSongs.WelcomeHorizons:
+            return 'Welcome Horizons';
+        default: {
+            const kkresult = /(?<name>[A-z]+)KK/.exec(song);
+
+            if (kkresult !== null && kkresult.groups!.name) {
+                return `${kkresult.groups!.name} K.K.`;
+            }
+
+            const otherResult = /KK(?<name>[A-z]+)/.exec(song);
+
+            if (otherResult !== null && otherResult.groups!.name) {
+                return `K.K. ${otherResult.groups!.name}`;
+            }
+
+            return song;
+        }
+    }
+}
+
+export function coffeeBeansEnumToString(bean: CoffeeBeansEnum) {
+    switch (bean) {
+        case CoffeeBeansEnum.BlueMountain:
+            return 'Blue Mountain';
+        default:
+            return bean;
+    }
+}
+
+export function coffeeMilkEnumToString(milk: CoffeeMilkEnum) {
+    switch (milk) {
+        case CoffeeMilkEnum.ALittleBit:
+            return 'A little bit';
+        case CoffeeMilkEnum.NoneAtAll:
+            return 'None at all';
+        case CoffeeMilkEnum.TheRegularAmount:
+            return 'The regular amount';
+        case CoffeeMilkEnum.Lots:
+            return 'Lots';
+    }
+}
+
+export function coffeeSugarEnumToString(sugar: CoffeeSugarEnum) {
+    switch (sugar) {
+        case CoffeeSugarEnum.NoneAtAll:
+            return 'None at all';
+        case CoffeeSugarEnum.OneSpoonful:
+            return 'One spoonful';
+        case CoffeeSugarEnum.ThreeSpoonfuls:
+            return 'Three spoonfuls';
+        case CoffeeSugarEnum.TwoSpoonfuls:
+            return 'Two spoonfuls';
+    }
+}
+
+export function getZodiacEmoji(starSign: StarSignEnum): `:${Lowercase<StarSignEnum>}:` {
+    return `:${starSign.toLowerCase()}:` as `:${Lowercase<StarSignEnum>}:`;
+}

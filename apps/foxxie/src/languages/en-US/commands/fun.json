@@ -1,0 +1,25 @@
+{
+    "animalcrossingCoffee": "Beans → {{beans}}\nMilk → {{milk}}\nSugar → {{sugar}}",
+    "animalcrossingDescription": "Fetch Animal Crossing data from celestia.",
+    "animalcrossingDescriptionVillager": "Fetch data about an Animal Crossing villager.",
+    "animalcrossingFooter": "Powered by Celestia.reese.gay",
+    "animalcrossingNoVillager": "{{ERROR}} I couldn't find an Animal Crossing villager named `{{villager}}`. Maybe you meant one of these?",
+    "animalcrossingOptionVillager": "The villager to search for.",
+    "animalcrossingTitles": {
+        "birthday": "• Birthday",
+        "catchphrase": "• Catchphrase",
+        "coffee": "• Coffee Request",
+        "game": "• Game",
+        "game_other": "• Games",
+        "gender": "• Gender",
+        "goal": "• Goal",
+        "personality": "• Personality",
+        "saying": "• Favorite Saying",
+        "series": "• Series",
+        "siblings": "• Siblings",
+        "skill": "•  Skill",
+        "song": "• Favorite Song",
+        "species": "• Species",
+        "zodiac": "• Zodiac"
+    }
+}
