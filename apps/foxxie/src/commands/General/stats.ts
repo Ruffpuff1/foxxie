@@ -1,6 +1,5 @@
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
-import { commit } from '#utils/constants';
 import { getServerDetails } from '#utils/util';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -17,9 +16,6 @@ import { version as discordVersion } from 'discord.js/package.json';
 })
 export class UserCommand extends FoxxieCommand {
     public async messageRun(msg: Message, args: FoxxieCommand.Args): Promise<void> {
-        const hash = commit();
-        const head = hash ? ` [${hash[0].trim()}]` : '';
-
         const {
             uptime,
             process: pross,
@@ -51,9 +47,8 @@ export class UserCommand extends FoxxieCommand {
 
         const embed = new EmbedBuilder()
             .setAuthor({
-                name: `${this.client.user?.username} v${process.env.VERSION_NUM}${isDev() ? '-dev' : ''}${head}`,
-                iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 2048 }),
-                url: `https://gitlab.com/Ruffpuff1/foxxie/-/tree/${hash[0]}`
+                name: `${this.client.user?.username} v${process.env.VERSION_NUM}${isDev() ? '-dev' : ''}`,
+                iconURL: this.client.user?.displayAvatarURL({ extension: 'png', size: 2048 })
             })
             .setDescription(stats)
             .setColor(args.color)
