@@ -87,10 +87,6 @@ export const helpUsagePostProcessor: PostProcessorModule = {
     }
 };
 
-export const commit = () => {
-    return execSync('git log -1 --date-order --format=format:"%h - %s"').toString().split('-');
-};
-
 export const allowedInviteIds = [
     // ID for `The Corner Store`, Foxxie's home server.
     '761512748898844702',
