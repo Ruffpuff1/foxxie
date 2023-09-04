@@ -1816,9 +1816,7 @@ internal-slot@^1.0.3:
     side-channel "^1.0.4"
 
 ioredis@^5.0.3:
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-5.0.6.tgz#e50b8cc945f1f3ac932b0b8aab4bd8073d1402a9"
-  integrity sha512-KUm7wPzIet9QrFMoMm09/4bkfVKBUD9KXwBitP3hrNkZ+A6NBndweXGwYIB/7szHcTZgfo7Kvx88SxljJV4D9A==
+  version "5.3.2"
   dependencies:
     "@ioredis/commands" "^1.1.1"
     cluster-key-slot "^1.1.0"
