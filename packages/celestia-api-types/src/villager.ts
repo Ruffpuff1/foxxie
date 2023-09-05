@@ -32,32 +32,26 @@ export enum VillagerKey {
     Cephalobot = 'cephalobot',
     Chabwick = 'chabwick',
     /**
-     * @internal Not in API currently
      * @description Peppy elephant based on the Cinnamoroll franchise.
      */
     Chai = 'chai',
     /**
-     * @internal Not in API currently
      * @description Normal deer based on the My Melody franchise.
      */
     Chelsea = 'chelsea',
     /**
-     * @internal Not in API currently
      * @description Normal sheep based on the Little Twin Stars franchise.
      */
     Etoile = 'etoile',
     /**
-     * @internal Not in API currently
      * @description Lazy bear cub based on the Pompompurin franchise.
      */
     Marty = 'marty',
     /**
-     * @internal Not in API currently
      * @description Peppy gorilla based on the Hello Kitty franchise.
      */
     Rilla = 'rilla',
     /**
-     * @internal Not in API currently
      * @description Smug rabbit based on the Keroppi franchise.
      */
     Toby = 'toby'

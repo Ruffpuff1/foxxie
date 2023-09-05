@@ -1,4 +1,13 @@
-import { GamesEnum, KKSliderSongs, MonthsEnum, PersonalitiesEnum, SpeciesEnum, StarSignEnum, Villager, VillagerKey } from '@foxxie/celestia-api-types';
+import {
+    GamesEnum,
+    KKSliderSongs,
+    MonthsEnum,
+    PersonalitiesEnum,
+    SpeciesEnum,
+    StarSignEnum,
+    Villager,
+    VillagerKey
+} from '@foxxie/celestia-api-types';
 
 export const Wolfs: Villager[] = [
     {
