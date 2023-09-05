@@ -1,10 +1,25 @@
 {
     "animalcrossingCoffee": "Beans → {{beans}}\nMilk → {{milk}}\nSugar → {{sugar}}",
-    "animalcrossingDescription": "Fetch Animal Crossing data from celestia.",
-    "animalcrossingDescriptionVillager": "Fetch data about an Animal Crossing villager.",
-    "animalcrossingFooter": "Powered by Celestia.reese.gay",
+    "animalcrossingFooter": "Powered by celestia.reese.gay",
+    "animalcrossingDetailedDescription": {
+        "description": "Fetch animal crossing data from the celestia API.",
+        "usage": "{{prefix}}animalcrossing [villager]",
+        "subcommands": [
+            {
+                "command": "villager",
+                "description": [
+                    "Search the name of a specific animal crossing villager to retrieve information about them."
+                ],
+                "examples": [
+                    "{{prefix}}animalcrossing villager bob",
+                    "{{prefix}}animalcrossing villager erik",
+                    "{{prefix}}animalcrossing villager zucker"
+                ]
+            }
+        ]
+    },
     "animalcrossingNoVillager": "{{ERROR}} I couldn't find an Animal Crossing villager named `{{villager}}`. Maybe you meant one of these?",
-    "animalcrossingOptionVillager": "The villager to search for.",
+    "animalcrossingNoVillagerProvided": "{{ERROR}} Please tell me which Animal Crossing villager I should search for.",
     "animalcrossingTitles": {
         "birthday": "• Birthday",
         "catchphrase": "• Catchphrase",

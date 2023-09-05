@@ -11,6 +11,7 @@ import { captureException } from '@sentry/node';
 })
 export class UserListener extends Listener<FoxxieEvents.ListenerError> {
     public run(...[error, context]: EventArgs<FoxxieEvents.ListenerError>): void {
+        console.log(error);
         const { event, location } = context.piece;
         this.container.logger.fatal(`[LISTENER] ${location.full}\n${cast<Error>(error).stack || cast<Error>(error).message}`);
 

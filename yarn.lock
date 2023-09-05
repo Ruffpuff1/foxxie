@@ -574,6 +574,14 @@
     "@ruffpuff/utilities" "^4.0.0"
     undici "^5.0.0"
 
+"@foxxie/fuzzysearch@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@foxxie/fuzzysearch/-/fuzzysearch-0.0.4.tgz#0ee239d8fae13fb6eacb2a021829a8b53cdf5ebb"
+  integrity sha512-okz9sU7VhjN7eagIQzqX0kbQp447CfxO2f3eZPqNBSpMgx2GRfepHwTjBorQ4Npgew2muMbbnVgJ1kMlmMMqPQ==
+  dependencies:
+    "@discordjs/collection" "^0.6.0"
+    "@skyra/jaro-winkler" "^1.1.0"
+
 "@foxxie/i18n-codes@0.0.0":
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/@foxxie/i18n-codes/-/i18n-codes-0.0.0.tgz#0a571de3c0e707f10cd9b1a56e6fa3aac3793d1f"
@@ -1342,6 +1350,11 @@
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@skyra/editable-commands/-/editable-commands-3.0.1.tgz#b7b8b513dbe63cac1151c116bd4a0c8daa4e36a3"
   integrity sha512-Dvx7k9D3XMVHT8+GTagh+/87RIOmYHx5uVsETFjUx3DutbTpNcynYsoHA+U4JcKSLj4ziR5zk0xgYOAMBNYIlw==
+
+"@skyra/jaro-winkler@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@skyra/jaro-winkler/-/jaro-winkler-1.1.0.tgz#6e0ccff912f5d72b3e1cdf386f85b10102412608"
+  integrity sha512-cfamfsSmi6dqc8yAABKg5YC76FGwZq0ui+T4/N8R8oi52HS9GGXgq0ZbcBhaGT6CHoNtd9bRALcQRUJx1NH0Ig==
 
 "@sqltools/formatter@^1.2.5":
   version "1.2.5"

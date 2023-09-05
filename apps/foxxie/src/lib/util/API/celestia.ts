@@ -1,3 +1,4 @@
+import { FuzzySearch } from '#external/FuzzySearch';
 import { LanguageKeys } from '#lib/i18n';
 import { BrandingColors, Urls } from '#utils/constants';
 import { resolveEmbedField } from '#utils/util';
@@ -9,13 +10,14 @@ import {
     KKSliderSongs,
     RouteRequestPayloads,
     StarSignEnum,
-    Villager
+    Villager,
+    VillagerKey
 } from '@foxxie/celestia-api-types';
 import { fetch } from '@foxxie/fetch';
 import { TFunction } from '@foxxie/i18n';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
-import { EmbedBuilder } from 'discord.js';
+import { Collection, EmbedBuilder } from 'discord.js';
 
 export async function fetchVillager(param: string): Promise<RouteRequestPayloads['CelestiaVillagersVillager']> {
     try {
@@ -30,6 +32,30 @@ export async function fetchVillager(param: string): Promise<RouteRequestPayloads
             error: 'Villager not found'
         };
     }
+}
+
+export const defaultFuzzyVillagerResult = [{ key: 'bob' }];
+
+export async function fuzzySearchVillagers(query: string, take = 20, cache?: `${VillagerKey}`[]) {
+    if (!cache) {
+        cache = [];
+        const data = await fetchVillagers();
+
+        for (const key of data.villagers) {
+            cache.push(key);
+        }
+    }
+
+    const fuzz = new FuzzySearch(new Collection(cache.map(key => [key, { key }])), ['key']);
+    const result = fuzz.runFuzzy(query);
+
+    return result.length ? result.slice(0, take) : defaultFuzzyVillagerResult;
+}
+
+export async function fetchVillagers(): Promise<RouteRequestPayloads['CelestiaVillagers']> {
+    const data = await fetch(Urls.Celestia).path('api', 'villagers').json<RouteRequestPayloads['CelestiaVillagers']>();
+
+    return data;
 }
 
 export function buildVillagerDisplay(data: Villager, t: TFunction, color?: number) {
@@ -180,13 +206,13 @@ export function kKSliderSongEnumToString(song: KKSliderSongs) {
                 return `${kkresult.groups!.name} K.K.`;
             }
 
-            const otherResult = /KK(?<name>[A-z]+)/.exec(song);
+            const otherResult = /kK(?<name>[A-z]+)/.exec(song);
 
             if (otherResult !== null && otherResult.groups!.name) {
                 return `K.K. ${otherResult.groups!.name}`;
             }
 
-            return song;
+            return toTitleCase(song);
         }
     }
 }
