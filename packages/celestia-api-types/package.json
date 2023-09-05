@@ -1,6 +1,6 @@
 {
   "name": "@foxxie/celestia-api-types",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Typings for Foxxie's Animal Crossing API",
   "scripts": {
     "build": "tsup",
