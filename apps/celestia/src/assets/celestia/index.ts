@@ -10,9 +10,22 @@ import { Rabbits } from './villagers/Rabbits';
 import { Rhinos } from './villagers/Rhinos';
 import { Wolfs } from './villagers/Wolfs';
 
+import { Sanrio } from './villagers/Sanrio';
+
 const Villagers = new Map<`${VillagerKey}`, Villager>();
 
-const AllVillagers: Villager[] = [...Birds, ...Cats, ...Dogs, ...Gorillas, ...Octopuses, ...Penguins, ...Rabbits, ...Rhinos, ...Wolfs];
+const AllVillagers: Villager[] = [
+    ...Birds,
+    ...Cats,
+    ...Dogs,
+    ...Gorillas,
+    ...Octopuses,
+    ...Penguins,
+    ...Rabbits,
+    ...Rhinos,
+    ...Wolfs,
+    ...Sanrio
+];
 
 for (const entry of AllVillagers) {
     Villagers.set(cast<`${VillagerKey}`>(entry.key), entry);
