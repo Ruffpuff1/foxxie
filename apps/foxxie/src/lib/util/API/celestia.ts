@@ -1,7 +1,7 @@
 import { FuzzySearch } from '#external/FuzzySearch';
 import { LanguageKeys } from '#lib/i18n';
 import { BrandingColors, Urls } from '#utils/constants';
-import { resolveEmbedField } from '#utils/util';
+import { conditionalField, removeEmptyFields, resolveEmbedField } from '#utils/util';
 import {
     CoffeeBeansEnum,
     CoffeeMilkEnum,
@@ -17,7 +17,7 @@ import { fetch } from '@foxxie/fetch';
 import { TFunction } from '@foxxie/i18n';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
-import { Collection, EmbedBuilder } from 'discord.js';
+import { Collection, EmbedBuilder, italic } from 'discord.js';
 
 export async function fetchVillager(param: string): Promise<RouteRequestPayloads['CelestiaVillagersVillager']> {
     try {
@@ -68,6 +68,8 @@ export function buildVillagerDisplay(data: Villager, t: TFunction, color?: numbe
         .setFooter({ text: t(LanguageKeys.Commands.Fun.AnimalcrossingFooter) })
         .setColor(color || BrandingColors.Primary);
 
+    if (data.description) template.setDescription(italic(data.description));
+
     const display = new PaginatedMessage({ template }) //
         .addPageEmbed(embed =>
             embed //
@@ -84,43 +86,43 @@ export function buildVillagerDisplay(data: Villager, t: TFunction, color?: numbe
                 ])
         );
 
-    if (data.coffeeRequest || data.siblings || data.skill || data.goal || data.song) {
-        display.addPageEmbed(embed => {
-            embed //
-                .addFields([
-                    resolveEmbedField(titles.siblings, data.siblings || none, true),
-                    resolveEmbedField(titles.skill, data.skill || none, true),
-                    resolveEmbedField(titles.goal, data.goal || none, true),
-                    resolveEmbedField(
-                        titles.coffee,
-                        data.coffeeRequest
-                            ? t(LanguageKeys.Commands.Fun.AnimalcrossingCoffee, {
-                                  beans: coffeeBeansEnumToString(cast<CoffeeBeansEnum>(data.coffeeRequest!.beans)),
-                                  milk: coffeeMilkEnumToString(cast<CoffeeMilkEnum>(data.coffeeRequest!.milk)),
-                                  sugar: coffeeSugarEnumToString(cast<CoffeeSugarEnum>(data.coffeeRequest!.sugar))
-                              })
-                            : none
-                    )
-                ]);
+    const hasTrivia = Boolean(data.siblings || data.skill || data.goal);
 
-            if (data.song)
-                embed.addFields(resolveEmbedField(titles.song, kKSliderSongEnumToString(cast<KKSliderSongs>(data.song)) || none));
+    display.addPageEmbed(embed => {
+        embed.addFields(
+            removeEmptyFields([
+                conditionalField(hasTrivia, titles.siblings, data.siblings || none, true),
+                conditionalField(hasTrivia, titles.skill, data.skill || none, true),
+                conditionalField(hasTrivia, titles.goal, data.goal || none, true),
+                conditionalField(
+                    Boolean(data.coffeeRequest),
+                    titles.coffee,
+                    t(LanguageKeys.Commands.Fun.AnimalcrossingCoffee, {
+                        beans: coffeeBeansEnumToString(cast<CoffeeBeansEnum>(data.coffeeRequest?.beans)),
+                        milk: coffeeMilkEnumToString(cast<CoffeeMilkEnum>(data.coffeeRequest?.milk)),
+                        sugar: coffeeSugarEnumToString(cast<CoffeeSugarEnum>(data.coffeeRequest?.sugar))
+                    }),
+                    true
+                )
+            ])
+        );
 
-            return embed;
-        });
-    }
+        embed.addFields([
+            resolveEmbedField(
+                titles.birthday,
+                `${getZodiacEmoji(cast<StarSignEnum>(data.birthday.zodiac))} ${data.birthday.month} ${t(
+                    LanguageKeys.Globals.NumberOrdinal,
+                    { value: data.birthday.day }
+                )}`,
+                true
+            )
+        ]);
 
-    // if (data.amiiboCard?.length) {
-    //     for (const card of data.amiiboCard) {
-    //         display.addPageEmbed(embed =>
-    //             embed //
-    //                 .addField(titles.birthday, card.birthday, true)
-    //                 .addField(`**${getZodiacEmoji(card.starSign as StarSignEnum)} ${titles.zodiac}**`, card.starSign, true)
-    //                 .addField(titles.series, `${card.series}`, true)
-    //                 .setImage(card.art)
-    //         );
-    //     }
-    // }
+        if (data.song)
+            embed.addFields(resolveEmbedField(titles.song, kKSliderSongEnumToString(cast<KKSliderSongs>(data.song)) || none));
+
+        return embed;
+    });
 
     return display;
 }

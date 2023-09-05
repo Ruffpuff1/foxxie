@@ -54,6 +54,8 @@ export class UserCommand extends FoxxieCommand {
                 content: args.t(LanguageKeys.Commands.Fun.AnimalcrossingNoVillager, { villager }),
                 components: [actionRow]
             });
+
+            return;
         }
 
         const display = buildVillagerDisplay(cast<Villager>(villagerData), args.t);

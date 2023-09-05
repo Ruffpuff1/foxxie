@@ -148,3 +148,12 @@ export function resolveClientColor(resolveable: GuildResolvable, color?: ColorRe
 export function resolveEmbedField(name: string, text: string, inline: boolean = false): APIEmbedField {
     return { name, value: text, inline };
 }
+
+export function removeEmptyFields(fields: (APIEmbedField | null | undefined)[]): APIEmbedField[] {
+    return fields.filter(field => Boolean(field)) as APIEmbedField[];
+}
+
+export function conditionalField(condition: boolean, name: string, text: string, inline: boolean = false): APIEmbedField | null {
+    if (!condition) return null;
+    return { name, value: text, inline };
+}
