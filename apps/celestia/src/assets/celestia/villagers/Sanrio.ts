@@ -1,4 +1,5 @@
 import {
+    AmiiboSeriesEnum,
     CoffeeBeansEnum,
     CoffeeMilkEnum,
     CoffeeSugarEnum,
@@ -31,10 +32,15 @@ export const Sanrio: Villager[] = [
             GamesEnum.HappyHomeParadise,
             GamesEnum.PocketCamp
         ],
-        art: 'https://dodo.ac/np/images/8/84/Chai_NH_Model.png',
+        art: {
+            villager: 'https://dodo.ac/np/images/8/84/Chai_NH_Model.png',
+            card: 'https://dodo.ac/np/images/0/02/004_Chai_Sanrio_amiibo_card_NA.png',
+            icon: 'https://dodo.ac/np/images/a/ac/Chai_NH_Villager_Icon.png'
+        },
         song: KKSliderSongs.KKBossa,
         skill: 'Napping',
         goal: 'Café owner',
+        siblings: null,
         coffeeRequest: {
             beans: CoffeeBeansEnum.Blend,
             milk: CoffeeMilkEnum.NoneAtAll,
@@ -44,6 +50,10 @@ export const Sanrio: Villager[] = [
             month: MonthsEnum.March,
             day: 6,
             zodiac: StarSignEnum.Pisces
+        },
+        amiibo: {
+            series: AmiiboSeriesEnum.Sanrio,
+            cardNumber: 4
         }
     },
     {
@@ -63,7 +73,11 @@ export const Sanrio: Villager[] = [
             GamesEnum.HappyHomeParadise,
             GamesEnum.PocketCamp
         ],
-        art: 'https://dodo.ac/np/images/c/c1/Chelsea_NH_Model.png',
+        art: {
+            villager: 'https://dodo.ac/np/images/c/c1/Chelsea_NH_Model.png',
+            card: 'https://dodo.ac/np/images/9/93/005_Chelsea_Sanrio_amiibo_card_NA.png',
+            icon: 'https://dodo.ac/np/images/4/40/Chelsea_NH_Villager_Icon.png'
+        },
         song: KKSliderSongs.KKStroll,
         skill: 'Making sweets',
         goal: 'Pastry chef',
@@ -77,6 +91,10 @@ export const Sanrio: Villager[] = [
             month: MonthsEnum.January,
             day: 18,
             zodiac: StarSignEnum.Capricorn
+        },
+        amiibo: {
+            series: AmiiboSeriesEnum.Sanrio,
+            cardNumber: 5
         }
     },
     {
@@ -96,7 +114,11 @@ export const Sanrio: Villager[] = [
             GamesEnum.HappyHomeParadise,
             GamesEnum.PocketCamp
         ],
-        art: 'https://dodo.ac/np/images/c/c1/Etoile_NH_Model.png',
+        art: {
+            villager: 'https://dodo.ac/np/images/c/c1/Etoile_NH_Model.png',
+            card: 'https://dodo.ac/np/images/0/04/003_%C3%89toile_Sanrio_amiibo_card_NA.png',
+            icon: 'https://dodo.ac/np/images/2/21/%C3%89toile_NH_Villager_Icon.png'
+        },
         song: KKSliderSongs.KKLullaby,
         skill: 'Handiwork',
         goal: 'Interior designer',
@@ -110,6 +132,10 @@ export const Sanrio: Villager[] = [
             month: MonthsEnum.December,
             day: 25,
             zodiac: StarSignEnum.Capricorn
+        },
+        amiibo: {
+            series: AmiiboSeriesEnum.Sanrio,
+            cardNumber: 3
         }
     },
     {
@@ -129,7 +155,11 @@ export const Sanrio: Villager[] = [
             GamesEnum.HappyHomeParadise,
             GamesEnum.PocketCamp
         ],
-        art: 'https://dodo.ac/np/images/e/e1/Marty_NH_Model.png',
+        art: {
+            villager: 'https://dodo.ac/np/images/e/e1/Marty_NH_Model.png',
+            card: 'https://dodo.ac/np/images/e/ea/002_Marty_Sanrio_amiibo_card_NA.png',
+            icon: 'https://dodo.ac/np/images/0/08/Marty_NH_Villager_Icon.png'
+        },
         song: KKSliderSongs.MyPlace,
         skill: 'Hiding shoes',
         goal: 'Baker',
@@ -143,6 +173,10 @@ export const Sanrio: Villager[] = [
             month: MonthsEnum.April,
             day: 16,
             zodiac: StarSignEnum.Aries
+        },
+        amiibo: {
+            series: AmiiboSeriesEnum.Sanrio,
+            cardNumber: 2
         }
     },
     {
@@ -162,7 +196,11 @@ export const Sanrio: Villager[] = [
             GamesEnum.HappyHomeParadise,
             GamesEnum.PocketCamp
         ],
-        art: 'https://dodo.ac/np/images/2/25/Rilla_NH_Model.png',
+        art: {
+            villager: 'https://dodo.ac/np/images/2/25/Rilla_NH_Model.png',
+            card: 'https://dodo.ac/np/images/a/a2/001_Rilla_Sanrio_amiibo_card_NA.png',
+            icon: 'https://dodo.ac/np/images/b/bc/Rilla_NH_Villager_Icon.png'
+        },
         song: KKSliderSongs.BubblegumKK,
         skill: 'Baking',
         goal: 'Kitty White',
@@ -176,6 +214,10 @@ export const Sanrio: Villager[] = [
             month: MonthsEnum.November,
             day: 1,
             zodiac: StarSignEnum.Scorpio
+        },
+        amiibo: {
+            series: AmiiboSeriesEnum.Sanrio,
+            cardNumber: 1
         }
     },
     {
@@ -195,7 +237,11 @@ export const Sanrio: Villager[] = [
             GamesEnum.HappyHomeParadise,
             GamesEnum.PocketCamp
         ],
-        art: 'https://dodo.ac/np/images/5/59/Toby_NH_Model.png',
+        art: {
+            villager: 'https://dodo.ac/np/images/5/59/Toby_NH_Model.png',
+            card: 'https://dodo.ac/np/images/5/54/006_Toby_Sanrio_amiibo_card_NA.png',
+            icon: 'https://dodo.ac/np/images/1/12/Toby_NH_Villager_Icon.png'
+        },
         song: KKSliderSongs.KingKK,
         skill: 'Simming',
         goal: 'Weatherperson',
@@ -209,6 +255,10 @@ export const Sanrio: Villager[] = [
             month: MonthsEnum.July,
             day: 10,
             zodiac: StarSignEnum.Cancer
+        },
+        amiibo: {
+            series: AmiiboSeriesEnum.Sanrio,
+            cardNumber: 6
         }
     }
 ];

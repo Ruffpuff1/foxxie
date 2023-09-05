@@ -1,4 +1,5 @@
 import {
+    AmiiboSeriesEnum,
     GamesEnum,
     KKSliderSongs,
     MonthsEnum,
@@ -21,12 +22,23 @@ export const Wolfs: Villager[] = [
         description:
             "Audie has the ability to brighten anyone's day with her warm presence. No matter where you are, you'll feel like you're on vacation when you're talking to her.",
         games: [GamesEnum.NewHorizons, GamesEnum.PocketCamp, GamesEnum.HappyHomeParadise],
-        art: 'https://dodo.ac/np/images/1/1b/Audie_NH.png',
+        art: {
+            villager: 'https://dodo.ac/np/images/1/1b/Audie_NH.png',
+            card: 'https://dodo.ac/np/images/2/20/428_Audie_amiibo_card_NA.png',
+            icon: 'https://dodo.ac/np/images/9/9e/Audie_NH_Villager_Icon.png'
+        },
+        siblings: null,
+        skill: null,
+        goal: null,
         song: KKSliderSongs.KKIsland,
         birthday: {
             month: MonthsEnum.August,
             day: 31,
             zodiac: StarSignEnum.Virgo
+        },
+        amiibo: {
+            series: AmiiboSeriesEnum.Five,
+            cardNumber: 428
         }
     }
 ];

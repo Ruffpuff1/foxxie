@@ -6,17 +6,17 @@ export interface Villager {
     gender: Gender;
     species: `${SpeciesEnum}`;
     personality: `${PersonalitiesEnum}`;
-    favoriteSaying?: string;
-    catchphrase?: string;
-    description?: string;
+    favoriteSaying: string | null;
+    catchphrase: string | null;
+    description: string | null;
     games: `${GamesEnum}`[];
-    art: string;
+    art: Art;
     coffeeRequest?: Coffee;
-    siblings?: string;
-    skill?: string;
-    goal?: string;
-    song?: `${KKSliderSongs}`;
-    amiibo?: `${AmiiboSeriesEnum}`;
+    siblings: string | null;
+    skill: string | null;
+    goal: string | null;
+    song: `${KKSliderSongs}` | null;
+    amiibo: Amiibo | null;
     birthday: Birthday;
 }
 
@@ -40,21 +40,97 @@ export enum VillagerKey {
      */
     Chelsea = 'chelsea',
     /**
+     * @internal Currently not in the API.
+     */
+    Cyd = 'cyd',
+    /**
+     * @internal Currently not in the API.
+     */
+    Dom = 'dom',
+    /**
      * @description Normal sheep based on the Little Twin Stars franchise.
      */
     Etoile = 'etoile',
+    /**
+     * @internal Currently not in the API.
+     */
+    Faith = 'faith',
+    /**
+     * @internal Currently not in the API.
+     */
+    Frett = 'frett',
+    /**
+     * @internal Currently not in the API.
+     */
+    Ione = 'ione',
+    /**
+     * @internal Currently not in the API.
+     */
+    Judy = 'judy',
+    /**
+     * @internal Currently not in the API.
+     */
+    Marlo = 'marlo',
     /**
      * @description Lazy bear cub based on the Pompompurin franchise.
      */
     Marty = 'marty',
     /**
+     * @internal Currently not in the API.
+     */
+    Megan = 'megan',
+    /**
+     * @internal Currently not in the API.
+     */
+    Petri = 'petri',
+    /**
+     * @internal Currently not in the API.
+     */
+    Quinn = 'quinn',
+    /**
+     * @internal Currently not in the API.
+     */
+    Raymond = 'raymond',
+    /**
+     * @internal Currently not in the API.
+     */
+    Reneigh = 'reeneigh',
+    /**
      * @description Peppy gorilla based on the Hello Kitty franchise.
      */
     Rilla = 'rilla',
     /**
+     * @internal Currently not in the API.
+     */
+    Rio = 'rio',
+    /**
+     * @internal Currently not in the API.
+     */
+    Roswell = 'roswell',
+    /**
+     * @internal Currently not in the API.
+     */
+    Sasha = 'sasha',
+    /**
+     * @internal Currently not in the API.
+     */
+    Sherb = 'sherb',
+    /**
+     * @internal Currently not in the API.
+     */
+    Shino = 'shino',
+    /**
+     * @internal Currently not in the API.
+     */
+    Tiansheng = 'tiansheng',
+    /**
      * @description Smug rabbit based on the Keroppi franchise.
      */
-    Toby = 'toby'
+    Toby = 'toby',
+    /**
+     * @internal Currently not in the API.
+     */
+    Zoe = 'zoe'
 }
 
 export type SanrioVillager =
@@ -77,6 +153,12 @@ export const SanrioVillagerArray: `${SanrioVillager}`[] = [
 export const VillagerKeyArray: `${VillagerKey}`[] = Object.keys(VillagerKey).map(key => VillagerKey[key]);
 
 export type Gender = `${GenderEnum}`;
+
+export interface Art {
+    villager: string | null;
+    icon: string | null;
+    card: string | null | string[];
+}
 
 export enum SpeciesEnum {
     Alligator = 'alligator',
@@ -173,6 +255,11 @@ export enum AmiiboSeriesEnum {
     Five = '5',
     Camper = 'Camper',
     Sanrio = 'Sanrio'
+}
+
+export interface Amiibo {
+    series: AmiiboSeriesEnum;
+    cardNumber: number;
 }
 
 export enum MonthsEnum {

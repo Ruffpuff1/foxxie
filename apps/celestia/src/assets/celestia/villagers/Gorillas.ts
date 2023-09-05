@@ -1,4 +1,5 @@
 import {
+    AmiiboSeriesEnum,
     CoffeeBeansEnum,
     CoffeeMilkEnum,
     CoffeeSugarEnum,
@@ -38,7 +39,11 @@ export const Gorillas: Villager[] = [
             milk: CoffeeMilkEnum.ALittleBit,
             sugar: CoffeeSugarEnum.OneSpoonful
         },
-        art: 'https://dodo.ac/np/images/1/19/Boone_NH.png',
+        art: {
+            villager: 'https://dodo.ac/np/images/1/19/Boone_NH.png',
+            card: 'https://dodo.ac/np/images/4/4b/328_Boone_amiibo_card_NA.png',
+            icon: 'https://dodo.ac/np/images/7/7e/Boone_NH_Villager_Icon.png'
+        },
         siblings: 'Second of 4 kids',
         skill: 'Dancing',
         goal: 'Rugby player',
@@ -47,6 +52,10 @@ export const Gorillas: Villager[] = [
             month: MonthsEnum.September,
             day: 12,
             zodiac: StarSignEnum.Virgo
+        },
+        amiibo: {
+            series: AmiiboSeriesEnum.Four,
+            cardNumber: 328
         }
     }
 ];

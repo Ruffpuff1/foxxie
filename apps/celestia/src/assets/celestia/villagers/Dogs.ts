@@ -1,4 +1,4 @@
-import { CoffeeBeansEnum, CoffeeMilkEnum, CoffeeSugarEnum, GamesEnum, KKSliderSongs, MonthsEnum, PersonalitiesEnum, SpeciesEnum, StarSignEnum, Villager, VillagerKey } from '@foxxie/celestia-api-types';
+import { AmiiboSeriesEnum, CoffeeBeansEnum, CoffeeMilkEnum, CoffeeSugarEnum, GamesEnum, KKSliderSongs, MonthsEnum, PersonalitiesEnum, SpeciesEnum, StarSignEnum, Villager, VillagerKey } from '@foxxie/celestia-api-types';
 
 export const Dogs: Villager[] = [
     {
@@ -25,16 +25,25 @@ export const Dogs: Villager[] = [
             milk: CoffeeMilkEnum.TheRegularAmount,
             sugar: CoffeeSugarEnum.TwoSpoonfuls
         },
-        art: 'https://dodo.ac/np/images/2/2b/Bones_NH.png',
+        art: {
+            villager: 'https://dodo.ac/np/images/2/2b/Bones_NH.png',
+            card: 'https://dodo.ac/np/images/0/07/342_Bones_amiibo_card_NA.png',
+            icon: 'https://dodo.ac/np/images/4/41/Bones_NH_Villager_Icon.png'
+        },
         siblings: 'Eldest of 7 kids',
         skill: 'Telling jokes',
         goal: 'Explorer',
-        description: "In this world, there are folks with the brains and folks with the heart. Jury's out on where Bones fits into that system.",
+        description:
+            "In this world, there are folks with the brains and folks with the heart. Jury's out on where Bones fits into that system.",
         song: KKSliderSongs.KKEtude,
         birthday: {
             month: MonthsEnum.August,
             day: 4,
             zodiac: StarSignEnum.Leo
+        },
+        amiibo: {
+            series: AmiiboSeriesEnum.Four,
+            cardNumber: 342
         }
     }
 ];

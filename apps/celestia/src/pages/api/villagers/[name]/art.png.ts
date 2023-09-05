@@ -14,7 +14,7 @@ export default async function handler(
         return;
     }
 
-    const blob = await (await fetch(villager.art)).blob();
+    const blob = await (await fetch(villager.art.villager)).blob();
     const arrBuffer = (await blob?.arrayBuffer())!;
     const buffer = Buffer.from(arrBuffer);
 
