@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "nx": "16.7.4",
+    "nx": "16.8.0",
     "nx-cloud": "latest"
   },
   "scripts": {
