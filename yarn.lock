@@ -528,11 +528,6 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.48.0.tgz#642633964e217905436033a2bd08bf322849b7fb"
   integrity sha512-ZSjtmelB7IJfWD2Fvb7+Z+ChTIKWq6kjda95fLcQKNS5aheVHn4IkfgRQE3sIIzTcSLwLcLZUD9UBt+V7+h+Pw==
 
-"@foxxie/celestia-api-types@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@foxxie/celestia-api-types/-/celestia-api-types-0.0.2.tgz#3340c84de3ec1c094785b6fb1f8d0fea7c51d90f"
-  integrity sha512-9A6483R9ROsmB9TxryA01BcH1QpV8iwosqDZeaM8P1ctzsqa0F6AwcMjR+KePaqgCVYeMNdvakh/+D4vC11UyQ==
-
 "@foxxie/env@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@foxxie/env/-/env-0.0.2.tgz#be8d7aaa25f68cd600f3e8b518c3ad4434703757"

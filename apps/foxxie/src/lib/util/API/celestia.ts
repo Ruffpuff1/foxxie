@@ -3,6 +3,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { BrandingColors, Urls } from '#utils/constants';
 import { conditionalField, removeEmptyFields, resolveEmbedField } from '#utils/util';
 import {
+    AmiiboSeriesEnum,
     CoffeeBeansEnum,
     CoffeeMilkEnum,
     CoffeeSugarEnum,
@@ -63,8 +64,8 @@ export function buildVillagerDisplay(data: Villager, t: TFunction, color?: numbe
     const titles = t(LanguageKeys.Commands.Fun.AnimalcrossingTitles);
 
     const template = new EmbedBuilder() //
-        .setThumbnail(data.art) //
-        .setAuthor({ name: `${toTitleCase(data.key)} [${data.keyJp}]` })
+        .setThumbnail(data.art.villager) //
+        .setAuthor({ name: `${toTitleCase(data.key)} [${data.keyJp}]`, iconURL: data.art.icon || undefined })
         .setFooter({ text: t(LanguageKeys.Commands.Fun.AnimalcrossingFooter) })
         .setColor(color || BrandingColors.Primary);
 
@@ -103,6 +104,16 @@ export function buildVillagerDisplay(data: Villager, t: TFunction, color?: numbe
                         sugar: coffeeSugarEnumToString(cast<CoffeeSugarEnum>(data.coffeeRequest?.sugar))
                     }),
                     true
+                ),
+                conditionalField(
+                    Boolean(data.amiibo),
+                    '• Amiibo',
+                    `${
+                        data.amiibo?.series === AmiiboSeriesEnum.Camper || data.amiibo?.series === AmiiboSeriesEnum.Sanrio
+                            ? data.amiibo.series
+                            : `Series ${data.amiibo?.series}`
+                    } → #${data.amiibo?.cardNumber}`,
+                    true
                 )
             ])
         );
@@ -123,6 +134,16 @@ export function buildVillagerDisplay(data: Villager, t: TFunction, color?: numbe
 
         return embed;
     });
+
+    if (data.art.card) {
+        if (Array.isArray(data.art.card)) {
+            for (const c of data.art.card) {
+                display.addPageEmbed(embed => embed.setThumbnail(null).setImage(c));
+            }
+        } else {
+            display.addPageEmbed(embed => embed.setThumbnail(null).setImage(data.art.card as string));
+        }
+    }
 
     return display;
 }
@@ -254,6 +275,11 @@ export function coffeeSugarEnumToString(sugar: CoffeeSugarEnum) {
     }
 }
 
-export function getZodiacEmoji(starSign: StarSignEnum): `:${Lowercase<StarSignEnum>}:` {
-    return `:${starSign.toLowerCase()}:` as `:${Lowercase<StarSignEnum>}:`;
+export function getZodiacEmoji(starSign: StarSignEnum): `:${Lowercase<StarSignEnum | 'scorpius'>}:` {
+    switch (starSign) {
+        case StarSignEnum.Scorpio:
+            return ':scorpius:';
+        default:
+            return `:${starSign.toLowerCase()}:` as `:${Lowercase<StarSignEnum>}:`;
+    }
 }
