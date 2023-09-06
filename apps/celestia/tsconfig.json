@@ -1,0 +1,88 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "resolveJsonModule": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "next.config.js",
+    ".eslintrc.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "paths": {
+    "@about-me/*": [
+      "src/components/pages/about-me/*"
+    ],
+    "@api/*": [
+      "src/pages/api/*"
+    ],
+    "@arts-culture/*": [
+      "src/components/pages/arts-and-culture/*"
+    ],
+    "@assets/*": [
+      "src/assets/*"
+    ],
+    "@auth/*": [
+      "src/components/auth/*"
+    ],
+    "@cdn/*": [
+      "src/components/pages/cdn/*"
+    ],
+    "@contact-me/*": [
+      "src/components/pages/contact-me/*"
+    ],
+    "@developers/*": [
+      "src/components/pages/developers/*"
+    ],
+    "@foxxie/*": [
+      "src/components/pages/foxxie/*"
+    ],
+    "@hire/*": [
+      "src/components/pages/hire/*"
+    ],
+    "@home/*": [
+      "src/components/pages/home/*"
+    ],
+    "@hooks/*": [
+      "src/hooks/*"
+    ],
+    "@music/*": [
+      "src/components/pages/music/*"
+    ],
+    "@my-work/*": [
+      "src/components/pages/my-work/*"
+    ],
+    "@providers/*": [
+      "src/providers/*"
+    ],
+    "@style-guide/*": [
+      "src/components/pages/developers/style-guide/*"
+    ],
+    "@ui/*": [
+      "src/components/ui/*"
+    ],
+    "@util/*": [
+      "src/util/*"
+    ]
+  }
+}

@@ -1,13 +1,14 @@
+import { acquireSettings } from '#lib/database';
 import { LanguageKeys, translate } from '#lib/i18n';
-import type { FoxxieArgs, FoxxieCommand } from '#lib/structures';
-import { FoxxieEvents } from '#lib/types';
+import type { FoxxieCommand } from '#lib/structures';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { EnvKeys } from '#lib/types/Env';
 import { clientOwners } from '#root/config';
 import { Colors, rootFolder } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';
 import type { TFunction } from '@foxxie/i18n';
-import { ZeroWidthSpace, cast } from '@ruffpuff/utilities';
-import { Args, ArgumentError, Command, Identifiers, Listener, MessageCommandErrorPayload, UserError } from '@sapphire/framework';
+import { cast } from '@ruffpuff/utilities';
+import { ArgumentError, Command, Identifiers, Listener, UserError } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { codeBlock, cutText } from '@sapphire/utilities';
 import { captureException } from '@sentry/node';
@@ -20,66 +21,68 @@ interface FoxxieError extends DiscordAPIError {
 
 const ignoredErrorCodes: (number | string)[] = [RESTJSONErrorCodes.UnknownChannel, RESTJSONErrorCodes.UnknownMessage];
 
-export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
-    public async run(error: Error, { message, command, parameters, args }: { args: FoxxieArgs } & MessageCommandErrorPayload) {
+export class UserListener extends Listener<FoxxieEvents.MessageSubcommandError> {
+    public async run(...[err, { message, command, context }]: EventArgs<FoxxieEvents.MessageSubcommandError>) {
+        const error = cast<Error>(err);
+        const t = await acquireSettings(message.guildId!, s => s.getLanguage());
         // if the error is something that the user should be aware of, send them a message.
-        if (typeof error === 'string') return this.stringError(message, args.t, error);
-        if (error instanceof ArgumentError) return this.argumentError(message, args.t, error);
-        if (error instanceof UserError) return this.userError(message, args, error);
+        if (typeof error === 'string') return this.stringError(message, t, error);
+        if (error instanceof ArgumentError) return this.argumentError(message, t, error);
+        if (error instanceof UserError) return this.userError(message, t, context, error);
 
         const { client, logger } = this.container;
 
         if (error.name === 'AbortError' || error.name === 'Internal Server Error') {
             logger.warn(`${this.getWarning(message)} (${message.author.id}) | ${error.constructor.name}`);
-            return this.send(message, args.t(LanguageKeys.Listeners.Errors.Abort));
+            return this.send(message, t(LanguageKeys.Listeners.Errors.Abort));
         }
 
         if (error instanceof DiscordAPIError || error instanceof HTTPError) {
-            if (this.isSilencedError(args, cast<FoxxieError>(error))) return null;
+            if (this.isSilencedError(message, cast<FoxxieError>(error))) return null;
             client.emit(FoxxieEvents.Error, error);
         } else {
             logger.warn(`${this.getWarning(message)} (${message.author.id}) | ${error.constructor.name}`);
         }
 
-        await this.sendErrorChannel(message, command, parameters, error);
+        await this.sendErrorChannel(message, command, error);
 
         logger.fatal(`[COMMAND] ${command.location.full}\n${error.stack || error.message}`);
         try {
-            await this.send(message, this.generateErrorMessage(args, error));
-        } catch (err) {
-            client.emit(FoxxieEvents.Error, err);
+            await this.send(message, this.generateErrorMessage(message, t, cast<FoxxieCommand>(command), error));
+        } catch (e) {
+            client.emit(FoxxieEvents.Error, e);
         }
 
         return null;
     }
 
-    private generateErrorMessage(args: Args, error: Error) {
-        if (clientOwners.includes(args.message.author.id) && error.stack) return codeBlock('js', error.stack);
-        if (!EnvParse.boolean(EnvKeys.SentryEnabled)) return args.t(LanguageKeys.Listeners.Errors.Unexpected);
+    private generateErrorMessage(message: Message, t: TFunction, command: FoxxieCommand, error: Error) {
+        if (clientOwners.includes(message.author.id) && error.stack) return codeBlock('js', error.stack);
+        if (!EnvParse.boolean(EnvKeys.SentryEnabled)) return t(LanguageKeys.Listeners.Errors.Unexpected);
 
         try {
             const report = captureException(error, {
-                tags: { command: args.command.name }
+                tags: { command: command.name }
             });
-            return args.t(LanguageKeys.Listeners.Errors.UnexpectedWithCode, {
+            return t(LanguageKeys.Listeners.Errors.UnexpectedWithCode, {
                 report
             });
         } catch (err) {
             this.container.client.emit(FoxxieEvents.Error, err);
-            return args.t(LanguageKeys.Listeners.Errors.Unexpected);
+            return t(LanguageKeys.Listeners.Errors.Unexpected);
         }
     }
 
-    private isSilencedError(args: Args, error: FoxxieError) {
-        return error.code ? ignoredErrorCodes.includes(error.code) : this.isDMReply(args, error);
+    private isSilencedError(message: Message, error: FoxxieError) {
+        return error.code ? ignoredErrorCodes.includes(error.code) : this.isDMReply(message, error);
     }
 
-    private isDMReply(args: Args, error: FoxxieError) {
+    private isDMReply(message: Message, error: FoxxieError) {
         if (error.code !== RESTJSONErrorCodes.CannotSendMessagesToThisUser) return false;
 
-        if (args.message.guild !== null) return false;
+        if (message.guild !== null) return false;
 
-        return error.path === `/channels/${args.message.channel.id}/messages`;
+        return error.path === `/channels/${message.channel.id}/messages`;
     }
 
     private stringError(message: Message, t: TFunction, error: string) {
@@ -108,7 +111,7 @@ export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
         );
     }
 
-    private userError(message: Message, args: Args, error: UserError) {
+    private userError(message: Message, t: TFunction, commandContext: FoxxieCommand.Context, error: UserError) {
         if (Reflect.get(Object(error.context), 'silent')) return null;
 
         if (error.identifier === Identifiers.ArgsMissing)
@@ -120,18 +123,18 @@ export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
         const identifier = translate(error.identifier);
         return this.send(
             message,
-            args.t(identifier, {
+            t(identifier, {
                 ...cast<any>(error.context),
-                prefix: args.commandContext.commandPrefix
+                prefix: commandContext.commandPrefix
             })
         );
     }
 
-    private async sendErrorChannel(message: Message, command: Command, parameters: string, error: Error) {
+    private async sendErrorChannel(message: Message, command: Command, error: Error) {
         const hook = this.container.client.webhookError;
         if (hook === null) return null;
 
-        const lines = [this.getLink(message.url), this.getCommand(command), this.getArgs(parameters), this.getError(error)];
+        const lines = [this.getLink(message.url), this.getCommand(command), this.getError(error)];
 
         if (error instanceof DiscordAPIError) {
             lines.splice(2, 0, this.getPath(error), this.getCode(error));
@@ -158,11 +161,6 @@ export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
 
     private getCommand(command: Command) {
         return `**Command**: ${command.location.full.slice(rootFolder.length)}`;
-    }
-
-    private getArgs(parameters: string) {
-        if (parameters.length === 0) return '**Parameters**: None';
-        return `**Parameters**: [\`${parameters.trim().replaceAll('`', '῾') || ZeroWidthSpace}\`]`;
     }
 
     private getError(error: Error) {

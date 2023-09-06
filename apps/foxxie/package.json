@@ -32,8 +32,10 @@
   "license": "MIT",
   "homepage": "https://reeseharlak.com/foxxie/about",
   "dependencies": {
+    "@foxxie/celestia-api-types": "^0.0.3",
     "@foxxie/env": "^0.0.2",
     "@foxxie/fetch": "0.0.4",
+    "@foxxie/fuzzysearch": "^0.0.4",
     "@foxxie/i18n": "^0.0.6",
     "@foxxie/i18n-codes": "0.0.0",
     "@foxxie/lock-queue": "0.1.2",

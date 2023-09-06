@@ -17,6 +17,8 @@ export function translate(key: string): string {
         case DecoratorIdentifiers.RequiresClientPermissionsMissingPermissions:
             return LanguageKeys.Preconditions.ClientPermissions;
         // Arguments
+        case Identifiers.ArgsMissing:
+            return LanguageKeys.Arguments.Missing;
         case Identifiers.ArgsUnavailable:
             return LanguageKeys.Arguments.Unavailable;
         default:
