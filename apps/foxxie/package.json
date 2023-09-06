@@ -70,8 +70,8 @@
     "@types/gradient-string": "^1.1.2",
     "@types/ioredis": "5.0.0",
     "@types/node": "20.5.9",
-    "@typescript-eslint/eslint-plugin": "6.5.0",
-    "@typescript-eslint/parser": "6.5.0",
+    "@typescript-eslint/eslint-plugin": "6.6.0",
+    "@typescript-eslint/parser": "6.6.0",
     "eslint": "8.48.0",
     "prettier": "^3.0.3",
     "typescript": "5.2.2"
