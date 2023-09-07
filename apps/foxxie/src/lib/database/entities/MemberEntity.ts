@@ -1,6 +1,6 @@
 import { container } from '@sapphire/framework';
 import type { GuildMember } from 'discord.js';
-import { BaseEntity, Column, Entity, PrimaryColumn, ObjectIdColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import type { Note } from './Note';
 import type { Warn } from './Warn';
 
@@ -23,6 +23,9 @@ export class MemberEntity extends BaseEntity {
 
     @Column()
     public warnings: Warn[] = [];
+
+    @Column('varchar')
+    public lastFmUsername!: string;
 
     public get member(): GuildMember | undefined {
         return container.client.guilds.resolve(this.guildId)?.members.cache.get(this.id);

@@ -3,7 +3,8 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { MongoDB } from './MongoDB';
 import { ClientEntity, GuildEntity, MemberEntity, ModerationEntity, ScheduleEntity, StarEntity } from './entities';
-import { ClientRepository, GuildRepository, MemberRepository } from './repository';
+import { LastFmArtistEntity } from './entities/LastFmArtistEntity';
+import { ClientRepository, GuildRepository, LastFmArtistRepository, MemberRepository } from './repository';
 
 export async function config(): Promise<void> {
     const dataSource = new DataSource({
@@ -13,7 +14,7 @@ export async function config(): Promise<void> {
         port: 3306,
         username: process.env.MONGO_USER,
         password: process.env.MONGO_PASSWORD,
-        entities: [ClientEntity, GuildEntity, MemberEntity, ModerationEntity, ScheduleEntity, StarEntity],
+        entities: [ClientEntity, GuildEntity, LastFmArtistEntity, MemberEntity, ModerationEntity, ScheduleEntity, StarEntity],
         authSource: 'admin',
         ssl: true,
         logging: true
@@ -24,6 +25,7 @@ export async function config(): Promise<void> {
     const clients = new ClientRepository(dataSource, ClientEntity);
     const guilds = new GuildRepository(dataSource, GuildEntity);
     const members = new MemberRepository(dataSource, MemberEntity);
+    const lastFmArtists = new LastFmArtistRepository(dataSource, LastFmArtistEntity);
 
-    container.db = new MongoDB(dataSource, clients, guilds, members);
+    container.db = new MongoDB(dataSource, clients, guilds, members, lastFmArtists);
 }

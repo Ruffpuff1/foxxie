@@ -12,4 +12,12 @@ export class MemberRepository extends CustomRepository<MemberEntity> {
         data.guildId = guildId;
         return data;
     }
+
+    public async guild(guildId: string) {
+        return this.dataSource.getRepository(this.entity).find({
+            where: {
+                guildId
+            }
+        });
+    }
 }

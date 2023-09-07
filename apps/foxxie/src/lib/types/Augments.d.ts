@@ -10,6 +10,7 @@ import type { Awaitable, Guild, User } from 'discord.js';
 import type { GuildMessage, TypeOfEmbed } from './Discord';
 import { FoxxieEvents } from './Events';
 import type { ColorData, LanguageString } from './Utils';
+import { ApiHandlers } from '#utils/apiHandler';
 
 declare module 'discord.js' {
     interface Client {
@@ -44,6 +45,7 @@ declare module '@sapphire/pieces' {
         redis: RedisManager | null;
         schedule: ScheduleManager;
         workers: WorkerManager;
+        apis: ApiHandlers;
     }
 
     interface StoreRegistryEntries {

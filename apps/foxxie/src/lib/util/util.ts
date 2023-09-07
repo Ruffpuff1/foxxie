@@ -157,3 +157,8 @@ export function conditionalField(condition: boolean, name: string, text: string,
     if (!condition) return null;
     return { name, value: text, inline };
 }
+
+export function ifNotNull(condition: boolean, value: string){
+    if (!condition) return null;
+    return value
+}

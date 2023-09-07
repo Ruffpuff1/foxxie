@@ -37,9 +37,16 @@ declare module '@foxxie/env' {
         DISCORD_TOKEN: string;
         PERSPECTIVE_TOKEN: string;
         SENTRY_TOKEN: string;
+        [EnvKeys.LastFmToken]: string;
+
+        [EnvKeys.SpotifyClientId]: string;
+        [EnvKeys.SpotifyClientSecret]: string;
     }
 }
 
 export const enum EnvKeys {
-    SentryEnabled = 'SENTRY_ENABLED'
+    SentryEnabled = 'SENTRY_ENABLED',
+    SpotifyClientId = 'SPOTIFY_CLIENT_ID',
+    SpotifyClientSecret = 'SPOTIFY_CLIENT_SECRET',
+    LastFmToken = 'LASTFM_TOKEN'
 }
