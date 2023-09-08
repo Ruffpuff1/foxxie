@@ -5,6 +5,7 @@
     "helpDescription": "Ver todos mis comandos, o el menú de ayuda para un comando específico.",
     "helpMenu": "Comandos de {{name}}",
     "helpTitles": {
+        "examples": "",
         "usage": "Uso"
     },
     "helpUsage": "(Comando)",
