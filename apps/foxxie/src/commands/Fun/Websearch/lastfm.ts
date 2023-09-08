@@ -1,8 +1,8 @@
+import { LastFmArtistGetInfoResult } from '#lib/Api/LastFmService';
 import { acquireSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
-import { LastFmArtistGetInfoResult, buildArtistDisplay } from '#lib/Api/lastfm';
 import { sendLoadingMessage } from '#utils/Discord';
 import { floatPromise, getOption, getSubcommand, parseDescription, resolveClientColor } from '#utils/util';
 import { getT } from '@foxxie/i18n';
@@ -95,7 +95,7 @@ export class UserCommand extends FoxxieCommand {
         const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<LastFmArtistGetInfoResult>(artistData));
         const artistBody = cast<LastFmArtistGetInfoResult>(artistData).artist;
 
-        const display = await buildArtistDisplay(
+        const display = await this.container.apis.lastFm.buildArtistDisplay(
             artistBody,
             artistEntity,
             t,
@@ -108,9 +108,18 @@ export class UserCommand extends FoxxieCommand {
     }
 
     public async messageRunArtist(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
-        const artist = await args.rest(UserCommand.artist);
-
+        let artist = await args.rest(UserCommand.artist).catch(() => null);
         const loading = await sendLoadingMessage(message);
+
+        if (!artist) {
+            const track = await this.container.apis.lastFm.getLastPlayedTrackFromGuildMember(message.author.id, message.guildId)
+
+            const artistName = track?.artist?.['#text'];
+            if (!artistName) this.error('noArtistProvided');
+
+            artist = artistName;
+        }
+
         const artistData = await this.container.apis.lastFm.getInfoFromArtist(artist);
 
         if (Reflect.has(artistData, 'error')) {
@@ -133,7 +142,7 @@ export class UserCommand extends FoxxieCommand {
         const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<LastFmArtistGetInfoResult>(artistData));
         const artistBody = cast<LastFmArtistGetInfoResult>(artistData).artist;
 
-        const display = await buildArtistDisplay(
+        const display = await this.container.apis.lastFm.buildArtistDisplay(
             artistBody,
             artistEntity,
             args.t,
