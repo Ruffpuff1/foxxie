@@ -25,3 +25,7 @@ export const AnimalcrossingTitles = T<{
     species: string;
     zodiac: string;
 }>('commands/fun:animalcrossingTitles');
+
+export const LastFmDetailedDescription = FT<{ prefix: string }, DetailedDescription>(
+    'commands/fun:lastFmDetailedDescription'
+);

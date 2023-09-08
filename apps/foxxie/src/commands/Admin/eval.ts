@@ -2,7 +2,7 @@
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';
-import { getHaste } from '#utils/API/haste';
+import { getHaste } from '#lib/Api/haste';
 import { Urls } from '#utils/constants';
 import { isThenable } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';

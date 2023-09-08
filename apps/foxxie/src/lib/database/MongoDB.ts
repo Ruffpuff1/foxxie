@@ -3,9 +3,10 @@ import { BrandingColors } from '#utils/constants';
 import type { Message } from 'discord.js';
 import type { DataSource, Repository } from 'typeorm';
 import { GuildEntity, ModerationEntity, ScheduleEntity, StarEntity } from './entities';
-import { ClientRepository, GuildRepository, MemberRepository } from './repository';
+import { ClientRepository, GuildRepository, LastFmArtistRepository, MemberRepository } from './repository';
 import { SerializerStore, TaskStore } from './structures';
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class MongoDB {
     public readonly dataSource: DataSource;
 
@@ -14,6 +15,8 @@ export class MongoDB {
     public readonly guilds: GuildRepository<GuildEntity>;
 
     public readonly members: MemberRepository;
+
+    public readonly lastFmArtists: LastFmArtistRepository;
 
     public readonly moderations: Repository<ModerationEntity>;
 
@@ -29,7 +32,8 @@ export class MongoDB {
         dataSource: DataSource,
         clients: ClientRepository,
         guilds: GuildRepository<GuildEntity>,
-        members: MemberRepository
+        members: MemberRepository,
+        lastFmArtists: LastFmArtistRepository
     ) {
         this.dataSource = dataSource;
         this.clients = clients;
@@ -38,6 +42,7 @@ export class MongoDB {
         this.moderations = dataSource.getRepository(ModerationEntity);
         this.schedules = dataSource.getRepository(ScheduleEntity);
         this.starboards = dataSource.getRepository(StarEntity);
+        this.lastFmArtists = lastFmArtists;
     }
 
     public fetchColor(msg: Message): number {
@@ -45,7 +50,7 @@ export class MongoDB {
     }
 }
 
-// eslint-disable-next-line no-redeclare
+// eslint-disable-next-line no-redeclare, @typescript-eslint/no-unsafe-declaration-merging
 export interface MongoDB {
     readonly dataSource: DataSource;
     readonly clients: ClientRepository;

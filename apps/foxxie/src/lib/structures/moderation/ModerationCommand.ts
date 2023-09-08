@@ -7,7 +7,7 @@ import { bold } from '@discordjs/builders';
 import { CustomFunctionGet } from '@foxxie/i18n';
 import { cast, minutes, seconds, years } from '@ruffpuff/utilities';
 import { CommandOptionsRunTypeEnum, PieceContext } from '@sapphire/framework';
-import type { GuildMember, User } from 'discord.js';
+import { PermissionFlagsBits, type GuildMember, type User } from 'discord.js';
 import { FoxxieCommand } from '../commands';
 
 export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
@@ -115,9 +115,10 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
 
         if (member) {
             const targetRolePos = member.roles.highest.position;
-            const myRolePos = maybeMe(message.guild)?.roles.highest.position;
+            const me = maybeMe(message.guild);
+            const myRolePos = me?.roles.highest.position;
 
-            if (!myRolePos || targetRolePos >= myRolePos) {
+            if (!myRolePos || (targetRolePos >= myRolePos && !me.permissions.has(PermissionFlagsBits.Administrator))) {
                 throw context.args.t(LanguageKeys.Listeners.Errors.ModerationRoleBot, {
                     target: `**${context.target.username}**`
                 });

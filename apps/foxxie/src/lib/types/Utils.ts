@@ -40,6 +40,12 @@ export interface SubcommandDescription {
     command: string;
     description: string | string[];
     examples: string[];
+    options?: SubcommandOption[]
+}
+
+export interface SubcommandOption {
+    name: string;
+    description: string
 }
 
 export const enum PermissionLevels {

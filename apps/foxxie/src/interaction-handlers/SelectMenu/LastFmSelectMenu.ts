@@ -1,8 +1,7 @@
 import { acquireSettings } from '#lib/database';
-import { buildVillagerDisplay, fetchVillager } from '#lib/Api/celestia';
-import { floatPromise } from '#utils/util';
-import { Villager } from '@foxxie/celestia-api-types';
-import { resolveToNull } from '@ruffpuff/utilities';
+import { LastFmArtistGetInfoResult, buildArtistDisplay } from '#lib/Api/lastfm';
+import { floatPromise, resolveClientColor } from '#utils/util';
+import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
@@ -17,9 +16,18 @@ export class UserInteractionHandler extends InteractionHandler {
         const t = await acquireSettings(interaction.guildId!, s => s.getLanguage());
         const message = await resolveToNull(interaction.channel!.messages.fetch(result.messageId));
 
+        const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<LastFmArtistGetInfoResult>(result.data));
+
         switch (result.type) {
-            case 'villager':
-                display = buildVillagerDisplay(result.data as Villager, t);
+            case 'artist':
+                display = await buildArtistDisplay(
+                    (result.data as LastFmArtistGetInfoResult).artist,
+                    artistEntity,
+                    t,
+                    resolveClientColor(message?.guildId as string, message?.member?.displayColor || 0),
+                    interaction.user.id,
+                    interaction.guildId!
+                );
                 break;
         }
 
@@ -29,15 +37,15 @@ export class UserInteractionHandler extends InteractionHandler {
     }
 
     public override async parse(interaction: SelectMenuInteraction) {
-        if (!interaction.customId.startsWith('animalcrossing|')) return this.none();
+        if (!interaction.customId.startsWith('lastfm|')) return this.none();
 
         const value = interaction.values[0];
-        const [, type, messageId] = interaction.customId.split('|') as [never, 'villager', string];
+        const [, type, messageId] = interaction.customId.split('|') as [never, 'artist', string];
         let data;
 
         switch (type) {
-            case 'villager':
-                data = await fetchVillager(value);
+            case 'artist':
+                data = await this.container.apis.lastFm.getInfoFromArtist(value);
                 break;
         }
 

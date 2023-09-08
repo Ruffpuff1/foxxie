@@ -36,5 +36,32 @@
         "song": "• Favorite Song",
         "species": "• Species",
         "zodiac": "• Zodiac"
+    },
+    "lastFmDetailedDescription": {
+        "description": "Fetch data from Last.fm.",
+        "usage": "{{prefix}}lastfm [artist]",
+        "subcommands": [
+            {
+                "command": "artist",
+                "description": [
+                    "Search and show data of a last.fm artist including tracks, albums, and scrobble counts."
+                ],
+                "options": [
+                    {
+                        "name": "artist",
+                        "description": "The artist to search for."
+                    },
+                    {
+                        "name": "hidden",
+                        "description": "Whether to hide the command's output."
+                    }
+                ],
+                "examples": [
+                    "{{prefix}}lastfm artist ricky montgomery",
+                    "{{prefix}}lastfm artist mitski",
+                    "{{prefix}}lastfm artist lana del rey"
+                ]
+            }
+        ]
     }
 }

@@ -1,9 +1,9 @@
 import { BaseEntity, DataSource, EntityTarget, FindOneOptions } from 'typeorm';
 
 export abstract class CustomRepository<T extends BaseEntity> {
-    private dataSource: DataSource;
+    protected dataSource: DataSource;
 
-    private entity: EntityTarget<T>;
+    protected entity: EntityTarget<T>;
 
     public constructor(dataSource: DataSource, entity: EntityTarget<T>) {
         this.dataSource = dataSource;

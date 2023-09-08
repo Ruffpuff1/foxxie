@@ -1,13 +1,14 @@
-import { container, SapphireClient } from '@sapphire/framework';
-import { clientOptions, webhookError } from '#root/config';
-import { WebhookClient } from 'discord.js';
-import { magentaBright } from 'colorette';
-import { Enumerable } from '@sapphire/decorators';
 import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import { InviteManager, RedisManager, ScheduleManager, WorkerManager } from './structures';
-import { isDev } from '@ruffpuff/utilities';
+import { clientOptions, webhookError } from '#root/config';
+import { ApiService } from '#lib/Api/ApiService';
 import { EnvParse } from '@foxxie/env';
+import { isDev } from '@ruffpuff/utilities';
+import { Enumerable } from '@sapphire/decorators';
+import { SapphireClient, container } from '@sapphire/framework';
+import { magentaBright } from 'colorette';
+import { WebhookClient } from 'discord.js';
+import { InviteManager, RedisManager, ScheduleManager, WorkerManager } from './structures';
 
 export default class FoxxieClient extends SapphireClient {
     @Enumerable(false)
@@ -29,6 +30,8 @@ export default class FoxxieClient extends SapphireClient {
 
         container.schedule = new ScheduleManager();
 
+        container.apis = new ApiService();
+
         container.redis = EnvParse.boolean('REDIS_ENABLED')
             ? new RedisManager({
                   host: process.env.REDIS_HOST,
@@ -46,6 +49,7 @@ export default class FoxxieClient extends SapphireClient {
         );
 
         await container.schedule.init();
+        await container.apis.init();
 
         return super.login();
     }
@@ -53,6 +57,11 @@ export default class FoxxieClient extends SapphireClient {
     public destroy(): Promise<void> {
         this.guildMemberFetchQueue.destroy();
         return super.destroy();
+    }
+
+    public emit(event: string, ...args: any[]) {
+        // console.log(event);
+        return super.emit(event, ...args);
     }
 
     public get development() {

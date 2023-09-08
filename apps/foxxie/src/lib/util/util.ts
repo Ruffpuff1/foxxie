@@ -1,5 +1,5 @@
 import { acquireSettings } from '#lib/database';
-import { GuildMessage } from '#lib/types';
+import { DetailedDescription, GuildMessage } from '#lib/types';
 import { cast, isNumber, isThenable } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { APIUser } from 'discord-api-types/v10';
@@ -136,8 +136,10 @@ export function getImage(message: Message): string | null {
     return attachment ? attachment.proxyURL || attachment.url : null;
 }
 
-export function resolveClientColor(resolveable: GuildResolvable, color?: ColorResolvable): ColorResolvable {
+export function resolveClientColor(resolveable: GuildResolvable | null, color?: ColorResolvable): ColorResolvable {
     if (color) return color;
+
+    if (!resolveable) return BrandingColors.Primary;
 
     const me = maybeMe(resolveable);
     if (!me) return BrandingColors.Primary;
@@ -156,4 +158,22 @@ export function removeEmptyFields(fields: (APIEmbedField | null | undefined)[]):
 export function conditionalField(condition: boolean, name: string, text: string, inline: boolean = false): APIEmbedField | null {
     if (!condition) return null;
     return { name, value: text, inline };
+}
+
+export function ifNotNull(condition: boolean, value: string) {
+    if (!condition) return null;
+    return value;
+}
+
+export function getSubcommand(name: string, description: DetailedDescription) {
+    return description.subcommands?.find(command => command.command === name)
+}
+
+export function getOption(commandName: string, name: string, description: DetailedDescription) {
+    return description.subcommands?.find(command => command.command === commandName)?.options?.find(opt => opt.name === name) || null;
+}
+
+export function parseDescription(description: string | string[] | undefined) {
+    if (!description) return null;
+    return Array.isArray(description) ? description.join('\n') : description;
 }

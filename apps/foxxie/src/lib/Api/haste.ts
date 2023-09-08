@@ -1,5 +1,5 @@
 import { fetch } from '@foxxie/fetch';
-import { Urls } from '../constants';
+import { Urls } from '../util/constants';
 
 export interface HastebinPostData {
     key: string;
