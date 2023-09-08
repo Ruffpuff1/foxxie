@@ -1,3 +1,8 @@
+import { GuildSettings, acquireSettings } from '#lib/database';
+import { LanguageKeys } from '#lib/i18n';
+import { GuildMessage, PermissionLevels } from '#lib/types';
+import { clientOwners } from '#root/config';
+import { isGuildOwner } from '#utils/Discord';
 import {
     Identifiers,
     PieceContext,
@@ -6,13 +11,8 @@ import {
     PreconditionOptions,
     PreconditionResult
 } from '@sapphire/framework';
-import { clientOwners } from '#root/config';
-import type { GuildMember } from 'discord.js';
-import { acquireSettings, GuildSettings } from '#lib/database';
-import { GuildMessage, PermissionLevels } from '#lib/types';
-import { isGuildOwner } from '#utils/Discord';
+import type { ChatInputCommandInteraction, GuildMember } from 'discord.js';
 import type { FoxxieCommand } from '../commands';
-import { LanguageKeys } from '#lib/i18n';
 
 export abstract class PermissionLevelPrecondition extends Precondition {
     private readonly guildOnly: boolean;
@@ -44,8 +44,35 @@ export abstract class PermissionLevelPrecondition extends Precondition {
         return this.handle(message, command, context);
     }
 
+    public async chatInputRun(
+        interaction: ChatInputCommandInteraction,
+        command: FoxxieCommand,
+        context: PermissionLevelPrecondition.Context
+    ) {
+        if (!interaction.guild || !interaction.member) {
+            return this.guildOnly ? this.error({ identifier: Identifiers.PreconditionGuildOnly }) : this.ok();
+        }
+
+        if (clientOwners.includes(interaction.user.id)) return this.ok();
+        const member = await interaction.guild.members.fetch(interaction.user.id);
+
+        if (this.shouldRun(member, command)) {
+            const allowed = await this.runPreconditions(member, command);
+            if (allowed === true) return this.ok();
+            if (allowed === false)
+                return this.error({
+                    identifier: LanguageKeys.Preconditions.PermNodes,
+                    context: {
+                        node: `${command.category!.toLowerCase()}.${command.name.toLowerCase()}`
+                    }
+                });
+        }
+
+        return this.handle(interaction, command, context);
+    }
+
     protected abstract handle(
-        message: GuildMessage,
+        message: GuildMessage | ChatInputCommandInteraction,
         command: FoxxieCommand,
         context: PermissionLevelPrecondition.Context
     ): PermissionLevelPrecondition.Result;

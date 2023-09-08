@@ -1,11 +1,11 @@
 import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import { clientOptions, webhookError } from '#root/config';
-import { getApiHandlers } from '#utils/apiHandler';
+import { ApiService } from '#lib/Api/ApiService';
 import { EnvParse } from '@foxxie/env';
 import { isDev } from '@ruffpuff/utilities';
 import { Enumerable } from '@sapphire/decorators';
-import { container, SapphireClient } from '@sapphire/framework';
+import { SapphireClient, container } from '@sapphire/framework';
 import { magentaBright } from 'colorette';
 import { WebhookClient } from 'discord.js';
 import { InviteManager, RedisManager, ScheduleManager, WorkerManager } from './structures';
@@ -30,7 +30,7 @@ export default class FoxxieClient extends SapphireClient {
 
         container.schedule = new ScheduleManager();
 
-        container.apis = getApiHandlers();
+        container.apis = new ApiService();
 
         container.redis = EnvParse.boolean('REDIS_ENABLED')
             ? new RedisManager({
@@ -49,7 +49,7 @@ export default class FoxxieClient extends SapphireClient {
         );
 
         await container.schedule.init();
-        await container.apis.spotify.initSpotify();
+        await container.apis.init();
 
         return super.login();
     }
@@ -57,6 +57,11 @@ export default class FoxxieClient extends SapphireClient {
     public destroy(): Promise<void> {
         this.guildMemberFetchQueue.destroy();
         return super.destroy();
+    }
+
+    public emit(event: string, ...args: any[]) {
+        // console.log(event);
+        return super.emit(event, ...args);
     }
 
     public get development() {

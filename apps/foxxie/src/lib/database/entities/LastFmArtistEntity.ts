@@ -1,6 +1,8 @@
-import { hours } from '@ruffpuff/utilities';
+import { hours, isDev } from '@ruffpuff/utilities';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { LastFmAlbum } from './LastFmAlbum';
 import { LastFmArtistUserScrobble } from './LastFmArtistUserScrobble';
+import { LastFmTrack } from './LastFmTrack';
 
 @Entity('lastfmartist', { schema: 'public' })
 export class LastFmArtistEntity extends BaseEntity {
@@ -49,6 +51,15 @@ export class LastFmArtistEntity extends BaseEntity {
     @Column()
     public userScrobbles: LastFmArtistUserScrobble[] = [];
 
+    @Column()
+    public instrumentCredits: { type?: string; name: string; link: string }[] = [];
+
+    @Column()
+    public tracks: LastFmTrack[] = [];
+
+    @Column()
+    public albums: LastFmAlbum[] = [];
+
     public lastUpdated = Date.now();
 
     public constructor() {
@@ -56,6 +67,7 @@ export class LastFmArtistEntity extends BaseEntity {
     }
 
     public get shouldBeUpdated(): boolean {
+        if (isDev()) return true;
         return this.lastUpdated + hours(1) < Date.now();
     }
 }

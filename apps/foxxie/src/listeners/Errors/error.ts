@@ -5,7 +5,6 @@ const NEWLINE = '\n';
 
 export class UserListener extends Listener {
     public run(error: Error) {
-        console.log(error);
         const { logger } = this.container;
         if (error instanceof DiscordAPIError) {
             logger.warn(`[API ERROR] [CODE: ${error.code}] ${error.message}${NEWLINE}            [PATH: ${error.method}]`);

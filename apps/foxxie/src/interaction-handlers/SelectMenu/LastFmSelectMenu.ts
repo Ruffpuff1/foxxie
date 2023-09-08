@@ -1,5 +1,5 @@
 import { acquireSettings } from '#lib/database';
-import { LastFmArtistGetInfoResult, buildArtistDisplay, fetchArtist } from '#utils/API/lastfm';
+import { LastFmArtistGetInfoResult, buildArtistDisplay } from '#lib/Api/lastfm';
 import { floatPromise, resolveClientColor } from '#utils/util';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -45,7 +45,7 @@ export class UserInteractionHandler extends InteractionHandler {
 
         switch (type) {
             case 'artist':
-                data = await fetchArtist(value);
+                data = await this.container.apis.lastFm.getInfoFromArtist(value);
                 break;
         }
 

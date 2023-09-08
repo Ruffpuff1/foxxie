@@ -9,10 +9,11 @@ import { TFunction } from '@foxxie/i18n';
 import { hours, resolveToNull, toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
+import { DurationFormatter } from '@sapphire/time-utilities';
 import { ColorResolvable, EmbedBuilder, bold, italic } from 'discord.js';
+import { LastFmArtist, LastFmArtistGetTopAlbumsResult, LastFmArtistGetTopTrackResult } from './LastFmService';
 
 const api_key = EnvParse.string(EnvKeys.LastFmToken);
-const baseApiUrl = 'https://ws.audioscrobbler.com/2.0';
 
 export async function buildArtistDisplay(
     artist: LastFmArtist,
@@ -22,8 +23,6 @@ export async function buildArtistDisplay(
     authorId: string,
     guildId: string
 ) {
-    const [albums, tracks] = await fetchArtistTracksAndAlbums(artist.name);
-
     const template = new EmbedBuilder() //
         .setColor(color)
         .setAuthor({ name: artist.name, iconURL: artistEntity?.imageUrl, url: artist.url });
@@ -31,7 +30,9 @@ export async function buildArtistDisplay(
     if (artistEntity?.imageUrl) template.setThumbnail(artistEntity.imageUrl);
 
     const description = italic(
-        cleanFmArtistSummary(artist.bio.summary.length > 4000 ? `${artist.bio.summary.slice(0, 4000)}...` : artist.bio.summary)
+        container.apis.lastFm.cleanLastFmArtistSummary(
+            artist.bio.summary.length > 4000 ? `${artist.bio.summary.slice(0, 4000)}...` : artist.bio.summary
+        )
     );
 
     const listeners = await getArtistListenersInGuild(artistEntity, guildId);
@@ -40,13 +41,18 @@ export async function buildArtistDisplay(
     const none = toTitleCase(t(LanguageKeys.Globals.None));
 
     if (me) {
-        const user = await resolveToNull(fetchUser(me.username));
+        const user = await resolveToNull(container.apis.lastFm.getInfoFromUser(me.username));
+        const footer: string[] = [];
 
         if (user) {
-            template.setFooter({
-                text: `${((me.count / Number(user.user.playcount)) * 100).toFixed(2)} % of all your scrobbles are on this artist`
-            });
+            footer.push(
+                `${((me.count / Number(user.user.playcount)) * 100).toFixed(2)} % of all your scrobbles are on this artist`
+            );
         }
+
+        footer.push(`Last updated ${new DurationFormatter().format(Date.now() - new Date(me.lastUpdated).getTime())} ago`);
+
+        if (footer.length) template.setFooter({ text: footer.join('\n') });
     }
 
     const display = new PaginatedMessage({ template }) //
@@ -131,33 +137,55 @@ export async function buildArtistDisplay(
                         true
                     ),
                     conditionalField(
-                        Boolean(artistEntity && ['Group', 'Orchestra'].includes(artistEntity.type) && artistEntity.startDate),
+                        Boolean(
+                            artistEntity &&
+                                container.apis.spotify.musicBrainz.groupTypes.includes(artistEntity.type) &&
+                                artistEntity.startDate
+                        ),
                         '• Started',
-                        `${artistEntity.startArea ? `In ${artistEntity.startArea} on` : ''}${t(LanguageKeys.Globals.DateDuration, {
-                            date: new Date(artistEntity.startDate || '').getTime() + hours(8)
-                        })}`,
+                        `${artistEntity.startArea ? `In ${artistEntity.startArea} on ` : ''}${t(
+                            LanguageKeys.Globals.DateDuration,
+                            {
+                                date: new Date(artistEntity.startDate || '').getTime() + hours(8)
+                            }
+                        )}`,
                         true
                     ),
                     conditionalField(
-                        Boolean(artistEntity && ['Group', 'Orchestra'].includes(artistEntity.type) && artistEntity.endDate),
+                        Boolean(
+                            artistEntity &&
+                                container.apis.spotify.musicBrainz.groupTypes.includes(artistEntity.type) &&
+                                artistEntity.endDate
+                        ),
                         '• Ended',
-                        `${artistEntity.endArea ? `In ${artistEntity.endArea} on` : ''}${t(LanguageKeys.Globals.DateDuration, {
+                        `${artistEntity.endArea ? `In ${artistEntity.endArea} on ` : ''}${t(LanguageKeys.Globals.DateDuration, {
                             date: new Date(artistEntity.endDate || '').getTime() + hours(8)
                         })}`,
                         true
                     ),
                     conditionalField(
-                        Boolean(artistEntity && ['Person', 'Violinist'].includes(artistEntity.type) && artistEntity.startDate),
+                        Boolean(
+                            artistEntity &&
+                                container.apis.spotify.musicBrainz.personTypes.includes(artistEntity.type) &&
+                                artistEntity.startDate
+                        ),
                         '• Born',
-                        `${artistEntity.startArea ? `In ${artistEntity.startArea} on` : ''}${t(LanguageKeys.Globals.DateDuration, {
-                            date: new Date(artistEntity.startDate || '').getTime() + hours(8)
-                        })}`,
+                        `${artistEntity.startArea ? `In ${artistEntity.startArea} on ` : ''}${t(
+                            LanguageKeys.Globals.DateDuration,
+                            {
+                                date: new Date(artistEntity.startDate || '').getTime() + hours(8)
+                            }
+                        )}`,
                         true
                     ),
                     conditionalField(
-                        Boolean(artistEntity && ['Person', 'Violinist'].includes(artistEntity.type) && artistEntity.endDate),
+                        Boolean(
+                            artistEntity &&
+                                container.apis.spotify.musicBrainz.personTypes.includes(artistEntity.type) &&
+                                artistEntity.endDate
+                        ),
                         '• Died',
-                        `${artistEntity.endArea ? `In ${artistEntity.endArea} on` : ''}${t(LanguageKeys.Globals.DateDuration, {
+                        `${artistEntity.endArea ? `In ${artistEntity.endArea} on ` : ''}${t(LanguageKeys.Globals.DateDuration, {
                             date: new Date(artistEntity.endDate || '').getTime() + hours(8)
                         })}`,
                         true
@@ -171,42 +199,69 @@ export async function buildArtistDisplay(
         });
     }
 
-    if (albums.topalbums.album.length || tracks.toptracks.track.length) {
+    if (artistEntity.albums.length || artistEntity.tracks.length) {
         display.addPageEmbed(embed =>
-            embed.addFields([
-                resolveEmbedField(
-                    '• Albums',
-                    albums.topalbums.album.length
-                        ? albums.topalbums.album
-                              .sort((a, b) => b.playcount - a.playcount)
-                              .filter(al => al.name !== '(null)')
-                              .slice(0, 5)
-                              .map(
-                                  al =>
-                                      `${italic(`[${al.name}](${al.url})`)} → ${t(LanguageKeys.Globals.NumberCompact, {
-                                          value: al.playcount
-                                      })} plays`
-                              )
-                              .join('\n') || none
-                        : none
-                ),
-                resolveEmbedField(
-                    '• Tracks',
-                    tracks.toptracks.track.length
-                        ? tracks.toptracks.track
-                              .sort((a, b) => b.playcount - a.playcount)
-                              .filter(al => al.name !== '(null)')
-                              .slice(0, 5)
-                              .map(
-                                  al =>
-                                      `[${al.name}](${al.url}) → ${t(LanguageKeys.Globals.NumberCompact, {
-                                          value: al.playcount
-                                      })} plays`
-                              )
-                              .join('\n') || none
-                        : none
-                )
-            ])
+            embed.addFields(
+                removeEmptyFields([
+                    resolveEmbedField(
+                        '• Albums',
+                        artistEntity.albums.length
+                            ? [
+                                  artistEntity.albums
+                                      .slice(0, 5)
+                                      .map(
+                                          al =>
+                                              `[${al.title}](${al.url}) → ${t(LanguageKeys.Globals.NumberCompact, {
+                                                  value: al.playcount
+                                              })} plays`
+                                      )
+                                      .join('\n') || none,
+                                  artistEntity.albums.length > 5
+                                      ? `and ${bold((artistEntity.albums.length - 5).toString())} more...`
+                                      : null
+                              ]
+                                  .filter(a => Boolean(a))
+                                  .join('\n')
+                            : none
+                    ),
+                    resolveEmbedField(
+                        '• Tracks',
+                        artistEntity.tracks.length
+                            ? [
+                                  artistEntity.tracks
+                                      .slice(0, 5)
+                                      .map(
+                                          al =>
+                                              `[${al.title}](${al.url}) → ${t(LanguageKeys.Globals.NumberCompact, {
+                                                  value: al.playcount
+                                              })} plays`
+                                      )
+                                      .join('\n') || none,
+                                  artistEntity.tracks.length > 5
+                                      ? `and ${bold((artistEntity.tracks.length - 5).toString())} more...`
+                                      : null
+                              ]
+                                  .filter(a => Boolean(a))
+                                  .join('\n')
+                            : none
+                    ),
+                    conditionalField(
+                        Boolean(artistEntity.instrumentCredits.length),
+                        '• Instrument Credits',
+                        [
+                            artistEntity.instrumentCredits
+                                .slice(0, 5)
+                                .map(credit => `[${credit.name}](${credit.link})${credit.type ? ` (${credit.type})` : ''}`)
+                                .join('\n'),
+                            artistEntity.instrumentCredits.length > 5
+                                ? `and ${bold((artistEntity.instrumentCredits.length - 5).toString())} more...`
+                                : null
+                        ]
+                            .filter(a => Boolean(a))
+                            .join('\n')
+                    )
+                ])
+            )
         );
     }
 
@@ -216,7 +271,7 @@ export async function buildArtistDisplay(
 export async function getArtistListenersInGuild(
     artist: LastFmArtistEntity,
     guildId: string
-): Promise<{ count: number; id: string; username: string }[]> {
+): Promise<{ count: number; id: string; username: string; lastUpdated: number }[]> {
     const members = await container.db.members.guild(guildId);
     const membersWithUsername = members.filter(member => typeof member.lastFmUsername === 'string');
 
@@ -224,61 +279,33 @@ export async function getArtistListenersInGuild(
 
     for (const member of membersWithUsername) {
         const countOfMember = await getArtistPlayCountForUser(artist, member.id, guildId);
-        if (countOfMember) listeners.push({ count: countOfMember, id: member.id, username: member.lastFmUsername });
+        if (countOfMember)
+            listeners.push({
+                count: countOfMember,
+                id: member.id,
+                username: member.lastFmUsername,
+                lastUpdated: artist.lastUpdated
+            });
     }
 
     return listeners;
 }
 
-export async function searchArtist(query: string): Promise<LastFmArtistSearchResult> {
-    try {
-        const data = await fetch(baseApiUrl)
-            .query({
-                method: 'artist.search',
-                artist: query,
-                api_key,
-                format: 'json'
-            })
-            .json<LastFmArtistSearchResult>();
-
-        if (!Reflect.has(data, 'error')) return data;
-        return data as LastFmArtistSearchResult;
-    } catch {
-        return {
-            results: {
-                artistmatches: { artist: [] },
-                'opensearch:Query': { '#text': '', role: '', searchTerms: '', startPage: '0' }
-            }
-        };
-    }
-}
-
-export interface LastFmArtistSearchResult {
-    results: {
-        'opensearch:Query': {
-            '#text': string;
-            role: string;
-            searchTerms: string;
-            startPage: string;
-        };
-        artistmatches: { artist: Pick<LastFmArtist, 'name' | 'url' | 'streamable' | 'image'>[] };
-    };
-}
-
 export async function fetchArtistTracksAndAlbums(
     artist: string
 ): Promise<[LastFmArtistGetTopAlbumsResult, LastFmArtistGetTopTrackResult]> {
-    const [albums, tracks] = await Promise.all([fetchArtistAlbums(artist), fetchArtistTracks(artist)]);
+    const [albums, tracks] = await Promise.all([container.apis.lastFm.getTopAlbumsFromArtist(artist), fetchArtistTracks(artist)]);
     return [albums as LastFmArtistGetTopAlbumsResult, tracks as LastFmArtistGetTopTrackResult];
 }
 
 export async function fetchArtistTracks(artist: string): Promise<LastFmArtistGetTopTrackResult | LastFmArtistGetInfoError> {
     try {
-        const data = await fetch(baseApiUrl)
+        const data = await fetch(container.apis.lastFm.baseApiUrl)
             .query({
                 method: 'artist.gettoptracks',
                 artist,
                 api_key,
+                limit: '50',
                 format: 'json'
             })
             .json<LastFmArtistGetInfoError | LastFmArtistGetTopTrackResult>();
@@ -372,119 +399,8 @@ interface GetArtistsResult {
     };
 }
 
-export async function fetchArtistAlbums(artist: string): Promise<LastFmArtistGetTopAlbumsResult | LastFmArtistGetInfoError> {
-    try {
-        const data = await fetch(baseApiUrl)
-            .query({
-                method: 'artist.gettopalbums',
-                artist,
-                api_key,
-                format: 'json'
-            })
-            .json<LastFmArtistGetInfoError | LastFmArtistGetTopAlbumsResult>();
-
-        if (!Reflect.has(data, 'error')) return data as LastFmArtistGetTopAlbumsResult;
-        return data as LastFmArtistGetInfoError;
-    } catch {
-        return {
-            error: 6,
-            message: 'The artist you supplied could not be found',
-            links: []
-        };
-    }
-}
-
-export async function fetchArtist(artist: string): Promise<LastFmArtistGetInfoError | LastFmArtistGetInfoResult> {
-    try {
-        const data = await fetch(baseApiUrl)
-            .query({
-                method: 'artist.getinfo',
-                artist,
-                api_key,
-                format: 'json'
-            })
-            .json<LastFmArtistGetInfoError | LastFmArtistGetInfoResult>();
-
-        if (!Reflect.has(data, 'error')) return data as LastFmArtistGetInfoResult;
-        return data as LastFmArtistGetInfoError;
-    } catch {
-        return {
-            error: 6,
-            message: 'The artist you supplied could not be found',
-            links: []
-        };
-    }
-}
-
-export async function fetchUser(user: string): Promise<LastFmGetUserResult> {
-    const data = await fetch(baseApiUrl)
-        .query({
-            method: 'user.getinfo',
-            api_key,
-            user,
-            format: 'json'
-        })
-        .json<LastFmGetUserResult>();
-
-    return data;
-}
-
-export interface LastFmGetUserResult {
-    user: {
-        name: string;
-        playcount: `${number}`;
-    };
-}
-
-export interface LastFmArtistGetTopAlbumsResult {
-    topalbums: {
-        album: { name: string; playcount: number; url: string; artist: Pick<LastFmArtist, 'name' | 'url' | 'image'> }[];
-    };
-}
-
-export interface LastFmArtistGetTopTrackResult {
-    toptracks: {
-        track: {
-            name: string;
-            playcount: number;
-            listners: number;
-            url: string;
-            artist: Pick<LastFmArtist, 'name' | 'url' | 'image'>;
-        }[];
-    };
-}
-
 export interface LastFmArtistGetInfoResult {
     artist: LastFmArtist;
-}
-
-export interface LastFmArtist {
-    name: string;
-    url: string;
-    image: LastFmImage[];
-    streamable: `${number}`;
-    ontour: `${number}`;
-    stats: LastFmStats;
-    similar: '';
-    tags: { tag: { name: string; url: string }[] };
-    bio: LastFmArtistBio;
-}
-
-export interface LastFmArtistBio {
-    links: '';
-    published: string;
-    summary: string;
-    content: string;
-}
-
-export interface LastFmStats {
-    listeners: `${number}`;
-    playcount: `${number}`;
-}
-
-export interface LastFmImage {
-    '#text': string;
-    size: 'small' | 'medium' | 'large' | 'extralarge' | 'mega' | '';
 }
 
 export interface LastFmArtistGetInfoError {
@@ -493,8 +409,22 @@ export interface LastFmArtistGetInfoError {
     links: string[];
 }
 
-const fmTagRegex = /<a href="https:\/\/www.last.fm\/.*">[. A-z]*<\/a>$/g;
-
-function cleanFmArtistSummary(text: string) {
-    return text.replace(fmTagRegex, '').replace(/\n/g, ' ');
+export interface GetRecentTracksUserResult {
+    recenttracks: {
+        track: {
+            artist: {
+                mbid: string;
+                '#text': string;
+            };
+            streamable: string;
+            mbid: string;
+            album: {
+                mbid: string;
+                '#text': string;
+            };
+            name: string;
+            url: string;
+            date: { uts: string; '#text': string };
+        }[];
+    };
 }

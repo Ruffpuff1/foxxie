@@ -22,7 +22,6 @@ const ignoredErrorCodes: (number | string)[] = [RESTJSONErrorCodes.UnknownChanne
 
 export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
     public async run(error: Error, { message, command, parameters, args }: { args: FoxxieArgs } & MessageCommandErrorPayload) {
-        console.log(error)
         // if the error is something that the user should be aware of, send them a message.
         if (typeof error === 'string') return this.stringError(message, args.t, error);
         if (error instanceof ArgumentError) return this.argumentError(message, args.t, error);

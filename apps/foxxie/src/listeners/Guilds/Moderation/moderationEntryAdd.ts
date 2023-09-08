@@ -32,7 +32,6 @@ export class UserListener extends Listener<FoxxieEvents.ModerationEntryAdd> {
 
             await entry.save();
         } catch (error) {
-            console.log(error);
             moderation._count! -= 1;
         }
     }
