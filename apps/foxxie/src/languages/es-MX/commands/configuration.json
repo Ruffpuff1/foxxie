@@ -1,7 +1,46 @@
 {
     "confDescription": "Configura la configuración de tu servidor para mí.",
     "confGet": "El valor para la clave **{{key}}** es: `{{value}}`",
+    "confGetNoExt": "",
+    "confMenuInvalidAction": "",
+    "confMenuInvalidKey": "",
+    "confMenuNoChange": "",
     "confMenuRenderAtFolder": "Actualmente en: 📁 {{path}}",
     "confMenuRenderAtPiece": "Actualmente en: ⚙️ {{path}}",
-    "confMenuRenderCValue": "Valor actual: **`{{value}}`**"
+    "confMenuRenderBack": "",
+    "confMenuRenderCValue": "Valor actual: **`{{value}}`**",
+    "confMenuRenderNokeys": "",
+    "confMenuRenderRemove": "",
+    "confMenuRenderReset": "",
+    "confMenuRenderSelect": "",
+    "confMenuRenderUndo": "",
+    "confMenuRenderUpdate": "",
+    "confMenuSaved": "",
+    "confMissingValue": "",
+    "confNotSet": "",
+    "confReset": "",
+    "confServer": "",
+    "confUpdated": "",
+    "confUsage": "",
+    "confValidationChooseKey": "",
+    "highlightDetailedDescription": {
+        "description": "",
+        "usage": "",
+        "subcommands": [
+            {
+                "command": "",
+                "description": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "examples": [
+                    "",
+                    "",
+                    ""
+                ]
+            }
+        ]
+    }
 }
