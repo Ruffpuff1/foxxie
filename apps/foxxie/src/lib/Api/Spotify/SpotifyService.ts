@@ -4,8 +4,7 @@ import { LastFmTrack } from '#lib/database/entities/LastFmTrack';
 import { fetch } from '@foxxie/fetch';
 import { cast, hours } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { LastFmArtistGetTopAlbumsResult, LastFmArtistGetTopTrackResult } from '../LastFmService';
-import { LastFmArtistGetInfoResult, fetchArtistTracksAndAlbums } from '../lastfm';
+import { LastFmArtistGetInfoResult, LastFmArtistGetTopAlbumsResult, LastFmArtistGetTopTrackResult } from '../LastFmService';
 import { IArtist, IRecording, IReleaseGroup, InstrumentCredit, MusicBrainzService } from './MusicBrainzService';
 
 export class SpotifyService {
@@ -29,7 +28,7 @@ export class SpotifyService {
 
     public async getOrStoreArtist(artistData: LastFmArtistGetInfoResult) {
         const previousArtist = await container.db.lastFmArtists.getArtist(artistData.artist.name);
-        const [foundAlbums, foundTracks] = await fetchArtistTracksAndAlbums(artistData.artist.name);
+        const [foundAlbums, foundTracks] = await container.apis.lastFm.getTopTracksAndAlbumsForArtist(artistData.artist.name);
 
         if (previousArtist === null) {
             const artist = new LastFmArtistEntity();

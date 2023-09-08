@@ -1,5 +1,5 @@
+import { LastFmArtistGetInfoResult } from '#lib/Api/LastFmService';
 import { acquireSettings } from '#lib/database';
-import { LastFmArtistGetInfoResult, buildArtistDisplay } from '#lib/Api/lastfm';
 import { floatPromise, resolveClientColor } from '#utils/util';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -20,8 +20,8 @@ export class UserInteractionHandler extends InteractionHandler {
 
         switch (result.type) {
             case 'artist':
-                display = await buildArtistDisplay(
-                    (result.data as LastFmArtistGetInfoResult).artist,
+                display = await this.container.apis.lastFm.buildArtistDisplay(
+                    cast<LastFmArtistGetInfoResult>(result.data).artist,
                     artistEntity,
                     t,
                     resolveClientColor(message?.guildId as string, message?.member?.displayColor || 0),
