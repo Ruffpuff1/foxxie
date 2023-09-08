@@ -1,0 +1,67 @@
+{
+    "animalcrossingCoffee": "",
+    "animalcrossingFooter": "",
+    "animalcrossingDetailedDescription": {
+        "description": "",
+        "usage": "",
+        "subcommands": [
+            {
+                "command": "",
+                "description": [
+                    ""
+                ],
+                "examples": [
+                    "",
+                    "",
+                    ""
+                ]
+            }
+        ]
+    },
+    "animalcrossingNoVillager": "",
+    "animalcrossingNoVillagerProvided": "",
+    "animalcrossingTitles": {
+        "birthday": "",
+        "catchphrase": "",
+        "coffee": "",
+        "game": "",
+        "game_other": "",
+        "gender": "",
+        "goal": "",
+        "personality": "",
+        "saying": "",
+        "series": "",
+        "siblings": "",
+        "skill": "",
+        "song": "",
+        "species": "",
+        "zodiac": ""
+    },
+    "lastFmDetailedDescription": {
+        "description": "",
+        "usage": "",
+        "subcommands": [
+            {
+                "command": "",
+                "description": [
+                    ""
+                ],
+                "options": [
+                    {
+                        "name": "",
+                        "description": ""
+                    },
+                    {
+                        "name": "",
+                        "description": ""
+                    }
+                ],
+                "examples": [
+                    "",
+                    "",
+                    ""
+                ]
+            }
+        ]
+    }
+}

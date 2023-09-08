@@ -1,6 +1,108 @@
 {
+    "banDetailedDescription": {
+        "description": "",
+        "usage": "",
+        "arguments": [
+            {
+                "name": "",
+                "description": ""
+            },
+            {
+                "name": "",
+                "description": ""
+            },
+            {
+                "name": "",
+                "description": ""
+            },
+            {
+                "name": "",
+                "description": ""
+            },
+            {
+                "name": "",
+                "description": ""
+            }
+        ],
+        "examples": [
+            "",
+            "",
+            ""
+        ]
+    },
+    "banSuccess": "",
+    "banSuccess_other": "",
     "caseDescription": "Ver un caso de moderación anterior de su servidor.",
     "caseNoExist": "{{ERROR}} Un caso de moderación con el id `{{id}}` no existe en este servidor.",
     "caseUsage": "[Id de caso | \"nuevo\"]",
-    "reasonUsage": "[Id de caso | \"nuevo\"] [razón]"
+    "guildBansEmpty": "",
+    "guildBansNotFound": "",
+    "kickDetailedDescription": {
+        "description": "",
+        "usage": "",
+        "arguments": [
+            {
+                "name": "",
+                "description": ""
+            },
+            {
+                "name": "",
+                "description": ""
+            },
+            {
+                "name": "",
+                "description": ""
+            }
+        ],
+        "examples": [
+            "",
+            ""
+        ]
+    },
+    "kickSuccess": "",
+    "kickSuccess_other": "",
+    "muteDetailedDescription": {
+        "description": "",
+        "usage": "",
+        "arguments": [
+            {
+                "name": "",
+                "description": ""
+            },
+            {
+                "name": "",
+                "description": ""
+            },
+            {
+                "name": "",
+                "description": ""
+            },
+            {
+                "name": "",
+                "description": ""
+            }
+        ],
+        "examples": [
+            "",
+            "",
+            ""
+        ]
+    },
+    "muteSuccess": "",
+    "muteSuccess_other": "",
+    "reasonDescription": "",
+    "reasonSuccess": "",
+    "reasonUsage": "[Id de caso | \"nuevo\"] [razón]",
+    "restrictEmbedDescription": "",
+    "restrictEmbedSuccess": "",
+    "restrictEmbedSuccess_other": "",
+    "unbanDescription": "",
+    "unbanSuccess": "",
+    "unbanSuccess_other": "",
+    "unmuteDescription": "",
+    "unmuteSuccess": "",
+    "unmuteSuccess_other": "",
+    "unRestrictEmbedDescription": "",
+    "unRestrictEmbedSuccess": "",
+    "unRestrictEmbedSuccess_other": ""
 }
