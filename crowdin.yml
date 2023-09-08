@@ -1,0 +1,3 @@
+files:
+  - source: /apps/foxxie/src/languages/en-US
+    translation: apps/foxxie/src/languages/%locale%/**/%original_file_name%
