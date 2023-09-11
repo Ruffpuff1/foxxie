@@ -1,8 +1,8 @@
 import type { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
+import { ApiService } from '#lib/Api/ApiService';
 import type { GuildEntity, ModerationEntity, MongoDB, SerializerStore, TaskStore } from '#lib/database';
 import type { FoxxieCommand, InviteManager, RedisManager, ScheduleManager, WorkerManager } from '#lib/structures';
-import { ApiService } from '#lib/Api/ApiService';
 import { TFunction } from '@foxxie/i18n';
 import type { Piece, Store } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';
@@ -45,6 +45,9 @@ declare module '@sapphire/pieces' {
         redis: RedisManager | null;
         schedule: ScheduleManager;
         workers: WorkerManager;
+        /**
+         * Api manager
+         */
         apis: ApiService;
     }
 

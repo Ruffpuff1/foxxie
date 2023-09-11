@@ -4,7 +4,7 @@ import { LastFmTrack } from '#lib/database/entities/LastFmTrack';
 import { fetch } from '@foxxie/fetch';
 import { cast, hours } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { LastFmArtistGetInfoResult, LastFmArtistGetTopAlbumsResult, LastFmArtistGetTopTrackResult } from '../LastFmService';
+import { GetArtistInfoResult, GetArtistTopAlbumsResult, GetArtistTopTracksResult } from './LastFmService';
 import { IArtist, IRecording, IReleaseGroup, InstrumentCredit, MusicBrainzService } from './MusicBrainzService';
 
 export class SpotifyService {
@@ -26,16 +26,27 @@ export class SpotifyService {
         setInterval(() => (this.token = null), hours(1));
     }
 
-    public async getOrStoreArtist(artistData: LastFmArtistGetInfoResult) {
+    public async getOrStoreArtist(artistData: GetArtistInfoResult) {
         const previousArtist = await container.db.lastFmArtists.getArtist(artistData.artist.name);
         const [foundAlbums, foundTracks] = await container.apis.lastFm.getTopTracksAndAlbumsForArtist(artistData.artist.name);
 
         if (previousArtist === null) {
             const artist = new LastFmArtistEntity();
-            return this.updateArtist(artist, artistData, foundTracks, foundAlbums);
+            return this.updateArtist(
+                artist,
+                artistData,
+                cast<GetArtistTopTracksResult>(foundTracks),
+                cast<GetArtistTopAlbumsResult>(foundAlbums)
+            );
         }
 
-        if (previousArtist.shouldBeUpdated) return this.updateArtist(previousArtist, artistData, foundTracks, foundAlbums);
+        if (previousArtist.shouldBeUpdated)
+            return this.updateArtist(
+                previousArtist,
+                artistData,
+                cast<GetArtistTopTracksResult>(foundTracks),
+                cast<GetArtistTopAlbumsResult>(foundAlbums)
+            );
         this.addArtistToCache(previousArtist);
 
         return previousArtist;
@@ -77,7 +88,7 @@ export class SpotifyService {
         if (data?.access_token) this.token = data.access_token;
     }
 
-    private mapRecordings(foundTracks: LastFmArtistGetTopTrackResult, recordings: IRecording[]): MappedRecording[] {
+    private mapRecordings(foundTracks: GetArtistTopTracksResult, recordings: IRecording[]): MappedRecording[] {
         return (
             foundTracks.toptracks.track
                 .map(track => {
@@ -97,7 +108,7 @@ export class SpotifyService {
         );
     }
 
-    private mapAlbums(foundTracks: LastFmArtistGetTopAlbumsResult, recordings: IReleaseGroup[]): LastFmAlbum[] {
+    private mapAlbums(foundTracks: GetArtistTopAlbumsResult, recordings: IReleaseGroup[]): LastFmAlbum[] {
         return (
             foundTracks.topalbums.album
                 .map(album => {
@@ -118,8 +129,8 @@ export class SpotifyService {
     private async processMusicBrainzData(
         artist: LastFmArtistEntity,
         musicBrainzData: IArtist,
-        foundTracks: LastFmArtistGetTopTrackResult,
-        foundAlbums: LastFmArtistGetTopAlbumsResult
+        foundTracks: GetArtistTopTracksResult,
+        foundAlbums: GetArtistTopAlbumsResult
     ) {
         const instrumentRelations = this.musicBrainz.getInstrumentCredits(musicBrainzData);
         const { recordings } = await this.musicBrainz.browseRecordingsForAnArtist(musicBrainzData?.id);
@@ -132,7 +143,7 @@ export class SpotifyService {
         this.updateArtistEntityWithMusicBrainzData(artist, musicBrainzData, instrumentRelations, tracks, albums);
     }
 
-    private removeDuplicateTracks(mappedRecordings: MappedRecording[]): LastFmTrack[] {
+    private removeDuplicateTracks(mappedRecordings: MappedRecording[]): Partial<LastFmTrack>[] {
         return [...new Set(mappedRecordings.map(r => r.title.toLowerCase()))].map(
             t => mappedRecordings.find(r => r.title.toLowerCase() === t)!
         );
@@ -144,9 +155,9 @@ export class SpotifyService {
 
     private async updateArtist(
         artist: LastFmArtistEntity,
-        data: LastFmArtistGetInfoResult,
-        tracks: LastFmArtistGetTopTrackResult,
-        albums: LastFmArtistGetTopAlbumsResult
+        data: GetArtistInfoResult,
+        tracks: GetArtistTopTracksResult,
+        albums: GetArtistTopAlbumsResult
     ) {
         const spotifyData = await this.getArtistFromSpotify(data.artist.name);
         if (spotifyData) this.updateArtistEntityWithSpotifyData(artist, spotifyData);
@@ -165,7 +176,7 @@ export class SpotifyService {
         artist: LastFmArtistEntity,
         musicBrainzArtist: IArtist,
         instrumentRelations: InstrumentCredit[],
-        tracks: LastFmTrack[],
+        tracks: Partial<LastFmTrack>[],
         albums: LastFmAlbum[]
     ) {
         artist.mbid = musicBrainzArtist.id;
@@ -178,8 +189,8 @@ export class SpotifyService {
         if (musicBrainzArtist.disambiguation) artist.disambiguation = musicBrainzArtist.disambiguation;
         if (musicBrainzArtist.type) artist.type = musicBrainzArtist.type;
         if (instrumentRelations?.length) artist.instrumentCredits = instrumentRelations;
-        if (tracks.length) artist.tracks = tracks;
-        if (albums.length) artist.albums = albums;
+        if (tracks && tracks.length) artist.tracks = cast<LastFmTrack[]>(tracks);
+        if (albums && albums.length) artist.albums = albums;
     }
 
     private updateArtistEntityWithSpotifyData(artist: LastFmArtistEntity, spotifyData: SpotifyApi.ArtistObjectFull) {
@@ -187,11 +198,14 @@ export class SpotifyService {
         if (iconURL) artist.imageUrl = iconURL;
     }
 
-    private updateArtistWithArtistData(artist: LastFmArtistEntity, artistData: LastFmArtistGetInfoResult) {
+    private updateArtistWithArtistData(artist: LastFmArtistEntity, artistData: GetArtistInfoResult) {
         artist.artistName = artistData.artist.name;
         artist.artistUrl = artistData.artist.url;
         artist.description = artistData.artist.bio.summary;
         artist.lastUpdated = Date.now();
+        artist.playcount = parseInt(artistData.artist.stats.playcount, 10);
+        artist.listeners = parseInt(artistData.artist.stats.listeners, 10);
+        artist.tags = artistData.artist.tags?.tag.map(t => ({ name: t.name, url: t.url })) || [];
     }
 }
 

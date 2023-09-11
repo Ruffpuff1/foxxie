@@ -39,8 +39,25 @@
     },
     "lastFmDetailedDescription": {
         "description": "Fetch data from Last.fm.",
-        "usage": "{{prefix}}lastfm [artist]",
+        "usage": "{{prefix}}lastfm [listening|artist]",
         "subcommands": [
+            {
+                "command": "listening",
+                "description": [
+                    "Shows the song you're currently scrobbling on last.fm or the last song you scrobbled."
+                ],
+                "options": [
+                    {
+                        "name": "user",
+                        "description": "The user to target, defaults to yourself."
+                    }
+                ],
+                "examples": [
+                    "{{prefix}}lastfm",
+                    "{{prefix}}lastfm tuesdei",
+                    "{{prefix}}lastfm colormane"
+                ]
+            },
             {
                 "command": "artist",
                 "description": [
@@ -57,11 +74,26 @@
                     }
                 ],
                 "examples": [
-                    "{{prefix}}lastfm artist ricky montgomery",
+                    "{{prefix}}lastfm artist",
                     "{{prefix}}lastfm artist mitski",
                     "{{prefix}}lastfm artist lana del rey"
                 ]
             }
         ]
-    }
+    },
+    "lastFmPlayListeners": "**{{count, number}}** listener",
+    "lastFmPlayListeners_other": "**{{count, number}}** listeners",
+    "lastFmPlayNowPlaying": "Now Playing",
+    "lastFmPlayPlays": "**{{count, number}}** play",
+    "lastFmPlayPlays_other": "**{{count, number}}** plays",
+    "lastFmPlayPlaysBy": "**{{count, number}}** play by {{target}}",
+    "lastFmPlayPlaysBy_other": "**{{count, number}}** plays by {{target}}",
+    "lastFmPlayPlaysByYou": "**{{count, number}}** play by you",
+    "lastFmPlayPlaysByYou_other": "**{{count, number}}** plays by you",
+    "lastFmPlayWasPlaying": "Was Playing",
+    "lastFmTitles": {
+        "statistics": "• Statistics",
+        "summary": "• Summary"
+    },
+    "lastFmTrackNotFoundForUser": "{{ERROR}} I'm sorry I couldn't find any tracks for the user: {{user.name, code}}."
 }

@@ -62,6 +62,12 @@ export class LastFmArtistEntity extends BaseEntity {
 
     public lastUpdated = Date.now();
 
+    public tags: { name: string; url: string }[] = [];
+
+    public listeners: number = null!;
+
+    public playcount: number = null!;
+
     public constructor() {
         super();
     }
