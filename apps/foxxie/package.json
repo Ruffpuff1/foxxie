@@ -80,6 +80,7 @@
     "typescript": "5.2.2"
   },
   "imports": {
+    "#api/*": "./dist/src/lib/Api/*.js",
     "#database/*": "./dist/src/lib/database/*.js",
     "#database/Keys": "./dist/src/lib/database/Keys/index.js",
     "#external/GuildMemberFetchQueue": "./dist/src/lib/util/External/GuildMemberFetchQueue.js",

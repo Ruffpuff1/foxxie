@@ -1,4 +1,4 @@
-import { LastFmArtistGetInfoResult } from '#lib/Api/LastFmService';
+import { GetArtistInfoResult } from '#lib/Api/LastFm/Services/LastFmService';
 import { acquireSettings } from '#lib/database';
 import { floatPromise, resolveClientColor } from '#utils/util';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
@@ -16,12 +16,11 @@ export class UserInteractionHandler extends InteractionHandler {
         const t = await acquireSettings(interaction.guildId!, s => s.getLanguage());
         const message = await resolveToNull(interaction.channel!.messages.fetch(result.messageId));
 
-        const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<LastFmArtistGetInfoResult>(result.data));
+        const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<GetArtistInfoResult>(result.data));
 
         switch (result.type) {
             case 'artist':
-                display = await this.container.apis.lastFm.buildArtistDisplay(
-                    cast<LastFmArtistGetInfoResult>(result.data).artist,
+                display = await this.container.apis.lastFm.displays.artist.build(
                     artistEntity,
                     t,
                     resolveClientColor(message?.guildId as string, message?.member?.displayColor || 0),

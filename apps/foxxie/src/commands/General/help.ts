@@ -102,7 +102,7 @@ export default class UserCommand extends FoxxieCommand {
 
         if (!detailed.subcommands) return display.run(message);
 
-        const subCommands = detailed.subcommands;
+        const subCommands = detailed.subcommands.sort((a, b) => a.command.localeCompare(b.command));
 
         if (subCommands.length) {
             for (const subCommand of subCommands) {

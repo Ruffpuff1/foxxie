@@ -1,7 +1,6 @@
 import { EnvKeys } from '#lib/types/Env';
 import { EnvParse } from '@foxxie/env';
-import { LastFmService } from './LastFmService';
-import { SpotifyService } from './Spotify/SpotifyService';
+import { LastFmService, SpotifyService } from './LastFm';
 
 /**
  * Api manager

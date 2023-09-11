@@ -1,4 +1,4 @@
-import { LastFmArtistGetInfoResult } from '#lib/Api/LastFmService';
+import { GetArtistInfoResult, GetArtistInfoResultWithUser, GetUserInfoResult } from '#api/LastFm';
 import { acquireSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
@@ -8,35 +8,40 @@ import { floatPromise, getOption, getSubcommand, parseDescription, resolveClient
 import { getT } from '@foxxie/i18n';
 import { cast } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApplicationCommandRegistry, Args, AutocompleteCommand, Command } from '@sapphire/framework';
+import { ApplicationCommandRegistry, AutocompleteCommand, Command } from '@sapphire/framework';
+import { send } from '@sapphire/plugin-editable-commands';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { ActionRowBuilder, Locale, StringSelectMenuBuilder } from 'discord.js';
+import { ActionRowBuilder, Locale, PermissionsBitField, StringSelectMenuBuilder } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['fm'],
     requiredClientPermissions: PermissionFlagsBits.EmbedLinks,
     detailedDescription: LanguageKeys.Commands.Fun.LastFmDetailedDescription,
-    subcommands: [{ name: 'artist', default: true, messageRun: 'messageRunArtist', chatInputRun: 'chatInputArtist' }]
+    subcommands: [
+        { name: 'listening', messageRun: 'messageRunListening', chatInputRun: 'chatInputListening', default: true },
+        { name: 'artist', messageRun: 'messageRunArtist', chatInputRun: 'chatInputArtist' }
+    ]
 })
 export class UserCommand extends FoxxieCommand {
-    private static artist = Args.make<string>((parameter, { argument }) => {
-        const lower = parameter?.toLowerCase();
-        if (!lower) return Args.error({ argument, parameter, identifier: 'noArtistProvided' });
-        return Args.ok(lower);
-    });
-
     public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
         const t = getT('en-US');
         const detailedDescription = t(this.detailedDescription);
         const artist = getSubcommand('artist', detailedDescription)!;
+        const listening = getSubcommand('listening', detailedDescription)!;
         const optionArtist = getOption('artist', 'artist', detailedDescription)!;
+        const optionUser = getOption('listening', 'user', detailedDescription)!;
         const optionHidden = getOption('artist', 'hidden', detailedDescription)!;
 
         registry.registerChatInputCommand(
             builder =>
-                builder //
+                builder
                     .setName(this.name)
                     .setDescription(detailedDescription.description)
+                    .setDMPermission(false)
+                    .setDefaultMemberPermissions(
+                        new PermissionsBitField([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions]).bitfield
+                    )
+                    .setNSFW(false)
                     .addSubcommand(subcommand =>
                         subcommand
                             .setName(artist.command)
@@ -60,22 +65,49 @@ export class UserCommand extends FoxxieCommand {
                                     .setDescriptionLocalization(Locale.EnglishUS, optionHidden.description)
                                     .setRequired(false)
                             )
+                    )
+                    .addSubcommand(subcommand =>
+                        subcommand
+                            .setName(listening.command)
+                            .setDescription(parseDescription(listening.description)!)
+                            .setNameLocalization(Locale.EnglishUS, listening.command)
+                            .setDescriptionLocalization(Locale.EnglishUS, parseDescription(listening.description))
+                            .addStringOption(option =>
+                                option
+                                    .setName(optionUser.name)
+                                    .setDescription(optionUser.description)
+                                    .setNameLocalization(Locale.EnglishUS, optionUser.name)
+                                    .setDescriptionLocalization(Locale.EnglishUS, optionUser.description)
+                                    .setAutocomplete(false)
+                                    .setRequired(false)
+                            )
+                            .addBooleanOption(option =>
+                                option
+                                    .setName(optionHidden.name)
+                                    .setDescription(optionHidden.description)
+                                    .setNameLocalization(Locale.EnglishUS, optionHidden.name)
+                                    .setDescriptionLocalization(Locale.EnglishUS, optionHidden.description)
+                                    .setRequired(false)
+                            )
                     ),
             { idHints: ['1149530889907347466'] }
         );
     }
 
     public async autocompleteRun(...[interaction]: Parameters<AutocompleteCommand['autocompleteRun']>) {
-        return this.container.apis.lastFm.getAutocompleteArtistOptions(interaction);
+        const { name } = interaction.options.getFocused(true);
+
+        switch (name) {
+            case 'artist':
+                return this.container.apis.lastFm.getAutocompleteArtistOptions(interaction);
+        }
     }
 
     public async chatInputArtist(interaction: Command.ChatInputCommandInteraction) {
-        const artist = interaction.options.getString('artist', true);
-        const ephemeral = interaction.options.getBoolean('hidden') || false;
-        const t = await acquireSettings(interaction.guildId!, s => s.getLanguage());
+        const [artist, defer] = await this.container.apis.lastFm.getArtistArgOrLastPlayedArtistFromGuildMember(interaction);
 
-        const defer = await interaction.deferReply({ ephemeral });
-        const artistData = await this.container.apis.lastFm.getInfoFromArtist(artist);
+        const t = await acquireSettings(interaction.guildId!, s => s.getLanguage());
+        const artistData = cast<GetArtistInfoResultWithUser>(await this.container.apis.lastFm.getInfoFromArtist(artist));
 
         if (Reflect.has(artistData, 'error')) {
             const options = await this.container.apis.lastFm.getSelectMenuArtistOptions(artist);
@@ -92,11 +124,9 @@ export class UserCommand extends FoxxieCommand {
             return;
         }
 
-        const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<LastFmArtistGetInfoResult>(artistData));
-        const artistBody = cast<LastFmArtistGetInfoResult>(artistData).artist;
+        const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<GetArtistInfoResult>(artistData));
 
-        const display = await this.container.apis.lastFm.buildArtistDisplay(
-            artistBody,
+        const display = await this.container.apis.lastFm.displays.artist.build(
             artistEntity,
             t,
             resolveClientColor(interaction.guild),
@@ -108,18 +138,7 @@ export class UserCommand extends FoxxieCommand {
     }
 
     public async messageRunArtist(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
-        let artist = await args.rest(UserCommand.artist).catch(() => null);
-        const loading = await sendLoadingMessage(message);
-
-        if (!artist) {
-            const track = await this.container.apis.lastFm.getLastPlayedTrackFromGuildMember(message.author.id, message.guildId)
-
-            const artistName = track?.artist?.['#text'];
-            if (!artistName) this.error('noArtistProvided');
-
-            artist = artistName;
-        }
-
+        const [artist, loading] = await this.container.apis.lastFm.getArtistArgOrLastPlayedArtistFromGuildMember(message, args);
         const artistData = await this.container.apis.lastFm.getInfoFromArtist(artist);
 
         if (Reflect.has(artistData, 'error')) {
@@ -139,11 +158,9 @@ export class UserCommand extends FoxxieCommand {
             return;
         }
 
-        const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<LastFmArtistGetInfoResult>(artistData));
-        const artistBody = cast<LastFmArtistGetInfoResult>(artistData).artist;
+        const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<GetArtistInfoResult>(artistData));
 
-        const display = await this.container.apis.lastFm.buildArtistDisplay(
-            artistBody,
+        const display = await this.container.apis.lastFm.displays.artist.build(
             artistEntity,
             args.t,
             resolveClientColor(message.guild, message.member.displayColor),
@@ -152,7 +169,66 @@ export class UserCommand extends FoxxieCommand {
         );
 
         await loading.delete();
-
         await display.run(message);
+    }
+
+    public async chatInputListening(interaction: FoxxieCommand.ChatInputCommandInteraction): Promise<void> {
+        const authorUsername = await this.container.apis.lastFm.getGuildMemberLastFmUsername(
+            interaction.user.id,
+            interaction.guildId
+        );
+
+        const username = interaction.options.getString('user') || authorUsername;
+        const ephemeral = interaction.options.getBoolean('hidden') || false;
+
+        if (!username) this.error('noUsername');
+        await interaction.deferReply({ ephemeral });
+
+        const t = await acquireSettings(interaction.guildId, s => s.getLanguage());
+        let user = cast<GetUserInfoResult>(await this.container.apis.lastFm.getInfoFromUser(username));
+
+        if (!user.user) {
+            if (!authorUsername) this.error('noUsername');
+            user = cast<GetUserInfoResult>(await this.container.apis.lastFm.getInfoFromUser(authorUsername));
+        }
+
+        const tracks = await this.container.apis.lastFm.getRecentTracksFromUser(user.user.name);
+
+        const embed = await this.container.apis.lastFm.displays.play.build(
+            tracks,
+            authorUsername,
+            t,
+            resolveClientColor(interaction.guildId),
+            user
+        );
+
+        await interaction.editReply({ content: null, embeds: [embed] });
+    }
+
+    public async messageRunListening(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
+        await sendLoadingMessage(message);
+
+        const authorUsername = await this.container.apis.lastFm.getGuildMemberLastFmUsername(message.author.id, message.guild.id);
+        const username = await args.pick('string').catch(() => authorUsername);
+        if (!username) this.error('noUsername');
+
+        let user = cast<GetUserInfoResult>(await this.container.apis.lastFm.getInfoFromUser(username));
+
+        if (!user.user) {
+            if (!authorUsername) this.error('noUsername');
+            user = cast<GetUserInfoResult>(await this.container.apis.lastFm.getInfoFromUser(authorUsername));
+        }
+
+        const tracks = await this.container.apis.lastFm.getRecentTracksFromUser(user.user.name);
+
+        const embed = await this.container.apis.lastFm.displays.play.build(
+            tracks,
+            authorUsername,
+            args.t,
+            resolveClientColor(message.guild, message.member.displayColor),
+            user
+        );
+
+        await send(message, { content: null, embeds: [embed] });
     }
 }

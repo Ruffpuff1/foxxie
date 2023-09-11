@@ -38,6 +38,9 @@
         "baseUrl": ".",
         "rootDir": ".",
         "paths": {
+            "#api/*": [
+                "src/lib/Api/*"
+            ],
             "#external/*": [
                 "src/lib/util/External/*"
             ],
