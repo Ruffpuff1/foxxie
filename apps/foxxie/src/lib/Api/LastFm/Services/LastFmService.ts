@@ -413,8 +413,8 @@ export class LastFmService {
     /**
      * Returns a last.fm request given the parameters.
      */
-    private createLastFmRequest<M extends LastFmApiMethods>(method: M, query: LastFmQuery<M>) {
-        return fetch(this.baseApiUrl)
+    private async createLastFmRequest<M extends LastFmApiMethods>(method: M, query: LastFmQuery<M>) {
+        const result = await fetch(this.baseApiUrl)
             .query({
                 api_key: this.apiKey,
                 method,
@@ -422,6 +422,10 @@ export class LastFmService {
                 ...query
             })
             .json<LastFmApiReturnType<M>>();
+
+        console.log(result);
+
+        return result;
     }
 }
 

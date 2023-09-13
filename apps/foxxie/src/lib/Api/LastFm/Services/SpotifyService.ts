@@ -199,12 +199,15 @@ export class SpotifyService {
     }
 
     private updateArtistWithArtistData(artist: LastFmArtistEntity, artistData: GetArtistInfoResult) {
-        artist.artistName = artistData.artist.name
+        const playcount = parseInt(artistData.artist.stats.playcount, 10);
+        const listeners = parseInt(artistData.artist.stats.listeners, 10);
+
+        artist.artistName = artistData.artist.name;
         artist.artistUrl = artistData.artist.url;
         artist.description = artistData.artist.bio.summary;
         artist.lastUpdated = Date.now();
-        artist.playcount = parseInt(artistData.artist.stats.playcount, 10);
-        artist.listeners = parseInt(artistData.artist.stats.listeners, 10);
+        if (playcount !== 0) artist.playcount = playcount;
+        if (listeners !== 0) artist.listeners = listeners;
         artist.tags = artistData.artist.tags?.tag.map(t => ({ name: t.name, url: t.url })) || [];
     }
 }
