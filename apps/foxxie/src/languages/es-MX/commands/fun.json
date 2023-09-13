@@ -50,6 +50,23 @@
                     {
                         "name": "",
                         "description": ""
+                    }
+                ],
+                "examples": [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                "command": "",
+                "description": [
+                    ""
+                ],
+                "options": [
+                    {
+                        "name": "",
+                        "description": ""
                     },
                     {
                         "name": "",
@@ -63,5 +80,20 @@
                 ]
             }
         ]
-    }
+    },
+    "lastFmPlayListeners": "",
+    "lastFmPlayListeners_other": "",
+    "lastFmPlayNowPlaying": "",
+    "lastFmPlayPlays": "",
+    "lastFmPlayPlays_other": "",
+    "lastFmPlayPlaysBy": "",
+    "lastFmPlayPlaysBy_other": "",
+    "lastFmPlayPlaysByYou": "",
+    "lastFmPlayPlaysByYou_other": "",
+    "lastFmPlayWasPlaying": "",
+    "lastFmTitles": {
+        "statistics": "",
+        "summary": ""
+    },
+    "lastFmTrackNotFoundForUser": ""
 }
