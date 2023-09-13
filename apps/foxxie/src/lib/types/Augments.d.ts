@@ -23,6 +23,7 @@ declare module 'discord.js' {
 
     interface ClientEvents {
         [FoxxieEvents.BotMessage]: [message: GuildMessage];
+        [FoxxieEvents.ChatInputCommandLogging]: [interaction: ChatInputCommandInteraction, command: FoxxieCommand]
         [FoxxieEvents.GuildMemberJoin]: [member: GuildMember, settings: GuildEntity];
         [FoxxieEvents.GuildMessageLog]: [
             guild: Guild,

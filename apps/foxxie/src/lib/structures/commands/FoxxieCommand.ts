@@ -4,7 +4,7 @@ import { DetailedDescription, PermissionLevels } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { CustomFunctionGet } from '@foxxie/i18n';
 import { cast, seconds } from '@ruffpuff/utilities';
-import { Command, CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserError } from '@sapphire/framework';
+import { ChatInputCommandContext, Command, CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserError } from '@sapphire/framework';
 import { ArgumentStream, Parser } from '@sapphire/lexure';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import type { Guild, Message } from 'discord.js';
@@ -137,6 +137,7 @@ export namespace FoxxieCommand {
     export type Args = FoxxieArgs;
     export type ChatInputCommandInteraction = Command.ChatInputCommandInteraction & { guildId: string; guild: Guild };
     export type Context = MessageCommandContext;
+    export type ChatInputContext = ChatInputCommandContext;
 }
 
 export type FoxxieCommandOptions = Subcommand.Options & {

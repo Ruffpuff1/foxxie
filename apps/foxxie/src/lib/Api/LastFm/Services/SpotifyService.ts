@@ -199,7 +199,7 @@ export class SpotifyService {
     }
 
     private updateArtistWithArtistData(artist: LastFmArtistEntity, artistData: GetArtistInfoResult) {
-        artist.artistName = artistData.artist.name;
+        artist.artistName = artistData.artist.name
         artist.artistUrl = artistData.artist.url;
         artist.description = artistData.artist.bio.summary;
         artist.lastUpdated = Date.now();

@@ -10,14 +10,7 @@ import { EnvParse } from '@foxxie/env';
 import { fetch } from '@foxxie/fetch';
 import { cast, hours, minutes, toTitleCase } from '@ruffpuff/utilities';
 import { Args, Command, UserError, container } from '@sapphire/framework';
-import {
-    AutocompleteInteraction,
-    Collection,
-    InteractionResponse,
-    Message,
-    StringSelectMenuOptionBuilder,
-    italic
-} from 'discord.js';
+import { AutocompleteInteraction, Collection, Message, StringSelectMenuOptionBuilder, italic } from 'discord.js';
 import { LastFmServicePlayBuilder } from '../Builders';
 import { LastFmServiceArtistBuilder } from '../Builders/LastFmServiceArtistBuilder';
 
@@ -59,6 +52,11 @@ export class LastFmService {
      */
     #autocomplateArtistOptionCache = new Collection<string, string[]>();
 
+    /**
+     * The cache for the autocomplete options of users.
+     */
+    #autocomplateUserOptionCache = new Collection<string, string[]>();
+
     private static artistArgument = Args.make<string>((parameter, { argument }) => {
         const lower = parameter?.toLowerCase();
         if (!lower) return Args.error({ argument, parameter, identifier: 'noArtistProvided' });
@@ -78,8 +76,7 @@ export class LastFmService {
      * Returns the listeners of an artist in a guild.
      */
     public async getArtistListenersInGuild(artist: LastFmArtistEntity, guildId: string): Promise<Listener[]> {
-        const members = await container.db.members.guild(guildId);
-        const membersWithUsername = members.filter(member => typeof member.lastFmUsername === 'string');
+        const membersWithUsername = await this.getGuildMembersWithLastFmUsername(guildId);
 
         const listeners: Listener[] = [];
 
@@ -95,6 +92,11 @@ export class LastFmService {
         }
 
         return listeners;
+    }
+
+    public async getGuildMembersWithLastFmUsername(guildId: string) {
+        const members = await container.db.members.guild(guildId);
+        return members.filter(member => typeof member.lastFmUsername === 'string');
     }
 
     /**
@@ -196,6 +198,34 @@ export class LastFmService {
     }
 
     /**
+     * Returns an interaction response for finding last.fm users in guild.
+     * @param interaction
+     * @returns
+     */
+    public async getAutocompleteUserOptions(interaction: AutocompleteInteraction): Promise<void> {
+        const option = interaction.options.getFocused(true);
+        const cachedData = this.#autocomplateUserOptionCache.get(interaction.guildId!);
+
+        if (cachedData) {
+            const fuzzy = new FuzzySearch(new Collection(cachedData.map(d => [d, { key: d }])), ['key']);
+            const results = option.value ? fuzzy.runFuzzy(option.value).map(v => v.key) : cachedData;
+
+            return interaction.respond(results.slice(0, 5).map(r => ({ name: r, value: r })));
+        }
+
+        const members = await this.getGuildMembersWithLastFmUsername(interaction.guildId!);
+        const mappedMembers = members.map(entity => entity.lastFmUsername);
+
+        this.#autocomplateUserOptionCache.set(interaction.guildId!, mappedMembers);
+        setTimeout(() => this.#autocomplateArtistOptionCache.delete(interaction.guildId!), minutes(2));
+
+        const fuzzy = new FuzzySearch(new Collection(mappedMembers.map(d => [d, { key: d }])), ['key']);
+        const results = option.value ? fuzzy.runFuzzy(option.value).map(v => v.key) : mappedMembers;
+
+        return interaction.respond(results.slice(0, 5).map(r => ({ name: r, value: r })));
+    }
+
+    /**
      * Get the select menu options for an artist query.
      * @param artist
      * @returns
@@ -237,7 +267,7 @@ export class LastFmService {
         const tracks = await this.getRecentTracksFromUser(username);
 
         // most recent
-        return tracks.recenttracks.track[0];
+        return tracks.recenttracks?.track[0];
     }
 
     /**
@@ -246,13 +276,14 @@ export class LastFmService {
     public async getArtistArgOrLastPlayedArtistFromGuildMember<M extends GuildMessage | Command.ChatInputCommandInteraction>(
         message: M,
         args?: FoxxieCommand.Args
-    ): Promise<M extends GuildMessage ? [string, GuildMessage] : [string, InteractionResponse<boolean>]>;
+    ): Promise<M extends GuildMessage ? [string, GuildMessage] : [string, boolean]>;
 
     public async getArtistArgOrLastPlayedArtistFromGuildMember<M extends GuildMessage | Command.ChatInputCommandInteraction>(
         message: M,
         args?: FoxxieCommand.Args
-    ): Promise<[string, GuildMessage] | [string, InteractionResponse<boolean>]> {
+    ): Promise<[string, GuildMessage] | [string, boolean]> {
         if (message instanceof Message && args) {
+            console.log('message');
             let artist = await args.rest(LastFmService.artistArgument).catch(() => null);
             const loading = await sendLoadingMessage(message);
 
@@ -273,9 +304,7 @@ export class LastFmService {
         const artist = interaction.options.getString('artist', true);
         const ephemeral = interaction.options.getBoolean('hidden') || false;
 
-        const defer = await interaction.deferReply({ ephemeral });
-
-        return [artist, defer];
+        return [artist, ephemeral];
     }
 
     /**

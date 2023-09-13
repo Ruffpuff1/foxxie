@@ -22,10 +22,6 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
         this.setUpKey = options.setUpKey;
     }
 
-    private get role() {
-        return cast<Argument<Role>>(this.container.stores.get('arguments').get('role'));
-    }
-
     public async messageRun(message: GuildMessage, args: ModerationCommand.Args, context: ModerationCommand.Context) {
         await this.inhibit(message, args, context);
         return super.messageRun(message, args, context);
@@ -64,6 +60,10 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
 
         const argument = this.role;
         return argument.run(result, { args, argument, command: this, commandContext: context, message });
+    }
+
+    private get role() {
+        return cast<Argument<Role>>(this.container.stores.get('arguments').get('role'));
     }
 }
 

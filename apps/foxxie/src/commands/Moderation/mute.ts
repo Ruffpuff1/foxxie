@@ -20,16 +20,15 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
     setUpKey: ModerationSetupRestriction.All
 })
 export class UserCommand extends ModerationRoleCommand {
-    public async prehandle(...[message, context]: ArgumentTypes<ModerationCommand['prehandle']>) {
+    public async messagePrehandle(...[message, context]: ArgumentTypes<ModerationCommand['messagePrehandle']>) {
         await Promise.all(
             context.targets.map(
                 user => this.container.redis?.pinsertex(`guild:${message.guild.id}:mute:${user.id}`, seconds(20), '')
             )
         );
-        return;
     }
 
-    public async handle(...[message, context]: ArgumentTypes<ModerationCommand['handle']>) {
+    public async messageHandle(...[message, context]: ArgumentTypes<ModerationCommand['messageHandle']>) {
         return getModeration(message.guild).actions.mute(
             {
                 userId: context.target.id,
@@ -40,7 +39,32 @@ export class UserCommand extends ModerationRoleCommand {
                 duration: context.duration,
                 refrence: context.args.getOption('reference') ? Number(context.args.getOption('reference')) : null
             },
-            await this.getDmData(message, context)
+            await this.messageGetDmData(message, context)
+        );
+    }
+
+    public async chatInputPrehandle(...[interaction, context]: ArgumentTypes<ModerationCommand['chatInputPrehandle']>) {
+        await Promise.all(
+            context.targets.map(
+                user => this.container.redis?.pinsertex(`guild:${interaction.guild.id}:mute:${user.id}`, seconds(20), '')
+            )
+        );
+    }
+
+    public async chatInputHandle(...[interaction, context]: ArgumentTypes<ModerationCommand['chatInputHandle']>) {
+        const reference = interaction.options.getNumber('reference');
+
+        return getModeration(interaction.guild).actions.mute(
+            {
+                userId: context.target.id,
+                moderatorId: interaction.user.id,
+                reason: context.reason,
+                channelId: interaction.channelId,
+                guildId: interaction.guild.id,
+                duration: context.duration,
+                refrence: reference ? Number(reference) : null
+            },
+            await this.chatInputGetDmData(interaction)
         );
     }
 }
