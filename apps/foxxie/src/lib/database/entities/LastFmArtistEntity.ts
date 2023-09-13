@@ -1,5 +1,5 @@
-import { hours, isDev } from '@ruffpuff/utilities';
-import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
+import { hours } from '@ruffpuff/utilities';
+import { AfterLoad, BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { LastFmAlbum } from './LastFmAlbum';
 import { LastFmArtistUserScrobble } from './LastFmArtistUserScrobble';
 import { LastFmTrack } from './LastFmTrack';
@@ -70,10 +70,16 @@ export class LastFmArtistEntity extends BaseEntity {
 
     public constructor() {
         super();
+        this.entityLoad();
+    }
+
+    @AfterLoad()
+    protected entityLoad() {
+        this.userScrobbles = this.userScrobbles.map(scrobbleData => new LastFmArtistUserScrobble(scrobbleData));
     }
 
     public get shouldBeUpdated(): boolean {
-        if (isDev()) return true;
+        // if (isDev()) return true;
         return this.lastUpdated + hours(1) < Date.now();
     }
 }

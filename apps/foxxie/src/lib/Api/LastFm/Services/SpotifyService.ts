@@ -40,15 +40,17 @@ export class SpotifyService {
             );
         }
 
-        if (previousArtist.shouldBeUpdated)
-            return this.updateArtist(
-                previousArtist,
-                artistData,
-                cast<GetArtistTopTracksResult>(foundTracks),
-                cast<GetArtistTopAlbumsResult>(foundAlbums)
-            );
-        this.addArtistToCache(previousArtist);
+        if (previousArtist.shouldBeUpdated) return this.updateArtist(
+            previousArtist,
+            artistData,
+            cast<GetArtistTopTracksResult>(foundTracks),
+            cast<GetArtistTopAlbumsResult>(foundAlbums)
+        );
 
+        this.updateArtistWithArtistData(previousArtist, artistData);
+
+        await previousArtist.save();
+        this.addArtistToCache(previousArtist);
         return previousArtist;
     }
 

@@ -65,7 +65,7 @@ export class UserCommand extends FoxxieCommand {
         if (output.length > 2000 || args.getOption('output') === OutputType.Paste) {
             const key = await getHaste(result);
             if (args.getFlags(...msgFlags)) {
-                output = `${Urls.Haste}/${key}`;
+                output = `${Urls.Haste}${key}`;
                 await send(message, output);
                 return;
             }

@@ -8,7 +8,7 @@ import { EnvKeys } from '#lib/types/Env';
 import { sendLoadingMessage } from '#utils/Discord';
 import { EnvParse } from '@foxxie/env';
 import { fetch } from '@foxxie/fetch';
-import { cast, hours, minutes, toTitleCase } from '@ruffpuff/utilities';
+import { cast, minutes, toTitleCase } from '@ruffpuff/utilities';
 import { Args, Command, UserError, container } from '@sapphire/framework';
 import { AutocompleteInteraction, Collection, Message, StringSelectMenuOptionBuilder, italic } from 'discord.js';
 import { LastFmServicePlayBuilder } from '../Builders';
@@ -114,23 +114,20 @@ export class LastFmService {
         const foundScrobblesForUser = userScrobbles.find(scrob => scrob.userId === userId);
 
         if (foundScrobblesForUser) {
-            if (foundScrobblesForUser.lastUpdated + hours(1) > Date.now()) return foundScrobblesForUser.count;
-
-            const data = await this.getLibraryArtistsFromUser(foundScrobblesForUser.username).then(t =>
-                t.artists.artist.find(a => a.name === artist.artistName)
-            );
+            if (foundScrobblesForUser.shouldBeUpdated) return foundScrobblesForUser.count;
+            const data = await foundScrobblesForUser.getUserArtistData(artist.artistName);
 
             if (data) {
                 const foundIndex = userScrobbles.indexOf(foundScrobblesForUser);
                 const count = parseInt(data.playcount, 10);
 
                 if (foundIndex !== -1) {
-                    userScrobbles[foundIndex] = {
-                        username: foundScrobblesForUser.username,
-                        userId,
+                    userScrobbles[foundIndex] = new LastFmArtistUserScrobble({
                         count,
+                        userId,
+                        username: lastFmUsername,
                         lastUpdated: Date.now()
-                    };
+                    });
                 }
 
                 await artist.save();
