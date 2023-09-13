@@ -4,6 +4,9 @@ export const enum FoxxieEvents {
     BotMessage = 'botMessage',
     ChatInputCommandDenied = 'chatInputCommandDenied',
     ChatInputCommandError = 'chatInputCommandError',
+    ChatInputCommandFinish = 'chatInputCommandFinish',
+    ChatInputCommandLogging = 'chatInputCommandLogging',
+    CommandDoesNotHaveMessageCommandHandler = 'commandDoesNotHaveMessageCommandHandler',
     Error = 'error',
     GuildBanAdd = 'guildBanAdd',
     GuildBanRemove = 'guildBanRemove',
@@ -37,6 +40,8 @@ export const enum FoxxieEvents {
     StatsMessage = 'statsMessage',
     SystemMessage = 'systemMessage',
     TaskError = 'taskError',
+    UnknownMessageCommand = 'unknownMessageCommand',
+    UnknownMessageCommandName = 'unknownMessageCommandName',
     UserMessage = 'userMessage',
     VoiceStateUpdate = 'voiceStateUpdate'
 }

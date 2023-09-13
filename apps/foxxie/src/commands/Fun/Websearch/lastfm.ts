@@ -1,4 +1,4 @@
-import { GetArtistInfoResult, GetArtistInfoResultWithUser, GetUserInfoResult } from '#api/LastFm';
+import { GetArtistInfoResult, GetUserInfoResult } from '#api/LastFm';
 import { acquireSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
@@ -78,7 +78,7 @@ export class UserCommand extends FoxxieCommand {
                                     .setDescription(optionUser.description)
                                     .setNameLocalization(Locale.EnglishUS, optionUser.name)
                                     .setDescriptionLocalization(Locale.EnglishUS, optionUser.description)
-                                    .setAutocomplete(false)
+                                    .setAutocomplete(true)
                                     .setRequired(false)
                             )
                             .addBooleanOption(option =>
@@ -100,14 +100,17 @@ export class UserCommand extends FoxxieCommand {
         switch (name) {
             case 'artist':
                 return this.container.apis.lastFm.getAutocompleteArtistOptions(interaction);
+            case 'user':
+                return this.container.apis.lastFm.getAutocompleteUserOptions(interaction);
         }
     }
 
     public async chatInputArtist(interaction: Command.ChatInputCommandInteraction) {
-        const [artist, defer] = await this.container.apis.lastFm.getArtistArgOrLastPlayedArtistFromGuildMember(interaction);
+        const [artist, ephemeral] = await this.container.apis.lastFm.getArtistArgOrLastPlayedArtistFromGuildMember(interaction);
+        const defer = await interaction.deferReply({ ephemeral });
 
         const t = await acquireSettings(interaction.guildId!, s => s.getLanguage());
-        const artistData = cast<GetArtistInfoResultWithUser>(await this.container.apis.lastFm.getInfoFromArtist(artist));
+        const artistData = await this.container.apis.lastFm.getInfoFromArtist(artist);
 
         if (Reflect.has(artistData, 'error')) {
             const options = await this.container.apis.lastFm.getSelectMenuArtistOptions(artist);

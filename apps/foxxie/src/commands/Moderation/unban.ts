@@ -18,7 +18,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
     successKey: LanguageKeys.Commands.Moderation.UnbanSuccess
 })
 export class UserCommand extends ModerationCommand {
-    public async prehandle(...[message, context]: ArgumentTypes<ModerationCommand['prehandle']>) {
+    public async messagePrehandle(...[message, context]: ArgumentTypes<ModerationCommand['messagePrehandle']>) {
         const result = await Result.fromAsync(message.guild.bans.fetch());
         const bans = result.isOk() ? result.unwrap().map(ban => ban.user.id) : null;
 
@@ -39,7 +39,7 @@ export class UserCommand extends ModerationCommand {
         return { bans };
     }
 
-    public async handle(...[message, context]: ArgumentTypes<ModerationCommand['handle']>) {
+    public async messageHandle(...[message, context]: ArgumentTypes<ModerationCommand['messageHandle']>) {
         return getModeration(message.guild).actions.unban(
             {
                 userId: context.target.id,
@@ -50,15 +50,61 @@ export class UserCommand extends ModerationCommand {
                 guildId: message.guild.id,
                 refrence: context.args.getOption('reference') ? Number(context.args.getOption('reference')) : null
             },
-            await this.getDmData(message, context)
+            await this.messageGetDmData(message, context)
         );
     }
 
-    public async checkModeratable(
-        ...[message, context]: ArgumentTypes<ModerationCommand<{ bans: string[] }>['checkModeratable']>
+    public async messageCheckModeratable(
+        ...[message, context]: ArgumentTypes<ModerationCommand<{ bans: string[] }>['messageCheckModeratable']>
     ) {
         if (!context.preHandled.bans.includes(context.target.id))
             throw context.args.t(LanguageKeys.Commands.Moderation.GuildBansNotFound);
-        return super.checkModeratable(message, context);
+        return super.messageCheckModeratable(message, context);
+    }
+
+    public async chatInputPrehandle(...[interaction, context]: ArgumentTypes<ModerationCommand['chatInputPrehandle']>) {
+        const result = await Result.fromAsync(interaction.guild.bans.fetch());
+        const bans = result.isOk() ? result.unwrap().map(ban => ban.user.id) : null;
+
+        if (bans === null) {
+            throw await resolveKey(interaction, LanguageKeys.System.FetchBansFail);
+        }
+
+        if (bans.length === 0) {
+            throw await resolveKey(interaction, LanguageKeys.Commands.Moderation.GuildBansEmpty);
+        }
+
+        await Promise.all(
+            context.targets.map(
+                user => this.container.redis?.pinsertex(`guild:${interaction.guild.id}:unban:${user.id}`, seconds(20), '')
+            )
+        );
+
+        return { bans };
+    }
+
+    public async chatInputHandle(...[interaction, context]: ArgumentTypes<ModerationCommand['chatInputHandle']>) {
+        const reference = interaction.options.getNumber('reference');
+
+        return getModeration(interaction.guild).actions.unban(
+            {
+                userId: context.target.id,
+                moderatorId: interaction.user.id,
+                duration: context.duration,
+                channelId: interaction.channelId,
+                reason: context.reason,
+                guildId: interaction.guild.id,
+                refrence: reference ? Number(reference) : null
+            },
+            await this.chatInputGetDmData(interaction)
+        );
+    }
+
+    public async chatInputCheckModeratable(
+        ...[interaction, context]: ArgumentTypes<ModerationCommand<{ bans: string[] }>['chatInputCheckModeratable']>
+    ) {
+        if (!context.preHandled.bans.includes(context.target.id))
+            throw context.t(LanguageKeys.Commands.Moderation.GuildBansNotFound);
+        return super.chatInputCheckModeratable(interaction, context);
     }
 }

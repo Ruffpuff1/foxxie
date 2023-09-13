@@ -1,7 +1,7 @@
 {
     "administrator": "{{ERROR}} You must be a server **administrator** to run the {{name, code}} command.",
     "clientPermissions": "I seem to be missing the {{missing, permissionarray}} permissions, which are required to run this command.",
-    "commandDisabled": "{{ERROR}} This command has been globally disabled by my owner, find out why at <{{TCS}}>.",
+    "commandDisabled": "{{ERROR}} This command has been globally disabled by my owner, find out why at [derricknuno.com](<{{SUPPORT}}>).",
     "commandDisabledGuild": "{{ERROR}} The {{name, code}} command has been disabled by an administrator of this server.",
     "cooldown": "{{ERROR}} Looks like you just used this command, try again in **{{remaining, remaining}}**.",
     "leveling": "{{ERROR}} This command requires the leveling system to be enabled in this server.",

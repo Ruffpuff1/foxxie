@@ -20,16 +20,15 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
     setUpKey: ModerationSetupRestriction.All
 })
 export class UserCommand extends ModerationRoleCommand {
-    public async prehandle(...[message, context]: ArgumentTypes<ModerationCommand['prehandle']>) {
+    public async messagePrehandle(...[message, context]: ArgumentTypes<ModerationCommand['messagePrehandle']>) {
         await Promise.all(
             context.targets.map(
                 user => this.container.redis?.pinsertex(`guild:${message.guild.id}:unmute:${user.id}`, seconds(20), '')
             )
         );
-        return;
     }
 
-    public async handle(...[message, context]: ArgumentTypes<ModerationCommand['handle']>) {
+    public async messageHandle(...[message, context]: ArgumentTypes<ModerationCommand['messageHandle']>) {
         return getModeration(message.guild).actions.unmute(
             {
                 userId: context.target.id,
@@ -39,7 +38,23 @@ export class UserCommand extends ModerationRoleCommand {
                 guildId: message.guild.id,
                 refrence: context.args.getOption('reference') ? Number(context.args.getOption('reference')) : null
             },
-            await this.getDmData(message, context)
+            await this.messageGetDmData(message, context)
+        );
+    }
+
+    public async chatInputHandle(...[interaction, context]: ArgumentTypes<ModerationCommand['chatInputHandle']>) {
+        const reference = interaction.options.getNumber('reference');
+
+        return getModeration(interaction.guild).actions.unmute(
+            {
+                userId: context.target.id,
+                moderatorId: interaction.user.id,
+                reason: context.reason,
+                channelId: interaction.channelId,
+                guildId: interaction.guild.id,
+                refrence: reference ? Number(reference) : null
+            },
+            await this.chatInputGetDmData(interaction)
         );
     }
 }

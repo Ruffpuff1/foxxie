@@ -96,7 +96,8 @@ function getDefaultVars(): Record<string, string | string[]> {
         CLIENT_ID: process.env.CLIENT_ID!,
         APPROVED: emojis.perms.granted,
         UNSPECIFIED: emojis.perms.notSpecified,
-        TCS: 'https://discord.gg/ZAZ4yRezC7'
+        TCS: 'https://tcs.reese.gay',
+        SUPPORT: 'https://derricknuno.com'
     };
 }
 

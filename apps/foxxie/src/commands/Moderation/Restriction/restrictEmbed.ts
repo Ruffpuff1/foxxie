@@ -19,7 +19,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
     setUpKey: ModerationSetupRestriction.Embed
 })
 export class UserCommand extends ModerationRoleCommand {
-    public async handle(...[message, context]: ArgumentTypes<ModerationCommand['handle']>) {
+    public async messageHandle(...[message, context]: ArgumentTypes<ModerationCommand['messageHandle']>) {
         return getModeration(message.guild).actions.restrictEmbed(
             {
                 userId: context.target.id,
@@ -30,7 +30,24 @@ export class UserCommand extends ModerationRoleCommand {
                 duration: context.duration,
                 refrence: context.args.getOption('reference') ? Number(context.args.getOption('reference')) : null
             },
-            await this.getDmData(message, context)
+            await this.messageGetDmData(message, context)
+        );
+    }
+
+    public async chatInputHandle(...[interaction, context]: ArgumentTypes<ModerationCommand['chatInputHandle']>) {
+        const reference = interaction.options.getNumber('reference');
+
+        return getModeration(interaction.guild).actions.restrictEmbed(
+            {
+                userId: context.target.id,
+                moderatorId: interaction.user.id,
+                reason: context.reason,
+                channelId: interaction.channelId,
+                guildId: interaction.guild.id,
+                duration: context.duration,
+                refrence: reference ? Number(reference) : null
+            },
+            await this.chatInputGetDmData(interaction)
         );
     }
 }

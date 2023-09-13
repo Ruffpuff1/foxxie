@@ -5,6 +5,7 @@ import { container } from '@sapphire/framework';
 import { APIUser } from 'discord-api-types/v10';
 import {
     APIEmbedField,
+    ChatInputCommandInteraction,
     ColorResolvable,
     GuildResolvable,
     Message,
@@ -29,8 +30,12 @@ export function floatPromise(promise: Promise<unknown>) {
     return promise;
 }
 
-export async function resolveKey(message: GuildMessage, key: string, ...variables: any[]): Promise<string> {
-    const guild = await acquireSettings(message.guild.id);
+export async function resolveKey(
+    message: GuildMessage | ChatInputCommandInteraction,
+    key: string,
+    ...variables: any[]
+): Promise<string> {
+    const guild = await acquireSettings(message instanceof Message ? message.guild.id : message.guildId!);
     const result = guild.getLanguage()(key, { ...variables });
 
     return result;
@@ -166,11 +171,13 @@ export function ifNotNull(condition: boolean, value: string) {
 }
 
 export function getSubcommand(name: string, description: DetailedDescription) {
-    return description.subcommands?.find(command => command.command === name)
+    return description.subcommands?.find(command => command.command === name);
 }
 
 export function getOption(commandName: string, name: string, description: DetailedDescription) {
-    return description.subcommands?.find(command => command.command === commandName)?.options?.find(opt => opt.name === name) || null;
+    return (
+        description.subcommands?.find(command => command.command === commandName)?.options?.find(opt => opt.name === name) || null
+    );
 }
 
 export function parseDescription(description: string | string[] | undefined) {
