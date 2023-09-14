@@ -1,4 +1,4 @@
-import type { RedisData, RedisKeys, RedisValue } from '#lib/types';
+import type { RedisData, RedisKeys, RedisValue } from '#lib/Types';
 import { cast } from '@ruffpuff/utilities';
 import { Result } from '@sapphire/result';
 import Redis, { RedisOptions } from 'ioredis';

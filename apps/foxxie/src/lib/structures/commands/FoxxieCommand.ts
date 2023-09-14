@@ -1,10 +1,17 @@
 import type FoxxieClient from '#lib/FoxxieClient';
+import { DetailedDescription, PermissionLevels } from '#lib/Types';
 import type { MongoDB } from '#lib/database';
-import { DetailedDescription, PermissionLevels } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { CustomFunctionGet } from '@foxxie/i18n';
 import { cast, seconds } from '@ruffpuff/utilities';
-import { ChatInputCommandContext, Command, CommandOptionsRunTypeEnum, MessageCommandContext, PieceContext, UserError } from '@sapphire/framework';
+import {
+    ChatInputCommandContext,
+    Command,
+    CommandOptionsRunTypeEnum,
+    MessageCommandContext,
+    PieceContext,
+    UserError
+} from '@sapphire/framework';
 import { ArgumentStream, Parser } from '@sapphire/lexure';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import type { Guild, Message } from 'discord.js';

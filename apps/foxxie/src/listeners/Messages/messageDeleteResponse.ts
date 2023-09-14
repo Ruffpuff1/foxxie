@@ -1,4 +1,4 @@
-import { EventArgs, FoxxieEvents } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { floatPromise } from '#utils/util';
 import { cast } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';

@@ -1,5 +1,5 @@
 import { FuzzySearch } from '#external/FuzzySearch';
-import { LanguageKeys } from '#lib/i18n';
+import { LanguageKeys } from '#lib/I18n';
 import { BrandingColors, Urls } from '#utils/constants';
 import { conditionalField, removeEmptyFields, resolveEmbedField } from '#utils/util';
 import {

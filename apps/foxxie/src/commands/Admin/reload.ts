@@ -1,6 +1,6 @@
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { GuildMessage, PermissionLevels } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import { GuildMessage, PermissionLevels } from '#lib/Types';
 import { sendLoadingMessage } from '#utils/Discord';
 import { TFunction, i18next } from '@foxxie/i18n';
 import { ApplyOptions } from '@sapphire/decorators';

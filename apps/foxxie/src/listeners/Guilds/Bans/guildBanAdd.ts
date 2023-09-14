@@ -1,5 +1,4 @@
-import { EventArgs, FoxxieEvents } from '#lib/types';
-import { fetchAuditEntry, getModeration } from '#utils/Discord';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 import { cast, isDev, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -13,20 +12,16 @@ import { setTimeout as sleep } from 'node:timers/promises';
 })
 export class UserListener extends Listener<FoxxieEvents.GuildBanAdd> {
     public async run(...[ban]: EventArgs<FoxxieEvents.GuildBanAdd>): Promise<void> {
-        const moderation = getModeration(ban.guild);
+        const guild = this.container.utilities.guild(ban.guild);
         const deleted = this.container.redis ? await this.container.redis!.del(`guild:${ban.guild.id}:ban:${ban.user.id}`) : null;
 
         if (deleted) return;
         await sleep(seconds(5));
 
-        const log = await fetchAuditEntry(
-            ban.guild,
-            AuditLogEvent.MemberBanAdd,
-            log => cast<User>(log.target)?.id === ban.user.id
-        );
+        const log = await guild.fetchAuditEntry(AuditLogEvent.MemberBanAdd, log => cast<User>(log.target)?.id === ban.user.id);
         if (!log) return;
 
-        const created = await moderation
+        const created = await guild.moderation
             .create({
                 userId: ban.user.id,
                 moderatorId: log.executor?.id || process.env.CLIENT_ID,
@@ -36,6 +31,6 @@ export class UserListener extends Listener<FoxxieEvents.GuildBanAdd> {
             })
             .create();
 
-        if (created) await moderation.actions.cancelTask(ban.user.id, TypeVariationAppealNames.Ban);
+        if (created) await guild.moderation.actions.cancelTask(ban.user.id, TypeVariationAppealNames.Ban);
     }
 }

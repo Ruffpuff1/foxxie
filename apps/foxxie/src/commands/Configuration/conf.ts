@@ -1,7 +1,7 @@
 import { configurableGroups, isSchemaGroup, isSchemaKey, remove, reset, SchemaKey, set } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { GuildMessage, PermissionLevels } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import { GuildMessage, PermissionLevels } from '#lib/Types';
 import { inlineCode } from '@discordjs/builders';
 import { cast, filter, map, toTitleCase } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';

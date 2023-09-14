@@ -1,5 +1,5 @@
-import { LanguageKeys } from '#lib/i18n';
-import type { FoxxieCommand } from '#lib/structures';
+import { LanguageKeys } from '#lib/I18n';
+import type { FoxxieCommand } from '#lib/Structures';
 import { cast } from '@ruffpuff/utilities';
 import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 

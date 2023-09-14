@@ -1,6 +1,6 @@
-import { ShardListener } from '#lib/structures';
+import { ShardListener } from '#lib/Structures';
+import type { EventArgs, FoxxieEvents } from '#lib/Types';
 import { red } from 'colorette';
-import type { EventArgs, FoxxieEvents } from '#lib/types';
 
 export class UserListener extends ShardListener<FoxxieEvents.ShardDisconnect> {
     protected readonly title = red('Disconnected');

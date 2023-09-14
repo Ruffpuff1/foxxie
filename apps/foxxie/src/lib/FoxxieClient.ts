@@ -1,14 +1,17 @@
+/* eslint-disable no-import-assign */
+import { ApiService } from '#api/ApiService';
 import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import { clientOptions, webhookError } from '#root/config';
-import { ApiService } from '#lib/Api/ApiService';
 import { EnvParse } from '@foxxie/env';
 import { isDev } from '@ruffpuff/utilities';
 import { Enumerable } from '@sapphire/decorators';
 import { SapphireClient, container } from '@sapphire/framework';
 import { magentaBright } from 'colorette';
 import { WebhookClient } from 'discord.js';
-import { InviteManager, RedisManager, ScheduleManager, WorkerManager } from './structures';
+import { UtilityService } from './Container/Utility/Services/UtilityService';
+import { WorkerService } from './Container/Workers';
+import { InviteManager, RedisManager, ScheduleManager } from './Structures';
 
 export default class FoxxieClient extends SapphireClient {
     @Enumerable(false)
@@ -26,11 +29,13 @@ export default class FoxxieClient extends SapphireClient {
     public constructor() {
         super(clientOptions);
 
-        container.workers = new WorkerManager(3);
+        container.workers = new WorkerService(3);
 
         container.schedule = new ScheduleManager();
 
         container.apis = new ApiService();
+
+        container.utilities = new UtilityService();
 
         container.redis = EnvParse.boolean('REDIS_ENABLED')
             ? new RedisManager({

@@ -1,5 +1,5 @@
 import { GuildEntity, GuildSettings, writeSettings } from '#lib/database';
-import { EventArgs, FoxxieEvents } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { isDev, minutes } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';

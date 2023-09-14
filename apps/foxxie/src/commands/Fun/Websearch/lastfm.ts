@@ -1,8 +1,8 @@
 import { GetArtistInfoResult, GetUserInfoResult } from '#api/LastFm';
 import { acquireSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { GuildMessage } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import { GuildMessage } from '#lib/Types';
 import { sendLoadingMessage } from '#utils/Discord';
 import { floatPromise, getOption, getSubcommand, parseDescription, resolveClientColor } from '#utils/util';
 import { getT } from '@foxxie/i18n';

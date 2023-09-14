@@ -1,7 +1,7 @@
+import { LanguageKeys } from '#lib/I18n';
+import { GuildMessage, PermissionLevels } from '#lib/Types';
 import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { GuildMessage, PermissionLevels } from '#lib/types';
-import { isGuildOwner, maybeMe, sendTemporaryMessage } from '#utils/Discord';
+import { isGuildOwner, sendTemporaryMessage } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { bold } from '@discordjs/builders';
 import { CustomFunctionGet, TFunction } from '@foxxie/i18n';
@@ -179,10 +179,10 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
 
         if (member) {
             const targetRolePos = member.roles.highest.position;
-            const me = maybeMe(message.guild);
-            const myRolePos = me?.roles.highest.position;
+            const { maybeMe } = this.container.utilities.guild(message.guild);
+            const myRolePos = maybeMe?.roles.highest.position;
 
-            if (!myRolePos || (targetRolePos >= myRolePos && !me.permissions.has(PermissionFlagsBits.Administrator))) {
+            if (!myRolePos || (targetRolePos >= myRolePos && !maybeMe.permissions.has(PermissionFlagsBits.Administrator))) {
                 throw context.args.t(LanguageKeys.Listeners.Errors.ModerationRoleBot, {
                     target: `**${context.target.username}**`
                 });
@@ -222,10 +222,10 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
 
         if (member) {
             const targetRolePos = member.roles.highest.position;
-            const me = maybeMe(interaction.guild);
-            const myRolePos = me?.roles.highest.position;
+            const { maybeMe } = this.container.utilities.guild(member);
+            const myRolePos = maybeMe?.roles.highest.position;
 
-            if (!myRolePos || (targetRolePos >= myRolePos && !me.permissions.has(PermissionFlagsBits.Administrator))) {
+            if (!myRolePos || (targetRolePos >= myRolePos && !maybeMe.permissions.has(PermissionFlagsBits.Administrator))) {
                 throw context.t(LanguageKeys.Listeners.Errors.ModerationRoleBot, {
                     target: `**${context.target.username}**`
                 });

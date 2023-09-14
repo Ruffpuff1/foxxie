@@ -1,4 +1,4 @@
-import type { ModerationData } from '#lib/structures';
+import type { ModerationData } from '#lib/Structures';
 import type { Schedules } from '#utils/constants';
 
 export type ScheduleData<T> = T extends Schedules.Disboard

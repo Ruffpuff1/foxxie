@@ -4,7 +4,7 @@ declare module '@foxxie/env' {
     interface Env {
         CLIENT_VERSION: string;
         CLIENT_NAME: string;
-        CLIENT_ID: string;
+        [EnvKeys.ClientId]: string;
         CLIENT_PREFIX: string;
         CLIENT_REGEX_PREFIX: string;
         CLIENT_PRESENCE_NAME: string;
@@ -37,6 +37,7 @@ declare module '@foxxie/env' {
         DISCORD_TOKEN: string;
         PERSPECTIVE_TOKEN: string;
         SENTRY_TOKEN: string;
+        [EnvKeys.HasteToken]: string;
         [EnvKeys.LastFmToken]: string;
 
         [EnvKeys.SpotifyClientId]: string;
@@ -45,6 +46,8 @@ declare module '@foxxie/env' {
 }
 
 export const enum EnvKeys {
+    ClientId = 'CLIENT_ID',
+    HasteToken = 'HASTE_TOKEN',
     SentryEnabled = 'SENTRY_ENABLED',
     SpotifyClientId = 'SPOTIFY_CLIENT_ID',
     SpotifyClientSecret = 'SPOTIFY_CLIENT_SECRET',

@@ -1,7 +1,7 @@
+import { LanguageKeys } from '#lib/I18n';
+import { GuildMessage } from '#lib/Types';
 import { GuildEntity, acquireSettings, writeSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { GuildMessage } from '#lib/types';
-import { getModeration, isAdmin, messagePrompt, promptForMessage } from '#utils/Discord';
+import { isAdmin, messagePrompt, promptForMessage } from '#utils/Discord';
 import { bold } from '@discordjs/builders';
 import { cast } from '@ruffpuff/utilities';
 import { Argument, PieceContext } from '@sapphire/framework';
@@ -43,7 +43,7 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
             if (!role.isOk()) return this.error(role.unwrapErr());
             await writeSettings(message.guild.id, settings => (settings[this.roleKey] = role.unwrap().id));
         } else if (await messagePrompt(message, t(LanguageKeys.Moderation.ActionsharedRoleSetupNew))) {
-            const role = await getModeration(message.guild).actions.setUpRole(message, this.setUpKey);
+            const role = await this.container.utilities.guild(message.guild).moderation.actions.setUpRole(message, this.setUpKey);
 
             const content = t(LanguageKeys.Moderation.ActionSharedRoleSetupSuccess, { role: bold(role.name) });
             await send(message, content);

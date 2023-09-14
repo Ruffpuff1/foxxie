@@ -1,6 +1,6 @@
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { PermissionLevels } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import { PermissionLevels } from '#lib/Types';
 import { chunk } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';

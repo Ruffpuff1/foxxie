@@ -1,4 +1,4 @@
-import { HighlightTypeEnum } from '#lib/structures';
+import { HighlightTypeEnum } from '#lib/Container/Workers';
 import { Column, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
 export class Highlight<T extends HighlightTypeEnum> {

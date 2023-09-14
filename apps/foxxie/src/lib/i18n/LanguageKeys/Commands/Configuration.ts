@@ -1,4 +1,4 @@
-import { DetailedDescription } from '#lib/types';
+import { DetailedDescription } from '#lib/Types';
 import { FT, T } from '@foxxie/i18n';
 
 export const ConfDescription = T('commands/configuration:confDescription');

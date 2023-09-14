@@ -1,7 +1,8 @@
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import type { GuildMessage } from '#lib/Types';
+import { EnvKeys } from '#lib/Types/Env';
 import { GuildSettings, MemberEntity, acquireSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import type { GuildMessage } from '#lib/types';
 import { isGuildOwner, sendLoadingMessage } from '#utils/Discord';
 import { BrandingColors, emojis } from '#utils/constants';
 import { floatPromise, resolveEmbedField } from '#utils/util';
@@ -255,7 +256,7 @@ export default class UserCommand extends FoxxieCommand {
 
     private async fetchGuildData(guild: Guild): Promise<[number, GuildMember | null, number]> {
         const messages = await acquireSettings(guild, GuildSettings.MessageCount);
-        const me = await resolveToNull(guild.members.fetch(EnvParse.string('CLIENT_ID')));
+        const me = await resolveToNull(guild.members.fetch(EnvParse.string(EnvKeys.ClientId)));
         const owner = await resolveToNull(guild.members.fetch(guild.ownerId));
 
         return [messages, owner, me?.displayColor || BrandingColors.Primary];

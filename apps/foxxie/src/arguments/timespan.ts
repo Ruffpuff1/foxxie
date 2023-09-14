@@ -1,4 +1,4 @@
-import { LanguageKeys } from '#lib/i18n';
+import { LanguageKeys } from '#lib/I18n';
 import { seconds } from '@ruffpuff/utilities';
 import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 import { Duration } from '@sapphire/time-utilities';

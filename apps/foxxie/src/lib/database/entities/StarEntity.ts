@@ -1,5 +1,5 @@
-import { StarboardManager } from '#lib/structures/managers/StarboardManager';
-import { GuildMessage } from '#lib/types';
+import { StarboardManager } from '#lib/Structures/managers/StarboardManager';
+import { GuildMessage } from '#lib/Types';
 import { defaultStarboardEmojis } from '#utils/Discord';
 import { Colors } from '#utils/constants';
 import { fetchReactionUsers, floatPromise, getAttachment, getImage, isVideo } from '#utils/util';

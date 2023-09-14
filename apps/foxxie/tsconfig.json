@@ -39,7 +39,7 @@
         "rootDir": ".",
         "paths": {
             "#api/*": [
-                "src/lib/Api/*"
+                "src/lib/Container/Api/*"
             ],
             "#external/*": [
                 "src/lib/util/External/*"

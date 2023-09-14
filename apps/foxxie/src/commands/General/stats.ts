@@ -1,5 +1,5 @@
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
 import { getServerDetails } from '#utils/util';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';

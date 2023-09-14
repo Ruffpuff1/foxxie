@@ -1,8 +1,8 @@
+import { LanguageKeys } from '#lib/I18n';
+import { AutomationListener } from '#lib/Structures';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { GuildSettings, acquireSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { AutomationListener } from '#lib/structures';
-import { EventArgs, FoxxieEvents } from '#lib/types';
-import { fetchChannel, getPersistRoles } from '#utils/Discord';
+import { fetchChannel } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import { cast, isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -23,7 +23,7 @@ export class UserAutomationAutomationListener extends AutomationListener<FoxxieE
         ]);
 
         if (persist) {
-            const persistRoles = getPersistRoles(member.guild);
+            const { persistRoles } = this.container.utilities.guild(member.guild);
             await Promise.all(
                 member.roles.cache
                     .filter(role => role.id !== member.guild.id)

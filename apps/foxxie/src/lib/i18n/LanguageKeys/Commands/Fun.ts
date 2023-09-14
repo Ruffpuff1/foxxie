@@ -1,5 +1,5 @@
 import { GetUserInfoResult } from '#api/LastFm';
-import { DetailedDescription } from '#lib/types';
+import { DetailedDescription } from '#lib/Types';
 import { FT, T } from '@foxxie/i18n';
 
 export const AnimalcrossingCoffee = FT<{ beans: string; milk: string; sugar: string }>('commands/fun:animalcrossingCoffee');

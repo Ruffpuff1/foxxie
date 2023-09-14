@@ -1,7 +1,7 @@
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { GuildMessage } from '#lib/types';
-import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#lib/Api/celestia';
+import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#api/celestia';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import { GuildMessage } from '#lib/Types';
 import { sendLoadingMessage } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import { Villager, VillagerKey } from '@foxxie/celestia-api-types';

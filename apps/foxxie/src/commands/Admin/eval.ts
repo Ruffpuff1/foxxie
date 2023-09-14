@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { PermissionLevels } from '#lib/types';
-import { getHaste } from '#lib/Api/haste';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import { PermissionLevels } from '#lib/Types';
 import { Urls } from '#utils/constants';
 import { isThenable } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
 import { Stopwatch } from '@sapphire/stopwatch';
+import Type from '@sapphire/type';
 import { codeBlock } from '@sapphire/utilities';
 import { Message } from 'discord.js';
 import { hostname } from 'node:os';
@@ -63,9 +63,9 @@ export class UserCommand extends FoxxieCommand {
         }
 
         if (output.length > 2000 || args.getOption('output') === OutputType.Paste) {
-            const key = await getHaste(result);
+            const key = await this.container.apis.hastebin.post(result);
             if (args.getFlags(...msgFlags)) {
-                output = `${Urls.Haste}${key}`;
+                output = `${Urls.Haste}/share/${key}`;
                 await send(message, output);
                 return;
             }
@@ -73,7 +73,7 @@ export class UserCommand extends FoxxieCommand {
                 message,
                 args.t(LanguageKeys.Commands.Admin.EvalHaste, {
                     time,
-                    output: `${Urls.Haste}/${key}`,
+                    output: `${Urls.Haste}/share/${key}`,
                     footer
                 })
             );
@@ -97,8 +97,8 @@ export class UserCommand extends FoxxieCommand {
         // eslint-disable-next-line one-var
         let asyncTime, result, success, syncTime;
         // eslint-disable-next-line one-var
-        let hasThen = false,
-            type = '';
+        let hasThen = false;
+        let type: Type;
 
         try {
             if (args.getFlags('a', 'async')) code = `(async () => {\n${code}\n})();`;
@@ -106,18 +106,17 @@ export class UserCommand extends FoxxieCommand {
             // eslint-disable-next-line no-eval
             result = eval(code);
             syncTime = stopwatch.toString();
-            type = `any`;
+            type = new Type(result);
             if (isThenable(result)) {
                 hasThen = true;
                 stopwatch.restart();
                 result = await result;
-                type = `Promise<any>`;
                 asyncTime = stopwatch.toString();
             }
             success = true;
         } catch (error) {
             if (!syncTime) syncTime = stopwatch.toString();
-            if (!type) type = `Error`;
+            type = new Type(error);
             if (hasThen && !asyncTime) asyncTime = stopwatch.toString();
             result = error;
             success = false;

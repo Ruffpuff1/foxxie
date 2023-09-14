@@ -1,6 +1,6 @@
+import type { GuildMessage } from '#lib/Types';
 import { GuildSettings, acquireSettings } from '#lib/database';
 import { StarEntity } from '#lib/database/entities/StarEntity';
-import type { GuildMessage } from '#lib/types';
 import { cast } from '@ruffpuff/utilities';
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';

@@ -1,8 +1,9 @@
+import { ApiService } from '#api/ApiService';
 import type { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import { ApiService } from '#lib/Api/ApiService';
+import { UtilityService } from '#lib/Container/Utility/Services/UtilityService';
+import type { FoxxieCommand, InviteManager, RedisManager, ScheduleManager, WorkerManager } from '#lib/Structures';
 import type { GuildEntity, ModerationEntity, MongoDB, SerializerStore, TaskStore } from '#lib/database';
-import type { FoxxieCommand, InviteManager, RedisManager, ScheduleManager, WorkerManager } from '#lib/structures';
 import { TFunction } from '@foxxie/i18n';
 import type { Piece, Store } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';
@@ -23,7 +24,7 @@ declare module 'discord.js' {
 
     interface ClientEvents {
         [FoxxieEvents.BotMessage]: [message: GuildMessage];
-        [FoxxieEvents.ChatInputCommandLogging]: [interaction: ChatInputCommandInteraction, command: FoxxieCommand]
+        [FoxxieEvents.ChatInputCommandLogging]: [interaction: ChatInputCommandInteraction, command: FoxxieCommand];
         [FoxxieEvents.GuildMemberJoin]: [member: GuildMember, settings: GuildEntity];
         [FoxxieEvents.GuildMessageLog]: [
             guild: Guild,
@@ -50,6 +51,10 @@ declare module '@sapphire/pieces' {
          * Api manager
          */
         apis: ApiService;
+        /**
+         * Utilities Manager
+         */
+        utilities: UtilityService;
     }
 
     interface StoreRegistryEntries {

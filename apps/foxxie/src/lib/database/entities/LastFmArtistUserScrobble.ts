@@ -18,7 +18,7 @@ export class LastFmArtistUserScrobble {
 
     public lastUpdated = Date.now();
 
-    public async getUserArtistData(artistName: string) {
+    public getUserArtistData(artistName: string) {
         return container.apis.lastFm
             .getLibraryArtistsFromUser(this.username)
             .then(t => t.artists.artist.find(a => a.name === artistName));

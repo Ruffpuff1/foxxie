@@ -1,5 +1,5 @@
-import type { FoxxieCommand } from '#lib/structures';
-import { EventArgs, FoxxieEvents } from '#lib/types';
+import type { FoxxieCommand } from '#lib/Structures';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { cast } from '@ruffpuff/utilities';
 import { Listener } from '@sapphire/framework';
 

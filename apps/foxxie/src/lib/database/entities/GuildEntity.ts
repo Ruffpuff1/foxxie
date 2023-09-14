@@ -1,5 +1,5 @@
-import { LanguageKeys } from '#lib/i18n';
-import type { HighlightTypeEnum } from '#lib/structures/workers/types';
+import type { HighlightTypeEnum } from '#lib/Container/Workers/types';
+import { LanguageKeys } from '#lib/I18n';
 import { create } from '#utils/regexCreator';
 import { TFunction, getT } from '@foxxie/i18n';
 import { arrayStrictEquals, cast, minutes, years } from '@ruffpuff/utilities';

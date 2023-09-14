@@ -1,4 +1,4 @@
-import { LanguageKeys } from '#lib/i18n';
+import { LanguageKeys } from '#lib/I18n';
 import { Argument, ArgumentContext, ArgumentResult, Piece } from '@sapphire/framework';
 
 export class UserArgument extends Argument<Piece> {

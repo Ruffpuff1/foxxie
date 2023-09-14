@@ -1,5 +1,5 @@
-import { maybeMe } from '#utils/Discord';
 import { BrandingColors } from '#utils/constants';
+import { container } from '@sapphire/framework';
 import type { Message } from 'discord.js';
 import type { DataSource, Repository } from 'typeorm';
 import { GuildEntity, ModerationEntity, ScheduleEntity, StarEntity } from './entities';
@@ -46,7 +46,7 @@ export class MongoDB {
     }
 
     public fetchColor(msg: Message): number {
-        return msg.member?.displayColor || maybeMe(msg.guild!)?.displayColor || BrandingColors.Primary;
+        return msg.member?.displayColor || container.utilities.guild(msg.guild!).maybeMe?.displayColor || BrandingColors.Primary;
     }
 }
 

@@ -1,6 +1,6 @@
 import { GuildSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import type { FoxxieCommand } from '#lib/structures';
+import { LanguageKeys } from '#lib/I18n';
+import type { FoxxieCommand } from '#lib/Structures';
 import { isModerator } from '#utils/Discord';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Identifiers, Precondition, PreconditionContext } from '@sapphire/framework';

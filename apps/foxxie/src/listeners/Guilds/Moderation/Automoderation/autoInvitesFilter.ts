@@ -1,12 +1,12 @@
-import { ApplyOptions } from '@sapphire/decorators';
-import { ModerationListener } from '#lib/structures';
+import { LanguageKeys } from '#lib/I18n';
+import { ModerationListener } from '#lib/Structures';
+import { FoxxieEvents, GuildMessage } from '#lib/Types';
 import { GuildSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieEvents, GuildMessage } from '#lib/types';
-import { allowedInviteIds, Colors } from '#utils/constants';
 import { deleteMessage, sendTemporaryMessage } from '#utils/Discord';
-import { Message, EmbedBuilder } from 'discord.js';
+import { Colors, allowedInviteIds } from '#utils/constants';
 import { cast } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
+import { EmbedBuilder, Message } from 'discord.js';
 
 @ApplyOptions<ModerationListener.Options>({
     keyEnabled: GuildSettings.Moderation.Auto.InvitesEnabled,

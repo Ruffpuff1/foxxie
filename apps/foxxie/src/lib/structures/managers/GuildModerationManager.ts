@@ -1,13 +1,16 @@
 import { ModerationEntity } from '#database/entities/ModerationEntity';
 import type FoxxieClient from '#lib/FoxxieClient';
+import { cast } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { Collection, Guild } from 'discord.js';
 import { ModerationActions } from '../moderation';
-import { cast } from '@ruffpuff/utilities';
 
 export class GuildModerationManager extends Collection<number, ModerationEntity> {
     public guild: Guild | null = null;
 
+    /**
+     * Guild Moderation actions.
+     */
     public actions: ModerationActions;
 
     public _count: number | null = null;
@@ -24,15 +27,23 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         return [...super.values()];
     }
 
-    public async getCurrentId(guildId?: string | null) {
-        if (this._count === null) {
-            const cases = await container.db.moderations.find({ where: { guildId: guildId || this.guild?.id } });
+    /**
+     * Retrives the current number of moderation cases for guild.
+     * @param force Whether to force checking the database.
+     * @returns The current number of moderation cases for a guild.
+     */
+    public async getCurrentId(force?: boolean) {
+        if (this._count === null || force) {
+            const cases = await container.db.moderations.find({ where: { guildId: this.guild?.id } });
             this._count = cases.length ?? 0;
         }
 
         return this._count;
     }
 
+    /**
+     * Creates and sets up a new moderation entity given moderation entity data.
+     */
     public create(data: Partial<ModerationEntity>): ModerationEntity {
         return new ModerationEntity(data).setup(this);
     }

@@ -1,6 +1,6 @@
 import { GuildSettings } from '#lib/database';
-import { EventArgs, FoxxieEvents } from '#lib/types';
-import { fetchChannel, getModeration } from '#utils/Discord';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
+import { fetchChannel } from '#utils/Discord';
 import type { ModerationScheule } from '#utils/moderation';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
@@ -15,7 +15,7 @@ export class UserListener extends Listener<FoxxieEvents.ModerationEntryAdd> {
 
     private async sendMessage(...[entry]: Parameters<UserListener['run']>): Promise<void> {
         const channel = await fetchChannel(entry.guildId!, GuildSettings.Channels.Logs.Moderation);
-        const moderation = getModeration(entry.guild!);
+        const { moderation } = this.container.utilities.guild(entry.guild!);
 
         if (!channel) {
             moderation._count! -= 1;

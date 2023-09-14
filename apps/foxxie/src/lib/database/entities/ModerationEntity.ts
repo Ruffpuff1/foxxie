@@ -1,7 +1,7 @@
 import type FoxxieClient from '#lib/FoxxieClient';
-import { LanguageKeys } from '#lib/i18n';
-import type { GuildModerationManager } from '#lib/structures';
-import { FoxxieEvents } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import type { GuildModerationManager } from '#lib/Structures';
+import { FoxxieEvents } from '#lib/Types';
 import {
     MetaData,
     metadata,

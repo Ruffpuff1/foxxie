@@ -1,4 +1,6 @@
 import { LLRCData, LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieEvents, GuildMessage } from '#lib/Types';
 import {
     SchemaGroup,
     SchemaKey,
@@ -9,8 +11,6 @@ import {
     set,
     writeSettings
 } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieEvents, GuildMessage } from '#lib/types';
 import { deleteMessage, sendLoadingMessage } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import type { TFunction } from '@foxxie/i18n';

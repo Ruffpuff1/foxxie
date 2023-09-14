@@ -1,6 +1,5 @@
-import { LanguageKeys } from '#lib/i18n';
-import { ModerationCommand } from '#lib/structures';
-import { getModeration } from '#utils/Discord';
+import { LanguageKeys } from '#lib/I18n';
+import { ModerationCommand } from '#lib/Structures';
 import { resolveKey } from '#utils/util';
 import { seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -40,7 +39,7 @@ export class UserCommand extends ModerationCommand {
     }
 
     public async messageHandle(...[message, context]: ArgumentTypes<ModerationCommand['messageHandle']>) {
-        return getModeration(message.guild).actions.unban(
+        return this.container.utilities.guild(message.guild).moderation.actions.unban(
             {
                 userId: context.target.id,
                 moderatorId: message.author.id,
@@ -86,7 +85,7 @@ export class UserCommand extends ModerationCommand {
     public async chatInputHandle(...[interaction, context]: ArgumentTypes<ModerationCommand['chatInputHandle']>) {
         const reference = interaction.options.getNumber('reference');
 
-        return getModeration(interaction.guild).actions.unban(
+        return this.container.utilities.guild(interaction.guild).moderation.actions.unban(
             {
                 userId: context.target.id,
                 moderatorId: interaction.user.id,

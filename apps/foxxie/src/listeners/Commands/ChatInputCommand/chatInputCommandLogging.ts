@@ -1,4 +1,4 @@
-import { EventArgs, FoxxieEvents } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { Listener } from '@sapphire/framework';
 import { blue } from 'colorette';
 

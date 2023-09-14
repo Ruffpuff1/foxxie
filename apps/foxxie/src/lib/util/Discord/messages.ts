@@ -1,5 +1,5 @@
-import { LanguageKeys } from '#lib/i18n';
-import type { GuildMessage } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import type { GuildMessage } from '#lib/Types';
 import { floatPromise } from '#utils/util';
 import type { CustomFunctionGet, CustomGet, TOptionsBase } from '@foxxie/i18n';
 import { cast, minutes, randomArray } from '@ruffpuff/utilities';

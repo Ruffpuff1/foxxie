@@ -1,5 +1,5 @@
+import { LanguageKeys } from '#lib/I18n';
 import { LastFmTrack } from '#lib/database/entities/LastFmTrack';
-import { LanguageKeys } from '#lib/i18n';
 import { resolveEmbedField } from '#utils/util';
 import { TFunction } from '@foxxie/i18n';
 import { UserError } from '@sapphire/framework';

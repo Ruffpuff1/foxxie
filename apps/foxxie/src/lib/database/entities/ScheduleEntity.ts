@@ -2,8 +2,8 @@
  * @license Apache License 2.0
  * @copyright 2019 Skyra Project
  */
-import type { ScheduleManager } from '#lib/structures';
-import { FoxxieEvents } from '#lib/types/Events';
+import type { ScheduleManager } from '#lib/Structures';
+import { FoxxieEvents } from '#lib/Types/Events';
 import { cast } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';

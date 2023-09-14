@@ -1,4 +1,5 @@
 import { cpus } from 'node:os';
+import { WorkerHandler } from './WorkerHandler';
 import type {
     HighlightTypeEnum,
     IncomingPayload,
@@ -7,9 +8,8 @@ import type {
     RunHighlightPayload,
     RunWordFilterPayload
 } from './types';
-import { WorkerHandler } from './WorkerHandler';
 
-export class WorkerManager {
+export class WorkerService {
     public readonly workers: WorkerHandler[] = [];
 
     public constructor(count = cpus().length) {
@@ -27,6 +27,7 @@ export class WorkerManager {
         data: Omit<RunHighlightPayload<HighlightTypeEnum>, 'id'>,
         delay?: number | null
     ): Promise<OutgoingHighlightPayload>;
+
     public async send(data: Omit<IncomingPayload, 'id'>, delay?: number | null) {
         return this.getWorker().send(data, delay);
     }

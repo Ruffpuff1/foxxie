@@ -1,7 +1,6 @@
+import { GuildUtilityService } from '#lib/Container/Utility/Services/Guild/GuildUtilityService';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { GuildSettings, acquireSettings } from '#lib/database';
-import { GuildModerationManager } from '#lib/structures';
-import { EventArgs, FoxxieEvents } from '#lib/types';
-import { fetchAuditEntry, getModeration } from '#utils/Discord';
 import { TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 import { cast, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -14,7 +13,7 @@ export class UserListener extends Listener {
     public async run(...[previous, next]: EventArgs<FoxxieEvents.GuildMemberUpdate>) {
         const prevRoles = previous.roles.cache;
         const nextRoles = next.roles.cache;
-        const moderation = getModeration(next.guild);
+        const guild = this.container.utilities.guild(next.guild);
 
         if (prevRoles.equals(nextRoles)) return;
 
@@ -36,25 +35,24 @@ export class UserListener extends Listener {
             if (!nextRoles.has(key)) removed.push(role.id);
         }
 
-        if (added.includes(muteRole) && muteAdd) return this.mute(next, moderation);
-        else if (removed.includes(muteRole) && muteRemove) return this.unmute(next, moderation);
+        if (added.includes(muteRole) && muteAdd) return this.mute(next, guild);
+        else if (removed.includes(muteRole) && muteRemove) return this.unmute(next, guild);
     }
 
-    private async mute(next: GuildMember, moderation: GuildModerationManager) {
+    private async mute(next: GuildMember, guild: GuildUtilityService) {
         const { user } = next;
         const deleted = this.container.redis ? await this.container.redis!.del(`guild:${next.guild.id}:mute:${user.id}`) : null;
 
         if (deleted) return;
         await sleep(seconds(5));
 
-        const log = await fetchAuditEntry(
-            next.guild,
+        const log = await guild.fetchAuditEntry(
             AuditLogEvent.MemberRoleUpdate,
             log => cast<User>(log.target)?.id === next.user.id
         );
         if (!log) return;
 
-        const created = await moderation
+        const created = await guild.moderation
             .create({
                 userId: user.id,
                 moderatorId: log.executor?.id || process.env.CLIENT_ID,
@@ -64,24 +62,23 @@ export class UserListener extends Listener {
             })
             .create();
 
-        if (created) await moderation.actions.cancelTask(user.id, TypeVariationAppealNames.Mute);
+        if (created) await guild.moderation.actions.cancelTask(user.id, TypeVariationAppealNames.Mute);
     }
 
-    private async unmute(next: GuildMember, moderation: GuildModerationManager) {
+    private async unmute(next: GuildMember, guild: GuildUtilityService) {
         const { user } = next;
         const deleted = this.container.redis ? await this.container.redis!.del(`guild:${next.guild.id}:unmute:${user.id}`) : null;
 
         if (deleted) return;
         await sleep(seconds(5));
 
-        const log = await fetchAuditEntry(
-            next.guild,
+        const log = await guild.fetchAuditEntry(
             AuditLogEvent.MemberRoleUpdate,
             log => cast<User>(log.target)?.id === next.user.id
         );
         if (!log) return;
 
-        const created = await moderation
+        const created = await guild.moderation
             .create({
                 userId: user.id,
                 moderatorId: log.executor?.id || process.env.CLIENT_ID,
@@ -91,6 +88,6 @@ export class UserListener extends Listener {
             })
             .create();
 
-        if (created) await moderation.actions.cancelTask(user.id, TypeVariationAppealNames.Mute);
+        if (created) await guild.moderation.actions.cancelTask(user.id, TypeVariationAppealNames.Mute);
     }
 }

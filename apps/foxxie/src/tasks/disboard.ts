@@ -1,6 +1,6 @@
 import { GuildSettings, PartialResponseValue, ResponseType, Task } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieEvents, ScheduleData } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieEvents, ScheduleData } from '#lib/Types';
 import { Schedules } from '#utils/constants';
 import { fetchChannel } from '#utils/Discord';
 import { isDev, seconds } from '@ruffpuff/utilities';

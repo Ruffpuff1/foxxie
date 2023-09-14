@@ -1,8 +1,9 @@
+import { HighlightTypeEnum } from '#lib/Container/Workers';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import { GuildMessage } from '#lib/Types';
 import { GuildSettings, acquireSettings, writeSettings } from '#lib/database';
 import { Highlight } from '#lib/database/entities/Highlight';
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand, HighlightTypeEnum } from '#lib/structures';
-import { GuildMessage } from '#lib/types';
 import { getUserDisplayName } from '#utils/Discord';
 import { inlineCode } from '@discordjs/builders';
 import { cast, resolveToNull } from '@ruffpuff/utilities';

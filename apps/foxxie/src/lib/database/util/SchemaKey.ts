@@ -1,5 +1,5 @@
-import { LanguageKeys } from '#lib/i18n';
-import type { FoxxieArgs } from '#lib/structures';
+import { LanguageKeys } from '#lib/I18n';
+import type { FoxxieArgs } from '#lib/Structures';
 import type { CustomGet, TFunction } from '@foxxie/i18n';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';

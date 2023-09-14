@@ -3,7 +3,7 @@
  * @copyright 2019 Skyra Project
  */
 import { ResponseType, ResponseValue, ScheduleEntity } from '#database/entities/ScheduleEntity';
-import type { ScheduleData } from '#lib/types';
+import type { ScheduleData } from '#lib/Types';
 import type { Schedules } from '#utils/constants';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';

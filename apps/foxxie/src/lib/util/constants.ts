@@ -33,7 +33,7 @@ export const enum Schedules {
 export const enum Urls {
     Celestia = 'https://celestia.reese.gay',
     Disboard = 'https://disboard.org/',
-    Haste = 'https://hastebin.com/',
+    Haste = 'https://hastebin.com',
     Repo = 'https://github.com/Ruffpuff1/foxxie'
 }
 

@@ -1,15 +1,14 @@
-import { GuildSettings, Highlight, acquireSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { HighlightReturnData, HighlightTypeEnum, IncomingType } from '#lib/structures/workers/types';
-import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
-import { maybeMe } from '#utils/Discord';
+import { HighlightReturnData, HighlightTypeEnum, IncomingType } from '#lib/Container/Workers/types';
+import { acquireSettings, GuildSettings, Highlight } from '#lib/database';
+import { LanguageKeys } from '#lib/I18n';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
 import { floatPromise, resolveClientColor, resolveEmbedField } from '#utils/util';
 import { TFunction } from '@foxxie/i18n';
 import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { EmbedBuilder, Message, escapeMarkdown } from 'discord.js';
+import { EmbedBuilder, escapeMarkdown, Message } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
     event: FoxxieEvents.UserMessage,
@@ -35,7 +34,11 @@ export class UserListener extends Listener<FoxxieEvents.UserMessage> {
         const actions: Promise<void>[] = [];
 
         const previousChannelMessages = [];
-        if (msg.channel.permissionsFor(maybeMe(msg.guild)!).has(PermissionFlagsBits.ReadMessageHistory)) {
+        if (
+            msg.channel
+                .permissionsFor(this.container.utilities.guild(msg.guild).maybeMe!)
+                .has(PermissionFlagsBits.ReadMessageHistory)
+        ) {
             previousChannelMessages.push(...(await this.fetchMessages(msg, t)));
         }
 

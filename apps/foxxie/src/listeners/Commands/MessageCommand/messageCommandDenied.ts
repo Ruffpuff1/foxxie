@@ -1,6 +1,6 @@
 import { acquireSettings } from '#lib/database';
-import { translate } from '#lib/i18n';
-import type { EventArgs, FoxxieEvents } from '#lib/types';
+import { translate } from '#lib/I18n';
+import type { EventArgs, FoxxieEvents } from '#lib/Types';
 import { cast } from '@ruffpuff/utilities';
 import { Listener } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';

@@ -1,4 +1,4 @@
-import type { FoxxieEvents } from '#lib/types';
+import type { FoxxieEvents } from '#lib/Types';
 import { Listener } from '@sapphire/framework';
 
 export class UserListener extends Listener<FoxxieEvents.UnknownMessageCommandName> {

@@ -1,4 +1,4 @@
-import { LanguageKeys } from '#lib/i18n';
+import { LanguageKeys } from '#lib/I18n';
 import { resolveClientColor } from '#utils/util';
 import type { TFunction } from '@foxxie/i18n';
 import { Listener } from '@sapphire/framework';

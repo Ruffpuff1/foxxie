@@ -1,6 +1,5 @@
-import { LanguageKeys } from '#lib/i18n';
-import { ModerationData, ModerationTask } from '#lib/structures';
-import { getModeration } from '#utils/Discord';
+import { LanguageKeys } from '#lib/I18n';
+import { ModerationData, ModerationTask } from '#lib/Structures';
 import { Schedules } from '#utils/constants';
 import { getT } from '@foxxie/i18n';
 import { seconds } from '@ruffpuff/utilities';
@@ -21,7 +20,7 @@ export class UserTask extends ModerationTask {
 
         await this.container.redis?.pinsertex(`guild:${guild.id}:unban:${data.userId}`, seconds(20), '');
 
-        await getModeration(guild).actions.unban(
+        await this.container.utilities.guild(guild).moderation.actions.unban(
             {
                 userId: data.userId,
                 moderatorId: data.moderatorId,

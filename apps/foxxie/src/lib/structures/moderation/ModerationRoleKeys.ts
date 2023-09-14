@@ -1,6 +1,6 @@
 import type { GuildSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import type { RoleLanguageKeyData } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import type { RoleLanguageKeyData } from '#lib/Types';
 import type { CustomFunctionGet } from '@foxxie/i18n';
 import { PermissionFlagsBits, PermissionOverwriteOptions, PermissionResolvable, PermissionsBitField } from 'discord.js';
 

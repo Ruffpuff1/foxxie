@@ -1,5 +1,5 @@
-import { LanguageKeys, translate } from '#lib/i18n';
-import type { FoxxieArgs } from '#lib/structures';
+import { LanguageKeys, translate } from '#lib/I18n';
+import type { FoxxieArgs } from '#lib/Structures';
 import type { TFunction } from '@foxxie/i18n';
 import { cast } from '@ruffpuff/utilities';
 import { AliasPiece, AliasPieceOptions, ArgumentError, ResultType, UserError } from '@sapphire/framework';

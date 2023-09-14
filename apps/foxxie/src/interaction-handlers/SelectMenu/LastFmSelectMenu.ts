@@ -1,4 +1,4 @@
-import { GetArtistInfoResult } from '#lib/Api/LastFm/Services/LastFmService';
+import { GetArtistInfoResult } from '#api/LastFm/Services/LastFmService';
 import { acquireSettings } from '#lib/database';
 import { floatPromise, resolveClientColor } from '#utils/util';
 import { cast, resolveToNull } from '@ruffpuff/utilities';

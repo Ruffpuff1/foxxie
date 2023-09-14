@@ -1,8 +1,8 @@
 import { GuildSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { AutomationListener } from '#lib/structures';
-import { EventArgs, FoxxieEvents } from '#lib/types';
-import { fetchChannel, getPersistRoles, maybeMe } from '#utils/Discord';
+import { LanguageKeys } from '#lib/I18n';
+import { AutomationListener } from '#lib/Structures';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
+import { fetchChannel } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -55,9 +55,11 @@ export class UserListener extends AutomationListener<FoxxieEvents.GuildMemberJoi
     }
 
     private async managePersistRoles(member: GuildMember) {
-        if (!maybeMe(member.guild)?.permissions.has(PermissionFlagsBits.ManageRoles)) return;
+        const { maybeMe, persistRoles } = this.container.utilities.guild(member);
 
-        const roles = await getPersistRoles(member).fetch(member.id);
+        if (!maybeMe?.permissions.has(PermissionFlagsBits.ManageRoles)) return;
+
+        const roles = await persistRoles.fetch(member.id);
         if (!roles.length) return;
 
         for (const id of roles) await floatPromise(member.roles.add(id));

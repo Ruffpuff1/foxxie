@@ -1,5 +1,5 @@
+import { LanguageKeys } from '#lib/I18n';
 import { LastFmArtistEntity } from '#lib/database/entities/LastFmArtistEntity';
-import { LanguageKeys } from '#lib/i18n';
 import { conditionalField, ifNotNull, removeEmptyFields, resolveEmbedField } from '#utils/util';
 import { TFunction } from '@foxxie/i18n';
 import { hours, resolveToNull, toTitleCase } from '@ruffpuff/utilities';

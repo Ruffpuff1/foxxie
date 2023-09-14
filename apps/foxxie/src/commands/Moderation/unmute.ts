@@ -1,8 +1,7 @@
 import { GuildSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { ModerationCommand, ModerationSetupRestriction } from '#lib/structures';
-import { ModerationRoleCommand } from '#lib/structures/moderation/ModerationRoleCommand';
-import { getModeration } from '#utils/Discord';
+import { LanguageKeys } from '#lib/I18n';
+import { ModerationCommand, ModerationSetupRestriction } from '#lib/Structures';
+import { ModerationRoleCommand } from '#lib/Structures/moderation/ModerationRoleCommand';
 import { seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ArgumentTypes } from '@sapphire/utilities';
@@ -29,7 +28,7 @@ export class UserCommand extends ModerationRoleCommand {
     }
 
     public async messageHandle(...[message, context]: ArgumentTypes<ModerationCommand['messageHandle']>) {
-        return getModeration(message.guild).actions.unmute(
+        return this.container.utilities.guild(message.guild).moderation.actions.unmute(
             {
                 userId: context.target.id,
                 moderatorId: message.author.id,
@@ -45,7 +44,7 @@ export class UserCommand extends ModerationRoleCommand {
     public async chatInputHandle(...[interaction, context]: ArgumentTypes<ModerationCommand['chatInputHandle']>) {
         const reference = interaction.options.getNumber('reference');
 
-        return getModeration(interaction.guild).actions.unmute(
+        return this.container.utilities.guild(interaction.guild).moderation.actions.unmute(
             {
                 userId: context.target.id,
                 moderatorId: interaction.user.id,

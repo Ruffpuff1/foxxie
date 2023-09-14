@@ -1,5 +1,5 @@
-import { LanguageKeys } from '#lib/i18n';
-import type { FoxxieArgs } from '#lib/structures';
+import { LanguageKeys } from '#lib/I18n';
+import type { FoxxieArgs } from '#lib/Structures';
 import { cast } from '@ruffpuff/utilities';
 import { container, UserError } from '@sapphire/framework';
 import type { GuildResolvable } from 'discord.js';

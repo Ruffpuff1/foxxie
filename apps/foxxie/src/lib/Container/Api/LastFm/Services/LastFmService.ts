@@ -1,10 +1,10 @@
 import { FuzzySearch } from '#external/FuzzySearch';
+import { FoxxieCommand } from '#lib/Structures';
+import { GuildMessage } from '#lib/Types';
+import { EnvKeys } from '#lib/Types/Env';
 import { LastFmArtistEntity } from '#lib/database/entities/LastFmArtistEntity';
 import { LastFmArtistUserScrobble } from '#lib/database/entities/LastFmArtistUserScrobble';
 import { LastFmTrack } from '#lib/database/entities/LastFmTrack';
-import { FoxxieCommand } from '#lib/structures';
-import { GuildMessage } from '#lib/types';
-import { EnvKeys } from '#lib/types/Env';
 import { sendLoadingMessage } from '#utils/Discord';
 import { EnvParse } from '@foxxie/env';
 import { fetch } from '@foxxie/fetch';

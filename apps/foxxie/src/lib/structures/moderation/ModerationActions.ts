@@ -1,7 +1,7 @@
+import { LanguageKeys } from '#lib/I18n';
+import type { GuildMessage } from '#lib/Types';
 import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import type { GuildMessage } from '#lib/types';
-import { getModeration, getPersistRoles, maybeMe, messagePrompt } from '#utils/Discord';
+import { messagePrompt } from '#utils/Discord';
 import { Colors } from '#utils/constants';
 import { SendOptions, TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 import { handleDiscordAPIError } from '#utils/transformers';
@@ -34,6 +34,9 @@ import {
 export class ModerationActions {
     public constructor(public guild: Guild) {}
 
+    /**
+     * Ban a guild member and create a new moderation case.
+     */
     public async ban(rawOptions: RawOptions, days: number, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Ban);
         const moderationLog = this.create(options);
@@ -346,7 +349,7 @@ export class ModerationActions {
     }
 
     private create(options: Partial<ModerationEntity>): ModerationEntity {
-        return getModeration(this.guild).create(options);
+        return this.guildUtilities.moderation.create(options);
     }
 
     private async sendDM(entry: ModerationEntity, sendOptions: SendOptions): Promise<ModerationEntity> {
@@ -395,7 +398,7 @@ export class ModerationActions {
     }
 
     private async fetchTask(userId: string, type: string, extra: (log: ModerationEntity) => boolean = () => true) {
-        const logs = await getModeration(this.guild).fetch(userId);
+        const logs = await this.guildUtilities.moderation.fetch(userId);
         return logs.filter(log => log.appealTaskName === type && extra(log)).last();
     }
 
@@ -444,7 +447,7 @@ export class ModerationActions {
         const role = await this.guild.roles.create({
             ...data,
             name: lang.name,
-            position: maybeMe(this.guild)?.roles.highest.position || 0,
+            position: this.guildUtilities.maybeMe?.roles.highest.position || 0,
             reason: lang.reason,
             color: Colors.Restricted
         });
@@ -523,7 +526,11 @@ export class ModerationActions {
     }
 
     private get persistRoles() {
-        return getPersistRoles(this.guild);
+        return this.guildUtilities.persistRoles;
+    }
+
+    private get guildUtilities() {
+        return container.utilities.guild(this.guild);
     }
 }
 

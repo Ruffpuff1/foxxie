@@ -1,6 +1,6 @@
+import { FoxxieEvents, GuildMessage } from '#lib/Types';
 import { GuildEntity, GuildSettings } from '#lib/database';
-import { FoxxieEvents, GuildMessage } from '#lib/types';
-import { getModeration, isModerator, isSendableChannel } from '#utils/Discord';
+import { isModerator } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
 import type { CustomGet, TFunction } from '@foxxie/i18n';
@@ -62,7 +62,7 @@ export abstract class ModerationListener extends Listener {
             await floatPromise(cast<Promise<unknown>>(this.onDelete(msg, language, checked)));
         }
 
-        if (bitField.has(ModerationFlagBits.Alert) && isSendableChannel(msg.channel)) {
+        if (bitField.has(ModerationFlagBits.Alert) && this.container.utilities.channel(msg.channel).isSendable) {
             await floatPromise(cast<Promise<unknown>>(this.onAlert(msg, language, checked)));
         }
 
@@ -96,7 +96,7 @@ export abstract class ModerationListener extends Listener {
     }
 
     private async onWarning(msg: GuildMessage, t: TFunction) {
-        return getModeration(msg.guild).actions.warn(
+        return this.container.utilities.guild(msg.guild).moderation.actions.warn(
             {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
@@ -109,7 +109,7 @@ export abstract class ModerationListener extends Listener {
 
     private async onKick(msg: GuildMessage, t: TFunction) {
         await this.container.redis!.pinsertex(`guild:${msg.guild.id}:kick:${msg.member.id}`, seconds(20), '');
-        return getModeration(msg.guild).actions.kick(
+        return this.container.utilities.guild(msg.guild).moderation.actions.kick(
             {
                 userId: msg.member.id,
                 moderatorId: process.env.CLIENT_ID,
@@ -124,7 +124,7 @@ export abstract class ModerationListener extends Listener {
     private async onSoftBan(msg: GuildMessage, t: TFunction) {
         await this.container.redis!.pinsertex(`guild:${msg.guild.id}:ban:${msg.member.id}`, seconds(20), '');
         await this.container.redis!.pinsertex(`guild:${msg.guild.id}:unban:${msg.member.id}`, seconds(20), '');
-        return getModeration(msg.guild).actions.softban(
+        return this.container.utilities.guild(msg.guild).moderation.actions.softban(
             {
                 userId: msg.member.id,
                 moderatorId: process.env.CLIENT_ID,
@@ -139,7 +139,7 @@ export abstract class ModerationListener extends Listener {
 
     private async onBan(msg: GuildMessage, t: TFunction, duration: number | null) {
         await this.container.redis!.pinsertex(`guild:${msg.guild.id}:ban:${msg.member.id}`, seconds(20), '');
-        return getModeration(msg.guild).actions.ban(
+        return this.container.utilities.guild(msg.guild).moderation.actions.ban(
             {
                 userId: msg.member.id,
                 moderatorId: process.env.CLIENT_ID,
@@ -158,7 +158,7 @@ export abstract class ModerationListener extends Listener {
         const roleId = await this.container.db.guilds.acquire(msg.guild.id, GuildSettings.Roles.Muted);
         if (!roleId) return;
 
-        return getModeration(msg.guild).actions.mute(
+        return this.container.utilities.guild(msg.guild).moderation.actions.mute(
             {
                 userId: msg.member.id,
                 moderatorId: process.env.CLIENT_ID,
