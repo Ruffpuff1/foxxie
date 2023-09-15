@@ -1,4 +1,4 @@
-import { GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import type { FoxxieCommand } from '#lib/Structures';
 import { isModerator } from '#utils/Discord';

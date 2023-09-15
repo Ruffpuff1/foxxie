@@ -1,4 +1,4 @@
-import { GetRecentTracksUserTrack, GetTrackInfoResultWithUser } from '#api/LastFm/Services/LastFmService';
+import { GetRecentTracksUserTrack, GetTrackInfoResultWithUser } from '#Api/LastFm/Services/LastFmService';
 import { Column, PrimaryColumn } from 'typeorm';
 
 export class LastFmTrack {

@@ -1,6 +1,6 @@
 import { LLRCData } from '#external/LongLivingReactionCollector';
+import { GuildSettings, StarEntity, acquireSettings, writeSettings } from '#lib/Database';
 import { StarboardManager } from '#lib/Structures/managers/StarboardManager';
-import { GuildSettings, StarEntity, acquireSettings, writeSettings } from '#lib/database';
 import { SerializedEmoji, isStarboardEmoji } from '#utils/Discord';
 import { snowflakeAge } from '#utils/util';
 import { cast, isDev } from '@ruffpuff/utilities';

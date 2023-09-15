@@ -1,4 +1,4 @@
-import type { ModerationEntity } from '#lib/database';
+import type { ModerationEntity } from '#lib/Database';
 import type { ClientEvents } from 'discord.js';
 import { FoxxieEvents } from './Events';
 
@@ -40,12 +40,12 @@ export interface SubcommandDescription {
     command: string;
     description: string | string[];
     examples: string[];
-    options?: SubcommandOption[]
+    options?: SubcommandOption[];
 }
 
 export interface SubcommandOption {
     name: string;
-    description: string
+    description: string;
 }
 
 export const enum PermissionLevels {

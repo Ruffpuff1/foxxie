@@ -1,4 +1,4 @@
-import type { Highlight } from '#lib/database';
+import type { Highlight } from '#lib/Database';
 import { sanitize } from '@foxxie/sanitize';
 import { cast, seconds } from '@ruffpuff/utilities';
 import { isMainThread, parentPort } from 'node:worker_threads';

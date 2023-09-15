@@ -1,6 +1,6 @@
-import { LastFmAlbum } from '#lib/database/entities/LastFmAlbum';
-import { LastFmArtistEntity } from '#lib/database/entities/LastFmArtistEntity';
-import { LastFmTrack } from '#lib/database/entities/LastFmTrack';
+import { LastFmAlbum } from '#lib/Database/entities/LastFmAlbum';
+import { LastFmArtistEntity } from '#lib/Database/entities/LastFmArtistEntity';
+import { LastFmTrack } from '#lib/Database/entities/LastFmTrack';
 import { fetch } from '@foxxie/fetch';
 import { cast, hours } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
@@ -40,12 +40,13 @@ export class SpotifyService {
             );
         }
 
-        if (previousArtist.shouldBeUpdated) return this.updateArtist(
-            previousArtist,
-            artistData,
-            cast<GetArtistTopTracksResult>(foundTracks),
-            cast<GetArtistTopAlbumsResult>(foundAlbums)
-        );
+        if (previousArtist.shouldBeUpdated)
+            return this.updateArtist(
+                previousArtist,
+                artistData,
+                cast<GetArtistTopTracksResult>(foundTracks),
+                cast<GetArtistTopAlbumsResult>(foundAlbums)
+            );
 
         this.updateArtistWithArtistData(previousArtist, artistData);
 

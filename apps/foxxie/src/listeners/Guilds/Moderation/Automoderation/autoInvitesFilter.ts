@@ -1,7 +1,7 @@
+import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { ModerationListener } from '#lib/Structures';
 import { FoxxieEvents, GuildMessage } from '#lib/Types';
-import { GuildSettings } from '#lib/database';
 import { deleteMessage, sendTemporaryMessage } from '#utils/Discord';
 import { Colors, allowedInviteIds } from '#utils/constants';
 import { cast } from '@ruffpuff/utilities';

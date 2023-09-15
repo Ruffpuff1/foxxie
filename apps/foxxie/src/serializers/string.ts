@@ -1,4 +1,4 @@
-import { Serializer, SerializerUpdateContext } from '#lib/database';
+import { Serializer, SerializerUpdateContext } from '#lib/Database';
 import type { Awaitable } from '@sapphire/utilities';
 
 export class UserSerializer extends Serializer<string> {

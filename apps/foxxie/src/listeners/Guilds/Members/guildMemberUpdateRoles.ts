@@ -1,6 +1,6 @@
 import { GuildUtilityService } from '#lib/Container/Utility/Services/Guild/GuildUtilityService';
+import { GuildSettings, acquireSettings } from '#lib/Database';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
-import { GuildSettings, acquireSettings } from '#lib/database';
 import { TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
 import { cast, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';

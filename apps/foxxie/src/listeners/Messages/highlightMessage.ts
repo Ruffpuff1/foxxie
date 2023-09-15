@@ -1,5 +1,5 @@
 import { HighlightReturnData, HighlightTypeEnum, IncomingType } from '#lib/Container/Workers/types';
-import { acquireSettings, GuildSettings, Highlight } from '#lib/database';
+import { GuildSettings, Highlight, acquireSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
 import { floatPromise, resolveClientColor, resolveEmbedField } from '#utils/util';
@@ -8,7 +8,7 @@ import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { EmbedBuilder, escapeMarkdown, Message } from 'discord.js';
+import { EmbedBuilder, Message, escapeMarkdown } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
     event: FoxxieEvents.UserMessage,

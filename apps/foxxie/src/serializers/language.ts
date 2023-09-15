@@ -1,4 +1,4 @@
-import { Serializer } from '#lib/database';
+import { Serializer } from '#lib/Database';
 import type { Awaitable } from '@sapphire/utilities';
 import i18next from 'i18next';
 

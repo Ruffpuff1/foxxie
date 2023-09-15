@@ -1,4 +1,4 @@
-import type { ModerationEntity } from '#lib/database';
+import type { ModerationEntity } from '#lib/Database';
 import type { CommandInteraction, EmbedBuilder, Guild, GuildMember, Message } from 'discord.js';
 
 export interface GuildMessage extends Message<true> {

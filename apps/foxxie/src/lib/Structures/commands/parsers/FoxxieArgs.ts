@@ -1,4 +1,4 @@
-import { acquireSettings, GuildEntity, SettingsCollectionCallback, writeSettings } from '#lib/database';
+import { acquireSettings, GuildEntity, SettingsCollectionCallback, writeSettings } from '#lib/Database';
 import { fetch, HttpMethodEnum } from '@foxxie/fetch';
 import { TFunction } from '@foxxie/i18n';
 import { cast } from '@ruffpuff/utilities';

@@ -1,6 +1,6 @@
+import { GuildSettings, acquireSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { GuildMessage, PermissionLevels } from '#lib/Types';
-import { GuildSettings, acquireSettings } from '#lib/database';
 import { clientOwners } from '#root/config';
 import { isGuildOwner } from '#utils/Discord';
 import {

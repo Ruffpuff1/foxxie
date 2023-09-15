@@ -1,4 +1,4 @@
-import { ModerationEntity } from '#database/entities/ModerationEntity';
+import { ModerationEntity } from '#Database/entities/ModerationEntity';
 import type FoxxieClient from '#lib/FoxxieClient';
 import { cast } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';

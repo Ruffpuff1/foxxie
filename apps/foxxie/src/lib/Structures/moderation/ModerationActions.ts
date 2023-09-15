@@ -1,6 +1,6 @@
+import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import type { GuildMessage } from '#lib/Types';
-import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/database';
 import { messagePrompt } from '#utils/Discord';
 import { Colors } from '#utils/constants';
 import { SendOptions, TypeCodes, TypeVariationAppealNames } from '#utils/moderation';
@@ -22,7 +22,7 @@ import {
     Role,
     Routes
 } from 'discord.js';
-import { Warn } from '../../database/entities/Warn';
+import { Warn } from '../../Database/entities/Warn';
 import {
     RoleKey,
     RolePermissionOverwriteOptionField,

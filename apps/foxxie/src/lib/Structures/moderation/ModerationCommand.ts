@@ -1,6 +1,6 @@
+import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { GuildMessage, PermissionLevels } from '#lib/Types';
-import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/database';
 import { isGuildOwner, sendTemporaryMessage } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { bold } from '@discordjs/builders';

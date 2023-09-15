@@ -1,5 +1,5 @@
-import { acquireSettings } from '#lib/database';
-import { buildVillagerDisplay, fetchVillager } from '#api/celestia';
+import { buildVillagerDisplay, fetchVillager } from '#Api/celestia';
+import { acquireSettings } from '#lib/Database';
 import { floatPromise } from '#utils/util';
 import { Villager } from '@foxxie/celestia-api-types';
 import { resolveToNull } from '@ruffpuff/utilities';

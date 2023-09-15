@@ -1,5 +1,5 @@
+import { GuildEntity, GuildSettings } from '#lib/Database';
 import { FoxxieEvents, GuildMessage } from '#lib/Types';
-import { GuildEntity, GuildSettings } from '#lib/database';
 import { isModerator } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';

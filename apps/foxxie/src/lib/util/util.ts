@@ -1,5 +1,5 @@
+import { acquireSettings } from '#lib/Database';
 import { DetailedDescription, GuildMessage } from '#lib/Types';
-import { acquireSettings } from '#lib/database';
 import { cast, isNumber, isThenable } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { APIUser } from 'discord-api-types/v10';

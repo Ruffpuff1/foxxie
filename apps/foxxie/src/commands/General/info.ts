@@ -1,8 +1,8 @@
+import { GuildSettings, MemberEntity, acquireSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import type { GuildMessage } from '#lib/Types';
 import { EnvKeys } from '#lib/Types/Env';
-import { GuildSettings, MemberEntity, acquireSettings } from '#lib/database';
 import { isGuildOwner, sendLoadingMessage } from '#utils/Discord';
 import { BrandingColors, emojis } from '#utils/constants';
 import { floatPromise, resolveEmbedField } from '#utils/util';

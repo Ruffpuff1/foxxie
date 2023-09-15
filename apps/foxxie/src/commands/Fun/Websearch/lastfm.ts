@@ -1,5 +1,5 @@
-import { GetArtistInfoResult, GetUserInfoResult } from '#api/LastFm';
-import { acquireSettings } from '#lib/database';
+import { GetArtistInfoResult, GetUserInfoResult } from '#Api/LastFm';
+import { acquireSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage } from '#lib/Types';

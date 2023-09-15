@@ -1,4 +1,4 @@
-import type { Highlight } from '#lib/database';
+import type { Highlight } from '#lib/Database';
 import type { Snowflake } from 'discord.js';
 
 export const enum OutputType {

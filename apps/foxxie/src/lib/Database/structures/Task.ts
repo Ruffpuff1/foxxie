@@ -2,7 +2,7 @@
  * @license Apache License 2.0
  * @copyright 2019 Skyra Project
  */
-import type { PartialResponseValue } from '#lib/database/entities';
+import type { PartialResponseValue } from '#lib/Database/entities';
 import { Piece, PieceOptions } from '@sapphire/framework';
 import type { Awaitable } from '@sapphire/utilities';
 

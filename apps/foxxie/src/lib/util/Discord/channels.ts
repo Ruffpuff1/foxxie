@@ -1,4 +1,4 @@
-import type { GuildEntity } from '#lib/database';
+import type { GuildEntity } from '#lib/Database';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';

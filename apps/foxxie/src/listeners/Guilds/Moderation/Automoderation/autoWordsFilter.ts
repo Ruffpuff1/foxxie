@@ -1,6 +1,6 @@
 import { IncomingType, OutgoingWordFilterPayload, OutputType } from '#lib/Container/Workers';
-import type { Word } from '#lib/database';
-import { GuildSettings } from '#lib/database';
+import type { Word } from '#lib/Database';
+import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { ModerationBitField, ModerationFlagBits, ModerationHardActionFlags } from '#lib/Structures';
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';

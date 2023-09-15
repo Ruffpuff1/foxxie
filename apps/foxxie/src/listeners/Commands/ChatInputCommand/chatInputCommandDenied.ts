@@ -1,4 +1,4 @@
-import { acquireSettings } from '#lib/database';
+import { acquireSettings } from '#lib/Database';
 import { translate } from '#lib/I18n';
 import type { EventArgs, FoxxieEvents } from '#lib/Types';
 import { cast } from '@ruffpuff/utilities';

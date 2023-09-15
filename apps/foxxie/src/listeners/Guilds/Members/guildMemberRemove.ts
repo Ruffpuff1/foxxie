@@ -1,7 +1,7 @@
+import { GuildSettings, acquireSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { AutomationListener } from '#lib/Structures';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
-import { GuildSettings, acquireSettings } from '#lib/database';
 import { fetchChannel } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import { cast, isDev, resolveToNull } from '@ruffpuff/utilities';

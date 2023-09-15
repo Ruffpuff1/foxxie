@@ -1,4 +1,4 @@
-import { GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { AutomationListener } from '#lib/Structures';
 import { EventArgs, FoxxieEvents } from '#lib/Types';

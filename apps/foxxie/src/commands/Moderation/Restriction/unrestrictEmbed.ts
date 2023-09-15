@@ -1,4 +1,4 @@
-import { GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { ModerationCommand, ModerationSetupRestriction } from '#lib/Structures';
 import { ModerationRoleCommand } from '#lib/Structures/moderation/ModerationRoleCommand';

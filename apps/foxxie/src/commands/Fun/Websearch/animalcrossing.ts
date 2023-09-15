@@ -1,4 +1,4 @@
-import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#api/celestia';
+import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#Api/celestia';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage } from '#lib/Types';

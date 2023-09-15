@@ -1,5 +1,5 @@
+import { GuildSettings, acquireSettings } from '#lib/Database';
 import type { EventArgs, FoxxieEvents } from '#lib/Types';
-import { GuildSettings, acquireSettings } from '#lib/database';
 import { floatPromise, resolveClientColor } from '#utils/util';
 import { Listener } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';

@@ -1,6 +1,6 @@
+import { acquireSettings, GuildSettings, PersistRole, writeSettings } from '#lib/Database';
 import { isNullish } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
-import { acquireSettings, GuildSettings, PersistRole, writeSettings } from '#lib/database';
 
 export class PersistRoleManager {
     #guild: Guild;

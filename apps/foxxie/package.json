@@ -88,7 +88,7 @@
     "#external/LongLivingReactionCollector": "./dist/src/lib/util/External/LongLivingReactionCollector.js",
     "#external/Rest": "./dist/src/lib/util/External/Rest.js",
     "#lib/*": "./dist/src/lib/*.js",
-    "#lib/database": "./dist/src/lib/database/index.js",
+    "#lib/Database": "./dist/src/lib/Database/index.js",
     "#lib/discord": "./dist/src/lib/discord/index.js",
     "#lib/FoxxieClient": "./dist/src/lib/FoxxieClient.js",
     "#lib/I18n": "./dist/src/lib/I18n/index.js",

@@ -1,4 +1,4 @@
-import { acquireSettings } from '#lib/database';
+import { acquireSettings } from '#lib/Database';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { fetchChannel } from '#utils/Discord';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';

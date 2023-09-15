@@ -1,4 +1,4 @@
-import { acquireSettings, GuildSettings } from '#lib/database';
+import { acquireSettings, GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { getT } from '@foxxie/i18n';

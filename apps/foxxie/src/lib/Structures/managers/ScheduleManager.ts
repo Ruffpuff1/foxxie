@@ -2,7 +2,7 @@
  * @license Apache License 2.0
  * @copyright 2019 Skyra Project
  */
-import { ResponseType, ResponseValue, ScheduleEntity } from '#database/entities/ScheduleEntity';
+import { ResponseType, ResponseValue, ScheduleEntity } from '#Database/entities/ScheduleEntity';
 import type { ScheduleData } from '#lib/Types';
 import type { Schedules } from '#utils/constants';
 import { container } from '@sapphire/framework';

@@ -1,9 +1,9 @@
-import { ApiService } from '#api/ApiService';
+import { ApiService } from '#Api/ApiService';
 import type { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import { UtilityService } from '#lib/Container/Utility/Services/UtilityService';
+import type { GuildEntity, ModerationEntity, MongoDB, SerializerStore, TaskStore } from '#lib/Database';
 import type { FoxxieCommand, InviteManager, RedisManager, ScheduleManager, WorkerManager } from '#lib/Structures';
-import type { GuildEntity, ModerationEntity, MongoDB, SerializerStore, TaskStore } from '#lib/database';
 import { TFunction } from '@foxxie/i18n';
 import type { Piece, Store } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';

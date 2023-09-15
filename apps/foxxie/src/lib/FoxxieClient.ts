@@ -1,5 +1,5 @@
 /* eslint-disable no-import-assign */
-import { ApiService } from '#api/ApiService';
+import { ApiService } from '#Api/ApiService';
 import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import { clientOptions, webhookError } from '#root/config';

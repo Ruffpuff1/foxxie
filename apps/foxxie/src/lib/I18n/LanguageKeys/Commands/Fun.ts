@@ -1,4 +1,4 @@
-import { GetUserInfoResult } from '#api/LastFm';
+import { GetUserInfoResult } from '#Api/LastFm';
 import { DetailedDescription } from '#lib/Types';
 import { FT, T } from '@foxxie/i18n';
 

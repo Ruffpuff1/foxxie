@@ -1,4 +1,4 @@
-import { config } from '#database/config';
+import { config } from '#Database/config';
 import FoxxieClient from '#lib/FoxxieClient';
 import '#lib/Setup';
 import { EnvKeys } from '#lib/Types/Env';

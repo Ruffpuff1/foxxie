@@ -1,4 +1,4 @@
-import { GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { ModerationData, ModerationTask } from '#lib/Structures';
 import { Schedules } from '#utils/constants';

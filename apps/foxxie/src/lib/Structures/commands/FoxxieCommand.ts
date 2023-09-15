@@ -1,6 +1,6 @@
+import type { MongoDB } from '#lib/Database';
 import type FoxxieClient from '#lib/FoxxieClient';
 import { DetailedDescription, PermissionLevels } from '#lib/Types';
-import type { MongoDB } from '#lib/database';
 import { clientOwners } from '#root/config';
 import { CustomFunctionGet } from '@foxxie/i18n';
 import { cast, seconds } from '@ruffpuff/utilities';

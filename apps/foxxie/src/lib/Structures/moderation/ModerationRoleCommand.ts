@@ -1,6 +1,6 @@
+import { GuildEntity, acquireSettings, writeSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { GuildMessage } from '#lib/Types';
-import { GuildEntity, acquireSettings, writeSettings } from '#lib/database';
 import { isAdmin, messagePrompt, promptForMessage } from '#utils/Discord';
 import { bold } from '@discordjs/builders';
 import { cast } from '@ruffpuff/utilities';

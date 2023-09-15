@@ -1,4 +1,4 @@
-import { GuildSettings } from '#lib/database';
+import { GuildSettings } from '#lib/Database';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';

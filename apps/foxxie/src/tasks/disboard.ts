@@ -1,4 +1,4 @@
-import { GuildSettings, PartialResponseValue, ResponseType, Task } from '#lib/database';
+import { GuildSettings, PartialResponseValue, ResponseType, Task } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieEvents, ScheduleData } from '#lib/Types';
 import { Schedules } from '#utils/constants';
