@@ -1,4 +1,4 @@
-import { EventArgs, FoxxieEvents } from '#lib/types';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { Schedules } from '#utils/constants';
 import { isDisboard } from '#utils/Discord';
 import { cast, hours, isDev } from '@ruffpuff/utilities';

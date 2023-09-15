@@ -1,5 +1,5 @@
-import { acquireSettings } from '#lib/database';
-import { DetailedDescription, GuildMessage } from '#lib/types';
+import { acquireSettings } from '#lib/Database';
+import { DetailedDescription, GuildMessage } from '#lib/Types';
 import { cast, isNumber, isThenable } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { APIUser } from 'discord-api-types/v10';
@@ -15,7 +15,6 @@ import {
     makeURLSearchParams
 } from 'discord.js';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
-import { maybeMe } from './Discord';
 import { BrandingColors } from './constants';
 
 /**
@@ -146,10 +145,10 @@ export function resolveClientColor(resolveable: GuildResolvable | null, color?: 
 
     if (!resolveable) return BrandingColors.Primary;
 
-    const me = maybeMe(resolveable);
-    if (!me) return BrandingColors.Primary;
+    const { maybeMe } = container.utilities.guild(resolveable);
+    if (!maybeMe) return BrandingColors.Primary;
 
-    return me.displayColor;
+    return maybeMe.displayColor;
 }
 
 export function resolveEmbedField(name: string, text: string, inline: boolean = false): APIEmbedField {

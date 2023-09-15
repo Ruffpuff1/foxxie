@@ -1,5 +1,5 @@
-import { Serializer, SerializerUpdateContext } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
+import { Serializer, SerializerUpdateContext } from '#lib/Database';
+import { LanguageKeys } from '#lib/I18n';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Awaitable } from '@sapphire/utilities';
 

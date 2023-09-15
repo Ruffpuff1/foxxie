@@ -1,5 +1,5 @@
-import { LanguageKeys } from '#lib/i18n';
-import type { LanguageString } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import type { LanguageString } from '#lib/Types';
 import { cast } from '@ruffpuff/utilities';
 import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 import i18next from 'i18next';

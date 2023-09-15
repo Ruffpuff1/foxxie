@@ -1,17 +1,11 @@
-import type { Word } from '#lib/database';
-import { GuildSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import {
-    IncomingType,
-    ModerationBitField,
-    ModerationFlagBits,
-    ModerationHardActionFlags,
-    OutgoingWordFilterPayload,
-    OutputType
-} from '#lib/structures';
-import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
+import { IncomingType, OutgoingWordFilterPayload, OutputType } from '#lib/Container/Workers';
+import type { Word } from '#lib/Database';
+import { GuildSettings } from '#lib/Database';
+import { LanguageKeys } from '#lib/I18n';
+import { ModerationBitField, ModerationFlagBits, ModerationHardActionFlags } from '#lib/Structures';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
 import { Colors } from '#utils/constants';
-import { deleteMessage, getModeration, isModerator, isSendableChannel, sendTemporaryMessage } from '#utils/Discord';
+import { deleteMessage, isModerator, sendTemporaryMessage } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
 import type { TFunction } from '@foxxie/i18n';
@@ -74,7 +68,7 @@ export class UserListener extends Listener<FoxxieEvents.UserMessage> {
     }
 
     private async onWarning(msg: GuildMessage, t: TFunction) {
-        return getModeration(msg.guild).actions.warn(
+        return this.container.utilities.guild(msg.guild).moderation.actions.warn(
             {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
@@ -88,7 +82,7 @@ export class UserListener extends Listener<FoxxieEvents.UserMessage> {
 
     private async onKick(msg: GuildMessage, t: TFunction) {
         await this.container.redis?.pinsertex(`guild:${msg.guild.id}:kick:${msg.author.id}`, seconds(20), '');
-        return getModeration(msg.guild).actions.kick(
+        return this.container.utilities.guild(msg.guild).moderation.actions.kick(
             {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
@@ -103,7 +97,7 @@ export class UserListener extends Listener<FoxxieEvents.UserMessage> {
     private async onSoftBan(msg: GuildMessage, t: TFunction) {
         await this.container.redis?.pinsertex(`guild:${msg.guild.id}:ban:${msg.author.id}`, seconds(20), '');
         await this.container.redis?.pinsertex(`guild:${msg.guild.id}:unban:${msg.author.id}`, seconds(20), '');
-        return getModeration(msg.guild).actions.softban(
+        return this.container.utilities.guild(msg.guild).moderation.actions.softban(
             {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
@@ -118,7 +112,7 @@ export class UserListener extends Listener<FoxxieEvents.UserMessage> {
 
     private async onBan(msg: GuildMessage, t: TFunction, duration: number | null) {
         await this.container.redis?.pinsertex(`guild:${msg.guild.id}:ban:${msg.author.id}`, seconds(20), '');
-        return getModeration(msg.guild).actions.ban(
+        return this.container.utilities.guild(msg.guild).moderation.actions.ban(
             {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
@@ -137,7 +131,7 @@ export class UserListener extends Listener<FoxxieEvents.UserMessage> {
         const roleId = await this.container.db.guilds.acquire(msg.guild.id, GuildSettings.Roles.Muted);
         if (!roleId) return;
 
-        return getModeration(msg.guild).actions.mute(
+        return this.container.utilities.guild(msg.guild).moderation.actions.mute(
             {
                 userId: msg.author.id,
                 moderatorId: process.env.CLIENT_ID,
@@ -164,7 +158,7 @@ export class UserListener extends Listener<FoxxieEvents.UserMessage> {
             this.onLog(msg, t, processed);
         }
 
-        if (bitfield.has(ModerationFlagBits.Alert) && isSendableChannel(msg.channel)) {
+        if (bitfield.has(ModerationFlagBits.Alert) && this.container.utilities.channel(msg.channel).isSendable) {
             await floatPromise(this.onAlert(msg, t));
         }
     }

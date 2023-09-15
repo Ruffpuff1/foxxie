@@ -1,7 +1,7 @@
 import { LLRCData } from '#external/LongLivingReactionCollector';
-import { GuildSettings, StarEntity, acquireSettings, writeSettings } from '#lib/database';
-import { StarboardManager } from '#lib/structures/managers/StarboardManager';
-import { SerializedEmoji, getStarboard, isStarboardEmoji } from '#utils/Discord';
+import { GuildSettings, StarEntity, acquireSettings, writeSettings } from '#lib/Database';
+import { StarboardManager } from '#lib/Structures/managers/StarboardManager';
+import { SerializedEmoji, isStarboardEmoji } from '#utils/Discord';
 import { snowflakeAge } from '#utils/util';
 import { cast, isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -36,7 +36,7 @@ export class UserListener extends Listener {
         }
 
         // Process the starboard
-        const starboard = getStarboard(data.guild);
+        const { starboard } = this.container.utilities.guild(data.guild);
 
         const previousEntity = await this.container.db.starboards.findOne({
             where: { starMessageId: data.messageId, guildId: data.guild.id }

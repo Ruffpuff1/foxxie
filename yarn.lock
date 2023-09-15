@@ -351,6 +351,21 @@
   dependencies:
     discord-api-types "0.37.50"
 
+"@discordjs/node-pre-gyp@^0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@discordjs/node-pre-gyp/-/node-pre-gyp-0.4.5.tgz#b33e38cedd821268c75923641783c68fcd1b55ae"
+  integrity sha512-YJOVVZ545x24mHzANfYoy0BJX5PDyeZlpiJjDkUBM/V/Ao7TFX9lcUvCN4nr0tbr5ubeaXxtEBILUrHtTphVeQ==
+  dependencies:
+    detect-libc "^2.0.0"
+    https-proxy-agent "^5.0.0"
+    make-dir "^3.1.0"
+    node-fetch "^2.6.7"
+    nopt "^5.0.0"
+    npmlog "^5.0.1"
+    rimraf "^3.0.2"
+    semver "^7.3.5"
+    tar "^6.1.11"
+
 "@discordjs/rest@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@discordjs/rest/-/rest-2.0.1.tgz#100c208a964e54b8d7cd418bbaed279c816b8ec5"
@@ -1275,6 +1290,15 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@sapphire/timestamp/-/timestamp-1.0.1.tgz#438d2c10702430cb95db84ada519f240800e5e4e"
   integrity sha512-uLg+rBFuBiaQY/pFGDDzZSOH2cfv4ONIB7zQGNuRCTpYKBW/iIhRBIZjJZyn8NVkXQhVi+Q94DI4i6gDhYVs7w==
+
+"@sapphire/type@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/type/-/type-2.4.0.tgz#2be5411cec4242ecad5170aab616c7e8d3319b6d"
+  integrity sha512-oEyNiNr2zfStol5yLAjsLC4nYW0jP0wrOmQFQVl7SX/gumskoTy0hKGtKAWUwSMmc9N5pdlw3QbFNDzIkKYRvg==
+  dependencies:
+    "@discordjs/node-pre-gyp" "^0.4.5"
+    nan "^2.17.0"
+    tslib "^2.5.0"
 
 "@sapphire/utilities@^3.13.0", "@sapphire/utilities@^3.6.2":
   version "3.13.0"
@@ -4823,6 +4847,11 @@ mz@^2.4.0, mz@^2.7.0:
     any-promise "^1.0.0"
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
+
+nan@^2.17.0:
+  version "2.18.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.18.0.tgz#26a6faae7ffbeb293a39660e88a76b82e30b7554"
+  integrity sha512-W7tfG7vMOGtD30sHoZSSc/JVYiyDPEyQVso/Zz+/uQd0B0L46gtC+pHha5FFMRpil6fm/AoEcRWyOVi4+E/f8w==
 
 nanoid@^3.3.4, nanoid@^3.3.6:
   version "3.3.6"

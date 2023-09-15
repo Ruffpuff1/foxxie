@@ -1,4 +1,4 @@
-import type { FoxxieEvents } from '#lib/types';
+import type { FoxxieEvents } from '#lib/Types';
 import { createBanner } from '#utils/startBanner';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';

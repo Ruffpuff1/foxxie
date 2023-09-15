@@ -1,4 +1,4 @@
-import { GuildSettings, acquireSettings } from '#lib/database';
+import { GuildSettings, acquireSettings } from '#lib/Database';
 import { floatPromise } from '#utils/util';
 import { isDev, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';

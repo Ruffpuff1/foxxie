@@ -1,13 +1,13 @@
-import { initI18n } from './config';
-import { config } from '#database/config';
+import { config } from '#Database/config';
 import FoxxieClient from '#lib/FoxxieClient';
-import '#lib/setup';
+import '#lib/Setup';
+import { EnvKeys } from '#lib/Types/Env';
 import { helpUsagePostProcessor } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';
 import { container } from '@sapphire/framework';
 import { init } from '@sentry/node';
 import i18next from 'i18next';
-import { EnvKeys } from '#lib/types/Env';
+import { initI18n } from './config';
 
 async function main() {
     await initI18n();

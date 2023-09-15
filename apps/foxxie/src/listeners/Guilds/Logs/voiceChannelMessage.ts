@@ -1,6 +1,6 @@
-import { GuildSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
+import { GuildSettings } from '#lib/Database';
+import { LanguageKeys } from '#lib/I18n';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
 import { Colors } from '#utils/constants';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';

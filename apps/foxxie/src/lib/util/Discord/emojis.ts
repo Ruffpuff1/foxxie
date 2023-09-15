@@ -1,4 +1,4 @@
-import { EmojiObject } from '#lib/types';
+import { EmojiObject } from '#lib/Types';
 import { cast } from '@ruffpuff/utilities';
 
 export type SerializedEmoji = string & { __TYPE__: 'SerializedEmoji' };

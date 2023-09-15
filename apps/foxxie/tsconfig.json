@@ -38,8 +38,8 @@
         "baseUrl": ".",
         "rootDir": ".",
         "paths": {
-            "#api/*": [
-                "src/lib/Api/*"
+            "#Api/*": [
+                "src/lib/Container/Api/*"
             ],
             "#external/*": [
                 "src/lib/util/External/*"
@@ -53,8 +53,8 @@
             "#languages": [
                 "src/languages/index"
             ],
-            "#database/*": [
-                "src/lib/database/*"
+            "#Database/*": [
+                "src/lib/Database/*"
             ],
             "#root/*": [
                 "src/*"

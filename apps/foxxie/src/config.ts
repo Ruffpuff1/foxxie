@@ -1,7 +1,7 @@
 process.env.NODE_ENV ??= 'development';
 
 import { localeMap } from '#languages';
-import { LanguageKeys } from '#lib/i18n';
+import { LanguageKeys } from '#lib/I18n';
 import { emojis, rootFolder } from '#utils/constants';
 import { TimestampStyles, bold, time } from '@discordjs/builders';
 import { EnvParse } from '@foxxie/env';

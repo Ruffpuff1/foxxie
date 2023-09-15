@@ -1,7 +1,6 @@
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { FoxxieEvents, GuildMessage, PermissionLevels } from '#lib/types';
-import { getModeration } from '#utils/Discord';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import { FoxxieEvents, GuildMessage, PermissionLevels } from '#lib/Types';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
 
@@ -14,7 +13,7 @@ export default class UserCommand extends FoxxieCommand {
     public async messageRun(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
         const caseId = await args.pick('moderationLog');
 
-        const log = await getModeration(message.guild).fetch(caseId);
+        const log = await this.container.utilities.guild(message.guild).moderation.fetch(caseId);
         if (!log) this.error(LanguageKeys.Commands.Moderation.CaseNoExist, { id: caseId });
 
         const reason = await args.rest('string', { maximum: 200 });

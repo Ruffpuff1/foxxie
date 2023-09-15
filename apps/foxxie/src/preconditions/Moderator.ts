@@ -1,8 +1,8 @@
-import type { Result, UserError } from '@sapphire/framework';
-import { PermissionLevelPrecondition } from '#lib/structures';
-import type { GuildMessage } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import { PermissionLevelPrecondition } from '#lib/Structures';
+import type { GuildMessage } from '#lib/Types';
 import { isModerator } from '#utils/Discord';
-import { LanguageKeys } from '#lib/i18n';
+import type { Result, UserError } from '@sapphire/framework';
 
 export class UserPrecondition extends PermissionLevelPrecondition {
     public async handle(message: GuildMessage): Promise<Result<unknown, UserError>> {

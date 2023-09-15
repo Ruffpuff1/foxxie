@@ -1,6 +1,5 @@
-import { GuildSettings } from '#lib/database';
-import { EventArgs, FoxxieEvents } from '#lib/types';
-import { getPersistRoles } from '#utils/Discord';
+import { GuildSettings } from '#lib/Database';
+import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
@@ -18,7 +17,7 @@ export class UserListener extends Listener<FoxxieEvents.GuildMemberAdd> {
             settings
         ]);
         if (muteRoleId) {
-            const persistRoles = getPersistRoles(member.guild);
+            const { persistRoles } = this.container.utilities.guild(member.guild);
 
             const memberRoles = await persistRoles.get(member.id);
             if (memberRoles.includes(muteRoleId)) return;

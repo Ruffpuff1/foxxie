@@ -1,6 +1,6 @@
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import type { GuildMessage } from '#lib/types';
+import { LanguageKeys } from '#lib/I18n';
+import { FoxxieCommand } from '#lib/Structures';
+import type { GuildMessage } from '#lib/Types';
 import { resolveClientColor } from '#utils/util';
 import { bold, inlineCode } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';

@@ -1,7 +1,7 @@
-import { acquireSettings, GuildSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { AutomationListener } from '#lib/structures';
-import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
+import { acquireSettings, GuildSettings } from '#lib/Database';
+import { LanguageKeys } from '#lib/I18n';
+import { AutomationListener } from '#lib/Structures';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
 import { fetchChannel, isBoostMessage } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import { TFunction } from '@foxxie/i18n';

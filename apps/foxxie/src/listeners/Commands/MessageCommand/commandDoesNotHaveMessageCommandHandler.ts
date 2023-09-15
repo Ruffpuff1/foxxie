@@ -1,4 +1,4 @@
-import type { EventArgs, FoxxieEvents } from '#lib/types';
+import type { EventArgs, FoxxieEvents } from '#lib/Types';
 import { Listener } from '@sapphire/framework';
 
 export class UserListener extends Listener<FoxxieEvents.CommandDoesNotHaveMessageCommandHandler> {

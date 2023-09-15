@@ -1,8 +1,7 @@
-import { GuildSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { ModerationData, ModerationTask } from '#lib/structures';
+import { GuildSettings } from '#lib/Database';
+import { LanguageKeys } from '#lib/I18n';
+import { ModerationData, ModerationTask } from '#lib/Structures';
 import { Schedules } from '#utils/constants';
-import { getModeration } from '#utils/Discord';
 import { seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
@@ -26,7 +25,7 @@ export class UserTask extends ModerationTask {
 
         const reason = t(LanguageKeys.Moderation.Unmute, this.ctx(data.duration));
 
-        await getModeration(guild).actions.unmute(
+        await this.container.utilities.guild(guild).moderation.actions.unmute(
             {
                 userId: data.userId,
                 moderatorId: data.moderatorId,

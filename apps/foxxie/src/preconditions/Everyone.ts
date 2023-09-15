@@ -1,6 +1,6 @@
+import { PermissionLevelPrecondition } from '#lib/Structures';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Result, UserError } from '@sapphire/framework';
-import { PermissionLevelPrecondition } from '#lib/structures';
 
 @ApplyOptions<PermissionLevelPrecondition.Options>({
     guildOnly: false

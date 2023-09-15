@@ -1,4 +1,4 @@
-import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
 import { cast } from '@ruffpuff/utilities';
 import { Listener } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';

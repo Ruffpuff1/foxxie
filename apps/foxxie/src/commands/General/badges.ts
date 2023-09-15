@@ -1,5 +1,5 @@
-import { FoxxieCommand } from '#lib/structures';
-import { GuildMessage, PermissionLevels } from '#lib/types';
+import { FoxxieCommand } from '#lib/Structures';
+import { GuildMessage, PermissionLevels } from '#lib/Types';
 import { sendLoadingMessage } from '#utils/Discord';
 import { BadgeEmojis } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';

@@ -1,5 +1,5 @@
-import { ShardListener } from '#lib/structures';
-import type { EventArgs, FoxxieEvents } from '#lib/types';
+import { ShardListener } from '#lib/Structures';
+import type { EventArgs, FoxxieEvents } from '#lib/Types';
 import { yellow } from 'colorette';
 
 export class UserListener extends ShardListener<FoxxieEvents.ShardResume> {
