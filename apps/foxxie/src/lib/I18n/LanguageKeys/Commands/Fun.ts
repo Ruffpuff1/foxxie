@@ -1,9 +1,9 @@
 import { GetUserInfoResult } from '#Api/LastFm';
-import { DetailedDescription } from '#lib/Types';
+import { DetailedDescription, DetailedDescriptionArgs } from '#lib/Types';
 import { FT, T } from '@foxxie/i18n';
 
 export const AnimalcrossingCoffee = FT<{ beans: string; milk: string; sugar: string }>('commands/fun:animalcrossingCoffee');
-export const AnimalcrossingDetailedDescription = FT<{ prefix: string }, DetailedDescription>(
+export const AnimalcrossingDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
     'commands/fun:animalcrossingDetailedDescription'
 );
 
@@ -27,7 +27,7 @@ export const AnimalcrossingTitles = T<{
     zodiac: string;
 }>('commands/fun:animalcrossingTitles');
 
-export const LastFmDetailedDescription = FT<{ prefix: string }, DetailedDescription>('commands/fun:lastFmDetailedDescription');
+export const LastFmDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/fun:lastFmDetailedDescription');
 export const LastFmPlayListeners = FT<{ count: number }>('commands/fun:lastFmPlayListeners');
 export const LastFmPlayNowPlaying = T('commands/fun:lastFmPlayNowPlaying');
 export const LastFmPlayPlays = FT<{ count: number }>('commands/fun:lastFmPlayPlays');

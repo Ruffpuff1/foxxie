@@ -618,7 +618,7 @@ export class GuildEntity extends BaseEntity {
     public getLanguage(): TFunction {
         return getT(cast<LocaleString>(this.language));
     }
-
+    
     @AfterLoad()
     protected entityLoad() {
         this.wordFilterRegExp = this.words.length ? create(this.words.map(en => en.word)) : null;

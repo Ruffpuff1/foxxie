@@ -1,5 +1,4 @@
 import { GetArtistInfoResult } from '#Api/LastFm/Services/LastFmService';
-import { acquireSettings } from '#lib/Database';
 import { floatPromise, resolveClientColor } from '#utils/util';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -13,7 +12,7 @@ import type { SelectMenuInteraction } from 'discord.js';
 export class UserInteractionHandler extends InteractionHandler {
     public override async run(interaction: SelectMenuInteraction, result: InteractionHandler.ParseResult<this>) {
         let display: PaginatedMessage;
-        const t = await acquireSettings(interaction.guildId!, s => s.getLanguage());
+        const t = await this.container.utilities.guild(interaction.guild!).settings.getT();
         const message = await resolveToNull(interaction.channel!.messages.fetch(result.messageId));
 
         const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<GetArtistInfoResult>(result.data));

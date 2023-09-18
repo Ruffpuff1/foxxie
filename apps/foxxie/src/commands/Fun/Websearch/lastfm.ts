@@ -1,5 +1,4 @@
 import { GetArtistInfoResult, GetUserInfoResult } from '#Api/LastFm';
-import { acquireSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage } from '#lib/Types';
@@ -109,7 +108,7 @@ export class UserCommand extends FoxxieCommand {
         const [artist, ephemeral] = await this.container.apis.lastFm.getArtistArgOrLastPlayedArtistFromGuildMember(interaction);
         const defer = await interaction.deferReply({ ephemeral });
 
-        const t = await acquireSettings(interaction.guildId!, s => s.getLanguage());
+        const t = await this.container.utilities.guild(interaction.guild!).settings.getT();
         const artistData = await this.container.apis.lastFm.getInfoFromArtist(artist);
 
         if (Reflect.has(artistData, 'error')) {
@@ -187,7 +186,7 @@ export class UserCommand extends FoxxieCommand {
         if (!username) this.error('noUsername');
         await interaction.deferReply({ ephemeral });
 
-        const t = await acquireSettings(interaction.guildId, s => s.getLanguage());
+        const t = await this.container.utilities.guild(interaction.guild!).settings.getT();
         let user = cast<GetUserInfoResult>(await this.container.apis.lastFm.getInfoFromUser(username));
 
         if (!user.user) {

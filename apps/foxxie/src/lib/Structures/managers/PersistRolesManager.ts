@@ -1,4 +1,5 @@
-import { acquireSettings, GuildSettings, PersistRole, writeSettings } from '#lib/Database';
+import { acquireSettings, GuildSettings, PersistRole } from '#lib/Database';
+import { container } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
 
@@ -33,7 +34,7 @@ export class PersistRoleManager {
             return roles;
         }
 
-        return writeSettings(this.#guild, settings => {
+        return this.settings.set(settings => {
             const index = settings[GuildSettings.PersistRoles].findIndex(roles => roles.userId === userId);
             if (index === -1) return [];
 
@@ -45,7 +46,7 @@ export class PersistRoleManager {
     }
 
     public remove(userId: string, roleId: string): Promise<string[]> {
-        return writeSettings(this.#guild, settings => {
+        return this.settings.set(settings => {
             const entries = settings.persistRoles;
 
             const index = entries.findIndex(r => r.userId === userId);
@@ -66,7 +67,7 @@ export class PersistRoleManager {
     }
 
     public clear(userId: string): Promise<string[]> {
-        return writeSettings(this.#guild, settings => {
+        return this.settings.set(settings => {
             const entries = settings[GuildSettings.PersistRoles];
 
             const index = entries.findIndex(r => r.userId === userId);
@@ -82,7 +83,7 @@ export class PersistRoleManager {
     }
 
     public add(userId: string, roleId: string): Promise<string[]> {
-        return writeSettings(this.#guild, settings => {
+        return this.settings.set(settings => {
             const entries = settings[GuildSettings.PersistRoles];
 
             const index = entries.findIndex(entry => entry.userId === userId);
@@ -128,5 +129,9 @@ export class PersistRoleManager {
         for (const id of ids) {
             if (roles.cache.has(id)) yield id;
         }
+    }
+
+    private get settings() {
+        return container.utilities.guild(this.#guild).settings;
     }
 }

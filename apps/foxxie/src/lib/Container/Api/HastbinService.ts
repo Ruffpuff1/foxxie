@@ -1,7 +1,7 @@
-import { EnvKeys } from '#lib/Types/Env';
+import { EnvKeys } from '#lib/Types';
+import { Urls } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';
 import { HttpMethodEnum, fetch } from '@foxxie/fetch';
-import { Urls } from '../../util/constants';
 
 export class HastebinService {
     public async post(body: string): Promise<string | null> {

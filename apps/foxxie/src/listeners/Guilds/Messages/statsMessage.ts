@@ -1,4 +1,4 @@
-import { GuildEntity, GuildSettings, writeSettings } from '#lib/Database';
+import { GuildSettings } from '#lib/Database';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { isDev, minutes } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -20,7 +20,7 @@ export class UserListener extends Listener<FoxxieEvents.StatsMessage> {
     }
 
     private async countGuild(guildId: string): Promise<void> {
-        await writeSettings(guildId, (settings: GuildEntity) => (settings[GuildSettings.MessageCount] += 1));
+        await this.container.utilities.guild(guildId).settings.set(settings => (settings[GuildSettings.MessageCount] += 1));
     }
 
     private async countMember(member: GuildMember, guildId: string): Promise<void> {

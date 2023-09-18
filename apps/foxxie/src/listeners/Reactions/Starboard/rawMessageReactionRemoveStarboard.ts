@@ -1,5 +1,5 @@
 import { LLRCData } from '#external/LongLivingReactionCollector';
-import { GuildSettings, StarEntity, acquireSettings, writeSettings } from '#lib/Database';
+import { GuildSettings, StarEntity } from '#lib/Database';
 import { StarboardManager } from '#lib/Structures/managers/StarboardManager';
 import { SerializedEmoji, isStarboardEmoji } from '#utils/Discord';
 import { snowflakeAge } from '#utils/util';
@@ -15,10 +15,9 @@ export class UserListener extends Listener {
     public async run(data: LLRCData, emojiId: SerializedEmoji) {
         if (isNsfwChannel(data.channel)) return;
 
-        const [channel, emoji] = await acquireSettings(data.guild, [
-            GuildSettings.Starboard.Channel,
-            GuildSettings.Starboard.Emojis
-        ]);
+        const { settings, starboard } = this.container.utilities.guild(data.guild);
+
+        const [channel, emoji] = await settings.get([GuildSettings.Starboard.Channel, GuildSettings.Starboard.Emojis]);
 
         // If there is no channel, or channel is the starboard channel, or the emoji isn't the starboard one, skip:
         if (!channel || !isStarboardEmoji(emoji, emojiId) || this.container.client.id === data.userId) return;
@@ -31,13 +30,11 @@ export class UserListener extends Listener {
 
         const starboardChannel = cast<TextChannel | undefined>(data.guild.channels.cache.get(channel));
         if (typeof starboardChannel === 'undefined' || !canSendMessages(starboardChannel)) {
-            await writeSettings(data.guild, [[GuildSettings.Starboard.Channel, null]]);
+            await settings.set(settings => (settings[GuildSettings.Starboard.Channel] = null));
             return;
         }
 
         // Process the starboard
-        const { starboard } = this.container.utilities.guild(data.guild);
-
         const previousEntity = await this.container.db.starboards.findOne({
             where: { starMessageId: data.messageId, guildId: data.guild.id }
         });

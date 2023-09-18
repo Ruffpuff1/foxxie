@@ -1,5 +1,4 @@
-import { EventArgs, FoxxieEvents } from '#lib/Types';
-import { EnvKeys } from '#lib/Types/Env';
+import { EnvKeys, EventArgs, FoxxieEvents } from '#lib/Types';
 import { EnvParse } from '@foxxie/env';
 import { cast } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';

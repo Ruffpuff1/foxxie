@@ -1,4 +1,4 @@
-import { GuildUtilityService } from '#lib/Container/Utility/Services/Guild/GuildUtilityService';
+import { GuildUtilityService } from '#lib/Container/Utility/Guild/GuildUtilityService';
 import { GuildSettings, acquireSettings } from '#lib/Database';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { TypeCodes, TypeVariationAppealNames } from '#utils/moderation';

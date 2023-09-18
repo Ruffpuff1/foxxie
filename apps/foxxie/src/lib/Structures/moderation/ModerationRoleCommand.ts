@@ -1,4 +1,4 @@
-import { GuildEntity, acquireSettings, writeSettings } from '#lib/Database';
+import { GuildEntity } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { GuildMessage } from '#lib/Types';
 import { isAdmin, messagePrompt, promptForMessage } from '#utils/Discord';
@@ -28,7 +28,8 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
     }
 
     public async inhibit(message: GuildMessage, args: ModerationCommand.Args, context: ModerationCommand.Context) {
-        const [id, t] = await acquireSettings(message.guild.id, settings => [settings[this.roleKey], settings.getLanguage()]);
+        const { settings } = this.container.utilities.guild(message.guild);
+        const [id, t] = await settings.get(settings => [settings[this.roleKey], settings.getLanguage()]);
 
         // Verify for role existence.
         const role = (id && message.guild.roles.cache.get(id)) ?? null;
@@ -41,7 +42,7 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
         if (await messagePrompt(message, t(LanguageKeys.Moderation.ActionSharedRoleSetupExisting))) {
             const role = await this.askForRole(message, args, context);
             if (!role.isOk()) return this.error(role.unwrapErr());
-            await writeSettings(message.guild.id, settings => (settings[this.roleKey] = role.unwrap().id));
+            await settings.set(settings => (settings[this.roleKey] = role.unwrap().id));
         } else if (await messagePrompt(message, t(LanguageKeys.Moderation.ActionsharedRoleSetupNew))) {
             const role = await this.container.utilities.guild(message.guild).moderation.actions.setUpRole(message, this.setUpKey);
 

@@ -32,6 +32,7 @@ export abstract class FoxxieCommand<T = unknown> extends Subcommand<FoxxieArgs> 
         string,
         {
             prefix: string;
+            CHANNEL: string;
         },
         DetailedDescription
     >;
@@ -136,6 +137,7 @@ export namespace FoxxieCommand {
             string,
             {
                 prefix: string;
+                CHANNEL: string;
             },
             DetailedDescription
         >;

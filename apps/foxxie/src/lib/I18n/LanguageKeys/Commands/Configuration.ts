@@ -1,4 +1,4 @@
-import { DetailedDescription } from '#lib/Types';
+import { DetailedDescription, DetailedDescriptionArgs } from '#lib/Types';
 import { FT, T } from '@foxxie/i18n';
 
 export const ConfDescription = T('commands/configuration:confDescription');
@@ -26,6 +26,6 @@ export const ConfUpdated = FT<{ key: string; response: string }>('commands/confi
 export const ConfUsage = T('commands/configuration:confUsage');
 export const ConfValidationChooseKey = FT<{ keys: string[] }>('commands/configuration:confValidationChooseKey');
 
-export const HighlightDetailedDescription = FT<{ prefix: string }, DetailedDescription>(
+export const HighlightDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
     'commands/configuration:highlightDetailedDescription'
 );

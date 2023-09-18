@@ -12,7 +12,7 @@ import { cutText, debounce, isNullish } from '@sapphire/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import { DiscordAPIError, EmbedBuilder, HTTPError, TextBasedChannel } from 'discord.js';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import { GuildSettings, acquireSettings, writeSettings } from '..';
+import { GuildSettings, acquireSettings } from '..';
 
 @Entity('starboard', { schema: 'public' })
 export class StarEntity extends BaseEntity {
@@ -116,12 +116,12 @@ export class StarEntity extends BaseEntity {
     public async downloadStarMessage(): Promise<void> {
         if (!this.starMessageId) return;
 
-        const channelId = await acquireSettings(this.#message.guild, GuildSettings.Starboard.Channel);
+        const channelId = await this.settings.get(GuildSettings.Starboard.Channel);
         if (isNullish(channelId)) return;
 
         const channel = cast<GuildTextBasedChannelTypes | undefined>(this.#message.guild.channels.cache.get(channelId));
         if (isNullish(channel)) {
-            await writeSettings(this.#message.guild, [[GuildSettings.Starboard.Channel, null]]);
+            await this.settings.set(settings => (settings[GuildSettings.Starboard.Channel] = null));
             return;
         }
 
@@ -304,6 +304,11 @@ export class StarEntity extends BaseEntity {
 
         this.#manager.syncMessageMap.set(this, promise);
         await promise;
+    }
+
+    private get settings() {
+        const { settings } = container.utilities.guild(this.#message.guild);
+        return settings;
     }
 
     private get emoji() {

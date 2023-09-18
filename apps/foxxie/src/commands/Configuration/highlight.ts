@@ -1,5 +1,5 @@
 import { HighlightTypeEnum } from '#lib/Container/Workers';
-import { GuildSettings, acquireSettings, writeSettings } from '#lib/Database';
+import { GuildSettings, acquireSettings } from '#lib/Database';
 import { Highlight } from '#lib/Database/entities/Highlight';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
@@ -69,7 +69,7 @@ export class UserCommand extends FoxxieCommand {
         const previous = userHighlights.find(hl => hl.word === wordToAdd.toLowerCase());
         if (previous) this.error('u alr got that one lol');
 
-        await writeSettings(message.guild, settings => {
+        await this.container.utilities.guild(message.guild).settings.set(settings => {
             const highlight = new Highlight({
                 word: wordToAdd.toLowerCase(),
                 type: HighlightTypeEnum.Word,

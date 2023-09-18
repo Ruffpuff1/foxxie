@@ -1,4 +1,6 @@
-import { DiscordAPIError } from 'discord.js';
+import { CustomGet } from '@foxxie/i18n';
+import { cast } from '@ruffpuff/utilities';
+import { DiscordAPIError, RESTJSONErrorCodes } from 'discord.js';
 
 export function channelLink<G extends string, C extends string>(
     guildId: G,
@@ -27,18 +29,18 @@ export function messageLink<G extends string, C extends string, M extends string
  * @param error {@link DiscordAPIError} The Discord API error.
  * @returns The i18next key for the error message.
  */
-export function handleDiscordAPIError(error: Error): {
-    identifier: string;
+export function handleDiscordAPIError(error: Error | DiscordAPIError): {
+    identifier: CustomGet<string, string> | '';
     message: string;
 } {
-    if (error instanceof DiscordAPIError) {
-        const identifier = '';
+    let identifier: CustomGet<string, string> | '' = '';
 
-        switch (error.code) {
-            default:
-                return { identifier, message: error.message };
+    if (error instanceof DiscordAPIError) {
+        switch (cast<RESTJSONErrorCodes>(error.code)) {
+            case RESTJSONErrorCodes.UnknownUser:
+                identifier = '';
         }
-    } else {
-        return { identifier: '', message: error.message };
     }
+
+    return { identifier, message: error.message };
 }

@@ -31,6 +31,11 @@ export interface DetailedDescription {
     subcommands?: SubcommandDescription[];
 }
 
+export interface DetailedDescriptionArgs {
+    prefix: string;
+    CHANNEL: string;
+}
+
 export interface ArgumentDescription {
     name: string;
     description: string;

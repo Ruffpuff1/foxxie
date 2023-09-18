@@ -1,8 +1,9 @@
 import { container } from '@sapphire/framework';
+import { join } from 'path';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { MongoDB } from './MongoDB';
-import { ClientEntity, GuildEntity, MemberEntity, ModerationEntity, ScheduleEntity, StarEntity } from './entities';
+import { ClientEntity, GuildEntity, MemberEntity } from './entities';
 import { LastFmArtistEntity } from './entities/LastFmArtistEntity';
 import { ClientRepository, GuildRepository, LastFmArtistRepository, MemberRepository } from './repository';
 
@@ -14,7 +15,7 @@ export async function config(): Promise<void> {
         port: 3306,
         username: process.env.MONGO_USER,
         password: process.env.MONGO_PASSWORD,
-        entities: [ClientEntity, GuildEntity, LastFmArtistEntity, MemberEntity, ModerationEntity, ScheduleEntity, StarEntity],
+        entities: [join(__dirname, 'entities/*Entity.js')],
         authSource: 'admin',
         ssl: true,
         logging: true

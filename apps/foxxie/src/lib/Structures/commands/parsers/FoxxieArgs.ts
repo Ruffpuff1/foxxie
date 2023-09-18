@@ -1,14 +1,10 @@
-import { acquireSettings, GuildEntity, SettingsCollectionCallback, writeSettings } from '#lib/Database';
-import { fetch, HttpMethodEnum } from '@foxxie/fetch';
+import { HttpMethodEnum, fetch } from '@foxxie/fetch';
 import { TFunction } from '@foxxie/i18n';
 import { cast } from '@ruffpuff/utilities';
-import { Args, MessageCommand, MessageCommandContext, Result, UserError } from '@sapphire/framework';
+import { Args, MessageCommand, MessageCommandContext, Result, UserError, container } from '@sapphire/framework';
 import { ArgumentStream } from '@sapphire/lexure';
 import type { Message } from 'discord.js';
 import type { FoxxieCommand } from '../FoxxieCommand';
-
-type K = keyof V;
-type V = GuildEntity;
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class FoxxieArgs extends Args {
@@ -30,114 +26,7 @@ export class FoxxieArgs extends Args {
         this.t = t;
     }
 
-    public acquire<K1 extends K>(paths: readonly [K1] | K1): Promise<V[K1]>;
-    public acquire<K1 extends K, K2 extends K>(paths: readonly [K1, K2]): Promise<[V[K1], V[K2]]>;
-    public acquire<K1 extends K, K2 extends K, K3 extends K>(paths: readonly [K1, K2, K3]): Promise<[V[K1], V[K2], V[K3]]>;
-    public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K>(
-        paths: readonly [K1, K2, K3, K4]
-    ): Promise<[V[K1], V[K2], V[K3], V[K4]]>;
-
-    public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K>(
-        paths: readonly [K1, K2, K3, K4, K5]
-    ): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5]]>;
-
-    public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K, K6 extends K>(
-        paths: readonly [K1, K2, K3, K4, K5, K6]
-    ): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5], V[K6]]>;
-
-    public acquire<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K, K6 extends K, K7 extends K>(
-        paths: readonly [K1, K2, K3, K4, K5, K6, K7]
-    ): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5], V[K6], V[K7]]>;
-
-    public acquire<
-        K1 extends K,
-        K2 extends K,
-        K3 extends K,
-        K4 extends K,
-        K5 extends K,
-        K6 extends K,
-        K7 extends K,
-        K8 extends K
-    >(paths: readonly [K1, K2, K3, K4, K5, K6, K7, K8]): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5], V[K6], V[K7], V[K8]]>;
-
-    public acquire<
-        K1 extends K,
-        K2 extends K,
-        K3 extends K,
-        K4 extends K,
-        K5 extends K,
-        K6 extends K,
-        K7 extends K,
-        K8 extends K,
-        K9 extends K
-    >(
-        paths: readonly [K1, K2, K3, K4, K5, K6, K7, K8, K9]
-    ): Promise<[V[K1], V[K2], V[K3], V[K4], V[K5], V[K6], V[K7], V[K8], V[K9]]>;
-
-    public acquire<KX extends K>(paths: readonly KX[]): Promise<V[KX][]>;
-    public acquire<R>(cb: SettingsCollectionCallback<V, R>): Promise<R>;
-    public acquire(): Promise<V>;
-    public acquire(keys?: any) {
-        return acquireSettings(this.message.guild!, keys);
-    }
-
-    public write<K1 extends K>(pairs: readonly [[K1, V[K1]]]): Promise<void>;
-    public write<K1 extends K, K2 extends K>(pairs: readonly [[K1, V[K1]], [K2, V[K2]]]): Promise<void>;
-    public write<K1 extends K, K2 extends K, K3 extends K>(
-        pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]]]
-    ): Promise<void>;
-
-    public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K>(
-        pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]]]
-    ): Promise<void>;
-
-    public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K>(
-        pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]], [K5, V[K5]]]
-    ): Promise<void>;
-
-    public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K, K6 extends K>(
-        pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]], [K5, V[K5]], [K6, V[K6]]]
-    ): Promise<void>;
-
-    public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K, K6 extends K, K7 extends K>(
-        pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]], [K5, V[K5]], [K6, V[K6]], [K7, V[K7]]]
-    ): Promise<void>;
-
-    public write<K1 extends K, K2 extends K, K3 extends K, K4 extends K, K5 extends K, K6 extends K, K7 extends K, K8 extends K>(
-        pairs: readonly [[K1, V[K1]], [K2, V[K2]], [K3, V[K3]], [K4, V[K4]], [K5, V[K5]], [K6, V[K6]], [K7, V[K7]], [K8, V[K8]]]
-    ): Promise<void>;
-
-    public write<
-        K1 extends K,
-        K2 extends K,
-        K3 extends K,
-        K4 extends K,
-        K5 extends K,
-        K6 extends K,
-        K7 extends K,
-        K8 extends K,
-        K9 extends K
-    >(
-        pairs: readonly [
-            [K1, V[K1]],
-            [K2, V[K2]],
-            [K3, V[K3]],
-            [K4, V[K4]],
-            [K5, V[K5]],
-            [K6, V[K6]],
-            [K7, V[K7]],
-            [K8, V[K8]],
-            [K9, V[K9]]
-        ]
-    ): Promise<void>;
-
-    public write<KX extends K>(pairs: readonly [KX, V[KX]][]): Promise<void>;
-    public write<R>(cb: SettingsCollectionCallback<V, R>): Promise<R>;
-    public write(keys: any) {
-        return writeSettings(this.message.guild!, keys);
-    }
-
-    public centra(url: string, method?: `${HttpMethodEnum}`) {
+    public fetch(url: string, method?: `${HttpMethodEnum}`) {
         return fetch(url, method);
     }
 
@@ -176,6 +65,14 @@ export class FoxxieArgs extends Args {
         const result = this.nextSplitResult(options);
         if (result.isOk()) return result.unwrap();
         throw result.unwrapErr();
+    }
+
+    public get guild() {
+        return this.message.guild ? container.utilities.guild(this.message.guild) : null;
+    }
+
+    public get settings() {
+        return this.guild?.settings || null;
     }
 }
 

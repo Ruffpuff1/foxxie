@@ -1,7 +1,7 @@
 import { config } from '#Database/config';
 import FoxxieClient from '#lib/FoxxieClient';
 import '#lib/Setup';
-import { EnvKeys } from '#lib/Types/Env';
+import { EnvKeys } from '#lib/Types';
 import { helpUsagePostProcessor } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';
 import { container } from '@sapphire/framework';

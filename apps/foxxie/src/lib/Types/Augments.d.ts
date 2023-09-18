@@ -1,7 +1,7 @@
 import { ApiService } from '#Api/ApiService';
 import type { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import { UtilityService } from '#lib/Container/Utility/Services/UtilityService';
+import { UtilityService } from '#lib/Container/Utility/UtilityService';
 import type { GuildEntity, ModerationEntity, MongoDB, SerializerStore, TaskStore } from '#lib/Database';
 import type { FoxxieCommand, InviteManager, RedisManager, ScheduleManager, WorkerManager } from '#lib/Structures';
 import { TFunction } from '@foxxie/i18n';

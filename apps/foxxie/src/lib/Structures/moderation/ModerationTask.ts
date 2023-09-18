@@ -1,4 +1,5 @@
-import { GuildSettings, PartialResponseValue, ResponseType, Task } from '#lib/Database';
+import { Task } from '#lib/Container/Stores/Tasks/Task';
+import { GuildSettings, PartialResponseValue, ResponseType } from '#lib/Database';
 import { LockQueue } from '@foxxie/lock-queue';
 import { seconds } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';

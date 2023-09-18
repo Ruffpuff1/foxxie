@@ -1,6 +1,6 @@
-import { BaseEntity, DataSource, EntityTarget, FindOneOptions } from 'typeorm';
+import { BaseEntity, DataSource, DeepPartial, EntityTarget, FindOneOptions } from 'typeorm';
 
-export abstract class CustomRepository<T extends BaseEntity> {
+export abstract class CustomRepository<T extends DeepPartial<BaseEntity>> {
     protected dataSource: DataSource;
 
     protected entity: EntityTarget<T>;
@@ -11,11 +11,11 @@ export abstract class CustomRepository<T extends BaseEntity> {
         this.entity = entity;
     }
 
-    protected get repository() {
-        return this.dataSource.getRepository(this.entity);
-    }
-
     public findOne(options: FindOneOptions<T>) {
         return this.dataSource.getRepository(this.entity).findOne(options);
+    }
+
+    protected get repository() {
+        return this.dataSource.getRepository(this.entity);
     }
 }

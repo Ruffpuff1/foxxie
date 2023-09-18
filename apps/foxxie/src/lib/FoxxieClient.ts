@@ -9,7 +9,7 @@ import { Enumerable } from '@sapphire/decorators';
 import { SapphireClient, container } from '@sapphire/framework';
 import { magentaBright } from 'colorette';
 import { WebhookClient } from 'discord.js';
-import { UtilityService } from './Container/Utility/Services/UtilityService';
+import { UtilityService } from './Container/Utility/UtilityService';
 import { WorkerService } from './Container/Workers';
 import { InviteManager, RedisManager, ScheduleManager } from './Structures';
 

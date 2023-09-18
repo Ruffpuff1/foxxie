@@ -4,7 +4,9 @@ import type { Message } from 'discord.js';
 import type { DataSource, Repository } from 'typeorm';
 import { GuildEntity, ModerationEntity, ScheduleEntity, StarEntity } from './entities';
 import { ClientRepository, GuildRepository, LastFmArtistRepository, MemberRepository } from './repository';
-import { SerializerStore, TaskStore } from './structures';
+import { SerializerStore } from './structures';
+import { PollEntity } from './entities/PollEntity';
+import { TaskStore } from '#lib/Container/Stores/Tasks/TaskStore';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class MongoDB {
@@ -19,6 +21,8 @@ export class MongoDB {
     public readonly lastFmArtists: LastFmArtistRepository;
 
     public readonly moderations: Repository<ModerationEntity>;
+
+    public readonly polls: Repository<PollEntity>;
 
     public readonly schedules: Repository<ScheduleEntity>;
 
@@ -40,6 +44,7 @@ export class MongoDB {
         this.guilds = guilds;
         this.members = members;
         this.moderations = dataSource.getRepository(ModerationEntity);
+        this.polls = dataSource.getRepository(PollEntity);
         this.schedules = dataSource.getRepository(ScheduleEntity);
         this.starboards = dataSource.getRepository(StarEntity);
         this.lastFmArtists = lastFmArtists;
@@ -57,6 +62,7 @@ export interface MongoDB {
     readonly guilds: GuildRepository<GuildEntity>;
     readonly members: MemberRepository;
     readonly moderation: ModerationEntity;
+    readonly polls: Repository<PollEntity>;
     readonly schedules: Repository<ScheduleEntity>;
     readonly starboards: Repository<StarEntity>;
 }

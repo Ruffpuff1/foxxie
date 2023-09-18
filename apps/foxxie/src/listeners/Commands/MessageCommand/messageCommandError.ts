@@ -1,7 +1,6 @@
 import { LanguageKeys, translate } from '#lib/I18n';
 import type { FoxxieArgs, FoxxieCommand } from '#lib/Structures';
-import { FoxxieEvents } from '#lib/Types';
-import { EnvKeys } from '#lib/Types/Env';
+import { EnvKeys, FoxxieEvents } from '#lib/Types';
 import { clientOwners } from '#root/config';
 import { Colors, rootFolder } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';

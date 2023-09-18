@@ -1,5 +1,4 @@
 import { buildVillagerDisplay, fetchVillager } from '#Api/celestia';
-import { acquireSettings } from '#lib/Database';
 import { floatPromise } from '#utils/util';
 import { Villager } from '@foxxie/celestia-api-types';
 import { resolveToNull } from '@ruffpuff/utilities';
@@ -14,7 +13,7 @@ import type { SelectMenuInteraction } from 'discord.js';
 export class UserInteractionHandler extends InteractionHandler {
     public override async run(interaction: SelectMenuInteraction, result: InteractionHandler.ParseResult<this>) {
         let display: PaginatedMessage;
-        const t = await acquireSettings(interaction.guildId!, s => s.getLanguage());
+        const t = await this.container.utilities.guild(interaction.guild!).settings.getT();
         const message = await resolveToNull(interaction.channel!.messages.fetch(result.messageId));
 
         switch (result.type) {

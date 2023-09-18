@@ -1,7 +1,7 @@
 import { container } from '@sapphire/framework';
 import { Channel, ChannelResolvable, Guild, GuildResolvable } from 'discord.js';
-import { ChannelUtilityService } from './ChannelUtilityService';
 import { GuildUtilityService } from './Guild/GuildUtilityService';
+import { ChannelUtilityService } from './ChannelUtilityService';
 
 export class UtilityService {
     #channelUtilityCache = new WeakMap<Channel, ChannelUtilityService>();

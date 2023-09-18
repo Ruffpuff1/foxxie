@@ -1,14 +1,5 @@
 import { LLRCData, LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import {
-    SchemaGroup,
-    SchemaKey,
-    acquireSettings,
-    configurableGroups,
-    isSchemaGroup,
-    remove,
-    set,
-    writeSettings
-} from '#lib/Database';
+import { SchemaGroup, SchemaKey, acquireSettings, configurableGroups, isSchemaGroup, remove, set } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieEvents, GuildMessage } from '#lib/Types';
 import { deleteMessage, sendLoadingMessage } from '#utils/Discord';
@@ -255,7 +246,7 @@ export class SettingsMenu {
     private async tryUpdate(action: UpdateType, args: FoxxieArgs | null = null, value: unknown = null) {
         try {
             const key = cast<SchemaKey>(this.schema);
-            const [oldValue, skipped] = await writeSettings(this.message.guild.id, async settings => {
+            const [oldValue, skipped] = await this.settings.set(async settings => {
                 const oldValue = deepClone(settings[key.property]);
 
                 switch (action) {
@@ -318,5 +309,9 @@ export class SettingsMenu {
 
     private get updatedValue(): boolean {
         return this.oldValue !== undefined;
+    }
+
+    private get settings() {
+        return container.utilities.guild(this.message.guild).settings;
     }
 }

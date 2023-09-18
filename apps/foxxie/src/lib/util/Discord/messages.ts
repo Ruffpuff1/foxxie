@@ -6,7 +6,7 @@ import { cast, minutes, randomArray } from '@ruffpuff/utilities';
 import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import type { Message, UserResolvable } from 'discord.js';
+import type { Message, TextChannel, UserResolvable } from 'discord.js';
 import { MessageCreateOptions, MessageType } from 'discord.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 
@@ -52,6 +52,18 @@ export async function sendLoadingMessage(
     const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
 
     return send(cast<Message>(msg), { content });
+}
+
+export async function sendLoadingMessageInChannel(
+    channel: TextChannel,
+    key: CustomGet<string, string[]> | CustomFunctionGet<any, string, string[]> = LanguageKeys.System.MessageLoading,
+    args = {}
+): Promise<Message | GuildMessage> {
+    const t = await container.db.guilds.acquire(channel.guild.id!, s => s.getLanguage());
+    const translated = t<string[]>(key, cast<TOptionsBase>(args));
+    const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
+
+    return channel.send({ content });
 }
 
 export const enum YesNo {

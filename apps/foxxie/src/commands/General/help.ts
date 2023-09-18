@@ -67,7 +67,7 @@ export default class UserCommand extends FoxxieCommand {
                     name: titles.usage,
                     value: inlineCode(
                         command.detailedDescription
-                            ? args.t(command.detailedDescription, { prefix }).usage!
+                            ? args.t(command.detailedDescription, { prefix, CHANNEL: message.channel.name }).usage!
                             : `${prefix}${command.name}${command.usage ? ` ${args.t(command.usage)}` : ''}`
                     )
                 }
@@ -78,7 +78,7 @@ export default class UserCommand extends FoxxieCommand {
 
         if (!command.detailedDescription) return display.run(message);
 
-        const detailed = args.t(command.detailedDescription, { prefix });
+        const detailed = args.t(command.detailedDescription, { prefix, CHANNEL: message.channel.name });
 
         if (detailed.arguments || detailed.examples) {
             display.addPageEmbed(e => {
