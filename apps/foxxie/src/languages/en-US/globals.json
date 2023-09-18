@@ -13,6 +13,7 @@
     "default": "{{key}} has not been localized for en-US yet.",
     "defaultLanguage": "Default Language",
     "duration": "{{duration, duration}}",
+    "everyone": "everyone",
     "fullDateTime": "{{date, fulldatetime}}",
     "infinite": "infinite",
     "input": "the input",
