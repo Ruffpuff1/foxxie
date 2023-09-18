@@ -82,8 +82,8 @@
   },
   "imports": {
     "#Api/*": "./dist/src/lib/Container/Api/*.js",
-    "#Database/*": "./dist/src/lib/database/*.js",
-    "#Database/Keys": "./dist/src/lib/database/Keys/index.js",
+    "#Database/*": "./dist/src/lib/Database/*.js",
+    "#Database/Keys": "./dist/src/lib/Database/Keys/index.js",
     "#external/GuildMemberFetchQueue": "./dist/src/lib/util/External/GuildMemberFetchQueue.js",
     "#external/LongLivingReactionCollector": "./dist/src/lib/util/External/LongLivingReactionCollector.js",
     "#external/Rest": "./dist/src/lib/util/External/Rest.js",
