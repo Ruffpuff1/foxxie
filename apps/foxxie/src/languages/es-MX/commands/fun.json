@@ -37,6 +37,11 @@
         "species": "",
         "zodiac": ""
     },
+    "lastFmArtistListeners": "",
+    "lastFmArtistListeners_other": "",
+    "lastFmArtistPlaysByYou": "",
+    "lastFmArtistPlaysByYou_other": "",
+    "lastFmArtistPlaysByYouLastWeek": "",
     "lastFmDetailedDescription": {
         "description": "",
         "usage": "",
@@ -78,6 +83,15 @@
                     "",
                     ""
                 ]
+            },
+            {
+                "command": "",
+                "description": [
+                    ""
+                ],
+                "examples": [
+                    ""
+                ]
             }
         ]
     },
@@ -92,6 +106,8 @@
     "lastFmPlayPlaysByYou_other": "",
     "lastFmPlayWasPlaying": "",
     "lastFmTitles": {
+        "about": "",
+        "lastFmStats": "",
         "statistics": "",
         "summary": ""
     },
