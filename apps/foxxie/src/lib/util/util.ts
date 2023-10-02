@@ -159,12 +159,17 @@ export function removeEmptyFields(fields: (APIEmbedField | null | undefined)[]):
     return fields.filter(field => Boolean(field)) as APIEmbedField[];
 }
 
-export function conditionalField(condition: boolean, name: string, text: string, inline: boolean = false): APIEmbedField | null {
-    if (!condition) return null;
-    return { name, value: text, inline };
+/**
+ * Returns a conditional embed field.
+ */
+export function conditionalField(condition: boolean, name: string, text: string, inline: boolean = false) {
+    return ifNotNull(condition, { name, value: text, inline });
 }
 
-export function ifNotNull(condition: boolean, value: string) {
+/**
+ * Tests for a condition, if the condition is false returns `null`, otherwise returns the parsed value.
+ */
+export function ifNotNull<T>(condition: boolean, value: T) {
     if (!condition) return null;
     return value;
 }

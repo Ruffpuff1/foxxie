@@ -31,6 +31,7 @@ declare module 'discord.js' {
             key: PickByValue<GuildEntity, Snowflake | null>,
             makeEmbed: (t: TFunction) => Awaitable<TypeOfEmbed | MessageCreateOptions>
         ];
+        [FoxxieEvents.LastFmUpdateUser]: [userId: string];
         [FoxxieEvents.MessageCommandLogging]: [message: Message, command: FoxxieCommand];
         [FoxxieEvents.ModerationEntryAdd]: [entry: ModerationEntity];
         [FoxxieEvents.ModerationEntryEdit]: [old: ModerationEntity, entry: ModerationEntity];

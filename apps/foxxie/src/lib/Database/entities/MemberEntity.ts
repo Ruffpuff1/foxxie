@@ -24,9 +24,6 @@ export class MemberEntity extends BaseEntity {
     @Column()
     public warnings: Warn[] = [];
 
-    @Column('varchar')
-    public lastFmUsername!: string;
-
     public get member(): GuildMember | undefined {
         return container.client.guilds.resolve(this.guildId)?.members.cache.get(this.id);
     }

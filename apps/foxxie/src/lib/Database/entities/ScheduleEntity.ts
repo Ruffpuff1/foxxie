@@ -7,7 +7,7 @@ import { FoxxieEvents } from '#lib/Types/Events';
 import { cast } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';
-import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
+import { AfterLoad, BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
 
 export const enum ResponseType {
     Ignore,
@@ -78,8 +78,7 @@ export class ScheduleEntity extends BaseEntity {
 
     public constructor() {
         super();
-
-        if (this.recurring) this.recurring = new Cron(this.recurring.cron);
+        this.entityLoad();
     }
 
     public setup(manager: ScheduleManager) {
@@ -121,6 +120,11 @@ export class ScheduleEntity extends BaseEntity {
 
     public delete() {
         return this.#manager.remove(this);
+    }
+
+    @AfterLoad()
+    protected entityLoad() {
+        if (this.recurring) this.recurring = new Cron(this.recurring.cron);
     }
 
     public get task() {

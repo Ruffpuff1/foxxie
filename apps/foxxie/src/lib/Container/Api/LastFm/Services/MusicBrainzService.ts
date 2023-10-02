@@ -1,4 +1,6 @@
+import { LastFmArtistEntity } from '#lib/Database/entities/LastFmArtistEntity';
 import { fetch } from '@foxxie/fetch';
+import { days } from '@ruffpuff/utilities';
 
 export class MusicBrainzService {
     /**
@@ -10,6 +12,44 @@ export class MusicBrainzService {
      * MusicBrainz types of a person.
      */
     public personTypes = ['Person', 'Violinist'];
+
+    public async addMusicBrainzDataToArtist(artist: LastFmArtistEntity): Promise<ArtistUpdated> {
+        try {
+            let updated = false;
+
+            if (artist.musicBrainzDate && artist.musicBrainzDate.getTime() > Date.now() - days(60)) {
+                return new ArtistUpdated(artist);
+            }
+
+            const musicBrainzResults = await this.fetchMusicBrainzData(artist.name);
+
+            if (musicBrainzResults) {
+                const startDate = musicBrainzResults['life-span']?.begin
+                    ? new Date(musicBrainzResults['life-span']?.begin)
+                    : undefined;
+                const endDate = musicBrainzResults['life-span']?.end ? new Date(musicBrainzResults['life-span']?.end) : undefined;
+
+                artist.musicBrainzDate = new Date();
+                if (musicBrainzResults.area?.name) artist.location = musicBrainzResults.area?.name;
+                // eslint-disable-next-line prefer-destructuring
+                if (musicBrainzResults.country?.[0]) artist.countryCode = musicBrainzResults.country;
+                if (musicBrainzResults.type) artist.type = musicBrainzResults.type;
+                if (musicBrainzResults.disambiguation) artist.disambiguation = musicBrainzResults.disambiguation;
+                if (musicBrainzResults.gender) artist.gender = musicBrainzResults.gender;
+                artist.startDate = startDate || undefined;
+                artist.endDate = endDate || undefined;
+                artist.mbid = musicBrainzResults.id;
+
+                updated = true;
+
+                return new ArtistUpdated(artist, updated);
+            }
+        } catch {
+            return new ArtistUpdated(artist);
+        }
+
+        return new ArtistUpdated(artist);
+    }
 
     public async browseRecordingsForAnArtist(artist: string) {
         const musicBrainzRecordingsResult = await fetch(`https://musicbrainz.org/ws/2/recording`)
@@ -758,4 +798,11 @@ export interface IBrowseWorksResult {
     works: IReleaseGroupsQuery[];
     'work-count': number;
     'work-offset': number;
+}
+
+export class ArtistUpdated {
+    public constructor(
+        public artist: LastFmArtistEntity,
+        public updated = false
+    ) {}
 }

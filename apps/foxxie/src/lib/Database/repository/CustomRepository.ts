@@ -1,4 +1,4 @@
-import { BaseEntity, DataSource, DeepPartial, EntityTarget, FindOneOptions } from 'typeorm';
+import { BaseEntity, DataSource, DeepPartial, EntityTarget, FilterOperators, FindManyOptions, FindOneOptions } from 'typeorm';
 
 export abstract class CustomRepository<T extends DeepPartial<BaseEntity>> {
     protected dataSource: DataSource;
@@ -15,7 +15,11 @@ export abstract class CustomRepository<T extends DeepPartial<BaseEntity>> {
         return this.dataSource.getRepository(this.entity).findOne(options);
     }
 
-    protected get repository() {
-        return this.dataSource.getRepository(this.entity);
+    public findMany(options?: FindManyOptions<T> | Partial<T> | FilterOperators<T>) {
+        return this.dataSource.getMongoRepository(this.entity).find(options);
+    }
+
+    public get repository() {
+        return this.dataSource.getMongoRepository(this.entity);
     }
 }

@@ -1,6 +1,7 @@
 import { acquireSettings } from '#lib/Database';
 import { translate } from '#lib/I18n';
 import type { EventArgs, FoxxieEvents } from '#lib/Types';
+import { getT } from '@foxxie/i18n';
 import { cast } from '@ruffpuff/utilities';
 import { Listener } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
@@ -10,7 +11,7 @@ export class UserListener extends Listener<FoxxieEvents.MessageCommandDenied> {
         if (Reflect.get(Object(error.context), 'silent')) return;
 
         const k = translate(error.identifier);
-        const t = await acquireSettings(message.guild!, s => s.getLanguage());
+        const t = message.guild ? await acquireSettings(message.guild!, s => s.getLanguage()) : getT('en-US');
 
         const content = t(k, {
             name: context.commandName,

@@ -37,6 +37,11 @@
         "species": "• Species",
         "zodiac": "• Zodiac"
     },
+    "lastFmArtistListeners": "**{{count, number}}** listener",
+    "lastFmArtistListeners_other": "**{{count, number}}** listeners",
+    "lastFmArtistPlaysByYou": "**{{count, number}}** play by you",
+    "lastFmArtistPlaysByYou_other": "**{{count, number}}** plays by you",
+    "lastFmArtistPlaysByYouLastWeek": "**{{count, number}}** by you last week",
     "lastFmDetailedDescription": {
         "description": "Fetch data from Last.fm.",
         "usage": "{{prefix}}lastfm [listening|artist]",
@@ -78,6 +83,15 @@
                     "{{prefix}}lastfm artist mitski",
                     "{{prefix}}lastfm artist lana del rey"
                 ]
+            },
+            {
+                "command": "update",
+                "description": [
+                    "Updates your cached scrobbles within my database."
+                ],
+                "examples": [
+                    "{{prefix}}lastfm update"
+                ]
             }
         ]
     },
@@ -92,6 +106,8 @@
     "lastFmPlayPlaysByYou_other": "**{{count, number}}** plays by you",
     "lastFmPlayWasPlaying": "Was Playing",
     "lastFmTitles": {
+        "about": "• About",
+        "lastFmStats": "• Last.fm stats",
         "statistics": "• Statistics",
         "summary": "• Summary"
     },

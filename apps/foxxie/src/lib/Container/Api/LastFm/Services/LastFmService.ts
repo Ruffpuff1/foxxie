@@ -1,22 +1,30 @@
+import { LastFmTrack } from '#Api/LastFm/Structures/LastFmTrack';
 import { FuzzySearch } from '#external/FuzzySearch';
 import { LastFmArtistEntity } from '#lib/Database/entities/LastFmArtistEntity';
-import { LastFmArtistUserScrobble } from '#lib/Database/entities/LastFmArtistUserScrobble';
-import { LastFmTrack } from '#lib/Database/entities/LastFmTrack';
+import { UserEntity } from '#lib/Database/entities/UserEntity';
 import { FoxxieCommand } from '#lib/Structures';
 import { EnvKeys, GuildMessage } from '#lib/Types';
 import { sendLoadingMessage } from '#utils/Discord';
 import { EnvParse } from '@foxxie/env';
 import { fetch } from '@foxxie/fetch';
 import { cast, minutes, toTitleCase } from '@ruffpuff/utilities';
-import { Args, Command, UserError, container } from '@sapphire/framework';
+import { Args, Command, container } from '@sapphire/framework';
 import { AutocompleteInteraction, Collection, Message, StringSelectMenuOptionBuilder, italic } from 'discord.js';
-import { LastFmServicePlayBuilder } from '../Builders';
-import { LastFmServiceArtistBuilder } from '../Builders/LastFmServiceArtistBuilder';
+import { TopArtist } from '../Structures/TopArtist';
+import { UserPlay } from '../Structures/UserPlay';
+import { TimerService } from './TimerService';
+import { UpdateService } from './UpdateService';
 
 /**
  * The service for handling the last.fm API.
  */
 export class LastFmService {
+    public cache = new Map<string, TopArtist[] | UserPlay>();
+
+    public timerService = new TimerService();
+
+    public updateService = new UpdateService();
+
     /**
      * The base last.fm api url.
      */
@@ -27,19 +35,10 @@ export class LastFmService {
      */
     public descriptionTagRegex = /<a href="https?:\/\/www.last.fm\/.*">[. A-z]*<\/a>/g;
 
-    /**
-     * The display builders for this service.
-     */
-    public displays: LastFmServiceDisplays = {
-        /**
-         * The last.fm artist builder
-         */
-        artist: new LastFmServiceArtistBuilder(this),
-        /**
-         * The last.fm play builder
-         */
-        play: new LastFmServicePlayBuilder(this)
-    };
+    // /**
+    //  * The Last.Fm Chat Input Command Service.
+    //  */
+    // public chatInputCommands = new LastFmChatInputCommandService(this);
 
     /**
      * The last.fm token
@@ -75,18 +74,17 @@ export class LastFmService {
      * Returns the listeners of an artist in a guild.
      */
     public async getArtistListenersInGuild(artist: LastFmArtistEntity, guildId: string): Promise<Listener[]> {
+        const listeners: Listener[] = [];
         const membersWithUsername = await this.getGuildMembersWithLastFmUsername(guildId);
 
-        const listeners: Listener[] = [];
-
-        for (const member of membersWithUsername) {
-            const countOfMember = await container.apis.lastFm.getArtistPlayCountForUser(artist, member.id, guildId);
+        for (const user of membersWithUsername) {
+            const countOfMember = 0;
             if (countOfMember)
                 listeners.push({
                     count: countOfMember,
-                    id: member.id,
-                    username: member.lastFmUsername,
-                    lastUpdated: artist.lastUpdated
+                    id: user.id,
+                    username: user.lastFm.username!,
+                    lastUpdated: artist.lastFmDate.getTime()
                 });
         }
 
@@ -94,72 +92,48 @@ export class LastFmService {
     }
 
     public async getGuildMembersWithLastFmUsername(guildId: string) {
-        const members = await container.db.members.guild(guildId);
-        return members.filter(member => typeof member.lastFmUsername === 'string');
+        const guild = container.client.guilds.cache.get(guildId);
+        if (!guild) return [];
+
+        const memberIds = [...guild.members.cache.keys()];
+        const memberUserEntities = await container.db.users.findMany({
+            where: {
+                id: {
+                    $in: memberIds
+                },
+                'lastFm.username': {
+                    $not: {
+                        $eq: null
+                    }
+                }
+            }
+        });
+
+        return memberUserEntities;
     }
 
-    /**
-     * Returns the playcount of an artist for a specific discord user if they have a linked last.fm account.
-     * @param artist
-     * @param userId
-     * @param guildId
-     * @returns {Promise<number|null>}
-     */
-    public async getArtistPlayCountForUser(artist: LastFmArtistEntity, userId: string, guildId: string) {
-        const lastFmUsername = await this.getGuildMemberLastFmUsername(userId, guildId);
-        if (!lastFmUsername) return null;
+    public async shouldDisplayGuildInformation(userId: string, guildId?: string) {
+        if (!guildId) return false;
 
-        const { userScrobbles } = artist;
-        const foundScrobblesForUser = userScrobbles.find(scrob => scrob.userId === userId);
+        const members = await this.getGuildMembersWithLastFmUsername(guildId);
+        if (!members.length) return false;
 
-        if (foundScrobblesForUser) {
-            if (foundScrobblesForUser.shouldBeUpdated) return foundScrobblesForUser.count;
-            const data = await foundScrobblesForUser.getUserArtistData(artist.artistName);
-
-            if (data) {
-                const foundIndex = userScrobbles.indexOf(foundScrobblesForUser);
-                const count = parseInt(data.playcount, 10);
-
-                if (foundIndex !== -1) {
-                    userScrobbles[foundIndex] = new LastFmArtistUserScrobble({
-                        count,
-                        userId,
-                        username: lastFmUsername,
-                        lastUpdated: Date.now()
-                    });
-                }
-
-                await artist.save();
-
-                return count;
-            }
-
-            return null;
+        if (members.length === 1) {
+            return members[0].id === userId ? false : true;
         }
 
-        try {
-            const data = await this.getLibraryArtistsFromUser(lastFmUsername).then(t =>
-                t.artists.artist.find(a => a.name === artist.artistName)
-            );
+        return true;
+    }
 
-            if (data?.playcount) {
-                const count = new LastFmArtistUserScrobble({
-                    count: parseInt(data?.playcount, 10),
-                    userId,
-                    username: lastFmUsername,
-                    lastUpdated: Date.now()
-                });
-                userScrobbles.push(count);
+    public async handleLastFmAutocomplete(interaction: AutocompleteInteraction) {
+        const { name } = interaction.options.getFocused(true);
 
-                await artist.save();
-
-                return count.count;
-            }
-        } catch {
-            return null;
+        switch (name) {
+            case 'artist':
+                return this.getAutocompleteArtistOptions(interaction);
+            case 'user':
+                return this.getAutocompleteUserOptions(interaction);
         }
-
-        return null;
     }
 
     /**
@@ -181,16 +155,17 @@ export class LastFmService {
             return interaction.respond(results.slice(0, 5).map(r => ({ name: r, value: r })));
         }
 
-        const recentTracks = await this.getRecentTracksFromUser(username);
-        const data = [...new Set(recentTracks.recenttracks.track.map(track => track.artist['#text']!))];
+        return interaction.respond([]);
+        // const recentTracks = await this.getRecentTracksFromUser(username);
+        // const data = [...new Set(recentTracks.recenttracks.track.map(track => track.artist['#text']!))];
 
-        this.#autocomplateArtistOptionCache.set(username, data);
-        setTimeout(() => this.#autocomplateArtistOptionCache.delete(username), minutes(2));
+        // this.#autocomplateArtistOptionCache.set(username, data);
+        // setTimeout(() => this.#autocomplateArtistOptionCache.delete(username), minutes(2));
 
-        const fuzzy = new FuzzySearch(new Collection(data.map(d => [d, { key: d }])), ['key']);
-        const results = option.value ? fuzzy.runFuzzy(option.value).map(v => v.key) : data;
+        // const fuzzy = new FuzzySearch(new Collection(data.map(d => [d, { key: d }])), ['key']);
+        // const results = option.value ? fuzzy.runFuzzy(option.value).map(v => v.key) : data;
 
-        return interaction.respond(results.slice(0, 5).map(r => ({ name: r, value: r })));
+        // return interaction.respond(results.slice(0, 5).map(r => ({ name: r, value: r })));
     }
 
     /**
@@ -209,8 +184,8 @@ export class LastFmService {
             return interaction.respond(results.slice(0, 5).map(r => ({ name: r, value: r })));
         }
 
-        const members = await this.getGuildMembersWithLastFmUsername(interaction.guildId!);
-        const mappedMembers = members.map(entity => entity.lastFmUsername);
+        const users = await this.getGuildMembersWithLastFmUsername(interaction.guildId!);
+        const mappedMembers = users.map(entity => entity.lastFm.username!);
 
         this.#autocomplateUserOptionCache.set(interaction.guildId!, mappedMembers);
         setTimeout(() => this.#autocomplateArtistOptionCache.delete(interaction.guildId!), minutes(2));
@@ -245,25 +220,11 @@ export class LastFmService {
      * @param guildId
      * @returns
      */
-    public async getGuildMemberLastFmUsername(memberId: string, guildId: string | undefined): Promise<string | undefined> {
-        if (!guildId) return undefined;
+    public async getGuildMemberLastFmUsername(memberId: string, guildId: string | undefined): Promise<string | null> {
+        if (!guildId) return null;
 
-        const memberEntity = await container.db.members.ensure(memberId, guildId);
-        return memberEntity.lastFmUsername;
-    }
-
-    /**
-     * Returns the last played track if a guild member has a last.fm account associated with it.
-     * @param memberId
-     * @param guildId
-     * @returns
-     */
-    public async getLastPlayedTrackFromGuildMember(memberId: string, guildId: string): Promise<GetRecentTracksUserTrack> {
-        const username = await this.getGuildMemberLastFmUsername(memberId, guildId);
-        const tracks = await this.getRecentTracksFromUser(username);
-
-        // most recent
-        return tracks.recenttracks?.track[0];
+        const userEntity = await container.db.users.ensure(memberId);
+        return userEntity.lastFm.username;
     }
 
     /**
@@ -279,18 +240,8 @@ export class LastFmService {
         args?: FoxxieCommand.Args
     ): Promise<[string, GuildMessage] | [string, boolean]> {
         if (message instanceof Message && args) {
-            console.log('message');
-            let artist = await args.rest(LastFmService.artistArgument).catch(() => null);
+            const artist = await args.rest(LastFmService.artistArgument).catch(() => '');
             const loading = await sendLoadingMessage(message);
-
-            if (!artist) {
-                const track = await this.getLastPlayedTrackFromGuildMember(message.author.id, message.guildId);
-
-                const artistName = track?.artist?.name || track?.artist['#text'];
-                if (!artistName) throw new UserError({ identifier: 'noArtistProvided' });
-
-                artist = artistName;
-            }
 
             return [artist, cast<GuildMessage>(loading)];
         }
@@ -334,9 +285,10 @@ export class LastFmService {
      * @returns
      */
     public async getInfoFromArtist(
-        artist: string
+        artist: string,
+        options?: { username?: string }
     ): Promise<GetArtistInfoResult | GetArtistInfoResultWithUser | GetArtistInfoResultNoExistResult> {
-        return this.createLastFmRequest(LastFmApiMethods.ArtistGetInfo, { artist });
+        return this.createLastFmRequest(LastFmApiMethods.ArtistGetInfo, { artist, ...options });
     }
 
     /**
@@ -348,14 +300,99 @@ export class LastFmService {
         return this.createLastFmRequest(LastFmApiMethods.ArtistSearch, { artist });
     }
 
-    /**
-     * Get the last 500 tracks a user on last.fm played.
-     * @param user The last.fm username to search for.
-     * @returns
-     */
-    public async getRecentTracksFromUser(user: string | undefined): Promise<GetRecentTracksUserResult> {
-        return this.createLastFmRequest(LastFmApiMethods.UserGetRecentTracks, { limit: '500', user: cast<string>(user) });
-    }
+    // /**
+    //  * Get the last 1000 tracks a user on last.fm played.
+    //  * @param user The last.fm username to search for.
+    //  * @returns
+    //  */
+    // public async getRecentTracksFromUser(
+    //     user: string | null,
+    //     options?: Record<string, string | number | `${number}`>
+    // ): Promise<RecentTrackList> {
+    //     const data = await this.createLastFmRequest(LastFmApiMethods.UserGetRecentTracks, {
+    //         user: cast<string>(user),
+    //         ...options,
+    //         limit: `${options?.limit as number}` || '1000'
+    //     });
+    // }
+
+    // public async getRecentTracksNotCached(userId: string, page = 1): Promise<GetRecentTracksUserTrack[]> {
+    //     const userEntity = userId instanceof UserEntity ? userId : await container.db.users.ensure(userId);
+
+    //     const result = await this.getRecentTracksFromUser(userEntity.lastFm.username, { page, limit: '20' });
+
+    //     const { plays } = userEntity.lastFm;
+    //     const lastCached = plays[plays.length - 1];
+    //     const tracks = result.recenttracks.track.slice(0, 250);
+
+    //     let currentIndex = 0;
+
+    //     for (const data of tracks) {
+    //         if (
+    //             data.name === lastCached?.track &&
+    //             data.artist['#text'] === lastCached?.artist &&
+    //             data.album?.['#text'] === lastCached?.album &&
+    //             data.date?.uts === (lastCached?.timestamp.getTime() / 1000).toString()
+    //         )
+    //             break;
+
+    //         console.log(currentIndex);
+
+    //         currentIndex++;
+    //     }
+
+    //     if (currentIndex === 21) return this.getRecentTracksNotCached(userId, page + 1);
+    //     const beforeTracks = tracks.slice(0, currentIndex).filter(tr => Reflect.has(tr, 'date'));
+
+    //     return beforeTracks;
+    // }
+
+    // public async updateUserPlaysCache(userId: string) {
+    //     const userEntity = userId instanceof UserEntity ? userId : await container.db.users.ensure(userId);
+    //     const { plays } = userEntity.lastFm;
+    //     const lastCached = plays[plays.length - 1];
+
+    //     const notCached = await this.getRecentTracksNotCached(userId);
+    //     let lastId = lastCached?.id || 0;
+
+    //     for (const track of notCached.reverse()) {
+    //         userEntity.lastFm.plays.push(
+    //             new UserPlay({
+    //                 id: lastId + 1,
+    //                 track: track.name,
+    //                 album: track.album?.['#text'],
+    //                 artist: track.artist['#text'] || track.artist.name,
+    //                 timestamp: new Date(parseInt(track.date?.uts || '0', 10) * 1000),
+    //                 timestring: track.date?.['#text']
+    //             })
+    //         );
+
+    //         lastId += 1;
+    //     }
+
+    //     return userEntity.save();
+    // }
+
+    // public async getAllScrobblesForUser(userId: string) {
+    //     const userEntity = userId instanceof UserEntity ? userId : await container.db.users.ensure(userId);
+    //     const firstResult = await this.getRecentTracksFromUser(userEntity.lastFm.username, { limit: '1000' });
+    //     const pageCount = firstResult.recenttracks['@attr'].totalPages;
+    //     const pageArray = new Array(parseInt(pageCount, 10)).fill('');
+
+    //     const pages: GetRecentTracksUserResult[] = [];
+    //     let idx = 0;
+
+    //     for (const _ of pageArray) {
+    //         const result = await this.getRecentTracksFromUser(userEntity.lastFm.username, { page: idx + 1, limit: '1000' });
+    //         pages.push(result);
+
+    //         await sleep(seconds(2));
+
+    //         idx++;
+    //     }
+
+    //     return PlayRepository.insertLatestPlays(pages.map(p => p.recenttracks.track).flat(), userEntity);
+    // }
 
     /**
      * Gets the last.fm artists in a users library.
@@ -371,8 +408,23 @@ export class LastFmService {
      * @param user
      * @returns
      */
-    public async getInfoFromUser(user: string): Promise<GetUserInfoResult | GetUserInfoUserNoExistResult> {
-        return this.createLastFmRequest(LastFmApiMethods.UserGetInfo, { user });
+    public async getInfoFromUser(user: string, userId: string | UserEntity): Promise<UserEntity> {
+        const entity = userId instanceof UserEntity ? userId : await container.db.users.ensure(userId);
+
+        if (!entity.lastFm.shouldBeUpdated) return entity;
+
+        const data = await this.createLastFmRequest(LastFmApiMethods.UserGetInfo, { user });
+
+        if (!Reflect.has(data, 'user')) return entity;
+
+        const { user: userData } = cast<GetUserInfoResult>(data);
+        const image = userData.image.find(img => img.size === 'medium')?.['#text'] || undefined;
+
+        entity.lastFm.playcount = parseInt(userData.playcount, 10);
+        if (image) entity.lastFm.imageUrl = image;
+        entity.lastFm.lastUpdated = Date.now();
+
+        return entity.save();
     }
 
     public async getInfoFromTrack<B extends boolean>(
@@ -402,14 +454,16 @@ export class LastFmService {
      * @param summary
      * @returns
      */
-    public formatArtistDescription(summary: string) {
-        return italic(this.cleanLastFmArtistSummary(summary.length > 4000 ? `${summary.slice(0, 4000)}...` : summary));
+    public formatArtistDescription(summary: string | null) {
+        return summary
+            ? italic(this.cleanLastFmArtistSummary(summary.length > 1000 ? `${summary.slice(0, 1000)}...` : summary))
+            : null;
     }
 
     /**
      * Returns a last.fm request given the parameters.
      */
-    private async createLastFmRequest<M extends LastFmApiMethods>(method: M, query: LastFmQuery<M>) {
+    public async createLastFmRequest<M extends LastFmApiMethods>(method: M, query: LastFmQuery<M> | Record<string, string>) {
         const result = await fetch(this.baseApiUrl)
             .query({
                 api_key: this.apiKey,
@@ -418,8 +472,6 @@ export class LastFmService {
                 ...query
             })
             .json<LastFmApiReturnType<M>>();
-
-        console.log(result);
 
         return result;
     }
@@ -451,6 +503,13 @@ export interface LastFmImage {
 export interface GetRecentTracksUserResult {
     recenttracks: {
         track: GetRecentTracksUserTrack[];
+        '@attr': {
+            user: string;
+            totalPages: `${number}`;
+            page: `${number}`;
+            total: `${number}`;
+            perPage: `${number}`;
+        };
     };
 }
 
@@ -598,7 +657,7 @@ export interface GetArtistTopTracksNoExistResult {
 }
 
 export interface GetArtistInfoResultWithUser extends GetArtistInfoResult {
-    stats: GetArtistInfoResult & { userplaycount: `${number}` };
+    artist: GetArtistInfoResult['artist'] & { stats: GetArtistInfoResult & { userplaycount: `${number}` } };
 }
 
 export interface GetArtistInfoResult {
@@ -787,9 +846,4 @@ export type LastFmQuery<M extends LastFmApiMethods> = M extends LastFmApiMethods
     ? LimitArtist
     : M extends LastFmApiMethods.ArtistGetTopAlbums
     ? Artist
-    : never;
-
-export interface LastFmServiceDisplays {
-    artist: LastFmServiceArtistBuilder;
-    play: LastFmServicePlayBuilder;
-}
+    : any;

@@ -27,7 +27,12 @@ export const AnimalcrossingTitles = T<{
     zodiac: string;
 }>('commands/fun:animalcrossingTitles');
 
-export const LastFmDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/fun:lastFmDetailedDescription');
+export const LastFmArtistListeners = FT<{ count: number }>('commands/fun:lastFmArtistListeners');
+export const LastFmArtistPlaysByYou = FT<{ count: number }>('commands/fun:lastFmArtistPlaysByYou');
+export const LastFmArtistPlaysByYouLastWeek = FT<{ count: number }>('commands/fun:lastFmArtistPlaysByYouLastWeek');
+export const LastFmDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
+    'commands/fun:lastFmDetailedDescription'
+);
 export const LastFmPlayListeners = FT<{ count: number }>('commands/fun:lastFmPlayListeners');
 export const LastFmPlayNowPlaying = T('commands/fun:lastFmPlayNowPlaying');
 export const LastFmPlayPlays = FT<{ count: number }>('commands/fun:lastFmPlayPlays');
@@ -35,6 +40,8 @@ export const LastFmPlayPlaysBy = FT<{ count: number; target: string }>('commands
 export const LastFmPlayPlaysByYou = FT<{ count: number }>('commands/fun:lastFmPlayPlaysByYou');
 export const LastFmPlayWasPlaying = T('commands/fun:lastFmPlayWasPlaying');
 export const LastFmTitles = T<{
+    about: string;
+    lastFmStats: string;
     statistics: string;
     summary: string;
 }>('commands/fun:lastFmTitles');

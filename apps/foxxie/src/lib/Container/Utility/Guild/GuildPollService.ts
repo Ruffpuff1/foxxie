@@ -5,6 +5,10 @@ import { Collection, Guild } from 'discord.js';
 export class GuildPollService extends Collection<number, PollEntity> {
     public guild: Guild;
 
+    public alphabet = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷', '🇸', '🇹'];
+
+    public numbers = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
+
     public constructor(guild: Guild) {
         super();
         this.guild = guild;
@@ -73,6 +77,21 @@ export class GuildPollService extends Collection<number, PollEntity> {
 
     public insert(data: PollEntity | PollEntity[]): Collection<number, PollEntity> | PollEntity | null {
         return this._cache(data);
+    }
+
+    public entity(data: Partial<PollEntity>) {
+        return new PollEntity(data);
+    }
+
+    public mapOptions(options: string[], emojis: string[]) {
+        return options.map((option, i) => {
+            return {
+                emoji: emojis[i],
+                count: 0,
+                name: option,
+                optionNumber: i + 1
+            };
+        });
     }
 
     private _cache(entries: PollEntity | PollEntity[]): Collection<number, PollEntity> | PollEntity | null {

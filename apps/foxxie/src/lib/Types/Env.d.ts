@@ -42,11 +42,16 @@ declare module '@foxxie/env' {
 
         [EnvKeys.SpotifyClientId]: string;
         [EnvKeys.SpotifyClientSecret]: string;
+
+        [EnvKeys.DiscogsConsumerKey]: string;
+        [EnvKeys.DiscogsOAuthSignature]: string;
     }
 }
 
 export const enum EnvKeys {
     ClientId = 'CLIENT_ID',
+    DiscogsConsumerKey = 'DISCOGS_CONSUMER_KEY',
+    DiscogsOAuthSignature = 'DISCOGS_OAUTH_SIGNATURE',
     HasteToken = 'HASTE_TOKEN',
     SentryEnabled = 'SENTRY_ENABLED',
     SpotifyClientId = 'SPOTIFY_CLIENT_ID',

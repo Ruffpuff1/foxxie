@@ -1,10 +1,11 @@
+import { SubCommandCommand } from '#lib/Container/Utility';
 import { GuildSettings, PermissionNode } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage, PermissionLevels } from '#lib/Types';
 import { messagePrompt } from '#utils/Discord';
 import { ApplyOptions } from '@sapphire/decorators';
-import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { CommandOptionsRunTypeEnum, container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { Role } from 'discord.js';
 
@@ -12,10 +13,7 @@ import { Role } from 'discord.js';
     aliases: ['perm', 'permissions', 'perms'],
     runIn: CommandOptionsRunTypeEnum.GuildText,
     permissionLevel: PermissionLevels.Administrator,
-    subcommands: [
-        { name: 'show', default: true, messageRun: 'messageRunShow' },
-        { name: 'allow', messageRun: 'messageRunAllow' }
-    ]
+    subcommands: container.utilities.subCommands.get(SubCommandCommand.Permission)
 })
 export class UserCommand extends FoxxieCommand {
     public async messageRunShow(message: GuildMessage, args: FoxxieCommand.Args) {

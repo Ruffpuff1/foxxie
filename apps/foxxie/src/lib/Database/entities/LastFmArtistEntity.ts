@@ -1,8 +1,4 @@
-import { hours } from '@ruffpuff/utilities';
-import { AfterLoad, BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import { LastFmAlbum } from './LastFmAlbum';
-import { LastFmArtistUserScrobble } from './LastFmArtistUserScrobble';
-import { LastFmTrack } from './LastFmTrack';
+import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
 @Entity('lastfmartist', { schema: 'public' })
 export class LastFmArtistEntity extends BaseEntity {
@@ -10,76 +6,48 @@ export class LastFmArtistEntity extends BaseEntity {
     public _id!: string;
 
     @PrimaryColumn({ default: null })
-    public artistName: string = null!;
-
-    @PrimaryColumn({ default: null })
-    public mbid: string = null!;
+    public name: string;
 
     @Column('varchar', { default: null })
-    public artistUrl: string = null!;
+    public lastFmUrl: string;
 
     @Column('varchar', { default: null })
-    public description: string = null!;
-
-    @Column('varchar', { default: null })
-    public imageUrl: string = null!;
-
-    @Column('varchar', { default: null })
-    public country: string = null!;
-
-    @Column('varchar', { default: null })
-    public gender: string = null!;
-
-    @Column('varchar', { default: null })
-    public startDate: string = null!;
-
-    @Column('varchar', { default: null })
-    public startArea: string = null!;
-
-    @Column('varchar', { default: null })
-    public endDate: string = null!;
-
-    @Column('varchar', { default: null })
-    public endArea: string = null!;
-
-    @Column('varchar', { default: null })
-    public disambiguation: string = null!;
-
-    @Column('varchar', { default: null })
-    public type: string = null!;
+    public lastFmDescription: string;
 
     @Column()
-    public userScrobbles: LastFmArtistUserScrobble[] = [];
+    public lastFmDate: Date;
 
     @Column()
-    public instrumentCredits: { type?: string; name: string; link: string }[] = [];
+    public spotifyImageUrl: string;
 
-    @Column()
-    public tracks: LastFmTrack[] = [];
+    public spotifyImageDate?: Date;
 
-    @Column()
-    public albums: LastFmAlbum[] = [];
+    public spotifyId: string;
 
-    public lastUpdated = Date.now();
+    public popularity?: number;
+
+    public mbid?: string;
+
+    public musicBrainzDate?: Date;
+
+    public location: string;
+
+    public countryCode: string;
+
+    public type: string;
+
+    public gender: string;
+
+    public disambiguation: string;
+
+    public startDate?: Date;
+
+    public endDate?: Date;
 
     public tags: { name: string; url: string }[] = [];
 
-    public listeners: number = null!;
-
-    public playcount: number = null!;
-
-    public constructor() {
+    public constructor(data: Partial<LastFmArtistEntity>) {
         super();
-        this.entityLoad();
-    }
-
-    @AfterLoad()
-    protected entityLoad() {
-        this.userScrobbles = this.userScrobbles.map(scrobbleData => new LastFmArtistUserScrobble(scrobbleData));
-    }
-
-    public get shouldBeUpdated(): boolean {
-        // if (isDev()) return true;
-        return this.lastUpdated + hours(1) < Date.now();
+        Object.assign(this, data);
     }
 }

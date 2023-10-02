@@ -1,12 +1,24 @@
 import { container } from '@sapphire/framework';
 import { Channel, ChannelResolvable, Guild, GuildResolvable } from 'discord.js';
-import { GuildUtilityService } from './Guild/GuildUtilityService';
+import { AutoCompleteCommandsService } from './AutoCompleteCommands/AutoCompleteCommands';
 import { ChannelUtilityService } from './ChannelUtilityService';
+import { ChatInputCommandsService } from './ChatInputCommands/ChatInputCommands';
+import { GuildUtilityService } from './Guild/GuildUtilityService';
+import { SubCommandsService } from './SubCommands/SubCommands';
+import { TextCommandsService } from './TextCommands/TextCommands';
 
 export class UtilityService {
     #channelUtilityCache = new WeakMap<Channel, ChannelUtilityService>();
 
     #guildUtilityCache = new WeakMap<Guild, GuildUtilityService>();
+
+    public autoCompleteCommands = new AutoCompleteCommandsService();
+
+    public chatInputCommands = new ChatInputCommandsService();
+
+    public subCommands = new SubCommandsService();
+
+    public textCommands = new TextCommandsService();
 
     public channel(resolvable: ChannelResolvable): ChannelUtilityService {
         const channel = container.client.channels.resolve(resolvable);

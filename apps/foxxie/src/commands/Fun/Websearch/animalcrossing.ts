@@ -1,4 +1,5 @@
 import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#Api/celestia';
+import { SubCommandCommand } from '#lib/Container/Utility';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage } from '#lib/Types';
@@ -7,7 +8,7 @@ import { floatPromise } from '#utils/util';
 import { Villager, VillagerKey } from '@foxxie/celestia-api-types';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Args } from '@sapphire/framework';
+import { Args, container } from '@sapphire/framework';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
 
@@ -15,7 +16,7 @@ import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilde
     aliases: ['ac'],
     requiredClientPermissions: PermissionFlagsBits.EmbedLinks,
     detailedDescription: LanguageKeys.Commands.Fun.AnimalcrossingDetailedDescription,
-    subcommands: [{ name: 'villager', default: true, messageRun: 'messageRunVillager' }]
+    subcommands: container.utilities.subCommands.get(SubCommandCommand.AnimalCrossing)
 })
 export class UserCommand extends FoxxieCommand {
     private static villager = Args.make<`${VillagerKey}`>((parameter, { argument }) => {

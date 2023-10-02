@@ -16,6 +16,7 @@ export const enum FoxxieEvents {
     GuildMemberUpdate = 'guildMemberUpdate',
     GuildMessageLog = 'guildMessageLog',
     GuildMessageUpdateLog = 'messageUpdate',
+    LastFmUpdateUser = 'lastFmUpdateUser',
     ListenerError = 'listenerError',
     MentionPrefixOnly = 'mentionPrefixOnly',
     MessageCommandDenied = 'messageCommandDenied',

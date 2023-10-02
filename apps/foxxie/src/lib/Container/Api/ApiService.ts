@@ -1,5 +1,6 @@
 import { EnvKeys } from '#lib/Types';
 import { EnvParse } from '@foxxie/env';
+import { DiscogsService } from './Discogs/DiscogsService';
 import { HastebinService } from './HastbinService';
 import { LastFmService, SpotifyService } from './LastFm';
 
@@ -7,6 +8,11 @@ import { LastFmService, SpotifyService } from './LastFm';
  * Api manager
  */
 export class ApiService {
+    /**
+     * The Discogs api service.
+     */
+    public discogs = new DiscogsService();
+
     /**
      * The hastebin api service.
      */

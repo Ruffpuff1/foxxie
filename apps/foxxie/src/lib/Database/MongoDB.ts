@@ -1,12 +1,15 @@
+import { UserArtist } from '#Api/LastFm/Structures/UserArtist';
+import { UserPlay } from '#Api/LastFm/Structures/UserPlay';
+import { TaskStore } from '#lib/Container/Stores/Tasks/TaskStore';
 import { BrandingColors } from '#utils/constants';
 import { container } from '@sapphire/framework';
 import type { Message } from 'discord.js';
-import type { DataSource, Repository } from 'typeorm';
+import type { DataSource, MongoRepository, Repository } from 'typeorm';
 import { GuildEntity, ModerationEntity, ScheduleEntity, StarEntity } from './entities';
-import { ClientRepository, GuildRepository, LastFmArtistRepository, MemberRepository } from './repository';
-import { SerializerStore } from './structures';
 import { PollEntity } from './entities/PollEntity';
-import { TaskStore } from '#lib/Container/Stores/Tasks/TaskStore';
+import { ClientRepository, GuildRepository, LastFmArtistRepository, MemberRepository } from './repository';
+import { UserRepository } from './repository/UserRepository';
+import { SerializerStore } from './structures';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class MongoDB {
@@ -20,6 +23,8 @@ export class MongoDB {
 
     public readonly lastFmArtists: LastFmArtistRepository;
 
+    public readonly lastFm: LastFm;
+
     public readonly moderations: Repository<ModerationEntity>;
 
     public readonly polls: Repository<PollEntity>;
@@ -27,6 +32,8 @@ export class MongoDB {
     public readonly schedules: Repository<ScheduleEntity>;
 
     public readonly starboards: Repository<StarEntity>;
+
+    public readonly users: UserRepository;
 
     public serializers = new SerializerStore();
 
@@ -37,7 +44,8 @@ export class MongoDB {
         clients: ClientRepository,
         guilds: GuildRepository<GuildEntity>,
         members: MemberRepository,
-        lastFmArtists: LastFmArtistRepository
+        lastFmArtists: LastFmArtistRepository,
+        users: UserRepository
     ) {
         this.dataSource = dataSource;
         this.clients = clients;
@@ -47,7 +55,13 @@ export class MongoDB {
         this.polls = dataSource.getRepository(PollEntity);
         this.schedules = dataSource.getRepository(ScheduleEntity);
         this.starboards = dataSource.getRepository(StarEntity);
+        this.users = users;
         this.lastFmArtists = lastFmArtists;
+
+        this.lastFm = {
+            artists: dataSource.getMongoRepository(UserArtist),
+            plays: dataSource.getMongoRepository(UserPlay)
+        };
     }
 
     public fetchColor(msg: Message): number {
@@ -65,4 +79,10 @@ export interface MongoDB {
     readonly polls: Repository<PollEntity>;
     readonly schedules: Repository<ScheduleEntity>;
     readonly starboards: Repository<StarEntity>;
+    readonly users: UserRepository;
+}
+
+export interface LastFm {
+    artists: MongoRepository<UserArtist>;
+    plays: MongoRepository<UserPlay>;
 }

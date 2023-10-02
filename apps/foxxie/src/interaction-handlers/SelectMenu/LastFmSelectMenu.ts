@@ -1,9 +1,9 @@
-import { GetArtistInfoResult } from '#Api/LastFm/Services/LastFmService';
-import { floatPromise, resolveClientColor } from '#utils/util';
-import { cast, resolveToNull } from '@ruffpuff/utilities';
+import { ArtistBuilders } from '#Api/LastFm/Builders/ArtistBuilders';
+import { ContextModel } from '#Api/LastFm/Structures/ContextModel';
+import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import type { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
+import { MessageOptions, send } from '@sapphire/plugin-editable-commands';
 import type { SelectMenuInteraction } from 'discord.js';
 
 @ApplyOptions<InteractionHandler.Options>({
@@ -11,30 +11,27 @@ import type { SelectMenuInteraction } from 'discord.js';
 })
 export class UserInteractionHandler extends InteractionHandler {
     public override async run(interaction: SelectMenuInteraction, result: InteractionHandler.ParseResult<this>) {
-        let display: PaginatedMessage;
+        let options: MessageOptions;
         const t = await this.container.utilities.guild(interaction.guild!).settings.getT();
         const message = await resolveToNull(interaction.channel!.messages.fetch(result.messageId));
 
-        const artistEntity = await this.container.apis.spotify.getOrStoreArtist(cast<GetArtistInfoResult>(result.data));
-
         switch (result.type) {
             case 'artist':
-                display = await this.container.apis.lastFm.displays.artist.build(
-                    artistEntity,
-                    t,
-                    resolveClientColor(message?.guildId as string, message?.member?.displayColor || 0),
-                    interaction.user.id,
-                    interaction.guildId!
+                options = await new ArtistBuilders().artist(
+                    new ContextModel(
+                        { user: interaction.user, guild: interaction.guild!, channel: interaction.channel!, t },
+                        '.',
+                        await this.container.db.users.ensure(interaction.user.id)
+                    ),
+                    result.data
                 );
                 break;
         }
 
-        if (message) await floatPromise(interaction.message.delete());
-
-        return display.run(message ?? interaction, message ? message.author : interaction.user);
+        await send(message!, options);
     }
 
-    public override async parse(interaction: SelectMenuInteraction) {
+    public override parse(interaction: SelectMenuInteraction) {
         if (!interaction.customId.startsWith('lastfm|')) return this.none();
 
         const value = interaction.values[0];
@@ -43,7 +40,7 @@ export class UserInteractionHandler extends InteractionHandler {
 
         switch (type) {
             case 'artist':
-                data = await this.container.apis.lastFm.getInfoFromArtist(value);
+                data = value;
                 break;
         }
 

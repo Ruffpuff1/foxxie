@@ -27,7 +27,9 @@ export const enum Schedules {
     EndTempBan = 'endTempban',
     EndTempMute = 'endTempmute',
     EndTempNick = 'endTempnick',
-    EndTempRestrictEmbed = 'endTemprestrictembed'
+    EndTempRestrictEmbed = 'endTemprestrictembed',
+    UpdateDiscogsUsers = 'updateDiscogsUsers',
+    UpdateLastFmUsers = 'updateLastFmUsers'
 }
 
 export const enum Urls {
@@ -53,6 +55,7 @@ export const emojis = {
         no: '916529423430344754',
         yes: '916529451536363633'
     },
+    vinyl: '<:Vinyl:1155284004656910397>',
     ruffThink: '<:RuffThink:910209205636579421>'
 };
 
