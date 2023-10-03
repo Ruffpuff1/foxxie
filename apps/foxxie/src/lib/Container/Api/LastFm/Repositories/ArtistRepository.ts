@@ -14,4 +14,18 @@ export class ArtistRepository {
             }
         });
     }
+
+    public static getArtistPlayCountForUser(artistName: string, userId: string) {
+        return container.db.lastFm.artists
+            .find({
+                where: {
+                    userId,
+                    name: artistName
+                },
+                order: {
+                    playcount: 'DESC'
+                }
+            })
+            .then(result => result[0]?.playcount);
+    }
 }

@@ -2,7 +2,7 @@ import { LastFmArtistEntity } from '#lib/Database/entities/LastFmArtistEntity';
 import { fetch } from '@foxxie/fetch';
 import { cast, hours } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { ArtistRepository } from '../ArtistRepository';
+import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { ArtistInfo } from '../Structures/ArtistInfo';
 import { MusicBrainzService } from './MusicBrainzService';
 

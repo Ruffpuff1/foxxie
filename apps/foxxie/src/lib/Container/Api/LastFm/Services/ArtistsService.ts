@@ -1,8 +1,10 @@
+import { LastFmArtistEntity } from '#lib/Database/entities/LastFmArtistEntity';
 import { Response } from '#utils/Response';
 import { minutes } from '@ruffpuff/utilities';
+import { container } from '@sapphire/framework';
 import { User } from 'discord.js';
-import { ArtistRepository } from '../ArtistRepository';
 import { DataSourceFactory } from '../Factories/DataSourceFactory';
+import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { LastFmRepository } from '../Repositories/LastFmRepository';
 import { ArtistInfo } from '../Structures/ArtistInfo';
 import { ArtistSearch } from '../Structures/ArtistModels';
@@ -59,7 +61,8 @@ export class ArtistsService {
 
             let artistCall: Response<ArtistInfo>;
 
-            if (useCachedArtists && false) {
+            if (useCachedArtists) {
+                artistCall = await this.getCachedArtist(artistValue, lastFmUserName, userId);
             } else {
                 artistCall = await this.dataSourceFactory.getArtistInfoAsync(artistValue, lastFmUserName);
             }
@@ -80,7 +83,8 @@ export class ArtistsService {
 
         let artistCall: Response<ArtistInfo>;
 
-        if (useCachedArtists && false) {
+        if (useCachedArtists) {
+            artistCall = await this.getCachedArtist(artistValue, lastFmUserName, userId);
         } else {
             artistCall = await this.dataSourceFactory.getArtistInfoAsync(lastPlayedTrack.artistName, lastFmUserName);
         }
@@ -114,5 +118,47 @@ export class ArtistsService {
         }
 
         return freshTopArtists;
+    }
+
+    private async getCachedArtist(artistName: string, lastFmUserName: string, userId: string | null, redirectsEnabled = false) {
+        let artistInfo: Response<ArtistInfo>;
+        const cachedArtist = await this.getArtistFromDatabase(artistName);
+        if (cachedArtist) {
+            artistInfo = new Response<ArtistInfo>({
+                content: this.cachedArtistToArtistInfo(cachedArtist),
+                success: true
+            });
+
+            if (userId) {
+                const userPlaycount = await this._whoKnowsArtistService.getArtistPlayCountForUser(cachedArtist.name, userId);
+                artistInfo.content.userPlaycount = userPlaycount;
+            }
+        } else {
+            artistInfo = await this.dataSourceFactory.getArtistInfoAsync(artistName, lastFmUserName, redirectsEnabled);
+        }
+
+        return artistInfo;
+    }
+
+    private cachedArtistToArtistInfo(artist: LastFmArtistEntity) {
+        return new ArtistInfo({
+            artistName: artist.name,
+            artistUrl: artist.lastFmUrl,
+            mbid: artist.mbid
+        });
+    }
+
+    private async getArtistFromDatabase(artistName: string) {
+        if (!artistName) {
+            return null;
+        }
+
+        const artist = await ArtistRepository.getArtistForName(artistName);
+
+        return artist?.spotifyId ? artist : null;
+    }
+
+    private get _whoKnowsArtistService() {
+        return container.apis.lastFm.whoKnowsArtistService;
     }
 }

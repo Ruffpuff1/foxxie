@@ -123,7 +123,7 @@ export class ArtistBuilders {
 
         let firstListenInfo: string | null = null;
         if (artistSearch.artist.userPlaycount! > 0) {
-            const firstPlay = await this.playService.getArtistFirstPlayDate(userEntity.id, fullArtist.name);
+            const firstPlay = await this.playService.getArtistFirstPlayDate(context.user.id, artistSearch.artist.artistName);
             if (firstPlay !== null) {
                 firstListenInfo = `First discovered on ${time(firstPlay, TimestampStyles.LongDate)}`;
             }

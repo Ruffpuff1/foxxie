@@ -1,6 +1,6 @@
 import { days } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { PlayRepository } from '../PlayRepository';
+import { PlayRepository } from '../Repositories/PlayRepository';
 
 export class PlayService {
     public async getArtistPlaycountForTimePeriod(userId: string, artistName: string, daysToGoBack = 7) {

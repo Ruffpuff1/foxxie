@@ -12,7 +12,12 @@ export class TimerService {
         const timeFilter = Date.now() - hours(3);
         const usersToUpdate = await container.apis.lastFm.updateService.getOutdatedUsers(timeFilter);
 
-        console.log(usersToUpdate);
         container.logger.debug(`[${blue('Last.fm')}] found ${usersToUpdate.length} outdated users, adding them to update queue.`);
+
+        await this._updateService.addUsersToUpdateQueue(usersToUpdate);
+    }
+
+    private get _updateService() {
+        return container.apis.lastFm.updateService
     }
 }

@@ -14,6 +14,7 @@ import { TopArtist } from '../Structures/TopArtist';
 import { UserPlay } from '../Structures/UserPlay';
 import { TimerService } from './TimerService';
 import { UpdateService } from './UpdateService';
+import { WhoKnowsArtistService } from './WhoKnowsArtistService';
 
 /**
  * The service for handling the last.fm API.
@@ -24,6 +25,8 @@ export class LastFmService {
     public timerService = new TimerService();
 
     public updateService = new UpdateService();
+
+    public whoKnowsArtistService = new WhoKnowsArtistService();
 
     /**
      * The base last.fm api url.
@@ -156,16 +159,6 @@ export class LastFmService {
         }
 
         return interaction.respond([]);
-        // const recentTracks = await this.getRecentTracksFromUser(username);
-        // const data = [...new Set(recentTracks.recenttracks.track.map(track => track.artist['#text']!))];
-
-        // this.#autocomplateArtistOptionCache.set(username, data);
-        // setTimeout(() => this.#autocomplateArtistOptionCache.delete(username), minutes(2));
-
-        // const fuzzy = new FuzzySearch(new Collection(data.map(d => [d, { key: d }])), ['key']);
-        // const results = option.value ? fuzzy.runFuzzy(option.value).map(v => v.key) : data;
-
-        // return interaction.respond(results.slice(0, 5).map(r => ({ name: r, value: r })));
     }
 
     /**
@@ -299,100 +292,6 @@ export class LastFmService {
     public async getSearchFromArtist(artist: string): Promise<ArtistSearchResult | ArtistSearchArtistNoExistResult> {
         return this.createLastFmRequest(LastFmApiMethods.ArtistSearch, { artist });
     }
-
-    // /**
-    //  * Get the last 1000 tracks a user on last.fm played.
-    //  * @param user The last.fm username to search for.
-    //  * @returns
-    //  */
-    // public async getRecentTracksFromUser(
-    //     user: string | null,
-    //     options?: Record<string, string | number | `${number}`>
-    // ): Promise<RecentTrackList> {
-    //     const data = await this.createLastFmRequest(LastFmApiMethods.UserGetRecentTracks, {
-    //         user: cast<string>(user),
-    //         ...options,
-    //         limit: `${options?.limit as number}` || '1000'
-    //     });
-    // }
-
-    // public async getRecentTracksNotCached(userId: string, page = 1): Promise<GetRecentTracksUserTrack[]> {
-    //     const userEntity = userId instanceof UserEntity ? userId : await container.db.users.ensure(userId);
-
-    //     const result = await this.getRecentTracksFromUser(userEntity.lastFm.username, { page, limit: '20' });
-
-    //     const { plays } = userEntity.lastFm;
-    //     const lastCached = plays[plays.length - 1];
-    //     const tracks = result.recenttracks.track.slice(0, 250);
-
-    //     let currentIndex = 0;
-
-    //     for (const data of tracks) {
-    //         if (
-    //             data.name === lastCached?.track &&
-    //             data.artist['#text'] === lastCached?.artist &&
-    //             data.album?.['#text'] === lastCached?.album &&
-    //             data.date?.uts === (lastCached?.timestamp.getTime() / 1000).toString()
-    //         )
-    //             break;
-
-    //         console.log(currentIndex);
-
-    //         currentIndex++;
-    //     }
-
-    //     if (currentIndex === 21) return this.getRecentTracksNotCached(userId, page + 1);
-    //     const beforeTracks = tracks.slice(0, currentIndex).filter(tr => Reflect.has(tr, 'date'));
-
-    //     return beforeTracks;
-    // }
-
-    // public async updateUserPlaysCache(userId: string) {
-    //     const userEntity = userId instanceof UserEntity ? userId : await container.db.users.ensure(userId);
-    //     const { plays } = userEntity.lastFm;
-    //     const lastCached = plays[plays.length - 1];
-
-    //     const notCached = await this.getRecentTracksNotCached(userId);
-    //     let lastId = lastCached?.id || 0;
-
-    //     for (const track of notCached.reverse()) {
-    //         userEntity.lastFm.plays.push(
-    //             new UserPlay({
-    //                 id: lastId + 1,
-    //                 track: track.name,
-    //                 album: track.album?.['#text'],
-    //                 artist: track.artist['#text'] || track.artist.name,
-    //                 timestamp: new Date(parseInt(track.date?.uts || '0', 10) * 1000),
-    //                 timestring: track.date?.['#text']
-    //             })
-    //         );
-
-    //         lastId += 1;
-    //     }
-
-    //     return userEntity.save();
-    // }
-
-    // public async getAllScrobblesForUser(userId: string) {
-    //     const userEntity = userId instanceof UserEntity ? userId : await container.db.users.ensure(userId);
-    //     const firstResult = await this.getRecentTracksFromUser(userEntity.lastFm.username, { limit: '1000' });
-    //     const pageCount = firstResult.recenttracks['@attr'].totalPages;
-    //     const pageArray = new Array(parseInt(pageCount, 10)).fill('');
-
-    //     const pages: GetRecentTracksUserResult[] = [];
-    //     let idx = 0;
-
-    //     for (const _ of pageArray) {
-    //         const result = await this.getRecentTracksFromUser(userEntity.lastFm.username, { page: idx + 1, limit: '1000' });
-    //         pages.push(result);
-
-    //         await sleep(seconds(2));
-
-    //         idx++;
-    //     }
-
-    //     return PlayRepository.insertLatestPlays(pages.map(p => p.recenttracks.track).flat(), userEntity);
-    // }
 
     /**
      * Gets the last.fm artists in a users library.

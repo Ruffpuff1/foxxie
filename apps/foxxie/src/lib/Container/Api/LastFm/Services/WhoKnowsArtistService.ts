@@ -1,5 +1,6 @@
 import { UserEntity } from '#lib/Database/entities/UserEntity';
 import { container } from '@sapphire/framework';
+import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { WhoKnowsObjectWithUser } from '../Structures/WhoKnowsObjectWithUser';
 
 export class WhoKnowsArtistService {
@@ -43,5 +44,9 @@ export class WhoKnowsArtistService {
         }
 
         return whoKnowsArtistList;
+    }
+
+    public getArtistPlayCountForUser(artistName: string, userId: string) {
+        return ArtistRepository.getArtistPlayCountForUser(artistName, userId);
     }
 }
