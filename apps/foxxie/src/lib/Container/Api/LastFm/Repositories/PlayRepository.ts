@@ -59,8 +59,15 @@ export class PlayRepository {
         return new PlayUpdate(addedPlays, removedPlays);
     }
 
+    public static async ReplaceAllPlays(playsToInsert: UserPlay[], userId: string) {
+        await this.removeAllCurrentLastFmPlays(userId);
+
+        container.logger.debug(`[${blue('Last.fm')}] Inserting ${playsToInsert.length} time series plays for user ${userId}`);
+        await this.insertPlays(playsToInsert)
+    }
+
     public static async insertPlays(addedPlays: UserPlay[]) {
-        await container.db.lastFm.plays.save(addedPlays);
+        await container.db.lastFm.plays.insertMany(addedPlays);
     }
 
     public static async removePlays(removedPlays: UserPlay[], userId: string) {
@@ -74,11 +81,9 @@ export class PlayRepository {
     }
 
     public static async removeAllCurrentLastFmPlays(userId: string) {
-        const plays = await container.db.lastFm.plays.find({
+        await container.db.lastFm.plays.deleteMany({
             userId
         });
-
-        await Promise.all(plays.map(p => p.remove()));
     }
 
     /**

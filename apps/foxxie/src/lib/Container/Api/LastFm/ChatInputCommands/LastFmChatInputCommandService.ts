@@ -87,8 +87,8 @@ export class LastFmChatInputCommandService {
         const options = await new ArtistBuilders().artist(
             new ContextModel(
                 { user: interaction.user, guild: interaction.guild, channel: interaction.channel!, t },
-                '/',
-                await container.db.users.ensure(interaction.user.id)
+                await container.db.users.ensure(interaction.user.id),
+                '/'
             ),
             artist
         );

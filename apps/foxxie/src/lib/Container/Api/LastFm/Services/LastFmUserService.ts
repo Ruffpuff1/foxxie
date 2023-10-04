@@ -7,6 +7,8 @@ export class LastFmUserService {
 
     public registered: Date | null = null;
 
+    public lastIndexed: number | null = null;
+
     public lastScrobbleUpdate: number | null = null;
 
     public lastUpdated: number = Date.now();

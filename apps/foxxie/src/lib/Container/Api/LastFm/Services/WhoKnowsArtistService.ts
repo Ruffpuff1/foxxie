@@ -1,5 +1,7 @@
 import { UserEntity } from '#lib/Database/entities/UserEntity';
+import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
+import { Guild } from 'discord.js';
 import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { WhoKnowsObjectWithUser } from '../Structures/WhoKnowsObjectWithUser';
 
@@ -44,6 +46,47 @@ export class WhoKnowsArtistService {
         }
 
         return whoKnowsArtistList;
+    }
+
+    public async getGlobalUsersForArtists(discordGuild: Guild, artistName: string) {
+        const userArtists = await container.db.lastFm.artists.find({
+            where: {
+                name: artistName
+            },
+            order: {
+                playcount: 'DESC'
+            }
+        });
+
+        const whoKnowsArtistList: WhoKnowsObjectWithUser[] = [];
+
+        for (let i = 0; i < userArtists.length; i++) {
+            const userArtist = userArtists[i];
+            const entity = await container.db.users.ensure(userArtist.userId);
+
+            let userName = entity.lastFm.username!;
+
+            if (i < 15) {
+                if (discordGuild) {
+                    const discordUser = await resolveToNull(discordGuild.members.fetch(userArtist.userId));
+                    if (discordUser !== null) {
+                        userName = discordUser.displayName;
+                    }
+                }
+            }
+
+            whoKnowsArtistList.push(
+                new WhoKnowsObjectWithUser({
+                    name: userArtist.name,
+                    discordName: userName,
+                    playcount: userArtist.playcount,
+                    lastFmUsername: entity.lastFm.username!,
+                    userId: userArtist.userId
+                })
+            );
+        }
+
+        return whoKnowsArtistList
     }
 
     public getArtistPlayCountForUser(artistName: string, userId: string) {

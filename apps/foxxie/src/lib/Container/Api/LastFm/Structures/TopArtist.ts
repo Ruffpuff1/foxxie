@@ -1,5 +1,19 @@
 import { TopTimeListened } from "./TopTimeListened";
 
+export class TopArtistList {
+    public totalAmount: number;
+
+    public userUrl: string;
+
+    public userTopArtistsUrl: string;
+
+    public topArtists: TopArtist[];
+
+    public constructor(data?: Partial<TopArtistList>) {
+        Object.assign(this, data);
+    }
+}
+
 export class TopArtist {
     public artistName: string;
 

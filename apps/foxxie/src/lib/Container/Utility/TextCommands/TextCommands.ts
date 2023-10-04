@@ -1,8 +1,8 @@
 import { InfoTextCommandService } from './InfoCommands';
-import { LastFmTextCommandService } from './LastFmCommands';
+import { LastFmTextCommands } from './LastFmCommands';
 
 export class TextCommandsService {
     public info = new InfoTextCommandService();
 
-    public lastFm = new LastFmTextCommandService();
+    public lastFm = new LastFmTextCommands();
 }

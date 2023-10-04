@@ -11,9 +11,7 @@ export class WhoKnowsPlayService {
         const userPlays: UserPlay[] = [];
 
         for (const user of guildUsers.filter(a => a.id !== currentUserId)) {
-            console.log(user);
             const userFound = this._cache.get(`${user.id}-lastplay-artist-${artistName}`) as UserPlay;
-            console.log(userFound);
 
             if (userFound) {
                 foundUsers.push(user);

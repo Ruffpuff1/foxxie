@@ -6,6 +6,7 @@ import { container } from '@sapphire/pieces';
 import { sleep } from '@sapphire/utilities';
 import { blue } from 'colorette';
 import { User } from 'discord.js';
+import { UpdateTypeBitField, UpdateTypeBits } from '../Enums/UpdateType';
 import { LastFmRepository } from '../Repositories/LastFmRepository';
 import { PlayRepository } from '../Repositories/PlayRepository';
 import { RecentTrack, RecentTrackList } from '../Structures/RecentTrack';
@@ -213,7 +214,8 @@ export class UpdateService {
     }
 
     private async onNextAsync(user: UpdateUserQueueItem) {
-        await this.updateUser(user);
+        const entity = await container.db.users.ensure(user.userId);
+        await container.apis.lastFm.indexService.modularUpdate(entity, new UpdateTypeBitField(UpdateTypeBits.Full));
     }
 
     private addRecentPlayToMemberCache(userId: string, tracks: RecentTrack[]) {

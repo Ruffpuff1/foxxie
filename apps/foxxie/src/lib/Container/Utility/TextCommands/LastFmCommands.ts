@@ -1,35 +1,66 @@
-import { ArtistBuilders } from '#Api/LastFm/Builders/ArtistBuilders';
-import { UpdateService } from '#Api/LastFm/Services/UpdateService';
+import { LastFmService } from '#Api/LastFm';
+import { UpdateTypeBitField, UpdateTypeBits } from '#Api/LastFm/Enums/UpdateType';
+import { WhoKnowsMode } from '#Api/LastFm/Enums/WhoKnowsMode';
+import { UserService } from '#Api/LastFm/Services/UserService';
 import { ContextModel } from '#Api/LastFm/Structures/ContextModel';
-import { GuildSettings } from '#lib/Database';
+import { WhoKnowsSettings } from '#Api/LastFm/Structures/WhoKnowsSettings';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage } from '#lib/Types';
+import { sendLoadingMessage } from '#utils/Discord';
 import { emojis } from '#utils/constants';
+import { RequiresLastFmUsername } from '#utils/decorators';
+import { resolveClientColor } from '#utils/util';
 import { RequiresClientPermissions } from '@sapphire/decorators';
-import { UserError, container } from '@sapphire/framework';
+import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { PermissionFlagsBits, PermissionsBitField, TimestampStyles, time } from 'discord.js';
+import { EmbedBuilder, PermissionFlagsBits, PermissionsBitField, TimestampStyles, time } from 'discord.js';
 import _ from 'lodash';
 
-export class LastFmTextCommandService {
-    private artistBuilders = new ArtistBuilders();
-
-    private updateService = new UpdateService();
-
+export class LastFmTextCommands {
+    @RequiresLastFmUsername()
     @RequiresClientPermissions(new PermissionsBitField([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.ManageMessages]))
     public async artist(...[message, args]: MessageRunArgs) {
-        const [artist] = await this.lastFm.getArtistArgOrLastPlayedArtistFromGuildMember(message, args);
+        const artist = await args.rest(LastFmService.ArtistArgument).catch(() => '');
+        await sendLoadingMessage(message);
 
-        const options = await this.artistBuilders.artist(
+        const options = await this._artistBuilders.artist(
             new ContextModel(
                 { user: message.author, guild: message.guild, channel: message.channel, t: args.t },
-                '.',
                 await container.db.users.ensure(message.author.id)
             ),
             artist
         );
 
         await send(message, options);
+    }
+
+    @RequiresLastFmUsername()
+    @RequiresClientPermissions(
+        new PermissionsBitField([
+            PermissionFlagsBits.EmbedLinks,
+            PermissionFlagsBits.ManageMessages,
+            PermissionFlagsBits.AttachFiles
+        ])
+    )
+    public async globalWhoKnows(...[message, args]: MessageRunArgs) {
+        await sendLoadingMessage(message);
+        const contextUser = await container.db.users.ensure(message.author.id);
+        const artistValue = await args.rest('string').catch(() => '');
+
+        const currentSettings = new WhoKnowsSettings({
+            hidePrivateUsers: false,
+            showBotters: false,
+            adminView: false,
+            newSearchValue: artistValue,
+            whoKnowsMode: WhoKnowsMode.Embed
+        });
+
+        const response = await this._artistBuilders.globalWhoKnowsArtist(
+            new ContextModel({ user: message.author, guild: message.guild, t: args.t, channel: message.channel }, contextUser),
+            currentSettings
+        );
+
+        await send(message, response);
     }
 
     // @RequiresClientPermissions(new PermissionsBitField([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.ManageMessages]))
@@ -67,56 +98,117 @@ export class LastFmTextCommandService {
     //     await send(message, { content: null, embeds: [embed] });
     // }
 
+    @RequiresLastFmUsername()
     public async update(...[message, args]: MessageRunArgs) {
-        const entity = await container.db.users.ensure(message.author.id);
-        const prefix = await args.guild?.settings.get(GuildSettings.Prefix);
-        console.log(prefix);
+        const type = await args
+            .repeat('string', { times: 5 })
+            .then(res => {
+                const full = ['full', 'force', 'f'];
+                const bits = new UpdateTypeBitField();
 
-        if (!entity.lastFm.username) this.error('not logged in');
+                if (full.some(f => res.includes(f))) {
+                    bits.add(UpdateTypeBits.Full);
+                } else {
+                    const allPlays = ['plays', 'allplays'];
+                    if (allPlays.some(f => res.includes(f))) {
+                        bits.add(UpdateTypeBits.AllPlays);
+                    }
 
-        await send(message, `${emojis.loading} Fetching **${entity.lastFm.username}**'s latest scrobbles.`);
+                    const artists = ['artists', 'artist', 'a'];
+                    if (artists.some(f => res.includes(f))) {
+                        bits.add(UpdateTypeBits.Artist);
+                    }
 
-        const update = await this.updateService.updateUserAndGetRecentTracks(message.author);
+                    const albums = ['albums', 'album', 'ab'];
+                    if (albums.some(f => res.includes(f))) {
+                        bits.add(UpdateTypeBits.Albums);
+                    }
 
-        if (update?.content.newRecentTracksAmount === 0 && update?.content.removedRecentTracksAmount === 0) {
-            const previousUpdate = entity.lastFm.lastUpdated;
-            let content = `${emojis.loading} Nothing new found on [**your Last.fm profile**](<https://last.fm/user/${
-                entity.lastFm.username
-            }>) since last update ${time(new Date(previousUpdate), TimestampStyles.RelativeTime)}.`;
-
-            if (update.content.recentTracks !== null && update.content.recentTracks.length) {
-                if (!update.content.recentTracks.find(a => a.nowPlaying)) {
-                    const latestScrobble = _.maxBy(update.content.recentTracks, o => o.timePlayed);
-                    if (latestScrobble && latestScrobble.timePlayed) {
-                        const specifiedTime = latestScrobble.timePlayed;
-
-                        content += ` Last scrobble: ${time(specifiedTime, TimestampStyles.RelativeTime)}`;
+                    const tracks = ['tracks', 'track', 'tr'];
+                    if (tracks.some(f => res.includes(f))) {
+                        bits.add(UpdateTypeBits.Tracks);
                     }
                 }
-            }
 
-            await send(message, content);
-        } else {
-            let content = '';
+                const discogs = ['discogs', 'discog', 'vinyl', 'collection'];
+                if (discogs.some(f => res.includes(f))) {
+                    bits.add(UpdateTypeBits.Discogs);
+                }
 
-            if (update?.content.removedRecentTracksAmount === 0) {
-                content += `${emojis.success} Playcounts have been updated for **${entity.lastFm.username}** based on **${update.content.newRecentTracksAmount}** new scrobbles.`;
-            } else if (update?.content.newRecentTracksAmount === 0) {
-                content += `${emojis.success} Cached playcounts have been updated for **${entity.lastFm.username}** based on **${update?.content.removedRecentTracksAmount}** removed scrobbles.`;
+                return bits;
+            })
+            .catch(() => new UpdateTypeBitField());
+
+        const entity = await container.db.users.ensure(message.author.id);
+
+        if (type.equals(0)) {
+            await send(message, `${emojis.loading} Fetching **${entity.lastFm.username}**'s latest scrobbles.`);
+
+            const update = await this._updateService.updateUserAndGetRecentTracks(message.author);
+
+            if (update?.content.newRecentTracksAmount === 0 && update?.content.removedRecentTracksAmount === 0) {
+                const previousUpdate = entity.lastFm.lastUpdated;
+                let content = `${emojis.loading} Nothing new found on [**your Last.fm profile**](<https://last.fm/user/${
+                    entity.lastFm.username
+                }>) since last update ${time(new Date(previousUpdate), TimestampStyles.RelativeTime)}.`;
+
+                if (update.content.recentTracks !== null && update.content.recentTracks.length) {
+                    if (!update.content.recentTracks.find(a => a.nowPlaying)) {
+                        const latestScrobble = _.maxBy(update.content.recentTracks, o => o.timePlayed);
+                        if (latestScrobble && latestScrobble.timePlayed) {
+                            const specifiedTime = latestScrobble.timePlayed;
+
+                            content += ` Last scrobble: ${time(specifiedTime, TimestampStyles.RelativeTime)}`;
+                        }
+                    }
+                }
+
+                await send(message, content);
             } else {
-                content += `${emojis.success} Cached playcounts have been updated for **${entity.lastFm.username}** based on **${update?.content.newRecentTracksAmount}** new scrobbles, and ${update?.content.removedRecentTracksAmount} removed scrobbles.`;
+                let content = '';
+
+                if (update?.content.removedRecentTracksAmount === 0) {
+                    content += `${emojis.success} Playcounts have been updated for **${entity.lastFm.username}** based on **${update.content.newRecentTracksAmount}** new scrobbles.`;
+                } else if (update?.content.newRecentTracksAmount === 0) {
+                    content += `${emojis.success} Cached playcounts have been updated for **${entity.lastFm.username}** based on **${update?.content.removedRecentTracksAmount}** removed scrobbles.`;
+                } else {
+                    content += `${emojis.success} Cached playcounts have been updated for **${entity.lastFm.username}** based on **${update?.content.newRecentTracksAmount}** new scrobbles, and ${update?.content.removedRecentTracksAmount} removed scrobbles.`;
+                }
+
+                await send(message, content);
             }
 
-            await send(message, content);
+            return;
         }
+
+        const content = `${emojis.loading} Fetching **${entity.lastFm.username}**'s latest scrobbles. I'm updating your full last.fm history so this may take a little bit.`;
+
+        await send(message, content);
+
+        const result = await this._indexService.modularUpdate(entity, type);
+
+        const description = UserService.GetIndexCompletedUserStats(entity, result);
+
+        await send(message, {
+            content: null,
+            embeds: [
+                new EmbedBuilder()
+                    .setColor(resolveClientColor(message.guild, message.member.displayColor))
+                    .setDescription(description)
+            ]
+        });
     }
 
-    protected error(identifier: string | UserError, context?: unknown): never {
-        throw typeof identifier === 'string' ? new UserError({ identifier, context }) : identifier;
+    private get _artistBuilders() {
+        return container.apis.lastFm.artistBuilders;
     }
 
-    public get lastFm() {
-        return container.apis.lastFm;
+    private get _indexService() {
+        return container.apis.lastFm.indexService;
+    }
+
+    private get _updateService() {
+        return container.apis.lastFm.updateService;
     }
 }
 

@@ -1,6 +1,7 @@
 import { DecoratorIdentifiers } from '@sapphire/decorators';
 import { Identifiers } from '@sapphire/framework';
 import { LanguageKeys } from '.';
+import { SubcommandPluginIdentifiers } from '@sapphire/plugin-subcommands';
 
 export function translate(key: string): string {
     switch (key) {
@@ -21,6 +22,9 @@ export function translate(key: string): string {
             return LanguageKeys.Arguments.Missing;
         case Identifiers.ArgsUnavailable:
             return LanguageKeys.Arguments.Unavailable;
+            // Subcommandsd
+            case SubcommandPluginIdentifiers.MessageSubcommandNoMatch:
+                return LanguageKeys.Preconditions.MessageSubcommandNoMatch;
         default:
             return key;
     }

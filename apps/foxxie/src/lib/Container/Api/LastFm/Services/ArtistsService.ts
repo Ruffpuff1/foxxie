@@ -11,20 +11,11 @@ import { ArtistSearch } from '../Structures/ArtistModels';
 import { RecentTrackList } from '../Structures/RecentTrack';
 import { TopArtist } from '../Structures/TopArtist';
 import { UpdateUserQueueItem } from '../Structures/UpdateUserQueueItem';
-import { UpdateService } from './UpdateService';
 
 export class ArtistsService {
     private dataSourceFactory = new DataSourceFactory();
 
-    private updateService = new UpdateService();
-
     private lastFmRepository = new LastFmRepository();
-
-    #cache: Map<string, TopArtist[]>;
-
-    public constructor(cache: Map<any, any>) {
-        this.#cache = cache;
-    }
 
     public async searchArtist(
         _: User,
@@ -72,7 +63,7 @@ export class ArtistsService {
         let recentScrobbles: Response<RecentTrackList> | null;
 
         if (userId && otherUserUsername === null) {
-            recentScrobbles = await this.updateService.updateUser(new UpdateUserQueueItem(userId, false));
+            recentScrobbles = await this._updateService.updateUser(new UpdateUserQueueItem(userId, false));
         } else {
             recentScrobbles = await this.lastFmRepository.getRecentTracks(lastFmUserName, 1, true, sessionKey);
         }
@@ -100,10 +91,10 @@ export class ArtistsService {
     public async getUserAllTimeTopArtists(userId: string, useCache = false) {
         const cacheKey = `user-${userId}-topartists-alltime`;
 
-        const cached = this.#cache.get(cacheKey);
+        const cached = this._cache.get(cacheKey);
 
         if (cached && useCache) {
-            return cached;
+            return cached as TopArtist[];
         }
 
         const freshTopArtists = await ArtistRepository.getUserArtists(userId).then(artists =>
@@ -113,8 +104,8 @@ export class ArtistsService {
         );
 
         if (freshTopArtists.length > 100) {
-            this.#cache.set(cacheKey, freshTopArtists);
-            setTimeout(() => this.#cache.delete(cacheKey), minutes(10));
+            this._cache.set(cacheKey, freshTopArtists);
+            setTimeout(() => this._cache.delete(cacheKey), minutes(10));
         }
 
         return freshTopArtists;
@@ -156,6 +147,14 @@ export class ArtistsService {
         const artist = await ArtistRepository.getArtistForName(artistName);
 
         return artist?.spotifyId ? artist : null;
+    }
+
+    private get _cache() {
+        return container.apis.lastFm.cache;
+    }
+
+    private get _updateService() {
+        return container.apis.lastFm.updateService;
     }
 
     private get _whoKnowsArtistService() {

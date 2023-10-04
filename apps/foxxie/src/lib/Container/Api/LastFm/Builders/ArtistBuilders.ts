@@ -11,10 +11,12 @@ import { PlayService } from '../Services/PlayService';
 import { UpdateService } from '../Services/UpdateService';
 import { WhoKnowsArtistService } from '../Services/WhoKnowsArtistService';
 import { WhoKnowsPlayService } from '../Services/WhoKnowsPlayService';
+import { WhoKnowsService } from '../Services/WhoKnowsService';
 import { ContextModel } from '../Structures/ContextModel';
+import { WhoKnowsSettings } from '../Structures/WhoKnowsSettings';
 
 export class ArtistBuilders {
-    public artistsService = new ArtistsService(container.apis.lastFm.cache);
+    public artistsService = new ArtistsService();
 
     public playService = new PlayService();
 
@@ -108,7 +110,7 @@ export class ArtistBuilders {
                 guildUsers,
                 artistSearch.artist.artistName
             );
-            console.log(guildAlsoPlaying);
+
             if (guildAlsoPlaying !== null) {
                 footer.push(guildAlsoPlaying);
             }
@@ -235,6 +237,47 @@ export class ArtistBuilders {
                 embed.addFields(resolveEmbedField('• Your Discogs collection', artistCollectionDescription.join('\n')));
             }
         }
+
+        return { embeds: [embed], content: null };
+    }
+
+    public async globalWhoKnowsArtist(context: ContextModel, settings: WhoKnowsSettings): Promise<MessageOptions> {
+        const artistSearch = await this.artistsService.searchArtist(
+            context.user,
+            settings.newSearchValue,
+            context.contextUser!.lastFm.username!,
+            undefined,
+            undefined,
+            undefined,
+            context.contextUser!.id
+        );
+        if (artistSearch.artist === null) return { content: artistSearch.response! };
+
+        const artist = await container.apis.spotify.getOrStoreArtist(artistSearch.artist);
+
+        const imgUrl = artist.spotifyImageUrl;
+
+        const usersWithArtist = await this.whoKnowsArtistService.getGlobalUsersForArtists(
+            context.guild,
+            artistSearch.artist.artistName.toLowerCase()
+        );
+
+        const filteredUsersWithArtist = usersWithArtist;
+
+        let serverUsers = WhoKnowsService.WhoKnowsListToString(filteredUsersWithArtist, context.contextUser!.id);
+        if (!serverUsers.length) {
+            serverUsers = 'Nobody thats uses me has listened to this artist.';
+        }
+
+        const embed = new EmbedBuilder()
+            .setDescription(serverUsers)
+            .setThumbnail(imgUrl)
+            .setColor(resolveClientColor(context.guild, context.guild.members.cache.get(context.user.id)?.displayColor))
+            .setAuthor({
+                name: `${artistSearch.artist.artistName} Globally`,
+                iconURL: imgUrl,
+                url: artistSearch.artist.artistUrl
+            });
 
         return { embeds: [embed], content: null };
     }

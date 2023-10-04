@@ -38,6 +38,11 @@ export class SubCommandsService {
                 //         this.chatInputCommands.listening(interaction),
                 //     default: true
                 // })),
+                ...['globalWhoKnows', 'gwk', 'globalwk', 'gw'].map(name => ({
+                    name,
+                    messageRun: (message: GuildMessage, args: FoxxieCommand.Args) =>
+                        this.textCommands.lastFm.globalWhoKnows(message, args)
+                })),
                 ...['update', 'u'].map(name => ({
                     name,
                     messageRun: (message: GuildMessage, args: FoxxieCommand.Args) =>

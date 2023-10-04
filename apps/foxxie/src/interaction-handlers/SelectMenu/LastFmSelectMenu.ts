@@ -20,7 +20,6 @@ export class UserInteractionHandler extends InteractionHandler {
                 options = await new ArtistBuilders().artist(
                     new ContextModel(
                         { user: interaction.user, guild: interaction.guild!, channel: interaction.channel!, t },
-                        '.',
                         await this.container.db.users.ensure(interaction.user.id)
                     ),
                     result.data

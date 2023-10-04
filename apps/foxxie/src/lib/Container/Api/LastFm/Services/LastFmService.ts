@@ -6,47 +6,56 @@ import { FoxxieCommand } from '#lib/Structures';
 import { EnvKeys, GuildMessage } from '#lib/Types';
 import { sendLoadingMessage } from '#utils/Discord';
 import { EnvParse } from '@foxxie/env';
-import { fetch } from '@foxxie/fetch';
 import { cast, minutes, toTitleCase } from '@ruffpuff/utilities';
 import { Args, Command, container } from '@sapphire/framework';
 import { AutocompleteInteraction, Collection, Message, StringSelectMenuOptionBuilder, italic } from 'discord.js';
+
+import { request } from 'undici';
+import { ArtistBuilders } from '../Builders';
+import { DataSourceFactory } from '../Factories/DataSourceFactory';
 import { TopArtist } from '../Structures/TopArtist';
 import { UserPlay } from '../Structures/UserPlay';
+import { IndexService } from './IndexService';
 import { TimerService } from './TimerService';
 import { UpdateService } from './UpdateService';
+import { UserService } from './UserService';
 import { WhoKnowsArtistService } from './WhoKnowsArtistService';
 
 /**
  * The service for handling the last.fm API.
  */
 export class LastFmService {
+    /**
+     * The base last.fm api url.
+     */
+    public baseApiUrl = 'https://ws.audioscrobbler.com/2.0';
+
     public cache = new Map<string, TopArtist[] | UserPlay>();
+
+    public artistBuilders = new ArtistBuilders();
+
+    public dataSourceFactory = new DataSourceFactory();
+
+    public indexService = new IndexService();
 
     public timerService = new TimerService();
 
     public updateService = new UpdateService();
 
-    public whoKnowsArtistService = new WhoKnowsArtistService();
+    public userService = new UserService();
 
-    /**
-     * The base last.fm api url.
-     */
-    public baseApiUrl = 'https://ws.audioscrobbler.com/2.0';
+    public whoKnowsArtistService = new WhoKnowsArtistService();
 
     /**
      * The regex for parsing last.fm descriptions.
      */
     public descriptionTagRegex = /<a href="https?:\/\/www.last.fm\/.*">[. A-z]*<\/a>/g;
 
-    // /**
-    //  * The Last.Fm Chat Input Command Service.
-    //  */
-    // public chatInputCommands = new LastFmChatInputCommandService(this);
-
-    /**
-     * The last.fm token
-     */
-    private apiKey = EnvParse.string(EnvKeys.LastFmToken);
+    public static ArtistArgument = Args.make<string>((parameter, { argument }) => {
+        const lower = parameter?.toLowerCase();
+        if (!lower) return Args.error({ argument, parameter, identifier: 'noArtistProvided' });
+        return Args.ok(lower);
+    });
 
     /**
      * The cache for the autocomplete options of users.
@@ -57,12 +66,6 @@ export class LastFmService {
      * The cache for the autocomplete options of users.
      */
     #autocomplateUserOptionCache = new Collection<string, string[]>();
-
-    private static artistArgument = Args.make<string>((parameter, { argument }) => {
-        const lower = parameter?.toLowerCase();
-        if (!lower) return Args.error({ argument, parameter, identifier: 'noArtistProvided' });
-        return Args.ok(lower);
-    });
 
     /**
      * Cleans up the artist summary from last.fm.
@@ -233,7 +236,7 @@ export class LastFmService {
         args?: FoxxieCommand.Args
     ): Promise<[string, GuildMessage] | [string, boolean]> {
         if (message instanceof Message && args) {
-            const artist = await args.rest(LastFmService.artistArgument).catch(() => '');
+            const artist = await args.rest(LastFmService.ArtistArgument).catch(() => '');
             const loading = await sendLoadingMessage(message);
 
             return [artist, cast<GuildMessage>(loading)];
@@ -362,17 +365,36 @@ export class LastFmService {
     /**
      * Returns a last.fm request given the parameters.
      */
-    public async createLastFmRequest<M extends LastFmApiMethods>(method: M, query: LastFmQuery<M> | Record<string, string>) {
-        const result = await fetch(this.baseApiUrl)
-            .query({
-                api_key: this.apiKey,
-                method,
-                format: 'json',
-                ...query
-            })
-            .json<LastFmApiReturnType<M>>();
+    public async createLastFmRequest<M extends LastFmApiMethods>(
+        method: M,
+        query: Record<string, string | undefined>
+    ): Promise<LastFmApiReturnType<M>> {
+        const options = {
+            api_key: this._apiKey,
+            method,
+            format: 'json',
+            ...query
+        };
 
-        return result;
+        const url = new URL(this.baseApiUrl);
+        const headers = {
+            'User-Agent': '@foxxie/7.0.0'
+        };
+
+        Object.keys(options).forEach(k => {
+            url.searchParams.append(k, (options as Record<string, string>)[k]);
+        });
+
+        const res = await request(url, { method: 'GET', headers, body: null });
+
+        return res.body.json() as Promise<LastFmApiReturnType<M>>;
+    }
+
+    /**
+     * The last.fm token
+     */
+    private get _apiKey() {
+        return EnvParse.string(EnvKeys.LastFmToken);
     }
 }
 
@@ -391,7 +413,9 @@ export enum LastFmApiMethods {
     LibraryGetArtists = 'library.getartists',
     TrackGetInfo = 'track.getInfo',
     UserGetInfo = 'user.getinfo',
-    UserGetRecentTracks = 'user.getrecenttracks'
+    UserGetRecentTracks = 'user.getrecenttracks',
+    UserGetTopArtists = 'user.getTopArtists',
+    UserGetWeeklyArtistChart = 'user.getWeeklyArtistChart'
 }
 
 export interface LastFmImage {
@@ -648,9 +672,26 @@ export type LastFmApiReturnType<M extends LastFmApiMethods> = M extends LastFmAp
     ? GetArtistInfoResult | GetArtistInfoResultWithUser | GetArtistInfoResultNoExistResult
     : M extends LastFmApiMethods.ArtistGetTopAlbums
     ? GetArtistTopAlbumsResult | GetArtistTopAlbumsResultNoExistResult
+    : M extends LastFmApiMethods.UserGetWeeklyArtistChart
+    ? GetUserWeeklyArtistChartResult
+    : M extends LastFmApiMethods.UserGetTopArtists
+    ? GetUserTopArtistsResult
     : never;
 
 export type NumberBool = '0' | '1';
+
+export interface GetUserTopArtistsResult {
+    topartists: {
+        artist: GetArtistInfoResult['artist'][];
+        '@attr': {
+            page: `${number}`;
+            total: `${number}`;
+            user: string;
+            perPage: `${number}`;
+            totalPages: `${number}`;
+        };
+    };
+}
 
 export interface BaseTrackWithUser extends BaseTrack {
     userplaycount: `${number}`;
@@ -685,6 +726,19 @@ export interface BaseTrack {
         published: string;
         summary: string;
         content: string;
+    };
+}
+
+export interface GetUserWeeklyArtistChartResult {
+    weeklyartistchart: {
+        artist: {
+            mbid: string;
+            url: string;
+            name: string;
+            '@attr': { rank: `${number}` };
+            playcount: `${number}`;
+        }[];
+        '@attr': { from: `${number}`; user: string; to: `${number}` };
     };
 }
 

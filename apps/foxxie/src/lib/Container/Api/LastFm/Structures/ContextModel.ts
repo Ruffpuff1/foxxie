@@ -13,15 +13,15 @@ export class ContextModel {
 
     public contextUser: UserEntity | null;
 
-    public t: TFunction
+    public t: TFunction;
 
-    public constructor(context: CommandContext, prefix: string, contextUser: UserEntity | null = null) {
+    public constructor(context: CommandContext, contextUser: UserEntity | null = null, prefix = '.') {
         this.prefix = prefix;
         this.guild = context.guild;
         this.channel = context.channel;
         this.user = context.user;
         this.contextUser = contextUser;
-        this.t = context.t
+        this.t = context.t;
     }
 }
 
@@ -29,5 +29,5 @@ interface CommandContext {
     guild: Guild;
     channel: Channel;
     user: User;
-    t: TFunction
+    t: TFunction;
 }
