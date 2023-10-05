@@ -96,6 +96,7 @@
             }
         ]
     },
+    "lastFmStatsMostActiveDayOfWeek": "Most active day of the week is **{{day}}**",
     "lastFmPlayListeners": "**{{count, number}}** listener",
     "lastFmPlayListeners_other": "**{{count, number}}** listeners",
     "lastFmPlayNowPlaying": "Now Playing",
@@ -109,8 +110,10 @@
     "lastFmTitles": {
         "about": "• About",
         "lastFmStats": "• Last.fm stats",
+        "months": "• Months",
         "statistics": "• Statistics",
-        "summary": "• Summary"
+        "summary": "• Summary",
+        "years": "• Years"
     },
     "lastFmTrackNotFoundForUser": "{{ERROR}} I'm sorry I couldn't find any tracks for the user: {{user.name, code}}."
 }
