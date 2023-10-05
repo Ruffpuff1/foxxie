@@ -19,6 +19,7 @@
     "default": "{{key}} no ha sido localizado para es-MX aún.",
     "defaultLanguage": "Idioma por defecto",
     "duration": "{{duration, duration}}",
+    "everyone": "",
     "fullDateTime": "{{date, fulldatetime}}",
     "infinite": "infinito",
     "input": "la entrada",
