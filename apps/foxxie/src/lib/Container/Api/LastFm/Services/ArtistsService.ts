@@ -11,6 +11,7 @@ import { ArtistSearch } from '../Structures/ArtistModels';
 import { RecentTrackList } from '../Structures/RecentTrack';
 import { TopArtist } from '../Structures/TopArtist';
 import { UpdateUserQueueItem } from '../Structures/UpdateUserQueueItem';
+import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 
 export class ArtistsService {
     private dataSourceFactory = new DataSourceFactory();
@@ -42,7 +43,7 @@ export class ArtistsService {
                 const topArtists = await this.getUserAllTimeTopArtists(userId, true);
                 if (topArtists.length > 0) {
                     const rnd = Math.floor(Math.random() * topArtists.length);
-                    const artist = topArtists[rnd];
+                    const artist = topArtists.member(rnd);
 
                     rndPosition = rnd;
                     rndPlaycount = artist.userPlaycount;
@@ -94,7 +95,7 @@ export class ArtistsService {
         const cached = this._cache.get(cacheKey);
 
         if (cached && useCache) {
-            return cached as TopArtist[];
+            return cached as List<TopArtist>;
         }
 
         const freshTopArtists = await ArtistRepository.getUserArtists(userId).then(artists =>

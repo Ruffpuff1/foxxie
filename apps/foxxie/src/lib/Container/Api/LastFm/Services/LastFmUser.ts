@@ -1,6 +1,6 @@
 import { hours, isDev } from '@ruffpuff/utilities';
 
-export class LastFmUserService {
+export class LastFmUser {
     public username: string | null = null;
 
     public imageUrl: string | null = null;
@@ -17,7 +17,7 @@ export class LastFmUserService {
 
     public type: UserTypeEnum = UserTypeEnum.User;
 
-    public constructor(data?: Partial<LastFmUserService>) {
+    public constructor(data?: Partial<LastFmUser>) {
         Object.assign(this, data);
     }
 

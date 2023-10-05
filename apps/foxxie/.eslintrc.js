@@ -17,6 +17,7 @@ module.exports = {
     },
     rules: {
         // typescript plugin eslint rules.
+        '@typescript-eslint/no-extraneous-class': 'off',
         '@typescript-eslint/adjacent-overload-signatures': 'error',
         '@typescript-eslint/array-type': 'off',
         '@typescript-eslint/await-thenable': 'error',

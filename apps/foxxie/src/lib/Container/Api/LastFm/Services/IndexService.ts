@@ -1,3 +1,4 @@
+import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { UserEntity } from '#lib/Database/entities/UserEntity';
 import { years } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
@@ -5,10 +6,12 @@ import { blue } from 'colorette';
 import { UpdateTypeBitField, UpdateTypeBits } from '../Enums/UpdateType';
 import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { PlayRepository } from '../Repositories/PlayRepository';
+import { TrackRepository } from '../Repositories/TrackRepository';
 import { UserRepository } from '../Repositories/UserRepository';
 import { IndexedUserStats } from '../Structures/IndexedUserStats';
 import { UserArtist } from '../Structures/UserArtist';
 import { UserPlay } from '../Structures/UserPlay';
+import { UserTrack } from '../Structures/UserTrack';
 
 export class IndexService {
     public async modularUpdate(user: UserEntity, type: UpdateTypeBitField): Promise<IndexedUserStats> {
@@ -32,6 +35,14 @@ export class IndexService {
             stats.artistCount = artists.length;
         }
 
+        if (type.has(UpdateTypeBits.Tracks) || type.has(UpdateTypeBits.Full)) {
+            const tracks = await this.getTopTracksForUser(user);
+
+            await TrackRepository.AddOrReplaceUserTracksInDatabase(tracks, user.id);
+
+            stats.trackCount = tracks.length;
+        }
+
         return stats;
     }
 
@@ -51,6 +62,28 @@ export class IndexService {
                 new UserArtist({
                     name: a.artistName.toLowerCase(),
                     playcount: Number(a.userPlaycount),
+                    userId: user.id
+                })
+        );
+    }
+
+    private async getTopTracksForUser(user: UserEntity) {
+        container.logger.debug(`[${blue('Last.fm')}] Getting tracks for user ${user.lastFm.username}`);
+
+        const indexLimit = 200;
+
+        const trackResult = await this._dataSourceFactory.getTopTracks(user.lastFm.username!, undefined, 1000, indexLimit);
+
+        if (!trackResult.success || !trackResult.content.topTracks.length) {
+            return new List<UserTrack>();
+        }
+
+        return trackResult.content.topTracks.map(
+            a =>
+                new UserTrack({
+                    name: a.trackName,
+                    artistName: a.artistName,
+                    playcount: a.userPlaycount,
                     userId: user.id
                 })
         );

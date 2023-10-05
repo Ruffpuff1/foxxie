@@ -1,6 +1,6 @@
-import { LastFmUserService } from '#Api/LastFm/Services/LastFmUserService';
+import { LastFmUser } from '#Api/LastFm/Services/LastFmUser';
 import { AfterLoad, BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import { DiscogsUserService } from '../../Container/Api/Discogs/DiscogsUserService';
+import { DiscogsUser } from '../../Container/Api/Discogs/DiscogsUser';
 
 @Entity('user', { schema: 'public' })
 export class UserEntity extends BaseEntity {
@@ -11,10 +11,10 @@ export class UserEntity extends BaseEntity {
     public id: string = null!;
 
     @Column()
-    public discogs = new DiscogsUserService();
+    public discogs = new DiscogsUser();
 
     @Column()
-    public lastFm = new LastFmUserService();
+    public lastFm = new LastFmUser();
 
     public constructor() {
         super();
@@ -24,8 +24,8 @@ export class UserEntity extends BaseEntity {
 
     @AfterLoad()
     protected entityLoad() {
-        this.discogs = new DiscogsUserService(this.discogs);
+        this.discogs = new DiscogsUser(this.discogs);
 
-        this.lastFm = new LastFmUserService(this.lastFm);
+        this.lastFm = new LastFmUser(this.lastFm);
     }
 }

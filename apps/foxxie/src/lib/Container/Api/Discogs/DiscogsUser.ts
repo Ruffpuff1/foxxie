@@ -1,8 +1,8 @@
-import { DiscogsGenre } from '#Api/LastFm/Structures/DiscogsGenre';
-import { DiscogsStyle } from '#Api/LastFm/Structures/DiscogsStyle';
+import { DiscogsGenre } from '#Api/Discogs/Structures/DiscogsGenre';
+import { DiscogsStyle } from '#Api/Discogs/Structures/DiscogsStyle';
 import { UserDiscogsRelease } from '#Api/LastFm/Structures/UserDiscogsRelease';
 
-export class DiscogsUserService {
+export class DiscogsUser {
     public accessToken: string | null = null;
 
     public accessTokenSecret: string | null = null;
@@ -11,7 +11,7 @@ export class DiscogsUserService {
 
     public username: string | null = null;
 
-    public constructor(data?: Partial<DiscogsUserService>) {
+    public constructor(data?: Partial<DiscogsUser>) {
         Object.assign(this, data);
 
         this.entityLoad();

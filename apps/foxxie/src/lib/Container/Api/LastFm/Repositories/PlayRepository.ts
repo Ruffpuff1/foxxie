@@ -67,7 +67,7 @@ export class PlayRepository {
     }
 
     public static async insertPlays(addedPlays: UserPlay[]) {
-        await container.db.lastFm.plays.insertMany(addedPlays);
+        await container.db.lastFm.userPlays.insertMany(addedPlays);
     }
 
     public static async removePlays(removedPlays: UserPlay[], userId: string) {
@@ -81,7 +81,7 @@ export class PlayRepository {
     }
 
     public static async removeAllCurrentLastFmPlays(userId: string) {
-        await container.db.lastFm.plays.deleteMany({
+        await container.db.lastFm.userPlays.deleteMany({
             userId
         });
     }
@@ -90,7 +90,7 @@ export class PlayRepository {
      * Returns UserPlays for the specified range.
      */
     public static async getUserPlaysWithinTimeRange(userId: string, start: number, end = Date.now()) {
-        const filtered = await container.db.lastFm.plays.find({
+        const filtered = await container.db.lastFm.userPlays.find({
             where: {
                 userId,
                 timestamp: {
@@ -104,7 +104,7 @@ export class PlayRepository {
     }
 
     public static async getUserPlays(userId: string, limit: number) {
-        const plays = await container.db.lastFm.plays.find({
+        const plays = await container.db.lastFm.userPlays.find({
             where: {
                 userId
             },

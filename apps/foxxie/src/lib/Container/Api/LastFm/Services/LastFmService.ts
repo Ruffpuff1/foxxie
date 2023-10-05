@@ -10,12 +10,16 @@ import { cast, minutes, toTitleCase } from '@ruffpuff/utilities';
 import { Args, Command, container } from '@sapphire/framework';
 import { AutocompleteInteraction, Collection, Message, StringSelectMenuOptionBuilder, italic } from 'discord.js';
 
+import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { request } from 'undici';
 import { ArtistBuilders } from '../Builders';
+import { UserBuilders } from '../Builders/UserBuilders';
 import { DataSourceFactory } from '../Factories/DataSourceFactory';
 import { TopArtist } from '../Structures/TopArtist';
 import { UserPlay } from '../Structures/UserPlay';
 import { IndexService } from './IndexService';
+import { PlayService } from './PlayService';
+import { TimeService } from './TimeService';
 import { TimerService } from './TimerService';
 import { UpdateService } from './UpdateService';
 import { UserService } from './UserService';
@@ -30,7 +34,7 @@ export class LastFmService {
      */
     public baseApiUrl = 'https://ws.audioscrobbler.com/2.0';
 
-    public cache = new Map<string, TopArtist[] | UserPlay>();
+    public cache = new Map<string, List<TopArtist> | UserPlay>();
 
     public artistBuilders = new ArtistBuilders();
 
@@ -40,7 +44,13 @@ export class LastFmService {
 
     public timerService = new TimerService();
 
+    public playService = new PlayService();
+
+    public timeService = new TimeService();
+
     public updateService = new UpdateService();
+
+    public userBuilders = new UserBuilders();
 
     public userService = new UserService();
 
@@ -415,6 +425,7 @@ export enum LastFmApiMethods {
     UserGetInfo = 'user.getinfo',
     UserGetRecentTracks = 'user.getrecenttracks',
     UserGetTopArtists = 'user.getTopArtists',
+    UserGetTopTracks = 'user.getTopTracks',
     UserGetWeeklyArtistChart = 'user.getWeeklyArtistChart'
 }
 
@@ -676,9 +687,24 @@ export type LastFmApiReturnType<M extends LastFmApiMethods> = M extends LastFmAp
     ? GetUserWeeklyArtistChartResult
     : M extends LastFmApiMethods.UserGetTopArtists
     ? GetUserTopArtistsResult
+    : M extends LastFmApiMethods.UserGetTopTracks
+    ? GetUserTopTracksResult
     : never;
 
 export type NumberBool = '0' | '1';
+
+export interface GetUserTopTracksResult {
+    toptracks: {
+        '@attr': {
+            page: `${number}`;
+            total: `${number}`;
+            user: string;
+            perPage: `${number}`;
+            totalPages: `${number}`;
+        };
+        track: GetTrackInfoResult['track'][];
+    };
+}
 
 export interface GetUserTopArtistsResult {
     topartists: {

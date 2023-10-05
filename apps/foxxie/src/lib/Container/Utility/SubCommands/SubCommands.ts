@@ -43,6 +43,10 @@ export class SubCommandsService {
                     messageRun: (message: GuildMessage, args: FoxxieCommand.Args) =>
                         this.textCommands.lastFm.globalWhoKnows(message, args)
                 })),
+                ...['stats', 'ui', 'user'].map(name => ({
+                    name,
+                    messageRun: (message: GuildMessage, args: FoxxieCommand.Args) => this.textCommands.lastFm.stats(message, args)
+                })),
                 ...['update', 'u'].map(name => ({
                     name,
                     messageRun: (message: GuildMessage, args: FoxxieCommand.Args) =>

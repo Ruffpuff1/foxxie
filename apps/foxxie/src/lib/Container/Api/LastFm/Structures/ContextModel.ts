@@ -11,11 +11,11 @@ export class ContextModel {
 
     public user: User;
 
-    public contextUser: UserEntity | null;
+    public contextUser: UserEntity;
 
     public t: TFunction;
 
-    public constructor(context: CommandContext, contextUser: UserEntity | null = null, prefix = '.') {
+    public constructor(context: CommandContext, contextUser: UserEntity, prefix = '.') {
         this.prefix = prefix;
         this.guild = context.guild;
         this.channel = context.channel;

@@ -1,3 +1,4 @@
+import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { Response } from '#utils/Response';
 import { cast, chunk, seconds } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
@@ -8,12 +9,14 @@ import {
     GetArtistInfoResultWithUser,
     GetRecentTracksUserResult,
     GetRecentTracksUserTrack,
+    GetUserTopTracksResult,
     LastFmApiMethods
 } from '../Services';
 import { ArtistInfo } from '../Structures/ArtistInfo';
 import { RecentTrack, RecentTrackList } from '../Structures/RecentTrack';
 import { Tag } from '../Structures/Tag';
 import { TopArtist, TopArtistList } from '../Structures/TopArtist';
+import { TopTrack, TopTrackList } from '../Structures/TopTrack';
 
 export class LastFmRepository {
     public async getArtistInfo(artistName: string, username: string, redirectsEnabled = false) {
@@ -257,6 +260,59 @@ export class LastFmRepository {
                 )
             })
         });
+    }
+
+    public async getTopTracks(lastFmUserName: string, amountOfPages = 1): Promise<Response<TopTrackList>> {
+        const options = { user: lastFmUserName, limit: '1000', page: '' };
+
+        let topTracksCall: GetUserTopTracksResult;
+
+        if (amountOfPages === 1) {
+            topTracksCall = await container.apis.lastFm.createLastFmRequest(LastFmApiMethods.UserGetTopTracks, options);
+        } else {
+            topTracksCall = await container.apis.lastFm.createLastFmRequest(LastFmApiMethods.UserGetTopTracks, options);
+            if (topTracksCall.toptracks && topTracksCall.toptracks.track.length > 998) {
+                for (let i = 2; i <= amountOfPages; i++) {
+                    options.page = i.toString();
+                    const pageResponse = await container.apis.lastFm.createLastFmRequest(
+                        LastFmApiMethods.UserGetTopTracks,
+                        options
+                    );
+
+                    if (pageResponse.toptracks) {
+                        topTracksCall.toptracks.track.push(...pageResponse.toptracks.track);
+                        if (pageResponse.toptracks.track.length < 1000) {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (topTracksCall.toptracks) {
+            return new Response<TopTrackList>({
+                success: true,
+                content: new TopTrackList({
+                    totalAmount: Number(topTracksCall.toptracks['@attr'].total),
+                    topTracks: new List(
+                        topTracksCall.toptracks.track.map(
+                            s =>
+                                new TopTrack({
+                                    trackName: s.name,
+                                    artistName: s.artist.name,
+                                    mbid: s.mbid,
+                                    trackUrl: s.url,
+                                    userPlaycount: Number(s.playcount)
+                                })
+                        )
+                    )
+                })
+            });
+        }
+
+        return new Response<TopTrackList>({ success: false, message: Reflect.get(topTracksCall, 'message') });
     }
 
     public async getTopArtistsForCustomTimePeriod(lastFmUserName: string, __: undefined, ___: Date, count: number) {

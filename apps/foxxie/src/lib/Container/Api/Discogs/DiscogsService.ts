@@ -1,7 +1,6 @@
-import { DiscogsFormatDescriptions } from '#Api/LastFm/Structures/DiscogsFormatDescriptions';
-import { DiscogsGenre } from '#Api/LastFm/Structures/DiscogsGenre';
-import { DiscogsRelease } from '#Api/LastFm/Structures/DiscogsRelease';
-import { DiscogsStyle } from '#Api/LastFm/Structures/DiscogsStyle';
+import { DiscogsGenre } from '#Api/Discogs/Structures/DiscogsGenre';
+import { DiscogsRelease } from '#Api/Discogs/Structures/DiscogsRelease';
+import { DiscogsStyle } from '#Api/Discogs/Structures/DiscogsStyle';
 import { UserDiscogsRelease } from '#Api/LastFm/Structures/UserDiscogsRelease';
 import { UserEntity } from '#lib/Database/entities/UserEntity';
 import { EnvKeys } from '#lib/Types';
@@ -12,6 +11,7 @@ import { container } from '@sapphire/framework';
 import { sleep } from '@sapphire/utilities';
 import { blue } from 'colorette';
 import { User, bold, hyperlink } from 'discord.js';
+import { DiscogsFormatDescriptions } from './Structures/DiscogsFormatDescriptions';
 
 export class DiscogsService {
     public baseApiUrl = 'https://api.discogs.com';

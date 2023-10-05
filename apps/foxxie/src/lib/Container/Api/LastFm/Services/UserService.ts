@@ -20,6 +20,10 @@ export class UserService {
             description.push(`• ${bold(result.artistCount.toLocaleString())} top artists`);
         }
 
+        if (result.trackCount) {
+            description.push(`• ${bold(result.trackCount.toLocaleString())} top tracks`);
+        }
+
         return description.join('\n');
     }
 }

@@ -6,6 +6,7 @@ import { container } from '@sapphire/pieces';
 import { MessageOptions } from '@sapphire/plugin-editable-commands';
 import { DurationFormatter } from '@sapphire/time-utilities';
 import { EmbedBuilder, TimestampStyles, bold, italic, time } from 'discord.js';
+import _ from 'lodash';
 import { ArtistsService } from '../Services/ArtistsService';
 import { PlayService } from '../Services/PlayService';
 import { UpdateService } from '../Services/UpdateService';
@@ -269,6 +270,22 @@ export class ArtistBuilders {
             serverUsers = 'Nobody thats uses me has listened to this artist.';
         }
 
+        const footer = [];
+
+        if (artistSearch.isRandom) {
+            footer.push(`Artist #${artistSearch.randomArtistPosition} (${artistSearch.randomArtistPlaycount} plays)`);
+        }
+
+        footer.push(`Global WhoKnows artist requesteed by ${context.user.displayName}`);
+
+        if (filteredUsersWithArtist.length > 1) {
+            const globalListeners = filteredUsersWithArtist.length;
+            const globalPlaycount = _.sumBy(filteredUsersWithArtist, a => a.playcount);
+            const avgPlaycount = Math.floor(globalPlaycount / globalListeners);
+
+            footer.push(`${globalListeners} listeners - ${globalPlaycount} total plays - ${avgPlaycount} avg plays`);
+        }
+
         const embed = new EmbedBuilder()
             .setDescription(serverUsers)
             .setThumbnail(imgUrl)
@@ -277,7 +294,8 @@ export class ArtistBuilders {
                 name: `${artistSearch.artist.artistName} Globally`,
                 iconURL: imgUrl,
                 url: artistSearch.artist.artistUrl
-            });
+            })
+            .setFooter({ text: footer.join('\n') });
 
         return { embeds: [embed], content: null };
     }

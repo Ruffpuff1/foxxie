@@ -11,7 +11,7 @@ import { emojis } from '#utils/constants';
 import { RequiresLastFmUsername } from '#utils/decorators';
 import { resolveClientColor } from '#utils/util';
 import { RequiresClientPermissions } from '@sapphire/decorators';
-import { container } from '@sapphire/framework';
+import { UserError, container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { EmbedBuilder, PermissionFlagsBits, PermissionsBitField, TimestampStyles, time } from 'discord.js';
 import _ from 'lodash';
@@ -97,6 +97,20 @@ export class LastFmTextCommands {
 
     //     await send(message, { content: null, embeds: [embed] });
     // }
+
+    public async stats(...[message, args]: MessageRunArgs) {
+        await sendLoadingMessage(message);
+        const user = await args.pick('username').catch(() => message.author);
+
+        const contextUser = await container.db.users.ensure(user.id);
+        if (!contextUser.lastFm.username) throw new UserError({ identifier: 'ntoLoggeedin' });
+
+        const content = await container.apis.lastFm.userBuilders.stats(
+            new ContextModel({ user: message.author, guild: message.guild, t: args.t, channel: message.channel }, contextUser)
+        );
+
+        await send(message, content);
+    }
 
     @RequiresLastFmUsername()
     public async update(...[message, args]: MessageRunArgs) {

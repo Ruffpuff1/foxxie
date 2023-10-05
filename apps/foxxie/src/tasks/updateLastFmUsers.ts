@@ -1,10 +1,11 @@
 import { Task } from '#lib/Container/Stores/Tasks/Task';
 import { Schedules } from '#utils/constants';
+import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 
 @ApplyOptions<Task.Options>({
-    name: Schedules.UpdateLastFmUsers
-    // enabled: !isDev()
+    name: Schedules.UpdateLastFmUsers,
+    enabled: !isDev()
 })
 export class UserTask extends Task {
     public async run() {

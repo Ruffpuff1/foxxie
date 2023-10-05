@@ -1,6 +1,7 @@
 import { Response } from '#utils/Response';
 import { LastFmRepository } from '../Repositories/LastFmRepository';
 import { TopArtistList } from '../Structures/TopArtist';
+import { TopTrackList } from '../Structures/TopTrack';
 
 export class DataSourceFactory {
     private lastFmRepository = new LastFmRepository();
@@ -39,5 +40,13 @@ export class DataSourceFactory {
     ): Promise<Response<TopArtistList>> {
         const topArtists = await this.lastFmRepository.getTopArtists(lastFmUserName, numberOfPages);
         return topArtists;
+    }
+
+    public async getTopTracks(lastFmUserName: string, __: undefined, ___ = 2, numberOfPages = 2, ____ = false) {
+        let topTracks: Response<TopTrackList>;
+
+        topTracks = await this.lastFmRepository.getTopTracks(lastFmUserName, numberOfPages);
+
+        return topTracks;
     }
 }

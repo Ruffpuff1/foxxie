@@ -1,4 +1,4 @@
-import { DiscogsRelease } from './DiscogsRelease';
+import { DiscogsRelease } from '../../Discogs/Structures/DiscogsRelease';
 
 export class UserDiscogsRelease {
     public userDiscogsReleaseId: string;

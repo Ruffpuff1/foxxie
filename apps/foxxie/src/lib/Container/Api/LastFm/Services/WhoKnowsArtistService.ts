@@ -11,7 +11,7 @@ export class WhoKnowsArtistService {
         const guild = container.client.guilds.cache.get(guildId)!;
         const ids = guildUsers.map(u => u.id);
 
-        const userArtists = await container.db.lastFm.artists.find({
+        const userArtists = await container.db.lastFm.userArtists.find({
             where: {
                 userId: {
                     $in: ids
@@ -49,7 +49,7 @@ export class WhoKnowsArtistService {
     }
 
     public async getGlobalUsersForArtists(discordGuild: Guild, artistName: string) {
-        const userArtists = await container.db.lastFm.artists.find({
+        const userArtists = await container.db.lastFm.userArtists.find({
             where: {
                 name: artistName
             },

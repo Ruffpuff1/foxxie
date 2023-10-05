@@ -187,7 +187,7 @@ export class UpdateService {
             } else return;
         }
 
-        const userArtist = await container.db.lastFm.artists.findOne({
+        const userArtist = await container.db.lastFm.userArtists.findOne({
             where: {
                 userId,
                 name: artistName.toLowerCase()
@@ -252,7 +252,7 @@ export class UpdateService {
     }
 
     private async getUserArtists(userEntity: UserEntity) {
-        const artists = await container.db.lastFm.artists.find({ where: { userId: userEntity.id } });
+        const artists = await container.db.lastFm.userArtists.find({ where: { userId: userEntity.id } });
 
         const map = new Map<string, UserArtist>();
         for (const artist of artists) {
