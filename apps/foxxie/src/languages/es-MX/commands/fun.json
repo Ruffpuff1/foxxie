@@ -96,6 +96,7 @@
             }
         ]
     },
+    "lastFmStatsMostActiveDayOfWeek": "",
     "lastFmPlayListeners": "",
     "lastFmPlayListeners_other": "",
     "lastFmPlayNowPlaying": "",
@@ -109,8 +110,10 @@
     "lastFmTitles": {
         "about": "",
         "lastFmStats": "",
+        "months": "",
         "statistics": "",
-        "summary": ""
+        "summary": "",
+        "years": ""
     },
     "lastFmTrackNotFoundForUser": ""
 }
