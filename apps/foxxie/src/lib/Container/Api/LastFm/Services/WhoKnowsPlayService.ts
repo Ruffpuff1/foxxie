@@ -1,7 +1,7 @@
 import { UserEntity } from '#lib/Database/entities/UserEntity';
 import { container } from '@sapphire/framework';
 import { DurationFormatter } from '@sapphire/time-utilities';
-import { UserPlay } from '../Structures/UserPlay';
+import { UserPlay } from '../Structures/Entities/UserPlay';
 
 export class WhoKnowsPlayService {
     public guildAlsoPlayingArtist(currentUserId: string, guildUsers: UserEntity[], artistName: string): string | null {

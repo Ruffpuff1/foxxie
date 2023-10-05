@@ -12,7 +12,7 @@ import { UserRepository } from '../Repositories/UserRepository';
 import { UserTrack } from '../Structures/Entities/UserTrack';
 import { IndexedUserStats } from '../Structures/IndexedUserStats';
 import { UserArtist } from '../Structures/UserArtist';
-import { UserPlay } from '../Structures/UserPlay';
+import { UserPlay } from '../Structures/Entities/UserPlay';
 
 export class IndexService {
     public async modularUpdate(user: UserEntity, type: UpdateTypeBitField): Promise<IndexedUserStats> {

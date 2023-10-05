@@ -1,7 +1,7 @@
 import { Track } from '#Api/LastFm/Structures/Entities/Track';
 import { UserTrack } from '#Api/LastFm/Structures/Entities/UserTrack';
 import { UserArtist } from '#Api/LastFm/Structures/UserArtist';
-import { UserPlay } from '#Api/LastFm/Structures/UserPlay';
+import { UserPlay } from '#Api/LastFm/Structures/Entities/UserPlay';
 import { DataSource, MongoRepository } from 'typeorm';
 
 export class LastFmDatabase {

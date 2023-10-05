@@ -16,7 +16,7 @@ import { ArtistBuilders } from '../Builders';
 import { UserBuilders } from '../Builders/UserBuilders';
 import { DataSourceFactory } from '../Factories/DataSourceFactory';
 import { TopArtist } from '../Structures/TopArtist';
-import { UserPlay } from '../Structures/UserPlay';
+import { UserPlay } from '../Structures/Entities/UserPlay';
 import { IndexService } from './IndexService';
 import { PlayService } from './PlayService';
 import { TimeService } from './TimeService';

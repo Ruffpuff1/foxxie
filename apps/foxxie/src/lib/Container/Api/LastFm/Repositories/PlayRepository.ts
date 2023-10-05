@@ -1,7 +1,7 @@
 import { container } from '@sapphire/pieces';
 import { blue } from 'colorette';
 import { RecentTrack } from '../Structures/RecentTrack';
-import { UserPlay } from '../Structures/UserPlay';
+import { UserPlay } from '../Structures/Entities/UserPlay';
 import { PlaySource } from '../Enums/PlaySource';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class

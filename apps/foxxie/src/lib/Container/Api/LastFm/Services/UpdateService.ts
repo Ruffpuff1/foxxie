@@ -13,7 +13,7 @@ import { PlayRepository } from '../Repositories/PlayRepository';
 import { RecentTrack, RecentTrackList } from '../Structures/RecentTrack';
 import { UpdateUserQueueItem } from '../Structures/UpdateUserQueueItem';
 import { UserArtist } from '../Structures/UserArtist';
-import { UserPlay } from '../Structures/UserPlay';
+import { UserPlay } from '../Structures/Entities/UserPlay';
 
 export class UpdateService {
     private lastFmRepository = new LastFmRepository();

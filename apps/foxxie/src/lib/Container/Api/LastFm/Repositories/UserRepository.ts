@@ -1,7 +1,7 @@
 import { container } from '@sapphire/framework';
 import { blue } from 'colorette';
 import _ from 'lodash';
-import { UserPlay } from '../Structures/UserPlay';
+import { UserPlay } from '../Structures/Entities/UserPlay';
 
 export class UserRepository {
     public static async SetUserIndexTime(userId: string, plays: UserPlay[]) {

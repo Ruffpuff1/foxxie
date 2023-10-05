@@ -1,6 +1,6 @@
 import { List } from "#lib/Container/Utility/Extensions/ArrayExtensions";
 import { DurationFormatter } from "@sapphire/time-utilities";
-import { UserPlay } from "../Structures/UserPlay";
+import { UserPlay } from "../Structures/Entities/UserPlay";
 
 export class TimeService {
     public async getPlayTimeForPlays(plays: List<UserPlay>) {
