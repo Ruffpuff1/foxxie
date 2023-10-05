@@ -44,7 +44,7 @@
     "lastFmArtistPlaysByYouLastWeek": "**{{count, number}}** by you last week",
     "lastFmDetailedDescription": {
         "description": "Fetch data from Last.fm.",
-        "usage": "{{prefix}}lastfm [listening|artist]",
+        "usage": "{{prefix}}lastfm [listening|artist|update]",
         "subcommands": [
             {
                 "command": "listening",
@@ -90,7 +90,8 @@
                     "Updates your cached scrobbles within my database."
                 ],
                 "examples": [
-                    "{{prefix}}lastfm update"
+                    "{{prefix}}lastfm update",
+                    "{{prefix}}lastfm update plays"
                 ]
             }
         ]
