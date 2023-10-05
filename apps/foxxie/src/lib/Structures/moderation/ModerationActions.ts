@@ -99,7 +99,7 @@ export class ModerationActions {
     public async mute(rawOptions: RawOptions, sendOptions: SendOptions): Promise<ModerationEntity> {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.Mute);
         const moderationLog = this.create(options);
-        const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.Muted);
+        const roleId = await acquireSettings(this.guild.id, s => s.roles[GuildSettings.Roles.Muted]);
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Mute);
@@ -125,7 +125,7 @@ export class ModerationActions {
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.Mute);
-        const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.Muted);
+        const roleId = await acquireSettings(this.guild.id, s => s.roles[GuildSettings.Roles.Muted]);
 
         try {
             const member = this.guild.members.cache.get(moderationLog.userId);
@@ -147,7 +147,7 @@ export class ModerationActions {
         const options = ModerationActions.fillOptions(rawOptions, TypeCodes.RestrictEmbed);
         const moderationLog = this.create(options);
 
-        const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.EmbedRestrict);
+        const roleId = await acquireSettings(this.guild.id, s => s.roles[GuildSettings.Roles.EmbedRestrict]);
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.RestrictEmbed);
@@ -173,7 +173,7 @@ export class ModerationActions {
 
         const reason = await this.fetchReason(moderationLog);
         await this.cancelTask(moderationLog.userId!, TypeVariationAppealNames.RestrictEmbed);
-        const roleId = await acquireSettings(this.guild.id, GuildSettings.Roles.EmbedRestrict);
+        const roleId = await acquireSettings(this.guild.id, s => s.roles[GuildSettings.Roles.EmbedRestrict]);
 
         try {
             const member = this.guild.members.cache.get(moderationLog.userId);
@@ -452,7 +452,7 @@ export class ModerationActions {
             color: Colors.Restricted
         });
 
-        await container.db.guilds.write(this.guild.id, settings => (settings[settingsKey] = role.id));
+        await container.db.guilds.write(this.guild.id, settings => (settings.roles[settingsKey] = role.id));
 
         if (await messagePrompt(msg, lang.init)) {
             await this.updateCategories(role, key ?? RoleKey.Muted);
@@ -535,8 +535,8 @@ export class ModerationActions {
 }
 
 export const enum ModerationSetupRestriction {
-    All = 'rolesMuted',
-    Embed = 'rolesEmbedRestrict'
+    All = 'muted',
+    Embed = 'embedRestrict'
 }
 
 export type RawOptions = Partial<ModerationEntity>;

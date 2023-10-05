@@ -9,10 +9,12 @@ import {
     GetArtistInfoResultWithUser,
     GetRecentTracksUserResult,
     GetRecentTracksUserTrack,
+    GetUserInfoResult,
     GetUserTopTracksResult,
     LastFmApiMethods
 } from '../Services';
 import { ArtistInfo } from '../Structures/ArtistInfo';
+import { DataSourceUser } from '../Structures/DataSourceUser';
 import { RecentTrack, RecentTrackList } from '../Structures/RecentTrack';
 import { Tag } from '../Structures/Tag';
 import { TopArtist, TopArtistList } from '../Structures/TopArtist';
@@ -58,6 +60,30 @@ export class LastFmRepository {
             responseStatus: new Error(cast<GetArtistInfoResultNoExistResult>(artistCall).message),
             message: cast<GetArtistInfoResultNoExistResult>(artistCall).message
         });
+    }
+
+    public async getUserInfo(username: string) {
+        const options = { user: username };
+
+        const userCall = (await container.apis.lastFm.createLastFmRequest(
+            LastFmApiMethods.UserGetInfo,
+            options
+        )) as GetUserInfoResult;
+
+        return userCall.user
+            ? new DataSourceUser({
+                  playcount: Number(userCall.user.playcount),
+                  name: userCall.user.name,
+                  country: userCall.user.country,
+                  url: userCall.user.url,
+                  registered: Number(userCall.user.registered.unixtime),
+                  image: userCall.user.image.find(a => a.size === 'extralarge')
+                      ? userCall.user.image.find(a => a.size === 'extralarge')?.['#text'].replace('/u/300x300/', '/u/')
+                      : null!,
+                  type: userCall.user.type,
+                  subscriber: userCall.user.subscriber === '1'
+              })
+            : null;
     }
 
     public async getRecentTracks(

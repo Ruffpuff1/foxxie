@@ -1,11 +1,9 @@
 export * as Logs from './Logs';
 
-export const Boost = 'channelsBoost';
-export const Disboard = 'channelsDisboard';
-export const IgnoreAll = 'channelsIgnoreAll';
-export const Goodbye = 'channelsGoodbye';
-export const StatsMemberCount = 'channelsStatsMemberCountChannel';
-export const StatsMemberCountCompact = 'channelsStatsMemberCountCompact';
-export const StatsMemberCountTemplate = 'channelsStatsMemberCountTemplate';
-export const StatusUpdate = 'channelsStatusUpdate';
-export const Welcome = 'channelsWelcome';
+export const Boost = 'boost';
+export const Command = 'command';
+export const Disabled = 'disabled';
+export const Disboard = 'disboard';
+export const IgnoreAll = 'ignoreAll';
+export const Goodbye = 'goodbye';
+export const Welcome = 'welcome';

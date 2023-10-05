@@ -4,7 +4,7 @@ import { cast } from '@ruffpuff/utilities';
 import { container, UserError } from '@sapphire/framework';
 import type { GuildResolvable } from 'discord.js';
 import type { ISchemaValue, SchemaGroup, SchemaKey } from '.';
-import type { GuildEntity } from './entities/GuildEntity';
+import type { GuildEntity } from './entities/Guild/GuildEntity';
 import type { SettingsCollectionCallback } from './repository';
 
 type K = keyof V;

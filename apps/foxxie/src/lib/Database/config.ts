@@ -1,3 +1,5 @@
+import { Track } from '#Api/LastFm/Structures/Entities/Track';
+import { UserTrack } from '#Api/LastFm/Structures/Entities/UserTrack';
 import { UserArtist } from '#Api/LastFm/Structures/UserArtist';
 import { UserPlay } from '#Api/LastFm/Structures/UserPlay';
 import { container } from '@sapphire/framework';
@@ -10,8 +12,6 @@ import { LastFmArtistEntity } from './entities/LastFmArtistEntity';
 import { UserEntity } from './entities/UserEntity';
 import { ClientRepository, GuildRepository, LastFmArtistRepository, MemberRepository } from './repository';
 import { UserRepository } from './repository/UserRepository';
-import { Track } from '#Api/LastFm/Structures/Track';
-import { UserTrack } from '#Api/LastFm/Structures/UserTrack';
 
 export async function config(): Promise<void> {
     const dataSource = new DataSource({
@@ -21,7 +21,7 @@ export async function config(): Promise<void> {
         port: 3306,
         username: process.env.MONGO_USER,
         password: process.env.MONGO_PASSWORD,
-        entities: [join(__dirname, 'entities/*Entity.js'), UserArtist, UserPlay, Track, UserTrack],
+        entities: [join(__dirname, 'entities/*Entity.js'), UserArtist, UserPlay, Track, UserTrack, GuildEntity],
         authSource: 'admin',
         ssl: true,
         logging: true

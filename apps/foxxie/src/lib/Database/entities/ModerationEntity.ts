@@ -16,7 +16,7 @@ import { cast, resolveToNull, Time, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { EmbedBuilder, Guild, GuildChannel, User } from 'discord.js';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import { GuildEntity, GuildSettings } from '..';
+import { GuildSettings } from '..';
 
 @Entity('moderation', { schema: 'public' })
 export class ModerationEntity extends BaseEntity {
@@ -180,7 +180,7 @@ export class ModerationEntity extends BaseEntity {
     }
 
     public async formatUtils(): Promise<[string, TFunction]> {
-        const t = await container.db.guilds.acquire(this.guildId!, (settings: GuildEntity) => settings.getLanguage());
+        const t = await container.db.guilds.acquire(this.guildId!, settings => settings.getLanguage());
 
         const total = this.getTotal();
         if (total) return [t(LanguageKeys.Moderation[this.metadata.title], { count: total }), t];

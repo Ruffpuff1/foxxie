@@ -1,7 +1,7 @@
 import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { container } from '@sapphire/framework';
 import { blue } from 'colorette';
-import { UserTrack } from '../Structures/UserTrack';
+import { UserTrack } from '../Structures/Entities/UserTrack';
 
 export class TrackRepository {
     public static async AddOrReplaceUserTracksInDatabase(tracks: List<UserTrack>, userId: string) {

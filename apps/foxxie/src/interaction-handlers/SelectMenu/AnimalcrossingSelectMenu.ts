@@ -1,4 +1,4 @@
-import { buildVillagerDisplay, fetchVillager } from '#Api/celestia';
+import { buildVillagerDisplay, fetchVillager } from '#Api/Celestia/celestia';
 import { floatPromise } from '#utils/util';
 import { Villager } from '@foxxie/celestia-api-types';
 import { resolveToNull } from '@ruffpuff/utilities';

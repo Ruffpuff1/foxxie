@@ -1,3 +1,4 @@
+import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { LastFmArtistEntity } from '#lib/Database/entities/LastFmArtistEntity';
 import { Response } from '#utils/Response';
 import { minutes } from '@ruffpuff/utilities';
@@ -7,11 +8,10 @@ import { DataSourceFactory } from '../Factories/DataSourceFactory';
 import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { LastFmRepository } from '../Repositories/LastFmRepository';
 import { ArtistInfo } from '../Structures/ArtistInfo';
-import { ArtistSearch } from '../Structures/ArtistModels';
+import { ArtistSearch } from '../Structures/Models/ArtistModels';
 import { RecentTrackList } from '../Structures/RecentTrack';
 import { TopArtist } from '../Structures/TopArtist';
 import { UpdateUserQueueItem } from '../Structures/UpdateUserQueueItem';
-import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 
 export class ArtistsService {
     private dataSourceFactory = new DataSourceFactory();

@@ -1,5 +1,3 @@
-export const CommandChannels = 'commandChannels';
-export const DisabledChannels = 'disabledChannels';
 export const DisabledCommands = 'disabledCommands';
 export const Highlights = 'highlights';
 export const Language = 'language';

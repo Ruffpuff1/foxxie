@@ -15,10 +15,10 @@ export class UserPrecondition extends Precondition {
         command: FoxxieCommand,
         context: PreconditionContext
     ) {
-        const [disabledCommands, disabledChannels, commandChannels] = await this.container.db.guilds.acquire(guildId, [
-            GuildSettings.DisabledCommands,
-            GuildSettings.DisabledChannels,
-            GuildSettings.CommandChannels
+        const [disabledCommands, disabledChannels, commandChannels] = await this.container.db.guilds.acquire(guildId, s => [
+            s[GuildSettings.DisabledCommands],
+            s.channels[GuildSettings.Channels.Disabled],
+            s.channels[GuildSettings.Channels.Command]
         ]);
 
         if (disabledChannels.includes(channelId) && !isModerator(member)) return this.error({ context: { silent: true } });

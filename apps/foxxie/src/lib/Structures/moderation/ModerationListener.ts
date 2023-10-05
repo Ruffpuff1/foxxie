@@ -155,7 +155,7 @@ export abstract class ModerationListener extends Listener {
 
     private async onMute(msg: GuildMessage, t: TFunction, duration: number | null) {
         await this.container.redis!.pinsertex(`guild:${msg.guild.id}:mute:${msg.member.id}`, seconds(20), '');
-        const roleId = await this.container.db.guilds.acquire(msg.guild.id, GuildSettings.Roles.Muted);
+        const roleId = await this.container.db.guilds.acquire(msg.guild.id, s => s.roles[GuildSettings.Roles.Muted]);
         if (!roleId) return;
 
         return this.container.utilities.guild(msg.guild).moderation.actions.mute(

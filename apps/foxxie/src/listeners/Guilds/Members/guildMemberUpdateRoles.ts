@@ -17,10 +17,10 @@ export class UserListener extends Listener {
 
         if (prevRoles.equals(nextRoles)) return;
 
-        const [muteAdd, muteRemove, muteRole] = await acquireSettings(next.guild.id, [
-            'eventsMuteAdd',
-            'eventsMuteRemove',
-            GuildSettings.Roles.Muted
+        const [muteAdd, muteRemove, muteRole] = await acquireSettings(next.guild.id, s => [
+            s.eventsMuteAdd,
+            s.eventsMuteRemove,
+            s.roles[GuildSettings.Roles.Muted]
         ]);
         if ((!muteAdd && !muteRemove) || !muteRole) return;
 

@@ -33,6 +33,7 @@ export const LastFmArtistPlaysByYouLastWeek = FT<{ count: number }>('commands/fu
 export const LastFmDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
     'commands/fun:lastFmDetailedDescription'
 );
+export const LastFmStatsMostActiveDayOfWeek = FT<{ day: string }>('commands/fun:lastFmStatsMostActiveDayOfWeek');
 export const LastFmPlayListeners = FT<{ count: number }>('commands/fun:lastFmPlayListeners');
 export const LastFmPlayNowPlaying = T('commands/fun:lastFmPlayNowPlaying');
 export const LastFmPlayPlays = FT<{ count: number }>('commands/fun:lastFmPlayPlays');
@@ -42,7 +43,9 @@ export const LastFmPlayWasPlaying = T('commands/fun:lastFmPlayWasPlaying');
 export const LastFmTitles = T<{
     about: string;
     lastFmStats: string;
+    months: string;
     statistics: string;
     summary: string;
+    years: string;
 }>('commands/fun:lastFmTitles');
 export const LastFmTrackNotFoundForUser = FT<{ user: GetUserInfoResult['user'] }>('commands/fun:lastFmTrackNotFoundForUser');

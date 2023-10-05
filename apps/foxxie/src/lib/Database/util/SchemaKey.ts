@@ -4,7 +4,7 @@ import type { CustomGet, TFunction } from '@foxxie/i18n';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { NonNullObject, isNullish } from '@sapphire/utilities';
-import type { GuildEntity } from '../entities/GuildEntity';
+import type { GuildEntity } from '../entities/Guild/GuildEntity';
 import type { Serializer, SerializerUpdateContext } from '../structures/Serializer';
 import type { ISchemaValue, SchemaGroup } from './SchemaGroup';
 

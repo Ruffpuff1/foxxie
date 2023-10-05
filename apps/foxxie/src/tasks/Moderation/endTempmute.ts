@@ -16,7 +16,7 @@ export class UserTask extends ModerationTask {
         if (!me.permissions.has(PermissionFlagsBits.ManageRoles)) return null;
 
         const [roleId, t] = await this.container.db.guilds.acquire(guild.id, settings => [
-            settings[GuildSettings.Roles.Muted],
+            settings.roles[GuildSettings.Roles.Muted],
             settings.getLanguage()
         ]);
         if (!roleId) return null;

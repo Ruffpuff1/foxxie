@@ -1,9 +1,8 @@
 import { GuildSettings, acquireSettings } from '#lib/Database';
 import type { EventArgs, FoxxieEvents } from '#lib/Types';
-import { floatPromise, resolveClientColor } from '#utils/util';
+import { floatPromise } from '#utils/util';
 import { Listener } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { EmbedBuilder } from 'discord.js';
 
 export class UserListener extends Listener<FoxxieEvents.UnknownMessageCommand> {
     public async run(...[{ commandName, message }]: EventArgs<FoxxieEvents.UnknownMessageCommand>): Promise<void> {
@@ -16,10 +15,7 @@ export class UserListener extends Listener<FoxxieEvents.UnknownMessageCommand> {
         const { content } = foundTag;
 
         if (foundTag.embed) {
-            const embed = new EmbedBuilder() //
-                .setDescription(content)
-                .setColor(resolveClientColor(message.guild, foundTag.color || message.member?.displayColor));
-
+            const embed = foundTag.buildEmbed(message);
             await send(message, { embeds: [embed], content: null });
 
             if (foundTag.delete) await floatPromise(message.delete());

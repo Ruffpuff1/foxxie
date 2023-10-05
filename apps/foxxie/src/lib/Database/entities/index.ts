@@ -1,5 +1,5 @@
 export * from './ClientEntity';
-export * from './GuildEntity';
+export * from './Guild/GuildEntity';
 export * from './Highlight';
 export * from './MemberEntity';
 export * from './ModerationEntity';

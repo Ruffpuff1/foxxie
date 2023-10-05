@@ -1,4 +1,5 @@
 import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
+import { PlaySource } from '../../Enums/PlaySource';
 
 @Entity('userLastFmPlays', { schema: 'public' })
 export class UserPlay extends BaseEntity {
@@ -19,6 +20,9 @@ export class UserPlay extends BaseEntity {
 
     @Column()
     public userId: string;
+
+    @Column()
+    public playSource: PlaySource;
 
     public constructor(data: Partial<UserPlay>) {
         super();

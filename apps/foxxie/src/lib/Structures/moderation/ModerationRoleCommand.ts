@@ -1,4 +1,4 @@
-import { GuildEntity } from '#lib/Database';
+import { GuildRoleSettingsService } from '#lib/Database/entities/Guild/Services/GuildRoleSettingsService';
 import { LanguageKeys } from '#lib/I18n';
 import { GuildMessage } from '#lib/Types';
 import { isAdmin, messagePrompt, promptForMessage } from '#utils/Discord';
@@ -12,7 +12,7 @@ import { ModerationSetupRestriction } from './ModerationActions';
 import { ModerationCommand } from './ModerationCommand';
 
 export abstract class ModerationRoleCommand extends ModerationCommand {
-    public readonly roleKey: PickByValue<GuildEntity, Snowflake | null>;
+    public readonly roleKey: PickByValue<GuildRoleSettingsService, Snowflake | null>;
 
     public readonly setUpKey: ModerationSetupRestriction;
 
@@ -29,7 +29,7 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
 
     public async inhibit(message: GuildMessage, args: ModerationCommand.Args, context: ModerationCommand.Context) {
         const { settings } = this.container.utilities.guild(message.guild);
-        const [id, t] = await settings.get(settings => [settings[this.roleKey], settings.getLanguage()]);
+        const [id, t] = await settings.get(settings => [settings.roles[this.roleKey], settings.getLanguage()]);
 
         // Verify for role existence.
         const role = (id && message.guild.roles.cache.get(id)) ?? null;
@@ -42,7 +42,7 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
         if (await messagePrompt(message, t(LanguageKeys.Moderation.ActionSharedRoleSetupExisting))) {
             const role = await this.askForRole(message, args, context);
             if (!role.isOk()) return this.error(role.unwrapErr());
-            await settings.set(settings => (settings[this.roleKey] = role.unwrap().id));
+            await settings.set(settings => (settings.roles[this.roleKey] = role.unwrap().id));
         } else if (await messagePrompt(message, t(LanguageKeys.Moderation.ActionsharedRoleSetupNew))) {
             const role = await this.container.utilities.guild(message.guild).moderation.actions.setUpRole(message, this.setUpKey);
 
@@ -70,7 +70,7 @@ export abstract class ModerationRoleCommand extends ModerationCommand {
 
 export namespace ModerationRoleCommand {
     export interface Options extends ModerationCommand.Options {
-        roleKey: PickByValue<GuildEntity, Snowflake | null>;
+        roleKey: PickByValue<GuildRoleSettingsService, Snowflake | null>;
         setUpKey: ModerationSetupRestriction;
     }
 

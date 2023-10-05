@@ -6,6 +6,7 @@ import { container } from '@sapphire/pieces';
 import { sleep } from '@sapphire/utilities';
 import { blue } from 'colorette';
 import { User } from 'discord.js';
+import { PlaySource } from '../Enums/PlaySource';
 import { UpdateTypeBitField, UpdateTypeBits } from '../Enums/UpdateType';
 import { LastFmRepository } from '../Repositories/LastFmRepository';
 import { PlayRepository } from '../Repositories/PlayRepository';
@@ -231,7 +232,8 @@ export class UpdateService {
                         album: s.albumName,
                         track: s.trackName,
                         timestamp: s.timePlayed?.getTime() || new Date().getTime(),
-                        userId
+                        userId,
+                        playSource: PlaySource.LastFm
                     })
             );
 

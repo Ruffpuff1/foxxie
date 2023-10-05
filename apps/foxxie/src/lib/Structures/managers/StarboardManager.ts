@@ -49,7 +49,7 @@ export class StarboardManager extends Collection<string, StarEntity> {
      * Get the Starboard channel
      */
     public async getStarboardChannel() {
-        const channelId = await acquireSettings(this.guild, GuildSettings.Starboard.Channel);
+        const channelId = await acquireSettings(this.guild, s => s.starboard[GuildSettings.Starboard.Channel]);
         if (isNullish(channelId)) return null;
         return cast<TextChannel | null>(this.guild.channels.cache.get(channelId) ?? null);
     }
@@ -58,7 +58,7 @@ export class StarboardManager extends Collection<string, StarEntity> {
      * Get the minimum amount of stars
      */
     public getMinimumStars() {
-        return acquireSettings(this.guild, GuildSettings.Starboard.Minimum);
+        return acquireSettings(this.guild, s => s.starboard[GuildSettings.Starboard.Minimum]);
     }
 
     /**

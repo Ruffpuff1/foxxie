@@ -11,7 +11,7 @@ import {
     PermissionsBitField
 } from 'discord.js';
 import { ArtistBuilders } from '../Builders/ArtistBuilders';
-import { ContextModel } from '../Structures/ContextModel';
+import { ContextModel } from '../Structures/Models/ContextModel';
 
 export class LastFmChatInputCommandService {
     // private service: LastFmService;

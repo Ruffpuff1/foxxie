@@ -12,6 +12,11 @@ export class DataSourceFactory {
         return artist;
     }
 
+    public async getUserInfo(username: string) {
+        const user = await this.lastFmRepository.getUserInfo(username);
+        return user;
+    }
+
     public async getRecentTracks(
         lastFmUserName: string,
         count = 2,

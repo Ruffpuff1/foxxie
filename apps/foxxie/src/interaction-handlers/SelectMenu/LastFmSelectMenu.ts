@@ -1,5 +1,5 @@
 import { ArtistBuilders } from '#Api/LastFm/Builders/ArtistBuilders';
-import { ContextModel } from '#Api/LastFm/Structures/ContextModel';
+import { ContextModel } from '#Api/LastFm/Structures/Models/ContextModel';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';

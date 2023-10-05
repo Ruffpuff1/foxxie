@@ -20,8 +20,8 @@ export class UserListener extends AutomationListener<FoxxieEvents.GuildMemberJoi
             settings[GuildSettings.Embeds.Welcome],
             settings[GuildSettings.Messages.AutoDelete.Welcome],
             settings[GuildSettings.Roles.PersistEnabled],
-            settings[GuildSettings.Roles.Auto],
-            settings[GuildSettings.Roles.Bot],
+            settings.roles[GuildSettings.Roles.Auto],
+            settings.roles[GuildSettings.Roles.Bot],
             settings.getLanguage()
         ];
 

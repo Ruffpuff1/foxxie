@@ -9,7 +9,6 @@ export class ArtistRepository {
         container.logger.debug(`[${blue('Last.fm')}] Inserting ${artists.length} artists for user ${userId}`);
 
         await container.db.lastFm.userArtists.deleteMany({ userId });
-
         await container.db.lastFm.userArtists.insertMany(artists);
     }
 

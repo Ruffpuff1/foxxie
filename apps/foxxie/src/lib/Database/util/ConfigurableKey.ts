@@ -2,7 +2,7 @@ import { cast } from '@ruffpuff/utilities';
 import { isFunction, isNumber, isPrimitive } from '@sapphire/utilities';
 import { Collection } from 'discord.js';
 import { ColumnOptions, ColumnType, getMetadataArgsStorage } from 'typeorm';
-import type { GuildEntity } from '../entities/GuildEntity';
+import type { GuildEntity } from '../entities/Guild/GuildEntity';
 import { NonEmptyArray, SchemaGroup } from './SchemaGroup';
 import { ConfigurableKeyValueOptions, SchemaKey } from './SchemaKey';
 

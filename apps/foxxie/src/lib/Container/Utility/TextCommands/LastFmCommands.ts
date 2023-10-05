@@ -2,7 +2,7 @@ import { LastFmService } from '#Api/LastFm';
 import { UpdateTypeBitField, UpdateTypeBits } from '#Api/LastFm/Enums/UpdateType';
 import { WhoKnowsMode } from '#Api/LastFm/Enums/WhoKnowsMode';
 import { UserService } from '#Api/LastFm/Services/UserService';
-import { ContextModel } from '#Api/LastFm/Structures/ContextModel';
+import { ContextModel } from '#Api/LastFm/Structures/Models/ContextModel';
 import { WhoKnowsSettings } from '#Api/LastFm/Structures/WhoKnowsSettings';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage } from '#lib/Types';

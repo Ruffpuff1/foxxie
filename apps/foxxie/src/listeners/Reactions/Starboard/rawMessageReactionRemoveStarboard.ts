@@ -17,7 +17,7 @@ export class UserListener extends Listener {
 
         const { settings, starboard } = this.container.utilities.guild(data.guild);
 
-        const [channel, emoji] = await settings.get([GuildSettings.Starboard.Channel, GuildSettings.Starboard.Emojis]);
+        const [channel, emoji] = await settings.get(s => [s.starboard[GuildSettings.Starboard.Channel], s.starboard[GuildSettings.Starboard.Emojis]]);
 
         // If there is no channel, or channel is the starboard channel, or the emoji isn't the starboard one, skip:
         if (!channel || !isStarboardEmoji(emoji, emojiId) || this.container.client.id === data.userId) return;
@@ -30,7 +30,7 @@ export class UserListener extends Listener {
 
         const starboardChannel = cast<TextChannel | undefined>(data.guild.channels.cache.get(channel));
         if (typeof starboardChannel === 'undefined' || !canSendMessages(starboardChannel)) {
-            await settings.set(settings => (settings[GuildSettings.Starboard.Channel] = null));
+            await settings.set(settings => (settings.starboard[GuildSettings.Starboard.Channel] = null));
             return;
         }
 

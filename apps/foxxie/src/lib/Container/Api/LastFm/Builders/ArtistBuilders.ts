@@ -13,7 +13,7 @@ import { UpdateService } from '../Services/UpdateService';
 import { WhoKnowsArtistService } from '../Services/WhoKnowsArtistService';
 import { WhoKnowsPlayService } from '../Services/WhoKnowsPlayService';
 import { WhoKnowsService } from '../Services/WhoKnowsService';
-import { ContextModel } from '../Structures/ContextModel';
+import { ContextModel } from '../Structures/Models/ContextModel';
 import { WhoKnowsSettings } from '../Structures/WhoKnowsSettings';
 
 export class ArtistBuilders {

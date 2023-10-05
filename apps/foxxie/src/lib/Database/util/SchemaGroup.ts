@@ -3,7 +3,7 @@ import { cast } from '@ruffpuff/utilities';
 import { codeBlock, isNullish, toTitleCase } from '@sapphire/utilities';
 import { Collection } from 'discord.js';
 import type { SchemaKey } from '.';
-import type { GuildEntity } from '../entities/GuildEntity';
+import type { GuildEntity } from '../entities/Guild/GuildEntity';
 
 export type NonEmptyArray<T> = [T, ...T[]];
 

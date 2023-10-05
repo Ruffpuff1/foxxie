@@ -13,7 +13,7 @@ export class UserListener extends Listener<FoxxieEvents.GuildMemberAdd> {
         if (member.pending) return;
 
         const [muteRoleId, settings] = await this.container.db.guilds.acquire(member.guild.id, settings => [
-            settings[GuildSettings.Roles.Muted],
+            settings.roles[GuildSettings.Roles.Muted],
             settings
         ]);
         if (muteRoleId) {

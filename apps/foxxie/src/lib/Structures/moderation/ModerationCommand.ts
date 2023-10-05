@@ -51,7 +51,7 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
         const errors = cast<Array<{ error: Error | string; target: User }>>([]);
 
         const { targets, ...handledRaw } = resolved;
-        const logChannelId = await acquireSettings(message.guild, GuildSettings.Channels.Logs.Moderation);
+        const logChannelId = await acquireSettings(message.guild, s => s.channels[GuildSettings.Channels.Logs.Moderation]);
 
         for (const target of new Set(targets)) {
             try {
@@ -107,7 +107,7 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
         const { targets, ...handledRaw } = resolved;
         const [t, logChannelId] = await acquireSettings(interaction.guild, s => [
             s.getLanguage(),
-            s[GuildSettings.Channels.Logs.Moderation]
+            s.channels[GuildSettings.Channels.Logs.Moderation]
         ]);
 
         const ephemeral = interaction.options.getBoolean('hidden') || false;

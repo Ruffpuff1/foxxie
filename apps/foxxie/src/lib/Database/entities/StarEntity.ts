@@ -116,12 +116,12 @@ export class StarEntity extends BaseEntity {
     public async downloadStarMessage(): Promise<void> {
         if (!this.starMessageId) return;
 
-        const channelId = await this.settings.get(GuildSettings.Starboard.Channel);
+        const channelId = await this.settings.get(s => s.starboard[GuildSettings.Starboard.Channel]);
         if (isNullish(channelId)) return;
 
         const channel = cast<GuildTextBasedChannelTypes | undefined>(this.#message.guild.channels.cache.get(channelId));
         if (isNullish(channel)) {
-            await this.settings.set(settings => (settings[GuildSettings.Starboard.Channel] = null));
+            await this.settings.set(settings => (settings.starboard[GuildSettings.Starboard.Channel] = null));
             return;
         }
 
@@ -136,9 +136,9 @@ export class StarEntity extends BaseEntity {
 
     public async downloadUserList(): Promise<void> {
         try {
-            const [emojis, selfStar] = await acquireSettings(this.#message.guild, [
-                GuildSettings.Starboard.Emojis,
-                GuildSettings.Starboard.SelfStar
+            const [emojis, selfStar] = await acquireSettings(this.#message.guild, s => [
+                s.starboard[GuildSettings.Starboard.Emojis],
+                s.starboard[GuildSettings.Starboard.SelfStar]
             ]);
             const users1 = await fetchReactionUsers(this.#message.channel.id, this.#message.id, [
                 ...emojis,
@@ -243,8 +243,8 @@ export class StarEntity extends BaseEntity {
 
     private async updateStarMessage(): Promise<void> {
         const [minimum, channelId, t] = await acquireSettings(this.#message.guild, settings => [
-            settings[GuildSettings.Starboard.Minimum],
-            settings[GuildSettings.Starboard.Channel],
+            settings.starboard[GuildSettings.Starboard.Minimum],
+            settings.starboard[GuildSettings.Starboard.Channel],
             settings.getLanguage()
         ]);
 

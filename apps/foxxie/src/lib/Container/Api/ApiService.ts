@@ -1,7 +1,7 @@
 import { EnvKeys } from '#lib/Types';
 import { EnvParse } from '@foxxie/env';
 import { DiscogsService } from './Discogs/DiscogsService';
-import { HastebinService } from './HastbinService';
+import { HastebinService } from './Hastebin/HastbinService';
 import { LastFmService, SpotifyService } from './LastFm';
 
 /**

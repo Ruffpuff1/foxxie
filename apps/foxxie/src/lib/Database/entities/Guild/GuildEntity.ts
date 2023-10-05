@@ -5,7 +5,7 @@ import { TFunction, getT } from '@foxxie/i18n';
 import { arrayStrictEquals, cast, minutes, years } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import type { APIEmbed, LocaleString, Snowflake } from 'discord-api-types/v10';
-import type { Guild, UserResolvable } from 'discord.js';
+import type { Guild as DiscordGuild, UserResolvable } from 'discord.js';
 import {
     AfterInsert,
     AfterLoad,
@@ -17,8 +17,12 @@ import {
     ObjectIdColumn,
     PrimaryColumn
 } from 'typeorm';
-import { ConfigurableKey } from '../util';
-import { Highlight } from './Highlight';
+import { ConfigurableKey } from '../../util';
+import { Highlight } from '../Highlight';
+import { GuildChannelSettingsService } from './Services/GuildChannelSettingsService';
+import { GuildRoleSettingsService } from './Services/GuildRoleSettingsService';
+import { GuildStarboardSettingsService } from './Services/GuildStarboardSettingsService';
+import { Tag } from './Structures/Tag';
 
 @Entity('guild', { schema: 'public' })
 export class GuildEntity extends BaseEntity {
@@ -28,194 +32,8 @@ export class GuildEntity extends BaseEntity {
     @PrimaryColumn()
     public id!: string;
 
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.Autoroles,
-        name: 'roles.auto',
-        type: 'role'
-    })
-    @Column('varchar', { name: 'autoroles', array: true, length: 19 })
-    public autoroles: Snowflake[] = [];
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.Botroles,
-        name: 'roles.bot',
-        type: 'role'
-    })
-    @Column('varchar', { name: 'botroles', array: true, length: 19 })
-    public botroles: Snowflake[] = [];
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsBoost,
-        name: 'channels.boost',
-        type: 'textchannel'
-    })
-    @Column('varchar', { name: 'channelsBoost', nullable: true, length: 19 })
-    public channelsBoost: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsDisboard,
-        name: 'channels.disboard',
-        type: 'textchannel'
-    })
-    @Column('varchar', { name: 'channelsDisboard', nullable: true, length: 19 })
-    public channelsDisboard: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsGoodbye,
-        name: 'channels.goodbye',
-        type: 'textchannel'
-    })
-    @Column('varchar', { name: 'channelsGoodbye', nullable: true, length: 19 })
-    public channelsGoodbye: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsIgnoreAll,
-        type: 'textchannel',
-        name: 'channels.ignore.all'
-    })
-    @Column('varchar', {
-        name: 'channelsIgnoreAll',
-        length: 19,
-        array: true,
-        default: () => 'ARRAY[]::VARCHAR[]'
-    })
-    public channelsIgnoreAll: Snowflake[] = [];
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsFilterInvites,
-        name: 'channels.logs.filter.invites',
-        type: 'textchannel'
-    })
-    @Column('varchar', { name: 'channelsLogsFilterInvites', nullable: true, length: 19 })
-    public channelsLogsFilterInvites: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsFilterWords,
-        name: 'channels.logs.filter.words',
-        type: 'textchannel'
-    })
-    @Column('varchar', { name: 'channelsLogsFilterWords', nullable: true, length: 19 })
-    public channelsLogsFilterWords: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsMemberJoin,
-        name: 'channels.logs.member-join',
-        type: 'textchannel'
-    })
-    @Column('varchar', {
-        name: 'channelsLogsMemberJoin',
-        nullable: true,
-        length: 19
-    })
-    public channelsLogsMemberJoin: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsMemberLeave,
-        name: 'channels.logs.member-leave',
-        type: 'textchannel'
-    })
-    @Column('varchar', {
-        name: 'channelsLogsMemberLeave',
-        nullable: true,
-        length: 19
-    })
-    public channelsLogsMemberLeave: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsMemberScreening,
-        name: 'channels.logs.member-screening',
-        type: 'textchannel'
-    })
-    @Column('varchar', {
-        name: 'channelsLogsMemberScreening',
-        nullable: true,
-        length: 19
-    })
-    public channelsLogsMemberScreening: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsMessageDelete,
-        name: 'channels.logs.message-delete',
-        type: 'textchannel'
-    })
-    @Column('varchar', {
-        name: 'channelsLogsMessageDelete',
-        nullable: true,
-        length: 19
-    })
-    public channelsLogsMessageDelete: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsMessageEdit,
-        name: 'channels.logs.message-edit',
-        type: 'textchannel'
-    })
-    @Column('varchar', {
-        name: 'channelsLogsMessageEdit',
-        nullable: true,
-        length: 19
-    })
-    public channelsLogsMessageEdit: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsMessageVoice,
-        name: 'channels.logs.message-voice',
-        type: 'textchannel'
-    })
-    @Column('varchar', {
-        name: 'channelsLogsMessageVoice',
-        nullable: true,
-        length: 19
-    })
-    public channelsLogsMessageVoice: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsModeration,
-        name: 'channels.logs.moderation',
-        type: 'textchannel'
-    })
-    @Column('varchar', {
-        name: 'channelsLogsModeration',
-        nullable: true,
-        length: 19
-    })
-    public channelsLogsModeration: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsLogsRoleUpdate,
-        name: 'channels.logs.role-update',
-        type: 'textchannel'
-    })
-    @Column('varchar', {
-        name: 'channelsLogsRoleUpdate',
-        nullable: true,
-        length: 19
-    })
-    public channelsLogsRoleUpdate: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.ChannelsWelcome,
-        name: 'channels.welcome',
-        type: 'textchannel'
-    })
-    @Column('varchar', { name: 'channelsWelcome', nullable: true, length: 19 })
-    public channelsWelcome: Snowflake | null = null;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.CommandChannels,
-        name: 'command-channels',
-        type: 'textchannel'
-    })
-    @Column('varchar', { name: 'commandChannels', array: true, length: 19 })
-    public commandChannels: Snowflake[] = [];
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.DisabledChannels,
-        name: 'disabled-channels',
-        type: 'textchannel'
-    })
-    @Column('varchar', { name: 'disabledChannels', array: true, length: 19 })
-    public disabledChannels: Snowflake[] = [];
+    @Column()
+    public channels: GuildChannelSettingsService;
 
     @ConfigurableKey({
         description: LanguageKeys.Settings.DisabledCommands,
@@ -431,11 +249,6 @@ export class GuildEntity extends BaseEntity {
     @Column('boolean', { name: 'moderationInvitesEnabled', default: false })
     public moderationInvitesEnabled = false;
 
-    // @ConfigurableKey({
-    //     description: LanguageKeys.Settings.ModerationInvitesSoftPunish,
-    //     name: 'moderation.auto.invites.action',
-    //     type: 'softaction'
-    // })
     @Column('smallint', { name: 'moderationInvitesSoftPunish', default: 0 })
     public moderationInvitesSoftPunish = 0;
 
@@ -463,11 +276,6 @@ export class GuildEntity extends BaseEntity {
     @Column('boolean', { name: 'moderationScamsEnabled', default: false })
     public moderationScamsEnabled = false;
 
-    // @ConfigurableKey({
-    //     description: LanguageKeys.Settings.ModerationScamsSoftPunish,
-    //     name: 'moderation.auto.scams.action',
-    //     type: 'softaction'
-    // })
     @Column('smallint', { name: 'moderationScamsSoftPunish', default: 0 })
     public moderationScamsSoftPunish = 0;
 
@@ -541,61 +349,15 @@ export class GuildEntity extends BaseEntity {
     @Column('jsonb', { name: 'reactionRoles', default: () => "'[]'::JSONB" })
     public reactionRoles: ReactionRole[] = [];
 
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.RolesEmbedRestrict,
-        name: 'roles.embed-restrict',
-        type: 'role'
-    })
-    @Column('varchar', {
-        name: 'rolesEmbedRestrict',
-        nullable: true,
-        length: 19
-    })
-    public rolesEmbedRestrict: Snowflake | null = null;
+    @Column()
+    public roles: GuildRoleSettingsService;
 
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.RolesMuted,
-        name: 'roles.muted',
-        type: 'role'
-    })
-    @Column('varchar', { name: 'rolesMuted', nullable: true, length: 19 })
-    public rolesMuted: Snowflake | null = null;
+    @Column()
+    public starboard: GuildStarboardSettingsService;
 
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.StarboardChannel,
-        name: 'starboard.channel',
-        type: 'textchannel'
-    })
-    @Column('varchar', { name: 'starboardChannel', nullable: true, length: 19 })
-    public starboardChannel: Snowflake | null = null;
-
-    @Column('varchar', { name: 'starboardEmoji', array: true })
-    public starboardEmojis: string[] = [];
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.StarboardMinimum,
-        name: 'starboard.minimum',
-        type: 'number'
-    })
-    @Column('smallint', { name: 'starboardMinimum', default: 3 })
-    public starboardMinimum: number = 3;
-
-    @ConfigurableKey({
-        description: LanguageKeys.Settings.StarboardSelfStar,
-        name: 'starboard.self-star',
-        type: 'boolean'
-    })
-    @Column('boolean', { name: 'starboardSelfStar', default: true })
-    public starboardSelfStar: boolean = true;
-
-    @Column('jsonb', { name: 'tags', default: () => "'[]'::JSONB" })
+    @Column()
     public tags: Tag[] = [];
-
-    // @ConfigurableKey({
-    //     description: LanguageKeys.Settings.Words,
-    //     type: 'word',
-    //     name: 'moderation.auto.words.words'
-    // })
+    
     @Column('varchar', {
         name: 'words',
         default: () => "'[]'::JSONB",
@@ -618,10 +380,18 @@ export class GuildEntity extends BaseEntity {
     public getLanguage(): TFunction {
         return getT(cast<LocaleString>(this.language));
     }
-    
+
     @AfterLoad()
     protected entityLoad() {
         this.wordFilterRegExp = this.words.length ? create(this.words.map(en => en.word)) : null;
+
+        this.channels = new GuildChannelSettingsService(this.channels);
+
+        this.roles = new GuildRoleSettingsService(this.roles);
+
+        this.starboard = new GuildStarboardSettingsService(this.starboard);
+
+        this.tags = this.tags.map(t => new Tag(t));
     }
 
     @AfterInsert()
@@ -637,7 +407,7 @@ export class GuildEntity extends BaseEntity {
         this.wordFilterRegExp = null;
     }
 
-    public get guild(): Guild {
+    public get guild(): DiscordGuild {
         return container.client.guilds.cache.get(this.id)!;
     }
 }
@@ -658,15 +428,6 @@ export interface Word {
     softPunish: number;
     hardPunish: number;
     hardPunishDuration: number | null;
-}
-
-export interface Tag {
-    id: string;
-    delete: boolean;
-    embed: boolean;
-    color: number;
-    aliases: string[];
-    content: string;
 }
 
 export interface ReactionRole {

@@ -5,8 +5,8 @@ import { cast } from '@ruffpuff/utilities';
 import { AliasPiece, AliasPieceOptions, ArgumentError, ResultType, UserError } from '@sapphire/framework';
 import type { Awaitable } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
-import type { GuildEntity } from '../entities/GuildEntity';
 import type { SchemaKey } from '../util/SchemaKey';
+import { GuildEntity } from '..';
 
 export interface Ok<T> {
     success: true;

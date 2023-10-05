@@ -1,4 +1,4 @@
-import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#Api/celestia';
+import { buildVillagerDisplay, fetchVillager, fuzzySearchVillagers } from '#Api/Celestia/celestia';
 import { SubCommandCommand } from '#lib/Container/Utility';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';

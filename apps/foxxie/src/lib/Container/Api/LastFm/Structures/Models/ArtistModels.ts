@@ -1,4 +1,4 @@
-import { ArtistInfo } from './ArtistInfo';
+import { ArtistInfo } from '../ArtistInfo';
 
 export class ArtistSearch {
     public isRandom: boolean;

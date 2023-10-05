@@ -3,15 +3,16 @@ import { UserEntity } from '#lib/Database/entities/UserEntity';
 import { years } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { blue } from 'colorette';
+import { PlaySource } from '../Enums/PlaySource';
 import { UpdateTypeBitField, UpdateTypeBits } from '../Enums/UpdateType';
 import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { PlayRepository } from '../Repositories/PlayRepository';
 import { TrackRepository } from '../Repositories/TrackRepository';
 import { UserRepository } from '../Repositories/UserRepository';
+import { UserTrack } from '../Structures/Entities/UserTrack';
 import { IndexedUserStats } from '../Structures/IndexedUserStats';
 import { UserArtist } from '../Structures/UserArtist';
 import { UserPlay } from '../Structures/UserPlay';
-import { UserTrack } from '../Structures/UserTrack';
 
 export class IndexService {
     public async modularUpdate(user: UserEntity, type: UpdateTypeBitField): Promise<IndexedUserStats> {
@@ -119,7 +120,8 @@ export class IndexService {
                     album: track.albumName,
                     artist: track.artistName,
                     timestamp: track.timePlayed!.getTime(),
-                    userId: user.id
+                    userId: user.id,
+                    playSource: PlaySource.LastFm
                 })
             );
         }
