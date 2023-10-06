@@ -1,5 +1,5 @@
+import { FT, T } from '#lib/Types';
 import type { GuildTextBasedChannel, User } from 'discord.js';
-import { FT, T } from '@foxxie/i18n';
 
 export const ActionDelete = T('guilds/logs:actionDelete');
 export const ActionEdit = T('guilds/logs:actionEdit');

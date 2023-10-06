@@ -4,15 +4,15 @@ import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { ModerationBitField, ModerationFlagBits, ModerationHardActionFlags } from '#lib/Structures';
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
-import { Colors } from '#utils/constants';
 import { deleteMessage, isModerator, sendTemporaryMessage } from '#utils/Discord';
+import { Colors } from '#utils/constants';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
-import type { TFunction } from '@foxxie/i18n';
 import { isDev, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { EmbedBuilder, Message } from 'discord.js';
+import { TFunction } from 'i18next';
 
 @ApplyOptions<ListenerOptions>({
     event: FoxxieEvents.UserMessage,

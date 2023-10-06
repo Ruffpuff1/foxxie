@@ -1,7 +1,6 @@
 import type { HighlightTypeEnum } from '#lib/Container/Workers/types';
 import { LanguageKeys } from '#lib/I18n';
 import { create } from '#utils/regexCreator';
-import { TFunction, getT } from '@foxxie/i18n';
 import { arrayStrictEquals, cast, minutes, years } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import type { APIEmbed, LocaleString, Snowflake } from 'discord-api-types/v10';
@@ -23,6 +22,7 @@ import { GuildChannelSettingsService } from './Services/GuildChannelSettingsServ
 import { GuildRoleSettingsService } from './Services/GuildRoleSettingsService';
 import { GuildStarboardSettingsService } from './Services/GuildStarboardSettingsService';
 import { Tag } from './Structures/Tag';
+import { TFunction, getFixedT } from 'i18next';
 
 @Entity('guild', { schema: 'public' })
 export class GuildEntity extends BaseEntity {
@@ -357,7 +357,7 @@ export class GuildEntity extends BaseEntity {
 
     @Column()
     public tags: Tag[] = [];
-    
+
     @Column('varchar', {
         name: 'words',
         default: () => "'[]'::JSONB",
@@ -378,7 +378,7 @@ export class GuildEntity extends BaseEntity {
     }
 
     public getLanguage(): TFunction {
-        return getT(cast<LocaleString>(this.language));
+        return getFixedT(cast<LocaleString>(this.language));
     }
 
     @AfterLoad()

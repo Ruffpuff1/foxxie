@@ -1,4 +1,5 @@
-import { FT, T } from '@foxxie/i18n';
+import { FT, T } from "#lib/Types";
+
 
 export const CommandCancel = T('system:commandCancel');
 export const DmWarn = T('system:dmWarn');

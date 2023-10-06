@@ -1,5 +1,4 @@
-import { DetailedDescription, DetailedDescriptionArgs } from '#lib/Types';
-import { FT, T } from '@foxxie/i18n';
+import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/Types';
 
 export const BanDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:banDetailedDescription');
 export const BanSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:banSuccess');

@@ -2,12 +2,12 @@ import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage, PermissionLevels } from '#lib/Types';
 import { messagePrompt, sendLoadingMessage, sendLoadingMessageInChannel } from '#utils/Discord';
-import { TFunction } from '@foxxie/i18n';
 import { ApplyOptions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { TextChannel, inlineCode } from 'discord.js';
+import { TFunction } from 'i18next';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['spoll'],

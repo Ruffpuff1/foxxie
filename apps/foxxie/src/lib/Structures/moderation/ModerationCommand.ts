@@ -1,14 +1,14 @@
 import { GuildSettings, ModerationEntity, acquireSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
-import { GuildMessage, PermissionLevels } from '#lib/Types';
+import { CustomFunctionGet, GuildMessage, PermissionLevels } from '#lib/Types';
 import { isGuildOwner, sendTemporaryMessage } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { bold } from '@discordjs/builders';
-import { CustomFunctionGet, TFunction } from '@foxxie/i18n';
 import { cast, minutes, seconds, years } from '@ruffpuff/utilities';
 import { CommandOptionsRunTypeEnum, PieceContext } from '@sapphire/framework';
 import { PermissionFlagsBits, type GuildMember, type User } from 'discord.js';
 import { FoxxieCommand } from '../commands';
+import { TFunction } from 'i18next';
 
 export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
     /**

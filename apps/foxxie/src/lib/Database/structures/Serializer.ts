@@ -1,12 +1,12 @@
 import { LanguageKeys, translate } from '#lib/I18n';
 import type { FoxxieArgs } from '#lib/Structures';
-import type { TFunction } from '@foxxie/i18n';
 import { cast } from '@ruffpuff/utilities';
 import { AliasPiece, AliasPieceOptions, ArgumentError, ResultType, UserError } from '@sapphire/framework';
 import type { Awaitable } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
 import type { SchemaKey } from '../util/SchemaKey';
 import { GuildEntity } from '..';
+import { TFunction } from 'i18next';
 
 export interface Ok<T> {
     success: true;

@@ -4,12 +4,12 @@ import { LanguageKeys } from '#lib/I18n';
 import { FoxxieEvents, GuildMessage } from '#lib/Types';
 import { deleteMessage, sendLoadingMessage } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
-import type { TFunction } from '@foxxie/i18n';
 import { ZeroWidthSpace, cast, deepClone, minutes } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { ArgumentStream } from '@sapphire/lexure';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import { DiscordAPIError, EmbedBuilder, ImageFormat, MessageCollector, Routes } from 'discord.js';
+import { TFunction } from 'i18next';
 import { FoxxieArgs, FoxxieCommand } from './commands';
 
 const EMOJIS = { BACK: '◀', STOP: '⏹' };

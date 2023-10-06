@@ -4,11 +4,11 @@ import { AutomationListener } from '#lib/Structures';
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
 import { fetchChannel, isBoostMessage } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
-import { TFunction } from '@foxxie/i18n';
 import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { ListenerOptions } from '@sapphire/framework';
 import { GuildPremiumTier, type Guild, type GuildMember, type GuildTextBasedChannel } from 'discord.js';
+import { TFunction } from 'i18next';
 
 @ApplyOptions<ListenerOptions>({
     enabled: !isDev(),

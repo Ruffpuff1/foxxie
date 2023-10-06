@@ -1,4 +1,4 @@
-import { CustomGet } from '@foxxie/i18n';
+import { CustomGet } from '#lib/Types';
 import { cast } from '@ruffpuff/utilities';
 import { DiscordAPIError, RESTJSONErrorCodes } from 'discord.js';
 

@@ -3,6 +3,7 @@ import { blue } from 'colorette';
 import { RecentTrack } from '../Structures/RecentTrack';
 import { UserPlay } from '../Structures/Entities/UserPlay';
 import { PlaySource } from '../Enums/PlaySource';
+import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class PlayRepository {
@@ -102,7 +103,7 @@ export class PlayRepository {
             }
         });
 
-        return filtered;
+        return new List(filtered);
     }
 
     public static async getUserPlays(userId: string, limit: number) {

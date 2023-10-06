@@ -10,17 +10,17 @@ import { PlaySource } from '../Enums/PlaySource';
 import { UpdateTypeBitField, UpdateTypeBits } from '../Enums/UpdateType';
 import { LastFmRepository } from '../Repositories/LastFmRepository';
 import { PlayRepository } from '../Repositories/PlayRepository';
+import { UserPlay } from '../Structures/Entities/UserPlay';
 import { RecentTrack, RecentTrackList } from '../Structures/RecentTrack';
 import { UpdateUserQueueItem } from '../Structures/UpdateUserQueueItem';
 import { UserArtist } from '../Structures/UserArtist';
-import { UserPlay } from '../Structures/Entities/UserPlay';
 
 export class UpdateService {
     private lastFmRepository = new LastFmRepository();
 
     public async addUsersToUpdateQueue(users: UserEntity[]) {
         container.logger.debug(`[${blue('Last.fm')}] Adding ${users.length} users to update queue.`);
-        await Promise.all(users.map(user => this.onNextAsync(new UpdateUserQueueItem(user.id, true))));
+        for (const user of users) await this.onNextAsync(new UpdateUserQueueItem(user.id, true));
     }
 
     public async getOutdatedUsers(timeFilter: number) {
@@ -92,7 +92,6 @@ export class UpdateService {
         }
 
         this.addRecentPlayToMemberCache(queueItem.userId, recentTracks.content.recentTracks);
-
         if (!recentTracks.content.recentTracks.length) {
             await this.setUserUpdateTime(userEntity);
 

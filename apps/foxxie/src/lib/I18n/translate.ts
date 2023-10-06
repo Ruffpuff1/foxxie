@@ -1,9 +1,13 @@
+import { CustomFunctionGet, CustomGet } from '#lib/Types';
 import { DecoratorIdentifiers } from '@sapphire/decorators';
 import { Identifiers } from '@sapphire/framework';
-import { LanguageKeys } from '.';
 import { SubcommandPluginIdentifiers } from '@sapphire/plugin-subcommands';
+import { LanguageKeys } from '.';
 
-export function translate(key: string): string {
+export type Identifier = Identifiers | DecoratorIdentifiers | SubcommandPluginIdentifiers | string;
+export type TranslatedResult = CustomFunctionGet<string, Record<any, any>, string> | CustomGet<string, string>;
+
+export function translate(key: Identifier): TranslatedResult {
     switch (key) {
         // Preconditions
         case Identifiers.CommandDisabled:
@@ -22,10 +26,10 @@ export function translate(key: string): string {
             return LanguageKeys.Arguments.Missing;
         case Identifiers.ArgsUnavailable:
             return LanguageKeys.Arguments.Unavailable;
-            // Subcommandsd
-            case SubcommandPluginIdentifiers.MessageSubcommandNoMatch:
-                return LanguageKeys.Preconditions.MessageSubcommandNoMatch;
+        // Subcommandsd
+        case SubcommandPluginIdentifiers.MessageSubcommandNoMatch:
+            return LanguageKeys.Preconditions.MessageSubcommandNoMatch;
         default:
-            return key;
+            return LanguageKeys.Globals.DefaultT;
     }
 }

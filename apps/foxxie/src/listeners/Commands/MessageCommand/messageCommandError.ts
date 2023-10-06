@@ -4,7 +4,6 @@ import { EnvKeys, FoxxieEvents } from '#lib/Types';
 import { clientOwners } from '#root/config';
 import { Colors, rootFolder } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';
-import type { TFunction } from '@foxxie/i18n';
 import { ZeroWidthSpace, cast } from '@ruffpuff/utilities';
 import { Args, ArgumentError, Command, Identifiers, Listener, MessageCommandErrorPayload, UserError } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
@@ -12,6 +11,7 @@ import { codeBlock, cutText } from '@sapphire/utilities';
 import { captureException } from '@sentry/node';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import { DiscordAPIError, EmbedBuilder, HTTPError, Message } from 'discord.js';
+import { TFunction } from 'i18next';
 
 interface FoxxieError extends DiscordAPIError {
     path?: string;
@@ -122,7 +122,7 @@ export class UserListener extends Listener<FoxxieEvents.MessageCommandError> {
             args.t(identifier, {
                 ...cast<any>(error.context),
                 prefix: args.commandContext.commandPrefix
-            })
+            }) as string
         );
     }
 

@@ -3,11 +3,11 @@ import { EnvKeys, GuildMessage } from '#lib/Types';
 import { BrandingColors, Colors } from '#utils/constants';
 import { fetchReactionUsers, floatPromise } from '#utils/util';
 import { EnvParse } from '@foxxie/env';
-import { TFunction } from '@foxxie/i18n';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { cast } from '@sapphire/utilities';
 import { EmbedBuilder, GuildMember, Routes, TextBasedChannel, TimestampStyles, inlineCode, time } from 'discord.js';
+import { TFunction } from 'i18next';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
 @Entity('poll', { schema: 'public' })

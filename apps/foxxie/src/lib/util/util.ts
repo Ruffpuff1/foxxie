@@ -1,7 +1,7 @@
 import { acquireSettings } from '#lib/Database';
 import { DetailedDescription, GuildMessage } from '#lib/Types';
 import { cast, isNumber, isThenable } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { ArgType, container } from '@sapphire/framework';
 import { APIUser } from 'discord-api-types/v10';
 import {
     APIEmbedField,
@@ -140,7 +140,7 @@ export function getImage(message: Message): string | null {
     return attachment ? attachment.proxyURL || attachment.url : null;
 }
 
-export function resolveClientColor(resolveable: GuildResolvable | null, color?: ColorResolvable): ColorResolvable {
+export function resolveClientColor(resolveable: GuildResolvable | null, color?: ColorResolvable | number): ColorResolvable {
     if (color) return color;
 
     if (!resolveable) return BrandingColors.Primary;
@@ -188,3 +188,16 @@ export function parseDescription(description: string | string[] | undefined) {
     if (!description) return null;
     return Array.isArray(description) ? description.join('\n') : description;
 }
+
+export const getUnionArg = async <K extends keyof ArgType, T>(cb: (opt: K) => Promise<T>, ...opts: K[]) => {
+    let lastError: unknown;
+    for (const opt of opts) {
+        try {
+            return await cb(opt);
+        } catch (error) {
+            lastError = error;
+        }
+    }
+
+    throw lastError;
+};

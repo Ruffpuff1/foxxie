@@ -1,4 +1,4 @@
-import { FT, T } from '@foxxie/i18n';
+import { FT, T } from "#lib/Types";
 
 export const BooleanDisabled = T('arguments:booleanDisabled');
 export const BooleanEnabled = T('arguments:booleanEnabled');

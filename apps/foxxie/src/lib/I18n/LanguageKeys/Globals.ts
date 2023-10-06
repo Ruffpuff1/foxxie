@@ -1,4 +1,4 @@
-import { FT, T } from '@foxxie/i18n';
+import { FT, T } from "#lib/Types";
 
 export const AbortOptions = T<string[]>('globals:abortOptions');
 export const And = FT<{ value: string[] }, string>('globals:and');

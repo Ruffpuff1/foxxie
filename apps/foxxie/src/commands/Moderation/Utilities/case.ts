@@ -1,12 +1,12 @@
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage, PermissionLevels } from '#lib/Types';
-import { getT } from '@foxxie/i18n';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { PermissionsBitField } from 'discord.js';
+import { getFixedT } from 'i18next';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['modlog'],
@@ -17,7 +17,7 @@ import { PermissionsBitField } from 'discord.js';
 })
 export default class UserCommand extends FoxxieCommand {
     public registerApplicationCommands(registry: ApplicationCommandRegistry) {
-        const t = getT('en-US');
+        const t = getFixedT('en-US');
 
         registry.registerChatInputCommand(builder =>
             builder

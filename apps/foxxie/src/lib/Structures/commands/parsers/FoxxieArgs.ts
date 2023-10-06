@@ -1,10 +1,10 @@
 import { HttpMethodEnum, fetch } from '@foxxie/fetch';
-import { TFunction } from '@foxxie/i18n';
 import { cast } from '@ruffpuff/utilities';
 import { Args, MessageCommand, MessageCommandContext, Result, UserError, container } from '@sapphire/framework';
 import { ArgumentStream } from '@sapphire/lexure';
 import type { Message } from 'discord.js';
 import type { FoxxieCommand } from '../FoxxieCommand';
+import { TFunction } from 'i18next';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class FoxxieArgs extends Args {

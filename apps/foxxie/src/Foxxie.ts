@@ -7,11 +7,8 @@ import { EnvParse } from '@foxxie/env';
 import { container } from '@sapphire/framework';
 import { init } from '@sentry/node';
 import i18next from 'i18next';
-import { initI18n } from './config';
 
 async function main() {
-    await initI18n();
-
     try {
         const client = new FoxxieClient();
 

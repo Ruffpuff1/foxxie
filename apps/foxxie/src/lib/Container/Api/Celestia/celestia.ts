@@ -15,10 +15,10 @@ import {
     VillagerKey
 } from '@foxxie/celestia-api-types';
 import { fetch } from '@foxxie/fetch';
-import { TFunction } from '@foxxie/i18n';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { Collection, EmbedBuilder, italic } from 'discord.js';
+import { TFunction } from 'i18next';
 
 export async function fetchVillager(param: string): Promise<RouteRequestPayloads['CelestiaVillagersVillager']> {
     try {

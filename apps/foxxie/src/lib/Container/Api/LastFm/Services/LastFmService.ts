@@ -12,11 +12,12 @@ import { AutocompleteInteraction, Collection, Message, StringSelectMenuOptionBui
 
 import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { request } from 'undici';
+import { ArtistAutoComplete } from '../AutoCompleteHandlers/ArtistAutoComplete';
 import { ArtistBuilders } from '../Builders';
 import { UserBuilders } from '../Builders/UserBuilders';
 import { DataSourceFactory } from '../Factories/DataSourceFactory';
-import { TopArtist } from '../Structures/TopArtist';
 import { UserPlay } from '../Structures/Entities/UserPlay';
+import { TopArtist } from '../Structures/TopArtist';
 import { IndexService } from './IndexService';
 import { PlayService } from './PlayService';
 import { TimeService } from './TimeService';
@@ -34,7 +35,9 @@ export class LastFmService {
      */
     public baseApiUrl = 'https://ws.audioscrobbler.com/2.0';
 
-    public cache = new Map<string, List<TopArtist> | UserPlay>();
+    public cache = new Map<string, List<TopArtist> | UserPlay | List<string> | List<LastFmArtistEntity>>();
+
+    public artistAutoComplete = new ArtistAutoComplete();
 
     public artistBuilders = new ArtistBuilders();
 
@@ -158,20 +161,8 @@ export class LastFmService {
      * @returns
      */
     public async getAutocompleteArtistOptions(interaction: AutocompleteInteraction): Promise<void> {
-        const option = interaction.options.getFocused(true);
-        const username = await this.getGuildMemberLastFmUsername(interaction.user.id, interaction.guildId!);
-
-        if (!username) return interaction.respond([]);
-        const cachedData = this.#autocomplateArtistOptionCache.get(username);
-
-        if (cachedData) {
-            const fuzzy = new FuzzySearch(new Collection(cachedData.map(d => [d, { key: d }])), ['key']);
-            const results = option.value ? fuzzy.runFuzzy(option.value).map(v => v.key) : cachedData;
-
-            return interaction.respond(results.slice(0, 5).map(r => ({ name: r, value: r })));
-        }
-
-        return interaction.respond([]);
+        const results = await this.artistAutoComplete.generateSuggestions(interaction);
+        return interaction.respond(results);
     }
 
     /**
@@ -254,10 +245,10 @@ export class LastFmService {
 
         const interaction = cast<Command.ChatInputCommandInteraction>(message);
 
-        const artist = interaction.options.getString('artist', true);
+        const artist = interaction.options.getString('artist', false);
         const ephemeral = interaction.options.getBoolean('hidden') || false;
 
-        return [artist, ephemeral];
+        return [artist || '', ephemeral];
     }
 
     /**

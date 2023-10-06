@@ -35,8 +35,6 @@ export default class FoxxieClient extends SapphireClient {
 
         container.apis = new ApiService();
 
-        container.utilities = new UtilityService();
-
         container.redis = EnvParse.boolean('REDIS_ENABLED')
             ? new RedisManager({
                   host: process.env.REDIS_HOST,
@@ -48,6 +46,8 @@ export default class FoxxieClient extends SapphireClient {
     }
 
     public async login(): Promise<string> {
+        container.utilities = new UtilityService();
+
         const { shardCount } = clientOptions;
         container.logger.info(
             `${magentaBright('Gateway:')} Logging in with ${shardCount ?? 1} shard${(shardCount ?? 1) > 1 ? 's' : ''}`

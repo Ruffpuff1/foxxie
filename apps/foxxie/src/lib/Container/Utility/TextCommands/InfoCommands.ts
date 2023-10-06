@@ -6,9 +6,9 @@ import { isGuildOwner, sendLoadingMessage } from '#utils/Discord';
 import { BrandingColors, emojis } from '#utils/constants';
 import { floatPromise, resolveEmbedField } from '#utils/util';
 import { EnvParse } from '@foxxie/env';
-import { TFunction } from '@foxxie/i18n';
 import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
+import { TFunction } from 'i18next';
 import { ChannelType, EmbedAuthorData, EmbedBuilder, Guild, GuildMember, Role } from 'discord.js';
 
 export class InfoTextCommandService {
@@ -39,7 +39,7 @@ export class InfoTextCommandService {
                 iconURL: user.displayAvatarURL()
             });
 
-        const owners = EnvParse.array('CLIENT_OWNERS');
+        const owners = EnvParse.array(EnvKeys.ClientOwners);
 
         embed.addFields(
             resolveEmbedField(`${titles.about}${owners.includes(user.id) ? ` ${emojis.ruffThink}` : ''}`, about.join('\n'))
@@ -64,7 +64,7 @@ export class InfoTextCommandService {
 
         const embed = new EmbedBuilder() //
             .setColor(color)
-            .setThumbnail(guild.iconURL()!)
+            .setThumbnail(guild.iconURL() || null)
             .setAuthor(this.guildFormatTitle(guild))
             .setDescription(
                 [
@@ -250,7 +250,7 @@ export class InfoTextCommandService {
 
     private async guildFetchData(guild: Guild): Promise<[number, GuildMember | null, number]> {
         const messages = await container.utilities.guild(guild).settings.get(GuildSettings.MessageCount);
-        const me = await resolveToNull(guild.members.fetch(EnvParse.string(EnvKeys.ClientId)));
+        const me = guild.client.id ? await resolveToNull(guild.members.fetch(guild.client.id)) : null;
         const owner = await resolveToNull(guild.members.fetch(guild.ownerId));
 
         return [messages, owner, me?.displayColor || BrandingColors.Primary];

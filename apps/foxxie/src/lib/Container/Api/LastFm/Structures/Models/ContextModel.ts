@@ -1,6 +1,6 @@
 import { UserEntity } from '#lib/Database/entities/UserEntity';
-import { TFunction } from '@foxxie/i18n';
 import { Channel, Guild, User } from 'discord.js';
+import { TFunction } from 'i18next';
 
 export class ContextModel {
     public prefix: string;

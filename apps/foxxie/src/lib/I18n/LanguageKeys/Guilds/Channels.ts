@@ -1,4 +1,5 @@
-import { T } from '@foxxie/i18n';
+import { T } from "#lib/Types";
+
 
 export const GUILD_NEWS = T('guilds/channels:GUILD_NEWS');
 export const GUILD_STAGE_VOICE = T('guilds/channels:GUILD_STAGE_VOICE');

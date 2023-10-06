@@ -1,7 +1,7 @@
-import type { TFunction } from '@foxxie/i18n';
 import { cast } from '@ruffpuff/utilities';
 import { codeBlock, isNullish, toTitleCase } from '@sapphire/utilities';
 import { Collection } from 'discord.js';
+import { TFunction } from 'i18next';
 import type { SchemaKey } from '.';
 import type { GuildEntity } from '../entities/Guild/GuildEntity';
 

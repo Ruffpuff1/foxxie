@@ -1,12 +1,12 @@
 import { GuildEntity, GuildSettings } from '#lib/Database';
-import { FoxxieEvents, GuildMessage } from '#lib/Types';
+import { CustomGet, FoxxieEvents, GuildMessage } from '#lib/Types';
 import { isModerator } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { floatPromise } from '#utils/util';
-import type { CustomGet, TFunction } from '@foxxie/i18n';
 import { cast, isDev, seconds } from '@ruffpuff/utilities';
 import { Listener, ListenerOptions, PieceContext } from '@sapphire/framework';
 import type { Awaitable, PickByValue } from '@sapphire/utilities';
+import { TFunction } from 'i18next';
 import { ModerationBitField, ModerationFlagBits, ModerationHardActionFlags } from './ModerationBitfield';
 
 export abstract class ModerationListener extends Listener {

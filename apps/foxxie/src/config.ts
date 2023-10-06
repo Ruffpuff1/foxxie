@@ -2,16 +2,17 @@ process.env.NODE_ENV ??= 'development';
 
 import { localeMap } from '#languages';
 import { LanguageKeys } from '#lib/I18n';
+import { CustomGet } from '#lib/Types';
 import { emojis, rootFolder } from '#utils/constants';
 import { TimestampStyles, bold, time } from '@discordjs/builders';
 import { EnvParse } from '@foxxie/env';
-import { Formatter, TFunction, getT, i18next, init } from '@foxxie/i18n';
 import { Iso6391Enum } from '@foxxie/i18n-codes';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { type LogLevel } from '@sapphire/framework';
+import type { I18nextFormatters, InternationalizationOptions, TFunction } from '@sapphire/plugin-i18next';
 import { DurationFormatAssetsTime, DurationFormatter } from '@sapphire/time-utilities';
-import { GatewayIntentBits, type LocaleString } from 'discord-api-types/v10';
+import { GatewayIntentBits } from 'discord-api-types/v10';
 import {
     ActivitiesOptions,
     ActivityType,
@@ -20,13 +21,14 @@ import {
     Collection,
     GuildChannel,
     GuildExplicitContentFilter,
+    GuildVerificationLevel,
     Partials,
     WebhookClientData,
     codeBlock,
     inlineCode
 } from 'discord.js';
 import { config } from 'dotenv-cra';
-import type { InterpolationOptions } from 'i18next';
+import { getFixedT, type InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
 
 config({
@@ -153,7 +155,7 @@ export function channelList(value: Collection<string, GuildChannel>, t: TFunctio
     );
 }
 
-function getFormatters(): Formatter[] {
+function getFormatters(): I18nextFormatters[] {
     return [
         {
             name: 'and',
@@ -222,16 +224,41 @@ function getFormatters(): Formatter[] {
         },
         {
             name: 'verificationlevel',
-            format: (value, lng) => getT(cast<LocaleString>(lng))(`guilds/verificationLevels:${value}`)
+            format: (value: GuildVerificationLevel, lng) => {
+                const t = getFixedT(lng!);
+                let key: CustomGet<string, string>;
+
+                switch (value) {
+                    case GuildVerificationLevel.None:
+                        key = LanguageKeys.Guilds.VerificationLevels.NONE;
+                        break;
+                    case GuildVerificationLevel.Low:
+                        key = LanguageKeys.Guilds.VerificationLevels.LOW;
+                        break;
+                    case GuildVerificationLevel.Medium:
+                        key = LanguageKeys.Guilds.VerificationLevels.MEDIUM;
+                        break;
+                    case GuildVerificationLevel.High:
+                        key = LanguageKeys.Guilds.VerificationLevels.HIGH;
+                        break;
+                    case GuildVerificationLevel.VeryHigh:
+                        key = LanguageKeys.Guilds.VerificationLevels.VERY_HIGH;
+                        break;
+                    default:
+                        key = LanguageKeys.Guilds.VerificationLevels.NONE;
+                }
+
+                return t(key);
+            }
         },
         {
             name: 'permissions',
-            format: (value, lng) => getT(cast<LocaleString>(lng))(`guilds/permissions:${value}`)
+            format: (value, lng) => getFixedT(lng!)(`guilds/permissions:${value}`)
         },
         {
             name: 'permissionarray',
             format: (value: string[], lng) => {
-                const t = getT(cast<LocaleString>(lng));
+                const t = getFixedT(lng!);
                 const mapped = value.map(perm => t(`guilds/permissions:${perm}`)).map(bold);
 
                 const and = new Intl.ListFormat(lng!, { type: 'conjunction' }).format(mapped);
@@ -264,16 +291,21 @@ function getFormatters(): Formatter[] {
         },
         {
             name: 'channellist',
-            format: (value, lng) => channelList(value, getT(lng!))
+            format: (value, lng) => channelList(value, getFixedT(lng!))
         },
         {
             name: 'contentfilter',
-            format: (value: GuildExplicitContentFilter, lng) => getT(lng!)(LanguageKeys.Guilds.ContentFilters.FilterArray[value])
+            format: (value: GuildExplicitContentFilter, lng) =>
+                getFixedT(lng!)(LanguageKeys.Guilds.ContentFilters.FilterArray[value])
         },
 
         {
             name: 'dateFormat',
             format: value => formatLongDate(getDurationValue(value))
+        },
+        {
+            name: 'bold',
+            format: value => bold(value)
         },
         {
             name: 'ordinal',
@@ -282,24 +314,28 @@ function getFormatters(): Formatter[] {
     ];
 }
 
-export async function initI18n() {
-    await init({
-        languageDirectory: join(__dirname, 'languages'),
-        returnObjects: true,
-        returnEmptyString: false,
-        returnNull: false,
-        load: 'all',
-        fallbackLng: 'en-US',
+function parseI18nOptions(): InternationalizationOptions {
+    return {
         defaultNS: 'globals',
-        supportedLngs: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishMexico],
-        interpolation: getInterpolation(),
-        initImmediate: false,
-        debug: false
-    });
-
-    for (const { name, format } of getFormatters()) {
-        i18next.services.formatter!.add(name, format);
-    }
+        defaultMissingKey: 'default',
+        formatters: getFormatters(),
+        defaultLanguageDirectory: join(__dirname, 'languages'),
+        i18next: {
+            supportedLngs: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishMexico],
+            preload: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishMexico],
+            returnObjects: true,
+            returnEmptyString: false,
+            returnNull: false,
+            load: 'all',
+            lng: 'en-US',
+            fallbackLng: 'en-US',
+            defaultNS: 'globals',
+            interpolation: getInterpolation(),
+            overloadTranslationOptionHandler: (args: string[]) => ({ defaultValue: args[1] }),
+            initImmediate: false,
+            debug: false
+        }
+    };
 }
 
 export const clientOptions: ClientOptions = {
@@ -312,6 +348,7 @@ export const clientOptions: ClientOptions = {
     regexPrefix: parseRegexPrefix(),
     loadDefaultErrorListeners: false,
     loadMessageCommandListeners: true,
+    i18n: parseI18nOptions(),
     shards: 'auto',
     caseInsensitiveCommands: true,
     caseInsensitivePrefixes: true,

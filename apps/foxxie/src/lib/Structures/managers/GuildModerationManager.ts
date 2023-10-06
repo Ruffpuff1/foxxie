@@ -32,13 +32,21 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
      * @param force Whether to force checking the database.
      * @returns The current number of moderation cases for a guild.
      */
-    public async getCurrentId(force?: boolean) {
-        if (this._count === null || force) {
-            const cases = await container.db.moderations.find({ where: { guildId: this.guild?.id } });
-            this._count = cases.length ?? 0;
-        }
+    public async getCurrentId() {
+        const cases = await container.db.moderations.find({
+            where: {
+                guildId: this.guild?.id
+            },
+            order: {
+                caseId: 'DESC'
+            }
+        });
 
-        return this._count;
+        const id = cases[0].caseId;
+
+        if (!this._count) this._count = id;
+
+        return id;
     }
 
     /**
@@ -66,6 +74,7 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         if (typeof id === 'string') {
             const entries = await container.db.moderations.find({
                 where: {
+                    guildId: this.guild?.id,
                     userId: id
                 }
             });
@@ -78,7 +87,7 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
                     container.db.moderations
                         .findOne({
                             where: {
-                                guildId: this.guild!.id,
+                                guildId: this.guild?.id,
                                 caseId
                             }
                         })
@@ -92,7 +101,7 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
 
         const found = await container.db.moderations.findOne({
             where: {
-                guildId: this.guild!.id,
+                guildId: this.guild?.id,
                 caseId: id
             }
         });

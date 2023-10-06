@@ -1,4 +1,4 @@
-import { FT, T } from '@foxxie/i18n';
+import { FT, T } from '#lib/Types';
 
 export const BoostMessageDefault = T('listeners/events:boostMessageDefault');
 export const GoodbyeDefault = T('listeners/events:goodbyeDefault');

@@ -37,6 +37,10 @@
         "species": "",
         "zodiac": ""
     },
+    "lastFmChatInputOptionArtistName": "artista",
+    "lastFmChatInputOptionArtistDescription": "El artista que desea buscar (por defecto se reproduce actualmente).",
+    "lastFmChatInputSubcommandArtistName": "artista",
+    "lastFmChatInputSubcommandArtistDescription": "Muestra la información del artista que estás escuchando o buscando en ese momento.",
     "lastFmDetailedDescription": {
         "description": "",
         "usage": "",
@@ -92,8 +96,12 @@
     "lastFmPlayPlaysByYou_other": "",
     "lastFmPlayWasPlaying": "",
     "lastFmTitles": {
-        "statistics": "",
-        "summary": ""
+        "about": "• Sobre",
+        "lastFmStats": "• Last.fm estadísticas",
+        "months": "• Meses",
+        "statistics": "• Estadísticas",
+        "summary": "• Resumen",
+        "years": "• Años"
     },
     "lastFmTrackNotFoundForUser": ""
 }

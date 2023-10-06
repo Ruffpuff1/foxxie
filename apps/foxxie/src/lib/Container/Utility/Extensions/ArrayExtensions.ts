@@ -92,6 +92,11 @@ export class List<T> {
         return new List(mapped);
     }
 
+    public distinct() {
+        const set = new Set([...this.array]);
+        return new List([...set]);
+    }
+
     public take(amount?: number) {
         return this.slice(0, amount);
     }
@@ -127,6 +132,16 @@ export class List<T> {
         return new List(this.array.slice(start, end));
     }
 
+    public addRange(items: T[] | List<T>) {
+        if (items instanceof List) {
+            this.push(...items.toArray());
+            return this;
+        }
+
+        this.push(...items);
+        return this;
+    }
+
     public push(...items: T[]): number {
         return this.array.push(...items);
     }
@@ -134,6 +149,11 @@ export class List<T> {
     public sort(compareFn?: ((a: T, b: T) => number) | undefined) {
         const sorted = this.array.sort(compareFn);
         return new List(sorted);
+    }
+
+    public filter(predicate?: _.ListIterateeCustom<T, boolean> | undefined): List<T> {
+        const filtered = _.filter(this.array, predicate);
+        return new List(filtered);
     }
 
     public get length(): number {

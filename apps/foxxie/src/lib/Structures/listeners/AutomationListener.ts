@@ -1,9 +1,9 @@
 import { LanguageKeys } from '#lib/I18n';
 import { resolveClientColor } from '#utils/util';
-import type { TFunction } from '@foxxie/i18n';
 import { Listener } from '@sapphire/framework';
 import type { APIEmbed } from 'discord-api-types/v10';
 import { APIEmbedField, ClientEvents, EmbedBuilder, GuildMember } from 'discord.js';
+import { TFunction } from 'i18next';
 
 export abstract class AutomationListener<T extends keyof ClientEvents | symbol = ''> extends Listener<T> {
     private matchRegex = /{user\.(mention|name|tag|discrim|position|createdat|joinedat)}|{guild(\.(splash|count))?}/g;

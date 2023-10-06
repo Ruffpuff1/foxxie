@@ -1,9 +1,11 @@
 import { LastFmService } from '#Api/LastFm';
-import { UpdateTypeBitField, UpdateTypeBits } from '#Api/LastFm/Enums/UpdateType';
+import { UpdateTypeBitField } from '#Api/LastFm/Enums/UpdateType';
 import { WhoKnowsMode } from '#Api/LastFm/Enums/WhoKnowsMode';
+import { SettingsService } from '#Api/LastFm/Services/SettingsService';
 import { UserService } from '#Api/LastFm/Services/UserService';
 import { ContextModel } from '#Api/LastFm/Structures/Models/ContextModel';
 import { WhoKnowsSettings } from '#Api/LastFm/Structures/WhoKnowsSettings';
+import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage } from '#lib/Types';
 import { sendLoadingMessage } from '#utils/Discord';
@@ -103,7 +105,14 @@ export class LastFmTextCommands {
         const user = await args.pick('username').catch(() => message.author);
 
         const contextUser = await container.db.users.ensure(user.id);
-        if (!contextUser.lastFm.username) throw new UserError({ identifier: 'ntoLoggeedin' });
+        if (!contextUser.lastFm.username)
+            throw new UserError({
+                identifier:
+                    user.id === message.author.id
+                        ? LanguageKeys.Commands.Fun.LastFmNotLoggedIn
+                        : LanguageKeys.Commands.Fun.LastFmUserNotLoggedIn,
+                context: { user: user.username }
+            });
 
         const content = await container.apis.lastFm.userBuilders.stats(
             new ContextModel({ user: message.author, guild: message.guild, t: args.t, channel: message.channel }, contextUser)
@@ -116,41 +125,7 @@ export class LastFmTextCommands {
     public async update(...[message, args]: MessageRunArgs) {
         const type = await args
             .repeat('string', { times: 5 })
-            .then(res => {
-                const full = ['full', 'force', 'f'];
-                const bits = new UpdateTypeBitField();
-
-                if (full.some(f => res.includes(f))) {
-                    bits.add(UpdateTypeBits.Full);
-                } else {
-                    const allPlays = ['plays', 'allplays'];
-                    if (allPlays.some(f => res.includes(f))) {
-                        bits.add(UpdateTypeBits.AllPlays);
-                    }
-
-                    const artists = ['artists', 'artist', 'a'];
-                    if (artists.some(f => res.includes(f))) {
-                        bits.add(UpdateTypeBits.Artist);
-                    }
-
-                    const albums = ['albums', 'album', 'ab'];
-                    if (albums.some(f => res.includes(f))) {
-                        bits.add(UpdateTypeBits.Albums);
-                    }
-
-                    const tracks = ['tracks', 'track', 'tr'];
-                    if (tracks.some(f => res.includes(f))) {
-                        bits.add(UpdateTypeBits.Tracks);
-                    }
-                }
-
-                const discogs = ['discogs', 'discog', 'vinyl', 'collection'];
-                if (discogs.some(f => res.includes(f))) {
-                    bits.add(UpdateTypeBits.Discogs);
-                }
-
-                return bits;
-            })
+            .then(res => SettingsService.GetUpdateType(res))
             .catch(() => new UpdateTypeBitField());
 
         const entity = await container.db.users.ensure(message.author.id);

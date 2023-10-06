@@ -1,5 +1,4 @@
-import { DetailedDescription, DetailedDescriptionArgs } from '#lib/Types';
-import { FT, T } from '@foxxie/i18n';
+import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/Types';
 import { ChannelMention } from 'discord.js';
 
 export const PollCancelled = T('commands/tools:pollCancelled');

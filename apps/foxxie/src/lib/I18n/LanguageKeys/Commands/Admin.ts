@@ -1,5 +1,4 @@
-import type { HelpDisplayData } from '#lib/Types';
-import { FT, T } from '@foxxie/i18n';
+import { T, type HelpDisplayData, FT } from '#lib/Types';
 
 export const EvalConsole = FT<{ name: string; footer: string; time: string }>('commands/admin:evalConsole');
 export const EvalDescription = T('commands/admin:evalDescription');

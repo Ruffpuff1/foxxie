@@ -26,9 +26,9 @@ export class SubCommandsService {
                 ...['a', 'artist', 'artistinfo'].map(name => ({
                     name,
                     messageRun: (message: GuildMessage, args: FoxxieCommand.Args) =>
-                        this.textCommands.lastFm.artist(message, args)
-                    // chatInputRun: (interaction: FoxxieCommand.ChatInputCommandInteraction) =>
-                    //     this.chatInputCommands.artist(interaction)
+                        this.textCommands.lastFm.artist(message, args),
+                    chatInputRun: (interaction: FoxxieCommand.ChatInputCommandInteraction) =>
+                        this.chatInputCommands.lastFm.artist(interaction)
                 })),
                 // ...['listening', 'nowplaying', 'np'].map(name => ({
                 //     name,
@@ -38,19 +38,26 @@ export class SubCommandsService {
                 //         this.chatInputCommands.listening(interaction),
                 //     default: true
                 // })),
-                ...['globalWhoKnows', 'gwk', 'globalwk', 'gw'].map(name => ({
+                ...['globalwhoknows', 'gwk', 'globalwk', 'gw'].map(name => ({
                     name,
                     messageRun: (message: GuildMessage, args: FoxxieCommand.Args) =>
-                        this.textCommands.lastFm.globalWhoKnows(message, args)
+                        this.textCommands.lastFm.globalWhoKnows(message, args),
+                    chatInputRun: (interaction: FoxxieCommand.ChatInputCommandInteraction) =>
+                        this.chatInputCommands.lastFm.globalWhoKnows(interaction)
                 })),
                 ...['stats', 'ui', 'user'].map(name => ({
                     name,
-                    messageRun: (message: GuildMessage, args: FoxxieCommand.Args) => this.textCommands.lastFm.stats(message, args)
+                    messageRun: (message: GuildMessage, args: FoxxieCommand.Args) =>
+                        this.textCommands.lastFm.stats(message, args),
+                    chatInputRun: (interaction: FoxxieCommand.ChatInputCommandInteraction) =>
+                        this.chatInputCommands.lastFm.stats(interaction)
                 })),
                 ...['update', 'u'].map(name => ({
                     name,
                     messageRun: (message: GuildMessage, args: FoxxieCommand.Args) =>
-                        this.textCommands.lastFm.update(message, args)
+                        this.textCommands.lastFm.update(message, args),
+                    chatInputRun: (interaction: FoxxieCommand.ChatInputCommandInteraction) =>
+                        this.chatInputCommands.lastFm.update(interaction)
                 }))
             ]
         ],
@@ -67,9 +74,9 @@ export class SubCommandsService {
         return this.subCommandData.get(name)!;
     }
 
-    // private get chatInputCommands() {
-    //     return container.apis.lastFm.chatInputCommands;
-    // }
+    private get chatInputCommands() {
+        return container.utilities.chatInputCommands;
+    }
 
     private get textCommands() {
         return container.utilities.textCommands;

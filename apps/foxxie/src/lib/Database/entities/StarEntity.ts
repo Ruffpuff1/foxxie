@@ -4,13 +4,13 @@ import { defaultStarboardEmojis } from '#utils/Discord';
 import { Colors } from '#utils/constants';
 import { fetchReactionUsers, floatPromise, getAttachment, getImage, isVideo } from '#utils/util';
 import { bold } from '@discordjs/builders';
-import { TFunction } from '@foxxie/i18n';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { cutText, debounce, isNullish } from '@sapphire/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import { DiscordAPIError, EmbedBuilder, HTTPError, TextBasedChannel } from 'discord.js';
+import { TFunction } from 'i18next';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { GuildSettings, acquireSettings } from '..';
 

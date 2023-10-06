@@ -1,7 +1,6 @@
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { getOption, getSubcommand } from '#utils/util';
-import { getT } from '@foxxie/i18n';
 import { RequiresClientPermissions } from '@sapphire/decorators';
 import { UserError, container } from '@sapphire/framework';
 import {
@@ -12,6 +11,7 @@ import {
 } from 'discord.js';
 import { ArtistBuilders } from '../Builders/ArtistBuilders';
 import { ContextModel } from '../Structures/Models/ContextModel';
+import { getFixedT } from 'i18next';
 
 export class LastFmChatInputCommandService {
     // private service: LastFmService;
@@ -75,7 +75,7 @@ export class LastFmChatInputCommandService {
         };
     };
 
-    #enUS = getT('en-US');
+    #enUS = getFixedT('en-US');
 
     @RequiresClientPermissions(new PermissionsBitField([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.ManageMessages]))
     public async artist(...[interaction]: ChatInputRunArgs) {

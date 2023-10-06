@@ -2,17 +2,20 @@ import { ApiService } from '#Api/ApiService';
 import type { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import { UtilityService } from '#lib/Container/Utility/UtilityService';
-import type { GuildEntity, ModerationEntity, MongoDB, SerializerStore, TaskStore } from '#lib/Database';
+import type { GuildEntity, ModerationEntity, MongoDB, SerializerStore } from '#lib/Database';
 import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
-import type { FoxxieCommand, InviteManager, RedisManager, ScheduleManager, WorkerManager } from '#lib/Structures';
-import { TFunction } from '@foxxie/i18n';
+import type { FoxxieCommand, InviteManager, RedisManager, ScheduleManager } from '#lib/Structures';
 import type { Piece, Store } from '@sapphire/framework';
-import type { PickByValue } from '@sapphire/utilities';
+import { TFunction, TOptions } from '@sapphire/plugin-i18next';
+import type { NonNullObject, PickByValue } from '@sapphire/utilities';
 import type { Snowflake } from 'discord-api-types/v10';
 import type { Awaitable, User } from 'discord.js';
+import { TOptionsBase } from 'i18next';
 import type { GuildMessage, TypeOfEmbed } from './Discord';
 import { FoxxieEvents } from './Events';
-import type { ColorData, LanguageString } from './Utils';
+import type { ColorData, CustomFunctionGet, CustomGet, LanguageString } from './Utils';
+import { WorkerService } from '#lib/Container/Workers';
+import { TaskStore } from '#lib/Container/Stores/Tasks/TaskStore';
 
 declare module 'discord.js' {
     interface Client {
@@ -48,7 +51,7 @@ declare module '@sapphire/pieces' {
         db: MongoDB;
         redis: RedisManager | null;
         schedule: ScheduleManager;
-        workers: WorkerManager;
+        workers: WorkerService;
         /**
          * Api manager
          */
@@ -89,5 +92,24 @@ declare module '@sapphire/framework' {
         store: Store<any>;
         timespan: number;
         username: User;
+    }
+}
+
+declare module 'i18next' {
+    export interface TFunction {
+        lng: string;
+        ns?: string;
+
+        <K extends string, TReturn>(key: CustomGet<K, TReturn>, options?: TOptionsBase | string): TReturn;
+        <K extends string, TReturn>(key: CustomGet<K, TReturn>, defaultValue: TReturn, options?: TOptionsBase | string): TReturn;
+        <K extends string, TArgs extends NonNullObject, TReturn>(
+            key: CustomFunctionGet<K, TArgs, TReturn>,
+            options?: TOptions<TArgs>
+        ): TReturn;
+        <K extends string, TArgs extends NonNullObject, TReturn>(
+            key: CustomFunctionGet<K, TArgs, TReturn>,
+            defaultValue: TReturn,
+            options?: TOptions<TArgs>
+        ): TReturn;
     }
 }

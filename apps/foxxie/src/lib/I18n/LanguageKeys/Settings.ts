@@ -1,4 +1,4 @@
-import { T } from '@foxxie/i18n';
+import { T } from "#lib/Types";
 
 export const AfkPrefix = T('settings:afkPrefix');
 export const AfkRole = T('settings:afkRole');

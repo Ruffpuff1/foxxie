@@ -1,12 +1,13 @@
 import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { LastFmArtistEntity } from '#lib/Database/entities/LastFmArtistEntity';
 import { Response } from '#utils/Response';
-import { minutes } from '@ruffpuff/utilities';
+import { days, hours, minutes, seconds } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { User } from 'discord.js';
 import { DataSourceFactory } from '../Factories/DataSourceFactory';
 import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { LastFmRepository } from '../Repositories/LastFmRepository';
+import { PlayRepository } from '../Repositories/PlayRepository';
 import { ArtistInfo } from '../Structures/ArtistInfo';
 import { ArtistSearch } from '../Structures/Models/ArtistModels';
 import { RecentTrackList } from '../Structures/RecentTrack';
@@ -110,6 +111,104 @@ export class ArtistsService {
         }
 
         return freshTopArtists;
+    }
+
+    public async getLatestArtists(discordUserId: string, cacheEnabled = true) {
+        try {
+            const cacheKey = `user-recent-artists-${discordUserId}`;
+
+            const cachedAvailable = this._cache.get(cacheKey) as List<string>;
+            if (cachedAvailable && cacheEnabled) {
+                return cachedAvailable;
+            }
+
+            const entity = await container.db.users.ensure(discordUserId);
+            if (!entity.lastFm.username) return new List(['AutocompleteLoginRequired']);
+
+            const plays = await PlayRepository.getUserPlaysWithinTimeRange(entity.id, Date.now() - days(2));
+
+            const artists = plays
+                .orderByDescending(o => o.timestamp)
+                .map(s => s.artist.toString())
+                .distinct();
+
+            this._cache.set(cacheKey, artists);
+            setTimeout(() => this._cache.delete(cacheKey), seconds(30));
+
+            return artists;
+        } catch (err) {
+            container.logger.error(`Error in getLatestArtists`, err);
+            throw err;
+        }
+    }
+
+    public async getRecentTopArtists(discordUserId: string, cacheEnabled = true, daysToGoBack = 20) {
+        try {
+            const cacheKey = `user-recent-top-artists-${discordUserId}`;
+
+            const cacheAvailable = this._cache.get(cacheKey) as List<string>;
+            if (cacheAvailable && cacheEnabled) {
+                return cacheAvailable;
+            }
+
+            const entity = await container.db.users.ensure(discordUserId);
+            if (!entity.lastFm.username) return new List(['AutocompleteLoginRequired']);
+
+            const plays = await PlayRepository.getUserPlaysWithinTimeRange(entity.id, Date.now() - days(daysToGoBack));
+
+            const artists = plays
+                .groupBy(g => g.artist)
+                .orderByDescending(o => o.length)
+                .map(s => s[0]?.artist);
+
+            this._cache.set(cacheKey, artists);
+            setTimeout(() => this._cache.delete(cacheKey), seconds(120));
+
+            return artists;
+        } catch (err) {
+            container.logger.error('Error in getRecentTopArtists', err);
+            throw err;
+        }
+    }
+
+    public async searchThroughArtists(searchValue: string, cacheEnabled = true) {
+        try {
+            const cacheKey = 'artists-all';
+
+            let artists = this._cache.get(cacheKey) as List<LastFmArtistEntity>;
+
+            if (!artists && cacheEnabled) {
+                artists = await container.db.lastFmArtists.repository
+                    .find({
+                        where: {
+                            popularity: [
+                                {
+                                    $gt: 9
+                                }
+                            ]
+                        }
+                    })
+                    .then(results => new List(results));
+
+                this._cache.set(cacheKey, artists);
+                setTimeout(() => this._cache.delete(cacheKey), hours(2));
+            }
+
+            const results = artists
+                .filter(artist => artist.name.toLowerCase().startsWith(searchValue.toLowerCase()))
+                .orderByDescending(o => o.popularity);
+
+            results.addRange(
+                artists
+                    .filter(artist => artist.name.toLowerCase().includes(searchValue.toLowerCase()))
+                    .orderByDescending(o => o.popularity)
+            );
+
+            return results;
+        } catch (err) {
+            container.logger.error(`Error in searchThroughArtists`, err);
+            throw err;
+        }
     }
 
     private async getCachedArtist(artistName: string, lastFmUserName: string, userId: string | null, redirectsEnabled = false) {

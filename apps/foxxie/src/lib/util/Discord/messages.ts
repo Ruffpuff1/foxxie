@@ -1,13 +1,13 @@
 import { LanguageKeys } from '#lib/I18n';
-import type { GuildMessage } from '#lib/Types';
+import type { CustomFunctionGet, CustomGet, GuildMessage } from '#lib/Types';
 import { floatPromise } from '#utils/util';
-import type { CustomFunctionGet, CustomGet, TOptionsBase } from '@foxxie/i18n';
 import { cast, minutes, randomArray } from '@ruffpuff/utilities';
 import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import type { Message, TextChannel, UserResolvable } from 'discord.js';
 import { MessageCreateOptions, MessageType } from 'discord.js';
+import { TOptionsBase } from 'i18next';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 /**
@@ -48,7 +48,7 @@ export async function sendLoadingMessage(
     args = {}
 ): Promise<Message | GuildMessage> {
     const t = await container.db.guilds.acquire(msg.guild.id!, s => s.getLanguage());
-    const translated = t<string[]>(key, cast<TOptionsBase>(args));
+    const translated = t(key, cast<TOptionsBase>(args));
     const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
 
     return send(cast<Message>(msg), { content });
@@ -60,7 +60,7 @@ export async function sendLoadingMessageInChannel(
     args = {}
 ): Promise<Message | GuildMessage> {
     const t = await container.db.guilds.acquire(channel.guild.id!, s => s.getLanguage());
-    const translated = t<string[]>(key, cast<TOptionsBase>(args));
+    const translated = t(key, args);
     const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
 
     return channel.send({ content });

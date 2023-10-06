@@ -1,6 +1,9 @@
 import { ApplicationCommandRegistry } from '@sapphire/framework';
+import { LastFmChatInputCommands } from './LastFmCommands';
 
 export class ChatInputCommandsService {
+    public lastFm = new LastFmChatInputCommands();
+
     private idHints = new Map<ChatInputCommand, string[]>([[ChatInputCommand.LastFm, ['1149530889907347466']]]);
 
     public getCommandOptions(command: ChatInputCommand): ApplicationCommandRegistry.RegisterOptions {

@@ -50,6 +50,7 @@ declare module '@foxxie/env' {
 
 export const enum EnvKeys {
     ClientId = 'CLIENT_ID',
+    ClientOwners = 'CLIENT_OWNERS',
     DiscogsConsumerKey = 'DISCOGS_CONSUMER_KEY',
     DiscogsOAuthSignature = 'DISCOGS_OAUTH_SIGNATURE',
     HasteToken = 'HASTE_TOKEN',

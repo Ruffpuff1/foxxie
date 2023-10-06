@@ -1,4 +1,5 @@
-import { FT, T } from '@foxxie/i18n';
+
+import { FT, T } from '#lib/Types';
 import type { UserMention } from 'discord.js';
 
 export const Abort = T('listeners/errors:abort');

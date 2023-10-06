@@ -2,10 +2,10 @@ import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage, PermissionLevels } from '#lib/Types';
 import { sendLoadingMessage } from '#utils/Discord';
-import { TFunction, i18next } from '@foxxie/i18n';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { Piece, Store } from '@sapphire/framework';
 import { Stopwatch } from '@sapphire/stopwatch';
+import i18next, { TFunction } from 'i18next';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['r'],

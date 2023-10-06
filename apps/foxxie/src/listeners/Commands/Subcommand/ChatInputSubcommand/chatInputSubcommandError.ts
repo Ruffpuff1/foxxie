@@ -19,8 +19,8 @@ interface FoxxieError extends DiscordAPIError {
 
 const ignoredErrorCodes: (number | string)[] = [RESTJSONErrorCodes.UnknownChannel, RESTJSONErrorCodes.UnknownMessage];
 
-export class UserListener extends Listener<FoxxieEvents.ChatInputCommandError> {
-    public async run(...[error, { interaction, command }]: EventArgs<FoxxieEvents.ChatInputCommandError>) {
+export class UserListener extends Listener<FoxxieEvents.ChatInputSubcommandError> {
+    public async run(...[error, { interaction, command }]: EventArgs<FoxxieEvents.ChatInputSubcommandError>) {
         const t = interaction.guildId ? await acquireSettings(interaction.guildId, s => s.getLanguage()) : getFixedT('en-US');
         // if the error is something that the user should be aware of, send them a message.
         if (typeof error === 'string') return this.stringError(interaction, t, error);

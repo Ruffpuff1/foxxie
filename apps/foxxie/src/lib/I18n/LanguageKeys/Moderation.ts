@@ -1,5 +1,4 @@
-import type { RoleLanguageKeyData } from '#lib/Types';
-import { FT, T } from '@foxxie/i18n';
+import { T, type RoleLanguageKeyData, FT } from '#lib/Types';
 
 export const ActionSharedRoleSetupExisting = T('moderation:actionSharedRoleSetupExisting');
 export const ActionSharedRoleSetupExistingName = T('moderation:actionSharedRoleSetupExistingName');

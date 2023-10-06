@@ -1,5 +1,4 @@
-import type { HelpDisplayData } from '#lib/Types';
-import { FT, T } from '@foxxie/i18n';
+import { FT, T, type HelpDisplayData } from '#lib/Types';
 
 export const ReminderCreateSuccess = FT<{ date: Date; text: string }>('commands/misc:reminderCreateSuccess');
 export const ReminderDefault = T('commands/misc:reminderDefault');

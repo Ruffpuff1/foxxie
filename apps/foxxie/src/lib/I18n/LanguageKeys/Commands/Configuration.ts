@@ -1,5 +1,4 @@
-import { DetailedDescription, DetailedDescriptionArgs } from '#lib/Types';
-import { FT, T } from '@foxxie/i18n';
+import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/Types';
 
 export const ConfDescription = T('commands/configuration:confDescription');
 export const ConfGet = FT<{ key: string; value: string }>('commands/configuration:confGet');

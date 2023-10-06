@@ -11,12 +11,12 @@ import {
     TypeVariationAppealNames
 } from '#utils/moderation';
 import { messageLink } from '#utils/transformers';
-import type { TFunction } from '@foxxie/i18n';
 import { cast, resolveToNull, Time, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { EmbedBuilder, Guild, GuildChannel, User } from 'discord.js';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { GuildSettings } from '..';
+import { TFunction } from 'i18next';
 
 @Entity('moderation', { schema: 'public' })
 export class ModerationEntity extends BaseEntity {
