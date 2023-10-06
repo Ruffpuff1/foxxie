@@ -42,35 +42,20 @@
     "lastFmArtistPlaysByYou": "",
     "lastFmArtistPlaysByYou_other": "",
     "lastFmArtistPlaysByYouLastWeek": "",
+    "lastFmChatInputOptionArtistName": "artista",
+    "lastFmChatInputOptionArtistDescription": "El artista que desea buscar (por defecto se reproduce actualmente).",
+    "lastFmChatInputSubcommandArtistName": "artista",
+    "lastFmChatInputSubcommandArtistDescription": "Muestra la información del artista que estás escuchando o buscando en ese momento.",
     "lastFmDetailedDescription": {
         "description": "",
         "usage": "",
         "subcommands": [
             {
-                "command": "",
-                "description": [
-                    ""
-                ],
+                "command": "artista",
+                "description": "",
                 "options": [
                     {
-                        "name": "",
-                        "description": ""
-                    }
-                ],
-                "examples": [
-                    "",
-                    "",
-                    ""
-                ]
-            },
-            {
-                "command": "",
-                "description": [
-                    ""
-                ],
-                "options": [
-                    {
-                        "name": "",
+                        "name": "artista",
                         "description": ""
                     },
                     {
@@ -86,10 +71,25 @@
             },
             {
                 "command": "",
-                "description": [
-                    ""
-                ],
+                "description": "",
                 "examples": [
+                    "",
+                    ""
+                ]
+            },
+            {
+                "command": "",
+                "description": "",
+                "examples": [
+                    "",
+                    ""
+                ]
+            },
+            {
+                "command": "",
+                "description": "",
+                "examples": [
+                    "",
                     "",
                     ""
                 ]
@@ -97,6 +97,7 @@
         ]
     },
     "lastFmStatsMostActiveDayOfWeek": "",
+    "lastFmNotLoggedIn": "",
     "lastFmPlayListeners": "",
     "lastFmPlayListeners_other": "",
     "lastFmPlayNowPlaying": "",
@@ -108,12 +109,13 @@
     "lastFmPlayPlaysByYou_other": "",
     "lastFmPlayWasPlaying": "",
     "lastFmTitles": {
-        "about": "",
-        "lastFmStats": "",
-        "months": "",
-        "statistics": "",
-        "summary": "",
-        "years": ""
+        "about": "• Sobre",
+        "lastFmStats": "• Last.fm estadísticas",
+        "months": "• Meses",
+        "statistics": "• Estadísticas",
+        "summary": "• Resumen",
+        "years": "• Años"
     },
-    "lastFmTrackNotFoundForUser": ""
+    "lastFmTrackNotFoundForUser": "",
+    "lastFmUserNotLoggedIn": ""
 }
