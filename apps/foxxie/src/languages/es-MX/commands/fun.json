@@ -46,6 +46,8 @@
     "lastFmChatInputOptionArtistDescription": "El artista que desea buscar (por defecto se reproduce actualmente).",
     "lastFmChatInputSubcommandArtistName": "artista",
     "lastFmChatInputSubcommandArtistDescription": "Muestra la información del artista que estás escuchando o buscando en ese momento.",
+    "lastFmChatInputSubcommandGlobalWhoKnows": "globalquiénsabe",
+    "lastFmChatInputSubcommandGlobalWhoKnowsDescription": "Muestra qué otros usuarios escuchan a un artista.",
     "lastFmDetailedDescription": {
         "description": "",
         "usage": "",
