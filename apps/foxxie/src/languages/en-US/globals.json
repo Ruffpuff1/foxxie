@@ -1,8 +1,16 @@
 {
-    "abortOptions": ["stop", "cancel", "abort", "end", "done"],
+    "abortOptions": [
+        "stop",
+        "cancel",
+        "abort",
+        "end",
+        "done"
+    ],
     "and": "{{value, and}}",
     "any": "any",
     "case": "case",
+    "chatInputOptionHidden": "hidden",
+    "chatInputOptionHiddenDescription": "Whether to hide the command's output (defaults to false).",
     "dateValue": "{{value, date}}",
     "dateDuration": "{{date, dateFormat}} ({{date, duration}})",
     "dateFormat": "MM/DD/YYYY",
@@ -18,6 +26,10 @@
     "infinite": "infinite",
     "input": "the input",
     "me": "me",
+    "milliseconds": "{{count, number}} millisecond",
+    "milliseconds_other": "{{count, number}} milliseconds",
+    "minutes": "{{count, number}} minute",
+    "minutes_other": "{{count, number}} minutes",
     "no": "No",
     "none": "None",
     "numberCompact": "{{value, numbercompact}}",
@@ -25,7 +37,13 @@
     "numberOrdinal": "{{value, ordinal}}",
     "other": "other",
     "remaining": "{{value, remaining}}",
-    "resetOptions": ["none", "reset", "default"],
+    "resetOptions": [
+        "none",
+        "reset",
+        "default"
+    ],
+    "seconds": "{{count, number}} second",
+    "seconds_other": "{{count, number}} seconds",
     "time": "{{value, time}}",
     "unknown": "unknown",
     "version": "",
