@@ -1,9 +1,11 @@
-import { FT, T } from "#lib/Types";
+import { FT, T } from '#lib/Types';
 
 export const AbortOptions = T<string[]>('globals:abortOptions');
 export const And = FT<{ value: string[] }, string>('globals:and');
 export const Any = T('globals:any');
 export const CaseT = T('globals:case');
+export const ChatInputOptionHidden = T('globals:chatInputOptionHidden');
+export const ChatInputOptionHiddenDescription = T('globals:chatInputOptionHiddenDescription');
 export const DateValue = FT<{ value: Date | number }, string>('globals:dataValue');
 export const DateDuration = FT<{ date: Date | number }, string>('globals:dateDuration');
 export const DateFormat = T('globals:dateFormat');
@@ -19,6 +21,8 @@ export const FullDateTime = FT<{ date: Date | number }, string>('globals:fullDat
 export const Infinte = T('globals:infinite');
 export const Input = T('globals:input');
 export const Me = T('globals:me');
+export const Milliseconds = FT<{ count: number }>('globals:milliseconds');
+export const Minutes = FT<{ count: number }>('globals:minutes');
 export const No = T('globals:no');
 export const None = T('globals:none');
 export const NumberCompact = FT<{ value: number }, string>('globals:numberCompact');
@@ -27,6 +31,7 @@ export const NumberOrdinal = FT<{ value: number }, string>('globals:numberOrdina
 export const Other = T('globals:other');
 export const Remaining = FT<{ value: number | Date }, string>('globals:remaining');
 export const ResetOptions = T<string[]>('globals:resetOptions');
+export const Seconds = FT<{ count: number }>('globals:seconds');
 export const Time = FT<{ value: Date | number }, string>('globals:time');
 export const Unknown = T('globals:unknown');
 export const Version = T('globals:version');

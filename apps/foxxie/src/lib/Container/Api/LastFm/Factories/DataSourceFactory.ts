@@ -54,4 +54,13 @@ export class DataSourceFactory {
 
         return topTracks;
     }
+
+    public async getTrackInfo(trackName: string, artistName: string, username: string | null = null) {
+        const track = await this.lastFmRepository.getTrackInfo(trackName, artistName, username);
+        return track;
+    }
+
+    public async searchTrack(searchQuery: string) {
+        return this.lastFmRepository.searchTrack(searchQuery);
+    }
 }

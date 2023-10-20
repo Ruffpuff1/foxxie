@@ -52,8 +52,6 @@ export class GuildPermissionService {
 
         out.push(`Permissions for **${name}**`, '');
 
-        console.log(node);
-
         if (node === true) {
             out.push(`${emojis.perms.granted} all commands (*)`);
         } else {
@@ -105,7 +103,6 @@ export class GuildPermissionService {
 
         for (const perm of node.allowed) {
             const [category, command] = perm.split('.');
-            console.log(category, command);
 
             if (!command && category === '*') {
                 return true;
@@ -122,8 +119,6 @@ export class GuildPermissionService {
             (tree[category] as Record<string, boolean>)[command] = true;
         }
 
-        console.log(node.allowed);
-
         return tree;
     }
 
@@ -133,8 +128,6 @@ export class GuildPermissionService {
             denied: [],
             id
         };
-
-        console.log(nodes);
 
         switch (type) {
             case 'user': {

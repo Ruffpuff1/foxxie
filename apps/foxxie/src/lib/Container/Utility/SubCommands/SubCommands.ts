@@ -38,6 +38,12 @@ export class SubCommandsService {
                 //         this.chatInputCommands.listening(interaction),
                 //     default: true
                 // })),
+                ...['spotifyimport', 'si', 'importspotify', 'import spotify'].map(name => ({
+                    name,
+                    chatInputRun: (interaction: FoxxieCommand.ChatInputCommandInteraction) => {
+                        this.chatInputCommands.lastFm.importSpotify(interaction);
+                    }
+                })),
                 ...['globalwhoknows', 'gwk', 'globalwk', 'gw'].map(name => ({
                     name,
                     messageRun: (message: GuildMessage, args: FoxxieCommand.Args) =>
@@ -51,6 +57,10 @@ export class SubCommandsService {
                         this.textCommands.lastFm.stats(message, args),
                     chatInputRun: (interaction: FoxxieCommand.ChatInputCommandInteraction) =>
                         this.chatInputCommands.lastFm.stats(interaction)
+                })),
+                ...['track', 'tr', 'ti', 'ts', 'trackinfo'].map(name => ({
+                    name,
+                    messageRun: (message: GuildMessage, args: FoxxieCommand.Args) => this.textCommands.lastFm.track(message, args)
                 })),
                 ...['update', 'u'].map(name => ({
                     name,

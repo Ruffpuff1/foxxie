@@ -9,6 +9,8 @@
     "and": "{{value, and}}",
     "any": "alguno",
     "case": "caso",
+    "chatInputOptionHidden": "oculto",
+    "chatInputOptionHiddenDescription": "Si se debe ocultar la salida del comando (el valor por defecto es falso).",
     "dateValue": "{{value, date}}",
     "dateDuration": "{{date, dateFormat}} ({{date, duration}})",
     "dateFormat": "DD/MM/YYYY",

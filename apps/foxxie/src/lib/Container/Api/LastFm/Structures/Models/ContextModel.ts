@@ -23,6 +23,10 @@ export class ContextModel {
         this.contextUser = contextUser;
         this.t = context.t;
     }
+
+    public get member() {
+        return this.guild.members.cache.get(this.user.id);
+    }
 }
 
 interface CommandContext {

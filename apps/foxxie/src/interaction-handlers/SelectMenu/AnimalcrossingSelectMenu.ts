@@ -1,6 +1,5 @@
-import { buildVillagerDisplay, fetchVillager } from '#Api/Celestia/celestia';
+import { ContextModel } from '#Api/LastFm/Structures/Models/ContextModel';
 import { floatPromise } from '#utils/util';
-import { Villager } from '@foxxie/celestia-api-types';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { PaginatedMessage } from '@sapphire/discord.js-utilities';
@@ -18,7 +17,13 @@ export class UserInteractionHandler extends InteractionHandler {
 
         switch (result.type) {
             case 'villager':
-                display = buildVillagerDisplay(result.data as Villager, t);
+                display = this._villagerBuilders.villager(
+                    result.data,
+                    new ContextModel(
+                        { t, user: interaction.user, guild: interaction.guild!, channel: interaction.channel! },
+                        null!
+                    )
+                );
                 break;
         }
 
@@ -36,10 +41,18 @@ export class UserInteractionHandler extends InteractionHandler {
 
         switch (type) {
             case 'villager':
-                data = await fetchVillager(value);
+                data = await this._celestiaRepository.getVillager(value);
                 break;
         }
 
-        return this.some({ data, type, messageId });
+        return this.some({ data: data.content, type, messageId });
+    }
+
+    private get _celestiaRepository() {
+        return this.container.apis.celestia.celestiaRepository;
+    }
+
+    private get _villagerBuilders() {
+        return this.container.apis.celestia.villagerBuilders;
     }
 }

@@ -69,6 +69,9 @@ export class Track extends BaseEntity {
     public durationMs: number;
 
     @Column()
+    public tempo: number;
+
+    @Column()
     public spotifyLastUpdated: number;
 
     public constructor(data: Partial<Track>) {

@@ -6,7 +6,7 @@ export class ChatInputCommandsService {
 
     private idHints = new Map<ChatInputCommand, string[]>([[ChatInputCommand.LastFm, ['1149530889907347466']]]);
 
-    public getCommandOptions(command: ChatInputCommand): ApplicationCommandRegistry.RegisterOptions {
+    public getRegisterOptions(command: ChatInputCommand): ApplicationCommandRegistry.RegisterOptions {
         return {
             idHints: this.getIdHints(command)
         };

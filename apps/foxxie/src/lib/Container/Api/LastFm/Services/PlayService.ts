@@ -1,12 +1,25 @@
-import { ArrayExtensions } from '#lib/Container/Utility/Extensions/ArrayExtensions';
+import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { days } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
+import { PlaySource } from '../Enums/PlaySource';
 import { PlayRepository } from '../Repositories/PlayRepository';
+import { UserPlay } from '../Structures/Entities/UserPlay';
 
 export class PlayService {
+    public static UserHasImported(userPlays: List<UserPlay>): boolean {
+        return (
+            userPlays
+                .filter(w => w.playSource === PlaySource.LastFm)
+                .groupBy(g => new Date(g.timestamp).toDateString())
+                .count(w => w.length > 2500) >= 7
+        );
+    }
+
     public async getAllUserPlays(userId: string) {
         const plays = await PlayRepository.getUserPlays(userId, 99999999);
-        return ArrayExtensions.Extend(plays);
+        const finalized = PlayRepository.GetFinalUserPlays(new List(plays));
+
+        return finalized;
     }
 
     public async getArtistPlaycountForTimePeriod(userId: string, artistName: string, daysToGoBack = 7) {
@@ -39,16 +52,34 @@ export class PlayService {
     }
 
     public async getArtistFirstPlayDate(userId: string, artistName: string) {
-        return container.db.lastFm.userPlays
-            .find({
-                where: {
-                    userId,
-                    artist: artistName
-                },
-                order: {
-                    timestamp: 'ASC'
-                }
-            })
-            .then(p => new Date(p[0].timestamp));
+        const artistPlays = await container.db.lastFm.userPlays.find({
+            where: {
+                userId,
+                artist: artistName
+            },
+            order: {
+                timestamp: 'ASC'
+            }
+        });
+
+        const first = artistPlays[0];
+
+        return first ? new Date(first.timestamp) : null;
+    }
+
+    public async getTrackFirstPlayDate(userId: string, trackName: string, artistName: string): Promise<Date | null> {
+        const artistPlays = await container.db.lastFm.userPlays.find({
+            where: {
+                userId,
+                artist: artistName
+            },
+            order: {
+                timestamp: 'ASC'
+            }
+        });
+
+        const foundTrack = artistPlays.filter(p => p.track.toLowerCase() === trackName.toLowerCase())[0];
+
+        return foundTrack ? new Date(foundTrack.timestamp) : null;
     }
 }

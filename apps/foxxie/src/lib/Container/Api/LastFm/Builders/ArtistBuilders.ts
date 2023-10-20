@@ -232,7 +232,7 @@ export class ArtistBuilders {
             if (artistCollection.length) {
                 const artistCollectionDescription: string[] = [];
                 for (const album of artistCollection.slice(0, 8)) {
-                    artistCollectionDescription.push(StringExtensions.userDiscogsWithAlbumName(album));
+                    artistCollectionDescription.push(StringExtensions.UserDiscogsWithAlbumName(album));
                 }
 
                 embed.addFields(resolveEmbedField('• Your Discogs collection', artistCollectionDescription.join('\n')));

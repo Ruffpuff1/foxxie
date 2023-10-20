@@ -14,17 +14,22 @@ import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { request } from 'undici';
 import { ArtistAutoComplete } from '../AutoCompleteHandlers/ArtistAutoComplete';
 import { ArtistBuilders } from '../Builders';
+import { TrackBuilders } from '../Builders/TrackBuilders';
 import { UserBuilders } from '../Builders/UserBuilders';
 import { DataSourceFactory } from '../Factories/DataSourceFactory';
+import { Track } from '../Structures/Entities/Track';
 import { UserPlay } from '../Structures/Entities/UserPlay';
 import { TopArtist } from '../Structures/TopArtist';
 import { IndexService } from './IndexService';
 import { PlayService } from './PlayService';
 import { TimeService } from './TimeService';
 import { TimerService } from './TimerService';
+import { TrackService } from './TrackService';
 import { UpdateService } from './UpdateService';
 import { UserService } from './UserService';
 import { WhoKnowsArtistService } from './WhoKnowsArtistService';
+import { WhoKnowsTrackService } from './WhoKnowsTrackService';
+import { ImportService } from './ImportService';
 
 /**
  * The service for handling the last.fm API.
@@ -35,13 +40,18 @@ export class LastFmService {
      */
     public baseApiUrl = 'https://ws.audioscrobbler.com/2.0';
 
-    public cache = new Map<string, List<TopArtist> | UserPlay | List<string> | List<LastFmArtistEntity>>();
+    public cache = new Map<
+        string,
+        List<TopArtist> | boolean | number | UserPlay | List<string> | List<LastFmArtistEntity> | Partial<Track>
+    >();
 
     public artistAutoComplete = new ArtistAutoComplete();
 
     public artistBuilders = new ArtistBuilders();
 
     public dataSourceFactory = new DataSourceFactory();
+
+    public importService = new ImportService();
 
     public indexService = new IndexService();
 
@@ -51,6 +61,10 @@ export class LastFmService {
 
     public timeService = new TimeService();
 
+    public trackBuilders = new TrackBuilders();
+
+    public trackService = new TrackService();
+
     public updateService = new UpdateService();
 
     public userBuilders = new UserBuilders();
@@ -58,6 +72,8 @@ export class LastFmService {
     public userService = new UserService();
 
     public whoKnowsArtistService = new WhoKnowsArtistService();
+
+    public whoKnowsTrackService = new WhoKnowsTrackService();
 
     /**
      * The regex for parsing last.fm descriptions.
@@ -413,6 +429,7 @@ export enum LastFmApiMethods {
     ArtistSearch = 'artist.search',
     LibraryGetArtists = 'library.getartists',
     TrackGetInfo = 'track.getInfo',
+    TrackSearch = 'track.search',
     UserGetInfo = 'user.getinfo',
     UserGetRecentTracks = 'user.getrecenttracks',
     UserGetTopArtists = 'user.getTopArtists',
@@ -680,9 +697,37 @@ export type LastFmApiReturnType<M extends LastFmApiMethods> = M extends LastFmAp
     ? GetUserTopArtistsResult
     : M extends LastFmApiMethods.UserGetTopTracks
     ? GetUserTopTracksResult
+    : M extends LastFmApiMethods.TrackSearch
+    ? TrackSearchResult
     : never;
 
 export type NumberBool = '0' | '1';
+
+export interface TrackSearchResult {
+    results: {
+        'opensearch:Query': {
+            '#text': '';
+            role: 'request';
+            searchTerms: string;
+            startPage: `${number}`;
+        };
+        'opensearch:totalResults': `${number}`;
+        'opensearch:startIndex': `${number}`;
+        'opensearch:itemsPerPage': `${number}`;
+        trackmatches: {
+            track: {
+                name: string;
+                artist: string;
+                url: string;
+                streamable: string;
+                listeners: `${number}`;
+                image: LastFmImage[];
+                mbid: string;
+            }[];
+        };
+    };
+    '@attr': Record<string, unknown>;
+}
 
 export interface GetUserTopTracksResult {
     toptracks: {

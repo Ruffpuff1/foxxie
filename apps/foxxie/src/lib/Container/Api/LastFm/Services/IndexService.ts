@@ -9,10 +9,10 @@ import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { PlayRepository } from '../Repositories/PlayRepository';
 import { TrackRepository } from '../Repositories/TrackRepository';
 import { UserRepository } from '../Repositories/UserRepository';
+import { UserPlay } from '../Structures/Entities/UserPlay';
 import { UserTrack } from '../Structures/Entities/UserTrack';
 import { IndexedUserStats } from '../Structures/IndexedUserStats';
 import { UserArtist } from '../Structures/UserArtist';
-import { UserPlay } from '../Structures/Entities/UserPlay';
 
 export class IndexService {
     public async modularUpdate(user: UserEntity, type: UpdateTypeBitField): Promise<IndexedUserStats> {
@@ -45,6 +45,17 @@ export class IndexService {
         }
 
         return stats;
+    }
+
+    public async recalculateTopLists(user: UserEntity) {
+        try {
+            await this.modularUpdate(
+                user,
+                new UpdateTypeBitField(UpdateTypeBits.Artist | UpdateTypeBits.Albums | UpdateTypeBits.Tracks)
+            );
+        } catch (e) {
+            throw e;
+        }
     }
 
     private async getTopArtistsForUser(user: UserEntity) {

@@ -3,8 +3,8 @@ import { cast } from '@ruffpuff/utilities';
 import { Args, MessageCommand, MessageCommandContext, Result, UserError, container } from '@sapphire/framework';
 import { ArgumentStream } from '@sapphire/lexure';
 import type { Message } from 'discord.js';
-import type { FoxxieCommand } from '../FoxxieCommand';
 import { TFunction } from 'i18next';
+import type { FoxxieCommand } from '../FoxxieCommand';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class FoxxieArgs extends Args {
@@ -65,6 +65,10 @@ export class FoxxieArgs extends Args {
         const result = this.nextSplitResult(options);
         if (result.isOk()) return result.unwrap();
         throw result.unwrapErr();
+    }
+
+    public restStringOrEmpty(): Promise<string> {
+        return this.rest('string').catch(() => '');
     }
 
     public get guild() {

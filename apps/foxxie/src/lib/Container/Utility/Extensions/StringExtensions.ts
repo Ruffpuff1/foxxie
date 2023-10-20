@@ -4,10 +4,10 @@ import { bold, italic } from 'discord.js';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class StringExtensions {
-    public static userDiscogsWithAlbumName(discogsRelease: UserDiscogsRelease): string {
+    public static UserDiscogsWithAlbumName(discogsRelease: UserDiscogsRelease): string {
         let description = '';
 
-        const formatEmote = this.getDiscogsFormatEmote(discogsRelease.release.format);
+        const formatEmote = this.GetDiscogsFormatEmote(discogsRelease.release.format);
         description += formatEmote ?? discogsRelease.release.format;
 
         description += ` - ${bold(
@@ -29,7 +29,7 @@ export class StringExtensions {
         return description;
     }
 
-    public static getDiscogsFormatEmote(format: string): string | null {
+    public static GetDiscogsFormatEmote(format: string): string | null {
         switch (format) {
             case 'Vinyl':
                 return emojis.vinyl;
@@ -40,5 +40,36 @@ export class StringExtensions {
         }
 
         return null;
+    }
+
+    public static KeyIntToPitchString(key: number) {
+        switch (key) {
+            case 0:
+                return 'C';
+            case 1:
+                return 'C#';
+            case 2:
+                return 'D';
+            case 3:
+                return 'D#';
+            case 4:
+                return 'E';
+            case 5:
+                return 'F';
+            case 6:
+                return 'F#';
+            case 7:
+                return 'G';
+            case 8:
+                return 'G#';
+            case 9:
+                return 'A';
+            case 10:
+                return 'A#';
+            case 11:
+                return 'B';
+            default:
+                return null;
+        }
     }
 }

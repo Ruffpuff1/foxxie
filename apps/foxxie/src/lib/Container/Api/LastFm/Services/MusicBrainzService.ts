@@ -51,17 +51,6 @@ export class MusicBrainzService {
         return new ArtistUpdated(artist);
     }
 
-    public async browseRecordingsForAnArtist(artist: string) {
-        const musicBrainzRecordingsResult = await fetch(`https://musicbrainz.org/ws/2/recording`)
-            .query({
-                artist,
-                limit: '2000',
-                fmt: 'json'
-            })
-            .json<{ recordings: IRecording[] }>();
-        return musicBrainzRecordingsResult;
-    }
-
     public async fetchMusicBrainzData(artist: string) {
         const musicBrainzQueryResult = await fetch(`https://musicbrainz.org/ws/2/artist`)
             .query({
@@ -91,18 +80,6 @@ export class MusicBrainzService {
             .json<IArtist>();
 
         return musicBrainzResults;
-    }
-
-    public getInstrumentCredits(musicBrainzData: IArtist): InstrumentCredit[] {
-        return (
-            musicBrainzData.relations
-                ?.filter(r => r['target-type'] === 'recording' && r.type === 'instrument' && r.direction === 'forward')
-                .map(r => ({
-                    type: r.attributes?.filter(a => a !== 'solo').join(', '),
-                    name: r.recording.title,
-                    link: `https://musicbrainz.org/recording/${r.recording.id}`
-                })) || []
-        );
     }
 }
 

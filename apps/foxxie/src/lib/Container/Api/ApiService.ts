@@ -1,5 +1,6 @@
 import { EnvKeys } from '#lib/Types';
 import { EnvParse } from '@foxxie/env';
+import { CelestiaService } from './Celestia/CelestiaService';
 import { DiscogsService } from './Discogs/DiscogsService';
 import { HastebinService } from './Hastebin/HastbinService';
 import { LastFmService, SpotifyService } from './LastFm';
@@ -8,6 +9,8 @@ import { LastFmService, SpotifyService } from './LastFm';
  * Api manager
  */
 export class ApiService {
+    public celestia = new CelestiaService();
+
     /**
      * The Discogs api service.
      */

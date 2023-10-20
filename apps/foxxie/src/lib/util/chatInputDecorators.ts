@@ -1,115 +1,57 @@
+import { LanguageKeys } from '#lib/I18n';
 import { CustomGet } from '#lib/Types';
-import { createClassDecorator, createMethodDecorator, createProxy } from '@sapphire/decorators';
-import { ApplicationCommandRegistry, container } from '@sapphire/framework';
+import { createMethodDecorator } from '@sapphire/decorators';
 import {
+    ApplicationCommandAttachmentOption,
     ApplicationCommandAutocompleteStringOptionData,
     ApplicationCommandBooleanOption,
+    ApplicationCommandOption,
     ApplicationCommandOptionChoiceData,
     ApplicationCommandOptionData,
     ApplicationCommandOptionType,
     ApplicationCommandStringOptionData,
     ApplicationCommandSubCommandData,
     ApplicationCommandUserOption,
-    ChatInputApplicationCommandData,
     Locale
 } from 'discord.js';
 import { TFunction, getFixedT } from 'i18next';
 
-const commandsCache = new Map<string | symbol, (ApplicationCommandOptionData & { translate?: boolean })[]>();
-// const commandMap = new Map<string | symbol, ChatInputApplicationCommandData>();
+export const commandsCache = new Map<string | symbol, (ApplicationCommandOptionData & { translate?: boolean })[]>();
 
-export function RegisterChatInputCommand(
-    options: Record<string, any>,
-    extraOptions?: ApplicationCommandRegistry.RegisterOptions,
-    subcommands?: string[]
-) {
-    return createClassDecorator(target =>
-        createProxy(target, {
-            construct: (ctor, [context, baseOptions = {}]) => {
-                const name: string = Reflect.get(baseOptions, 'name');
-                const subcommandKeys: string[] =
-                    subcommands ||
-                    (options.options as ApplicationCommandSubCommandData[])
-                        .filter(opt => opt.type === ApplicationCommandOptionType.Subcommand)
-                        .map(opt => opt.name) ||
-                    [];
+export const AddAttachmentOption = (
+    name: string,
+    description: string,
+    optionOptions?: ETranslatedOptionOptions<ApplicationCommandAttachmentOption>
+): MethodDecorator => {
+    return createMethodDecorator((_, propertyKey) => {
+        const options: ApplicationCommandAttachmentOption = {
+            name,
+            description,
+            type: ApplicationCommandOptionType.Attachment,
+            ...optionOptions
+        };
 
-                const englishUS = getFixedT('en-US');
-                const spanishMX = getFixedT('es-MX');
+        if (propertyKey.toString() === 'chatInputRun') {
+            const key = `${optionOptions?.commandName}.chatinputrun`;
+            const previous = commandsCache.get(key);
 
-                const localize = (
-                    opts: ApplicationCommandOptionData & {
-                        translate?: boolean;
-                    }
-                ) => {
-                    if (!opts.translate) return opts;
+            if (previous) previous.push(options);
+            else commandsCache.set(key, [options]);
+            return;
+        }
 
-                    opts.nameLocalizations = {
-                        [Locale.SpanishES]: spanishMX(opts.name)
-                    };
+        const key = propertyKey.toString().toLowerCase();
+        const previous = commandsCache.get(key);
 
-                    opts.descriptionLocalizations = {
-                        [Locale.SpanishES]: spanishMX(opts.description)
-                    };
-
-                    opts.name = englishUS(opts.name);
-                    opts.description = englishUS(opts.description);
-
-                    return opts;
-                };
-
-                if (subcommandKeys.length) {
-                    for (const subcommand of subcommandKeys) {
-                        const foundOptions = commandsCache.get(subcommand);
-
-                        if (foundOptions) {
-                            const dataSubcommand = options.options?.find(
-                                (opt: ApplicationCommandOptionData) => opt.name === subcommand
-                            );
-
-                            const mappedFound = foundOptions.map(opts => localize(opts)).reverse();
-
-                            if (dataSubcommand) {
-                                if (dataSubcommand.options) dataSubcommand.options.push(mappedFound);
-                                else dataSubcommand.options = [...mappedFound];
-                            } else if (options.options) {
-                                options.options.push({
-                                    name: subcommand,
-                                    description: 'unknown description',
-                                    type: ApplicationCommandOptionType.Subcommand,
-                                    options: [...mappedFound]
-                                });
-                            } else {
-                                options.options = [
-                                    {
-                                        name: subcommand,
-                                        description: 'unknown description',
-                                        type: ApplicationCommandOptionType.Subcommand,
-                                        options: [...mappedFound]
-                                    }
-                                ];
-                            }
-                        }
-                    }
-                }
-
-                container.applicationCommandRegistries
-                    .acquire(name)
-                    .registerChatInputCommand(options as ChatInputApplicationCommandData, extraOptions);
-
-                return new ctor(context, {
-                    ...baseOptions,
-                    ...options
-                });
-            }
-        })
-    );
-}
+        if (previous) previous.push(options);
+        else commandsCache.set(key, [options]);
+    });
+};
 
 export const AddStringOption = (
     name: string,
     description: string,
-    optionOptions?: Omit<ApplicationCommandStringOptionData, 'name' | 'description' | 'type'> & { translate?: boolean }
+    optionOptions?: ETranslatedOptionOptions<ApplicationCommandStringOptionData>
 ): MethodDecorator => {
     return createMethodDecorator((_, propertyKey) => {
         const options: ApplicationCommandStringOptionData = {
@@ -118,6 +60,15 @@ export const AddStringOption = (
             type: ApplicationCommandOptionType.String,
             ...optionOptions
         };
+
+        if (propertyKey.toString() === 'chatInputRun') {
+            const key = `${optionOptions?.commandName}.chatinputrun`;
+            const previous = commandsCache.get(key);
+
+            if (previous) previous.push(options);
+            else commandsCache.set(key, [options]);
+            return;
+        }
 
         const key = propertyKey.toString().toLowerCase();
         const previous = commandsCache.get(key);
@@ -130,7 +81,9 @@ export const AddStringOption = (
 export const AddStringAutoCompleteOption = (
     name: string,
     description: string,
-    optionOptions?: Omit<ApplicationCommandAutocompleteStringOptionData, 'name' | 'description' | 'type' | 'autocomplete'>
+    optionOptions?: Omit<ApplicationCommandAutocompleteStringOptionData, 'name' | 'description' | 'type' | 'autocomplete'> & {
+        translate?: boolean;
+    }
 ): MethodDecorator => {
     return createMethodDecorator((_, propertyKey) => {
         const options: ApplicationCommandAutocompleteStringOptionData = {
@@ -152,7 +105,7 @@ export const AddStringAutoCompleteOption = (
 export const AddBooleanOption = (
     name: string,
     description: string,
-    optionOptions: Omit<ApplicationCommandBooleanOption, 'name' | 'description' | 'type'>
+    optionOptions: ETranslatedOptionOptions<ApplicationCommandBooleanOption>
 ): MethodDecorator => {
     return createMethodDecorator((_, propertyKey) => {
         const options: ApplicationCommandBooleanOption = {
@@ -173,7 +126,7 @@ export const AddBooleanOption = (
 export const AddUserOption = (
     name: string,
     description: string,
-    optionOptions: Omit<ApplicationCommandUserOption, 'name' | 'description' | 'type'>
+    optionOptions: TranslatedOptionOptions<ApplicationCommandUserOption>
 ): MethodDecorator => {
     return createMethodDecorator((_, propertyKey) => {
         const options: ApplicationCommandUserOption = {
@@ -192,7 +145,13 @@ export const AddUserOption = (
 };
 
 export const AddEphemeralOption = () =>
-    AddBooleanOption('hidden', "Whether to hide the command's output (defaults to false).", { required: false });
+    AddTranslatedBooleanOption(
+        LanguageKeys.Globals.ChatInputOptionHidden,
+        LanguageKeys.Globals.ChatInputOptionHiddenDescription,
+        {
+            required: false
+        }
+    );
 
 export const MapStringOptionsToChoices: (...choices: string[]) => ApplicationCommandOptionChoiceData<string>[] = (...choices) =>
     choices.map(opt => ({ name: opt, value: opt }));
@@ -233,9 +192,18 @@ export const NameAndDescriptionToLocalizedSubCommands: (
 export const AddTranslatedStringOption = (
     nameKey: CustomGet<string, string>,
     descriptionKey: CustomGet<string, string>,
-    options: Omit<ApplicationCommandStringOptionData, 'name' | 'description' | 'type'>
+    options: TranslatedOptionOptions<ApplicationCommandStringOptionData | ApplicationCommandAutocompleteStringOptionData>
 ) => {
-    return AddStringOption(nameKey, descriptionKey, { ...options, translate: true });
+    if (options.autocomplete) return AddStringAutoCompleteOption(nameKey, descriptionKey, { ...options, translate: true });
+    return AddStringOption(nameKey, descriptionKey, { ...options, translate: true, autocomplete: false });
+};
+
+export const AddTranslatedBooleanOption = (
+    nameKey: CustomGet<string, string>,
+    descriptionKey: CustomGet<string, string>,
+    options: TranslatedOptionOptions<ApplicationCommandBooleanOption>
+) => {
+    return AddBooleanOption(nameKey, descriptionKey, { ...options, translate: true });
 };
 
 export interface TranslatedOptionChoice {
@@ -254,3 +222,10 @@ export class T {
         this.spanishMX = spanishMX;
     }
 }
+
+export type TranslatedOptionOptions<T extends ApplicationCommandOption> = Omit<T, 'name' | 'description' | 'type'>;
+
+export type ETranslatedOptionOptions<T extends ApplicationCommandOption> = Omit<T, 'name' | 'description' | 'type'> & {
+    translate?: boolean;
+    commandName?: string;
+};

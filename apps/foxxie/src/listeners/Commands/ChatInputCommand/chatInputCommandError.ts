@@ -21,7 +21,9 @@ const ignoredErrorCodes: (number | string)[] = [RESTJSONErrorCodes.UnknownChanne
 
 export class UserListener extends Listener<FoxxieEvents.ChatInputCommandError> {
     public async run(...[error, { interaction, command }]: EventArgs<FoxxieEvents.ChatInputCommandError>) {
-        const t = interaction.guildId ? await acquireSettings(interaction.guildId, s => s.getLanguage()) : getFixedT('en-US');
+        const t = interaction.guildId
+            ? await acquireSettings(interaction.guildId, s => s.getLanguage())
+            : getFixedT(interaction.locale);
         // if the error is something that the user should be aware of, send them a message.
         if (typeof error === 'string') return this.stringError(interaction, t, error);
         if (error instanceof ArgumentError) return this.argumentError(interaction, t, error);

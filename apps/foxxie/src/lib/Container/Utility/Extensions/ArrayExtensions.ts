@@ -71,6 +71,26 @@ export class List<T> {
         return result;
     }
 
+    public minBy(iteratee?: ValueIteratee<T> | undefined) {
+        const result = _.minBy(this.array, iteratee);
+
+        return result;
+    }
+
+    public count(predicate?: _.ListIterateeCustom<T, boolean> | undefined) {
+        if (predicate) {
+            const filteredResult = this.filter(predicate);
+            return filteredResult.length;
+        }
+
+        return this.array.length;
+    }
+
+    public average(predicate: (value: T) => number) {
+        const total = this.array.reduce((acc, rd) => (acc += predicate(rd)), 0);
+        return total / this.array.length;
+    }
+
     public orderBy(
         iteratees?: _.Many<_.ListIterator<T, unknown>> | undefined,
         orders?: _.Many<boolean | 'asc' | 'desc'> | undefined
@@ -92,6 +112,11 @@ export class List<T> {
         return new List(mapped);
     }
 
+    public find(predicate?: _.ListIterateeCustom<T, boolean> | undefined, fromIndex?: number | undefined) {
+        const found = _.find(this.array, predicate, fromIndex);
+        return found;
+    }
+
     public distinct() {
         const set = new Set([...this.array]);
         return new List([...set]);
@@ -107,6 +132,10 @@ export class List<T> {
 
     public member(index: number) {
         return this.array[index];
+    }
+
+    public all(predicate?: _.ListIterateeCustom<T, boolean> | undefined) {
+        return _.every(this.array, predicate);
     }
 
     public sumBy(iteratee?: string | ((value: T) => number) | undefined) {

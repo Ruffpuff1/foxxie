@@ -47,7 +47,7 @@ export class LastFmTextCommands {
     public async globalWhoKnows(...[message, args]: MessageRunArgs) {
         await sendLoadingMessage(message);
         const contextUser = await container.db.users.ensure(message.author.id);
-        const artistValue = await args.rest('string').catch(() => '');
+        const artistValue = await args.restStringOrEmpty();
 
         const currentSettings = new WhoKnowsSettings({
             hidePrivateUsers: false,
@@ -119,6 +119,21 @@ export class LastFmTextCommands {
         );
 
         await send(message, content);
+    }
+
+    @RequiresLastFmUsername()
+    public async track(...[message, args]: MessageRunArgs) {
+        await sendLoadingMessage(message);
+
+        const contextUser = await container.db.users.ensure(message.author.id);
+        const trackValues = await args.restStringOrEmpty();
+
+        const response = await this._trackBuilders.track(
+            new ContextModel({ user: message.author, guild: message.guild, t: args.t, channel: message.channel }, contextUser),
+            trackValues
+        );
+
+        await send(message, response);
     }
 
     @RequiresLastFmUsername()
@@ -194,6 +209,10 @@ export class LastFmTextCommands {
 
     private get _indexService() {
         return container.apis.lastFm.indexService;
+    }
+
+    private get _trackBuilders() {
+        return container.apis.lastFm.trackBuilders;
     }
 
     private get _updateService() {

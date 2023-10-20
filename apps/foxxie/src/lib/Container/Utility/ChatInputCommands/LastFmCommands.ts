@@ -7,63 +7,45 @@ import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import {
+    AddAttachmentOption,
     AddEphemeralOption,
     AddStringOption,
     AddTranslatedStringOption,
     AddUserOption,
-    MapStringOptionsToChoices,
-    NameAndDescriptionToLocalizedSubCommands,
-    T
+    MapStringOptionsToChoices
 } from '#utils/chatInputDecorators';
 import { emojis } from '#utils/constants';
 import { RequiresLastFmUsername } from '#utils/decorators';
-import { resolveClientColor } from '#utils/util';
+import { resolveClientColor, resolveEmbedField } from '#utils/util';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { RequiresClientPermissions } from '@sapphire/decorators';
 import { UserError, container } from '@sapphire/framework';
 import {
-    ChatInputApplicationCommandData,
+    Attachment,
     ChatInputCommandInteraction,
     EmbedBuilder,
+    Message,
     PermissionFlagsBits,
     PermissionsBitField,
     TimestampStyles,
+    bold,
+    inlineCode,
+    italic,
     time
 } from 'discord.js';
 import { getFixedT } from 'i18next';
 import _ from 'lodash';
-
-const t = new T(getFixedT('en-US'), getFixedT('es-MX'));
+import { List } from '../Extensions/ArrayExtensions';
 
 export class LastFmChatInputCommands {
-    public chatInputCommandData: () => ChatInputApplicationCommandData = () => {
-        const detailedDescription = t.englishUS(LanguageKeys.Commands.Fun.LastFmDetailedDescription);
-        return {
-            name: 'lastfm',
-            description: detailedDescription.description,
-            dmPermission: false,
-            defaultMemberPermissions: new PermissionsBitField([PermissionFlagsBits.EmbedLinks]).bitfield,
-            nsfw: false,
-            options: NameAndDescriptionToLocalizedSubCommands(
-                {
-                    name: LanguageKeys.Commands.Fun.LastFmChatInputSubcommandArtistName,
-                    description: LanguageKeys.Commands.Fun.LastFmChatInputSubcommandArtistDescription,
-                    translate: true
-                },
-                { name: 'globalwhoknows', description: 'see who knows an artist globally' },
-                { name: 'stats', description: 'search for lastfm user stats' },
-                { name: 'update', description: 'updating ur stats lolz' }
-            )
-        };
-    };
-
     @RequiresLastFmUsername()
     @RequiresClientPermissions(new PermissionsBitField([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.ManageMessages]))
     @AddTranslatedStringOption(
         LanguageKeys.Commands.Fun.LastFmChatInputOptionArtistName,
         LanguageKeys.Commands.Fun.LastFmChatInputOptionArtistDescription,
         {
-            required: false
+            required: false,
+            autocomplete: true
         }
     )
     @AddEphemeralOption()
@@ -95,7 +77,8 @@ export class LastFmChatInputCommands {
         LanguageKeys.Commands.Fun.LastFmChatInputOptionArtistName,
         LanguageKeys.Commands.Fun.LastFmChatInputOptionArtistDescription,
         {
-            required: false
+            required: false,
+            autocomplete: true
         }
     )
     @AddEphemeralOption()
@@ -120,6 +103,97 @@ export class LastFmChatInputCommands {
         );
 
         await interaction.editReply(options);
+    }
+
+    @RequiresLastFmUsername()
+    @RequiresClientPermissions(new PermissionsBitField([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.ManageMessages]))
+    @AddAttachmentOption('file-1', 'spotify file 1', {
+        required: true
+    })
+    @AddEphemeralOption()
+    public async importSpotify(...[interaction]: ChatInputRunArgs) {
+        const attachment1 = interaction.options.getAttachment('file-1', true);
+
+        const contextUser = await container.db.users.ensure(interaction.user.id);
+
+        let attachments = new List<Attachment | null>([attachment1]);
+
+        const noAttachments = attachments.all(a => a === null);
+        attachments = attachments.filter(a => a !== null);
+
+        await interaction.deferReply();
+        const member = await resolveToNull(interaction.guild.members.fetch(interaction.user.id));
+
+        const description: string[] = [];
+        const embed = new EmbedBuilder().setColor(resolveClientColor(interaction.guild, member?.displayColor));
+
+        if (noAttachments) {
+            throw 'no att';
+        }
+
+        try {
+            embed
+                .setAuthor({ name: 'Importing spotify into foxxie...' })
+                .setDescription(`${emojis.loading} Loading import files...`);
+            const message = await interaction.editReply({ embeds: [embed] });
+            console.log(message, description);
+
+            const [status, result, processedFiles] = await this._importService.handleSpotifyFiles(
+                attachments as List<Attachment>
+            );
+
+            if (status === 1) {
+                await this.updateImportEmbed(message, embed, description, 'Invalid Spotify import file.');
+                return;
+            }
+
+            await this.updateImportEmbed(
+                message,
+                embed,
+                description,
+                `${bold(result!.length.toLocaleString())} Spotify imports found`
+            );
+
+            const plays = await this._importService.spotifyImportToUserPlays(contextUser, result!);
+            await this.updateImportEmbed(
+                message,
+                embed,
+                description,
+                `${bold(plays!.length.toLocaleString())} actual plays found`
+            );
+
+            const playsWithoutDuplicates = await this._importService.removeDuplicateSpotifyImports(contextUser.id, plays);
+            await this.updateImportEmbed(
+                message,
+                embed,
+                description,
+                `${bold(playsWithoutDuplicates.length.toLocaleString())} new plays found`
+            );
+
+            if (playsWithoutDuplicates.length) {
+                await this._importService.insertImportPlays(contextUser, playsWithoutDuplicates);
+                await this.updateImportEmbed(message, embed, description, `- Added plays to database`);
+            }
+
+            await this._indexService.recalculateTopLists(contextUser);
+            await this.updateImportEmbed(message, embed, description, `- Recalculated top lists`);
+
+            const files = new List();
+            for (const attachment of processedFiles!
+                .orderBy(o => o)
+                .take(4)
+                .toArray()) {
+                files.push(inlineCode(attachment));
+            }
+
+            if (processedFiles!.length > 4) {
+                files.push(italic(`*+ ${processedFiles!.length} more files...*`));
+            }
+
+            embed.addFields(resolveEmbedField('Processed files', files.stringify()));
+
+            await this.updateImportEmbed(message, embed, description, `${emojis.success} Import completed`, true);
+        } catch {}
     }
 
     @AddUserOption('user', "The discord user who's lastfm stats to search for (defaults to you).", { required: false })
@@ -253,8 +327,33 @@ export class LastFmChatInputCommands {
         return ['en-US', 'es-MX', 'es-ES'].includes(locale);
     }
 
+    private async updateImportEmbed(
+        message: Message<boolean>,
+        embed: EmbedBuilder,
+        builder: string[],
+        lineToAdd: string,
+        finalLine = false,
+        components = null,
+        image = null
+    ) {
+        builder.push(lineToAdd);
+
+        const loadingLine = `${emojis.loading} Loading import files...`;
+        const appended = finalLine ? '' : `\n${loadingLine}`;
+
+        embed.setDescription(`${builder.filter(e => Boolean(e)).join('\n')}${appended}`);
+
+        if (image) console.log(image, components);
+
+        await message.edit({ embeds: [embed] });
+    }
+
     private get _artistBuilders() {
         return container.apis.lastFm.artistBuilders;
+    }
+
+    private get _importService() {
+        return container.apis.lastFm.importService;
     }
 
     private get _indexService() {

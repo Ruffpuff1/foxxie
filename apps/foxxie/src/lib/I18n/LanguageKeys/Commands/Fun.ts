@@ -33,6 +33,8 @@ export const LastFmChatInputOptionArtistName = T('commands/fun:lastFmChatInputOp
 export const LastFmChatInputOptionArtistDescription = T('commands/fun:lastFmChatInputOptionArtistDescription');
 export const LastFmChatInputSubcommandArtistName = T('commands/fun:lastFmChatInputSubcommandArtistName');
 export const LastFmChatInputSubcommandArtistDescription = T('commands/fun:lastFmChatInputSubcommandArtistDescription');
+export const LastFmChatInputSubcommandGlobalWhoKnows = T('commands/fun:lastFmChatInputSubcommandGlobalWhoKnows');
+export const LastFmChatInputSubcommandGlobalWhoKnowsDescription = T('commands/fun:lastFmChatInputSubcommandGlobalWhoKnowsDescription');
 export const LastFmDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
     'commands/fun:lastFmDetailedDescription'
 );

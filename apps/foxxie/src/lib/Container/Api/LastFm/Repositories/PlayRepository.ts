@@ -1,9 +1,9 @@
+import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { container } from '@sapphire/pieces';
 import { blue } from 'colorette';
-import { RecentTrack } from '../Structures/RecentTrack';
-import { UserPlay } from '../Structures/Entities/UserPlay';
 import { PlaySource } from '../Enums/PlaySource';
-import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
+import { UserPlay } from '../Structures/Entities/UserPlay';
+import { RecentTrack } from '../Structures/RecentTrack';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class PlayRepository {
@@ -62,15 +62,22 @@ export class PlayRepository {
         return new PlayUpdate(addedPlays, removedPlays);
     }
 
+    public static GetFinalUserPlays(userPlays: List<UserPlay>) {
+        const firstImportPlay = userPlays.filter(w => w.playSource !== PlaySource.LastFm).minBy(o => o.timestamp)?.timestamp;
+        const lastImportPlay = userPlays.filter(w => w.playSource === PlaySource.SpotifyImport).orderByDescending(o => o.timestamp).ofFirst(o => o.timestamp);
+
+        return userPlays.filter(w => w.playSource !== PlaySource.LastFm || w.timestamp > lastImportPlay || w.timestamp < firstImportPlay!)
+    }
+
     public static async ReplaceAllPlays(playsToInsert: UserPlay[], userId: string) {
         await this.removeAllCurrentLastFmPlays(userId);
 
         container.logger.debug(`[${blue('Last.fm')}] Inserting ${playsToInsert.length} time series plays for user ${userId}`);
-        await this.insertPlays(playsToInsert)
+        await this.insertPlays(playsToInsert);
     }
 
     public static async insertPlays(addedPlays: UserPlay[]) {
-        await container.db.lastFm.userPlays.insertMany(addedPlays);
+        return container.db.lastFm.userPlays.insertMany(addedPlays);
     }
 
     public static async removePlays(removedPlays: UserPlay[], userId: string) {
@@ -85,8 +92,20 @@ export class PlayRepository {
 
     public static async removeAllCurrentLastFmPlays(userId: string) {
         await container.db.lastFm.userPlays.deleteMany({
-            userId
+            userId,
+            playSource: PlaySource.LastFm
         });
+    }
+
+    public static async RemoveAllImportPlays(userId: string) {
+        const plays = await container.db.lastFm.userPlays.find({
+            where: {
+                userId,
+                playSource: PlaySource.SpotifyImport
+            }
+        });
+
+        await container.db.lastFm.userPlays.remove(plays);
     }
 
     /**
@@ -117,6 +136,19 @@ export class PlayRepository {
         });
 
         return plays.slice(0, limit);
+    }
+
+    public static async HasImported(userId: string) {
+        const play = await container.db.lastFm.userPlays.findOne({
+            where: {
+                userId,
+                playSource: {
+                    $ne: PlaySource.LastFm
+                }
+            }
+        });
+
+        return play !== null;
     }
 }
 

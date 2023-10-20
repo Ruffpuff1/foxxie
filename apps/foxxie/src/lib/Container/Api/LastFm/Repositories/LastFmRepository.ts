@@ -9,6 +9,7 @@ import {
     GetArtistInfoResultWithUser,
     GetRecentTracksUserResult,
     GetRecentTracksUserTrack,
+    GetTrackInfoResultWithUser,
     GetUserInfoResult,
     GetUserTopTracksResult,
     LastFmApiMethods
@@ -19,6 +20,7 @@ import { RecentTrack, RecentTrackList } from '../Structures/RecentTrack';
 import { Tag } from '../Structures/Tag';
 import { TopArtist, TopArtistList } from '../Structures/TopArtist';
 import { TopTrack, TopTrackList } from '../Structures/TopTrack';
+import { TrackInfo } from '../Structures/TrackInfo';
 
 export class LastFmRepository {
     public async getArtistInfo(artistName: string, username: string, redirectsEnabled = false) {
@@ -284,6 +286,81 @@ export class LastFmRepository {
                             mbid: s.mbid || undefined
                         })
                 )
+            })
+        });
+    }
+
+    public async getTrackInfo(trackName: string, artistName: string, username: string | null = null) {
+        const options = {
+            artist: artistName.slice(),
+            track: trackName.slice(),
+            username: username || undefined,
+            extended: '1',
+            autocorrect: '1'
+        };
+        const trackCall = await container.apis.lastFm.createLastFmRequest(LastFmApiMethods.TrackGetInfo, options);
+
+        if (trackCall.track) {
+            const linkToFilter = `<a href="${trackCall.track.url}">Read more on Last.fm</a>`;
+            const filteredSummary = trackCall.track.wiki?.summary
+                .replace(linkToFilter, '')
+                .replace(linkToFilter.replace('https', 'http'), '');
+
+            return new Response<TrackInfo>({
+                success: true,
+                content: new TrackInfo({
+                    trackName: trackCall.track.name,
+                    trackUrl: trackCall.track.url,
+                    albumName: trackCall.track.album?.title,
+                    albumArtist: trackCall.track.album?.artist,
+                    albumUrl: trackCall.track.album?.url,
+                    albumCoverUrl: trackCall.track.album?.image.find(a => a.size === 'extralarge')?.['#text'],
+                    artistName: trackCall.track.artist?.name,
+                    artistUrl: trackCall.track.artist.url,
+                    artistMbid: trackCall.track.artist.mbid,
+                    mbid: trackCall.track.mbid,
+                    description: filteredSummary?.replace('. .', '.').replace('\n\n', '\n').replace(' ,', ',').replace(' .', '.'),
+                    totalPlaycount: Number(trackCall.track.playcount || 0),
+                    totalListeners: Number(trackCall.track.listeners || 0),
+                    duration: Number(trackCall.track.duration || 0),
+                    userPlaycount: Number((trackCall as GetTrackInfoResultWithUser).track?.userplaycount || 0),
+                    loved: (trackCall as GetTrackInfoResultWithUser).track.userloved === '1',
+                    tags: trackCall.track.toptags.tag.map(
+                        s =>
+                            new Tag({
+                                name: s.name,
+                                url: s.url
+                            })
+                    )
+                })
+            });
+        }
+
+        return new Response<TrackInfo>({
+            success: false,
+            message: Reflect.get(trackCall, 'message')
+        });
+    }
+
+    public async searchTrack(searchQuery: string) {
+        const trackSearch = await container.apis.lastFm.createLastFmRequest(LastFmApiMethods.TrackSearch, { track: searchQuery, limit: '1' })
+
+        if (!trackSearch.results?.trackmatches?.track?.length) {
+            return new Response<TrackInfo>({
+                success: false,
+                message: 'Last.fm returned an error.'
+            })
+        }
+
+        const track = trackSearch.results.trackmatches.track[0];
+
+        return new Response<TrackInfo>({
+            success: true,
+            content: new TrackInfo({
+                artistName: track.artist,
+                trackName: track.name,
+                totalListeners: Number(track.listeners || 0),
+                albumCoverUrl: track.image.find(t => t.size === 'extralarge')?.['#text']
             })
         });
     }

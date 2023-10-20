@@ -1,4 +1,3 @@
-import { ArtistBuilders } from '#Api/LastFm/Builders/ArtistBuilders';
 import { ContextModel } from '#Api/LastFm/Structures/Models/ContextModel';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -17,7 +16,7 @@ export class UserInteractionHandler extends InteractionHandler {
 
         switch (result.type) {
             case 'artist':
-                options = await new ArtistBuilders().artist(
+                options = await this._artistBuilders.artist(
                     new ContextModel(
                         { user: interaction.user, guild: interaction.guild!, channel: interaction.channel!, t },
                         await this.container.db.users.ensure(interaction.user.id)
@@ -44,5 +43,9 @@ export class UserInteractionHandler extends InteractionHandler {
         }
 
         return this.some({ data, type, messageId });
+    }
+
+    private get _artistBuilders() {
+        return this.container.apis.lastFm.artistBuilders;
     }
 }

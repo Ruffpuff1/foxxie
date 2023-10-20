@@ -106,12 +106,12 @@
     "#root/config": "./dist/src/config.js",
     "#utils/*": "./dist/src/lib/util/*.js",
     "#utils/constants": "./dist/src/lib/util/constants.js",
+    "#utils/Decorators": "./dist/src/lib/util/Decorators/*.js",
     "#utils/Discord": "./dist/src/lib/util/Discord/index.js",
     "#utils/moderation": "./dist/src/lib/util/moderation.js",
     "#utils/regexCreator": "./dist/src/lib/util/regexCreator.js",
     "#utils/transformers": "./dist/src/lib/util/transformers.js",
     "#utils/util": "./dist/src/lib/util/util.js",
-    "#utils/decorators": "./dist/src/lib/util/decorators.js",
     "#external/*": "./dist/src/lib/util/External/*.js"
   },
   "funding": {

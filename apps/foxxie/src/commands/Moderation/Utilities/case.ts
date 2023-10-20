@@ -1,6 +1,7 @@
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage, PermissionLevels } from '#lib/Types';
+import { AddStringOption } from '#utils/chatInputDecorators';
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
@@ -48,6 +49,7 @@ export default class UserCommand extends FoxxieCommand {
         await send(message, { embeds: [embed], content: null });
     }
 
+    @AddStringOption('case', 'the case to fetch', { commandName: 'case' })
     public async chatInputRun(interaction: FoxxieCommand.ChatInputCommandInteraction) {
         const caseId = interaction.options.getInteger('case', true);
         const ephemeral = interaction.options.getBoolean('hidden') || false;
