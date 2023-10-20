@@ -46,6 +46,8 @@
     "lastFmChatInputOptionArtistDescription": "The artist you want to search for (defaults to currently playing).",
     "lastFmChatInputSubcommandArtistName": "artist",
     "lastFmChatInputSubcommandArtistDescription": "Shows artist info for the artist you're currently listening to or searching for.",
+    "lastFmChatInputSubcommandGlobalWhoKnows": "globalwhoknows",
+    "lastFmChatInputSubcommandGlobalWhoKnowsDescription": "Shows which others users listen an artist.",
     "lastFmDetailedDescription": {
         "description": "Fetch data from Last.fm.",
         "usage": "{{prefix}}lastfm [subcommand]",
