@@ -26,6 +26,8 @@ export const enum FoxxieEvents {
     MessageCommandLogging = 'messageCommandLogging',
     MessageCreate = 'messageCreate',
     MessageDelete = 'messageDelete',
+    // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
+    MessageUpdate = 'messageUpdate',
     MessageSubcommandError = 'messageSubcommandError',
     MessageSubcommandNoMatch = 'messageSubcommandNoMatch',
     ModerationEntryAdd = 'moderationEntryAdd',
@@ -46,5 +48,11 @@ export const enum FoxxieEvents {
     UnknownMessageCommand = 'unknownMessageCommand',
     UnknownMessageCommandName = 'unknownMessageCommandName',
     UserMessage = 'userMessage',
+    VoiceChannelDeafened = 'voiceChannelDeafened',
+    VoiceChannelJoin = 'voiceChannelJoin',
+    VoiceChannelLeave = 'voiceChannelLeave',
+    VoiceChannelMuted = 'voiceChannelMuted',
+    VoiceChannelUndeafened = 'voiceChannelUndeafened',
+    VoiceChannelUnmuted = 'voiceChannelUnmuted',
     VoiceStateUpdate = 'voiceStateUpdate'
 }

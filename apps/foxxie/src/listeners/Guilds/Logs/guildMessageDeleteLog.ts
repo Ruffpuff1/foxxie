@@ -2,18 +2,19 @@ import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { Colors } from '#utils/constants';
-import { isDev } from '@ruffpuff/utilities';
+import { getAttachment } from '#utils/util';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, Message, hyperlink } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: FoxxieEvents.MessageDelete,
-    enabled: !isDev()
+    event: FoxxieEvents.MessageDelete
 })
 export class UserListener extends Listener<FoxxieEvents.MessageDelete> {
     public run(...[message]: EventArgs<FoxxieEvents.MessageDelete>): void {
-        if (message.author?.bot || !message.guild || !message.content) return;
+        if (message.author?.bot || !message.guild) return;
+
+        const attachment = getAttachment(message as Message<boolean>);
 
         this.container.client.emit(FoxxieEvents.GuildMessageLog, message.guild, GuildSettings.Channels.Logs.MessageDelete, t =>
             new EmbedBuilder()
@@ -29,8 +30,11 @@ export class UserListener extends Listener<FoxxieEvents.MessageDelete> {
                         t(LanguageKeys.Guilds.Logs.ArgsChannel, {
                             channel: message.channel
                         }),
-                        t(LanguageKeys.Guilds.Logs.ArgsMessage, { content: message.content })
-                    ].join('\n')
+                        message.content ? t(LanguageKeys.Guilds.Logs.ArgsMessage, { content: message.content }) : null,
+                        attachment ? `**Attachment**: ${hyperlink('Here', attachment.url)}` : null
+                    ]
+                        .filter(a => Boolean(a))
+                        .join('\n')
                 )
         );
     }

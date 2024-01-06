@@ -96,15 +96,17 @@ export interface ImageAttachment {
     width: number;
 }
 
-export const VIDEO_EXTENSION = /\.(mp4|mov)$/i;
+export const VIDEO_EXTENSION = /\.(mp4|mov)/i;
 
-export const IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp)$/i;
+export const IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp)/i;
 
 export function isVideo(attachment: ImageAttachment | null) {
     return attachment ? VIDEO_EXTENSION.test(attachment.url) : false;
 }
 
 export function getAttachment(message: Message): ImageAttachment | null {
+    console.log(message.attachments);
+
     if (message.attachments.size) {
         const attachment = message.attachments.find(att => IMAGE_EXTENSION.test(att.url) || VIDEO_EXTENSION.test(att.url));
         if (attachment) {

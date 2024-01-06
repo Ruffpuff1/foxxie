@@ -7,9 +7,10 @@ import { bold } from '@discordjs/builders';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
+import { MessageOptions } from '@sapphire/plugin-editable-commands';
 import { cutText, debounce, isNullish } from '@sapphire/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
-import { DiscordAPIError, EmbedBuilder, HTTPError, TextBasedChannel } from 'discord.js';
+import { DiscordAPIError, EmbedBuilder, HTTPError, Message, MessageEditOptions, TextBasedChannel } from 'discord.js';
 import { TFunction } from 'i18next';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { GuildSettings, acquireSettings } from '..';
@@ -172,32 +173,71 @@ export class StarEntity extends BaseEntity {
         this.stars = this.#users.size;
     }
 
-    private async getEmbed(t: TFunction) {
+    private async getStarContent(t: TFunction): Promise<MessageOptions | MessageEditOptions> {
         const color = await this.color();
 
         const message = this.#message;
         const attachment = getAttachment(message);
         const video = isVideo(attachment);
+        const shouldSplit = this.#message.content.length > 1800;
+        const possibleRefrence = await this.getRefrencedMessage(this.#message);
 
-        if (video && attachment) {
-            return new EmbedBuilder()
-                .setAuthor({
-                    name: message.member?.displayName || message.author.username,
-                    iconURL: message.author.displayAvatarURL({ size: 128 })
-                })
-                .setColor(color)
-                .setImage(getImage(message)!)
-                .setDescription([await this.getContent(t), attachment.url].join('\n'));
+        const options: { embeds: EmbedBuilder[]; content: null | string } = { embeds: [], content: null };
+
+        if (possibleRefrence) {
+            options.embeds.push(
+                new EmbedBuilder()
+                    .setAuthor({
+                        name: possibleRefrence.member?.displayName || possibleRefrence.author.username,
+                        iconURL: possibleRefrence.author.displayAvatarURL({ size: 128 })
+                    })
+                    .setColor(await this.refrencedColor(possibleRefrence))
+                    .setImage(getImage(possibleRefrence)!)
+                    .setDescription(possibleRefrence.content || null)
+            );
         }
 
-        return new EmbedBuilder()
-            .setAuthor({
-                name: message.member?.displayName || message.author.username,
-                iconURL: message.author.displayAvatarURL({ size: 128 })
-            })
-            .setColor(color)
-            .setImage(getImage(message)!)
-            .setDescription(await this.getContent(t));
+        if (shouldSplit) {
+            const split = this.#message.content.split(`(?<=\\G.{${1800}})`);
+            const i = 0;
+            const url = await this.getUrl();
+
+            for (const slice of split) {
+                const ended = i + 1 === split.length;
+                console.log(split, ended);
+
+                options.embeds.push(
+                    new EmbedBuilder()
+                        .setAuthor({
+                            name: message.member?.displayName || message.author.username,
+                            iconURL: message.author.displayAvatarURL({ size: 128 })
+                        })
+                        .setColor(color)
+                        .setImage(getImage(message)!)
+                        .setDescription(
+                            // eslint-disable-next-line no-implicit-coercion
+                            [slice, ended ? '' : null, ended ? `${url}` : null].filter(a => a !== null).join('\n')
+                        )
+                );
+            }
+        } else {
+            options.embeds.push(
+                new EmbedBuilder()
+                    .setAuthor({
+                        name: message.member?.displayName || message.author.username,
+                        iconURL: message.author.displayAvatarURL({ size: 128 })
+                    })
+                    .setColor(color)
+                    .setImage(getImage(message)!)
+                    .setDescription(await this.getContent(t))
+            );
+        }
+
+        if (video && attachment) {
+            options.content = attachment.url;
+        }
+
+        return options;
     }
 
     private async color() {
@@ -209,14 +249,28 @@ export class StarEntity extends BaseEntity {
         return member.displayColor || Colors.TheCornerStoreStarboard;
     }
 
+    private async refrencedColor(ref: Message) {
+        const guild = container.client.guilds.cache.get(this.guildId);
+        if (!guild) return Colors.TheCornerStoreStarboard;
+        const member = await resolveToNull(guild.members.fetch(ref.author.id));
+        if (!member) return Colors.TheCornerStoreStarboard;
+
+        return member.displayColor || Colors.TheCornerStoreStarboard;
+    }
+
     private async getContent(_: TFunction) {
+        const url = await this.getUrl();
+        return [cutText(this.#message.content, 1800), '', url].join('\n');
+    }
+
+    private async getUrl() {
         const possibleRefrence = await this.getRefrencedMessage(this.#message);
 
         const url = `${this.emoji} ${bold(this.stars.toString())} | <#${this.channelId}> | [Jump to Message](${
             this.#message.url
         })${possibleRefrence ? ` | [Jump to Refrenced Message](${possibleRefrence.url})` : ''}`;
 
-        return [cutText(this.#message.content, 1800), '', url].join('\n');
+        return url;
     }
 
     private async getRefrencedMessage(message: GuildMessage) {
@@ -265,8 +319,8 @@ export class StarEntity extends BaseEntity {
 
         if (this.#starMessage) {
             try {
-                const embed = await this.getEmbed(t);
-                await this.#starMessage.edit({ embeds: [embed] });
+                const options = await this.getStarContent(t);
+                await this.#starMessage.edit(options as MessageEditOptions);
             } catch (error) {
                 if (!(error instanceof DiscordAPIError) || !(error instanceof HTTPError)) return;
 
@@ -282,9 +336,9 @@ export class StarEntity extends BaseEntity {
         const channel = cast<GuildTextBasedChannelTypes | undefined>(this.#message.guild.channels.cache.get(channelId));
         if (!channel) return;
 
-        const embed = await this.getEmbed(t);
+        const options = await this.getStarContent(t);
         const promise = channel
-            .send({ embeds: [embed] })
+            .send({ embeds: options.embeds!, content: options.content ?? undefined })
             .then(message => {
                 this.#starMessage = cast<GuildMessage>(message);
                 this.starMessageId = message.id;

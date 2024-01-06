@@ -1299,14 +1299,14 @@
   resolved "https://registry.yarnpkg.com/@sapphire/timestamp/-/timestamp-1.0.1.tgz#438d2c10702430cb95db84ada519f240800e5e4e"
   integrity sha512-uLg+rBFuBiaQY/pFGDDzZSOH2cfv4ONIB7zQGNuRCTpYKBW/iIhRBIZjJZyn8NVkXQhVi+Q94DI4i6gDhYVs7w==
 
-"@sapphire/type@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@sapphire/type/-/type-2.4.0.tgz#2be5411cec4242ecad5170aab616c7e8d3319b6d"
-  integrity sha512-oEyNiNr2zfStol5yLAjsLC4nYW0jP0wrOmQFQVl7SX/gumskoTy0hKGtKAWUwSMmc9N5pdlw3QbFNDzIkKYRvg==
+"@sapphire/type@^2.4.3":
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/@sapphire/type/-/type-2.4.3.tgz#102609e76fcb7525b180320fd3f24381e9c0b10b"
+  integrity sha512-G3rbxqAwfKrx1MUXSQ1X1A+0D+n2nqn/OqtY9v5TaZdd7KHEz6nQRZfNA7mbUYbg3fIAn9q+7CkrdpMS570h7w==
   dependencies:
     "@discordjs/node-pre-gyp" "^0.4.5"
-    nan "^2.17.0"
-    tslib "^2.5.0"
+    nan "^2.18.0"
+    tslib "^2.6.2"
 
 "@sapphire/utilities@^3.13.0", "@sapphire/utilities@^3.6.2":
   version "3.13.0"
@@ -4871,7 +4871,7 @@ mz@^2.4.0, mz@^2.7.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
-nan@^2.17.0:
+nan@^2.18.0:
   version "2.18.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.18.0.tgz#26a6faae7ffbeb293a39660e88a76b82e30b7554"
   integrity sha512-W7tfG7vMOGtD30sHoZSSc/JVYiyDPEyQVso/Zz+/uQd0B0L46gtC+pHha5FFMRpil6fm/AoEcRWyOVi4+E/f8w==

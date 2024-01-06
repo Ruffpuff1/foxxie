@@ -43,6 +43,8 @@ declare module 'discord.js' {
         [FoxxieEvents.StatsMessage]: [guildId: Snowflake, member: GuildMember];
         [FoxxieEvents.SystemMessage]: [message: GuildMessage];
         [FoxxieEvents.UserMessage]: [message: GuildMessage];
+        [FoxxieEvents.VoiceChannelDeafened]: [state: VoiceState];
+        [FoxxieEvents.VoiceChannelUndeafened]: [state: VoiceState];
     }
 }
 
