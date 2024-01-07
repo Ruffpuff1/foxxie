@@ -36,6 +36,7 @@ declare module 'discord.js' {
             makeEmbed: (t: TFunction) => Awaitable<TypeOfEmbed | MessageCreateOptions>
         ];
         [FoxxieEvents.LastFmUpdateUser]: [userId: string];
+        [FoxxieEvents.MemberIdleLog]: [Presence];
         [FoxxieEvents.MessageCommandLogging]: [message: Message, command: FoxxieCommand];
         [FoxxieEvents.ModerationEntryAdd]: [entry: ModerationEntity];
         [FoxxieEvents.ModerationEntryEdit]: [old: ModerationEntity, entry: ModerationEntity];

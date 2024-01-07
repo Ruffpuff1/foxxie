@@ -4,12 +4,12 @@ import { FoxxieCommand } from '#lib/Structures';
 import { EnvKeys, GuildMessage } from '#lib/Types';
 import { isGuildOwner, sendLoadingMessage } from '#utils/Discord';
 import { BrandingColors, emojis } from '#utils/constants';
-import { floatPromise, resolveEmbedField } from '#utils/util';
+import { floatPromise, resolveClientColor, resolveEmbedField } from '#utils/util';
 import { EnvParse } from '@foxxie/env';
 import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { TFunction } from 'i18next';
 import { ChannelType, EmbedAuthorData, EmbedBuilder, Guild, GuildMember, Role } from 'discord.js';
+import { TFunction } from 'i18next';
 
 export class InfoTextCommandService {
     private guildRoleLimit = 10;
@@ -42,7 +42,12 @@ export class InfoTextCommandService {
         const owners = EnvParse.array(EnvKeys.ClientOwners);
 
         embed.addFields(
-            resolveEmbedField(`${titles.about}${owners.includes(user.id) ? ` ${emojis.ruffThink}` : ''}`, about.join('\n'))
+            resolveEmbedField(
+                `${titles.about}${owners.includes(user.id) ? ` ${emojis.ruffThink}` : ''}${
+                    message.guild.ownerId === user.id ? ` :crown:` : ''
+                }`,
+                about.join('\n')
+            )
         );
 
         if (member) this.userAddRoles(embed, member, args.t);
@@ -56,7 +61,10 @@ export class InfoTextCommandService {
         const { guild } = message;
         const msg = await sendLoadingMessage(message);
 
-        const [messages, owner, color] = await this.guildFetchData(guild);
+        const messages = await container.utilities.guild(guild).settings.get(GuildSettings.MessageCount);
+        const owner = await resolveToNull(guild.members.fetch(guild.ownerId));
+        const color = resolveClientColor(message.guild, BrandingColors.Primary);
+
         const titles = args.t(LanguageKeys.Commands.General.InfoServerTitles);
         const channels = guild.channels.cache.filter(c => c.type !== ChannelType.GuildCategory);
         const none = toTitleCase(args.t(LanguageKeys.Globals.None));
@@ -246,14 +254,6 @@ export class InfoTextCommandService {
             animated: guild.emojis.cache.filter(emoji => Boolean(emoji.animated)).size,
             hasEmojis: guild.emojis.cache.size > 0
         };
-    }
-
-    private async guildFetchData(guild: Guild): Promise<[number, GuildMember | null, number]> {
-        const messages = await container.utilities.guild(guild).settings.get(GuildSettings.MessageCount);
-        const me = guild.client.id ? await resolveToNull(guild.members.fetch(guild.client.id)) : null;
-        const owner = await resolveToNull(guild.members.fetch(guild.ownerId));
-
-        return [messages, owner, me?.displayColor || BrandingColors.Primary];
     }
 
     private guildFormatTitle(guild: Guild): EmbedAuthorData {
