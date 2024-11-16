@@ -1,4 +1,3 @@
-
 import { FT, T } from '#lib/Types';
 import type { UserMention } from 'discord.js';
 

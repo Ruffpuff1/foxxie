@@ -1,12 +1,11 @@
 import { GuildSettings } from '#lib/Database';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
-import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 
 @ApplyOptions<Listener.Options>({
     event: FoxxieEvents.GuildMemberAdd,
-    enabled: !isDev()
+    enabled: true
 })
 export class UserListener extends Listener<FoxxieEvents.GuildMemberAdd> {
     public async run(...[member]: EventArgs<FoxxieEvents.GuildMemberAdd>): Promise<void> {

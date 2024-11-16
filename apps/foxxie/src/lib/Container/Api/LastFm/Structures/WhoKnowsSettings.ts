@@ -1,4 +1,4 @@
-import { WhoKnowsMode } from "../Enums/WhoKnowsMode";
+import { WhoKnowsMode } from '../Enums/WhoKnowsMode';
 
 export class WhoKnowsSettings {
     public hidePrivateUsers: boolean;

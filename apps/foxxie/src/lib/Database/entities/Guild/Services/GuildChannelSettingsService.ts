@@ -1,4 +1,4 @@
-import { Snowflake } from "discord.js";
+import { Snowflake } from 'discord.js';
 
 export class GuildChannelSettingsService {
     public boost: Snowflake | null = null;
@@ -33,7 +33,7 @@ export class GuildChannelSettingsService {
 
     public logsRoleUpdate: Snowflake | null = null;
 
-    public welcome: Snowflake | null = null
+    public welcome: Snowflake | null = null;
 
     public constructor(data: Partial<GuildChannelSettingsService>) {
         Object.assign(this, data);

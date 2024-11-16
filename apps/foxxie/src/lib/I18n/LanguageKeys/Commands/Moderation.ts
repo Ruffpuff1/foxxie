@@ -1,6 +1,8 @@
 import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/Types';
 
-export const BanDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:banDetailedDescription');
+export const BanDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
+    'commands/moderation:banDetailedDescription'
+);
 export const BanSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:banSuccess');
 
 export const CaseDescription = T('commands/moderation:caseDescription');
@@ -10,10 +12,14 @@ export const CaseUsage = T('commands/moderation:caseUsage');
 export const GuildBansEmpty = T('commands/moderation:guildBansEmpty');
 export const GuildBansNotFound = T('commands/moderation:guildBansNotFound');
 
-export const KickDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:kickDetailedDescription');
+export const KickDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
+    'commands/moderation:kickDetailedDescription'
+);
 export const KickSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:kickSuccess');
 
-export const MuteDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:muteDetailedDescription');
+export const MuteDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
+    'commands/moderation:muteDetailedDescription'
+);
 export const MuteSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:muteSuccess');
 
 export const ReasonDescription = T('commands/moderation:reasonDescription');

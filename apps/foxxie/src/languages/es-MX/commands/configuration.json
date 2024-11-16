@@ -29,17 +29,8 @@
         "subcommands": [
             {
                 "command": "",
-                "description": [
-                    "",
-                    "",
-                    "",
-                    ""
-                ],
-                "examples": [
-                    "",
-                    "",
-                    ""
-                ]
+                "description": ["", "", "", ""],
+                "examples": ["", "", ""]
             }
         ]
     }

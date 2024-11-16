@@ -1,4 +1,4 @@
-export  class Tag {
+export class Tag {
     public name: string;
 
     public url: string;

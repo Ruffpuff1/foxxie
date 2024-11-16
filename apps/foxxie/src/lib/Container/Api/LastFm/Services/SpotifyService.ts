@@ -222,8 +222,6 @@ export class SpotifyService {
                 }
 
                 dbTrack.spotifyLastUpdated = Date.now();
-
-
             }
 
             await dbTrack.save();

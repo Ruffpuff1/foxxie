@@ -1,3 +1,3 @@
-export * from './LastFmDatabase'
+export * from './LastFmDatabase';
 export * from './Serializer';
 export * from './SerializerStore';

@@ -7,14 +7,8 @@
         "subcommands": [
             {
                 "command": "",
-                "description": [
-                    ""
-                ],
-                "examples": [
-                    "",
-                    "",
-                    ""
-                ]
+                "description": [""],
+                "examples": ["", "", ""]
             }
         ]
     },
@@ -49,26 +43,18 @@
         "subcommands": [
             {
                 "command": "",
-                "description": [
-                    ""
-                ],
+                "description": [""],
                 "options": [
                     {
                         "name": "",
                         "description": ""
                     }
                 ],
-                "examples": [
-                    "",
-                    "",
-                    ""
-                ]
+                "examples": ["", "", ""]
             },
             {
                 "command": "",
-                "description": [
-                    ""
-                ],
+                "description": [""],
                 "options": [
                     {
                         "name": "",
@@ -79,11 +65,7 @@
                         "description": ""
                     }
                 ],
-                "examples": [
-                    "",
-                    "",
-                    ""
-                ]
+                "examples": ["", "", ""]
             }
         ]
     },

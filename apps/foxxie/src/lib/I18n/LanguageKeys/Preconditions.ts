@@ -1,5 +1,4 @@
-import { FT, T } from "#lib/Types";
-
+import { FT, T } from '#lib/Types';
 
 export const Administrator = FT<{ name: string }>('preconditions:administrator');
 export const ClientPermissions = FT<{ missing: string[] }>('preconditions:clientPermissions');

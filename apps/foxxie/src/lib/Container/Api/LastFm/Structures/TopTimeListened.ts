@@ -5,7 +5,7 @@ export class TopTimeListened {
 
     public totalTimeListened: number;
 
-    public countedTracks: CountedTrack[]
+    public countedTracks: CountedTrack[];
 }
 
 export class CountedTrack {
@@ -13,4 +13,3 @@ export class CountedTrack {
 
     public countedPlays: number;
 }
-

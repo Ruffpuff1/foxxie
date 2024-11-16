@@ -1,4 +1,4 @@
-import { TopTimeListened } from "./TopTimeListened";
+import { TopTimeListened } from './TopTimeListened';
 
 export class TopArtistList {
     public totalAmount: number;

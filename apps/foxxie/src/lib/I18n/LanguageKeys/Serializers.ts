@@ -1,4 +1,4 @@
-import { FT, T } from "#lib/Types";
+import { FT, T } from '#lib/Types';
 
 export const InvalidCommand = FT<{ param: string }>('serializers:invalidCommand');
 export const InvalidInt = FT<{ name: string }>('serializers:invalidInt');

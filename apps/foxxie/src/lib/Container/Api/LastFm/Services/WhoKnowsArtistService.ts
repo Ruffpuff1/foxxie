@@ -86,7 +86,7 @@ export class WhoKnowsArtistService {
             );
         }
 
-        return whoKnowsArtistList
+        return whoKnowsArtistList;
     }
 
     public getArtistPlayCountForUser(artistName: string, userId: string) {

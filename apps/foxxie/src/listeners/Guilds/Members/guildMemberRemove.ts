@@ -4,13 +4,13 @@ import { AutomationListener } from '#lib/Structures';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { fetchChannel } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
-import { cast, isDev, resolveToNull } from '@ruffpuff/utilities';
+import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import type { GuildMember } from 'discord.js';
 
 @ApplyOptions<AutomationListener.Options>({
     event: FoxxieEvents.GuildMemberRemove,
-    enabled: !isDev()
+    enabled: true
 })
 export class UserAutomationAutomationListener extends AutomationListener<FoxxieEvents.GuildMemberRemove> {
     public async run(...[member]: EventArgs<FoxxieEvents.GuildMemberRemove>): Promise<void> {

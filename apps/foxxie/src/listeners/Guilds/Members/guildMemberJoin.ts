@@ -4,14 +4,14 @@ import { AutomationListener } from '#lib/Structures';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { fetchChannel } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
-import { isDev, resolveToNull } from '@ruffpuff/utilities';
+import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import type { GuildMember } from 'discord.js';
 
 @ApplyOptions<AutomationListener.Options>({
     event: FoxxieEvents.GuildMemberJoin,
-    enabled: !isDev()
+    enabled: true
 })
 export class UserListener extends AutomationListener<FoxxieEvents.GuildMemberJoin> {
     public async run(...[member, settings]: EventArgs<FoxxieEvents.GuildMemberJoin>): Promise<void> {

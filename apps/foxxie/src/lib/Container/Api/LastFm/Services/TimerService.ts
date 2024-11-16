@@ -18,6 +18,6 @@ export class TimerService {
     }
 
     private get _updateService() {
-        return container.apis.lastFm.updateService
+        return container.apis.lastFm.updateService;
     }
 }

@@ -1,11 +1,5 @@
 {
-    "abortOptions": [
-        "stop",
-        "cancel",
-        "abort",
-        "end",
-        "done"
-    ],
+    "abortOptions": ["stop", "cancel", "abort", "end", "done"],
     "and": "{{value, and}}",
     "any": "any",
     "case": "case",
@@ -37,11 +31,7 @@
     "numberOrdinal": "{{value, ordinal}}",
     "other": "other",
     "remaining": "{{value, remaining}}",
-    "resetOptions": [
-        "none",
-        "reset",
-        "default"
-    ],
+    "resetOptions": ["none", "reset", "default"],
     "seconds": "{{count, number}} second",
     "seconds_other": "{{count, number}} seconds",
     "time": "{{value, time}}",

@@ -1,5 +1,4 @@
-import { FT, T } from "#lib/Types";
-
+import { FT, T } from '#lib/Types';
 
 export const CommandCancel = T('system:commandCancel');
 export const DmWarn = T('system:dmWarn');

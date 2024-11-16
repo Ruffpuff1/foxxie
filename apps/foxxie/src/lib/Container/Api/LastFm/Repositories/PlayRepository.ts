@@ -64,9 +64,14 @@ export class PlayRepository {
 
     public static GetFinalUserPlays(userPlays: List<UserPlay>) {
         const firstImportPlay = userPlays.filter(w => w.playSource !== PlaySource.LastFm).minBy(o => o.timestamp)?.timestamp;
-        const lastImportPlay = userPlays.filter(w => w.playSource === PlaySource.SpotifyImport).orderByDescending(o => o.timestamp).ofFirst(o => o.timestamp);
+        const lastImportPlay = userPlays
+            .filter(w => w.playSource === PlaySource.SpotifyImport)
+            .orderByDescending(o => o.timestamp)
+            .ofFirst(o => o.timestamp);
 
-        return userPlays.filter(w => w.playSource !== PlaySource.LastFm || w.timestamp > lastImportPlay || w.timestamp < firstImportPlay!)
+        return userPlays.filter(
+            w => w.playSource !== PlaySource.LastFm || w.timestamp > lastImportPlay || w.timestamp < firstImportPlay!
+        );
     }
 
     public static async ReplaceAllPlays(playsToInsert: UserPlay[], userId: string) {

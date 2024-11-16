@@ -3,14 +3,14 @@ import { GuildSettings, StarEntity } from '#lib/Database';
 import { StarboardManager } from '#lib/Structures/managers/StarboardManager';
 import { SerializedEmoji, isStarboardEmoji } from '#utils/Discord';
 import { snowflakeAge } from '#utils/util';
-import { cast, isDev } from '@ruffpuff/utilities';
+import { cast } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { GuildTextBasedChannelTypes, canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { isNullishOrZero } from '@sapphire/utilities';
 import type { TextChannel } from 'discord.js';
 
-@ApplyOptions<ListenerOptions>({ event: 'rawReactionAdd', enabled: !isDev() })
+@ApplyOptions<ListenerOptions>({ event: 'rawReactionAdd', enabled: true })
 export class UserListener extends Listener {
     public async run(data: LLRCData, emojiId: SerializedEmoji) {
         if (isNsfwChannel(data.channel)) return;

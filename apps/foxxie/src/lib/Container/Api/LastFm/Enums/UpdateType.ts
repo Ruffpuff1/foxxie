@@ -11,7 +11,14 @@ export class UpdateTypeBitField extends BitField<UpdateTypeString> {
         DISCOGS: 1 << 7
     };
 
-    public static ALL = UpdateTypeBitField.FLAGS.RECENT_PLAYS | UpdateTypeBitField.FLAGS.ALL_PLAYS | UpdateTypeBitField.FLAGS.FULL | UpdateTypeBitField.FLAGS.ARTIST | UpdateTypeBitField.FLAGS.ALBUMS | UpdateTypeBitField.FLAGS.TRACKS | UpdateTypeBitField.FLAGS.DISCOGS;
+    public static ALL =
+        UpdateTypeBitField.FLAGS.RECENT_PLAYS |
+        UpdateTypeBitField.FLAGS.ALL_PLAYS |
+        UpdateTypeBitField.FLAGS.FULL |
+        UpdateTypeBitField.FLAGS.ARTIST |
+        UpdateTypeBitField.FLAGS.ALBUMS |
+        UpdateTypeBitField.FLAGS.TRACKS |
+        UpdateTypeBitField.FLAGS.DISCOGS;
 }
 
 export type UpdateTypeString = 'RECENT_PLAYS' | 'ALL_PLAYS' | 'FULL' | 'ARTIST' | 'ALBUMS' | 'TRACKS' | 'DISCOGS';

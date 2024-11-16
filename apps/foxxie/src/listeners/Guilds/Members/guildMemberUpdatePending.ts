@@ -2,14 +2,13 @@ import { GuildSettings } from '#lib/Database';
 import { LanguageKeys } from '#lib/I18n';
 import { EventArgs, FoxxieEvents } from '#lib/Types';
 import { Colors } from '#utils/constants';
-import { isDev } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { EmbedBuilder } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
     event: FoxxieEvents.GuildMemberUpdate,
-    enabled: !isDev()
+    enabled: true
 })
 export class UserListener extends Listener<FoxxieEvents.GuildMemberUpdate> {
     public async run(...[previous, next]: EventArgs<FoxxieEvents.GuildMemberUpdate>): Promise<void> {

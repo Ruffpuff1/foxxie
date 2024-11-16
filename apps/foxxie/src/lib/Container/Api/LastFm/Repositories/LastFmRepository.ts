@@ -343,13 +343,16 @@ export class LastFmRepository {
     }
 
     public async searchTrack(searchQuery: string) {
-        const trackSearch = await container.apis.lastFm.createLastFmRequest(LastFmApiMethods.TrackSearch, { track: searchQuery, limit: '1' })
+        const trackSearch = await container.apis.lastFm.createLastFmRequest(LastFmApiMethods.TrackSearch, {
+            track: searchQuery,
+            limit: '1'
+        });
 
         if (!trackSearch.results?.trackmatches?.track?.length) {
             return new Response<TrackInfo>({
                 success: false,
                 message: 'Last.fm returned an error.'
-            })
+            });
         }
 
         const track = trackSearch.results.trackmatches.track[0];

@@ -7,9 +7,7 @@
         "subcommands": [
             {
                 "command": "villager",
-                "description": [
-                    "Search the name of a specific animal crossing villager to retrieve information about them."
-                ],
+                "description": ["Search the name of a specific animal crossing villager to retrieve information about them."],
                 "examples": [
                     "{{prefix}}animalcrossing villager bob",
                     "{{prefix}}animalcrossing villager erik",
@@ -65,36 +63,22 @@
                         "description": "Whether to hide the command's output."
                     }
                 ],
-                "examples": [
-                    "{{prefix}}lastfm artist",
-                    "{{prefix}}lastfm artist mitski",
-                    "{{prefix}}lastfm artist lana del rey"
-                ]
+                "examples": ["{{prefix}}lastfm artist", "{{prefix}}lastfm artist mitski", "{{prefix}}lastfm artist lana del rey"]
             },
             {
                 "command": "globalwhoknows",
                 "description": "Shows who listens to an artist out of everyone who uses me.",
-                "examples": [
-                    "{{prefix}}lastfm globalwhoknows",
-                    "{{prefix}}lastfm globalwhoknows grentperez"
-                ]
+                "examples": ["{{prefix}}lastfm globalwhoknows", "{{prefix}}lastfm globalwhoknows grentperez"]
             },
             {
                 "command": "stats",
                 "description": "Shows your last.fm user statistics.",
-                "examples": [
-                    "{{prefix}}lastfm stats",
-                    "{{prefix}}lastfm stats @Ruffpuff"
-                ]
+                "examples": ["{{prefix}}lastfm stats", "{{prefix}}lastfm stats @Ruffpuff"]
             },
             {
                 "command": "update",
                 "description": "Updates your cached scrobbles within my database.",
-                "examples": [
-                    "{{prefix}}lastfm update",
-                    "{{prefix}}lastfm update plays",
-                    "{{prefix}}lastfm update artists"
-                ]
+                "examples": ["{{prefix}}lastfm update", "{{prefix}}lastfm update plays", "{{prefix}}lastfm update artists"]
             }
         ]
     },
