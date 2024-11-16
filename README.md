@@ -1,4 +1,4 @@
-# Foxxie
+# Foxxie v2
 
 A Smort Butler for your Server
 
