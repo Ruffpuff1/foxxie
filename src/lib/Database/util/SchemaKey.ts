@@ -1,5 +1,4 @@
 import { LanguageKeys } from '#lib/I18n';
-import type { FoxxieArgs } from '#lib/Structures';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { NonNullObject, isNullish } from '@sapphire/utilities';
@@ -8,6 +7,7 @@ import type { Serializer, SerializerUpdateContext } from '../structures/Serializ
 import type { ISchemaValue, SchemaGroup } from './SchemaGroup';
 import { TFunction } from 'i18next';
 import { CustomGet } from '#lib/Types';
+import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
 
 export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implements ISchemaValue {
     /**

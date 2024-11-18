@@ -55,7 +55,7 @@ function parsePresenceActivity(): ActivitiesOptions[] {
     return [
         {
             name: EnvParse.string('CLIENT_PRESENCE_NAME'),
-            type: ActivityType.Listening
+            type: ActivityType.Watching
         }
     ];
 }

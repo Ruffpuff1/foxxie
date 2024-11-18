@@ -8,7 +8,7 @@ export const enum FoxxieEvents {
     ChatInputCommandLogging = 'chatInputCommandLogging',
     ChatInputSubcommandError = 'chatInputSubcommandError',
     CommandDoesNotHaveMessageCommandHandler = 'commandDoesNotHaveMessageCommandHandler',
-    ConsoleLog = 'consoleLog',
+    Console = 'console',
     Error = 'error',
     GuildBanAdd = 'guildBanAdd',
     GuildBanRemove = 'guildBanRemove',

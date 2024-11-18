@@ -57,7 +57,7 @@ export class SchemaGroup extends Collection<string, ISchemaValue> {
 
     public getPathArray([key, ...tail]: NonEmptyArray<string>): ISchemaValue | null {
         if (tail.length === 0) {
-            return key === '' || key === '.' ? this : this.get(key) ?? null;
+            return key === '' || key === '.' ? this : (this.get(key) ?? null);
         }
 
         const value = this.get(key);

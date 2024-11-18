@@ -43,7 +43,7 @@ export class UserListener extends Listener<FoxxieEvents.MessageSubcommandError> 
             logger.warn(`${this.getWarning(message)} (${message.author.id}) | ${error.constructor.name}`);
         }
 
-        await this.sendErrorChannel(message, command, error);
+        await this.sendErrorChannel(message, command as unknown as FoxxieCommand, error);
 
         logger.fatal(`[COMMAND] ${command.location.full}\n${error.stack || error.message}`);
         try {
@@ -110,7 +110,7 @@ export class UserListener extends Listener<FoxxieEvents.MessageSubcommandError> 
         );
     }
 
-    private userError(message: Message, t: TFunction, commandContext: FoxxieCommand.Context, error: UserError) {
+    private userError(message: Message, t: TFunction, commandContext: FoxxieCommand.RunContext, error: UserError) {
         if (Reflect.get(Object(error.context), 'silent')) return null;
 
         if (error.identifier === Identifiers.ArgsMissing)
@@ -129,7 +129,7 @@ export class UserListener extends Listener<FoxxieEvents.MessageSubcommandError> 
         );
     }
 
-    private async sendErrorChannel(message: Message, command: Command, error: Error) {
+    private async sendErrorChannel(message: Message, command: FoxxieCommand, error: Error) {
         const hook = this.container.client.webhookError;
         if (hook === null) return null;
 

@@ -1,10 +1,17 @@
 import type FoxxieClient from '#lib/FoxxieClient';
-import { DetailedDescription, PermissionLevels } from '#lib/Types';
+import { CustomFunctionGet, DetailedDescription, PermissionLevels } from '#lib/Types';
 import { clientOwners } from '#root/config';
 import { cast, seconds } from '@ruffpuff/utilities';
-import { Command, CommandOptionsRunTypeEnum, MessageCommand, UserError } from '@sapphire/framework';
+import {
+    ChatInputCommandContext,
+    Command,
+    CommandOptionsRunTypeEnum,
+    MessageCommand,
+    MessageCommandContext,
+    UserError
+} from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import type { Awaitable, Message } from 'discord.js';
+import type { Awaitable, Guild, Message } from 'discord.js';
 import { FoxxieCommandUtilities } from './base/FoxxieCommandUtilities';
 import { FoxxieArgs } from './FoxxieArgs';
 
@@ -19,7 +26,14 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 
     public permissionLevel: PermissionLevels;
 
-    public declare detailedDescription: DetailedDescription;
+    public declare detailedDescription: CustomFunctionGet<
+        string,
+        {
+            prefix: string;
+            CHANNEL: string;
+        },
+        DetailedDescription
+    >;
 
     public constructor(context: Command.LoaderContext, options: FoxxieCommand.Options) {
         super(context, {
@@ -105,11 +119,30 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 // eslint-disable-next-line @typescript-eslint/no-namespace
 // eslint-disable-next-line no-redeclare
 export namespace FoxxieCommand {
-    export type Options = FoxxieCommandOptions;
+    export type Options = Subcommand.Options & {
+        guarded?: boolean;
+        hidden?: boolean;
+        spam?: boolean;
+        usage?: string;
+        allowedGuilds?: string[];
+        permissionLevel?: PermissionLevels;
+        detailedDescription?: CustomFunctionGet<
+            string,
+            {
+                prefix: string;
+                CHANNEL: string;
+            },
+            DetailedDescription
+        >;
+    };
 
     export type Args = FoxxieArgs;
     export type LoaderContext = Command.LoaderContext;
     export type RunContext = MessageCommand.RunContext;
+
+    export type ChatInputCommandInteraction = Command.ChatInputCommandInteraction & { guildId: string; guild: Guild };
+    export type Context = MessageCommandContext;
+    export type ChatInputContext = ChatInputCommandContext;
 }
 
 export type FoxxieCommandOptions = Subcommand.Options & {
@@ -118,6 +151,12 @@ export type FoxxieCommandOptions = Subcommand.Options & {
     spam?: boolean;
     allowedGuilds?: string[];
     permissionLevel?: PermissionLevels;
-    usage?: string;
-    detailedDescription?: DetailedDescription;
+
+    detailedDescription?: CustomFunctionGet<
+        string,
+        {
+            prefix: string;
+        },
+        DetailedDescription
+    >;
 };

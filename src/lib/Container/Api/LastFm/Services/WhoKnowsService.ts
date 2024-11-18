@@ -43,8 +43,8 @@ export class WhoKnowsService {
                         ? `__**${positionCounter}** __`
                         : `**${positionCounter}** `
                     : user.sameServer
-                    ? `__${positionCounter}__ `
-                    : `${positionCounter} `;
+                      ? `__${positionCounter}__ `
+                      : `${positionCounter} `;
 
             const afterPositionSpacer = index + 1 === 10 ? '' : index + 1 === 7 || index + 1 === 9 ? ' ' : ' ';
 

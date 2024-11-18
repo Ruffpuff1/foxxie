@@ -84,6 +84,14 @@ export interface ColorData {
     base10: number;
 }
 
+export const enum ConsoleState {
+    Log,
+    Debug,
+    Warn,
+    Error,
+    Fatal
+}
+
 type EventKey = keyof ClientEvents | keyof FoxxieEvents;
 
 export type CustomGet<K extends string, TCustom> = K & { __type__: TCustom };

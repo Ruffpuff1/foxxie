@@ -5,7 +5,7 @@ import { isGuildOwner, sendTemporaryMessage } from '#utils/Discord';
 import type { SendOptions } from '#utils/moderation';
 import { bold } from '@discordjs/builders';
 import { cast, minutes, seconds, years } from '@ruffpuff/utilities';
-import { CommandOptionsRunTypeEnum, PieceContext } from '@sapphire/framework';
+import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { PermissionFlagsBits, type GuildMember, type User } from 'discord.js';
 import { FoxxieCommand } from '../commands';
 import { TFunction } from 'i18next';
@@ -26,7 +26,7 @@ export abstract class ModerationCommand<T = unknown> extends FoxxieCommand {
      */
     protected successKey: string;
 
-    public constructor(context: PieceContext, options: ModerationCommand.Options) {
+    public constructor(context: FoxxieCommand.LoaderContext, options: ModerationCommand.Options) {
         super(context, {
             cooldownDelay: seconds(5),
             flags: ['no-author', 'authored', 'no-dm', 'dm'],

@@ -1,11 +1,11 @@
 import { LanguageKeys } from '#lib/I18n';
-import type { FoxxieArgs } from '#lib/Structures';
 import { cast } from '@ruffpuff/utilities';
 import { container, UserError } from '@sapphire/framework';
 import type { GuildResolvable } from 'discord.js';
 import type { ISchemaValue, SchemaGroup, SchemaKey } from '.';
 import type { GuildEntity } from './entities/Guild/GuildEntity';
 import type { SettingsCollectionCallback } from './repository';
+import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
 
 type K = keyof V;
 type V = GuildEntity;

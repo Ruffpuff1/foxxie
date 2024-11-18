@@ -678,28 +678,28 @@ export interface GetArtistTopAlbumsResultNoExistResult {
 export type LastFmApiReturnType<M extends LastFmApiMethods> = M extends LastFmApiMethods.TrackGetInfo
     ? GetTrackInfoResult | GetTrackInfoResultWithUser
     : M extends LastFmApiMethods.UserGetRecentTracks
-    ? GetRecentTracksUserResult
-    : M extends LastFmApiMethods.UserGetInfo
-    ? GetUserInfoResult | GetUserInfoUserNoExistResult
-    : M extends LastFmApiMethods.LibraryGetArtists
-    ? GetLibraryArtistsResult
-    : M extends LastFmApiMethods.ArtistSearch
-    ? ArtistSearchResult | ArtistSearchArtistNoExistResult
-    : M extends LastFmApiMethods.ArtistGetTopTracks
-    ? GetArtistTopTracksResult | GetArtistTopTracksNoExistResult
-    : M extends LastFmApiMethods.ArtistGetInfo
-    ? GetArtistInfoResult | GetArtistInfoResultWithUser | GetArtistInfoResultNoExistResult
-    : M extends LastFmApiMethods.ArtistGetTopAlbums
-    ? GetArtistTopAlbumsResult | GetArtistTopAlbumsResultNoExistResult
-    : M extends LastFmApiMethods.UserGetWeeklyArtistChart
-    ? GetUserWeeklyArtistChartResult
-    : M extends LastFmApiMethods.UserGetTopArtists
-    ? GetUserTopArtistsResult
-    : M extends LastFmApiMethods.UserGetTopTracks
-    ? GetUserTopTracksResult
-    : M extends LastFmApiMethods.TrackSearch
-    ? TrackSearchResult
-    : never;
+      ? GetRecentTracksUserResult
+      : M extends LastFmApiMethods.UserGetInfo
+        ? GetUserInfoResult | GetUserInfoUserNoExistResult
+        : M extends LastFmApiMethods.LibraryGetArtists
+          ? GetLibraryArtistsResult
+          : M extends LastFmApiMethods.ArtistSearch
+            ? ArtistSearchResult | ArtistSearchArtistNoExistResult
+            : M extends LastFmApiMethods.ArtistGetTopTracks
+              ? GetArtistTopTracksResult | GetArtistTopTracksNoExistResult
+              : M extends LastFmApiMethods.ArtistGetInfo
+                ? GetArtistInfoResult | GetArtistInfoResultWithUser | GetArtistInfoResultNoExistResult
+                : M extends LastFmApiMethods.ArtistGetTopAlbums
+                  ? GetArtistTopAlbumsResult | GetArtistTopAlbumsResultNoExistResult
+                  : M extends LastFmApiMethods.UserGetWeeklyArtistChart
+                    ? GetUserWeeklyArtistChartResult
+                    : M extends LastFmApiMethods.UserGetTopArtists
+                      ? GetUserTopArtistsResult
+                      : M extends LastFmApiMethods.UserGetTopTracks
+                        ? GetUserTopTracksResult
+                        : M extends LastFmApiMethods.TrackSearch
+                          ? TrackSearchResult
+                          : never;
 
 export type NumberBool = '0' | '1';
 
@@ -848,17 +848,17 @@ interface LimitArtist extends Artist {
 export type LastFmQuery<M extends LastFmApiMethods> = M extends LastFmApiMethods.TrackGetInfo
     ? { artist: string; track: string; username: string | undefined }
     : M extends LastFmApiMethods.UserGetInfo
-    ? User
-    : M extends LastFmApiMethods.LibraryGetArtists
-    ? LimitUser
-    : M extends LastFmApiMethods.UserGetRecentTracks
-    ? LimitUser
-    : M extends LastFmApiMethods.ArtistSearch
-    ? Artist
-    : M extends LastFmApiMethods.ArtistGetInfo
-    ? Artist
-    : M extends LastFmApiMethods.ArtistGetTopTracks
-    ? LimitArtist
-    : M extends LastFmApiMethods.ArtistGetTopAlbums
-    ? Artist
-    : any;
+      ? User
+      : M extends LastFmApiMethods.LibraryGetArtists
+        ? LimitUser
+        : M extends LastFmApiMethods.UserGetRecentTracks
+          ? LimitUser
+          : M extends LastFmApiMethods.ArtistSearch
+            ? Artist
+            : M extends LastFmApiMethods.ArtistGetInfo
+              ? Artist
+              : M extends LastFmApiMethods.ArtistGetTopTracks
+                ? LimitArtist
+                : M extends LastFmApiMethods.ArtistGetTopAlbums
+                  ? Artist
+                  : any;

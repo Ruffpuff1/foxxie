@@ -17,19 +17,19 @@ model schedule {
 }
 
 model moderation {
-  caseId       Int
-  createdAt    DateTime? @db.Timestamp(6)
+  caseId       Int @map("case_id")
+  createdAt    DateTime? @db.Timestamp(6) @map("created_at")
   duration     BigInt?
-  extraData    Json?     @db.Json
-  guildId      String    @db.VarChar(19)
-  moderatorId  String    @db.VarChar(19)
+  extraData    Json?     @db.Json @map("extra_data")
+  guildId      String    @db.VarChar(19) @map("guild_id")
+  moderatorId  String    @db.VarChar(19) @map("moderator_id")
   reason       String?   @db.VarChar(2000)
-  imageUrl     String?   @db.VarChar(2000)
-  refrenceId   Int?      @db.SmallInt
-  userId       String?   @db.VarChar(19)
-  channelId    String?   @db.VarChar(19)
-  logChannelId String?   @db.VarChar(19)
-  logMessageId String?   @db.VarChar(19)
+  imageUrl     String?   @db.VarChar(2000) @map("image_url")
+  refrenceId   Int?      @db.SmallInt @map("refrence_id")
+  userId       String?   @db.VarChar(19) @map("user_id")
+  channelId    String?   @db.VarChar(19) @map("channel_id")
+  logChannelId String?   @db.VarChar(19) @map("log_channel_id")
+  logMessageId String?   @db.VarChar(19) @map("log_message_id")
   type         Int       @db.SmallInt
   metadata     Int       @default(0) @db.SmallInt
 

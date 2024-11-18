@@ -1,3 +1,4 @@
+import { FoxxieEvents, ConsoleState } from '#lib/Types';
 import { Listener } from '@sapphire/framework';
 import { DiscordAPIError } from 'discord.js';
 
@@ -7,9 +8,14 @@ export class UserListener extends Listener {
     public run(error: Error) {
         const { logger } = this.container;
         if (error instanceof DiscordAPIError) {
-            logger.warn(`[API ERROR] [CODE: ${error.code}] ${error.message}${NEWLINE}            [PATH: ${error.method}]`);
-            logger.fatal(error.stack);
+            this.container.client.emit(
+                FoxxieEvents.Console,
+                ConsoleState.Warn,
+                `[API ERROR] [CODE: ${error.code}] ${error.message}${NEWLINE}            [PATH: ${error.method}]`
+            );
+            this.container.client.emit(FoxxieEvents.Console, ConsoleState.Fatal, error.stack || '');
         } else {
+            this.container.client.emit(FoxxieEvents.Console, ConsoleState.Error, `${error.message}${NEWLINE}${error.stack}`);
             logger.error(error);
         }
     }

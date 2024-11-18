@@ -1,14 +1,20 @@
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
+import { floatPromise } from '#utils/util';
 import { cast } from '@ruffpuff/utilities';
 import { Listener } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
 
 export class UserListener extends Listener<FoxxieEvents.MessageCreate> {
-    public run(...[message]: EventArgs<FoxxieEvents.MessageCreate>): void {
+    public async run(...[message]: EventArgs<FoxxieEvents.MessageCreate>): Promise<void> {
         if (isNullish(message.guild) || isNullish(message.member)) return;
 
         if (message.system) {
             this.container.client.emit(FoxxieEvents.SystemMessage, cast<GuildMessage>(message));
+            return;
+        }
+
+        if (message.channel.id === '1307441764856107118') {
+            await floatPromise(message.delete());
             return;
         }
 

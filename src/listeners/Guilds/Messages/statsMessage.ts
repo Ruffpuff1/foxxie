@@ -1,5 +1,5 @@
 import { GuildSettings } from '#lib/Database';
-import { EventArgs, FoxxieEvents } from '#lib/Types';
+import { ConsoleState, EventArgs, FoxxieEvents } from '#lib/Types';
 import { minutes } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
@@ -22,9 +22,13 @@ export class UserListener extends Listener<FoxxieEvents.StatsMessage> {
     private async countGuild(guildId: string): Promise<void> {
         await this.container.settings.writeGuild(guildId, settings => {
             const newCount = settings[GuildSettings.MessageCount] + 1;
-            this.container.logger.debug(
+
+            this.container.client.emit(
+                FoxxieEvents.Console,
+                ConsoleState.Debug,
                 `[${cyan('StatsMessage')}] - ${`Updated guild [${cyan(guildId)}] message count - [${cyan(newCount.toLocaleString())}]`}`
             );
+
             return { messageCount: newCount };
         });
     }
@@ -33,6 +37,13 @@ export class UserListener extends Listener<FoxxieEvents.StatsMessage> {
         const memberEntity = await this.container.db.members.ensure(member.id, guildId);
         memberEntity.messageCount += 1;
         await memberEntity.save();
+
+        this.container.client.emit(
+            FoxxieEvents.Console,
+            ConsoleState.Debug,
+            `[${cyan('StatsMessage')}] - ${`Updated member [${cyan(member.displayName)}] message count - [${cyan(memberEntity.messageCount.toLocaleString())}]`}`
+        );
+
         this.container.logger.debug(
             `[${cyan('StatsMessage')}] - ${`Updated member [${cyan(member.displayName)}] message count - [${cyan(memberEntity.messageCount.toLocaleString())}]`}`
         );
@@ -42,7 +53,10 @@ export class UserListener extends Listener<FoxxieEvents.StatsMessage> {
         const client = await this.container.db.clients.ensure();
         client.messageCount += 1;
         await client.save();
-        this.container.logger.debug(
+
+        this.container.client.emit(
+            FoxxieEvents.Console,
+            ConsoleState.Debug,
             `[${cyan('StatsMessage')}] - ${`Updated client message count - [${cyan(client.messageCount.toLocaleString())}]`}`
         );
     }

@@ -1,4 +1,4 @@
-import { EnvKeys, EventArgs, FoxxieEvents } from '#lib/Types';
+import { ConsoleState, EnvKeys, EventArgs, FoxxieEvents } from '#lib/Types';
 import { EnvParse } from '@foxxie/env';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
@@ -12,7 +12,11 @@ export class UserListener extends Listener<FoxxieEvents.ListenerError> {
         const { event, location } = context.piece;
 
         if (error instanceof Error) {
-            this.container.logger.fatal(`[Listener] ${location.full}\n${error.stack || error.message}`)
+            this.container.client.emit(
+                FoxxieEvents.Console,
+                ConsoleState.Fatal,
+                `[Listener] ${location.full}\n${error.stack || error.message}`
+            );
         } else return;
 
         if (EnvParse.boolean(EnvKeys.SentryEnabled)) {

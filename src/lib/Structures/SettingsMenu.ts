@@ -10,7 +10,8 @@ import { ArgumentStream } from '@sapphire/lexure';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import { DiscordAPIError, EmbedBuilder, ImageFormat, MessageCollector, Routes } from 'discord.js';
 import { TFunction } from 'i18next';
-import { FoxxieArgs, FoxxieCommand } from './commands';
+import { FoxxieCommand } from './commands';
+import { FoxxieArgs } from './commands/FoxxieArgs';
 
 const EMOJIS = { BACK: '◀', STOP: '⏹' };
 const TIMEOUT = minutes(15);
@@ -155,7 +156,7 @@ export class SettingsMenu {
             // @ts-expect-error lexer is a private property.
             const lexureParser = new Lexure.Parser(conf.lexer.setInput(message.content).lex());
             const lexureArgs = new ArgumentStream(lexureParser.parse());
-            const args = new FoxxieArgs(this.message, conf, lexureArgs, context, this.t, 0);
+            const args = new FoxxieArgs(this.message, conf, lexureArgs, context, this.t);
 
             const commandLowerCase = args.next().toLowerCase(); //
             if (commandLowerCase === 'set') await this.tryUpdate(UpdateType.Set, args);

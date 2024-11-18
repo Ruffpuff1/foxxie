@@ -13,7 +13,7 @@ import type { Awaitable, User } from 'discord.js';
 import { TOptionsBase } from 'i18next';
 import type { GuildMessage, TypeOfEmbed } from './Discord';
 import { FoxxieEvents } from './Events';
-import type { ColorData, CustomFunctionGet, CustomGet, LanguageString } from './Utils';
+import type { ColorData, ConsoleState, CustomFunctionGet, CustomGet, LanguageString } from './Utils';
 import { WorkerService } from '#lib/Container/Workers';
 import { TaskStore } from '#lib/Container/Stores/Tasks/TaskStore';
 import { SettingsService } from '#lib/Container/Services/SettingsService';
@@ -30,6 +30,7 @@ declare module 'discord.js' {
     interface ClientEvents {
         [FoxxieEvents.BotMessage]: [message: GuildMessage];
         [FoxxieEvents.ChatInputCommandLogging]: [interaction: ChatInputCommandInteraction, command: FoxxieCommand];
+        [FoxxieEvents.Console]: [state: ConsoleState, message: string]
         [FoxxieEvents.GuildMemberJoin]: [member: GuildMember, settings: GuildEntity];
         [FoxxieEvents.GuildMessageLog]: [
             guild: Guild,

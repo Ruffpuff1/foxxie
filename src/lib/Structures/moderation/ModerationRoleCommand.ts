@@ -4,19 +4,20 @@ import { GuildMessage } from '#lib/Types';
 import { isAdmin, messagePrompt, promptForMessage } from '#utils/Discord';
 import { bold } from '@discordjs/builders';
 import { cast } from '@ruffpuff/utilities';
-import { Argument, PieceContext } from '@sapphire/framework';
+import { Argument } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { PickByValue } from '@sapphire/utilities';
 import { Role, Snowflake } from 'discord.js';
 import { ModerationSetupRestriction } from './ModerationActions';
 import { ModerationCommand } from './ModerationCommand';
+import { FoxxieCommand } from '../commands';
 
 export abstract class ModerationRoleCommand extends ModerationCommand {
     public readonly roleKey: PickByValue<GuildRoleSettingsService, Snowflake | null>;
 
     public readonly setUpKey: ModerationSetupRestriction;
 
-    public constructor(context: PieceContext, options: ModerationRoleCommand.Options) {
+    public constructor(context: FoxxieCommand.LoaderContext, options: ModerationRoleCommand.Options) {
         super(context, options);
         this.roleKey = options.roleKey;
         this.setUpKey = options.setUpKey;

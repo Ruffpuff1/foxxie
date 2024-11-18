@@ -1,7 +1,7 @@
-import { AsyncQueue } from "@sapphire/async-queue";
-import { ReadonlyGuildData } from "../types";
-import { SettingsService } from "#lib/Container/Services/SettingsService";
-import { container } from "@sapphire/framework";
+import { AsyncQueue } from '@sapphire/async-queue';
+import { ReadonlyGuildData } from '../types';
+import { SettingsService } from '#lib/Container/Services/SettingsService';
+import { container } from '@sapphire/framework';
 
 export class Transaction {
     #changes = Object.create(null) as Partial<ReadonlyGuildData>;

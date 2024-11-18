@@ -61,11 +61,10 @@ export class SettingsService {
         return SettingsService.GuildContextCache.ensure(settings.id, () => new SettingsContext(settings));
     }
 
-    public static UpdateSettingsContext(settings: ReadonlyGuildData, data: Partial<ReadonlyGuildData>): void {
+    public static UpdateSettingsContext(settings: ReadonlyGuildData, _: Partial<ReadonlyGuildData>): void {
         const existing = SettingsService.GuildContextCache.get(settings.id);
         if (existing) {
-            console.log(data);
-            //existing.update(settings, data);
+            // existing.update(settings, data);
         } else {
             const context = new SettingsContext(settings);
             SettingsService.GuildContextCache.set(settings.id, context);
