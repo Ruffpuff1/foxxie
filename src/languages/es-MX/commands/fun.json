@@ -1,0 +1,91 @@
+{
+    "animalcrossingCoffee": "",
+    "animalcrossingFooter": "",
+    "animalcrossingDetailedDescription": {
+        "description": "",
+        "usage": "",
+        "subcommands": [
+            {
+                "command": "",
+                "description": [""],
+                "examples": ["", "", ""]
+            }
+        ]
+    },
+    "animalcrossingNoVillager": "",
+    "animalcrossingNoVillagerProvided": "",
+    "animalcrossingTitles": {
+        "birthday": "",
+        "catchphrase": "",
+        "coffee": "",
+        "game": "",
+        "game_other": "",
+        "gender": "",
+        "goal": "",
+        "personality": "",
+        "saying": "",
+        "series": "",
+        "siblings": "",
+        "skill": "",
+        "song": "",
+        "species": "",
+        "zodiac": ""
+    },
+    "lastFmChatInputOptionArtistName": "artista",
+    "lastFmChatInputOptionArtistDescription": "El artista que desea buscar (por defecto se reproduce actualmente).",
+    "lastFmChatInputSubcommandArtistName": "artista",
+    "lastFmChatInputSubcommandArtistDescription": "Muestra la información del artista que estás escuchando o buscando en ese momento.",
+    "lastFmChatInputSubcommandGlobalWhoKnows": "globalquiénsabe",
+    "lastFmChatInputSubcommandGlobalWhoKnowsDescription": "Muestra qué otros usuarios escuchan a un artista.",
+    "lastFmDetailedDescription": {
+        "description": "",
+        "usage": "",
+        "subcommands": [
+            {
+                "command": "",
+                "description": [""],
+                "options": [
+                    {
+                        "name": "",
+                        "description": ""
+                    }
+                ],
+                "examples": ["", "", ""]
+            },
+            {
+                "command": "",
+                "description": [""],
+                "options": [
+                    {
+                        "name": "",
+                        "description": ""
+                    },
+                    {
+                        "name": "",
+                        "description": ""
+                    }
+                ],
+                "examples": ["", "", ""]
+            }
+        ]
+    },
+    "lastFmPlayListeners": "",
+    "lastFmPlayListeners_other": "",
+    "lastFmPlayNowPlaying": "",
+    "lastFmPlayPlays": "",
+    "lastFmPlayPlays_other": "",
+    "lastFmPlayPlaysBy": "",
+    "lastFmPlayPlaysBy_other": "",
+    "lastFmPlayPlaysByYou": "",
+    "lastFmPlayPlaysByYou_other": "",
+    "lastFmPlayWasPlaying": "",
+    "lastFmTitles": {
+        "about": "• Sobre",
+        "lastFmStats": "• Last.fm estadísticas",
+        "months": "• Meses",
+        "statistics": "• Estadísticas",
+        "summary": "• Resumen",
+        "years": "• Años"
+    },
+    "lastFmTrackNotFoundForUser": ""
+}

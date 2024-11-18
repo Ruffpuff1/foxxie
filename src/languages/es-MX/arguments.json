@@ -1,0 +1,9 @@
+{
+    "booleanDisabled": "Deshabilitado",
+    "booleanEnabled": "Activar",
+    "command": "{{ERROR}} ¡No tengo un comando llamado `{{parameter}}`! ¿Tal vez lo has escrito mal?",
+    "duration": "{{ERROR}} No pude resolver `{{parameter}}` a una duración. Prueba cosas como `1d` o `1week`.",
+    "language": "{{ERROR}} Actualmente no apoyo `{{parameter}}` como idioma. Por favor, elige entre {{list, codeand}}.",
+    "latest": "nuevo",
+    "moderationLogNone": "{{ERROR}} Parece que este servidor no tiene registros de moderación."
+}
