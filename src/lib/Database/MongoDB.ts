@@ -3,7 +3,7 @@ import { BrandingColors } from '#utils/constants';
 import { container } from '@sapphire/framework';
 import type { Message } from 'discord.js';
 import type { DataSource, Repository } from 'typeorm';
-import { GuildEntity, ModerationEntity, ScheduleEntity, StarEntity } from './entities';
+import { GuildEntity, ModerationEntity, StarEntity } from './entities';
 import { PollEntity } from './entities/PollEntity';
 import { ClientRepository, GuildRepository, LastFmArtistRepository, MemberRepository } from './repository';
 import { UserRepository } from './repository/UserRepository';
@@ -27,8 +27,6 @@ export class MongoDB {
 
     public readonly polls: Repository<PollEntity>;
 
-    public readonly schedules: Repository<ScheduleEntity>;
-
     public readonly starboards: Repository<StarEntity>;
 
     public readonly users: UserRepository;
@@ -51,7 +49,6 @@ export class MongoDB {
         this.members = members;
         this.moderations = dataSource.getRepository(ModerationEntity);
         this.polls = dataSource.getRepository(PollEntity);
-        this.schedules = dataSource.getRepository(ScheduleEntity);
         this.starboards = dataSource.getRepository(StarEntity);
         this.users = users;
         this.lastFmArtists = lastFmArtists;
@@ -73,7 +70,6 @@ export interface MongoDB {
     readonly members: MemberRepository;
     readonly moderation: ModerationEntity;
     readonly polls: Repository<PollEntity>;
-    readonly schedules: Repository<ScheduleEntity>;
     readonly starboards: Repository<StarEntity>;
     readonly users: UserRepository;
 }

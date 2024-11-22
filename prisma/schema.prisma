@@ -9,10 +9,10 @@ datasource db {
 
 model schedule {
   id        Int      @id @default(autoincrement())
-  taskId    String   @db.VarChar
+  taskId    String   @db.VarChar @map("task_id")
   time      DateTime @db.Timestamp(6)
   recurring String?  @db.VarChar
-  catchUp   Boolean  @default(true)
+  catchUp   Boolean  @default(true) @map("catch_up")
   data      Json
 }
 

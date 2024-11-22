@@ -1,4 +1,3 @@
-/* eslint-disable no-import-assign */
 import { ApiService } from '#Api/ApiService';
 import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
@@ -11,8 +10,9 @@ import { magentaBright } from 'colorette';
 import { WebhookClient } from 'discord.js';
 import { UtilityService } from './Container/Utility/UtilityService';
 import { WorkerService } from './Container/Workers';
-import { InviteManager, RedisManager, ScheduleManager } from './Structures';
+import { InviteManager, RedisManager } from './Structures';
 import { SettingsService } from './Container/Services/SettingsService';
+import { ScheduleManager } from './schedule/manager/ScheduleManager';
 
 export default class FoxxieClient extends SapphireClient {
     @Enumerable(false)

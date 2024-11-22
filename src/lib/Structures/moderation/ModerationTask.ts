@@ -1,5 +1,7 @@
 import { Task } from '#lib/Container/Stores/Tasks/Task';
-import { GuildSettings, PartialResponseValue, ResponseType } from '#lib/Database';
+import { GuildSettings } from '#lib/Database';
+import { PartialResponseValue, ResponseType } from '#lib/schedule/manager/ScheduleEntry';
+import { SchemaKeys } from '#utils/moderation';
 import { LockQueue } from '@foxxie/lock-queue';
 import { seconds } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
@@ -47,13 +49,21 @@ export abstract class ModerationTask<T = unknown> extends Task {
 }
 
 export interface ModerationData<T = unknown> {
-    caseId: number;
-    userId: string;
-    guildId: string;
-    duration: number;
-    channelId: string;
-    moderatorId: string;
-    extra: T;
+    [SchemaKeys.Case]: number;
+    [SchemaKeys.CreatedAt]: Date;
+    [SchemaKeys.Moderator]: string;
+    [SchemaKeys.Reason]: string | null;
+    [SchemaKeys.ImageURL]: string | null;
+    [SchemaKeys.Type]: number;
+    [SchemaKeys.Refrence]: number | null;
+    [SchemaKeys.LogChannel]: string | null;
+    [SchemaKeys.LogMessageId]: string | null;
+    [SchemaKeys.Channel]: string | null;
+    [SchemaKeys.Guild]: string;
+    [SchemaKeys.User]: string;
+    [SchemaKeys.Duration]: number;
+    [SchemaKeys.ExtraData]: T;
+    [SchemaKeys.Metadata]: any;
     scheduleRetryCount?: number;
 }
 

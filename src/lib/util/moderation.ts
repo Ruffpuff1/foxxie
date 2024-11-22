@@ -5,24 +5,67 @@ export const enum TypeBits {
     Metadata = 0b11110000 // 240
 }
 
-export const TypeVariation = {
-    Ban: 0b00000000, // 0
-    Kick: 0b00000001, // 1
-    Mute: 0b00000010, // 2
-    Prune: 0b00000011, // 3
-    SoftBan: 0b00000100, // 4
-    Warning: 0b00000101, // 5
-    Lock: 0b00000111, // 7
-    SetNickname: 0b00001011, // 11
-    RestrictEmbed: 0b00010100 // 20
-};
+export const enum TypeVariation {
+    Ban, // 0
+    Kick, // 1
+    Mute, // 2
+    Prune, // 3
+    Softban, //4
+    Warning, // 5
+    Unlock, // 6
+    Lock, // 7
+    VoiceMute, // 8
+    VoiceDeafen, // 9
+    VoiceDisconnect, // 10
+    SetNickname, // 11
+    RestrictedReaction, // 12
+    RestrictedAttachment, // 13
+    RestrictedVoice, // 14
+    RestrictedEmoji, // 15
+    RoleAdd, // 16
+    RoleRemove, // 17
+    Timeout, // 18
+    Dehoist, // 19
+    RestrictedEmbed, // 20
+    RaidBan // 21 prob final for now
+}
 
-export const TypeMetadata = {
-    Appeal: 0b01100100, // 100
-    Temporary: 0b11001000, // 200
-    Fast: 0b100101100, // 300
-    Invalidated: 0b110010000 // 400
-};
+export const enum TypeMetadata {
+	None = 0,
+	Undo = 1 << 0,
+	Temporary = 1 << 1,
+	/** @deprecated Use Temporary instead */
+	Fast = 1 << 2,
+	Archived = 1 << 3,
+	Completed = 1 << 4
+}
+
+export const enum SchemaKeys {
+	Case = 'caseId',
+	CreatedAt = 'createdAt',
+	Duration = 'duration',
+	ExtraData = 'extraData',
+	Guild = 'guildId',
+	Moderator = 'moderatorId',
+	Reason = 'reason',
+	ImageURL = 'imageUrl',
+	Type = 'type',
+	User = 'userId',
+    Refrence = 'refrenceId',
+    LogChannel = 'logChannelId',
+    LogMessageId = 'logMessageId',
+    Channel = 'channelId',
+    Metadata = 'metadata'
+}
+
+export interface ModerationTypeAssets {
+	color: number;
+	title: string;
+}
+
+export interface Unlock {
+	unlock(): void;
+}
 
 export const TypeCodes = {
     // normal
@@ -30,31 +73,31 @@ export const TypeCodes = {
     Kick: TypeVariation.Kick, // 1
     Mute: TypeVariation.Mute, // 2
     Prune: TypeVariation.Prune, // 3
-    SoftBan: TypeVariation.SoftBan, // 4
+    SoftBan: TypeVariation.Softban, // 4
     Warning: TypeVariation.Warning, // 5
     Lock: TypeVariation.Lock, // 7
     SetNickname: TypeVariation.SetNickname, // 11
-    RestrictEmbed: TypeVariation.RestrictEmbed, // 20
+    RestrictEmbed: TypeVariation.RestrictedEmbed, // 20
 
     // removed
-    UnBan: TypeVariation.Ban | TypeMetadata.Appeal, // 100
-    UnMute: TypeVariation.Mute | TypeMetadata.Appeal, // 102
-    UnWarn: TypeVariation.Warning | TypeMetadata.Appeal, // 101
-    UnLock: TypeVariation.Lock | TypeMetadata.Appeal, // 103
-    UnNickname: TypeVariation.SetNickname | TypeMetadata.Appeal, // 111
-    UnRestrictEmbed: TypeVariation.RestrictEmbed | TypeMetadata.Appeal, // 116
+    UnBan: TypeVariation.Ban | TypeMetadata.Undo, // 100
+    UnMute: TypeVariation.Mute | TypeMetadata.Undo, // 102
+    UnWarn: TypeVariation.Warning | TypeMetadata.Undo, // 101
+    UnLock: TypeVariation.Lock | TypeMetadata.Undo, // 103
+    UnNickname: TypeVariation.SetNickname | TypeMetadata.Undo, // 111
+    UnRestrictEmbed: TypeVariation.RestrictedEmbed | TypeMetadata.Undo, // 116
 
     // temp
     TemporaryBan: TypeVariation.Ban | TypeMetadata.Temporary, // 200
     TemporaryMute: TypeVariation.Mute | TypeMetadata.Temporary, // 202
     TemporaryNickname: TypeVariation.SetNickname | TypeMetadata.Temporary, // 203
-    TemporaryRestrictEmbed: TypeVariation.RestrictEmbed | TypeMetadata.Temporary, // 220
+    TemporaryRestrictEmbed: TypeVariation.RestrictedEmbed | TypeMetadata.Temporary, // 220
 
     // fast
     FastTemporaryBan: TypeVariation.Ban | TypeMetadata.Temporary | TypeMetadata.Fast, // 492
     FastTemporaryMute: TypeVariation.Mute | TypeMetadata.Temporary | TypeMetadata.Fast, // 494
     FastTemporaryNickname: TypeVariation.SetNickname | TypeMetadata.Temporary | TypeMetadata.Fast, // 495
-    FastTemporaryRestrictEmbed: TypeVariation.RestrictEmbed | TypeMetadata.Temporary | TypeMetadata.Fast // 508
+    FastTemporaryRestrictEmbed: TypeVariation.RestrictedEmbed | TypeMetadata.Temporary | TypeMetadata.Fast // 508
 };
 
 export const metadata = new Map<any, MetaData>([

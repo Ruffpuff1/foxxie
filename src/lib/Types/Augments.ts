@@ -4,7 +4,7 @@ import type { LongLivingReactionCollector } from '#external/LongLivingReactionCo
 import { UtilityService } from '#lib/Container/Utility/UtilityService';
 import type { GuildEntity, ModerationEntity, MongoDB, SerializerStore } from '#lib/Database';
 import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
-import type { FoxxieCommand, InviteManager, RedisManager, ScheduleManager } from '#lib/Structures';
+import type { FoxxieCommand, InviteManager, RedisManager } from '#lib/Structures';
 import type { Piece, Store } from '@sapphire/framework';
 import { TFunction, TOptions } from '@sapphire/plugin-i18next';
 import type { NonNullObject, PickByValue } from '@sapphire/utilities';
@@ -17,6 +17,7 @@ import type { ColorData, ConsoleState, CustomFunctionGet, CustomGet, LanguageStr
 import { WorkerService } from '#lib/Container/Workers';
 import { TaskStore } from '#lib/Container/Stores/Tasks/TaskStore';
 import { SettingsService } from '#lib/Container/Services/SettingsService';
+import { ScheduleManager } from '#lib/schedule/manager/ScheduleManager';
 
 declare module 'discord.js' {
     interface Client {
