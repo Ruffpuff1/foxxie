@@ -55,7 +55,7 @@ function parsePresenceActivity(): ActivitiesOptions[] {
     return [
         {
             name: EnvParse.string('CLIENT_PRESENCE_NAME'),
-            type: ActivityType.Watching
+            type: ActivityType.Playing
         }
     ];
 }
@@ -364,6 +364,7 @@ export const clientOptions: ClientOptions = {
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildPresences
     ]
 };

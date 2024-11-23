@@ -1,4 +1,4 @@
-import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
+import { guilds } from '@prisma/client';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';
@@ -6,17 +6,18 @@ import { type GuildResolvable, type GuildTextBasedChannel, type Snowflake } from
 
 export async function fetchChannel<T = GuildTextBasedChannel>(
     resolvable: GuildResolvable,
-    key: PickByValue<GuildChannelSettingsService, Snowflake | null>
+    key: PickByValue<guilds, Snowflake | null>
 ) {
     const guild = container.client.guilds.resolve(resolvable)!;
     if (!guild) return null;
 
-    const channelId = await container.db.guilds.acquire(guild.id, s => s.channels[key]);
+    const settings = await container.settings.readGuild(guild.id);
+    const channelId = settings[key];
     if (!channelId) return null;
 
     const channel = await resolveToNull(guild.channels.fetch(channelId));
     if (!channel) {
-        await container.db.guilds.write(guild.id, settings => (settings.channels[key] = null));
+        await container.settings.writeGuild(guild.id, { [key]: null });
         return null;
     }
 

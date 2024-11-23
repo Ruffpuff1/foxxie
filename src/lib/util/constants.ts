@@ -22,12 +22,19 @@ export const enum BrandingColors {
     Secondary = 0x4583c7
 }
 
+export type ModerationTaskId = Omit<Schedules, 'Birthday' | 'Disboard' | 'UpdateDiscogsUsers' | 'UpdateLastFmUsers'>;
+
+export const ModerationTasks = [Schedules.EndTempBan, Schedules.EndTempMute, Schedules.EndTempNick, Schedules.EndTempNick];
+
 export const enum Schedules {
+    Birthday = 'birthday',
     Disboard = 'disboard',
     EndTempBan = 'endTempban',
     EndTempMute = 'endTempmute',
     EndTempNick = 'endTempnick',
     EndTempRestrictEmbed = 'endTemprestrictembed',
+    Reminder = 'reminder',
+    RemoveBirthdayRole = 'removeBirthdayRole',
     UpdateDiscogsUsers = 'updateDiscogsUsers',
     UpdateLastFmUsers = 'updateLastFmUsers'
 }

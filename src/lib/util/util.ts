@@ -1,5 +1,5 @@
 import { acquireSettings } from '#lib/Database';
-import { DetailedDescription, GuildMessage } from '#lib/Types';
+import { DetailedDescription, GuildMessage, ScheduleData } from '#lib/Types';
 import { cast, isNumber, isThenable } from '@ruffpuff/utilities';
 import { ArgType, container } from '@sapphire/framework';
 import { APIUser } from 'discord-api-types/v10';
@@ -15,7 +15,8 @@ import {
     makeURLSearchParams
 } from 'discord.js';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
-import { BrandingColors } from './constants';
+import { BrandingColors, Schedules } from './constants';
+import { ScheduleEntry } from '#lib/schedule/manager/ScheduleEntry';
 
 /**
  * Attaches a logging catch method to a promise, "floating it".
@@ -38,6 +39,32 @@ export async function resolveKey(
     const result = guild.getLanguage()(key, { ...variables });
 
     return result;
+}
+
+export function fetchTasks<T extends Schedules = Schedules>(
+    type: T,
+    filter: (j: ScheduleEntry<T>) => boolean = () => true
+): MappedTask<T>[] {
+    const cache = container.schedule.queue;
+
+    const filtered = cache
+        .filter(a => Boolean(a))
+        .filter(a => (type ? a.taskId === type : true))
+        .filter(filter);
+
+    return filtered.map(job => ({
+        id: job.id,
+        time: new Date(job.time),
+        data: job.data as ScheduleData<T>,
+        name: job.taskId as T
+    }));
+}
+
+export interface MappedTask<T extends Schedules = Schedules> {
+    id: number;
+    time: Date;
+    data: ScheduleData<T>;
+    name: T;
 }
 
 export function getServerDetails() {

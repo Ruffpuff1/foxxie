@@ -1,4 +1,32 @@
 {
+    "birthdayDescription": "Manage the birthdays of the members of your server.",
+    "birthdayDetailedDescription": {
+        "description": "Configure my birthday settings for you in this server.",
+        "usage": "{{prefix}}birthday [list|set]",
+        "subcommands": [
+            {
+                "command": "list",
+                "description": [
+                    "Lists the birthdays set in this server"
+                ],
+                "examples": [
+                    "{{prefix}}birthday",
+                    "{{prefix}}birthday list"
+                ]
+            },
+            {
+                "command": "set",
+                "description": [
+                    "Allows you to set your birthday in this server with an optional year."
+                ],
+                "examples": [
+                    "{{prefix}}birthday set 08/29/2005",
+                    "{{prefix}}birthday set 12/11"
+                ]
+            }
+        ]
+    },
+    "birthdaySetSuccess": "{{SUCCESS}} Done! I'll wish you a happy birthday on **{{birthday, fulldate}}**.",
     "confDescription": "Configure your server's settings for me.",
     "confGet": "The value for the key **{{key}}** is: `{{value}}`",
     "confGetNoExt": "The key **{{key}}** does not seem to exist.",

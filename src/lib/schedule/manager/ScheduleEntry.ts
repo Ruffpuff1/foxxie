@@ -1,19 +1,19 @@
-import { ModerationManagerEntry } from '#lib/moderation/managers/ModerationManagerEntry';
-import { FoxxieEvents } from '#lib/Types';
-import { TypeVariation } from '#utils/moderation';
+import { FoxxieEvents, ScheduleData } from '#lib/Types';
+import { BirthdayData } from '#utils/birthday';
+import { Schedules } from '#utils/constants';
 import { schedule } from '@prisma/client';
 import { cast } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';
 import { isNullishOrEmpty } from '@sapphire/utilities';
 
-export class ScheduleEntry<Type extends ScheduleEntry.TaskId = ScheduleEntry.TaskId> {
+export class ScheduleEntry<Type extends Schedules = Schedules> {
     public id: number;
-    public taskId: string;
+    public taskId: Schedules;
     public time: Date;
     public recurring!: Cron | null;
     public catchUp!: boolean;
-    public data!: ScheduleEntry.TaskData[Type];
+    public data!: ScheduleData<Type>;
 
     #running = false;
 
@@ -21,7 +21,7 @@ export class ScheduleEntry<Type extends ScheduleEntry.TaskId = ScheduleEntry.Tas
 
     public constructor(data: schedule) {
         this.id = data.id;
-        this.taskId = data.taskId;
+        this.taskId = data.taskId as Schedules;
         this.#patch(data);
     }
 
@@ -92,12 +92,10 @@ export class ScheduleEntry<Type extends ScheduleEntry.TaskId = ScheduleEntry.Tas
         this.time = data.time;
         this.recurring = isNullishOrEmpty(data.recurring) ? null : new Cron(data.recurring);
         this.catchUp = data.catchUp;
-        this.data = cast<ScheduleEntry.TaskData[Type]>(data.data);
+        this.data = cast<ScheduleData<Type>>(data.data);
     }
 
-    public static async create<const Type extends ScheduleEntry.TaskId>(
-        data: ScheduleEntry.CreateData<Type>
-    ): Promise<ScheduleEntry<Type>> {
+    public static async create<const Type extends Schedules>(data: ScheduleEntry.CreateData<Type>): Promise<ScheduleEntry<Type>> {
         const entry = await container.prisma.schedule.create({ data });
         return new ScheduleEntry(entry);
     }
@@ -118,46 +116,37 @@ export type PartialResponseValue =
 export type ResponseValue = PartialResponseValue & { entry: ScheduleEntry };
 
 export namespace ScheduleEntry {
-    export type TaskId = keyof TaskData;
+    // interface SharedModerationTaskData<Type extends TypeVariation> {
+    //     caseID: number;
+    //     userID: string;
+    //     guildID: string;
+    //     type: Type;
+    //     duration: number | null;
+    //     extraData: ModerationManagerEntry.ExtraData<Type>;
+    //     scheduleRetryCount?: number;
+    // }
 
-    export interface TaskData {
-        moderationEndAddRole: SharedModerationTaskData<TypeVariation.RoleAdd>;
-        moderationEndBan: SharedModerationTaskData<TypeVariation.Ban>;
-        moderationEndMute: SharedModerationTaskData<TypeVariation.Mute>;
-        moderationEndRemoveRole: SharedModerationTaskData<TypeVariation.RoleRemove>;
-        moderationEndRestrictionAttachment: SharedModerationTaskData<TypeVariation.RestrictedAttachment>;
-        moderationEndRestrictionEmbed: SharedModerationTaskData<TypeVariation.RestrictedEmbed>;
-        moderationEndRestrictionEmoji: SharedModerationTaskData<TypeVariation.RestrictedEmoji>;
-        moderationEndRestrictionReaction: SharedModerationTaskData<TypeVariation.RestrictedReaction>;
-        moderationEndRestrictionVoice: SharedModerationTaskData<TypeVariation.RestrictedVoice>;
-        moderationEndSetNickname: SharedModerationTaskData<TypeVariation.SetNickname>;
-        moderationEndTimeout: SharedModerationTaskData<TypeVariation.Timeout>;
-        moderationEndVoiceMute: SharedModerationTaskData<TypeVariation.VoiceMute>;
-        moderationEndWarning: SharedModerationTaskData<TypeVariation.Warning>;
+    export interface BirthdayTaskData extends BirthdayData {
+        guildId: string;
+        userId: string;
     }
 
-    interface SharedModerationTaskData<Type extends TypeVariation> {
-        caseID: number;
-        userID: string;
-        guildID: string;
-        type: Type;
-        duration: number | null;
-        extraData: ModerationManagerEntry.ExtraData<Type>;
-        scheduleRetryCount?: number;
-    }
-
-    export interface CreateData<Type extends TaskId> {
+    export interface CreateData<Type extends Schedules> {
         taskId: Type;
         time: Date | string;
         recurring: string | null;
         catchUp: boolean;
-        data: TaskData[Type];
+        data: ScheduleData<Type>;
     }
 
-    export interface UpdateData<Type extends TaskId> {
+    export interface UpdateData<Type extends Schedules> {
         time?: Date;
         recurring?: string | null;
         catchUp?: boolean;
-        data?: TaskData[Type];
+        data?: ScheduleData<Type>;
     }
 }
+
+export type ModerationScheduleEntry = ScheduleEntry<
+    Schedules.EndTempBan | Schedules.EndTempMute | Schedules.EndTempNick | Schedules.EndTempRestrictEmbed
+>;

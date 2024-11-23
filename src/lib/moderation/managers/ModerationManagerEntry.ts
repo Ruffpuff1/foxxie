@@ -1,5 +1,6 @@
-import { ScheduleEntry } from '#lib/schedule/manager/ScheduleEntry';
+import { ModerationScheduleEntry } from '#lib/schedule/manager/ScheduleEntry';
 import { ModerationData } from '#lib/Structures';
+import { ModerationTasks } from '#utils/constants';
 import { TypeMetadata, TypeVariation } from '#utils/moderation';
 import { minutes } from '@ruffpuff/utilities';
 import { UserError, container } from '@sapphire/framework';
@@ -272,8 +273,9 @@ export class ModerationManagerEntry<Type extends TypeVariation = TypeVariation> 
         };
     }
 
-    #isMatchingTask(task: ScheduleEntry) {
-        return task.data !== null && task.data.caseID === this.id && task.data.guildID === this.guild.id;
+    #isMatchingTask(task: ModerationScheduleEntry) {
+        if (!ModerationTasks.includes(task.taskId)) return false;
+        return task.data !== null && task.data.caseId && task.data.caseId === this.id && task.data.guildId === this.guild.id;
     }
 
     #setDuration(duration: bigint | number | null) {

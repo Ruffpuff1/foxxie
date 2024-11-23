@@ -1,6 +1,8 @@
 import { container } from '@sapphire/framework';
 import { ResponseType, ResponseValue, ScheduleEntry } from './ScheduleEntry';
 import { Cron } from '@sapphire/time-utilities';
+import { ScheduleData } from '#lib/Types';
+import { Schedules } from '#utils/constants';
 
 export class ScheduleManager {
     public queue: ScheduleEntry[] = [];
@@ -16,7 +18,7 @@ export class ScheduleManager {
         this._checkInterval();
     }
 
-    public async add<const Type extends ScheduleEntry.TaskId>(
+    public async add<const Type extends Schedules = Schedules>(
         taskId: Type,
         timeResolvable: TimeResolvable,
         options: ScheduleManagerAddOptions<Type>
@@ -182,7 +184,7 @@ export class ScheduleManager {
     }
 }
 
-export interface ScheduleManagerAddOptions<Type extends ScheduleEntry.TaskId> {
+export interface ScheduleManagerAddOptions<Type extends Schedules> {
     /**
      * If the task should try to catch up if the bot is down.
      */
@@ -191,7 +193,7 @@ export interface ScheduleManagerAddOptions<Type extends ScheduleEntry.TaskId> {
     /**
      * The data to pass to the Task piece when the ScheduledTask is ready for execution.
      */
-    data: ScheduleEntry.TaskData[Type];
+    data: ScheduleData<Type>;
 }
 
 export type TimeResolvable = number | Date | string | Cron;

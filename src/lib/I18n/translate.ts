@@ -29,6 +29,14 @@ export function translate(key: Identifier): TranslatedResult {
         // Subcommandsd
         case SubcommandPluginIdentifiers.MessageSubcommandNoMatch:
             return LanguageKeys.Preconditions.MessageSubcommandNoMatch;
+        // Return as Self
+        case LanguageKeys.Arguments.Birthday:
+        case LanguageKeys.Arguments.BirthdayDay:
+        case LanguageKeys.Arguments.BirthdayMonth:
+        case LanguageKeys.Arguments.BirthdayYear:
+        case LanguageKeys.Arguments.BirthdayYearFuture:
+        case LanguageKeys.Arguments.BirthdayYearPast:
+            return key as TranslatedResult;
         default:
             return LanguageKeys.Globals.DefaultT;
     }

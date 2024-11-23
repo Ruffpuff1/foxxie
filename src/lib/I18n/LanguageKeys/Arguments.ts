@@ -1,5 +1,12 @@
 import { FT, T } from '#lib/Types';
 
+export const Birthday = FT<{ parameter: string }>('arguments:birthday');
+export const BirthdayDay = FT<{ day: number; monthKey: string }>('arguments:birthdayDay');
+export const BirthdayMonth = FT<{ month: number }>('arguments:birthdayMonth');
+export const BirthdayMonths = T<string[]>('arguments:birthdayMonths');
+export const BirthdayYear = FT<{ year: number; msg: string }>('arguments:birthdayYear');
+export const BirthdayYearFuture = T('arguments:birthdayYearFuture');
+export const BirthdayYearPast = T('arguments:birthdayYearPast');
 export const BooleanDisabled = T('arguments:booleanDisabled');
 export const BooleanEnabled = T('arguments:booleanEnabled');
 export const Command = FT<{ parameter: string }>('arguments:command');

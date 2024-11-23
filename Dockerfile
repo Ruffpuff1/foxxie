@@ -11,8 +11,9 @@ RUN yarn install
 
 COPY scripts/ scripts/
 COPY src/ src/
+COPY prisma/ prisma/
 
-RUN yarn build
+RUN yarn run prisma generate \ && yarn run build
 
 ENV NODE_ENV="production"
 

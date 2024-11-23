@@ -9,7 +9,7 @@ datasource db {
 
 model schedule {
   id        Int      @id @default(autoincrement())
-  taskId    String   @db.VarChar @map("task_id")
+  taskId    String   @map("task_id") @db.VarChar
   time      DateTime @db.Timestamp(6)
   recurring String?  @db.VarChar
   catchUp   Boolean  @default(true) @map("catch_up")
@@ -17,19 +17,19 @@ model schedule {
 }
 
 model moderation {
-  caseId       Int @map("case_id")
-  createdAt    DateTime? @db.Timestamp(6) @map("created_at")
+  caseId       Int       @map("case_id")
+  createdAt    DateTime? @map("created_at") @db.Timestamp(6)
   duration     BigInt?
-  extraData    Json?     @db.Json @map("extra_data")
-  guildId      String    @db.VarChar(19) @map("guild_id")
-  moderatorId  String    @db.VarChar(19) @map("moderator_id")
+  extraData    Json?     @map("extra_data") @db.Json
+  guildId      String    @map("guild_id") @db.VarChar(19)
+  moderatorId  String    @map("moderator_id") @db.VarChar(19)
   reason       String?   @db.VarChar(2000)
-  imageUrl     String?   @db.VarChar(2000) @map("image_url")
-  refrenceId   Int?      @db.SmallInt @map("refrence_id")
-  userId       String?   @db.VarChar(19) @map("user_id")
-  channelId    String?   @db.VarChar(19) @map("channel_id")
-  logChannelId String?   @db.VarChar(19) @map("log_channel_id")
-  logMessageId String?   @db.VarChar(19) @map("log_message_id")
+  imageUrl     String?   @map("image_url") @db.VarChar(2000)
+  refrenceId   Int?      @map("refrence_id") @db.SmallInt
+  userId       String?   @map("user_id") @db.VarChar(19)
+  channelId    String?   @map("channel_id") @db.VarChar(19)
+  logChannelId String?   @map("log_channel_id") @db.VarChar(19)
+  logMessageId String?   @map("log_message_id") @db.VarChar(19)
   type         Int       @db.SmallInt
   metadata     Int       @default(0) @db.SmallInt
 
@@ -56,6 +56,7 @@ model guilds {
   disabledCommands                     String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(32)[]")) @map("disabled-commands") @db.VarChar(32)
   permissionsUsers                     Json     @default("[]") @map("permissions.users")
   permissionsRoles                     Json     @default("[]") @map("permissions.roles")
+  channelsBirthday                     String?  @map("channels.birthday") @db.VarChar(19)
   channelsMediaOnly                    String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("channels.media-only") @db.VarChar(19)
   channelsLogsModeration               String?  @map("channels.logs.moderation") @db.VarChar(19)
   channelsLogsImage                    String?  @map("channels.logs.image") @db.VarChar(19)
@@ -107,6 +108,7 @@ model guilds {
   rolesPersistEnabled                  Boolean  @default(true) @map("roles.persist-enabled")
   reactionRoles                        Json     @default("[]") @map("reaction-roles")
   rolesAdmin                           String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("roles.admin") @db.VarChar(19)
+  rolesBirthday                           String?  @map("roles.birthday") @db.VarChar(19)
   rolesInitialHumans                   String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("roles.initial-humans") @db.VarChar(19)
   rolesInitialBots                     String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("roles.initial-bots") @db.VarChar(19)
   rolesModerator                       String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("roles.moderator") @db.VarChar(19)

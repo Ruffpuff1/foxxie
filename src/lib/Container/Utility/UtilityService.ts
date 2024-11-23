@@ -6,6 +6,7 @@ import { ChatInputCommandsService } from './ChatInputCommands/ChatInputCommands'
 import { GuildUtilityService } from './Guild/GuildUtilityService';
 import { SubCommandsService } from './SubCommands/SubCommands';
 import { TextCommandsService } from './TextCommands/TextCommands';
+import { ErrorService } from './Errors/ErrorService';
 
 export class UtilityService {
     #channelUtilityCache = new WeakMap<Channel, ChannelUtilityService>();
@@ -15,6 +16,8 @@ export class UtilityService {
     public autoCompleteCommands = new AutoCompleteCommandsService();
 
     public chatInputCommands = new ChatInputCommandsService();
+
+    public errors = new ErrorService();
 
     public subCommands = new SubCommandsService();
 

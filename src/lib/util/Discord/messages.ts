@@ -45,7 +45,7 @@ export async function deleteMessage(message: Message, time = 0): Promise<Message
 export async function sendLoadingMessage(
     msg: GuildMessage,
     key: CustomGet<string, string[]> | CustomFunctionGet<any, string, string[]> = LanguageKeys.System.MessageLoading,
-    args = {}
+    args = {},
 ): Promise<Message | GuildMessage> {
     const t = await container.db.guilds.acquire(msg.guild.id!, s => s.getLanguage());
     const translated = t(key, cast<TOptionsBase>(args));
