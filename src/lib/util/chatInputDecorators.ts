@@ -172,7 +172,7 @@ export const NameAndDescriptionToLocalizedSubCommands: (
     )[]
 ) => ApplicationCommandSubCommandData[] = (...options) => {
     const englishUS = getFixedT('en-US');
-    const spanishMX = getFixedT('es-MX');
+    const spanishMX = getFixedT('es-ES');
 
     return options.map(opt => {
         if (!opt.translate)

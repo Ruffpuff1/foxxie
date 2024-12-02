@@ -2,6 +2,5 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnPaste": true,
-    "editor.formatOnType": true,
-    "typescript.experimental.updateImportsOnPaste": true
+    "editor.formatOnType": true
 }

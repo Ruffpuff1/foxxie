@@ -9,7 +9,7 @@
     "eventsKick": "Whether or not I should log kicks made through the Discord UI as well as my own commands.",
     "eventsMuteAdd": "Whether or not I should log when the mute role is manually added to a user using the Discord UI.",
     "eventsMuteRemove": "Whether or not I should log when the mute role is manually removed from a user using the Discord UI.",
-    "language": "The language I'll respond with in your server, currently I support `en-US` and `es-MX`.",
+    "language": "The language I'll respond with in your server, currently I support `en-US` and `es-ES`.",
     "messagesBoost": "The message I'll send if somebody boosts the server. I'll send the message in the configured boost announcement channel.",
     "messagesDisboard": "The message I'll send if disboard bumping reminders are enabled.",
     "messagesGoodbye": "The message I'll send if a member leaves the server. I'll send the message in the configured goodbye channel.",

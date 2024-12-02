@@ -23,7 +23,7 @@ export function RegisterChatInputCommand(
                     [];
 
                 const englishUS = getFixedT('en-US');
-                const spanishMX = getFixedT('es-MX');
+                const spanishMX = getFixedT('es-ES');
 
                 if (options.translate) {
                     options.name = englishUS(options.name);

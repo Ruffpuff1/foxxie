@@ -2,7 +2,7 @@
     "abortOptions": ["stop", "cancel", "abort", "end", "done"],
     "and": "{{value, and}}",
     "any": "any",
-    "case": "case",
+    "case": "Case",
     "chatInputOptionHidden": "hidden",
     "chatInputOptionHiddenDescription": "Whether to hide the command's output (defaults to false).",
     "dateValue": "{{value, date}}",

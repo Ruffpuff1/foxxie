@@ -21,6 +21,13 @@
     "birthdayYearPast": "If I remember correctly, currently the oldest person on earth was born in 1908.",
     "booleanDisabled": "Disabled",
     "booleanEnabled": "Enabled",
+    "caseNoEntries": "I could not resolve `{{parameter}}` to a case, as there are no moderation cases in this server!",
+	"caseUnknownEntry": "I could not resolve `{{parameter}}` to a case, make sure you typed its number correctly!",
+	"caseNotInThisGuild": "I somehow resolved `{{parameter}}` to a case, but it is not from this server!",
+	"caseLatestOptions": [
+		"last",
+		"latest"
+	],
     "command": "{{ERROR}} I don't have a command named `{{parameter}}`! Maybe you spelled it wrong?",
     "duration": "{{ERROR}} I couldn't resolve `{{parameter}}` to a duration. Try things such as `1d` or `1week`.",
     "language": "{{ERROR}} I don't currently support `{{parameter}}` as a language. Please choose between {{list, codeand}}.",

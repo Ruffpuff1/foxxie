@@ -11,8 +11,9 @@ import {
     UserError
 } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
-import type { Awaitable, Guild, Message } from 'discord.js';
+import type { Awaitable, Guild, Message, Snowflake } from 'discord.js';
 import { FoxxieCommandUtilities } from './base/FoxxieCommandUtilities';
+import { first } from '@sapphire/iterator-utilities/first';
 import { FoxxieArgs } from './FoxxieArgs';
 
 export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCommand.Options> {
@@ -101,6 +102,20 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
         super.parseConstructorPreConditions(options);
         this.addPermissionLevels(options);
         this.addAllowedGuildsPrecondition(options);
+    }
+
+    /**
+     * Retrieves the global command id from the application command registry.
+     *
+     * @remarks
+     *
+     * This method is used for slash commands, and will throw an error if the
+     * global command ids are empty.
+     */
+    public getGlobalCommandId(): Snowflake {
+        const ids = this.applicationCommandRegistry.guildCommandIds;
+        if (ids.size === 0) throw new Error('The global command ids are empty.');
+        return first(ids.values())!;
     }
 
     protected error(identifier: string | UserError, context?: unknown): never {

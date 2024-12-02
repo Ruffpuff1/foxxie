@@ -33,7 +33,7 @@ export interface StickyRole {
 
 export enum FoxxieLocale {
     EnglishUS = 'en-US',
-    SpanishMX = 'es-MX'
+    SpanishMX = 'es-ES'
 }
 
 export type FoxxieLocaleType = `${FoxxieLocale}`;

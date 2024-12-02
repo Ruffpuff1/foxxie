@@ -1,0 +1,10 @@
+{
+    "name": "case",
+    "description": "Manage or view moderation cases.",
+    "viewName": "view",
+	"viewDescription": "Retrieve a moderation case's information.",
+    "optionsCaseName": "case",
+	"optionsCaseDescription": "The number of the moderation case.",
+    "optionsShowName": "show",
+	"optionsShowDescription": "Whether or not to show the response publicly."
+}

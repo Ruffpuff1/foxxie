@@ -1,8 +1,12 @@
 import { CustomFunctionGet, CustomGet } from '#lib/Types';
 import { DecoratorIdentifiers } from '@sapphire/decorators';
-import { Identifiers } from '@sapphire/framework';
+import { container, Identifiers } from '@sapphire/framework';
 import { SubcommandPluginIdentifiers } from '@sapphire/plugin-subcommands';
 import { LanguageKeys } from '.';
+import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
+import { getFixedT, TFunction } from 'i18next';
+import { Nullish } from '@sapphire/utilities';
+import { LocaleString, Interaction } from 'discord.js';
 
 export type Identifier = Identifiers | DecoratorIdentifiers | SubcommandPluginIdentifiers | string;
 export type TranslatedResult = CustomFunctionGet<string, Record<any, any>, string> | CustomGet<string, string>;
@@ -43,4 +47,36 @@ export function translate(key: Identifier): TranslatedResult {
         default:
             return LanguageKeys.Globals.DefaultT;
     }
+}
+
+export type TResolvable = FoxxieArgs | TFunction;
+
+export function resolveT(t: TResolvable): TFunction {
+    return typeof t === 'function' ? t : t.t;
+}
+/**
+ * Returns a translation function for the specified locale, or the default 'en-US' if none is provided.
+ * @param locale The locale to get the translation function for.
+ * @returns The translation function for the specified locale.
+ */
+export function getT(locale?: LocaleString | string | Nullish) {
+    return getFixedT(locale ?? 'en-US');
+}
+
+export function getSupportedLanguageName(interaction: Interaction): LocaleString {
+    if (interaction.guildLocale && container.i18n.languages.has(interaction.guildLocale)) return interaction.guildLocale;
+    return 'en-US';
+}
+
+export function getSupportedLanguageT(interaction: Interaction): TFunction {
+    return getT(getSupportedLanguageName(interaction));
+}
+
+export function getSupportedUserLanguageName(interaction: Interaction): LocaleString {
+    if (container.i18n.languages.has(interaction.locale)) return interaction.locale;
+    return getSupportedLanguageName(interaction);
+}
+
+export function getSupportedUserLanguageT(interaction: Interaction): TFunction {
+    return getT(getSupportedUserLanguageName(interaction));
 }

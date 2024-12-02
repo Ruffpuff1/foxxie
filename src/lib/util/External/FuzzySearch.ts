@@ -65,8 +65,8 @@ export class FuzzySearch<K extends string, V> {
 
                         resultsFromAccessKeys.push(sorted[0]);
                     }
-                } else if (typeof current === 'string') {
-                    lowerCaseName = current.toLowerCase();
+                } else if (typeof current === 'string' || typeof current === 'number') {
+                    lowerCaseName = current.toString().toLowerCase();
 
                     // If lowercase result, go next
                     if (lowerCaseName === query) {

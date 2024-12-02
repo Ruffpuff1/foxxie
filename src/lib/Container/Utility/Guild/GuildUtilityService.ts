@@ -4,11 +4,14 @@ import { Result, container } from '@sapphire/framework';
 import { Guild, GuildAuditLogsEntry, GuildAuditLogsResolvable, GuildResolvable } from 'discord.js';
 import { GuildPollService } from './GuildPollService';
 import { GuildSettingsService } from './GuildSettingsService';
+import { GuildModerationService } from '#lib/moderation/managers/GuildModerationService';
 
 /**
  * Utility service for a Discord guild.
  */
 export class GuildUtilityService {
+    public moderation: GuildModerationService;
+
     public polls: GuildPollService;
 
     /**
@@ -25,6 +28,8 @@ export class GuildUtilityService {
     public constructor(resolvable: GuildResolvable) {
         const guild = container.client.guilds.resolve(resolvable);
         this.guild = guild!;
+
+        this.moderation = new GuildModerationService(this.guild);
 
         this.polls = new GuildPollService(this.guild);
 

@@ -12,14 +12,12 @@ export class UserListener extends Listener {
         if (presence.userId === '825130284382289920') {
             if (presence.status === PresenceUpdateStatus.Offline) {
                 if (this.cache.has(presence.userId)) return;
-                console.log(presence);
                 this.cache.add(presence.userId);
                 this.container.client.developmentRecoveryMode = true;
                 this.reloadStores();
                 this.setStatus('idle');
             } else {
                 if (this.cache.has(presence.userId)) return;
-                console.log(presence);
                 this.cache.add(presence.userId);
 
                 this.container.client.developmentRecoveryMode = false;

@@ -440,6 +440,11 @@
     "@sapphire/stopwatch" "^1.5.0"
     "@sapphire/utilities" "^3.13.0"
 
+"@sapphire/iterator-utilities@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@sapphire/iterator-utilities/-/iterator-utilities-2.0.1.tgz#0a60e93f9e4e55d5f74f43bac7d85e14d14918a9"
+  integrity sha512-SqH2MFaUbmxPoijdYiFdzHM185PWR2m4cNPEUyJTpQqKU7/EPtFh7Nari3ZFoQ0IbPgwn/a7l+kRFf2twUV1+g==
+
 "@sapphire/lexure@^1.1.5":
   version "1.1.10"
   resolved "https://registry.yarnpkg.com/@sapphire/lexure/-/lexure-1.1.10.tgz#64735e5e12cfcd9c3542cb5436d64bfcf55e24f8"

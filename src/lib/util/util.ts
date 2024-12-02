@@ -8,15 +8,37 @@ import {
     ChatInputCommandInteraction,
     ColorResolvable,
     GuildResolvable,
+    ImageURLOptions,
     Message,
     RESTGetAPIChannelMessageReactionUsersResult,
     Routes,
     SnowflakeUtil,
+    User,
     makeURLSearchParams
 } from 'discord.js';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
 import { BrandingColors, Schedules } from './constants';
 import { ScheduleEntry } from '#lib/schedule/manager/ScheduleEntry';
+import { isNullishOrEmpty } from '@sapphire/utilities';
+
+/**
+ * Checks whether or not the user uses the new username change, defined by the
+ * `discriminator` being `'0'` or in the future, no discriminator at all.
+ * @see {@link https://dis.gd/usernames}
+ * @param user The user to check.
+ */
+export function usesPomelo(user: User | APIUser) {
+    return isNullishOrEmpty(user.discriminator) || user.discriminator === '0';
+}
+
+export function getDisplayAvatar(user: User | APIUser, options?: Readonly<ImageURLOptions>) {
+    if (user.avatar === null) {
+        const id = usesPomelo(user) ? Number(BigInt(user.id) >> 22n) % 6 : Number(user.discriminator) % 5;
+        return container.client.rest.cdn.defaultAvatar(id);
+    }
+
+    return container.client.rest.cdn.avatar(user.id, user.avatar, options);
+}
 
 /**
  * Attaches a logging catch method to a promise, "floating it".

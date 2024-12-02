@@ -318,8 +318,8 @@ function parseI18nOptions(): InternationalizationOptions {
         formatters: getFormatters(),
         defaultLanguageDirectory: join(__dirname, 'languages'),
         i18next: {
-            supportedLngs: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishMexico],
-            preload: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishMexico],
+            supportedLngs: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishSpain, 'es-419'],
+            preload: [Iso6391Enum.EnglishUnitedStates, Iso6391Enum.SpanishSpain, 'es-419'],
             returnObjects: true,
             returnEmptyString: false,
             returnNull: false,

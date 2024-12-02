@@ -41,3 +41,5 @@ export const UnRestrictEmbedDescription = T('commands/moderation:unRestrictEmbed
 export const UnRestrictEmbedSuccess = FT<{ users: string[]; range: string | number; count: number }>(
     'commands/moderation:unRestrictEmbedSuccess'
 );
+
+export * from './Moderation/index';

@@ -1,7 +1,7 @@
 import type { ClientEvents } from 'discord.js';
 import { FoxxieEvents } from './Events';
 
-export type LanguageString = 'en-US' | 'es-MX';
+export type LanguageString = 'en-US' | 'es-ES';
 
 interface EmojiObjectPartial {
     name: string | null;
