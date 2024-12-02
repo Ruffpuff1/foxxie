@@ -1,4 +1,3 @@
-import { GetUserInfoResult } from '#Api/LastFm';
 import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/Types';
 
 export const AnimalcrossingCoffee = FT<{ beans: string; milk: string; sugar: string }>('commands/fun:animalcrossingCoffee');
@@ -56,5 +55,5 @@ export const LastFmTitles = T<{
     summary: string;
     years: string;
 }>('commands/fun:lastFmTitles');
-export const LastFmTrackNotFoundForUser = FT<{ user: GetUserInfoResult['user'] }>('commands/fun:lastFmTrackNotFoundForUser');
+// export const LastFmTrackNotFoundForUser = FT<{ user: GetUserInfoResult['user'] }>('commands/fun:lastFmTrackNotFoundForUser');
 export const LastFmUserNotLoggedIn = FT<{ user: string }>('commands/fun:lastFmUserNotLoggedIn');

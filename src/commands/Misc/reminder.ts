@@ -1,8 +1,7 @@
 import { Schedules } from '#utils/constants';
 import { minutes, years, chunk } from '@ruffpuff/utilities';
-import { fetchTasks, MappedTask, resolveClientColor } from '#utils/util';
+import { fetchTasks, resolveClientColor } from '#utils/util';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
-import { Args } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
@@ -12,32 +11,34 @@ import { LanguageKeys } from '#lib/I18n';
 import { GuildMessage } from '#lib/Types';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { sendLoadingMessageInChannel } from '#utils/Discord';
+import { SubcommandKeys } from '#lib/Container/Stores/Commands/Keys/index';
 
 const flags = ['c', 'channel'];
+type JSONEmbed = ReturnType<EmbedBuilder['toJSON']>;
 
 @ApplyOptions<FoxxieSubcommand.Options>({
     aliases: ['remindme', 'rm'],
     description: LanguageKeys.Commands.Misc.ReminderDescription,
-    detailedDescription: LanguageKeys.Commands.Configuration.BirthdayDetailedDescription,
+    detailedDescription: LanguageKeys.Commands.Misc.ReminderDetailedDescription,
     flags: [...flags, 'all'],
     options: ['content'],
     quotes: [],
     subcommands: [
-        { name: 'list', messageRun: 'list' },
-        { name: 'show', messageRun: 'show' },
-        { name: 'delete', messageRun: 'delete' },
-        { name: 'remove', messageRun: 'delete' },
-        { name: 'cancel', messageRun: 'delete' },
-        { name: 'create', default: true, messageRun: 'create' }
+        { name: SubcommandKeys.Misc.List, messageRun: SubcommandKeys.Misc.List },
+        { name: SubcommandKeys.Misc.Show, messageRun: SubcommandKeys.Misc.Show },
+        { name: SubcommandKeys.Misc.Delete, messageRun: SubcommandKeys.Misc.Delete },
+        { name: SubcommandKeys.Misc.Remove, messageRun: SubcommandKeys.Misc.Delete },
+        { name: SubcommandKeys.Misc.Cancel, messageRun: SubcommandKeys.Misc.Delete },
+        { name: SubcommandKeys.Misc.Create, default: true, messageRun: SubcommandKeys.Misc.Create }
     ]
 })
 export class UserCommand extends FoxxieSubcommand {
     @RequiresClientPermissions([PermissionFlagsBits.AddReactions, PermissionFlagsBits.EmbedLinks])
-    public async list(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
+    public async [SubcommandKeys.Misc.List](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
         return this.buildAndShowDisplay(msg, msg.member, args.t);
     }
 
-    public async create(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
+    public async [SubcommandKeys.Misc.Create](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
         const duration = await args.pick('timespan', {
             minimum: minutes(1),
             maximum: years(5)
@@ -46,7 +47,7 @@ export class UserCommand extends FoxxieSubcommand {
         const channel = await args.pick('guildTextChannel').catch(() => null);
         const content = (await args.rest('string')) ?? args.t(LanguageKeys.Commands.Misc.ReminderDefault);
 
-        let json: ReturnType<EmbedBuilder['toJSON']> | null = null;
+        let json: JSONEmbed | null = null;
         try {
             const parsed = JSON.parse(
                 content
@@ -66,6 +67,7 @@ export class UserCommand extends FoxxieSubcommand {
         const { id } = await this.container.schedule.add(Schedules.Reminder, new Date(Date.now() + duration), {
             data: {
                 channelId: channel?.id || null,
+                createdChannelId: msg.channel.id,
                 userId: msg.author.id,
                 text: json ? args.getOption('content') : content,
                 json,
@@ -78,10 +80,10 @@ export class UserCommand extends FoxxieSubcommand {
         await send(msg, message);
     }
 
-    public async delete(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message> {
+    public async [SubcommandKeys.Misc.Delete](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message> {
         if (args.getFlags('all')) return this.deleteAll(msg, args);
 
-        const task = await args.pick(UserCommand.Reminder, {
+        const task = await args.pick('reminder', {
             userId: msg.author.id
         });
         await this.container.schedule.remove(task.id);
@@ -145,8 +147,8 @@ export class UserCommand extends FoxxieSubcommand {
     //     );
     // }
 
-    public async show(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message> {
-        const task = await args.pick(UserCommand.Reminder, {
+    public async [SubcommandKeys.Misc.Show](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message> {
+        const task = await args.pick('reminder', {
             userId: msg.author.id
         });
 
@@ -165,12 +167,16 @@ export class UserCommand extends FoxxieSubcommand {
         const tasks = await fetchTasks(Schedules.Reminder).filter(job => job.data.userId === msg.author.id);
         if (!tasks.length) this.error(LanguageKeys.Commands.Misc.ReminderNone);
 
-        const template = new EmbedBuilder().setColor(await resolveClientColor(msg.guild)).setAuthor({
-            name: t(LanguageKeys.Commands.Misc.ReminderList, {
-                author: member.user.username
-            }),
-            iconURL: member.displayAvatarURL()
-        });
+        const color = await resolveClientColor(msg);
+
+        const template = new EmbedBuilder() //
+            .setColor(color)
+            .setAuthor({
+                name: t(LanguageKeys.Commands.Misc.ReminderList, {
+                    author: member.user.username
+                }),
+                iconURL: member.displayAvatarURL()
+            });
 
         const display = new PaginatedMessage({ template }); // .setPromptMessage(t(LanguageKeys.System.ReactionHandlerPrompt));
 
@@ -205,19 +211,4 @@ export class UserCommand extends FoxxieSubcommand {
               )
             : send(msg, args.t(LanguageKeys.Commands.Misc.ReminderDeleteNone));
     }
-
-    private static readonly Reminder = Args.make<MappedTask<Schedules.Reminder>>(async (parameter, { argument, userId }) => {
-        const tasks = (await fetchTasks(Schedules.Reminder)).filter(job => job.data.userId === userId);
-        const task = tasks.find(task => String(task.id) === parameter);
-
-        if (!task)
-            return Args.error({
-                parameter,
-                argument,
-                identifier: LanguageKeys.Arguments.Birthday,
-                context: { parameter }
-            });
-
-        return Args.ok(task);
-    });
 }

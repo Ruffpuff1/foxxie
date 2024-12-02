@@ -2,9 +2,9 @@
     "ignoreDeprecations": "5.0",
     "compilerOptions": {
         "target": "es2020",
-        "module": "Commonjs",
+        "module": "Node16",
         "strict": true,
-        "moduleResolution": "node",
+        "moduleResolution": "node16",
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "skipLibCheck": true,

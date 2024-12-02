@@ -57,7 +57,6 @@ export default class FoxxieClient extends SapphireClient {
         );
 
         await container.schedule.init();
-        await container.apis.init();
 
         return super.login();
     }

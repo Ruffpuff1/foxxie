@@ -13,7 +13,7 @@ export class UserPrecondition extends Precondition {
         command: MessageCommand,
         context: PreconditionContext
     ) {
-        const { disabledCommands, disabledChannels } = await this.container.settings.readGuild(guildId);
+        const { disabledCommands, disabledChannels } = await this.container.settings.guilds.acquire(guildId);
         if (disabledChannels.includes(channelId) && !isModerator(member)) return this.error({ context: { silent: true } });
 
         const matched = disabledCommands.find(key => this.matchCommand(command, key));

@@ -57,6 +57,7 @@ export const emojis = {
         notSpecified: '<:PermsUnspecified:894420872234942466>',
         denied: '<:PermsDisabled:894420679934484561>'
     },
+
     boosts: ['<a:boost1:904581076377292820>', '<a:boost2:904581123445776464>', '<a:boost3:904581171202097152>'],
     reactions: {
         no: '916529423430344754',
@@ -65,6 +66,19 @@ export const emojis = {
     vinyl: '<:Vinyl:1155284004656910397>',
     ruffThink: '<:RuffThink:910209205636579421>'
 };
+
+export const enum Emojis {
+    /** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
+    MaleSignEmoji = '<:Male:950037521126023208>',
+    /** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
+    FemaleSignEmoji = '<:Female:950037546212147200>',
+    /** The logo of https://serebii.net */
+    Serebii = '910209205636579421',
+    /** The logo of https://bulbapedia.bulbagarden.net */
+    Bulbapedia = '910209205636579421',
+    /** The logo of https://www.smogon.com */
+    Smogon = '910209205636579421'
+}
 
 export const enum BadgeEmojis {
     Bot = '<:Bot:1144539023415718009>',
@@ -112,3 +126,7 @@ export const allowedInviteIds = [
     // Typescript Server
     '508357248330760243'
 ];
+
+export const enum SelectMenuCustomIds {
+    Pokemon = 'pokemon-select-menu'
+}

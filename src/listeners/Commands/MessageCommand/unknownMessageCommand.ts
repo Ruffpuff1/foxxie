@@ -1,4 +1,4 @@
-import { GuildSettings, acquireSettings } from '#lib/Database';
+import { acquireSettings } from '#lib/Database';
 import type { EventArgs, FoxxieEvents } from '#lib/Types';
 import { floatPromise } from '#utils/util';
 import { Listener } from '@sapphire/framework';
@@ -7,7 +7,7 @@ import { send } from '@sapphire/plugin-editable-commands';
 export class UserListener extends Listener<FoxxieEvents.UnknownMessageCommand> {
     public async run(...[{ commandName, message }]: EventArgs<FoxxieEvents.UnknownMessageCommand>): Promise<void> {
         if (!message.inGuild()) return;
-        const tags = await acquireSettings(message.guildId, GuildSettings.Tags);
+        const tags = await acquireSettings(message.guildId, 'tags');
 
         const foundTag = tags.find(tag => tag.id === commandName || tag.aliases.includes(commandName));
         if (!foundTag) return;

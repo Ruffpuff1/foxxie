@@ -9,6 +9,6 @@ export class FoxxieCommandUtilities {
         parameters: string,
         context: MessageCommand.RunContext
     ): Promise<FoxxieArgs> {
-        return FoxxieArgs.from(command, message, parameters, context, await container.settings.getT(message.guild));
+        return FoxxieArgs.from(command, message, parameters, context, await container.settings.guilds.acquireT(message.guild));
     }
 }

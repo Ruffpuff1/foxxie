@@ -169,12 +169,32 @@ export function getImage(message: Message): string | null {
     return attachment ? attachment.proxyURL || attachment.url : null;
 }
 
-export function resolveClientColor(resolveable: GuildResolvable | null, color?: ColorResolvable | number): ColorResolvable {
+export function resolveClientColor(
+    resolveable: GuildResolvable | Message | null,
+    color?: ColorResolvable | number
+): ColorResolvable {
     if (color) return color;
 
     if (!resolveable) return BrandingColors.Primary;
 
-    const { maybeMe } = container.utilities.guild(resolveable);
+    if (resolveable instanceof Message) {
+        if (resolveable.inGuild()) {
+            const member = resolveable.member;
+            if (member) {
+                const memberColor = member.roles.highest.color;
+                if (memberColor) return memberColor;
+            } else {
+                const { maybeMe } = container.utilities.guild(resolveable.guild);
+                if (!maybeMe) return BrandingColors.Primary;
+
+                return maybeMe.displayColor;
+            }
+        } else {
+            return BrandingColors.Primary;
+        }
+    }
+
+    const { maybeMe } = container.utilities.guild(resolveable instanceof Message ? resolveable.guild : resolveable);
     if (!maybeMe) return BrandingColors.Primary;
 
     return maybeMe.displayColor;

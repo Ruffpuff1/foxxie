@@ -3,21 +3,28 @@ import { LanguageKeys } from '#lib/I18n';
 import { PartialResponseValue, ResponseType } from '#lib/schedule/manager/ScheduleEntry';
 import { ScheduleData } from '#lib/Types';
 import { Schedules } from '#utils/constants';
-import { resolveToNull } from '@ruffpuff/utilities';
+import { floatPromise } from '#utils/util';
+import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { EmbedBuilder, EmbedData, GuildTextBasedChannel } from 'discord.js';
+import { canSendMessages } from '@sapphire/discord.js-utilities';
+import { DiscordAPIError, EmbedBuilder, EmbedData, GuildTextBasedChannel, RESTJSONErrorCodes } from 'discord.js';
 
 @ApplyOptions<Task.Options>({
     name: Schedules.Reminder
 })
 export class UserTask extends Task {
     public async run(data: ScheduleData<Schedules.Reminder>): Promise<PartialResponseValue | null> {
-        const channel = data.channelId
-            ? ((await resolveToNull(this.container.client.channels.fetch(data.channelId))) as GuildTextBasedChannel | null)
-            : null;
+        const channel = await this.resolveChannel(data.channelId);
         if (!channel) return this.runUserContext(data);
 
         return this.runChannelContext(data, channel);
+    }
+
+    private async resolveChannel(channelId: string | null): Promise<GuildTextBasedChannel | null> {
+        if (!channelId) return null;
+        const channel = await resolveToNull(this.container.client.channels.fetch(channelId));
+        if (!channel || !canSendMessages(channel) || !channel.isTextBased()) return null;
+        return cast<GuildTextBasedChannel>(channel);
     }
 
     private async runChannelContext(
@@ -28,7 +35,7 @@ export class UserTask extends Task {
         if (!user) return null;
 
         const [embeds, content] = this.constructContent(data);
-        await channel.send({ embeds, content });
+        await floatPromise(channel.send({ embeds, content }));
 
         if (data.repeat) return this.handleRepeat(data);
         else return { type: ResponseType.Finished };
@@ -39,7 +46,16 @@ export class UserTask extends Task {
         if (!user) return { type: ResponseType.Finished };
 
         const [embeds, content] = this.constructContent(data, true);
-        await user.send({ embeds, content: content });
+        await user.send({ embeds, content: content }).catch(async err => {
+            if (err instanceof DiscordAPIError) {
+                if (err.code === RESTJSONErrorCodes.CannotSendMessagesToThisUser) {
+                    const channel = await this.resolveChannel(data.createdChannelId);
+                    if (channel) return this.runChannelContext(data, channel);
+                }
+            }
+
+            return null;
+        });
 
         if (data.repeat) return this.handleRepeat(data);
         else return { type: ResponseType.Finished };
@@ -47,8 +63,7 @@ export class UserTask extends Task {
 
     private handleRepeat(data: ScheduleData<Schedules.Reminder>): PartialResponseValue {
         console.log(data);
-        return { type: ResponseType.Finished };
-        // if (data.repeat) this.container.tasks.create(Schedules.Reminder, data, data.repeat);
+        return { type: ResponseType.Delay, value: data.repeat! };
     }
 
     private constructContent(data: ScheduleData<Schedules.Reminder>, dm = false): [EmbedBuilder[], string | undefined] {

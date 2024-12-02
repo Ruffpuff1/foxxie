@@ -1,4 +1,3 @@
-import type { ModerationEntity } from '#lib/Database';
 import type { ClientEvents } from 'discord.js';
 import { FoxxieEvents } from './Events';
 
@@ -68,7 +67,7 @@ export interface RoleLanguageKeyData {
     init: string;
 }
 
-export type PartialModerationModelWithRoleIdExtraData = Partial<ModerationEntity> & { extraData: { roleId: string } };
+export type PartialModerationModelWithRoleIdExtraData = Partial<{}> & { extraData: { roleId: string } };
 
 export type EventArgs<T extends EventKey> = T extends keyof ClientEvents
     ? ClientEvents[T]

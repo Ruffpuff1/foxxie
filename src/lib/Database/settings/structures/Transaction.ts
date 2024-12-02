@@ -1,7 +1,8 @@
 import { AsyncQueue } from '@sapphire/async-queue';
 import { ReadonlyGuildData } from '../types';
-import { SettingsService } from '#lib/Container/Services/SettingsService';
 import { container } from '@sapphire/framework';
+import { FoxxieGuild } from '#Database/Models';
+import { GuildSettingsService } from '#lib/Container/Services/GuildSettingService';
 
 export class Transaction {
     #changes = Object.create(null) as Partial<ReadonlyGuildData>;
@@ -9,7 +10,7 @@ export class Transaction {
     #locking = true;
 
     public constructor(
-        public readonly settings: ReadonlyGuildData,
+        public readonly settings: FoxxieGuild,
         private readonly queue: AsyncQueue
     ) {}
 
@@ -33,12 +34,12 @@ export class Transaction {
         }
 
         try {
-            if (SettingsService.WeakMapNotInitialized.has(this.settings)) {
+            if (GuildSettingsService.WeakMapNotInitialized.has(this.settings)) {
                 await container.prisma.guilds.create({
                     // @ts-expect-error readonly
                     data: { ...this.settings, ...this.#changes }
                 });
-                SettingsService.WeakMapNotInitialized.delete(this.settings);
+                GuildSettingsService.WeakMapNotInitialized.delete(this.settings);
             } else {
                 await container.prisma.guilds.update({
                     where: { id: this.settings.id },
@@ -49,7 +50,7 @@ export class Transaction {
 
             Object.assign(this.settings, this.#changes);
             this.#hasChanges = false;
-            SettingsService.UpdateSettingsContext(this.settings, this.#changes);
+            GuildSettingsService.UpdateSettingsContext(this.settings, this.#changes);
         } finally {
             this.#changes = Object.create(null);
 

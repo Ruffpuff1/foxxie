@@ -108,12 +108,22 @@ export class UserCommand extends FoxxieSubcommand {
             const msg =
                 year < 1908 ? args.t(LanguageKeys.Arguments.BirthdayYearPast) : args.t(LanguageKeys.Arguments.BirthdayYearFuture);
 
-            return Args.error({ argument, parameter, identifier: LanguageKeys.Arguments.BirthdayYear, context: { msg, year } });
+            return Args.error({
+                argument,
+                parameter,
+                identifier: LanguageKeys.Arguments.BirthdayYear,
+                context: { msg, year }
+            });
         }
 
         const month = Number(result.groups!.month);
         if (month <= 0 || month > 12) {
-            return Args.error({ argument, parameter, identifier: LanguageKeys.Arguments.BirthdayMonth, context: { month } });
+            return Args.error({
+                argument,
+                parameter,
+                identifier: LanguageKeys.Arguments.BirthdayMonth,
+                context: { month }
+            });
         }
 
         const day = Number(result.groups!.day);

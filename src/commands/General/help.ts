@@ -28,7 +28,9 @@ export default class UserCommand extends FoxxieCommand {
 
     private async fullHelp(message: GuildMessage, args: FoxxieCommand.Args) {
         const embed = new EmbedBuilder() //
-            .setAuthor({ name: args.t(LanguageKeys.Commands.General.HelpMenu, { name: this.container.client.user?.username }) })
+            .setAuthor({
+                name: args.t(LanguageKeys.Commands.General.HelpMenu, { name: this.container.client.user?.username })
+            })
             .setColor(resolveClientColor(message.guild));
 
         const commands = this.container.stores.get('commands');

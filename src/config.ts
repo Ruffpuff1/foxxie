@@ -8,7 +8,6 @@ import { TimestampStyles, bold, time } from '@discordjs/builders';
 import { EnvParse } from '@foxxie/env';
 import { Iso6391Enum } from '@foxxie/i18n-codes';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { type LogLevel } from '@sapphire/framework';
 import type { I18nextFormatters, InternationalizationOptions, TFunction } from '@sapphire/plugin-i18next';
 import { DurationFormatAssetsTime, DurationFormatter } from '@sapphire/time-utilities';
@@ -27,22 +26,20 @@ import {
     codeBlock,
     inlineCode
 } from 'discord.js';
-import { config } from 'dotenv-cra';
 import { getFixedT, type InterpolationOptions } from 'i18next';
 import { join } from 'node:path';
+import { setup } from '@skyra/env-utilities';
 
-config({
-    path: join(rootFolder, '.env')
-});
+setup(join(rootFolder, '.env'));
 
 export const formatDuration = (value: Date) => time(value, TimestampStyles.RelativeTime);
 export const formatLongDate = (value: Date) => time(value, TimestampStyles.LongDate);
 
-PaginatedMessage.defaultActions = [
-    PaginatedMessage.defaultActions[2], // previous
-    PaginatedMessage.defaultActions[5], // stop
-    PaginatedMessage.defaultActions[3] // next
-];
+// PaginatedMessage.defaultActions = [
+//     PaginatedMessage.defaultActions[2], // previous
+//     PaginatedMessage.defaultActions[5], // stop
+//     PaginatedMessage.defaultActions[3] // next
+// ];
 
 export const clientOwners = EnvParse.array('CLIENT_OWNERS');
 export const webhookError = parseWebhookError();

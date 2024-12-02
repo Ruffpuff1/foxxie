@@ -1,4 +1,3 @@
-import type { ModerationEntity } from '#lib/Database';
 import type { CommandInteraction, EmbedBuilder, Guild, GuildMember, Message } from 'discord.js';
 
 export interface GuildMessage extends Message<true> {
@@ -12,4 +11,4 @@ export interface GuildInteraction extends CommandInteraction {
 
 export type TypeOfEmbed = EmbedBuilder;
 
-export type PartialModerationEntityWithRoleIdExtraData = Partial<ModerationEntity> & { extraData: { roleId: string } };
+export type PartialModerationEntityWithRoleIdExtraData = Partial<{}> & { extraData: { roleId: string } };

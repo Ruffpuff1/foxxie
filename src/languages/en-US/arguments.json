@@ -28,6 +28,7 @@
     "missing": "{{ERROR}} The {{context, code}} command is missing some arguments! Run `{{prefix}}help {{context}}` to learn how to use it.",
     "moderationLogNone": "{{ERROR}} It seems this server doesn't have any moderation logs.",
     "piece": "{{ERROR}} I could not resolve {{parameter, code}} to a valid piece of mine.",
+    "reminder": "{{ERROR}} The taskId {{parameter, code}} either was not a valid taskId or was not a taskId of a task that you created.",
     "timespanTooLarge": "{{ERROR}} The timespan of {{parameter, code}} seems to be a timespan larger than **{{duration, remaining}}**, which isn't allowed.",
     "timespanTooSmall": "{{ERROR}} A timespan of {{parameter, code}} is a timespan smaller than **{{duration, remaining}}**, which is too small.",
     "unavailable": "Whoops! It seems I couldn't find a parser for a parameter, please contact my developer about it!\n"

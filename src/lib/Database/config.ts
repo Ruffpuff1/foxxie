@@ -1,7 +1,3 @@
-import { Track } from '#Api/LastFm/Structures/Entities/Track';
-import { UserTrack } from '#Api/LastFm/Structures/Entities/UserTrack';
-import { UserArtist } from '#Api/LastFm/Structures/UserArtist';
-import { UserPlay } from '#Api/LastFm/Structures/Entities/UserPlay';
 import { container } from '@sapphire/framework';
 import { join } from 'path';
 import 'reflect-metadata';
@@ -21,7 +17,7 @@ export async function config(): Promise<void> {
         port: 3306,
         username: process.env.MONGO_USER,
         password: process.env.MONGO_PASSWORD,
-        entities: [join(__dirname, 'entities/*Entity.js'), UserArtist, UserPlay, Track, UserTrack, GuildEntity],
+        entities: [join(__dirname, 'entities/*Entity.js'), GuildEntity],
         authSource: 'admin',
         ssl: true,
         logging: true

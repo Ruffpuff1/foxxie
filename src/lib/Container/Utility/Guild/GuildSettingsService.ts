@@ -135,10 +135,10 @@ export class GuildSettingsService {
         return container.db.members.guild(this.guild.id);
     }
 
-    /**
-     * Get an array of starboard entities belonging to this guild.
-     */
-    public getStarboards() {
-        return container.db.starboards.find({ where: { guildId: this.guild.id } });
-    }
+    // /**
+    //  * Get an array of starboard entities belonging to this guild.
+    //  */
+    // public getStarboards() {
+    //     return container.db.starboards.find({ where: { guildId: this.guild.id } });
+    // }
 }

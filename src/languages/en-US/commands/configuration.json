@@ -6,23 +6,13 @@
         "subcommands": [
             {
                 "command": "list",
-                "description": [
-                    "Lists the birthdays set in this server"
-                ],
-                "examples": [
-                    "{{prefix}}birthday",
-                    "{{prefix}}birthday list"
-                ]
+                "description": ["Lists the birthdays set in this server"],
+                "examples": ["{{prefix}}birthday", "{{prefix}}birthday list"]
             },
             {
                 "command": "set",
-                "description": [
-                    "Allows you to set your birthday in this server with an optional year."
-                ],
-                "examples": [
-                    "{{prefix}}birthday set 08/29/2005",
-                    "{{prefix}}birthday set 12/11"
-                ]
+                "description": ["Allows you to set your birthday in this server with an optional year."],
+                "examples": ["{{prefix}}birthday set 08/29/2005", "{{prefix}}birthday set 12/11"]
             }
         ]
     },

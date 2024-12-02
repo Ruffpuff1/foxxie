@@ -45,7 +45,7 @@ export async function deleteMessage(message: Message, time = 0): Promise<Message
 export async function sendLoadingMessage(
     msg: GuildMessage,
     key: CustomGet<string, string[]> | CustomFunctionGet<any, string, string[]> = LanguageKeys.System.MessageLoading,
-    args = {},
+    args = {}
 ): Promise<Message | GuildMessage> {
     const t = await container.db.guilds.acquire(msg.guild.id!, s => s.getLanguage());
     const translated = t(key, cast<TOptionsBase>(args));
@@ -141,7 +141,11 @@ export async function promptForMessage(
 ): Promise<string | null> {
     await send(message, sendOptions);
 
-    const responses = await message.channel.awaitMessages({ filter: msg => msg.author === message.author, time, max: 1 });
+    const responses = await message.channel.awaitMessages({
+        filter: msg => msg.author === message.author,
+        time,
+        max: 1
+    });
     const content = responses.size === 0 ? null : responses.first()!.content;
 
     if (content) await floatPromise(deleteMessage(responses.first()!));

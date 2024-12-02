@@ -30,7 +30,7 @@ export class UserTask extends Task {
         const member = await resolveToNull(guild.members.fetch(data.userId));
         if (!member) return null;
 
-        const { rolesBirthday } = await this.container.settings.readGuild(guild);
+        const { rolesBirthday } = await this.container.settings.guilds.acquire(guild);
         const [message, t] = [null, getFixedT('en-US')];
 
         const results = await Promise.all([

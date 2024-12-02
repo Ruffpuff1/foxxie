@@ -1,10 +1,7 @@
-import { GuildModerationManager, PersistRoleManager } from '#lib/Structures';
-import { StarboardManager } from '#lib/Structures/managers/StarboardManager';
 import { EnvKeys } from '#lib/Types';
 import { EnvParse } from '@foxxie/env';
 import { Result, container } from '@sapphire/framework';
 import { Guild, GuildAuditLogsEntry, GuildAuditLogsResolvable, GuildResolvable } from 'discord.js';
-import { GuildPermissionService } from './GuildPermissionService';
 import { GuildPollService } from './GuildPollService';
 import { GuildSettingsService } from './GuildSettingsService';
 
@@ -12,29 +9,12 @@ import { GuildSettingsService } from './GuildSettingsService';
  * Utility service for a Discord guild.
  */
 export class GuildUtilityService {
-    /**
-     * This guild's moderation manager.
-     */
-    public moderation: GuildModerationManager;
-
-    public permissions: GuildPermissionService;
-
-    /**
-     * This guild's persist roles manager.
-     */
-    public persistRoles: PersistRoleManager;
-
     public polls: GuildPollService;
 
     /**
      * This guild's settings manager.
      */
     public settings: GuildSettingsService;
-
-    /**
-     * This guild's starboard manager.
-     */
-    public starboard: StarboardManager;
 
     private guild: Guild;
 
@@ -46,17 +26,9 @@ export class GuildUtilityService {
         const guild = container.client.guilds.resolve(resolvable);
         this.guild = guild!;
 
-        this.moderation = new GuildModerationManager(this.guild);
-
-        this.permissions = new GuildPermissionService(this.guild);
-
-        this.persistRoles = new PersistRoleManager(this.guild);
-
         this.polls = new GuildPollService(this.guild);
 
         this.settings = new GuildSettingsService(this.guild);
-
-        this.starboard = new StarboardManager(this.guild);
     }
 
     /**

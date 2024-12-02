@@ -41,6 +41,7 @@ declare module '@foxxie/env' {
         [EnvKeys.HasteToken]: string;
         [EnvKeys.LastFmToken]: string;
 
+        [EnvKeys.PokemonUrl]: string;
         [EnvKeys.SpotifyClientId]: string;
         [EnvKeys.SpotifyClientSecret]: string;
 
@@ -56,6 +57,7 @@ export const enum EnvKeys {
     DiscogsConsumerKey = 'DISCOGS_CONSUMER_KEY',
     DiscogsOAuthSignature = 'DISCOGS_OAUTH_SIGNATURE',
     HasteToken = 'HASTE_TOKEN',
+    PokemonUrl = 'POKEMON_URL',
     LastFmToken = 'LASTFM_TOKEN',
     LogChannelId = 'LOG_CHANNEL_ID',
     SentryEnabled = 'SENTRY_ENABLED',

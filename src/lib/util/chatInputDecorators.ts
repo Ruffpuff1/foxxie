@@ -159,7 +159,11 @@ export const MapStringOptionsToChoices: (...choices: string[]) => ApplicationCom
 export const NameAndDescriptionsToSubcommands: (
     ...options: { name: string; description: string }[]
 ) => { name: string; description: string; type: ApplicationCommandOptionType.Subcommand }[] = (...options) =>
-    options.map(opt => ({ name: opt.name, description: opt.description, type: ApplicationCommandOptionType.Subcommand }));
+    options.map(opt => ({
+        name: opt.name,
+        description: opt.description,
+        type: ApplicationCommandOptionType.Subcommand
+    }));
 
 export const NameAndDescriptionToLocalizedSubCommands: (
     ...options: (

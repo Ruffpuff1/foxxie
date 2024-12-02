@@ -1,4 +1,3 @@
-import { GuildSettings } from '#lib/Database';
 import { ConsoleState, EventArgs, FoxxieEvents } from '#lib/Types';
 import { minutes } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -20,17 +19,7 @@ export class UserListener extends Listener<FoxxieEvents.StatsMessage> {
     }
 
     private async countGuild(guildId: string): Promise<void> {
-        await this.container.settings.writeGuild(guildId, settings => {
-            const newCount = settings[GuildSettings.MessageCount] + 1;
-
-            this.container.client.emit(
-                FoxxieEvents.Console,
-                ConsoleState.Debug,
-                `[${cyan('StatsMessage')}] - ${`Updated guild [${cyan(guildId)}] message count - [${cyan(newCount.toLocaleString())}]`}`
-            );
-
-            return { messageCount: newCount };
-        });
+        await this.container.settings.guilds.acquire(guildId).then(settings => settings.incMessageCount());
     }
 
     private async countMember(member: GuildMember, guildId: string): Promise<void> {

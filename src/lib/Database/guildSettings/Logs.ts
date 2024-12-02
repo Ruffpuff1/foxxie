@@ -1,9 +1,0 @@
-export const FilterInvites = 'logsFilterInvites';
-export const FilterWords = 'logsFilterWords';
-export const MemberJoin = 'logsMemberJoin';
-export const MemberLeave = 'logsMemberLeave';
-export const MemberScreening = 'logsMemberScreening';
-export const MessageDelete = 'logsMessageDelete';
-export const MessageEdit = 'logsMessageEdit';
-export const MessageVoice = 'logsMessageVoice';
-export const Moderation = 'logsModeration';

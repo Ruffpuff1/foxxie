@@ -1,8 +1,7 @@
 import { ApiService } from '#Api/ApiService';
 import type { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import { UtilityService } from '#lib/Container/Utility/UtilityService';
-import type { GuildEntity, ModerationEntity, MongoDB, SerializerStore } from '#lib/Database';
+import type { GuildEntity, MongoDB } from '#lib/Database';
 import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
 import type { FoxxieCommand, InviteManager, RedisManager } from '#lib/Structures';
 import type { Piece, Store } from '@sapphire/framework';
@@ -18,6 +17,10 @@ import { WorkerService } from '#lib/Container/Workers';
 import { TaskStore } from '#lib/Container/Stores/Tasks/TaskStore';
 import { SettingsService } from '#lib/Container/Services/SettingsService';
 import { ScheduleManager } from '#lib/schedule/manager/ScheduleManager';
+import { UtilityService } from '#lib/Container/Utility/UtilityService';
+import { SerializerStore } from '#lib/Container/Stores/Serializers/SerializerStore';
+import { MappedTask } from '#lib/util/util';
+import { Schedules } from '#lib/util/constants';
 
 declare module 'discord.js' {
     interface Client {
@@ -31,7 +34,7 @@ declare module 'discord.js' {
     interface ClientEvents {
         [FoxxieEvents.BotMessage]: [message: GuildMessage];
         [FoxxieEvents.ChatInputCommandLogging]: [interaction: ChatInputCommandInteraction, command: FoxxieCommand];
-        [FoxxieEvents.Console]: [state: ConsoleState, message: string]
+        [FoxxieEvents.Console]: [state: ConsoleState, message: string];
         [FoxxieEvents.GuildMemberJoin]: [member: GuildMember, settings: GuildEntity];
         [FoxxieEvents.GuildMessageLog]: [
             guild: Guild,
@@ -41,8 +44,8 @@ declare module 'discord.js' {
         [FoxxieEvents.LastFmUpdateUser]: [userId: string];
         [FoxxieEvents.MemberIdleLog]: [Presence];
         [FoxxieEvents.MessageCommandLogging]: [message: Message, command: FoxxieCommand];
-        [FoxxieEvents.ModerationEntryAdd]: [entry: ModerationEntity];
-        [FoxxieEvents.ModerationEntryEdit]: [old: ModerationEntity, entry: ModerationEntity];
+        // [FoxxieEvents.ModerationEntryAdd]: [entry: ModerationEntity];
+        // [FoxxieEvents.ModerationEntryEdit]: [old: ModerationEntity, entry: ModerationEntity];
         [FoxxieEvents.StatsMemberCount]: [guild: Guild, t: TFunction];
         [FoxxieEvents.StatsMessage]: [guildId: Snowflake, member: GuildMember];
         [FoxxieEvents.SystemMessage]: [message: GuildMessage];
@@ -62,12 +65,10 @@ declare module '@sapphire/pieces' {
          * Api manager
          */
         apis: ApiService;
-        /**
-         * Utilities Manager
-         */
-        utilities: UtilityService;
 
         settings: SettingsService;
+
+        utilities: UtilityService;
     }
 
     interface StoreRegistryEntries {
@@ -96,6 +97,7 @@ declare module '@sapphire/framework' {
         language: LanguageString;
         moderationLog: number;
         piece: Piece;
+        reminder: MappedTask<Schedules.Reminder>;
         song: string[];
         store: Store<any>;
         timespan: number;

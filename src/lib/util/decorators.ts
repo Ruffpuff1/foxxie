@@ -11,7 +11,8 @@ export const RequiresLastFmUsername = (
     return createFunctionPrecondition(
         async (message: GuildMessage) => {
             const entity = await container.db.users.ensure(message.member.id);
-            if (entity.lastFm.username) return true;
+            console.log(entity);
+            //if (entity.lastFm.username) return true;
             return false;
         },
         () => {

@@ -347,7 +347,7 @@ export class GuildEntity extends BaseEntity {
     public raidChannel: Snowflake | null = null;
 
     @Column('jsonb', { name: 'reactionRoles', default: () => "'[]'::JSONB" })
-    public reactionRoles: ReactionRole[] = [];
+    public reactionRoles: FoxxieReactionRole[] = [];
 
     @Column()
     public roles: GuildRoleSettingsService;
@@ -430,7 +430,7 @@ export interface Word {
     hardPunishDuration: number | null;
 }
 
-export interface ReactionRole {
+export interface FoxxieReactionRole {
     messageId: string;
     roleId: string;
     channelId: string;

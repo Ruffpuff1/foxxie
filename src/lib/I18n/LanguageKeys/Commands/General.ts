@@ -86,6 +86,9 @@ export const InfoUserDiscordJoin = FT<{ created: Date }, string>('commands/gener
 export const InfoUserGuildCreate = FT<{ name: string; joined: Date }, string>('commands/general:infoUserGuildCreate');
 export const InfoUserGuildJoin = FT<{ name: string; joined: Date }, string>('commands/general:infoUserGuildJoin');
 export const InfoUserMessages = FT<{ messages: number }, string>('commands/general:infoUserMessages');
+export const InfoUserMessagesWithPercent = FT<{ messages: number; percent: string }>(
+    'commands/general:infoUserMessagesWithPercent'
+);
 export const InfoUserSelectMenu = T<[string, string]>('commands/general:infoUserSelectMenu');
 export const InfoUserTitles = T<{
     about: string;

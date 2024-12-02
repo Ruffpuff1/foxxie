@@ -1,37 +1,16 @@
-import { EnvKeys } from '#lib/Types';
-import { EnvParse } from '@foxxie/env';
-import { CelestiaService } from './Celestia/CelestiaService';
-import { DiscogsService } from './Discogs/DiscogsService';
 import { HastebinService } from './Hastebin/HastbinService';
-import { LastFmService, SpotifyService } from './LastFm';
+import { PokemonService } from './Pokemon/pokemon';
 
 /**
  * Api manager
  */
 export class ApiService {
-    public celestia = new CelestiaService();
-
-    /**
-     * The Discogs api service.
-     */
-    public discogs = new DiscogsService();
-
     /**
      * The hastebin api service.
      */
     public hastebin = new HastebinService();
-
     /**
-     * The spotify api service.
+     * The Pokemon Api Service.
      */
-    public spotify = new SpotifyService(EnvParse.string(EnvKeys.SpotifyClientId), EnvParse.string(EnvKeys.SpotifyClientSecret));
-
-    /**
-     * The last.fm api service.
-     */
-    public lastFm = new LastFmService();
-
-    public async init(): Promise<void> {
-        await this.spotify.initSpotify();
-    }
+    public pokemon = new PokemonService();
 }

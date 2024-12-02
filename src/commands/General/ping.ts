@@ -17,7 +17,6 @@ export default class UserCommand extends FoxxieCommand {
         await this.container.db.guilds.ensure(message.guild.id);
         stopwatch.stop();
 
-
         const content = args.t(LanguageKeys.Commands.General.PingPong, {
             roundTrip: (msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp),
             wsPing: Math.round(this.container.client.ws.ping),

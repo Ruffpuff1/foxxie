@@ -18,7 +18,7 @@ export class UserListener extends Listener<FoxxieEvents.MentionPrefixOnly> {
     }
 
     private async runGuildContext(message: Message<true>) {
-        const { prefix, language } = await this.container.settings.readGuild(message.guild);
+        const { prefix, language } = await this.container.settings.guilds.acquire(message.guild);
         const t = getFixedT(cast<LocaleString>(language));
 
         const content = this.formatPrefix(prefix, t);

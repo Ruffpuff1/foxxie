@@ -24,7 +24,7 @@ export class ErrorService {
             t = cast<FoxxieArgs>(payload.args).t;
             parameters = payload.parameters;
         } else {
-            t = await container.settings.getT(message.guild);
+            t = await container.settings.guilds.acquireT(message.guild);
             parameters = message.content.slice(payload.context.commandPrefix.length + payload.context.commandName.length).trim();
         }
 
@@ -86,8 +86,8 @@ export class ErrorService {
         const argument = error.argument.name;
         const identifier = translate(error.identifier);
         const parameter = error.parameter.replaceAll('`', '῾');
-        const prefix = Reflect.get(error.context as object, 'prefix') || EnvParse.string(EnvKeys.ClientPrefix);
-        const command = Reflect.get(error.context as object, 'command') as UserCommand | undefined;
+        const prefix = Reflect.get(Object(error.context), 'prefix') || EnvParse.string(EnvKeys.ClientPrefix);
+        const command = Reflect.get(Object(error.context), 'command') as UserCommand | undefined;
         const commandName = command ? command.name : null;
 
         return this.messageAlert(
@@ -108,12 +108,12 @@ export class ErrorService {
         // Use cases for this are for example permissions error when running the `eval` command.
         if (Reflect.get(Object(error.context), 'silent')) return;
 
-        const prefix = Reflect.get(error.context as object, 'prefix') || EnvParse.string(EnvKeys.ClientPrefix);
-        const command = Reflect.get(error.context as object, 'command') as UserCommand | undefined;
+        const prefix = Reflect.get(Object(error.context), 'prefix') || EnvParse.string(EnvKeys.ClientPrefix);
+        const command = Reflect.get(Object(error.context), 'command') as UserCommand | undefined;
         const commandName = command ? command.name : null;
 
         const identifier = translate(error.identifier);
-        const content = t(identifier, { ...(error.context as any), prefix, context: commandName }) as string;
+        const content = t(identifier, { ...Object(error.context), prefix, context: commandName }) as string;
         return this.messageAlert(message, content);
     }
 

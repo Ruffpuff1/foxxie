@@ -31,26 +31,26 @@ export const enum TypeVariation {
 }
 
 export const enum TypeMetadata {
-	None = 0,
-	Undo = 1 << 0,
-	Temporary = 1 << 1,
-	/** @deprecated Use Temporary instead */
-	Fast = 1 << 2,
-	Archived = 1 << 3,
-	Completed = 1 << 4
+    None = 0,
+    Undo = 1 << 0,
+    Temporary = 1 << 1,
+    /** @deprecated Use Temporary instead */
+    Fast = 1 << 2,
+    Archived = 1 << 3,
+    Completed = 1 << 4
 }
 
 export const enum SchemaKeys {
-	Case = 'caseId',
-	CreatedAt = 'createdAt',
-	Duration = 'duration',
-	ExtraData = 'extraData',
-	Guild = 'guildId',
-	Moderator = 'moderatorId',
-	Reason = 'reason',
-	ImageURL = 'imageUrl',
-	Type = 'type',
-	User = 'userId',
+    Case = 'caseId',
+    CreatedAt = 'createdAt',
+    Duration = 'duration',
+    ExtraData = 'extraData',
+    Guild = 'guildId',
+    Moderator = 'moderatorId',
+    Reason = 'reason',
+    ImageURL = 'imageUrl',
+    Type = 'type',
+    User = 'userId',
     Refrence = 'refrenceId',
     LogChannel = 'logChannelId',
     LogMessageId = 'logMessageId',
@@ -59,12 +59,12 @@ export const enum SchemaKeys {
 }
 
 export interface ModerationTypeAssets {
-	color: number;
-	title: string;
+    color: number;
+    title: string;
 }
 
 export interface Unlock {
-	unlock(): void;
+    unlock(): void;
 }
 
 export const TypeCodes = {

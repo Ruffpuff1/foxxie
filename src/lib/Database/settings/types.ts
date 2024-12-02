@@ -30,3 +30,10 @@ export interface StickyRole {
     roles: readonly Snowflake[];
     user: Snowflake;
 }
+
+export enum FoxxieLocale {
+    EnglishUS = 'en-US',
+    SpanishMX = 'es-MX'
+}
+
+export type FoxxieLocaleType = `${FoxxieLocale}`;

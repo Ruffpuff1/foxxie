@@ -1,13 +1,12 @@
 import { LanguageKeys } from '#lib/I18n';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
 import { NonNullObject, isNullish } from '@sapphire/utilities';
 import type { GuildEntity } from '../entities/Guild/GuildEntity';
-import type { Serializer, SerializerUpdateContext } from '../structures/Serializer';
 import type { ISchemaValue, SchemaGroup } from './SchemaGroup';
 import { TFunction } from 'i18next';
 import { CustomGet } from '#lib/Types';
 import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
+import { Serializer, SerializerUpdateContext } from '#lib/Container/Stores/Serializers/Serializer';
 
 export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implements ISchemaValue {
     /**
@@ -126,7 +125,7 @@ export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implemen
     }
 
     public get serializer(): Serializer<GuildEntity[K]> {
-        const value = container.db.serializers.get(this.type);
+        const value = undefined; // container.serializers.get(this.type); FIX
         if (typeof value === 'undefined') throw new Error(`The serializer for '${this.type}' does not exist.`);
         return cast<Serializer<GuildEntity[K]>>(value);
     }

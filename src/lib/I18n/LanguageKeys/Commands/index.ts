@@ -5,3 +5,4 @@ export * as General from './General';
 export * as Misc from './Misc';
 export * as Moderation from './Moderation';
 export * as Tools from './Tools';
+export * as Websearch from './Websearch';
