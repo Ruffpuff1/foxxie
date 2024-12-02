@@ -3,7 +3,6 @@ import { GuildMemberFetchQueue } from '#external/GuildMemberFetchQueue';
 import type { LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
 import { clientOptions, webhookError } from '#root/config';
 import { EnvParse } from '@foxxie/env';
-import { isDev } from '@ruffpuff/utilities';
 import { Enumerable } from '@sapphire/decorators';
 import { SapphireClient, container } from '@sapphire/framework';
 import { magentaBright } from 'colorette';
@@ -72,6 +71,16 @@ export default class FoxxieClient extends SapphireClient {
     }
 
     public get development() {
-        return isDev();
+        return process.env.CLIENT_ID === '840755658793418782';
     }
+
+    public enabledProdOnlyEvent() {
+        if (this.development) {
+            return this.developmentRecoveryMode;
+        }
+
+        return true;
+    }
+
+    public developmentRecoveryMode = false;
 }

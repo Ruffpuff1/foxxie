@@ -7,6 +7,7 @@ import { Schedules } from '#utils/constants';
 import { fetchChannel } from '#utils/Discord';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
+import { container } from '@sapphire/framework';
 import { type TFunction } from '@sapphire/plugin-i18next';
 import type { Guild, GuildMember } from 'discord.js';
 import { getFixedT } from 'i18next';
@@ -18,7 +19,8 @@ const enum PartResult {
 }
 
 @ApplyOptions<Task.Options>({
-    name: Schedules.Birthday
+    name: Schedules.Birthday,
+    enabled: container.client.enabledProdOnlyEvent()
 })
 export class UserTask extends Task {
     private matchRegex = /{member(\.(age|nick|username|tag|guild))?}/g;

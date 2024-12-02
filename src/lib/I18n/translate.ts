@@ -8,6 +8,7 @@ export type Identifier = Identifiers | DecoratorIdentifiers | SubcommandPluginId
 export type TranslatedResult = CustomFunctionGet<string, Record<any, any>, string> | CustomGet<string, string>;
 
 export function translate(key: Identifier): TranslatedResult {
+    console.log(key);
     switch (key) {
         // Preconditions
         case Identifiers.CommandDisabled:
@@ -16,6 +17,8 @@ export function translate(key: Identifier): TranslatedResult {
             return LanguageKeys.Preconditions.ClientPermissions;
         case Identifiers.PreconditionCooldown:
             return LanguageKeys.Preconditions.Cooldown;
+        case Identifiers.PreconditionMissingChatInputHandler:
+            return LanguageKeys.Preconditions.MissingChatInputHandler;
         case Identifiers.PreconditionNSFW:
             return LanguageKeys.Preconditions.Nsfw;
         // Decorators

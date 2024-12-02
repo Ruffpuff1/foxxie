@@ -1,8 +1,8 @@
 import { LanguageKeys } from '#lib/I18n';
 import { isModerator } from '#utils/Discord';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Identifiers, MessageCommand, Precondition, PreconditionContext } from '@sapphire/framework';
-import type { GuildMember, Message } from 'discord.js';
+import { ChatInputCommand, Identifiers, MessageCommand, Precondition, PreconditionContext } from '@sapphire/framework';
+import type { ChatInputCommandInteraction, GuildMember, Message } from 'discord.js';
 
 @ApplyOptions<Precondition.Options>({
     position: 10
@@ -10,7 +10,7 @@ import type { GuildMember, Message } from 'discord.js';
 export class UserPrecondition extends Precondition {
     public async run(
         { guildId, channelId, member }: PreconditionEnabledContext,
-        command: MessageCommand,
+        command: MessageCommand | ChatInputCommand,
         context: PreconditionContext
     ) {
         const { disabledCommands, disabledChannels } = await this.container.settings.guilds.acquire(guildId);
@@ -39,7 +39,24 @@ export class UserPrecondition extends Precondition {
         return this.run({ member, guildId: msg.guild.id, channelId: msg.channel.id }, command, context);
     }
 
-    private matchCommand(command: MessageCommand, key: string) {
+    public async chatInputRun(
+        interaction: ChatInputCommandInteraction,
+        command: ChatInputCommand,
+        context: Precondition.Context
+    ) {
+        if (!command.enabled)
+            return this.error({
+                identifier: Identifiers.CommandDisabled,
+                context
+            });
+
+        if (!interaction.guild) return this.ok();
+        const member = await interaction.guild.members.fetch(interaction.user.id);
+
+        return this.run({ member, guildId: interaction.guildId!, channelId: interaction.channelId }, command, context);
+    }
+
+    private matchCommand(command: MessageCommand | ChatInputCommand, key: string) {
         const [category, name] = key.split('.');
         const cmdCategory = command.category!.toLowerCase();
 

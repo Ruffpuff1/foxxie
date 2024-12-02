@@ -4,10 +4,12 @@ import { ScheduleData } from '#lib/Types';
 import { Schedules } from '#utils/constants';
 import { resolveToNull, seconds } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
+import { container } from '@sapphire/framework';
 import { PermissionFlagsBits } from 'discord-api-types/v9';
 
 @ApplyOptions<Task.Options>({
-    name: Schedules.RemoveBirthdayRole
+    name: Schedules.RemoveBirthdayRole,
+    enabled: container.client.enabledProdOnlyEvent()
 })
 export class UserTask extends Task {
     public async run(data: ScheduleData<Schedules.RemoveBirthdayRole>): Promise<PartialResponseValue | null> {

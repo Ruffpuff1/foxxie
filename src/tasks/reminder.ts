@@ -7,10 +7,12 @@ import { floatPromise } from '#utils/util';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendMessages } from '@sapphire/discord.js-utilities';
+import { container } from '@sapphire/framework';
 import { DiscordAPIError, EmbedBuilder, EmbedData, GuildTextBasedChannel, RESTJSONErrorCodes } from 'discord.js';
 
 @ApplyOptions<Task.Options>({
-    name: Schedules.Reminder
+    name: Schedules.Reminder,
+    enabled: container.client.enabledProdOnlyEvent()
 })
 export class UserTask extends Task {
     public async run(data: ScheduleData<Schedules.Reminder>): Promise<PartialResponseValue | null> {

@@ -8,6 +8,7 @@ export const Cooldown = FT<{ remaining: number }>('preconditions:cooldown');
 export const LastFmUsername = T('preconditions:lastFmUsername');
 export const Leveling = T('preconditions:leveling');
 export const MessageSubcommandNoMatch = T('preconditions:messageSubcommandNoMatch');
+export const MissingChatInputHandler = T('preconditions:missingChatInputHandler');
 export const Moderator = FT<{ name: string }>('preconditions:moderator');
 export const Nsfw = FT<{ name: string }>('preconditions:nsfw');
 export const PermNodes = T('preconditions:permNodes');

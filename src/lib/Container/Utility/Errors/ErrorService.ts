@@ -111,7 +111,6 @@ export class ErrorService {
         const prefix = Reflect.get(Object(error.context), 'prefix') || EnvParse.string(EnvKeys.ClientPrefix);
         const command = Reflect.get(Object(error.context), 'command') as UserCommand | undefined;
         const commandName = command ? command.name : null;
-
         const identifier = translate(error.identifier);
         const content = t(identifier, { ...Object(error.context), prefix, context: commandName }) as string;
         return this.messageAlert(message, content);

@@ -25,6 +25,8 @@ import { Schedules } from '#lib/util/constants';
 declare module 'discord.js' {
     interface Client {
         development: boolean;
+        developmentRecoveryMode: boolean;
+        enabledProdOnlyEvent(): boolean;
         invites: InviteManager;
         webhookError: WebhookClient | null;
         guildMemberFetchQueue: GuildMemberFetchQueue;

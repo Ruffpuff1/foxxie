@@ -21,7 +21,10 @@ import { compressPokemonCustomIdMetadata } from '#Api/Pokemon/utils';
     description: LanguageKeys.Commands.Websearch.PokemonDescription,
     detailedDescription: LanguageKeys.Commands.Websearch.PokemonDetailedDescription,
     flags: ['shiny', 'back'],
-    subcommands: [{ name: SubcommandKeys.Websearch.Pokemon, messageRun: SubcommandKeys.Websearch.Pokemon, default: true }]
+    subcommands: [
+        { name: SubcommandKeys.Websearch.Pokemon, messageRun: SubcommandKeys.Websearch.Pokemon, default: true },
+        { name: 'dex', messageRun: SubcommandKeys.Websearch.Pokemon, chatInputRun: 'chatInputRunPokemon' }
+    ]
 })
 export class UserCommand extends FoxxieSubcommand {
     private readonly spriteChoices: APIApplicationCommandOptionChoice<PokemonSpriteTypes>[] = [
@@ -76,7 +79,7 @@ export class UserCommand extends FoxxieSubcommand {
             );
     }
 
-    public override async chatInputRun(interaction: ChatInputCommand.Interaction): Promise<void> {
+    public async chatInputRunPokemon(interaction: ChatInputCommand.Interaction): Promise<void> {
         await interaction.deferReply();
 
         const pokemon = interaction.options.getString('pokemon', true);

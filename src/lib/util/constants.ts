@@ -47,8 +47,8 @@ export const enum Urls {
 }
 
 export const emojis = {
-    success: '<:Check:916529451536363633>',
-    error: '<:Cross:916529423430344754>',
+    success: '<:TickYes:894419647439466556>',
+    error: '<:TickNo:894420222084280331>',
     loading: '<a:HotCoffee:905458108225183765>',
     foxWiggle: '<a:foxwiggle:799197027568713748>',
     music: '🎶 🎻',
@@ -60,8 +60,8 @@ export const emojis = {
 
     boosts: ['<a:boost1:904581076377292820>', '<a:boost2:904581123445776464>', '<a:boost3:904581171202097152>'],
     reactions: {
-        no: '916529423430344754',
-        yes: '916529451536363633'
+        no: '894420222084280331',
+        yes: '894419647439466556'
     },
     vinyl: '<:Vinyl:1155284004656910397>',
     ruffThink: '<:RuffThink:910209205636579421>'

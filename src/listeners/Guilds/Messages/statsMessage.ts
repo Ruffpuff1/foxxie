@@ -1,12 +1,13 @@
 import { ConsoleState, EventArgs, FoxxieEvents } from '#lib/Types';
 import { minutes } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { Listener, ListenerOptions } from '@sapphire/framework';
+import { container, Listener, ListenerOptions } from '@sapphire/framework';
 import { cyan } from 'colorette';
 import type { GuildMember } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({
-    event: FoxxieEvents.StatsMessage
+    event: FoxxieEvents.StatsMessage,
+    enabled: container.client.enabledProdOnlyEvent()
 })
 export class UserListener extends Listener<FoxxieEvents.StatsMessage> {
     public timeout = minutes(5);

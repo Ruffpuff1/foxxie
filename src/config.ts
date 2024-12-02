@@ -45,7 +45,7 @@ export const clientOwners = EnvParse.array('CLIENT_OWNERS');
 export const webhookError = parseWebhookError();
 export const timezone = EnvParse.string('TIMEZONE');
 
-function parsePresenceActivity(): ActivitiesOptions[] {
+export function parsePresenceActivity(): ActivitiesOptions[] {
     const { CLIENT_PRESENCE_NAME } = process.env;
     if (!CLIENT_PRESENCE_NAME) return [];
 
@@ -339,7 +339,7 @@ export const clientOptions: ClientOptions = {
     defaultPrefix: EnvParse.string('CLIENT_PREFIX'),
     presence: {
         activities: parsePresenceActivity(),
-        status: 'idle'
+        status: process.env.NODE_ENV === 'development' ? 'invisible' : 'idle'
     },
     partials: [Partials.Message, Partials.Channel, Partials.Reaction],
     regexPrefix: parseRegexPrefix(),

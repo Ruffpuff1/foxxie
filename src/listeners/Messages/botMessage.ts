@@ -1,9 +1,13 @@
 import { ConsoleState, EventArgs, FoxxieEvents, GuildMessage } from '#lib/Types';
-import { Listener } from '@sapphire/framework';
+import { ApplyOptions } from '@sapphire/decorators';
+import { container, Listener } from '@sapphire/framework';
 import { ChannelType, italic } from 'discord.js';
 
 const CHANNELID = '1305722872458772591';
 
+@ApplyOptions({
+    enabled: container.client.enabledProdOnlyEvent()
+})
 export class UserListener extends Listener<FoxxieEvents.BotMessage> {
     public async run(...[message]: EventArgs<FoxxieEvents.BotMessage>): Promise<void> {
         if (message.author.id === '840681796914905100') await this.runMinecraft(message);

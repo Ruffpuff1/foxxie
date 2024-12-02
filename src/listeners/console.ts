@@ -1,7 +1,8 @@
 import { ConsoleState, EventArgs, FoxxieEvents } from '#lib/Types';
 import { BrandingColors } from '#utils/constants';
 import { resolveToNull } from '@ruffpuff/utilities';
-import { Listener } from '@sapphire/framework';
+import { ApplyOptions } from '@sapphire/decorators';
+import { container, Listener } from '@sapphire/framework';
 import { ChannelType, codeBlock, EmbedBuilder } from 'discord.js';
 
 const MESSAGEID = '1308177739546755224';
@@ -9,6 +10,9 @@ const CHANNELID = '1307441764856107118';
 const GUILDID = '1117671374052397136';
 const COLORREG = /\[34m|\[36m|\[39m/gm;
 
+@ApplyOptions({
+    enabled: container.client.enabledProdOnlyEvent()
+})
 export class UserListener extends Listener {
     private messages: string[] = [];
 
