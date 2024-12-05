@@ -18,11 +18,11 @@
 	"argsMessage": "**Mensaje**: {{content}}",
 	"argsMessageCount": "**Mensajes**: {{count, number}} enviado",
 	"argsMessages": "**Antes de que**: {{old}}\n**después**: {{new}}",
-	"argsModerator": "**Moderador**: {{mod.username}} ({{mod.id}})",
+	"argsModerator": "**Moderador**: {{mod.username, code}} ({{mod.id}})",
 	"argsPosition": "**Posición**: {{position, ordinal}}",
 	"argsReason": "**Razón**: {{reason}}",
 	"argsRefrence": "**Refrencia**: [#{{id, number}}]({{url}})",
 	"argsTimeTaken": "**Tiempo**: {{time, remaining}}",
-	"argsUser": "**Usuario**: {{user.username}} ({{user.id}})",
+	"argsUser": "**Usuario**: {{user.username, code}} ({{user.id}})",
 	"attachment": "Adjunto"
 }
