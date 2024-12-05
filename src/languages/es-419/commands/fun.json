@@ -53,11 +53,11 @@
 		"usage": "",
 		"subcommands": [
 			{
-				"command": "",
+				"command": "artista",
 				"description": "",
 				"options": [
 					{
-						"name": "",
+						"name": "artista",
 						"description": ""
 					},
 					{
@@ -72,7 +72,7 @@
 				]
 			},
 			{
-				"command": "",
+				"command": "globalquiénsabe",
 				"description": "",
 				"examples": [
 					"",
