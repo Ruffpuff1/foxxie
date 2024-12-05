@@ -81,7 +81,7 @@
     "prism": "^4.1.2",
     "prisma-json-types-generator": "^3.2.2",
     "saslprep": "^1.0.3",
-    "skia-canvas": "^1.0.1",
+    "skia-canvas": "^2.0.0",
     "typeorm": "^0.3.17",
     "undici": "^5.25.3"
   },
