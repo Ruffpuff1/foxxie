@@ -48,7 +48,7 @@
     "@sapphire/plugin-editable-commands": "^3.0.3",
     "@sapphire/plugin-i18next": "^6.0.1",
     "@sapphire/plugin-logger": "^3.0.6",
-    "@sapphire/plugin-subcommands": "4.2.1",
+    "@sapphire/plugin-subcommands": "4.3.0",
     "@sapphire/ratelimits": "^2.4.4",
     "@sapphire/result": "^2.6.4",
     "@sapphire/stopwatch": "^1.4.1",
@@ -76,13 +76,13 @@
     "@types/gradient-string": "^1.1.2",
     "@types/ioredis": "5.0.0",
     "@types/lodash": "^4.14.199",
-    "@types/node": "20.5.9",
-    "@types/spotify-api": "^0.0.22",
-    "@typescript-eslint/eslint-plugin": "6.6.0",
-    "@typescript-eslint/parser": "6.6.0",
-    "eslint": "8.48.0",
+    "@types/node": "20.17.9",
+    "@types/spotify-api": "^0.0.25",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "@typescript-eslint/parser": "6.21.0",
+    "eslint": "8.57.1",
     "prettier": "^3.0.3",
-    "typescript": "5.2.2"
+    "typescript": "5.7.2"
   },
   "imports": {
     "#Api/*": "./dist/src/lib/Container/Api/*.js",
@@ -118,5 +118,5 @@
     "type": "individual",
     "url": "https://ko-fi.com/ruffpuff"
   },
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@1.22.22"
 }
