@@ -1,7 +1,7 @@
 {
 	"confUpdated": "",
 	"confGetNoExt": "",
-	"confGet": "El valor para la clave **{{key}}** es: `{{value}}`",
+	"confGet": "",
 	"confReset": "",
 	"confMenuRenderAtFolder": "",
 	"confMenuRenderAtPiece": "",
@@ -21,7 +21,7 @@
 	"confServerExtended": {
 		"usages": [
 			"",
-			"mostrar",
+			"",
 			"",
 			"",
 			"",
@@ -31,7 +31,7 @@
 		"examples": [
 			"",
 			"",
-			"mostrar",
+			"",
 			"",
 			"",
 			"",
