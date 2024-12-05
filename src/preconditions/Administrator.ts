@@ -1,15 +1,16 @@
-import { LanguageKeys } from '#lib/I18n';
-import { PermissionLevelPrecondition } from '#lib/Structures';
-import type { GuildMessage } from '#lib/Types';
-import { isAdmin } from '#utils/Discord';
-import type { Result, UserError } from '@sapphire/framework';
+import { LanguageKeys } from '#lib/i18n';
+import { PermissionLevelPrecondition } from '#lib/structures';
+import { GuildMessage } from '#lib/types';
+import { isAdmin } from '#utils/discord';
+import { UserError } from '@sapphire/framework';
+import { Result } from '@sapphire/result';
 
 export class UserPrecondition extends PermissionLevelPrecondition {
-    protected async handle(message: GuildMessage): Promise<Result<unknown, UserError>> {
-        return isAdmin(message.member)
-            ? this.ok()
-            : this.error({
-                  identifier: LanguageKeys.Preconditions.Administrator
-              });
-    }
+	protected async handle(message: GuildMessage): Promise<Result<unknown, UserError>> {
+		return isAdmin(message.member)
+			? this.ok()
+			: this.error({
+					identifier: LanguageKeys.Preconditions.Administrator
+				});
+	}
 }

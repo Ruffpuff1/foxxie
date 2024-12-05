@@ -1,12 +1,13 @@
-import { PermissionLevelPrecondition } from '#lib/Structures';
+import { PermissionLevelPrecondition } from '#lib/structures';
 import { ApplyOptions } from '@sapphire/decorators';
-import type { Result, UserError } from '@sapphire/framework';
+import { UserError } from '@sapphire/framework';
+import { Result } from '@sapphire/result';
 
 @ApplyOptions<PermissionLevelPrecondition.Options>({
-    guildOnly: false
+	guildOnly: false
 })
 export class UserPrecondition extends PermissionLevelPrecondition {
-    public async handle(): Promise<Result<unknown, UserError>> {
-        return this.ok();
-    }
+	public async handle(): Promise<Result<unknown, UserError>> {
+		return this.ok();
+	}
 }

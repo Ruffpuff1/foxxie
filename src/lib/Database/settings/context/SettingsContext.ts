@@ -1,5 +1,26 @@
-import { FoxxieGuild } from '#Database/Models';
+import { ReadonlyGuildData } from '#lib/database';
+import { isNullishOrEmpty } from '@sapphire/utilities';
+import { PermissionNodeManager } from '../structures/PermissionNodeManager';
 
 export class SettingsContext {
-    public constructor(public settings: FoxxieGuild) {}
+	readonly #permissionNodes: PermissionNodeManager;
+	#wordFilterRegExp: RegExp | null;
+
+	public constructor(public settings: ReadonlyGuildData) {
+		this.#permissionNodes = new PermissionNodeManager(settings);
+		this.#wordFilterRegExp = isNullishOrEmpty(settings.selfmodFilterRaw) ? null : new RegExp('', 'gi');
+	}
+
+	public get permissionNodes() {
+		return this.#permissionNodes;
+	}
+
+	public get wordFilterRegExp() {
+		return this.#wordFilterRegExp;
+	}
+
+	public update(settings: ReadonlyGuildData, data: Partial<ReadonlyGuildData>) {
+		// FIX
+		console.log(settings, data);
+	}
 }

@@ -1,107 +1,107 @@
 {
-    "animalcrossingCoffee": "Beans → {{beans}}\nMilk → {{milk}}\nSugar → {{sugar}}",
-    "animalcrossingFooter": "Powered by celestia.reese.gay",
-    "animalcrossingDetailedDescription": {
-        "description": "Fetch animal crossing data from the celestia API.",
-        "usage": "{{prefix}}animalcrossing [villager]",
-        "subcommands": [
-            {
-                "command": "villager",
-                "description": ["Search the name of a specific animal crossing villager to retrieve information about them."],
-                "examples": [
-                    "{{prefix}}animalcrossing villager bob",
-                    "{{prefix}}animalcrossing villager erik",
-                    "{{prefix}}animalcrossing villager zucker"
-                ]
-            }
-        ]
-    },
-    "animalcrossingNoVillager": "{{ERROR}} I couldn't find an Animal Crossing villager named `{{villager}}`. Maybe you meant one of these?",
-    "animalcrossingNoVillagerProvided": "{{ERROR}} Please tell me which Animal Crossing villager I should search for.",
-    "animalcrossingTitles": {
-        "birthday": "• Birthday",
-        "catchphrase": "• Catchphrase",
-        "coffee": "• Coffee Request",
-        "game": "• Game",
-        "game_other": "• Games",
-        "gender": "• Gender",
-        "goal": "• Goal",
-        "personality": "• Personality",
-        "saying": "• Favorite Saying",
-        "series": "• Series",
-        "siblings": "• Siblings",
-        "skill": "•  Skill",
-        "song": "• Favorite Song",
-        "species": "• Species",
-        "zodiac": "• Zodiac"
-    },
-    "lastFmArtistListeners": "**{{count, number}}** listener",
-    "lastFmArtistListeners_other": "**{{count, number}}** listeners",
-    "lastFmArtistPlaysByYou": "**{{count, number}}** play by you",
-    "lastFmArtistPlaysByYou_other": "**{{count, number}}** plays by you",
-    "lastFmArtistPlaysByYouLastWeek": "**{{count, number}}** by you last week",
-    "lastFmChatInputOptionArtistName": "artist",
-    "lastFmChatInputOptionArtistDescription": "The artist you want to search for (defaults to currently playing).",
-    "lastFmChatInputSubcommandArtistName": "artist",
-    "lastFmChatInputSubcommandArtistDescription": "Shows artist info for the artist you're currently listening to or searching for.",
-    "lastFmChatInputSubcommandGlobalWhoKnows": "globalwhoknows",
-    "lastFmChatInputSubcommandGlobalWhoKnowsDescription": "Shows which others users listen an artist.",
-    "lastFmDetailedDescription": {
-        "description": "Fetch data from Last.fm.",
-        "usage": "{{prefix}}lastfm [subcommand]",
-        "subcommands": [
-            {
-                "command": "artist",
-                "description": "Search and show data of a last.fm artist including tracks, albums, and scrobble counts.",
-                "options": [
-                    {
-                        "name": "artist",
-                        "description": "The artist to search for."
-                    },
-                    {
-                        "name": "hidden",
-                        "description": "Whether to hide the command's output."
-                    }
-                ],
-                "examples": ["{{prefix}}lastfm artist", "{{prefix}}lastfm artist mitski", "{{prefix}}lastfm artist lana del rey"]
-            },
-            {
-                "command": "globalwhoknows",
-                "description": "Shows who listens to an artist out of everyone who uses me.",
-                "examples": ["{{prefix}}lastfm globalwhoknows", "{{prefix}}lastfm globalwhoknows grentperez"]
-            },
-            {
-                "command": "stats",
-                "description": "Shows your last.fm user statistics.",
-                "examples": ["{{prefix}}lastfm stats", "{{prefix}}lastfm stats @Ruffpuff"]
-            },
-            {
-                "command": "update",
-                "description": "Updates your cached scrobbles within my database.",
-                "examples": ["{{prefix}}lastfm update", "{{prefix}}lastfm update plays", "{{prefix}}lastfm update artists"]
-            }
-        ]
-    },
-    "lastFmStatsMostActiveDayOfWeek": "Most active day of the week is **{{day}}**",
-    "lastFmNotLoggedIn": "{{ERROR}} I couldn't run that command because you're not logged in with Last.fm! Try running `.lastfm login` to get more information.",
-    "lastFmPlayListeners": "**{{count, number}}** listener",
-    "lastFmPlayListeners_other": "**{{count, number}}** listeners",
-    "lastFmPlayNowPlaying": "Now Playing",
-    "lastFmPlayPlays": "**{{count, number}}** play",
-    "lastFmPlayPlays_other": "**{{count, number}}** plays",
-    "lastFmPlayPlaysBy": "**{{count, number}}** play by {{target}}",
-    "lastFmPlayPlaysBy_other": "**{{count, number}}** plays by {{target}}",
-    "lastFmPlayPlaysByYou": "**{{count, number}}** play by you",
-    "lastFmPlayPlaysByYou_other": "**{{count, number}}** plays by you",
-    "lastFmPlayWasPlaying": "Was Playing",
-    "lastFmTitles": {
-        "about": "• About",
-        "lastFmStats": "• Last.fm stats",
-        "months": "• Months",
-        "statistics": "• Statistics",
-        "summary": "• Summary",
-        "years": "• Years"
-    },
-    "lastFmTrackNotFoundForUser": "{{ERROR}} I'm sorry I couldn't find any tracks for the user: {{user.name, code}}.",
-    "lastFmUserNotLoggedIn": "{{ERROR}} Oops I couldn't run that command because the user {{user, bold}} isn't logged in with Last.fm!"
+	"animalcrossingCoffee": "Beans → {{beans}}\nMilk → {{milk}}\nSugar → {{sugar}}",
+	"animalcrossingFooter": "Powered by celestia.reese.gay",
+	"animalcrossingDetailedDescription": {
+		"description": "Fetch animal crossing data from the celestia API.",
+		"usage": "{{prefix}}animalcrossing [villager]",
+		"subcommands": [
+			{
+				"command": "villager",
+				"description": ["Search the name of a specific animal crossing villager to retrieve information about them."],
+				"examples": [
+					"{{prefix}}animalcrossing villager bob",
+					"{{prefix}}animalcrossing villager erik",
+					"{{prefix}}animalcrossing villager zucker"
+				]
+			}
+		]
+	},
+	"animalcrossingNoVillager": "{{ERROR}} I couldn't find an Animal Crossing villager named `{{villager}}`. Maybe you meant one of these?",
+	"animalcrossingNoVillagerProvided": "{{ERROR}} Please tell me which Animal Crossing villager I should search for.",
+	"animalcrossingTitles": {
+		"birthday": "• Birthday",
+		"catchphrase": "• Catchphrase",
+		"coffee": "• Coffee Request",
+		"game": "• Game",
+		"game_other": "• Games",
+		"gender": "• Gender",
+		"goal": "• Goal",
+		"personality": "• Personality",
+		"saying": "• Favorite Saying",
+		"series": "• Series",
+		"siblings": "• Siblings",
+		"skill": "•  Skill",
+		"song": "• Favorite Song",
+		"species": "• Species",
+		"zodiac": "• Zodiac"
+	},
+	"lastFmArtistListeners": "**{{count, number}}** listener",
+	"lastFmArtistListeners_other": "**{{count, number}}** listeners",
+	"lastFmArtistPlaysByYou": "**{{count, number}}** play by you",
+	"lastFmArtistPlaysByYou_other": "**{{count, number}}** plays by you",
+	"lastFmArtistPlaysByYouLastWeek": "**{{count, number}}** by you last week",
+	"lastFmChatInputOptionArtistName": "artist",
+	"lastFmChatInputOptionArtistDescription": "The artist you want to search for (defaults to currently playing).",
+	"lastFmChatInputSubcommandArtistName": "artist",
+	"lastFmChatInputSubcommandArtistDescription": "Shows artist info for the artist you're currently listening to or searching for.",
+	"lastFmChatInputSubcommandGlobalWhoKnows": "globalwhoknows",
+	"lastFmChatInputSubcommandGlobalWhoKnowsDescription": "Shows which others users listen an artist.",
+	"lastFmDetailedDescription": {
+		"description": "Fetch data from Last.fm.",
+		"usage": "{{prefix}}lastfm [subcommand]",
+		"subcommands": [
+			{
+				"command": "artist",
+				"description": "Search and show data of a last.fm artist including tracks, albums, and scrobble counts.",
+				"options": [
+					{
+						"name": "artist",
+						"description": "The artist to search for."
+					},
+					{
+						"name": "hidden",
+						"description": "Whether to hide the command's output."
+					}
+				],
+				"examples": ["{{prefix}}lastfm artist", "{{prefix}}lastfm artist mitski", "{{prefix}}lastfm artist lana del rey"]
+			},
+			{
+				"command": "globalwhoknows",
+				"description": "Shows who listens to an artist out of everyone who uses me.",
+				"examples": ["{{prefix}}lastfm globalwhoknows", "{{prefix}}lastfm globalwhoknows grentperez"]
+			},
+			{
+				"command": "stats",
+				"description": "Shows your last.fm user statistics.",
+				"examples": ["{{prefix}}lastfm stats", "{{prefix}}lastfm stats @Ruffpuff"]
+			},
+			{
+				"command": "update",
+				"description": "Updates your cached scrobbles within my database.",
+				"examples": ["{{prefix}}lastfm update", "{{prefix}}lastfm update plays", "{{prefix}}lastfm update artists"]
+			}
+		]
+	},
+	"lastFmStatsMostActiveDayOfWeek": "Most active day of the week is **{{day}}**",
+	"lastFmNotLoggedIn": "{{ERROR}} I couldn't run that command because you're not logged in with Last.fm! Try running `.lastfm login` to get more information.",
+	"lastFmPlayListeners": "**{{count, number}}** listener",
+	"lastFmPlayListeners_other": "**{{count, number}}** listeners",
+	"lastFmPlayNowPlaying": "Now Playing",
+	"lastFmPlayPlays": "**{{count, number}}** play",
+	"lastFmPlayPlays_other": "**{{count, number}}** plays",
+	"lastFmPlayPlaysBy": "**{{count, number}}** play by {{target}}",
+	"lastFmPlayPlaysBy_other": "**{{count, number}}** plays by {{target}}",
+	"lastFmPlayPlaysByYou": "**{{count, number}}** play by you",
+	"lastFmPlayPlaysByYou_other": "**{{count, number}}** plays by you",
+	"lastFmPlayWasPlaying": "Was Playing",
+	"lastFmTitles": {
+		"about": "• About",
+		"lastFmStats": "• Last.fm stats",
+		"months": "• Months",
+		"statistics": "• Statistics",
+		"summary": "• Summary",
+		"years": "• Years"
+	},
+	"lastFmTrackNotFoundForUser": "{{ERROR}} I'm sorry I couldn't find any tracks for the user: {{user.name, code}}.",
+	"lastFmUserNotLoggedIn": "{{ERROR}} Oops I couldn't run that command because the user {{user, bold}} isn't logged in with Last.fm!"
 }

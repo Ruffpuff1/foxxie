@@ -1,4 +1,4 @@
-import { FT, T } from '#lib/Types';
+import { FT, T } from '#lib/types';
 
 export const AbortOptions = T<string[]>('globals:abortOptions');
 export const And = FT<{ value: string[] }, string>('globals:and');
@@ -16,6 +16,7 @@ export const DateTime = FT<{ date: Date | number }, string>('globals:dateTime');
 export const DefaultT = FT<{ key: string }, string>(`globals:defaultT`);
 export const DefaultLanguage = T('globals:defaultLanguage');
 export const Duration = FT<{ duration: number | Date }, string>('globals:duration');
+export const DurationString = FT<{ value: number }, string>('globals:durationString');
 export const Everyone = T('globals:everyone');
 export const FullDateTime = FT<{ date: Date | number }, string>('globals:fullDateTime');
 export const Infinte = T('globals:infinite');

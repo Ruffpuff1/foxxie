@@ -1,4 +1,4 @@
-import { FT, T } from '#lib/Types';
+import { FT, T } from '#lib/types';
 import type { GuildTextBasedChannel, User } from 'discord.js';
 
 export const ActionDelete = T('guilds/logs:actionDelete');
@@ -13,6 +13,7 @@ export const ArgsAttachment = FT<{ attachments: string }>('guilds/logs:argsAttac
 export const ArgsChannel = FT<{ channel: GuildTextBasedChannel }>('guilds/logs:argsChannel');
 export const ArgsCreated = FT<{ date: Date }>('guilds/logs:argsCreated');
 export const ArgsDuration = FT<{ duration: number }>('guilds/logs:argsDuration');
+export const ArgsDurationPast = FT<{ duration: number }>('guilds/logs:argsDurationPast');
 export const ArgsInvites = FT<{ invites: string[]; count: number }>('guilds/logs:argsInvites');
 export const ArgsJoinedAt = FT<{ date: Date }>('guilds/logs:argsJoinedAt');
 export const ArgsLink = FT<{ link: string }>('guilds/logs:argsLink');

@@ -1,35 +1,34 @@
-import { container } from '@sapphire/framework';
-import { join } from 'path';
+import { join } from 'node:path';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { MongoDB } from './MongoDB';
-import { ClientEntity, GuildEntity, MemberEntity } from './entities';
+import { ClientEntity, MemberEntity } from './entities';
 import { LastFmArtistEntity } from './entities/LastFmArtistEntity';
 import { UserEntity } from './entities/UserEntity';
-import { ClientRepository, GuildRepository, LastFmArtistRepository, MemberRepository } from './repository';
+import { ClientRepository, LastFmArtistRepository, MemberRepository } from './repository';
 import { UserRepository } from './repository/UserRepository';
+import { MongoDB } from './MongoDB';
+import { container } from '@sapphire/framework';
 
 export async function config(): Promise<void> {
-    const dataSource = new DataSource({
-        type: 'mongodb',
-        host: 'local',
-        url: process.env.MONGO_URL,
-        port: 3306,
-        username: process.env.MONGO_USER,
-        password: process.env.MONGO_PASSWORD,
-        entities: [join(__dirname, 'entities/*Entity.js'), GuildEntity],
-        authSource: 'admin',
-        ssl: true,
-        logging: true
-    });
+	const dataSource = new DataSource({
+		type: 'mongodb',
+		host: 'local',
+		url: process.env.MONGO_URL,
+		port: 3306,
+		username: process.env.MONGO_USER,
+		password: process.env.MONGO_PASSWORD,
+		entities: [join(__dirname, 'entities/*Entity.js')],
+		authSource: 'admin',
+		ssl: true,
+		logging: true
+	});
 
-    await dataSource.initialize();
+	await dataSource.initialize();
 
-    const clients = new ClientRepository(dataSource, ClientEntity);
-    const guilds = new GuildRepository(dataSource, GuildEntity);
-    const members = new MemberRepository(dataSource, MemberEntity);
-    const lastFmArtists = new LastFmArtistRepository(dataSource, LastFmArtistEntity);
-    const users = new UserRepository(dataSource, UserEntity);
+	const clients = new ClientRepository(dataSource, ClientEntity);
+	const members = new MemberRepository(dataSource, MemberEntity);
+	const lastFmArtists = new LastFmArtistRepository(dataSource, LastFmArtistEntity);
+	const users = new UserRepository(dataSource, UserEntity);
 
-    container.db = new MongoDB(dataSource, clients, guilds, members, lastFmArtists, users);
+	container.db = new MongoDB(dataSource, clients, members, lastFmArtists, users);
 }

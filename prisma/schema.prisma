@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator json {
+  provider = "prisma-json-types-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -54,7 +58,9 @@ model guilds {
   language                             String   @default("en-US") @db.VarChar
   disableNaturalPrefix                 Boolean  @default(false) @map("disable-natural-prefix")
   disabledCommands                     String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(32)[]")) @map("disabled-commands") @db.VarChar(32)
+  /// [PermissionNodeEntries]
   permissionsUsers                     Json     @default("[]") @map("permissions.users")
+  /// [PermissionNodeEntries]
   permissionsRoles                     Json     @default("[]") @map("permissions.roles")
   channelsMediaOnly                    String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("channels.media-only") @db.VarChar(19)
   channelsLogsModeration               String?  @map("channels.logs.moderation") @db.VarChar(19)
@@ -103,6 +109,7 @@ model guilds {
   messagesAutoDeleteIgnoredRoles       String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("messages.auto-delete.ignored-roles") @db.VarChar(19)
   messagesAutoDeleteIgnoredChannels    String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("messages.auto-delete.ignored-channels") @db.VarChar(19)
   messagesAutoDeleteIgnoredCommands    String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(32)[]")) @map("messages.auto-delete.ignored-commands") @db.VarChar(32)
+  /// [RolesPersistEntries]
   rolesPersist                         Json     @default("[]") @map("roles.persist")
   rolesPersistEnabled                  Boolean  @default(true) @map("roles.persist-enabled")
   reactionRoles                        Json     @default("[]") @map("reaction-roles")

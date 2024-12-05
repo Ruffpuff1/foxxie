@@ -1,37 +1,37 @@
-import { LanguageKeys } from '#lib/I18n/index';
+import { LanguageKeys } from '#lib/i18n';
 import { memberNote } from '@prisma/client';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
+import { TFunction } from '@sapphire/plugin-i18next';
 import { bold } from 'discord.js';
-import { TFunction } from 'i18next';
 
 export class Note {
-    id: number;
+	id!: number;
 
-    createdAt: Date;
+	createdAt!: Date;
 
-    guildId: string;
+	guildId!: string;
 
-    userId: string;
+	userId!: string;
 
-    authorId: string;
+	authorId!: string;
 
-    reason: string | null;
+	reason!: string | null;
 
-    public constructor(data: memberNote) {
-        Object.assign(this, data);
-    }
+	public constructor(data: memberNote) {
+		Object.assign(this, data);
+	}
 
-    public display(t: TFunction) {
-        const name = this.author?.username || t(LanguageKeys.Globals.Unknown);
-        return [`${bold(t(LanguageKeys.Globals.NumberFormat, { value: this.id }))}.`, this.reason, `- **${name}**`].join(' ');
-    }
+	public display(t: TFunction) {
+		const name = this.author?.username || t(LanguageKeys.Globals.Unknown);
+		return [`${bold(t(LanguageKeys.Globals.NumberFormat, { value: this.id }))}.`, this.reason, `- **${name}**`].join(' ');
+	}
 
-    public fetchAuthor() {
-        return resolveToNull(container.client.users.fetch(this.authorId));
-    }
+	public fetchAuthor() {
+		return resolveToNull(container.client.users.fetch(this.authorId));
+	}
 
-    private get author() {
-        return container.client.users.cache.get(this.authorId);
-    }
+	private get author() {
+		return container.client.users.cache.get(this.authorId);
+	}
 }

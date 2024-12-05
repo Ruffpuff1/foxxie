@@ -1,5 +1,3 @@
-export * from './util';
-export * from './functions';
 export * from './repository';
 export * from './entities';
 export * from './MongoDB';

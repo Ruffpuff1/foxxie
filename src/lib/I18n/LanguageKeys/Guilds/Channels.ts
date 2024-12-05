@@ -1,4 +1,4 @@
-import { T } from '#lib/Types';
+import { T } from '#lib/types';
 
 export const GUILD_NEWS = T('guilds/channels:GUILD_NEWS');
 export const GUILD_STAGE_VOICE = T('guilds/channels:GUILD_STAGE_VOICE');

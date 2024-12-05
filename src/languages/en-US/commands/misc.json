@@ -1,43 +1,43 @@
 {
-    "reminderCreateSuccess": "{{SUCCESS}} Created a task with the Id `[{{id}}]`.",
-    "reminderDefault": "For some secret reason :eyes:",
-    "reminderDeleteNone": "{{ERROR}} I couldn't find any reminders to delete.'",
-    "reminderDeleteSuccess": "{{SUCCESS}} Successfully deleted reminder {{ids, codeand}}.",
-    "reminderDescription": "Schedule and manage reminders.",
-    "reminderDetailedDescription": {
-        "description": "Schedule and manage reminders for yourself.",
-        "usage": "{{prefix}}reminder [create|show|edit|delete|list]",
-        "subcommands": [
-            {
-                "command": "create",
-                "description": ["Creates a new reminder with the specified message"],
-                "examples": ["{{prefix}}reminder 3h make food", "{{prefix}}reminder create 2h1d post a QOTD"]
-            },
-            {
-                "command": "show",
-                "description": ["Shows the full text of a reminder given its ID"],
-                "examples": ["{{prefix}}reminder show 23"]
-            },
-            {
-                "command": "edit",
-                "description": ["Edits the text of a reminder given its ID"],
-                "examples": ["{{prefix}}reminder edit 46 make pizza"]
-            },
-            {
-                "command": "delete",
-                "description": ["Deletes a reminder given its ID"],
-                "examples": ["{{prefix}}reminder delete 30"]
-            },
-            {
-                "command": "list",
-                "description": ["Lists your active reminders"],
-                "examples": ["{{prefix}}reminder list"]
-            }
-        ]
-    },
-    "reminderDMWarn": "\n\n**Please note that your DMs are closed right now, unless opened I will send the reminder in the channel you created it.**",
-    "reminderEditSuccess": "{{SUCCESS}} Edited the task from {{old, code}} to:\n> {{new}}",
-    "reminderList": "Reminders for {{author}}:",
-    "reminderNone": "{{ERROR}} You don't currently have any active reminders.",
-    "reminderShow": "On **{{date, fulldatetime}}** im going to remind you:\n> *{{text}}*"
+	"reminderCreateSuccess": "{{SUCCESS}} Created a task with the Id `[{{id}}]`.",
+	"reminderDefault": "For some secret reason :eyes:",
+	"reminderDeleteNone": "{{ERROR}} I couldn't find any reminders to delete.'",
+	"reminderDeleteSuccess": "{{SUCCESS}} Successfully deleted reminder {{ids, codeand}}.",
+	"reminderDescription": "Schedule and manage reminders.",
+	"reminderDetailedDescription": {
+		"description": "Schedule and manage reminders for yourself.",
+		"usage": "{{prefix}}reminder [create|show|edit|delete|list]",
+		"subcommands": [
+			{
+				"command": "create",
+				"description": ["Creates a new reminder with the specified message"],
+				"examples": ["{{prefix}}reminder 3h make food", "{{prefix}}reminder create 2h1d post a QOTD"]
+			},
+			{
+				"command": "show",
+				"description": ["Shows the full text of a reminder given its ID"],
+				"examples": ["{{prefix}}reminder show 23"]
+			},
+			{
+				"command": "edit",
+				"description": ["Edits the text of a reminder given its ID"],
+				"examples": ["{{prefix}}reminder edit 46 make pizza"]
+			},
+			{
+				"command": "delete",
+				"description": ["Deletes a reminder given its ID"],
+				"examples": ["{{prefix}}reminder delete 30"]
+			},
+			{
+				"command": "list",
+				"description": ["Lists your active reminders"],
+				"examples": ["{{prefix}}reminder list"]
+			}
+		]
+	},
+	"reminderDMWarn": "\n\n**Please note that your DMs are closed right now, unless opened I will send the reminder in the channel you created it.**",
+	"reminderEditSuccess": "{{SUCCESS}} Edited the task from {{old, code}} to:\n> {{new}}",
+	"reminderList": "Reminders for {{author}}:",
+	"reminderNone": "{{ERROR}} You don't currently have any active reminders.",
+	"reminderShow": "On **{{date, fulldatetime}}** im going to remind you:\n> *{{text}}*"
 }

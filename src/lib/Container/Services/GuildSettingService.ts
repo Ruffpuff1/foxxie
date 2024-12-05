@@ -1,120 +1,119 @@
-import { getDefaultGuildSettings, GuildData, ReadonlyGuildData } from '#Database/index';
-import { FoxxieGuild } from '#Database/Models/index';
-import { SettingsContext } from '#Database/settings/context/SettingsContext';
-import { Transaction } from '#Database/settings/structures/Transaction';
+import { FoxxieGuild, getDefaultGuildSettings, GuildData, ReadonlyGuildData } from '#lib/database';
+import { SettingsContext } from '#lib/Database/settings/context/SettingsContext';
+import { Transaction } from '#lib/Database/settings/structures/Transaction';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { container } from '@sapphire/framework';
 import { Awaitable, Collection, GuildResolvable, Snowflake } from 'discord.js';
 import { getFixedT } from 'i18next';
 
 export class GuildSettingsService {
-    public cache = new Collection<string, FoxxieGuild>();
+	public cache = new Collection<string, FoxxieGuild>();
 
-    #queue = new Collection<string, Promise<FoxxieGuild>>();
+	#queue = new Collection<string, Promise<FoxxieGuild>>();
 
-    static Locks = new Collection<string, AsyncQueue>();
+	public async acquire(resolvable: GuildResolvable): Promise<FoxxieGuild> {
+		const id = this.resolveGuildId(resolvable);
 
-    static WeakMapNotInitialized = new WeakSet<FoxxieGuild>();
+		const read = this.cache.get(id) ?? (await this.processGuildFetch(id));
+		return read;
+	}
 
-    static GuildContextCache = new Collection<Snowflake, SettingsContext>();
+	public async writeGuild(
+		guild: GuildResolvable,
+		data: Partial<ReadonlyGuildData> | ((settings: FoxxieGuild) => Awaitable<Partial<ReadonlyGuildData>>)
+	) {
+		using trx = await this.writeSettingsTransaction(guild);
 
-    async acquire(resolvable: GuildResolvable): Promise<FoxxieGuild> {
-        const id = this.resolveGuildId(resolvable);
+		if (typeof data === 'function') {
+			data = await data(trx.settings);
+		}
 
-        const read = this.cache.get(id) ?? (await this.processGuildFetch(id));
-        return read;
-    }
+		await trx.write(data).submit();
+	}
 
-    public async writeGuild(
-        guild: GuildResolvable,
-        data: Partial<ReadonlyGuildData> | ((settings: FoxxieGuild) => Awaitable<Partial<ReadonlyGuildData>>)
-    ) {
-        using trx = await this.writeSettingsTransaction(guild);
+	public async writeSettingsTransaction(guild: GuildResolvable) {
+		const id = this.resolveGuildId(guild);
+		const queue = GuildSettingsService.Locks.ensure(id, () => new AsyncQueue());
 
-        if (typeof data === 'function') {
-            data = await data(trx.settings);
-        }
+		// Acquire a write lock:
+		await queue.wait();
 
-        await trx.write(data).submit();
-    }
+		// Fetch the entry:
+		const settings = this.cache.get(id) ?? (await this.unlockOnThrow(this.processGuildFetch(id), queue));
 
-    public async writeSettingsTransaction(guild: GuildResolvable) {
-        const id = this.resolveGuildId(guild);
-        const queue = GuildSettingsService.Locks.ensure(id, () => new AsyncQueue());
+		return new Transaction(settings, queue);
+	}
 
-        // Acquire a write lock:
-        await queue.wait();
+	public getGuildContext(settings: FoxxieGuild): SettingsContext {
+		return GuildSettingsService.GuildContextCache.ensure(settings.id, () => new SettingsContext(settings._data));
+	}
 
-        // Fetch the entry:
-        const settings = this.cache.get(id) ?? (await this.unlockOnThrow(this.processGuildFetch(id), queue));
+	public async acquireT(resolveable: GuildResolvable | null) {
+		if (!resolveable) return getFixedT('en-US');
+		const { language } = await this.acquire(resolveable);
+		return getFixedT(language);
+	}
 
-        return new Transaction(settings, queue);
-    }
+	private async unlockOnThrow(promise: Promise<FoxxieGuild>, lock: AsyncQueue) {
+		try {
+			return await promise;
+		} catch (error) {
+			lock.shift();
+			throw error;
+		}
+	}
 
-    public getGuildContext(settings: FoxxieGuild): SettingsContext {
-        return GuildSettingsService.GuildContextCache.ensure(settings.id, () => new SettingsContext(settings));
-    }
+	private async processGuildFetch(id: string): Promise<FoxxieGuild> {
+		const previous = this.#queue.get(id);
+		if (previous) return previous;
 
-    public static UpdateSettingsContext(settings: FoxxieGuild, _: Partial<ReadonlyGuildData>): void {
-        const existing = GuildSettingsService.GuildContextCache.get(settings.id);
-        if (existing) {
-            // existing.update(settings, data);
-        } else {
-            const context = new SettingsContext(settings);
-            GuildSettingsService.GuildContextCache.set(settings.id, context);
-        }
-    }
+		try {
+			const promise = this.fetchGuild(id);
+			this.#queue.set(id, promise);
+			const value = await promise;
+			this.getGuildContext(value);
+			return value;
+		} finally {
+			this.#queue.delete(id);
+		}
+	}
 
-    public async acquireT(resolveable: GuildResolvable | null) {
-        if (!resolveable) return getFixedT('en-US');
-        const { language } = await this.acquire(resolveable);
-        return getFixedT(language);
-    }
+	private resolveGuildId(guild: GuildResolvable): Snowflake {
+		const resolvedId = container.client.guilds.resolveId(guild);
+		if (resolvedId === null) throw new TypeError(`Cannot resolve "guild" to a Guild instance.`);
+		return resolvedId;
+	}
 
-    private async unlockOnThrow(promise: Promise<FoxxieGuild>, lock: AsyncQueue) {
-        try {
-            return await promise;
-        } catch (error) {
-            lock.shift();
-            throw error;
-        }
-    }
+	private async fetchGuild(id: string): Promise<FoxxieGuild> {
+		const { guilds } = container.prisma;
+		const existing = await guilds.findUnique({ where: { id } });
+		if (existing) {
+			const guildEntry = new FoxxieGuild(existing);
+			this.cache.set(id, guildEntry);
+			return guildEntry;
+		}
 
-    private async processGuildFetch(id: string): Promise<FoxxieGuild> {
-        const previous = this.#queue.get(id);
-        if (previous) return previous;
+		const createdData = Object.assign(Object.create(null), getDefaultGuildSettings(), { id }) as GuildData;
+		const guildEntry = new FoxxieGuild(createdData);
 
-        try {
-            const promise = this.fetchGuild(id);
-            this.#queue.set(id, promise);
-            const value = await promise;
-            this.getGuildContext(value);
-            return value;
-        } finally {
-            this.#queue.delete(id);
-        }
-    }
+		this.cache.set(id, guildEntry);
+		GuildSettingsService.WeakMapNotInitialized.add(guildEntry);
+		return guildEntry;
+	}
 
-    private resolveGuildId(guild: GuildResolvable): Snowflake {
-        const resolvedId = container.client.guilds.resolveId(guild);
-        if (resolvedId === null) throw new TypeError(`Cannot resolve "guild" to a Guild instance.`);
-        return resolvedId;
-    }
+	public static Locks = new Collection<string, AsyncQueue>();
 
-    private async fetchGuild(id: string): Promise<FoxxieGuild> {
-        const { guilds } = container.prisma;
-        const existing = await guilds.findUnique({ where: { id } });
-        if (existing) {
-            const guildEntry = new FoxxieGuild(existing);
-            this.cache.set(id, guildEntry);
-            return guildEntry;
-        }
+	public static WeakMapNotInitialized = new WeakSet<FoxxieGuild>();
 
-        const createdData = Object.assign(Object.create(null), getDefaultGuildSettings(), { id }) as GuildData;
-        const guildEntry = new FoxxieGuild(createdData);
+	public static GuildContextCache = new Collection<Snowflake, SettingsContext>();
 
-        this.cache.set(id, guildEntry);
-        GuildSettingsService.WeakMapNotInitialized.add(guildEntry);
-        return guildEntry;
-    }
+	public static UpdateSettingsContext(settings: FoxxieGuild, _: Partial<ReadonlyGuildData>): void {
+		const existing = GuildSettingsService.GuildContextCache.get(settings.id);
+		if (existing) {
+			// existing.update(settings, data);
+		} else {
+			const context = new SettingsContext(settings._data);
+			GuildSettingsService.GuildContextCache.set(settings.id, context);
+		}
+	}
 }

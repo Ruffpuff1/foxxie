@@ -1,9 +1,7 @@
-import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/Types';
+import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/types';
 
 export const BirthdayDescription = T('commands/configuration:birthdayDescription');
-export const BirthdayDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
-    'commands/configuration:birthdayDetailedDescription'
-);
+export const BirthdayDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/configuration:birthdayDetailedDescription');
 export const BirthdaySetSuccess = FT<{ birthday: Date }>('commands/configuration:birthdaySetSuccess');
 export const ConfDescription = T('commands/configuration:confDescription');
 export const ConfGet = FT<{ key: string; value: string }>('commands/configuration:confGet');
@@ -30,6 +28,18 @@ export const ConfUpdated = FT<{ key: string; response: string }>('commands/confi
 export const ConfUsage = T('commands/configuration:confUsage');
 export const ConfValidationChooseKey = FT<{ keys: string[] }>('commands/configuration:confValidationChooseKey');
 
-export const HighlightDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>(
-    'commands/configuration:highlightDetailedDescription'
-);
+export const HighlightDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/configuration:highlightDetailedDescription');
+
+export const PermissionNodesAdd = T<string>('commands/configuration:permissionNodesAdd');
+export const PermissionNodesCommandNotExists = T<string>('commands/configuration:permissionNodesCommandNotExists');
+export const PermissionNodesDescription = T<string>('commands/configuration:permissionNodesDescription');
+export const PermissionNodesExtended = FT<DetailedDescriptionArgs, DetailedDescription>('commands/configuration:permissionNodesExtended');
+export const PermissionNodesHigher = T<string>('commands/configuration:permissionNodesHigher');
+export const PermissionNodesCannotAllowEveryone = T<string>('commands/configuration:permissionNodesCannotAllowEveryone');
+export const PermissionNodesInvalidType = T<string>('commands/configuration:permissionNodesInvalidType');
+export const PermissionNodesNodeNotExists = T<string>('commands/configuration:permissionNodesNodeNotExists');
+export const PermissionNodesRemove = T<string>('commands/configuration:permissionNodesRemove');
+export const PermissionNodesReset = T<string>('commands/configuration:permissionNodesReset');
+export const PermissionNodesShowAllow = FT<{ allow: string }, string>('commands/configuration:permissionNodesShowAllow');
+export const PermissionNodesShowDeny = FT<{ deny: string }, string>('commands/configuration:permissionNodesShowDeny');
+export const PermissionNodesShowName = FT<{ name: string }, string>('commands/configuration:permissionNodesShowName');

@@ -1,24 +1,25 @@
-import { EnvKeys } from '#lib/Types';
+import { EnvKeys } from '#lib/types';
 import { Urls } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';
-import { HttpMethodEnum, fetch } from '@foxxie/fetch';
+import makeRequest from '@aero/http';
 
 export class HastebinService {
-    public async post(body: string): Promise<string | null> {
-        const { key } = await fetch(Urls.Haste, HttpMethodEnum.Post)
-            .path('documents')
-            .body({ body })
-            .auth(this.token, 'Bearer')
-            .json<HastebinPostData>();
+	public async post(body: string): Promise<string | null> {
+		const { key } = await makeRequest(Urls.Haste)
+			.path('documents')
+			.body({ body })
+			.method('POST')
+			.auth(this.token, 'Bearer')
+			.json<HastebinPostData>();
 
-        return key ?? null;
-    }
+		return key ?? null;
+	}
 
-    private get token() {
-        return EnvParse.string(EnvKeys.HasteToken);
-    }
+	private get token() {
+		return EnvParse.string(EnvKeys.HasteToken);
+	}
 }
 
 export interface HastebinPostData {
-    key: string;
+	key: string;
 }
