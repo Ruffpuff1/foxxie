@@ -1,4 +1,32 @@
 {
+	"birthdayDescription": "",
+	"birthdayDetailedDescription": {
+		"description": "",
+		"usage": "",
+		"subcommands": [
+			{
+				"command": "lista",
+				"description": [
+					""
+				],
+				"examples": [
+					"",
+					""
+				]
+			},
+			{
+				"command": "",
+				"description": [
+					""
+				],
+				"examples": [
+					"",
+					""
+				]
+			}
+		]
+	},
+	"birthdaySetSuccess": "",
 	"confDescription": "Configura la configuración de tu servidor para mí.",
 	"confGet": "El valor para la clave **{{key}}** es: `{{value}}`",
 	"confGetNoExt": "",
@@ -29,9 +57,28 @@
 		"subcommands": [
 			{
 				"command": "",
-				"description": ["", "", "", ""],
-				"examples": ["", "", ""]
+				"description": [
+					"",
+					"",
+					"",
+					""
+				],
+				"examples": [
+					"",
+					"",
+					""
+				]
 			}
 		]
-	}
+	},
+	"permissionNodesCannotAllowEveryone": "",
+	"permissionNodesInvalidType": "",
+	"permissionNodesAdd": "",
+	"permissionNodesNodeNotExists": "",
+	"permissionNodesCommandNotExists": "",
+	"permissionNodesRemove": "",
+	"permissionNodesReset": "",
+	"permissionNodesShowName": "",
+	"permissionNodesShowAllow": "",
+	"permissionNodesShowDeny": ""
 }

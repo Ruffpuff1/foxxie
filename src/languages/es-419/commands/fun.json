@@ -7,8 +7,14 @@
 		"subcommands": [
 			{
 				"command": "",
-				"description": [""],
-				"examples": ["", "", ""]
+				"description": [
+					""
+				],
+				"examples": [
+					"",
+					"",
+					""
+				]
 			}
 		]
 	},
@@ -31,6 +37,11 @@
 		"species": "",
 		"zodiac": ""
 	},
+	"lastFmArtistListeners": "",
+	"lastFmArtistListeners_other": "",
+	"lastFmArtistPlaysByYou": "",
+	"lastFmArtistPlaysByYou_other": "",
+	"lastFmArtistPlaysByYouLastWeek": "",
 	"lastFmChatInputOptionArtistName": "artista",
 	"lastFmChatInputOptionArtistDescription": "El artista que desea buscar (por defecto se reproduce actualmente).",
 	"lastFmChatInputSubcommandArtistName": "artista",
@@ -42,22 +53,11 @@
 		"usage": "",
 		"subcommands": [
 			{
-				"command": "",
-				"description": [""],
+				"command": "artista",
+				"description": "",
 				"options": [
 					{
-						"name": "",
-						"description": ""
-					}
-				],
-				"examples": ["", "", ""]
-			},
-			{
-				"command": "",
-				"description": [""],
-				"options": [
-					{
-						"name": "",
+						"name": "artista",
 						"description": ""
 					},
 					{
@@ -65,10 +65,41 @@
 						"description": ""
 					}
 				],
-				"examples": ["", "", ""]
+				"examples": [
+					"",
+					"",
+					""
+				]
+			},
+			{
+				"command": "globalquiénsabe",
+				"description": "",
+				"examples": [
+					"",
+					""
+				]
+			},
+			{
+				"command": "",
+				"description": "",
+				"examples": [
+					"",
+					""
+				]
+			},
+			{
+				"command": "",
+				"description": "",
+				"examples": [
+					"",
+					"",
+					""
+				]
 			}
 		]
 	},
+	"lastFmStatsMostActiveDayOfWeek": "",
+	"lastFmNotLoggedIn": "",
 	"lastFmPlayListeners": "",
 	"lastFmPlayListeners_other": "",
 	"lastFmPlayNowPlaying": "",
@@ -87,5 +118,6 @@
 		"summary": "• Resumen",
 		"years": "• Años"
 	},
-	"lastFmTrackNotFoundForUser": ""
+	"lastFmTrackNotFoundForUser": "",
+	"lastFmUserNotLoggedIn": ""
 }

@@ -8,7 +8,7 @@
 	"actionMemberLeave": "Miembro dejado",
 	"actionMemberScreening": "Miembro verificado",
 	"argsAttachment": "**Adjuntos**: {{attachments}}",
-	"argsChannel": "**Ubicación**: {{channel.name}} ({{channel.id}})",
+	"argsChannel": "**Ubicación**: {{channel.name, code}} ({{channel.id}})",
 	"argsCreated": "**Creado**: {{date, fulldate}} ({{date, duration}})",
 	"argsDuration": "**Expira**: {{duration, duration}}",
 	"argsInvites": "**Invitación**: {{invites, and}}",
