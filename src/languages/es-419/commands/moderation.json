@@ -24,7 +24,11 @@
 				"description": ""
 			}
 		],
-		"examples": ["", "", ""]
+		"examples": [
+			"",
+			"",
+			""
+		]
 	},
 	"banSuccess": "",
 	"banSuccess_other": "",
@@ -50,10 +54,24 @@
 				"description": ""
 			}
 		],
-		"examples": ["", ""]
+		"examples": [
+			"",
+			""
+		]
 	},
 	"kickSuccess": "",
 	"kickSuccess_other": "",
+	"moderationFailed_one": "",
+	"moderationFailed_other": "",
+	"moderationDmFooter": "",
+	"moderationDmDescription": "",
+	"moderationDmDescriptionWithReason": "",
+	"moderationDmDescriptionWithDuration": "",
+	"moderationDmDescriptionWithReasonWithDuration": "",
+	"moderationOutput_one": "",
+	"moderationOutput_other": "",
+	"moderationOutputWithReason_one": "",
+	"moderationOutputWithReason_other": "",
 	"muteDetailedDescription": {
 		"description": "",
 		"usage": "",
@@ -75,16 +93,23 @@
 				"description": ""
 			}
 		],
-		"examples": ["", "", ""]
+		"examples": [
+			"",
+			"",
+			""
+		]
 	},
 	"muteSuccess": "",
 	"muteSuccess_other": "",
+	"permissions": "",
+	"permissionsAll": "",
 	"reasonDescription": "",
 	"reasonSuccess": "",
 	"reasonUsage": "[Id de caso | \"nuevo\"] [razón]",
 	"restrictEmbedDescription": "",
 	"restrictEmbedSuccess": "",
 	"restrictEmbedSuccess_other": "",
+	"success": "",
 	"unbanDescription": "",
 	"unbanSuccess": "",
 	"unbanSuccess_other": "",
