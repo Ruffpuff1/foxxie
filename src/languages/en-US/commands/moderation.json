@@ -1,108 +1,111 @@
 {
-    "banDetailedDescription": {
-        "description": "Ban a user from your server so they can no longer join back.",
-        "usage": "{{prefix}}ban [...users] (time) (reason) {--days=} {--refrence=}",
-        "arguments": [
-            {
-                "name": "Users",
-                "description": "The users to ban. This can be mentions or user IDs. You can also ban up to ten users at a time."
-            },
-            {
-                "name": "Time",
-                "description": "An optional duration to ban the users for. This time can be formatted as `2h` for two hours or `1w` for one week."
-            },
-            {
-                "name": "Reason",
-                "description": "The optional reason for the ban. This will be added to the server's audit logs."
-            },
-            {
-                "name": "Days",
-                "description": "The optional amount of days worth messages to delete. This can be between 1 and 7, such as `--days=1` or `--days=7`."
-            },
-            {
-                "name": "Refrence",
-                "description": "The optional case to refrence in the moderation log. This can be the number of a prior moderation case."
-            }
-        ],
-        "examples": [
-            "{{prefix}}ban @Ruffpuff",
-            "{{prefix}}ban @Boom 2d",
-            "{{prefix}}ban @ArEo --days=7 --refrence=245"
-        ]
-    },
-    "banSuccess": "{{SUCCESS}} Successfully banned {{users, and}}, creating case {{range}}.",
-    "banSuccess_other": "{{SUCCESS}} Successfully banned {{users, and}}, creating cases {{range}}.",
-    "caseDescription": "View a prior moderation case from your server.",
-    "caseNoExist": "{{ERROR}} A moderation case with the id `{{id}}` doesn't exist in this server.",
-    "caseUsage": "[caseId | \"latest\"]",
-    "guildBansEmpty": "{{ERROR}} This server doesn't have any banned members.",
-    "guildBansNotFound": "{{ERROR}} That member doesn't seem to be banned in this server.",
-    "kickDetailedDescription": {
-        "description": "Kick a member from your server.",
-        "usage": "{{prefix}}kick [...users] (reason) {--refrence=}",
-        "arguments": [
-            {
-                "name": "Users",
-                "description": "The users to kick. This can be mentions or user IDs. You can also kick up to ten users at a time."
-            },
-            {
-                "name": "Reason",
-                "description": "The optional reason for the kick. This will be added to the server's audit logs."
-            },
-            {
-                "name": "Refrence",
-                "description": "The optional case to refrence in the moderation log. This can be the number of a prior moderation case."
-            }
-        ],
-        "examples": [
-            "{{prefix}}kick @Ruffpuff",
-            "{{prefix}}kick @Boom --refrence=69"
-        ]
-    },
-    "kickSuccess": "{{SUCCESS}} Successfully kicked {{users, and}}, creating case {{range}}.",
-    "kickSuccess_other": "{{SUCCESS}} Successfully kicked {{users, and}}, creating cases {{range}}.",
-    "muteDetailedDescription": {
-        "description": "Mute a member from your server so that they can no longer talk.",
-        "usage": "{{prefix}}mute [...users] (time) (reason) {--refrence=}",
-        "arguments": [
-            {
-                "name": "Users",
-                "description": "The users to mute. This can be mentions or user IDs. You can also mute up to ten users at a time."
-            },
-            {
-                "name": "Time",
-                "description": "An optional duration to mute the users for. This time can be formatted as `2h` for two hours or `1w` for one week."
-            },
-            {
-                "name": "Reason",
-                "description": "The optional reason for the mute. This will be added to the server's audit logs."
-            },
-            {
-                "name": "Refrence",
-                "description": "The optional case to refrence in the moderation log. This can be the number of a prior moderation case."
-            }
-        ],
-        "examples": [
-            "{{prefix}}mute @Ruffpuff",
-            "{{prefix}}mute @Boom 2d",
-            "{{prefix}}mute @_waindrop_ --refrence=245"
-        ]
-    },
-    "muteSuccess": "{{SUCCESS}} Successfully muted {{users, and}}, creating case {{range}}.",
-    "muteSuccess_other": "{{SUCCESS}} Successfully muted {{users, and}}, creating cases {{range}}.",
-    "reasonDescription": "Edit the reason for a moderation case in your server.",
-    "reasonSuccess": "{{SUCCESS}} Changed the case's reason to `{{reason}}`.",
-    "reasonUsage": "[caseId | \"latest\"] [reason]",
-    "restrictEmbedDescription": "Restrict embeding for members of your server, preventing them from embeding links such as GIFs.",
-    "restrictEmbedSuccess": "{{SUCCESS}} Successfully embed restricted {{users, and}}, creating case {{range}}.",
-    "restrictEmbedSuccess_other": "{{SUCCESS}} Successfully embed restricted {{users, and}}, creating cases {{range}}.",
-    "unbanDescription": "Unban members from your server",
-    "unbanSuccess": "{{SUCCESS}} Successfully unbanned {{users, and}}, creating case {{range}}.",
-    "unbanSuccess_other": "{{SUCCESS}} Successfully unbanned {{users, and}}, creating cases {{range}}.",
-    "unmuteDescription": "Unmute members of your server so they can talk again.",
-    "unmuteSuccess": "{{SUCCESS}} Successfully unmuted {{users, and}}, creating case {{range}}.",
-    "unmuteSuccess_other": "{{SUCCESS}} Successfully unmuted {{users, and}}, creating cases {{range}}.",
-    "unRestrictEmbedDescription": "Remove embed restrictions for members of your server, allowing them to embed links again.",
-    "unRestrictEmbedSuccess": "{{SUCCESS}} Successfully restored embed permissions for {{users, and}}, creating case {{range}}.",
-    "unRestrictEmbedSuccess_other": "{{SUCCESS}} Successfully restored embed permissions for {{users, and}}, creating cases {{range}}."
+	"banDetailedDescription": {
+		"description": "Ban a user from your server so they can no longer join back.",
+		"usage": "{{prefix}}ban [...users] (time) (reason) {--days=} {--refrence=}",
+		"arguments": [
+			{
+				"name": "Users",
+				"description": "The users to ban. This can be mentions or user IDs. You can also ban up to ten users at a time."
+			},
+			{
+				"name": "Time",
+				"description": "An optional duration to ban the users for. This time can be formatted as `2h` for two hours or `1w` for one week."
+			},
+			{
+				"name": "Reason",
+				"description": "The optional reason for the ban. This will be added to the server's audit logs."
+			},
+			{
+				"name": "Days",
+				"description": "The optional amount of days worth messages to delete. This can be between 1 and 7, such as `--days=1` or `--days=7`."
+			},
+			{
+				"name": "Refrence",
+				"description": "The optional case to refrence in the moderation log. This can be the number of a prior moderation case."
+			}
+		],
+		"examples": ["{{prefix}}ban @Ruffpuff", "{{prefix}}ban @Boom 2d", "{{prefix}}ban @ArEo --days=7 --refrence=245"]
+	},
+	"banSuccess": "{{SUCCESS}} Successfully banned {{users, and}}, creating case {{range}}.",
+	"banSuccess_other": "{{SUCCESS}} Successfully banned {{users, and}}, creating cases {{range}}.",
+	"caseDescription": "View a prior moderation case from your server.",
+	"caseNoExist": "{{ERROR}} A moderation case with the id `{{id}}` doesn't exist in this server.",
+	"caseUsage": "[caseId | \"latest\"]",
+	"guildBansEmpty": "{{ERROR}} This server doesn't have any banned members.",
+	"guildBansNotFound": "{{ERROR}} That member doesn't seem to be banned in this server.",
+	"kickDetailedDescription": {
+		"description": "Kick a member from your server.",
+		"usage": "{{prefix}}kick [...users] (reason) {--refrence=}",
+		"arguments": [
+			{
+				"name": "Users",
+				"description": "The users to kick. This can be mentions or user IDs. You can also kick up to ten users at a time."
+			},
+			{
+				"name": "Reason",
+				"description": "The optional reason for the kick. This will be added to the server's audit logs."
+			},
+			{
+				"name": "Refrence",
+				"description": "The optional case to refrence in the moderation log. This can be the number of a prior moderation case."
+			}
+		],
+		"examples": ["{{prefix}}kick @Ruffpuff", "{{prefix}}kick @Boom --refrence=69"]
+	},
+	"kickSuccess": "{{SUCCESS}} Successfully kicked {{users, and}}, creating case {{range}}.",
+	"kickSuccess_other": "{{SUCCESS}} Successfully kicked {{users, and}}, creating cases {{range}}.",
+	"moderationFailed_one": "{{ERROR}} Failed to moderate user:\n{{users}}",
+	"moderationFailed_other": "{{ERROR}} Failed to moderate users:\n{{users}}",
+	"moderationDmFooter": "To disable moderation DMs, write `toggleModerationDM`.",
+	"moderationDmDescription": "**❯ Server**: {{guild}}\n**❯ Type**: {{title}}\n**❯ Reason**: None specified",
+	"moderationDmDescriptionWithReason": "**❯ Server**: {{guild}}\n**❯ Type**: {{title}}\n**❯ Reason**: {{reason}}",
+	"moderationDmDescriptionWithDuration": "**❯ Server**: {{guild}}\n**❯ Type**: {{title}}\n**❯ Duration**: {{duration, duration}}\n**❯ Reason**: None specified",
+	"moderationDmDescriptionWithReasonWithDuration": "**❯ Server**: {{guild}}\n**❯ Type**: {{title}}\n**❯ Duration**: {{duration, duration}}\n**❯ Reason**: {{reason}}",
+	"moderationOutput_one": "{{SUCCESS}} Created case {{range}} | {{users, list(conjunction)}}.",
+	"moderationOutput_other": "{{SUCCESS}} Created cases {{range}} | {{users, list(conjunction)}}.",
+	"moderationOutputWithReason_one": "{{SUCCESS}} Created case {{range}} | {{users, list(conjunction)}}.\nWith the reason of: {{reason}}",
+	"moderationOutputWithReason_other": "{{SUCCESS}} Created cases {{range}} | {{users, list(conjunction)}}.\nWith the reason of: {{reason}}",
+	"muteDetailedDescription": {
+		"description": "Mute a member from your server so that they can no longer talk.",
+		"usage": "{{prefix}}mute [...users] (time) (reason) {--refrence=}",
+		"arguments": [
+			{
+				"name": "Users",
+				"description": "The users to mute. This can be mentions or user IDs. You can also mute up to ten users at a time."
+			},
+			{
+				"name": "Time",
+				"description": "An optional duration to mute the users for. This time can be formatted as `2h` for two hours or `1w` for one week."
+			},
+			{
+				"name": "Reason",
+				"description": "The optional reason for the mute. This will be added to the server's audit logs."
+			},
+			{
+				"name": "Refrence",
+				"description": "The optional case to refrence in the moderation log. This can be the number of a prior moderation case."
+			}
+		],
+		"examples": ["{{prefix}}mute @Ruffpuff", "{{prefix}}mute @Boom 2d", "{{prefix}}mute @_waindrop_ --refrence=245"]
+	},
+	"muteSuccess": "{{SUCCESS}} Successfully muted {{users, and}}, creating case {{range}}.",
+	"muteSuccess_other": "{{SUCCESS}} Successfully muted {{users, and}}, creating cases {{range}}.",
+	"permissions": "Permissions for {{username}} ({{id}})",
+	"permissionsAll": "All Permissions",
+	"reasonDescription": "Edit the reason for a moderation case in your server.",
+	"reasonSuccess": "{{SUCCESS}} Changed the case's reason to `{{reason}}`.",
+	"reasonUsage": "[caseId | \"latest\"] [reason]",
+	"restrictEmbedDescription": "Restrict embeding for members of your server, preventing them from embeding links such as GIFs.",
+	"restrictEmbedSuccess": "{{SUCCESS}} Successfully embed restricted {{users, and}}, creating case {{range}}.",
+	"restrictEmbedSuccess_other": "{{SUCCESS}} Successfully embed restricted {{users, and}}, creating cases {{range}}.",
+	"success": "{{SUCCESS}} Successfully executed the command.",
+	"unbanDescription": "Unban members from your server",
+	"unbanSuccess": "{{SUCCESS}} Successfully unbanned {{users, and}}, creating case {{range}}.",
+	"unbanSuccess_other": "{{SUCCESS}} Successfully unbanned {{users, and}}, creating cases {{range}}.",
+	"unmuteDescription": "Unmute members of your server so they can talk again.",
+	"unmuteSuccess": "{{SUCCESS}} Successfully unmuted {{users, and}}, creating case {{range}}.",
+	"unmuteSuccess_other": "{{SUCCESS}} Successfully unmuted {{users, and}}, creating cases {{range}}.",
+	"unRestrictEmbedDescription": "Remove embed restrictions for members of your server, allowing them to embed links again.",
+	"unRestrictEmbedSuccess": "{{SUCCESS}} Successfully restored embed permissions for {{users, and}}, creating case {{range}}.",
+	"unRestrictEmbedSuccess_other": "{{SUCCESS}} Successfully restored embed permissions for {{users, and}}, creating cases {{range}}."
 }
