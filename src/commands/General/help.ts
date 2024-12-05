@@ -59,7 +59,7 @@ export default class UserCommand extends FoxxieCommand {
 			.setAuthor({ name: `${command.name}${command.aliases.length ? ` (${command.aliases.join(', ')})` : ''}` });
 
 		const embed = new EmbedBuilder() //
-			.setDescription(command.detailedDescription ? args.t(command.detailedDescription).description : args.t(command.description))
+			.setDescription(command.detailedDescription ? args.t(command.detailedDescription) : args.t(command.description))
 			.addFields([
 				{
 					name: titles.usage,

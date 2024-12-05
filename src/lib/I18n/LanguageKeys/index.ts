@@ -1,6 +1,6 @@
 export * as Arguments from './Arguments';
 export * as Automod from './Automod';
-export * as Commands from './Commands';
+export * as Commands from './commands';
 export * as FuzzySearch from './FuzzySearch';
 export * as Globals from './Globals';
 export * as Guilds from './Guilds';
