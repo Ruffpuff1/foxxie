@@ -42,22 +42,22 @@
 	"lastFmArtistPlaysByYou": "",
 	"lastFmArtistPlaysByYou_other": "",
 	"lastFmArtistPlaysByYouLastWeek": "",
-	"lastFmChatInputOptionArtistName": "artista",
-	"lastFmChatInputOptionArtistDescription": "El artista que desea buscar (por defecto se reproduce actualmente).",
-	"lastFmChatInputSubcommandArtistName": "artista",
-	"lastFmChatInputSubcommandArtistDescription": "Muestra la información del artista que estás escuchando o buscando en ese momento.",
-	"lastFmChatInputSubcommandGlobalWhoKnows": "globalquiénsabe",
-	"lastFmChatInputSubcommandGlobalWhoKnowsDescription": "Muestra qué otros usuarios escuchan a un artista.",
+	"lastFmChatInputOptionArtistName": "",
+	"lastFmChatInputOptionArtistDescription": "",
+	"lastFmChatInputSubcommandArtistName": "",
+	"lastFmChatInputSubcommandArtistDescription": "",
+	"lastFmChatInputSubcommandGlobalWhoKnows": "",
+	"lastFmChatInputSubcommandGlobalWhoKnowsDescription": "",
 	"lastFmDetailedDescription": {
 		"description": "",
 		"usage": "",
 		"subcommands": [
 			{
-				"command": "artista",
+				"command": "",
 				"description": "",
 				"options": [
 					{
-						"name": "artista",
+						"name": "",
 						"description": ""
 					},
 					{
@@ -72,7 +72,7 @@
 				]
 			},
 			{
-				"command": "globalquiénsabe",
+				"command": "",
 				"description": "",
 				"examples": [
 					"",
@@ -111,12 +111,12 @@
 	"lastFmPlayPlaysByYou_other": "",
 	"lastFmPlayWasPlaying": "",
 	"lastFmTitles": {
-		"about": "• Sobre",
-		"lastFmStats": "• Last.fm estadísticas",
-		"months": "• Meses",
-		"statistics": "• Estadísticas",
-		"summary": "• Resumen",
-		"years": "• Años"
+		"about": "",
+		"lastFmStats": "",
+		"months": "",
+		"statistics": "",
+		"summary": "",
+		"years": ""
 	},
 	"lastFmTrackNotFoundForUser": "",
 	"lastFmUserNotLoggedIn": ""
