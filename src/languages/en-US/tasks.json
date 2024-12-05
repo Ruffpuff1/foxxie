@@ -1,8 +1,3 @@
 {
-	"birthdayMessageAge": "Lets all wish {member} a very happy birthday. They're turning {member.age} today! :cake:",
-	"birthdayMessage": "Everyone wish {member} a very happy birthday! :cake:",
-	"birthdayYearOlder": "a year older",
-	"disboardDefault": "We'd really appreciate it if you bumped the server on Disboard. Use the command `!d bump` and I'll notify you in **two hours**.",
-	"reminderToChannelWithUser": "Hey {{user}}! On **{{time, fulldatetime}}** you wanted me to remind you:\n> *{{text}}*",
-	"reminderToDM": ":mailbox_with_mail: You got mail!\nOn **{{time, fulldatetime}}** you wanted me to remind you:\n> *{{text}}*"
+    "disboardDefault": "We'd really appreciate it if you bumped the server on Disboard. Use the command `!d bump` and I'll notify you in **two hours**."
 }
