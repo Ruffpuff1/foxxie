@@ -7,6 +7,5 @@
 	"GUILD_TEXT_short": "Texto: **{{count, number}}**",
 	"GUILD_PUBLIC_THREAD": "Hilo",
 	"GUILD_PUBLIC_THREAD_short": "Hilos: **{{count, number}}**",
-	"GUILD_VOICE": "Voz",
-	"GUILD_VOICE_short": "Voice: **{{count, number}}**"
+	"GUILD_VOICE": "Voz"
 }
