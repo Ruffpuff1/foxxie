@@ -47,7 +47,7 @@
 		"",
 		"nuevo"
 	],
-	"command": "{{ERROR}} ¡No tengo un comando llamado `{{parameter}}`! ¿Tal vez lo has escrito mal?",
+	"command": "",
 	"commandMatch": "",
 	"duration": "{{ERROR}} No pude resolver `{{parameter}}` a una duración. Prueba cosas como `1d` o `1week`.",
 	"language": "{{ERROR}} Actualmente no apoyo `{{parameter}}` como idioma. Por favor, elige entre {{list, codeand}}.",
