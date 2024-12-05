@@ -47,7 +47,7 @@
     "@foxxie/lock-queue": "0.1.2",
     "@foxxie/sanitize": "^0.0.0",
     "@lionralfs/discogs-client": "^4.0.0",
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "^6.0.0",
     "@ruffpuff/utilities": "^4.0.0",
     "@sapphire/async-queue": "^1.5.5",
     "@sapphire/bitfield": "^1.2.4",
