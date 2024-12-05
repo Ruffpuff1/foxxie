@@ -19,16 +19,7 @@
 				]
 			},
 			{
-				"command": "mostrar",
-				"description": [
-					""
-				],
-				"examples": [
-					""
-				]
-			},
-			{
-				"command": "editar",
+				"command": "",
 				"description": [
 					""
 				],
@@ -46,7 +37,16 @@
 				]
 			},
 			{
-				"command": "lista",
+				"command": "",
+				"description": [
+					""
+				],
+				"examples": [
+					""
+				]
+			},
+			{
+				"command": "",
 				"description": [
 					""
 				],
