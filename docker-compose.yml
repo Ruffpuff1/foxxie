@@ -1,0 +1,13 @@
+version: '3'
+services:
+
+  foxxie:
+    build:
+      context: .
+    container_name: foxxie
+    env_file:
+      - .env.foxxie
+    ports:
+      - '8282:8282'
+    restart: always
+    tty: true

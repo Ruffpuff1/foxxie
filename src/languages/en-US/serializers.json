@@ -1,0 +1,6 @@
+{
+	"invalidCommand": "{{name}} doesn't seem to be one of my commands. If you forgot, feel free to run my `help` command.",
+	"invalidRole": "{{name}} must be a mention or id of a role in this server.",
+	"permissionNodeDuplicatedCommand": "You have set `{{command}}` twice, either allow it, or deny it.",
+	"unknownChannel": "Unknown Channel"
+}
