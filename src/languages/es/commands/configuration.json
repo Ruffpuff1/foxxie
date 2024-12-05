@@ -5,7 +5,7 @@
 		"usage": "",
 		"subcommands": [
 			{
-				"command": "lista",
+				"command": "",
 				"description": [
 					""
 				],
@@ -27,16 +27,16 @@
 		]
 	},
 	"birthdaySetSuccess": "",
-	"confDescription": "Configura la configuración de tu servidor para mí.",
-	"confGet": "El valor para la clave **{{key}}** es: `{{value}}`",
+	"confDescription": "",
+	"confGet": "",
 	"confGetNoExt": "",
 	"confMenuInvalidAction": "",
 	"confMenuInvalidKey": "",
 	"confMenuNoChange": "",
-	"confMenuRenderAtFolder": "Actualmente en: 📁 {{path}}",
-	"confMenuRenderAtPiece": "Actualmente en: ⚙️ {{path}}",
+	"confMenuRenderAtFolder": "",
+	"confMenuRenderAtPiece": "",
 	"confMenuRenderBack": "",
-	"confMenuRenderCValue": "Valor actual: **`{{value}}`**",
+	"confMenuRenderCValue": "",
 	"confMenuRenderNokeys": "",
 	"confMenuRenderRemove": "",
 	"confMenuRenderReset": "",
