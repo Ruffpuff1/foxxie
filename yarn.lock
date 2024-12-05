@@ -350,10 +350,10 @@
     wrap-ansi "^8.1.0"
     wrap-ansi-cjs "npm:wrap-ansi@^7.0.0"
 
-"@lionralfs/discogs-client@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@lionralfs/discogs-client/-/discogs-client-3.1.3.tgz#23841b1eb7e2f080be97cb4bce882da2eddc4820"
-  integrity sha512-Q5hKyPwf334NrwLjTXstcjfJ0S4VFFmEBPpoe6ZCDsBcWN+INrMXqgG5JrGBVBSSEyR1rGev37WVrM66xBJ4OQ==
+"@lionralfs/discogs-client@^4.0.0":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@lionralfs/discogs-client/-/discogs-client-4.1.2.tgz#fd4e72c141b311c0ff7843c34d65331166a7ae16"
+  integrity sha512-DOxtHL0smYO72mV3JEjWc4ej2WFBH4UeWqWpWkAx2JGwCRB5LXCzqi5mX0kGSMU+zFH47tMDDejw82VW3TnUWA==
   dependencies:
     node-fetch "^3.2.0"
 
