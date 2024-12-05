@@ -1,11 +1,14 @@
 {
-    "administrator": "{{ERROR}} You must be a server **administrator** to run the {{name, code}} command.",
-    "clientPermissions": "I seem to be missing the {{missing, permissionarray}} permissions, which are required to run this command.",
-    "commandDisabled": "{{ERROR}} This command has been globally disabled by my owner, find out why at <{{TCS}}>.",
-    "commandDisabledGuild": "{{ERROR}} The {{name, code}} command has been disabled by an administrator of this server.",
-    "cooldown": "{{ERROR}} Looks like you just used this command, try again in **{{remaining, remaining}}**.",
-    "leveling": "{{ERROR}} This command requires the leveling system to be enabled in this server.",
-    "moderator": "{{ERROR}} You must be a **moderator** of this server to run the {{name, code}} command.",
-    "nsfw": "{{ERROR}} Ahem, due to it's potential risqué nature, the command {{name, code}} can only be used in **nsfw** type channels.",
-    "permNodes": "{{ERROR}} This command requires the **{{node}}** permission node, of which you have been denied."
+	"administrator": "{{ERROR}} You must be a server **administrator** to run the {{name, code}} command.",
+	"clientPermissions": "I seem to be missing the {{missing, permissionarray}} permissions, which are required to run this command.",
+	"commandDisabled": "{{ERROR}} This command has been globally disabled by my owner, find out why at [derricknuno.com](<{{SUPPORT}}>).",
+	"commandDisabledGuild": "{{ERROR}} The {{name, code}} command has been disabled by an administrator of this server.",
+	"cooldown": "{{ERROR}} Looks like you just used this command, try again in **{{remaining, remaining}}**.",
+	"lastFmUsername": "{{ERROR}} Using this subcommand requires you to be logged in with Last.fm!",
+	"leveling": "{{ERROR}} This command requires the leveling system to be enabled in this server.",
+	"messageSubcommandNoMatch": "{{ERROR}} Please specify a subcommand, run the **help** command to learn more!",
+	"missingChatInputHandler": "{{ERROR}} Uhhh this should never happen, a precondition this command requires is missing a slash command handler.",
+	"moderator": "{{ERROR}} You must be a **moderator** of this server to run the {{name, code}} command.",
+	"nsfw": "{{ERROR}} Ahem, due to it's potential risqué nature, the command {{name, code}} can only be used in **nsfw** type channels.",
+	"permNodes": "{{ERROR}} This command requires the **{{node}}** permission node, of which you have been denied."
 }
