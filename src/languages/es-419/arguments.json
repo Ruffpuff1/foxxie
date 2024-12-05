@@ -1,27 +1,64 @@
 {
+	"birthday": "",
+	"birthdayDay": "",
+	"birthdayMonth": "",
+	"birthdayMonths": [
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"",
+		""
+	],
+	"birthdayYear": "",
+	"birthdayYearFuture": "",
+	"birthdayYearPast": "",
+	"boolean": "",
 	"booleanDisabled": "Deshabilitado",
 	"booleanEnabled": "Activar",
 	"booleanFalses": [
-        "falso",
-        "-",
-        "f",
-        "no",
-        "n",
-        "apagado",
-        "desactivar"
-    ],
-    "booleanTruths": [
-        "cierto",
-        "+",
-        "c",
-        "sí",
-        "s",
-        "en",
-        "habilitar"
-    ],
+		"falso",
+		"",
+		"",
+		"",
+		"",
+		"apagado",
+		"desactivar"
+	],
+	"booleanTruths": [
+		"cierto",
+		"",
+		"c",
+		"sí",
+		"s",
+		"en",
+		"habilitar"
+	],
+	"caseNoEntries": "",
+	"caseUnknownEntry": "",
+	"caseNotInThisGuild": "",
+	"caseLatestOptions": [
+		"",
+		"nuevo"
+	],
 	"command": "{{ERROR}} ¡No tengo un comando llamado `{{parameter}}`! ¿Tal vez lo has escrito mal?",
+	"commandMatch": "",
 	"duration": "{{ERROR}} No pude resolver `{{parameter}}` a una duración. Prueba cosas como `1d` o `1week`.",
 	"language": "{{ERROR}} Actualmente no apoyo `{{parameter}}` como idioma. Por favor, elige entre {{list, codeand}}.",
 	"latest": "nuevo",
-	"moderationLogNone": "{{ERROR}} Parece que este servidor no tiene registros de moderación."
+	"missing": "",
+	"moderationLogNone": "{{ERROR}} Parece que este servidor no tiene registros de moderación.",
+	"piece": "",
+	"reminder": "",
+	"roleError": "",
+	"roleMissingGuild": "",
+	"timespanTooLarge": "",
+	"timespanTooSmall": "",
+	"unavailable": ""
 }
