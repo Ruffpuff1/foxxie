@@ -1,0 +1,64 @@
+{
+	"reminderCreateSuccess": "",
+	"reminderDefault": "",
+	"reminderDeleteNone": "",
+	"reminderDeleteSuccess": "",
+	"reminderDescription": "",
+	"reminderDetailedDescription": {
+		"description": "",
+		"usage": "",
+		"subcommands": [
+			{
+				"command": "",
+				"description": [
+					""
+				],
+				"examples": [
+					"",
+					""
+				]
+			},
+			{
+				"command": "mostrar",
+				"description": [
+					""
+				],
+				"examples": [
+					""
+				]
+			},
+			{
+				"command": "editar",
+				"description": [
+					""
+				],
+				"examples": [
+					""
+				]
+			},
+			{
+				"command": "",
+				"description": [
+					""
+				],
+				"examples": [
+					""
+				]
+			},
+			{
+				"command": "lista",
+				"description": [
+					""
+				],
+				"examples": [
+					""
+				]
+			}
+		]
+	},
+	"reminderDMWarn": "",
+	"reminderEditSuccess": "",
+	"reminderList": "",
+	"reminderNone": "",
+	"reminderShow": ""
+}
