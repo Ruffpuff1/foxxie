@@ -1,6 +1,6 @@
 import { api } from '#lib/discord/Api';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import type { Guild } from 'discord.js';
 
 export class ModerationActionVoiceKick extends ModerationAction<never, TypeVariation.VoiceDisconnect> {

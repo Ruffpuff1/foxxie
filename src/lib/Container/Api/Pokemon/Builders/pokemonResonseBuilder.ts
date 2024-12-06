@@ -8,7 +8,7 @@ import {
 	resolveColor,
 	resolveSerebiiUrl
 } from '@favware/graphql-pokemon/utilities';
-import { FavouredEntry, KeysContaining } from '../utils';
+import { FavouredEntry, KeysContaining } from '../utils.js';
 import {
 	APIButtonComponentWithURL,
 	APISelectMenuOption,

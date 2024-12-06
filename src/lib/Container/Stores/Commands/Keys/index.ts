@@ -1,1 +1,1 @@
-export * as SubcommandKeys from './SubcommandKeys';
+export * as SubcommandKeys from './SubcommandKeys/index.js';

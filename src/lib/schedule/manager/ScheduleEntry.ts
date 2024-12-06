@@ -2,7 +2,7 @@ import { ModerationManager } from '#lib/moderation';
 import { FoxxieEvents } from '#lib/types';
 import { JSONEmbed } from '#root/commands/Misc/reminder';
 import { BirthdayData } from '#utils/birthday';
-import { SchemaKeys, TypeVariation } from '#utils/moderation';
+import { SchemaKeys, TypeVariation } from '#utils/moderationConstants';
 import { schedule } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';

@@ -1,4 +1,5 @@
-import { type GuildSettingsOfType } from '#lib/database';
+import { writeSettings, type GuildSettingsOfType } from '#lib/database';
+import { PruneLoggerTypeManager, TimeoutLoggerTypeManager } from '#lib/moderation';
 import { toErrorCodeResult } from '#utils/common';
 import { getCodeStyle, getLogPrefix } from '#utils/functions/pieces';
 import { EmbedBuilder } from '@discordjs/builders';
@@ -13,8 +14,6 @@ import {
 	type MessageCreateOptions,
 	type Snowflake
 } from 'discord.js';
-import { TimeoutLoggerTypeManager } from './loggers/TimeoutLoggerTypeManager';
-import { PruneLoggerTypeManager } from './loggers/PruneLoggerTypeManager';
 
 export class LoggerManager {
 	public readonly timeout = new TimeoutLoggerTypeManager(this);
@@ -80,7 +79,7 @@ export class LoggerManager {
 
 		// If the channel was not found, clear the settings:
 		if (code === RESTJSONErrorCodes.UnknownChannel) {
-			await container.settings.guilds.writeGuild(this.guild, { [options.key]: null });
+			await writeSettings(this.guild, { [options.key]: null });
 		} else {
 			this.#logError(code, options.channelId!, 'Failed to fetch channel');
 		}

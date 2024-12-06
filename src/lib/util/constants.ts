@@ -92,8 +92,8 @@ export const enum Emojis {
 	Calendar = ':calendar_spiral:',
 	Hourglass = ':hourglass:',
 	Moderator = ':hammer:',
-	/** The logo of https://www.smogon.com */
 	QuarantinedIcon = ':speech_balloon:',
+	/** The logo of https://www.smogon.com */
 	Smogon = '910209205636579421',
 	SpammerIcon = ':warning:',
 	ShieldMember = ':bust_in_silhouette:'

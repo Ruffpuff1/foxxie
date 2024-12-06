@@ -1,13 +1,1 @@
-export * as Arguments from './Arguments';
-export * as Automod from './Automod';
-export * as Commands from './commands';
-export * as FuzzySearch from './FuzzySearch';
-export * as Globals from './Globals';
-export * as Guilds from './Guilds';
-export * as Listeners from './Listeners';
-export * as Moderation from './Moderation';
-export * as Preconditions from './Preconditions';
-export * as Serializers from './Serializers';
-export * as Settings from './settings';
-export * as System from './System';
-export * as Tasks from './Tasks';
+export * as LanguageKeys from '#lib/I18n/LanguageKeys/keys/All';

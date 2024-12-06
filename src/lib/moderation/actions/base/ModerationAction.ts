@@ -1,15 +1,16 @@
-import { LanguageKeys } from '#lib/i18n';
-import { getTitle, ModerationManager } from '#lib/moderation';
-import { getTranslationKey } from '#lib/moderation/common/util';
-import { TypedT } from '#lib/types';
+import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { getTitle, getTranslationKey } from '#lib/moderation/common';
+import type { ModerationManager } from '#lib/moderation/managers/ModerationManager';
+import type { TypedT } from '#lib/types';
+import { TypeMetadata, type TypeVariation } from '#lib/util/moderationConstants';
 import { seconds, years } from '#utils/common';
 import { getCodeStyle, getLogPrefix, getModeration } from '#utils/functions';
-import { TypeMetadata, TypeVariation } from '#utils/moderation';
 import { getFullEmbedAuthor } from '#utils/util';
+import { EmbedBuilder } from '@discordjs/builders';
 import { container } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
-import { isNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
-import { Awaitable, DiscordAPIError, EmbedBuilder, Guild, HTTPError, RESTJSONErrorCodes, Snowflake, User } from 'discord.js';
+import { isNullish, isNullishOrEmpty, isNullishOrZero, type Awaitable } from '@sapphire/utilities';
+import { DiscordAPIError, HTTPError, RESTJSONErrorCodes, type Guild, type Snowflake, type User } from 'discord.js';
 
 const Root = LanguageKeys.Commands.Moderation;
 

@@ -3,15 +3,15 @@ import '#lib/setup';
 import { config } from '#lib/Database/config';
 import FoxxieClient from '#lib/FoxxieClient';
 import { EnvKeys } from '#lib/types';
-import { EnvParse } from '@foxxie/env';
 import { container } from '@sapphire/framework';
 import { init } from '@sentry/node';
+import { envParseBoolean } from '@skyra/env-utilities';
 
 const client = new FoxxieClient();
 
 async function main() {
 	try {
-		if (EnvParse.boolean(EnvKeys.SentryEnabled)) {
+		if (envParseBoolean(EnvKeys.SentryEnabled)) {
 			init({
 				dsn: process.env.SENTRY_TOKEN,
 				release: `Foxxie@${process.env.CLIENT_VERSION}`

@@ -1,6 +1,5 @@
-import { type StickyRole } from '#lib/database';
+import { readSettings, type StickyRole } from '#lib/database';
 import { writeSettingsTransaction } from '#lib/Database/settings/functions';
-import { container } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
 
@@ -16,7 +15,7 @@ export class StickyRoleManager {
 	}
 
 	public async get(userId: string): Promise<readonly string[]> {
-		const settings = await container.settings.guilds.acquire(this.#guild);
+		const settings = await readSettings(this.#guild);
 		return settings.rolesPersist.find((entry) => entry.user === userId)?.roles ?? [];
 	}
 
@@ -27,7 +26,7 @@ export class StickyRoleManager {
 
 	public async fetch(userId: string): Promise<readonly string[]> {
 		// 1.0. If the entry does not exist, return empty array
-		const settings = await container.settings.guilds.acquire(this.#guild);
+		const settings = await readSettings(this.#guild);
 		const entry = settings.rolesPersist.find((entry) => entry.user === userId);
 		if (isNullish(entry)) return [];
 

@@ -1,16 +1,16 @@
 import { Guild, RESTJSONErrorCodes, Snowflake } from 'discord.js';
-import { ModerationEntry } from './ModerationEntry';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { container, UserError } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
 import { createReferPromise, desc, floatPromise, minutes, ReferredPromise, resolveOnErrorCodes, seconds } from '#utils/common';
-import { TypeMetadata, TypeVariation } from '#utils/moderation';
+import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieEvents } from '#lib/types';
 import { SortedCollection } from '#lib/Structures/data/SortedCollection';
 import { canSendEmbeds } from '@sapphire/discord.js-utilities';
-import { getEmbed } from '../common';
 import { fetchT } from '@sapphire/plugin-i18next';
+import { getEmbed, ModerationEntry } from '#lib/moderation';
+import { readSettings } from '#lib/database';
 
 enum CacheActions {
 	None,
@@ -46,7 +46,7 @@ export class ModerationManager {
 	}
 
 	public async fetchChannel() {
-		const settings = await container.settings.guilds.acquire(this.guild);
+		const settings = await readSettings(this.guild);
 		const channelId = settings.channelsLogsModeration;
 		if (isNullish(channelId)) return null;
 		return this.guild.channels.cache.get(channelId) ?? null;

@@ -2,10 +2,9 @@ import { AsyncQueue } from '@sapphire/async-queue';
 import { container, type Awaitable } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';
 import { Collection, type GuildResolvable, type Snowflake } from 'discord.js';
-import { getDefaultGuildSettings, GuildData, ReadonlyGuildData } from '.';
 import { guilds } from '@prisma/client';
-import { deleteSettingsContext, getSettingsContext, updateSettingsContext } from './context/functions';
 import { maybeParseNumber } from '#utils/common';
+import { deleteSettingsContext, getDefaultGuildSettings, getSettingsContext, GuildData, ReadonlyGuildData, updateSettingsContext } from '#lib/database';
 
 const cache = new Collection<string, GuildData>();
 const queue = new Collection<string, Promise<GuildData>>();

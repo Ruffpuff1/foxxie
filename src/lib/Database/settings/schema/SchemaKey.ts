@@ -3,12 +3,9 @@ import { resolveGuild } from '#utils/common';
 import { container } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
-import { GuildDataKey, ReadonlyGuildData } from '../types';
 import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
 import { LanguageKeys } from '#lib/i18n';
-import { Serializer } from '../structures/Serializer';
-import { ISchemaValue } from '../base/ISchemaValue';
-import { SchemaGroup } from './SchemaGroup';
+import { GuildDataKey, ISchemaValue, ReadonlyGuildData, SchemaGroup, Serializer } from '#lib/database';
 
 export class SchemaKey<K extends GuildDataKey = GuildDataKey> implements ISchemaValue {
 	/**

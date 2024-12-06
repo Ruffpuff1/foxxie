@@ -4,7 +4,7 @@ import { FoxxieEvents } from '#lib/types';
 import { seconds } from '#utils/common';
 import { getLogger, getModeration } from '#utils/functions';
 import { getUserMentionWithFlagsString } from '#utils/functions/users';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import { getFullEmbedAuthor } from '#utils/util';
 import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';

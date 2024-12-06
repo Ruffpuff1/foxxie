@@ -6,7 +6,7 @@ import { PermissionsBits } from '#utils/bits';
 import { resolveOnErrorCodes } from '#utils/common';
 import { getCodeStyle, getStickyRoles } from '#utils/functions';
 import { promptConfirmation } from '#utils/functions/messages';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import { GuildLimits, isCategoryChannel, isTextBasedChannel, isThreadChannel, isVoiceBasedChannel } from '@sapphire/discord.js-utilities';
 import { UserError, container, type Awaitable } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';

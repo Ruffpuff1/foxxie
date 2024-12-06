@@ -1,6 +1,6 @@
 import { Collection } from 'discord.js';
-import { LastFmArtistEntity } from '../entities/LastFmArtistEntity';
-import { CustomRepository } from './CustomRepository';
+import { CustomRepository } from './CustomRepository.js';
+import { LastFmArtistEntity } from '../entities/LastFmArtistEntity.js';
 
 export class LastFmArtistRepository extends CustomRepository<LastFmArtistEntity> {
 	public cache = new Collection<string, LastFmArtistEntity>();

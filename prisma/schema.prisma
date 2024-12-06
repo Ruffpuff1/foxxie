@@ -98,7 +98,7 @@ model guilds {
   eventsKick                           Boolean  @default(true) @map("events.kick")
   eventsMuteAdd                        Boolean  @default(true) @map("events.mute-add")
   eventsMuteRemove                     Boolean  @default(true) @map("events.mute-remove")
-  messageCount                         Int      @default(0) @map("message-count") @db.SmallInt
+  messageCount                         Int      @default(0) @map("message-count")
   messagesIgnoreChannels               String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("messages.ignore-channels") @db.VarChar(19)
   messagesModerationDm                 Boolean  @default(false) @map("messages.moderation-dm")
   messagesModerationReasonDisplay      Boolean  @default(true) @map("messages.moderation-reason-display")
@@ -217,6 +217,14 @@ model memberNote {
   guildId   String    @db.VarChar(19)
   authorId  String?   @db.VarChar(19)
   id        Int?
+
+  @@id([userId, guildId])
+}
+
+model member {
+  userId       String @map("userid") @db.VarChar(19)
+  guildId      String @map("guildid") @db.VarChar(19)
+  messageCount Int    @default(0) @map("messagecount")
 
   @@id([userId, guildId])
 }

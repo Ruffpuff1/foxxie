@@ -3,7 +3,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { ModerationCommand } from '#lib/moderation/structures/ModerationCommand';
 import { GuildMessage } from '#lib/types';
 import { getModeration } from '#utils/functions';
-import { TypeVariation, Unlock } from '#utils/moderation';
+import { TypeVariation, Unlock } from '#utils/moderationConstants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PermissionFlagsBits } from 'discord.js';
 

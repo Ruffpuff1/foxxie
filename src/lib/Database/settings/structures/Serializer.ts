@@ -1,3 +1,4 @@
+import { ReadonlyGuildData, SchemaKey } from '#lib/database';
 import { LanguageKeys, translate } from '#lib/i18n';
 import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
 import { AliasPiece, ArgumentError, UserError } from '@sapphire/framework';
@@ -5,8 +6,6 @@ import type { TFunction } from '@sapphire/plugin-i18next';
 import { Result } from '@sapphire/result';
 import type { Awaitable } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
-import { SchemaKey } from '../schema/SchemaKey';
-import { ReadonlyGuildData } from '../types';
 
 export type SerializerResult<T> = Result<T, Error>;
 export type AsyncSerializerResult<T> = Promise<Result<T, Error>>;

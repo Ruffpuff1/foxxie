@@ -1,9 +1,9 @@
 import { LanguageKeys } from '#lib/i18n';
 import { TypedT } from '#lib/types';
-import { TypeMetadata, TypeVariation } from '#utils/moderation';
+import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { isNullishOrZero } from '@sapphire/utilities';
-import { ModerationManager } from '../managers';
 import { Colors, Schedules } from '#utils/constants';
+import type { ModerationManager } from '../managers/ModerationManager.js';
 
 export const TranslationMappings = {
 	[TypeVariation.Ban]: LanguageKeys.Moderation.Ban,

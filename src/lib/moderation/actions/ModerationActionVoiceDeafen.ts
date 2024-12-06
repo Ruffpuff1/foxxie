@@ -1,7 +1,7 @@
 import { api } from '#lib/discord/Api';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { resolveOnErrorCodes } from '#utils/common';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import { RESTJSONErrorCodes, type Guild, type Snowflake } from 'discord.js';
 
 export class ModerationActionVoiceDeafen extends ModerationAction<never, TypeVariation.VoiceDeafen> {

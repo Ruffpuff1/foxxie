@@ -1,4 +1,3 @@
-export * from './GuildModerationManager';
-export * from './InviteManager';
-export * from './PersistRolesManager';
-export * from './RedisManager';
+export * from '#lib/Structures/managers/InviteManager';
+export * from '#lib/Structures/managers/LockdownManager';
+export * from '#lib/Structures/managers/RedisManager';

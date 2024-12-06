@@ -7,7 +7,7 @@ import { desc, floatPromise, minutes, seconds, years } from '#utils/common';
 import { Emojis } from '#utils/constants';
 import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginatedMessageEmbedFields';
 import { getModeration } from '#utils/functions';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import { resolveCase } from '#utils/resolvers/Case';
 import { resolveTimeSpan } from '#utils/resolvers/TimeSpan';
 import { getFullEmbedAuthor, isUserSelf, resolveClientColor } from '#utils/util';

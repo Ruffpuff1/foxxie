@@ -1,3 +1,4 @@
+import { readSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
@@ -14,7 +15,7 @@ export default class UserCommand extends FoxxieCommand {
 		const msg = await send(message, { content: args.t(LanguageKeys.Commands.General.Ping), embeds: undefined });
 
 		const stopwatch = new Stopwatch().start();
-		await this.container.settings.guilds.acquire(message.guild.id);
+		await readSettings(message.guild.id);
 		stopwatch.stop();
 
 		const content = args.t(LanguageKeys.Commands.General.PingPong, {

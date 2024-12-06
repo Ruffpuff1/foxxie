@@ -1,5 +1,5 @@
 import { cpus } from 'node:os';
-import { WorkerHandler } from './WorkerHandler';
+import { WorkerHandler } from './WorkerHandler.js';
 import type {
 	HighlightTypeEnum,
 	IncomingPayload,
@@ -7,7 +7,7 @@ import type {
 	OutgoingWordFilterPayload,
 	RunHighlightPayload,
 	RunWordFilterPayload
-} from './types';
+} from './types.js';
 
 export class WorkerService {
 	public readonly workers: WorkerHandler[] = [];

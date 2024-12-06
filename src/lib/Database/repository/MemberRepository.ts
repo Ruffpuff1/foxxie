@@ -1,6 +1,6 @@
 import { FindOneOptions } from 'typeorm';
-import { MemberEntity } from '../entities';
-import { CustomRepository } from './CustomRepository';
+import { CustomRepository } from './CustomRepository.js';
+import { MemberEntity } from '../entities/MemberEntity.js';
 
 export class MemberRepository extends CustomRepository<MemberEntity> {
 	public async ensure(id: string, guildId: string, options: FindOneOptions<MemberEntity> = {}): Promise<MemberEntity> {

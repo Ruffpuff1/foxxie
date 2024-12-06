@@ -1,9 +1,9 @@
 import { resolveOnErrorCodes } from '#utils/common';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import { Guild, RESTJSONErrorCodes, Snowflake } from 'discord.js';
-import { ModerationAction } from './base/ModerationAction';
 import { isNullish } from '@sapphire/utilities';
 import { api } from '#lib/discord';
+import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 
 export class ModerationActionBan extends ModerationAction<number, TypeVariation.Ban> {
 	public constructor() {

@@ -1,27 +1,27 @@
-import { TypeVariation } from '#utils/moderation';
-import { ModerationAction } from './base/ModerationAction';
-import { RoleModerationAction } from './base/RoleModerationAction';
-import { ModerationActionBan } from './ModerationActionBan';
-import { ModerationActionDehoist } from './ModerationActionDehoist';
-import { ModerationActionKick } from './ModerationActionKick';
-import { ModerationActionLock } from './ModerationActionLock';
-import { ModerationActionPrune } from './ModerationActionPrune';
-import { ModerationActionRaidBan } from './ModerationActionRaidBan';
-import { ModerationActionRestrictedAll } from './ModerationActionRestrictedAll';
-import { ModerationActionRestrictedAttachment } from './ModerationActionRestrictedAttachment';
-import { ModerationActionRestrictedEmbed } from './ModerationActionRestrictedEmbed';
-import { ModerationActionRestrictedEmoji } from './ModerationActionRestrictedEmoji';
-import { ModerationActionRestrictedReaction } from './ModerationActionRestrictedReaction';
-import { ModerationActionRestrictedVoice } from './ModerationActionRestrictedVoice';
-import { ModerationActionRoleAdd } from './ModerationActionRoleAdd';
-import { ModerationActionRoleRemove } from './ModerationActionRoleRemove';
-import { ModerationActionSetNickname } from './ModerationActionSetNickname';
-import { ModerationActionSoftban } from './ModerationActionSoftBan';
-import { ModerationActionTimeout } from './ModerationActionTimeout';
-import { ModerationActionVoiceDeafen } from './ModerationActionVoiceDeafen';
-import { ModerationActionVoiceKick } from './ModerationActionVoiceKick';
-import { ModerationActionVoiceMute } from './ModerationActionVoiceMute';
-import { ModerationActionWarning } from './ModerationActionWarning';
+import { TypeVariation } from '#utils/moderationConstants';
+import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
+import { RoleModerationAction } from '#lib/moderation/actions/base/RoleModerationAction';
+import { ModerationActionBan } from '#lib/moderation/actions/ModerationActionBan';
+import { ModerationActionDehoist } from '#lib/moderation/actions/ModerationActionDehoist';
+import { ModerationActionKick } from '#lib/moderation/actions/ModerationActionKick';
+import { ModerationActionLock } from '#lib/moderation/actions/ModerationActionLock';
+import { ModerationActionPrune } from '#lib/moderation/actions/ModerationActionPrune';
+import { ModerationActionRaidBan } from '#lib/moderation/actions/ModerationActionRaidBan';
+import { ModerationActionRestrictedAll } from '#lib/moderation/actions/ModerationActionRestrictedAll';
+import { ModerationActionRestrictedAttachment } from '#lib/moderation/actions/ModerationActionRestrictedAttachment';
+import { ModerationActionRestrictedEmbed } from '#lib/moderation/actions/ModerationActionRestrictedEmbed';
+import { ModerationActionRestrictedEmoji } from '#lib/moderation/actions/ModerationActionRestrictedEmoji';
+import { ModerationActionRestrictedReaction } from '#lib/moderation/actions/ModerationActionRestrictedReaction';
+import { ModerationActionRestrictedVoice } from '#lib/moderation/actions/ModerationActionRestrictedVoice';
+import { ModerationActionRoleAdd } from '#lib/moderation/actions/ModerationActionRoleAdd';
+import { ModerationActionRoleRemove } from '#lib/moderation/actions/ModerationActionRoleRemove';
+import { ModerationActionSetNickname } from '#lib/moderation/actions/ModerationActionSetNickname';
+import { ModerationActionSoftban } from '#lib/moderation/actions/ModerationActionSoftBan';
+import { ModerationActionTimeout } from '#lib/moderation/actions/ModerationActionTimeout';
+import { ModerationActionVoiceDeafen } from '#lib/moderation/actions/ModerationActionVoiceDeafen';
+import { ModerationActionVoiceKick } from '#lib/moderation/actions/ModerationActionVoiceKick';
+import { ModerationActionVoiceMute } from '#lib/moderation/actions/ModerationActionVoiceMute';
+import { ModerationActionWarning } from '#lib/moderation/actions/ModerationActionWarning';
 
 export const ModerationActions = {
 	ban: new ModerationActionBan(),
@@ -85,3 +85,5 @@ export type RoleModerationActionKey = {
 }[ModerationActionKey];
 
 export type RoleTypeVariation = (typeof ModerationActions)[RoleModerationActionKey]['type'];
+
+export * from '#lib/moderation/actions/base/index';

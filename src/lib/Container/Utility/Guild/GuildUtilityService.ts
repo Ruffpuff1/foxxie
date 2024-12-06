@@ -1,8 +1,8 @@
 import { EnvKeys } from '#lib/types';
-import { EnvParse } from '@foxxie/env';
 import { Result, container } from '@sapphire/framework';
 import { Guild, GuildAuditLogsEntry, GuildAuditLogsResolvable, GuildResolvable } from 'discord.js';
-import { GuildPollService } from './GuildPollService';
+import { GuildPollService } from './GuildPollService.js';
+import { envParseString } from '@skyra/env-utilities';
 
 /**
  * Utility service for a Discord guild.
@@ -46,6 +46,6 @@ export class GuildUtilityService {
 	 * Accesses the client's guild member in the server if currently cached. If not, returns `null`.
 	 */
 	public get maybeMe() {
-		return this.guild.members.cache.get(EnvParse.string(EnvKeys.ClientId)) ?? null;
+		return this.guild.members.cache.get(envParseString(EnvKeys.ClientId)) ?? null;
 	}
 }

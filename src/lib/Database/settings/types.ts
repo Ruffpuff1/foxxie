@@ -1,7 +1,7 @@
 import { DeepReadonly, PickByValue } from '@sapphire/utilities';
-import { GuildData } from '.';
 import { Snowflake } from 'discord.js';
 import { SerializedEmoji } from '#utils/discord';
+import { GuildData } from '#lib/database';
 
 export type ReadonlyGuildData = DeepReadonly<GuildData>;
 export type ReadonlyGuildDataValue = DeepReadonly<GuildDataValue>;

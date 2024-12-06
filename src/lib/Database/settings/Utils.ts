@@ -1,10 +1,7 @@
 import { UserError } from '@sapphire/framework';
-import { ISchemaValue } from './base/ISchemaValue';
-import { SchemaGroup } from './schema/SchemaGroup';
-import { SchemaKey } from './schema/SchemaKey';
-import { GuildData, ReadonlyGuildData } from './types';
 import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
 import { LanguageKeys } from '#lib/i18n';
+import { GuildData, ISchemaValue, ReadonlyGuildData, SchemaGroup, SchemaKey } from '#lib/database';
 
 export function isSchemaGroup(groupOrKey: ISchemaValue): groupOrKey is SchemaGroup {
 	return groupOrKey.type === 'Group';

@@ -1,5 +1,5 @@
-import { HastebinService } from './Hastebin/HastbinService';
-import { PokemonService } from './Pokemon/pokemon';
+import { HastebinService } from './Hastebin/HastbinService.js';
+import { PokemonService } from './Pokemon/pokemon.js';
 
 /**
  * Api manager

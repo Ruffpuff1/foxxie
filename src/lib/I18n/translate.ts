@@ -2,11 +2,11 @@ import { CustomFunctionGet, CustomGet } from '#lib/types';
 import { DecoratorIdentifiers } from '@sapphire/decorators';
 import { container, Identifiers } from '@sapphire/framework';
 import { SubcommandPluginIdentifiers } from '@sapphire/plugin-subcommands';
-import { LanguageKeys } from '.';
 import { TFunction } from '@sapphire/plugin-i18next';
 import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
 import { Nullish } from '@sapphire/utilities';
 import { Interaction, LocaleString } from 'discord.js';
+import { LanguageKeys } from '#lib/i18n';
 
 export type Identifier = Identifiers | DecoratorIdentifiers | SubcommandPluginIdentifiers | string;
 export type TranslatedResult = CustomFunctionGet<string, Record<any, any>, string> | CustomGet<string, string>;

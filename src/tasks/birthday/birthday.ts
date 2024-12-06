@@ -1,3 +1,4 @@
+import { readSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
 import { getAge, nextBirthday } from '#utils/birthday';
@@ -29,7 +30,7 @@ export class UserTask extends Task {
 		const member = await resolveToNull(guild.members.fetch(data.userId));
 		if (!member) return null;
 
-		const { rolesBirthday } = await this.container.settings.guilds.acquire(guild);
+		const { rolesBirthday } = await readSettings(guild);
 		const [message, t] = [null, getFixedT('en-US')];
 
 		const results = await Promise.all([this.handleMessage(message!, guild, member, data, t), this.handleRole(member, rolesBirthday)]);

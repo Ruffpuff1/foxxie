@@ -1,5 +1,5 @@
 import type { ClientEvents } from 'discord.js';
-import { FoxxieEvents } from './Events';
+import { FoxxieEvents } from './Events.js';
 
 export type LanguageString = 'en-US' | 'es-ES';
 

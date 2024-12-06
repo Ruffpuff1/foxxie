@@ -1,8 +1,8 @@
 import { ConsoleState, EnvKeys, EventArgs, FoxxieEvents } from '#lib/types';
-import { EnvParse } from '@foxxie/env';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { captureException } from '@sentry/node';
+import { envParseBoolean } from '@skyra/env-utilities';
 
 @ApplyOptions<ListenerOptions>({
 	event: FoxxieEvents.ListenerError
@@ -15,7 +15,7 @@ export class UserListener extends Listener<FoxxieEvents.ListenerError> {
 			this.container.client.emit(FoxxieEvents.Console, ConsoleState.Fatal, `[Listener] ${location.full}\n${error.stack || error.message}`);
 		} else return;
 
-		if (EnvParse.boolean(EnvKeys.SentryEnabled)) {
+		if (envParseBoolean(EnvKeys.SentryEnabled)) {
 			captureException(error, { tags: { event } });
 		}
 	}

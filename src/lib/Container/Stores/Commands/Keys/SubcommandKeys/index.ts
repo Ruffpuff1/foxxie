@@ -1,2 +1,2 @@
-export * as Misc from './Misc';
-export * as Websearch from './Websearch';
+export * as Misc from './Misc.js';
+export * as Websearch from './Websearch.js';

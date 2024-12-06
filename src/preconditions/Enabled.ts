@@ -1,3 +1,4 @@
+import { readSettings } from '#lib/Database/settings/functions';
 import { LanguageKeys } from '#lib/i18n';
 import { isModerator } from '#utils/discord';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -13,7 +14,7 @@ export class UserPrecondition extends Precondition {
 		command: MessageCommand | ChatInputCommand,
 		context: PreconditionContext
 	) {
-		const { disabledCommands, disabledChannels } = await this.container.settings.guilds.acquire(guildId);
+		const { disabledCommands, disabledChannels } = await readSettings(guildId);
 		if (disabledChannels.includes(channelId) && !isModerator(member)) return this.error({ context: { silent: true } });
 
 		const matched = disabledCommands.find((key) => this.matchCommand(command, key));

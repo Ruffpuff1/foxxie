@@ -1,7 +1,7 @@
 import { EnvKeys } from '#lib/types';
 import { Urls } from '#utils/constants';
-import { EnvParse } from '@foxxie/env';
 import makeRequest from '@aero/http';
+import { envParseString } from '@skyra/env-utilities';
 
 export class HastebinService {
 	public async post(body: string): Promise<string | null> {
@@ -16,7 +16,7 @@ export class HastebinService {
 	}
 
 	private get token() {
-		return EnvParse.string(EnvKeys.HasteToken);
+		return envParseString(EnvKeys.HasteToken);
 	}
 }
 

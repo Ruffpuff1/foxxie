@@ -1,6 +1,6 @@
 import { FindOneOptions } from 'typeorm';
-import { UserEntity } from '../entities/UserEntity';
-import { CustomRepository } from './CustomRepository';
+import { CustomRepository } from './CustomRepository.js';
+import { UserEntity } from '../entities/UserEntity.js';
 
 export class UserRepository extends CustomRepository<UserEntity> {
 	public async ensure(id: string, options?: FindOneOptions<UserEntity>): Promise<UserEntity> {

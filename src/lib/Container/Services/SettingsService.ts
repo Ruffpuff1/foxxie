@@ -1,8 +1,5 @@
-import { GuildSettingsService } from './GuildSettingService';
-import { MemberSettingsService } from './MemberSettingsService';
+import { MemberSettingsService } from './MemberSettingsService.js';
 
 export class SettingsService {
-	public guilds = new GuildSettingsService();
-
 	public members = new MemberSettingsService();
 }

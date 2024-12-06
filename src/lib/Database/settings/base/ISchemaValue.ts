@@ -1,6 +1,5 @@
+import { ReadonlyGuildData, SchemaGroup } from '#lib/database';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import { SchemaGroup } from '../schema/SchemaGroup';
-import { ReadonlyGuildData } from '../types';
 
 export interface ISchemaValue {
 	readonly type: string;

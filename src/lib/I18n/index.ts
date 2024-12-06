@@ -1,2 +1,2 @@
-export * as LanguageKeys from './LanguageKeys';
-export * from './translate';
+export * from '#lib/I18n/translate';
+export * from '#lib/I18n/LanguageKeys/index';

@@ -1,5 +1,5 @@
 import { MovesEnum, PokemonEnum } from '@favware/graphql-pokemon';
-import { PokemonSpriteTypes } from './Builders';
+import { PokemonSpriteTypes } from './Builders/index.js';
 import { brotliCompressSync, brotliDecompressSync } from 'node:zlib';
 import { container, Events, InteractionHandler, Result, UserError } from '@sapphire/framework';
 import { deserialize, serialize } from 'binarytf';

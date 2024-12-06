@@ -1,11 +1,11 @@
-import { EnvParse } from '@foxxie/env';
-import type { ReadonlyGuildData } from './types';
+import { ReadonlyGuildData } from '#lib/database';
+import { envParseString } from '@skyra/env-utilities';
 
 let cachedDefaultGuildSettings: DefaultGuildData | null = null;
 
 export function getDefaultGuildSettings() {
 	cachedDefaultGuildSettings ??= Object.assign(Object.create(null), {
-		prefix: EnvParse.string('CLIENT_PREFIX'),
+		prefix: envParseString('CLIENT_PREFIX'),
 		language: 'en-US',
 		messageCount: 0,
 		disableNaturalPrefix: false,

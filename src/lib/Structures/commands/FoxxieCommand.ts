@@ -2,13 +2,12 @@ import { CustomFunctionGet, DetailedDescription, PermissionLevels } from '#lib/t
 import { clientOwners } from '#root/config';
 import { seconds } from '#utils/common';
 import { ChatInputCommandContext, Command, CommandOptionsRunTypeEnum, MessageCommand, MessageCommandContext, UserError } from '@sapphire/framework';
-import { FoxxieCommandUtilities } from './base/FoxxieCommandUtilities';
 import { Awaitable, Guild, Message, Snowflake } from 'discord.js';
 import { cast } from '@sapphire/utilities';
 import FoxxieClient from '#lib/FoxxieClient';
-import { first } from 'lodash';
-import { FoxxieArgs } from './FoxxieArgs';
+import first from 'lodash/first.js';
 import { Subcommand } from '@sapphire/plugin-subcommands';
+import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
 
 export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCommand.Options> {
 	public readonly guarded: boolean;

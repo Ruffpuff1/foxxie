@@ -4,12 +4,11 @@ import { LanguageKeys } from '#lib/i18n';
 import { CustomGet } from '#lib/types';
 import { emojis, LanguageFormatters, rootFolder } from '#utils/constants';
 import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginatedMessageEmbedFields';
-import { EnvParse } from '@foxxie/env';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { container, LogLevel } from '@sapphire/framework';
 import { I18nextFormatter, InternationalizationOptions, TFunction } from '@sapphire/plugin-i18next';
 import { cast, toTitleCase } from '@sapphire/utilities';
-import { setup } from '@skyra/env-utilities';
+import { envParseArray, envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import {
 	ActivitiesOptions,
 	ActivityType,
@@ -48,9 +47,9 @@ FoxxiePaginatedMessageEmbedFields.defaultActions = [
 	PaginatedMessage.defaultActions[4] // last
 ];
 
-export const clientOwners = EnvParse.array('CLIENT_OWNERS');
+export const clientOwners = envParseArray('CLIENT_OWNERS');
 export const webhookError = parseWebhookError();
-export const timezone = EnvParse.string('TIMEZONE');
+export const timezone = envParseString('TIMEZONE');
 
 export function parsePresenceActivity(): ActivitiesOptions[] {
 	const { CLIENT_PRESENCE_NAME } = process.env;
@@ -58,7 +57,7 @@ export function parsePresenceActivity(): ActivitiesOptions[] {
 
 	return [
 		{
-			name: EnvParse.string('CLIENT_PRESENCE_NAME'),
+			name: envParseString('CLIENT_PRESENCE_NAME'),
 			type: ActivityType.Playing
 		}
 	];
@@ -347,7 +346,7 @@ function parseI18nOptions(): InternationalizationOptions {
 }
 
 export const clientOptions: ClientOptions = {
-	defaultPrefix: EnvParse.string('CLIENT_PREFIX'),
+	defaultPrefix: envParseString('CLIENT_PREFIX'),
 	presence: {
 		activities: parsePresenceActivity(),
 		status: process.env.NODE_ENV === 'development' ? 'invisible' : 'idle'
@@ -362,7 +361,7 @@ export const clientOptions: ClientOptions = {
 	caseInsensitivePrefixes: true,
 	allowedMentions: { parse: ['users'] },
 	logger: {
-		level: cast<LogLevel>(EnvParse.int('LOG_LEVEL'))
+		level: cast<LogLevel>(envParseInteger('LOG_LEVEL'))
 	},
 	intents: [
 		GatewayIntentBits.Guilds,

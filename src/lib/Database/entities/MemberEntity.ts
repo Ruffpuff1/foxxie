@@ -1,8 +1,8 @@
 import { container } from '@sapphire/framework';
 import type { GuildMember } from 'discord.js';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
-import type { Note } from './Note';
-import type { Warn } from './Warn';
+import { Note } from './Note.js';
+import { Warn } from './Warn.js';
 
 @Entity('member', { schema: 'public' })
 export class MemberEntity extends BaseEntity {

@@ -1,3 +1,3 @@
-export * from './base/LoggerTypeManager';
-export * from './PruneLoggerTypeManager';
-export * from './TimeoutLoggerTypeManager';
+export * from '#lib/moderation/managers/loggers/base/LoggerTypeManager';
+export * from '#lib/moderation/managers/loggers/PruneLoggerTypeManager';
+export * from '#lib/moderation/managers/loggers/TimeoutLoggerTypeManager';
