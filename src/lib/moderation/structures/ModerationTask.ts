@@ -2,9 +2,9 @@ import { PartialResponseValue, ResponseType, Task } from '#lib/schedule';
 import { getModeration } from '#utils/functions';
 import { isNullish } from '@sapphire/utilities';
 import type { Guild, Snowflake } from 'discord.js';
-import { ModerationAction } from '../actions/base/ModerationAction';
 import { readSettings } from '#lib/Database/settings/functions';
-import { SchemaKeys } from '#utils/moderation';
+import { SchemaKeys } from '#utils/moderationConstants';
+import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 
 export abstract class ModerationTask<T = unknown> extends Task {
 	public async run(data: ModerationData<T>): Promise<PartialResponseValue> {

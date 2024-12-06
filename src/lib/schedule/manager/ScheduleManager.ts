@@ -1,5 +1,5 @@
+import { ResponseType, ResponseValue, ScheduleEntry } from '#lib/schedule';
 import { container } from '@sapphire/framework';
-import { ResponseType, ResponseValue, ScheduleEntry } from './ScheduleEntry';
 import { Cron } from '@sapphire/time-utilities';
 
 export class ScheduleManager {

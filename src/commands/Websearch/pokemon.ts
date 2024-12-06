@@ -9,7 +9,7 @@ import { sendLoadingMessage } from '#utils/functions/messages';
 import { PokemonEnum } from '@favware/graphql-pokemon';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { ChatInputCommand } from '@sapphire/framework';
-import { TFunction } from '@sapphire/plugin-i18next';
+import { fetchT, TFunction } from '@sapphire/plugin-i18next';
 import { cast, isNullish } from '@sapphire/utilities';
 import {
 	ActionRowBuilder,
@@ -118,7 +118,7 @@ export class UserCommand extends FoxxieSubcommand {
 
 	private async sendInteractionPokemonReply(pokemon: string, spriteToGet: PokemonSpriteTypes, interaction: ChatInputCommand.Interaction) {
 		const pokemonDetails = await this.container.apis.pokemon.getPokemon(pokemon as PokemonEnum);
-		const t = await this.container.settings.guilds.acquireT(interaction.guildId);
+		const t = await fetchT(interaction.guild!);
 
 		if (isNullish(pokemonDetails)) {
 			const fuzzyPokemon = await this.container.apis.pokemon.fuzzilySearchPokemon(pokemon, 25);

@@ -4,11 +4,10 @@ import { seconds } from '#utils/common';
 import { Command, CommandOptionsRunTypeEnum, MessageCommand, UserError } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { ChatInputCommandInteraction, Message, Snowflake } from 'discord.js';
-import { FoxxieCommandUtilities } from './base/FoxxieCommandUtilities';
 import FoxxieClient from '#lib/FoxxieClient';
 import { cast } from '@sapphire/utilities';
-import { FoxxieArgs } from './FoxxieArgs';
-import { first } from 'lodash';
+import first from 'lodash/first.js';
+import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
 
 export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSubcommand.Options> {
 	public readonly guarded: boolean;

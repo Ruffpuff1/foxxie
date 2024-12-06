@@ -1,13 +1,17 @@
 import { join } from 'node:path';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { ClientEntity, MemberEntity } from './entities';
-import { LastFmArtistEntity } from './entities/LastFmArtistEntity';
-import { UserEntity } from './entities/UserEntity';
-import { ClientRepository, LastFmArtistRepository, MemberRepository } from './repository';
-import { UserRepository } from './repository/UserRepository';
-import { MongoDB } from './MongoDB';
 import { container } from '@sapphire/framework';
+import { ClientRepository } from './repository/ClientRepository.js';
+import { MemberRepository } from './repository/MemberRepository.js';
+import { ClientEntity } from './entities/ClientEntity.js';
+import { MemberEntity } from './entities/MemberEntity.js';
+import { LastFmArtistEntity } from './entities/LastFmArtistEntity.js';
+import { LastFmArtistRepository } from './repository/LastFmArtistRepository.js';
+import { UserRepository } from './repository/UserRepository.js';
+import { UserEntity } from './entities/UserEntity.js';
+import { MongoDB } from './MongoDB.js';
+import { rootFolder } from '#utils/constants';
 
 export async function config(): Promise<void> {
 	const dataSource = new DataSource({
@@ -17,7 +21,7 @@ export async function config(): Promise<void> {
 		port: 3306,
 		username: process.env.MONGO_USER,
 		password: process.env.MONGO_PASSWORD,
-		entities: [join(__dirname, 'entities/*Entity.js')],
+		entities: [join(rootFolder, 'src/lib/Database/entities/*Entity.js')],
 		authSource: 'admin',
 		ssl: true,
 		logging: true

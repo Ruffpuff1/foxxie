@@ -1,5 +1,5 @@
 import { RoleModerationAction } from '#lib/moderation/actions/base/RoleModerationAction';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import { PermissionFlagsBits } from 'discord.js';
 
 export class ModerationActionRestrictedAttachment extends RoleModerationAction<never, TypeVariation.RestrictedAttachment> {

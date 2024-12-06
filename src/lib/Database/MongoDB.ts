@@ -1,7 +1,7 @@
 import { DataSource, Repository } from 'typeorm';
-import { ClientRepository, LastFmArtistRepository, MemberRepository } from './repository';
-import { PollEntity } from './entities/PollEntity';
-import { UserRepository } from './repository/UserRepository';
+import { ClientRepository, LastFmArtistRepository, MemberRepository } from './repository/index.js';
+import { PollEntity } from './entities/PollEntity.js';
+import { UserRepository } from './repository/UserRepository.js';
 import { TaskStore } from '#lib/schedule';
 import { BrandingColors } from '#utils/constants';
 import { Message } from 'discord.js';

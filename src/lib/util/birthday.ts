@@ -1,8 +1,8 @@
 import { GuildMember, GuildResolvable } from 'discord.js';
-import { hours } from './common';
-import { Schedules } from './constants';
-import { fetchTasks } from './util';
 import { container } from '@sapphire/framework';
+import { hours } from '#utils/common';
+import { fetchTasks } from './util.js';
+import { Schedules } from './constants.js';
 
 export interface BirthdayData {
 	day: number;
@@ -141,7 +141,7 @@ export async function findTasksByMember(resolvable: GuildMember) {
 	const userId = resolvable.guild.members.resolveId(resolvable);
 	if (!userId) return null;
 
-	const tasks = await fetchTasks(Schedules.Birthday);
+	const tasks = fetchTasks(Schedules.Birthday);
 
 	return tasks.find((task) => task.data.userId === userId && task.data.guildId === resolvable.guild.id)!;
 }

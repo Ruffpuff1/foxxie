@@ -15,18 +15,18 @@ import {
 } from '@favware/graphql-pokemon';
 import os from 'node:os';
 import { Result } from '@sapphire/result';
-import { getFuzzyPokemon, getPokemon } from './queries';
-import { EnvParse } from '@foxxie/env';
+import { getFuzzyPokemon, getPokemon } from './queries.js';
 import { EnvKeys } from '#lib/types';
 import makeRequest from '@aero/http';
 import { UserError } from '@sapphire/framework';
-import { PokemonBuilderService } from './Builders/PokemonBuilderService';
-import { FavouredPokemon } from './utils';
+import { PokemonBuilderService } from './Builders/PokemonBuilderService.js';
+import { FavouredPokemon } from './utils.js';
+import { envParseString } from '@skyra/env-utilities';
 
 export class PokemonService {
 	public builders = new PokemonBuilderService();
 
-	private uri = EnvParse.string(EnvKeys.PokemonUrl);
+	private uri = envParseString(EnvKeys.PokemonUrl);
 
 	private userAgent = `Favware Dragonite/1.0.0 (apollo-client) ${os.platform()}/${os.release()}`;
 

@@ -4,6 +4,7 @@ import { Learnset, Pokemon, PokemonEnum } from '@favware/graphql-pokemon';
 import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { InteractionHandler, InteractionHandlerTypes, UserError } from '@sapphire/framework';
+import { fetchT } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
 import { StringSelectMenuInteraction } from 'discord.js';
 
@@ -39,7 +40,7 @@ export class SelectMenuHandler extends InteractionHandler {
 		if (!interaction.customId.startsWith(SelectMenuCustomIds.Pokemon)) return this.none();
 
 		await interaction.deferReply();
-		const t = await this.container.settings.guilds.acquireT(interaction.guildId);
+		const t = await fetchT(interaction.guild!);
 
 		const pokemon = interaction.values[0];
 		const splitCustomId = interaction.customId.split('|');

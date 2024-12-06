@@ -1,1 +1,1 @@
-export * from './pokemonResonseBuilder';
+export * from './pokemonResonseBuilder.js';

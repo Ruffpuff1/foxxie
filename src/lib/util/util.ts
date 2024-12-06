@@ -17,9 +17,10 @@ import {
 	SnowflakeUtil,
 	User
 } from 'discord.js';
-import { BrandingColors } from './constants';
 import { ScheduleEntry } from '#lib/schedule';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
+import { readSettings } from '#lib/database';
+import { BrandingColors } from './constants.js';
 
 /**
  * Checks whether or not the user uses the new username change, defined by the
@@ -65,8 +66,8 @@ export function floatPromise(promise: Promise<unknown>) {
 }
 
 export async function resolveKey(message: GuildMessage | ChatInputCommandInteraction, key: string, ...variables: any[]): Promise<string> {
-	const guild = await container.settings.guilds.acquire(message instanceof Message ? message.guild.id : message.guildId!);
-	const result = guild.getLanguage()(key, { ...variables });
+	const guild = await readSettings(message instanceof Message ? message.guild.id : message.guildId!);
+	const result = container.i18n.getT(guild.language)(key, { ...variables });
 
 	return result;
 }

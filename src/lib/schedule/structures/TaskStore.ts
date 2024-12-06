@@ -2,8 +2,8 @@
  * @license Apache License 2.0
  * @copyright 2019 Skyra Project
  */
+import { Task } from '#lib/schedule';
 import { Store } from '@sapphire/framework';
-import { Task } from './Task';
 import { cast } from '@sapphire/utilities';
 
 export class TaskStore extends Store<Task> {

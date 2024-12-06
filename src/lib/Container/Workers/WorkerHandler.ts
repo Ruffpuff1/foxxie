@@ -1,6 +1,6 @@
 import { AsyncQueue } from '@sapphire/async-queue';
-import { WorkerResponse } from './WorkerResponse';
-import { IncomingPayload } from './types';
+import { WorkerResponse } from './WorkerResponse.js';
+import { IncomingPayload } from './types.js';
 import { once } from 'node:events';
 // import { cyan } from 'colorette';
 // import { container } from '@sapphire/framework';

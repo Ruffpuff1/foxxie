@@ -1,17 +1,10 @@
-import { MongoDB, PermissionsNode, StickyRole } from '#lib/database';
-import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
-import { FoxxieCommand, InviteManager, RedisManager } from '#lib/structures';
 import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
 import { LLRCData, LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
 import { Awaitable, Snowflake, User } from 'discord.js';
-import { GuildMessage, TypeOfEmbed } from './Discord';
-import { FoxxieEvents } from './Events';
-import { ColorData, ConsoleState, LanguageString, TypedFT, TypedT } from './Utils';
 import { PickByValue } from '@sapphire/utilities';
 import { TFunction } from '@sapphire/plugin-i18next';
 import { API } from '@discordjs/core/http-only';
 import { ScheduleManager, TaskStore } from '#lib/schedule';
-import { WorkerService } from '../Container/Workers';
 import { ApiService } from '#lib/Container/Api/ApiService';
 import { SettingsService } from '#lib/Container/Services/SettingsService';
 import { UtilityService } from '#lib/Container/Utility/UtilityService';
@@ -21,6 +14,14 @@ import { Schedules } from '#utils/constants';
 import { SerializerStore } from '#lib/Database/settings/structures/SerializerStore';
 import { ModerationEntry } from '#lib/moderation';
 import { SerializedEmoji } from '#utils/discord';
+import { PermissionsNode, StickyRole } from '#lib/Database/settings/types';
+import { InviteManager } from '#lib/Structures/managers/InviteManager';
+import { ColorData, ConsoleState, FoxxieEvents, GuildMessage, LanguageString, TypedFT, TypedT, TypeOfEmbed } from '#lib/types';
+import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
+import { FoxxieCommand } from '#lib/structures';
+import { RedisManager } from '#lib/Structures/managers/RedisManager';
+import { WorkerService } from '#lib/Container/Workers/WorkerService';
+import { MongoDB } from '#lib/Database/MongoDB';
 
 declare global {
 	namespace PrismaJson {

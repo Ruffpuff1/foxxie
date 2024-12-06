@@ -2,7 +2,7 @@ import { api } from '#lib/discord/Api';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { days, resolveOnErrorCodes } from '#utils/common';
 import { getLogger } from '#utils/functions';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import { isNullish } from '@sapphire/utilities';
 import { RESTJSONErrorCodes, type Guild, type Snowflake } from 'discord.js';
 

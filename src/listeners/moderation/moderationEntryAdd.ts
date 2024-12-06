@@ -1,5 +1,5 @@
 import { getUndoTaskName, ModerationManager } from '#lib/moderation';
-import { SchemaKeys } from '#utils/moderation';
+import { SchemaKeys } from '#utils/moderationConstants';
 import { Listener } from '@sapphire/framework';
 import { isNullishOrZero } from '@sapphire/utilities';
 

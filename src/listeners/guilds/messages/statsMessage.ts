@@ -1,3 +1,5 @@
+import { writeSettings } from '#lib/database';
+import { acquireMember, createMember, updateMember } from '#lib/Database/Models/member';
 import { ConsoleState, EventArgs, FoxxieEvents } from '#lib/types';
 import { minutes } from '#utils/common';
 import { ApplyOptions } from '@sapphire/decorators';
@@ -20,23 +22,18 @@ export class UserListener extends Listener<FoxxieEvents.StatsMessage> {
 	}
 
 	private async countGuild(guildId: string): Promise<void> {
-		await this.container.settings.guilds.acquire(guildId).then((settings) => settings.incMessageCount());
+		await writeSettings(guildId, (settings) => ({ messageCount: settings.messageCount + 1 }));
 	}
 
 	private async countMember(member: GuildMember, guildId: string): Promise<void> {
-		const memberEntity = await this.container.db.members.ensure(member.id, guildId);
-		memberEntity.messageCount += 1;
-		await memberEntity.save();
+		const memberData = await acquireMember(member.id, guildId);
 
-		this.container.client.emit(
-			FoxxieEvents.Console,
-			ConsoleState.Debug,
-			`[${cyan('StatsMessage')}] - ${`Updated member [${cyan(member.displayName)}] message count - [${cyan(memberEntity.messageCount.toLocaleString())}]`}`
-		);
+		if (!memberData) {
+			await createMember(member.id, guildId, { messageCount: 1 });
+			return;
+		}
 
-		this.container.logger.debug(
-			`[${cyan('StatsMessage')}] - ${`Updated member [${cyan(member.displayName)}] message count - [${cyan(memberEntity.messageCount.toLocaleString())}]`}`
-		);
+		await updateMember(member.id, guildId, { messageCount: memberData.messageCount + 1 });
 	}
 
 	private async countClient(): Promise<void> {

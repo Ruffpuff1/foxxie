@@ -1,7 +1,7 @@
 import { EventArgs, FoxxieEvents } from '#lib/types';
 import { floatPromise } from '#utils/util';
-import { EnvParse } from '@foxxie/env';
 import { Listener } from '@sapphire/framework';
+import { envParseString } from '@skyra/env-utilities';
 import { ActivityType, PresenceStatusData, PresenceUpdateStatus } from 'discord.js';
 
 export class UserListener extends Listener {
@@ -35,7 +35,7 @@ export class UserListener extends Listener {
 		return this.container.client.user?.setPresence({
 			activities: [
 				{
-					name: EnvParse.string('CLIENT_PRESENCE_NAME'),
+					name: envParseString('CLIENT_PRESENCE_NAME'),
 					type: ActivityType.Playing
 				}
 			],

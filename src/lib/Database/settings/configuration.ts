@@ -1,12 +1,11 @@
-import type { GuildDataKey } from '#lib/database';
+import { ConfigurableKeyValueOptions, NonEmptyArray, SchemaKey, type GuildDataKey } from '#lib/database';
+import { SchemaGroup } from '#lib/Database/settings/schema/SchemaGroup';
 import { LanguageKeys } from '#lib/i18n';
 import { years } from '#utils/common';
 import { objectEntries } from '@sapphire/utilities';
 import { Collection } from 'discord.js';
-import { EnvParse } from '@foxxie/env';
 import { EnvKeys } from '#lib/types';
-import { ConfigurableKeyValueOptions, SchemaKey } from './schema/SchemaKey';
-import { NonEmptyArray, SchemaGroup } from './schema/SchemaGroup';
+import { envParseString } from '@skyra/env-utilities';
 
 export type SchemaDataKey = Exclude<GuildDataKey, 'id' | 'messageCount' | 'starboardEmojis' | 'tags' | 'words'>;
 
@@ -31,7 +30,7 @@ export function getConfiguration() {
 			description: LanguageKeys.Settings.Prefix,
 			minimum: 1,
 			maximum: 10,
-			default: EnvParse.string(EnvKeys.ClientPrefix)
+			default: envParseString(EnvKeys.ClientPrefix)
 		},
 		language: {
 			type: 'language',

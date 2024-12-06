@@ -1,18 +1,18 @@
+import { InviteManager, RedisManager } from '#lib/structures';
 import { clientOptions, webhookError } from '#root/config';
+import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
 import { LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
 import { Enumerable } from '@sapphire/decorators';
 import { container, SapphireClient } from '@sapphire/framework';
 import { WebhookClient } from 'discord.js';
-import { InviteManager, RedisManager } from './Structures';
-import { WorkerService } from './Container/Workers';
-import { ScheduleManager, TaskStore } from './schedule';
-import { ApiService } from './Container/Api/ApiService';
-import { SettingsService } from './Container/Services/SettingsService';
-import { EnvParse } from '@foxxie/env';
-import { UtilityService } from './Container/Utility/UtilityService';
+import { WorkerService } from './Container/Workers/WorkerService.js';
+import { ScheduleManager, TaskStore } from '#lib/schedule';
+import { ApiService } from './Container/Api/ApiService.js';
+import { SettingsService } from './Container/Services/SettingsService.js';
+import { SerializerStore } from '#lib/database';
+import { envParseBoolean, envParseInteger } from '@skyra/env-utilities';
+import { UtilityService } from './Container/Utility/UtilityService.js';
 import { magentaBright } from 'colorette';
-import { GuildMemberFetchQueue } from './util/External';
-import { SerializerStore } from './Database/settings/structures/SerializerStore';
 
 export default class FoxxieClient extends SapphireClient {
 	@Enumerable(false)
@@ -41,10 +41,10 @@ export default class FoxxieClient extends SapphireClient {
 		container.stores.register(new SerializerStore());
 		container.stores.register(new TaskStore());
 
-		container.redis = EnvParse.boolean('REDIS_ENABLED')
+		container.redis = envParseBoolean('REDIS_ENABLED')
 			? new RedisManager({
 					host: process.env.REDIS_HOST,
-					port: EnvParse.int('REDIS_PORT'),
+					port: envParseInteger('REDIS_PORT'),
 					password: process.env.REDIS_PASSWORD,
 					lazyConnect: true
 				})

@@ -1,6 +1,6 @@
 import { readSettings } from '#lib/Database/settings/functions';
 import { getModeration } from '#utils/functions';
-import { TypeMetadata, TypeVariation } from '#utils/moderation';
+import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { Listener } from '@sapphire/framework';
 import type { GuildBan } from 'discord.js';
 

@@ -1,3 +1,3 @@
-export * from './ClientRepository';
-export * from './LastFmArtistRepository';
-export * from './MemberRepository';
+export * from './ClientRepository.js';
+export * from './LastFmArtistRepository.js';
+export * from './MemberRepository.js';

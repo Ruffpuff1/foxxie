@@ -1,18 +1,16 @@
 import { LanguageKeys } from '#lib/i18n';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import { getImage, getTag, isUserSelf } from '#utils/util';
 import { Args, CommandOptionsRunTypeEnum, type Awaitable } from '@sapphire/framework';
 import { free, send } from '@sapphire/plugin-editable-commands';
 import type { User } from 'discord.js';
-import { ActionByType, getAction, GetContextType } from '../actions';
 import { GuildMessage, PermissionLevels, TypedT } from '#lib/types';
 import { asc, floatPromise, seconds } from '#utils/common';
 import { FoxxieCommand } from '#lib/structures';
 import { readSettings } from '#lib/Database/settings/functions';
-import { ModerationManager } from '../managers';
+import { ActionByType, getAction, GetContextType, ModerationAction, ModerationManager } from '#lib/moderation';
 import { deleteMessage } from '#utils/functions/messages';
 import { isGuildOwner } from '#utils/discord';
-import { ModerationAction } from '../actions/base/ModerationAction';
 
 const Root = LanguageKeys.Moderation;
 

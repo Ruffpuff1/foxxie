@@ -1,9 +1,7 @@
+import { ISchemaValue, ReadonlyGuildData, SchemaKey } from '#lib/database';
 import type { TFunction } from '@sapphire/plugin-i18next';
 import { codeBlock, isNullish, toTitleCase } from '@sapphire/utilities';
-import { AliasedCollection } from '../structures/collections/AliasedCollection';
-import { SchemaKey } from './SchemaKey';
-import { ISchemaValue } from '../base/ISchemaValue';
-import { ReadonlyGuildData } from '../types';
+import { AliasedCollection } from '#lib/Database/settings/structures/collections/AliasedCollection';
 
 export type NonEmptyArray<T> = [T, ...T[]];
 

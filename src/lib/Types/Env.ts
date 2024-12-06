@@ -1,6 +1,6 @@
-import type { BooleanString, IntegerString } from '@foxxie/env';
+import { ArrayString, BooleanString, IntegerString } from '@skyra/env-utilities';
 
-declare module '@foxxie/env' {
+declare module '@skyra/env-utilities' {
 	interface Env {
 		CLIENT_VERSION: string;
 		CLIENT_NAME: string;
@@ -13,7 +13,7 @@ declare module '@foxxie/env' {
 		LOG_LEVEL: IntegerString;
 		[EnvKeys.LogChannelId]: string;
 
-		CLIENT_OWNERS: string;
+		CLIENT_OWNERS: ArrayString;
 		THE_CORNER_STORE_URL: string;
 
 		PROD_HOST: string;

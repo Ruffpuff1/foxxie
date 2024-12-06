@@ -1,3 +1,5 @@
+import { readSettings } from '#lib/database';
+import { ensureMember } from '#lib/Database/Models/member';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
@@ -32,8 +34,8 @@ export class UserCommand extends FoxxieSubcommand {
 	}
 
 	private async buildUserMessageDisplay(message: GuildMessage, args: FoxxieSubcommand.Args, user: User): Promise<PaginatedMessage> {
-		const guildSettings = await this.container.settings.guilds.acquire(message.guildId);
-		const memberSettings = await this.container.db.members.ensure(user.id, message.guildId);
+		const guildSettings = await readSettings(message.guildId);
+		const memberSettings = await ensureMember(user.id, message.guildId);
 
 		const authorString = `${user.tag} [${user.id}]`;
 		let member: GuildMember | null = null;

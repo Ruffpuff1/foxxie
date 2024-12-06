@@ -1,5 +1,5 @@
-import { I18nFormattersService } from './I18nFormattersService';
-import { StringFormattersService } from './StringExtensions';
+import { I18nFormattersService } from './I18nFormattersService.js';
+import { StringFormattersService } from './StringExtensions.js';
 
 export class FormattersService {
 	/**

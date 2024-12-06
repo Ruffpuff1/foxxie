@@ -2,10 +2,11 @@ import { GuildPollService } from '#lib/Container/Utility/Guild/GuildPollService'
 import { EnvKeys, GuildMessage } from '#lib/types';
 import { BrandingColors, Colors } from '#utils/constants';
 import { fetchReactionUsers, floatPromise } from '#utils/util';
-import { EnvParse } from '@foxxie/env';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
+import { fetchT } from '@sapphire/plugin-i18next';
 import { cast } from '@sapphire/utilities';
+import { envParseString } from '@skyra/env-utilities';
 import { EmbedBuilder, GuildMember, Routes, TextBasedChannel, TimestampStyles, inlineCode, time } from 'discord.js';
 import { TFunction } from 'i18next';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
@@ -96,7 +97,7 @@ export class PollEntity extends BaseEntity {
 		if (this.enabled) await this.updatePollOptionData();
 
 		try {
-			const t = await container.settings.guilds.acquireT(this.guildId);
+			const t = await fetchT(container.client.guilds.cache.get(this.guildId)!);
 			const embed = await this.getEmbed(t);
 
 			const endingContent = this.getEndContent();
@@ -156,7 +157,7 @@ export class PollEntity extends BaseEntity {
 		const results = await Promise.all(
 			this.options.map(async (option) => {
 				const reactionSet = await fetchReactionUsers(this.channelId, this.messageId, [encodeURIComponent(option.emoji)]);
-				const users = [...reactionSet].filter((id) => id !== EnvParse.string(EnvKeys.ClientId));
+				const users = [...reactionSet].filter((id) => id !== envParseString(EnvKeys.ClientId));
 
 				return { users, count: users.length, option: { ...option, count: users.length } };
 			})

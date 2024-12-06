@@ -1,10 +1,10 @@
 import { resolveGuild } from '#utils/common';
 import { UserError } from '@sapphire/framework';
 import { Collection, Role, type GuildMember, type User } from 'discord.js';
-import { PermissionsNode, ReadonlyGuildData } from '../types';
 import { FoxxieCommand } from '#lib/structures';
 import { LanguageKeys } from '#lib/i18n';
 import { matchAny } from '#lib/Database/utils/matchers/Command';
+import { PermissionsNode, ReadonlyGuildData } from '#lib/database';
 
 export const enum PermissionNodeAction {
 	Allow,

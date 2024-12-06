@@ -2,7 +2,7 @@
 	"extends": ["@sapphire/ts-config", "@sapphire/ts-config/extra-strict", "@sapphire/ts-config/decorators", "@sapphire/ts-config/verbatim"],
 	"compilerOptions": {
 		"removeComments": true,
-        "verbatimModuleSyntax": false,
+        "verbatimModuleSyntax": false
 	},
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", "dist"]
 }

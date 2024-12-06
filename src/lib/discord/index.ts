@@ -1,1 +1,1 @@
-export * from './Api';
+export * from '#lib/discord/Api';

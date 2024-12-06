@@ -1,14 +1,16 @@
-import { TypeVariation } from '#utils/moderation';
-import { TFunction } from '@sapphire/plugin-i18next';
-import { getColor, TranslationMappings, UndoTaskNameMappings } from './constants';
+import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { TranslationMappings, UndoTaskNameMappings, getColor } from '#lib/moderation/common/constants';
+import type { ModerationManager } from '#lib/moderation/managers/ModerationManager';
+import type { FoxxieCommand } from '#lib/structures';
 import { TypedT } from '#lib/types';
-import { LanguageKeys } from '#lib/i18n';
-import { ModerationManager } from '../managers';
-import { resolveToNull } from '@ruffpuff/utilities';
-import { chatInputApplicationCommandMention, EmbedBuilder, messageLink, Snowflake, User } from 'discord.js';
-import { container } from '@sapphire/framework';
-import { FoxxieCommand } from '#lib/structures';
 import { getModeration } from '#utils/functions';
+import { TypeVariation } from '#utils/moderationConstants';
+import { messageLink } from '#utils/transformers';
+import { EmbedBuilder } from '@discordjs/builders';
+import { resolveToNull } from '@ruffpuff/utilities';
+import { container } from '@sapphire/framework';
+import type { TFunction } from '@sapphire/plugin-i18next';
+import { chatInputApplicationCommandMention, User, type Snowflake } from 'discord.js';
 
 export function getTranslationKey<const Type extends TypeVariation>(type: Type): (typeof TranslationMappings)[Type] {
 	return TranslationMappings[type];
@@ -24,7 +26,7 @@ export function getUndoTaskName(type: TypeVariation) {
 	return type in UndoTaskNameMappings ? UndoTaskNameMappings[type as keyof typeof UndoTaskNameMappings] : null;
 }
 
-export function getTitleUndo(t: TFunction, key: TypedT) {
+export function getTitleUndo(t: TFunction, key: TypedT): string {
 	switch (key) {
 		case TranslationMappings[TypeVariation.Ban]:
 			return t(LanguageKeys.Moderation.Unban);
@@ -39,7 +41,7 @@ export function getTitleUndo(t: TFunction, key: TypedT) {
 	}
 }
 
-export function getTitleTemporary(t: TFunction, key: TypedT) {
+export function getTitleTemporary(t: TFunction, key: TypedT): string {
 	switch (key) {
 		case TranslationMappings[TypeVariation.Ban]:
 			return t(LanguageKeys.Moderation.TempBan);
@@ -50,7 +52,7 @@ export function getTitleTemporary(t: TFunction, key: TypedT) {
 	}
 }
 
-export function getTitle(t: TFunction, entry: ModerationManager.Entry) {
+export function getTitle(t: TFunction, entry: ModerationManager.Entry): string {
 	const key = getTranslationKey(entry.type);
 	if (entry.isUndo()) return getTitleUndo(t, key);
 	if (entry.isTemporary()) return getTitleTemporary(t, key);

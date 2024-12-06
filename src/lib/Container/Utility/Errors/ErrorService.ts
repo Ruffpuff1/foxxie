@@ -4,12 +4,12 @@ import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
 import { EnvKeys, FoxxieEvents } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { sendTemporaryMessage } from '#utils/functions/messages';
-import { EnvParse } from '@foxxie/env';
 import { ArgumentError, container, MessageCommand, MessageCommandErrorPayload, UserError } from '@sapphire/framework';
 import { fetchT, TFunction } from '@sapphire/plugin-i18next';
 import { MessageSubcommandErrorPayload, Subcommand } from '@sapphire/plugin-subcommands';
 import { cast, cutText } from '@sapphire/utilities';
 import { captureException } from '@sentry/node';
+import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 import { codeBlock, DiscordAPIError, Message, RESTJSONErrorCodes, Routes, Snowflake } from 'discord.js';
 
 export class ErrorService {
@@ -82,7 +82,7 @@ export class ErrorService {
 		const argument = error.argument.name;
 		const identifier = translate(error.identifier);
 		const parameter = error.parameter.replaceAll('`', '῾');
-		const prefix = Reflect.get(Object(error.context), 'prefix') || EnvParse.string(EnvKeys.ClientPrefix);
+		const prefix = Reflect.get(Object(error.context), 'prefix') || envParseString(EnvKeys.ClientPrefix);
 		const command = Reflect.get(Object(error.context), 'command') as FoxxieCommand | undefined;
 		const commandName = command ? command.name : null;
 
@@ -104,7 +104,7 @@ export class ErrorService {
 		// Use cases for this are for example permissions error when running the `eval` command.
 		if (Reflect.get(Object(error.context), 'silent')) return;
 
-		const prefix = Reflect.get(Object(error.context), 'prefix') || EnvParse.string(EnvKeys.ClientPrefix);
+		const prefix = Reflect.get(Object(error.context), 'prefix') || envParseString(EnvKeys.ClientPrefix);
 		const command = Reflect.get(Object(error.context), 'command') as FoxxieCommand | undefined;
 		const commandName = command ? command.name : null;
 		const identifier = translate(error.identifier);
@@ -114,7 +114,7 @@ export class ErrorService {
 
 	private generateUnexpectedErrorMessage(userId: Snowflake, command: MessageCommand | Subcommand, t: TFunction, error: unknown) {
 		if (clientOwners.includes(userId)) return codeBlock('js', String(error));
-		if (!EnvParse.boolean(EnvKeys.SentryEnabled)) return t(LanguageKeys.Listeners.Errors.Unexpected);
+		if (!envParseBoolean(EnvKeys.SentryEnabled)) return t(LanguageKeys.Listeners.Errors.Unexpected);
 
 		try {
 			const report = captureException(error, { tags: { command: command.name } });

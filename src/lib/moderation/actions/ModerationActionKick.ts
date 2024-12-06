@@ -1,7 +1,7 @@
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 import { Guild } from 'discord.js';
-import { ModerationAction } from './base/ModerationAction';
 import { api } from '#lib/discord';
+import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 
 export class ModerationActionKick extends ModerationAction<never, TypeVariation.Kick> {
 	public constructor() {

@@ -1,5 +1,5 @@
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
-import { TypeVariation } from '#utils/moderation';
+import { TypeVariation } from '#utils/moderationConstants';
 
 export class ModerationActionRaidBan extends ModerationAction<number, TypeVariation.RaidBan> {
 	public constructor() {

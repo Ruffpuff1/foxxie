@@ -2,7 +2,7 @@ import { getEmbed, getUndoTaskName } from '#lib/moderation';
 import { ModerationManager } from '#lib/moderation/managers';
 import { ScheduleEntry } from '#lib/schedule';
 import { getModeration } from '#utils/functions';
-import { SchemaKeys } from '#utils/moderation';
+import { SchemaKeys } from '#utils/moderationConstants';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { canSendEmbeds, ChannelTypes } from '@sapphire/discord.js-utilities';
 import { Listener } from '@sapphire/framework';

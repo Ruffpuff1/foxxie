@@ -1,6 +1,5 @@
-import { ReadonlyGuildData } from '#lib/database';
+import { PermissionNodeManager, ReadonlyGuildData } from '#lib/database';
 import { isNullishOrEmpty } from '@sapphire/utilities';
-import { PermissionNodeManager } from '../structures/PermissionNodeManager';
 
 export class SettingsContext {
 	readonly #permissionNodes: PermissionNodeManager;
