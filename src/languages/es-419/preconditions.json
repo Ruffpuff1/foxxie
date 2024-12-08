@@ -1,8 +1,3 @@
 {
-	"administrator": "{{ERROR}} Tienes que ser un administrador del servidor para usar el {{name, code}} comando.",
-	"commandDisabled": "{{ERROR}} Este comando ha sido globalmente blocado por mi dueño, entérate porque aquí [derricknuno.com](<{{SUPPORT}}>).",
-	"cooldown": "{{ERROR}} Parece que ya usaste este comando, inténtelo de nuevo en **{{remaining, remaining}}**.",
-	"leveling": "{{ERROR}} Este comando se requiere el sistema de nivelación para funcionar en este servidor.",
-	"moderator": "{{ERROR}} Debes de ser un **moderador** en este servidor para usar el {{name, code}} comando.",
-	"nsfw": "{{ERROR}} Debido a el contenido escandaloso de este comando {{name, code}}, solo puede ser usado en **nsfw** tipo de canales."
+	"cooldown": "{{ERROR}} Parece que ya usaste este comando, inténtelo de nuevo en **{{remaining, remaining}}**."
 }
