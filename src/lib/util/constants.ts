@@ -1,9 +1,11 @@
 export const rootFolder = process.cwd();
 
 export const enum LanguageFormatters {
+	Bold = 'bold',
 	Duration = 'duration',
 	DurationString = 'durationString',
 	ExplicitContentFilter = 'explicitContentFilter',
+	Italic = 'italic',
 	MessageNotifications = 'messageNotifications',
 	Number = 'number',
 	NumberCompact = 'numberCompact',
@@ -54,15 +56,12 @@ export const enum Urls {
 	Celestia = 'https://celestia.reese.gay',
 	Disboard = 'https://disboard.org/',
 	Haste = 'https://hastebin.com',
-	Repo = 'https://github.com/Ruffpuff1/foxxie'
+	Repo = 'https://github.com/Ruffpuff1/foxxie',
+	Support = 'https://rsehrk.com/tcs',
+	TheCornerStore = 'https://rsehrk.com/tcs'
 }
 
 export const emojis = {
-	success: '<:TickYes:894419647439466556>',
-	error: '<:TickNo:894420222084280331>',
-	loading: '<a:HotCoffee:905458108225183765>',
-	foxWiggle: '<a:foxwiggle:799197027568713748>',
-	music: '🎶 🎻',
 	perms: {
 		granted: '<:PermsEnabled:894420447091904563>',
 		notSpecified: '<:PermsUnspecified:894420872234942466>',
@@ -73,30 +72,36 @@ export const emojis = {
 	reactions: {
 		no: '894420222084280331',
 		yes: '894419647439466556'
-	},
-	vinyl: '<:Vinyl:1155284004656910397>',
-	ruffThink: '<:RuffThink:910209205636579421>'
+	}
 };
 
 export const enum Emojis {
-	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
-	MaleSignEmoji = '<:Male:950037521126023208>',
-	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
-	FemaleSignEmoji = '<:Female:950037546212147200>',
-	/** The logo of https://serebii.net */
-	Serebii = '910209205636579421',
 	AutoModerator = ':fox:',
 	Bot = ':robot:',
 	/** The logo of https://bulbapedia.bulbagarden.net */
 	Bulbapedia = '910209205636579421',
 	Calendar = ':calendar_spiral:',
+	Error = '<:TickNo:894420222084280331>',
+	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
+	FemaleSignEmoji = '<:Female:950037546212147200>',
+	FoxWiggle = '<a:foxwiggle:799197027568713748>',
 	Hourglass = ':hourglass:',
+	Information = ':information_source:',
+	Loading = '<a:HotCoffee:905458108225183765>',
+	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
+	MaleSignEmoji = '<:Male:950037521126023208>',
 	Moderator = ':hammer:',
+	Music = '🎶 🎻',
 	QuarantinedIcon = ':speech_balloon:',
+	RuffThink = '<:RuffThink:910209205636579421>',
+	/** The logo of https://serebii.net */
+	Serebii = '910209205636579421',
+	ShieldMember = ':bust_in_silhouette:',
 	/** The logo of https://www.smogon.com */
 	Smogon = '910209205636579421',
 	SpammerIcon = ':warning:',
-	ShieldMember = ':bust_in_silhouette:'
+	Success = '<:TickYes:894419647439466556>',
+	Vinyl = '<:Vinyl:1155284004656910397>'
 }
 
 export const enum BadgeEmojis {

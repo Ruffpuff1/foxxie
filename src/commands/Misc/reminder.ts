@@ -1,20 +1,35 @@
 import { SubcommandKeys } from '#lib/Container/Stores/Commands/Keys/index';
-import { LanguageKeys } from '#lib/i18n';
+import { IdHints } from '#lib/discord';
+import { getSupportedLanguageT, getSupportedUserLanguageT, LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
 import { minutes, years } from '#utils/common';
 import { Schedules } from '#utils/constants';
-import { sendLoadingMessageInChannel } from '#utils/functions/messages';
-import { fetchTasks, resolveClientColor } from '#utils/util';
+import { sendLoadingMessage } from '#utils/functions/messages';
+import { fetchTasks, MappedTask, resolveClientColor } from '#utils/util';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
+import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { TFunction } from '@sapphire/plugin-i18next';
+import { applyLocalizedBuilder, TFunction } from '@sapphire/plugin-i18next';
 import { chunk } from '@sapphire/utilities';
-import { EmbedBuilder, escapeMarkdown, GuildMember, Message, PermissionFlagsBits, time, TimestampStyles } from 'discord.js';
+import {
+	Awaitable,
+	ChatInputCommandInteraction,
+	EmbedBuilder,
+	escapeMarkdown,
+	GuildMember,
+	InteractionContextType,
+	Message,
+	PermissionFlagsBits,
+	time,
+	TimestampStyles,
+	User
+} from 'discord.js';
 
 const flags = ['c', 'channel'];
 export type JSONEmbed = ReturnType<EmbedBuilder['toJSON']>;
+const Root = LanguageKeys.Commands.Moderation.Utilities.Case;
 
 @ApplyOptions<FoxxieSubcommand.Options>({
 	aliases: ['remindme', 'rm'],
@@ -24,7 +39,7 @@ export type JSONEmbed = ReturnType<EmbedBuilder['toJSON']>;
 	options: ['content'],
 	quotes: [],
 	subcommands: [
-		{ name: SubcommandKeys.Misc.List, messageRun: SubcommandKeys.Misc.List },
+		{ name: SubcommandKeys.Misc.List, messageRun: `messageRunList`, chatInputRun: 'chatInputRunList' },
 		{ name: SubcommandKeys.Misc.Show, messageRun: SubcommandKeys.Misc.Show },
 		{ name: SubcommandKeys.Misc.Delete, messageRun: SubcommandKeys.Misc.Delete },
 		{ name: SubcommandKeys.Misc.Remove, messageRun: SubcommandKeys.Misc.Delete },
@@ -33,9 +48,53 @@ export type JSONEmbed = ReturnType<EmbedBuilder['toJSON']>;
 	]
 })
 export class UserCommand extends FoxxieSubcommand {
+	public override registerApplicationCommands(registry: ApplicationCommandRegistry): Awaitable<void> {
+		registry.registerChatInputCommand(
+			(builder) =>
+				builder
+					.setName('reminder')
+					.setDescription('mnaager reminders')
+					.setContexts(InteractionContextType.Guild)
+					.addSubcommand((subcommand) =>
+						applyLocalizedBuilder(subcommand, Root.List) //
+							.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsShow))
+					),
+			{
+				idHints: [IdHints.Nightly.Misc.Reminder]
+			}
+		);
+	}
+
 	@RequiresClientPermissions([PermissionFlagsBits.AddReactions, PermissionFlagsBits.EmbedLinks])
-	public async [SubcommandKeys.Misc.List](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
-		return this.buildAndShowDisplay(msg, msg.member, args.t);
+	public async messageRunList(msg: GuildMessage, args: FoxxieSubcommand.Args) {
+		const loading = await sendLoadingMessage(msg);
+
+		const tasks = await fetchTasks(Schedules.Reminder).filter((job) => job.data.userId === msg.author.id);
+		if (!tasks.length) {
+			await loading.delete();
+			this.error(LanguageKeys.Commands.Misc.ReminderNone);
+		}
+
+		await this.#buildAndShowDisplay(msg, msg.member, args.t, tasks);
+		return loading.delete();
+	}
+
+	@RequiresClientPermissions([PermissionFlagsBits.AddReactions, PermissionFlagsBits.EmbedLinks])
+	public async chatInputRunList(interaction: FoxxieSubcommand.Interaction) {
+		const show = interaction.options.getBoolean('show') ?? false;
+		await interaction.deferReply({ ephemeral: !show });
+
+		const tasks = await fetchTasks(Schedules.Reminder).filter((job) => job.data.userId === interaction.user.id);
+		if (!tasks.length) {
+			this.error(LanguageKeys.Commands.Misc.ReminderNone);
+		}
+
+		const entity = interaction.guild
+			? await interaction.guild.members.fetch(interaction.user.id)
+			: await this.container.client.users.fetch(interaction.user.id);
+
+		const t = show ? getSupportedLanguageT(interaction) : getSupportedUserLanguageT(interaction);
+		await this.#buildAndShowDisplay(interaction, entity, t, tasks);
 	}
 
 	public async [SubcommandKeys.Misc.Create](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
@@ -83,15 +142,16 @@ export class UserCommand extends FoxxieSubcommand {
 	public async [SubcommandKeys.Misc.Delete](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message> {
 		if (args.getFlags('all')) return this.deleteAll(msg, args);
 
-		const task = await args.pick('reminder', {
+		const tasks = await args.repeat('reminder', {
 			userId: msg.author.id
 		});
-		await this.container.schedule.remove(task.id);
+
+		for (const task of tasks) await this.container.schedule.remove(task.id);
 
 		return send(
 			msg,
 			args.t(LanguageKeys.Commands.Misc.ReminderDeleteSuccess, {
-				ids: [task.id]
+				ids: tasks.map((t) => t.id)
 			})
 		);
 	}
@@ -161,36 +221,36 @@ export class UserCommand extends FoxxieSubcommand {
 		return send(msg, content);
 	}
 
-	private async buildAndShowDisplay(msg: GuildMessage, member: GuildMember, t: TFunction) {
-		const loading = await sendLoadingMessageInChannel(msg.channel);
-
-		const tasks = await fetchTasks(Schedules.Reminder).filter((job) => job.data.userId === msg.author.id);
-		if (!tasks.length) this.error(LanguageKeys.Commands.Misc.ReminderNone);
-
-		const color = await resolveClientColor(msg);
+	async #buildAndShowDisplay(
+		input: GuildMessage | ChatInputCommandInteraction,
+		entity: GuildMember | User,
+		t: TFunction,
+		tasks: MappedTask<Schedules.Reminder>[]
+	) {
+		const user = entity instanceof User ? entity : entity.user;
 
 		const template = new EmbedBuilder() //
-			.setColor(color)
+			.setColor(await resolveClientColor(input))
 			.setAuthor({
 				name: t(LanguageKeys.Commands.Misc.ReminderList, {
-					author: member.user.username
+					author: user.username
 				}),
-				iconURL: member.displayAvatarURL()
+				iconURL: user.displayAvatarURL()
 			});
 
 		const display = new PaginatedMessage({ template }); // .setPromptMessage(t(LanguageKeys.System.ReactionHandlerPrompt));
-
 		const pages = chunk(
-			tasks.map((task) => {
-				const text = escapeMarkdown(task.data.text!).replace(/\n/g, ' ');
-				return `\`[${task.id}]\` - ${text.length > 30 ? `${text.substring(0, 27).trim()}...` : text} - **${time(new Date(task.time), TimestampStyles.LongDateTime)}**`;
-			}),
+			tasks.map((task) => this.#mapTask(task)),
 			5
 		);
 
 		for (const page of pages) display.addPageEmbed((embed) => embed.setDescription(page.join('\n')));
-		await display.run(msg);
-		await loading.delete();
+		return display.run(input);
+	}
+
+	#mapTask(task: MappedTask<Schedules.Reminder>) {
+		const text = escapeMarkdown(task.data.text!).replace(/\n/g, ' ');
+		return `\`[${task.id}]\` - ${text.length > 30 ? `${text.substring(0, 27).trim()}...` : text} - **${time(new Date(task.time), TimestampStyles.LongDateTime)}**`;
 	}
 
 	private async deleteAll(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message> {

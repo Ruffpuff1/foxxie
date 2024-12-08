@@ -8,6 +8,7 @@ import FoxxieClient from '#lib/FoxxieClient';
 import { cast } from '@sapphire/utilities';
 import first from 'lodash/first.js';
 import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
+import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
 
 export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSubcommand.Options> {
 	public readonly guarded: boolean;
@@ -15,7 +16,7 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 	public readonly permissionLevel: PermissionLevels;
 	public allowedGuilds: string[];
 	public usage: string | null = null;
-	declare public readonly detailedDescription: TypedFT<DetailedDescriptionArgs, DetailedDescription>;
+	declare public readonly detailedDescription: TypedFT<DetailedDescriptionArgs, DetailedDescription> | TypedT<LanguageHelpDisplayOptions>;
 	declare public readonly description: TypedT<string>;
 
 	public constructor(context: FoxxieSubcommand.LoaderContext, options: FoxxieSubcommand.Options) {
@@ -117,7 +118,7 @@ export namespace FoxxieSubcommand {
 
 export type ExtendOptions<T> = T & {
 	description: TypedT<string>;
-	detailedDescription: TypedFT<DetailedDescriptionArgs, DetailedDescription>;
+	detailedDescription: TypedFT<DetailedDescriptionArgs, DetailedDescription> | TypedT<LanguageHelpDisplayOptions>;
 	guarded?: boolean;
 	hidden?: boolean;
 	usage?: string;

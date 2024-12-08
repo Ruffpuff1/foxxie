@@ -8,35 +8,18 @@
 		"subcommands": [
 			{
 				"command": "",
-				"description": [
-					""
-				],
-				"examples": [
-					"",
-					"",
-					""
-				]
+				"description": [""],
+				"examples": ["", "", ""]
 			}
 		]
 	},
 	"pokemonDexNone": "",
 	"pokemonDexSelect": "",
-	"pokemonDexSelectPages": [
-		"",
-		"",
-		"",
-		"",
-		""
-	],
+	"pokemonDexSelectPages": ["", "", "", "", ""],
 	"pokemonDexSmogonUnknown": "",
 	"pokemonMoveNone": "",
 	"pokemonMoveSelect": "",
-	"pokemonMoveSelectPages": [
-		"",
-		"",
-		"",
-		""
-	],
+	"pokemonMoveSelectPages": ["", "", "", ""],
 	"pokemonOptionPokemon": "",
 	"pokemonOptionSprite": "",
 	"pokemonOptionMove": "",

@@ -3,13 +3,12 @@ import { seconds } from '#utils/common';
 import { Schedules } from '#utils/constants';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
-import { container } from '@sapphire/framework';
 import { PermissionFlagsBits } from 'discord.js';
 
-@ApplyOptions<Task.Options>({
+@ApplyOptions<Task.Options>(({ container }) => ({
 	name: Schedules.RemoveBirthdayRole,
 	enabled: container.client.enabledProdOnlyEvent()
-})
+}))
 export class UserTask extends Task {
 	public async run(data: ScheduleEntry.TaskData[Schedules.RemoveBirthdayRole]): Promise<PartialResponseValue | null> {
 		const guild = this.container.client.guilds.cache.get(data.guildId);

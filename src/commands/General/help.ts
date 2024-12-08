@@ -1,11 +1,12 @@
 import { LanguageKeys } from '#lib/i18n';
+import { LanguageHelp, LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
 import { resolveClientColor } from '#utils/util';
 import { ApplyOptions } from '@sapphire/decorators';
-import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { send } from '@sapphire/plugin-editable-commands';
-import { bold, EmbedBuilder, inlineCode, PermissionFlagsBits } from 'discord.js';
+import { TFunction } from '@sapphire/plugin-i18next';
+import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
 	aliases: ['h', 'commands'],
@@ -14,14 +15,13 @@ import { bold, EmbedBuilder, inlineCode, PermissionFlagsBits } from 'discord.js'
 	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks]
 })
 export default class UserCommand extends FoxxieCommand {
-	public async messageRun(message: GuildMessage, args: FoxxieCommand.Args, ctx: FoxxieCommand.Context): Promise<void> {
+	public async messageRun(message: GuildMessage, args: FoxxieCommand.Args, ctx: FoxxieCommand.Context) {
 		const command = await args.pick('command').catch(() => null);
 		if (command) {
-			await this.commandHelp(command, message, args, ctx.commandPrefix);
-			return;
+			return this.commandHelp(command, message, args, ctx.commandPrefix);
 		}
 
-		await this.fullHelp(message, args);
+		return this.fullHelp(message, args);
 	}
 
 	private async fullHelp(message: GuildMessage, args: FoxxieCommand.Args) {
@@ -29,7 +29,7 @@ export default class UserCommand extends FoxxieCommand {
 			.setAuthor({
 				name: args.t(LanguageKeys.Commands.General.HelpMenu, { name: this.container.client.user?.username })
 			})
-			.setColor(resolveClientColor(message.guild));
+			.setColor(await resolveClientColor(message));
 
 		const commands = this.container.stores.get('commands');
 		const categories = [...new Set(this.container.stores.get('commands').map((c) => c.category!))]
@@ -52,65 +52,39 @@ export default class UserCommand extends FoxxieCommand {
 	}
 
 	private async commandHelp(command: FoxxieCommand, message: GuildMessage, args: FoxxieCommand.Args, prefix: string) {
-		const titles = args.t(LanguageKeys.Commands.General.HelpTitles);
+		const embed = await this.#buildCommandHelp(message, args, command, prefix);
+		return send(message, { embeds: [embed] });
+	}
 
-		const template = new EmbedBuilder() //
-			.setColor(resolveClientColor(message.guild))
-			.setAuthor({ name: `${command.name}${command.aliases.length ? ` (${command.aliases.join(', ')})` : ''}` });
+	async #buildCommandHelp(message: GuildMessage, args: FoxxieCommand.Args, command: FoxxieCommand, prefixUsed: string) {
+		const builderData = args.t(LanguageKeys.System.HelpTitles);
 
-		const embed = new EmbedBuilder() //
-			.setDescription(command.detailedDescription ? args.t(command.detailedDescription) : args.t(command.description))
-			.addFields([
-				{
-					name: titles.usage,
-					value: inlineCode(
-						command.detailedDescription
-							? args.t(command.detailedDescription, { prefix, CHANNEL: message.channel.name }).usage!
-							: `${prefix}${command.name}${command.usage ? ` ${args.t(command.usage)}` : ''}`
-					)
-				}
-			]);
+		const builder = new LanguageHelp()
+			.setUsages(builderData.usages)
+			.setAliases(builderData.aliases)
+			.setExtendedHelp(builderData.extendedHelp)
+			.setExplainedUsage(builderData.explainedUsage)
+			.setExamples(builderData.examples)
+			.setPossibleFormats(builderData.possibleFormats)
+			.setReminder(builderData.reminders);
 
-		const display = new PaginatedMessage({ template }) //
-			.addPageEmbed(() => embed);
+		const extendedHelpData = args.t(command.detailedDescription, { prefix: prefixUsed }) as LanguageHelpDisplayOptions;
+		const extendedHelp = builder.display(command.name, this.formatAliases(args.t, command.aliases), extendedHelpData, prefixUsed);
 
-		if (!command.detailedDescription) return display.run(message);
+		const data = args.t(LanguageKeys.Commands.General.HelpData, {
+			footerName: command.name,
+			titleDescription: args.t(command.description)
+		});
+		return new EmbedBuilder()
+			.setColor(await resolveClientColor(message))
+			.setTimestamp()
+			.setFooter({ text: data.footer })
+			.setTitle(data.title)
+			.setDescription(extendedHelp);
+	}
 
-		const detailed = args.t(command.detailedDescription, { prefix, CHANNEL: message.channel.name });
-
-		if (detailed.arguments || detailed.examples) {
-			display.addPageEmbed((e) => {
-				if (detailed.examples?.length) {
-					e.addFields([{ name: titles.examples, value: detailed.examples.map(inlineCode).join('\n') }]).setAuthor({
-						name: `${command.name} → examples`
-					});
-				}
-
-				if (detailed.arguments?.length) {
-					e.setDescription(detailed.arguments!.map((arg) => `• ${bold(arg.name)}: ${arg.description}`).join('\n')).setAuthor({
-						name: `${command.name} → arguments`
-					});
-				}
-
-				return e;
-			});
-		}
-
-		if (!detailed.subcommands) return display.run(message);
-
-		const subCommands = detailed.subcommands.sort((a, b) => a.command.localeCompare(b.command));
-
-		if (subCommands.length) {
-			for (const subCommand of subCommands) {
-				display.addPageEmbed((e) =>
-					e //
-						.setDescription(Array.isArray(subCommand.description) ? subCommand.description.join('\n') : subCommand.description)
-						.setAuthor({ name: `${command.name} → ${subCommand.command}` })
-						.addFields([{ name: titles.examples, value: subCommand.examples.map((e) => inlineCode(e)).join('\n') }])
-				);
-			}
-		}
-
-		return display.run(message);
+	private formatAliases(t: TFunction, aliases: readonly string[]): string | null {
+		if (aliases.length === 0) return null;
+		return t(LanguageKeys.Globals.And, { value: aliases.map((alias) => `\`${alias}\``) });
 	}
 }

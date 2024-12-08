@@ -19,24 +19,9 @@
 	"confNochange": "",
 	"confServerDescription": "",
 	"confServerExtended": {
-		"usages": [
-			"",
-			"mostrar",
-			"",
-			"",
-			"",
-			""
-		],
+		"usages": ["", "mostrar", "", "", "", ""],
 		"extendedHelp": "",
-		"examples": [
-			"",
-			"",
-			"mostrar",
-			"",
-			"",
-			"",
-			""
-		],
+		"examples": ["", "", "mostrar", "", "", "", ""],
 		"reminder": ""
 	},
 	"confServer": "",

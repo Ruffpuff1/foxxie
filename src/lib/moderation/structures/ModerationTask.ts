@@ -42,6 +42,13 @@ export abstract class ModerationTask<T = unknown> extends Task {
 		};
 	}
 
+	protected getReasonContext(duration: number) {
+		return {
+			context: 'reason',
+			duration
+		} as const;
+	}
+
 	protected abstract handle(guild: Guild, data: ModerationData<T>): unknown;
 }
 

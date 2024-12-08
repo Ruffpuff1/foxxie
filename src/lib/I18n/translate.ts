@@ -33,19 +33,17 @@ export function translate(key: Identifier): TranslatedResult {
 			return LanguageKeys.Arguments.Missing;
 		case Identifiers.ArgsUnavailable:
 			return LanguageKeys.Arguments.Unavailable;
+		case Identifiers.ArgumentIntegerError:
+			return LanguageKeys.Arguments.IntegerError;
+		case Identifiers.ArgumentIntegerTooLarge:
+			return LanguageKeys.Arguments.IntegerTooLarge;
+		case Identifiers.ArgumentIntegerTooSmall:
+			return LanguageKeys.Arguments.IntegerTooSmall;
 		// Subcommandsd
 		case SubcommandPluginIdentifiers.MessageSubcommandNoMatch:
 			return LanguageKeys.Preconditions.MessageSubcommandNoMatch;
-		// Return as Self
-		case LanguageKeys.Arguments.Birthday:
-		case LanguageKeys.Arguments.BirthdayDay:
-		case LanguageKeys.Arguments.BirthdayMonth:
-		case LanguageKeys.Arguments.BirthdayYear:
-		case LanguageKeys.Arguments.BirthdayYearFuture:
-		case LanguageKeys.Arguments.BirthdayYearPast:
-			return key as TranslatedResult;
 		default:
-			return LanguageKeys.Globals.DefaultT;
+			return key as TranslatedResult;
 	}
 }
 
@@ -60,12 +58,12 @@ export function resolveT(t: TResolvable): TFunction {
  * @returns The translation function for the specified locale.
  */
 export function getT(locale?: LocaleString | string | Nullish) {
-	return container.i18n.getT(locale ?? 'en-US');
+	return container.i18n.getT(locale ?? SupportedLanguages.EnglishUnitedStates);
 }
 
 export function getSupportedLanguageName(interaction: Interaction): LocaleString {
 	if (interaction.guildLocale && container.i18n.languages.has(interaction.guildLocale)) return interaction.guildLocale;
-	return 'en-US';
+	return SupportedLanguages.EnglishUnitedStates;
 }
 
 export function getSupportedLanguageT(interaction: Interaction): TFunction {
@@ -79,4 +77,9 @@ export function getSupportedUserLanguageName(interaction: Interaction): LocaleSt
 
 export function getSupportedUserLanguageT(interaction: Interaction): TFunction {
 	return getT(getSupportedUserLanguageName(interaction));
+}
+
+export const enum SupportedLanguages {
+	EnglishUnitedStates = 'en-US',
+	SpanishLatinAmerica = 'es-419'
 }

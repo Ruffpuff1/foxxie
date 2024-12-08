@@ -1,8 +1,13 @@
 {
-	"commandCancel": "{{SUCCESS}} Got it, cancelled that command.",
-	"dmWarn": "Your DMs are closed right now, meaning this will not function properly.",
-	"fetchBansFail": "{{ERROR}} Sorry, I couldn't fetch then bans from this server.",
-	"footer": "Page -",
+	"helpTitles": {
+		"aliases": "🖇️ | **Aliases**",
+		"usages": "📝 | **Command Usage**",
+		"extendedHelp": "🔍 | **Extended Help**",
+		"explainedUsage": ":gear: | **Explained usage**",
+		"possibleFormats": "🔢 | **Possible formats**",
+		"examples": "🔗 | **Examples**",
+		"reminders": "⏰ | **Reminder**"
+	},
 	"messageLoading": [
 		"{{LOADING}} I'll handle that order, just one second.",
 		"{{LOADING}} Coming right up! This might take few seconds.",
@@ -11,6 +16,6 @@
 		"{{LOADING}} Hey chef! We got a new order!"
 	],
 	"prefixReminder": "Heyo! My prefix for this server is: {{prefixes, codeand}}",
-	"prefixReminder_other": "Hey there! My prefixes for this server are: {{prefixes, codeand}}",
-	"queryFail": "{{ERROR}} I couldn't find any data from the server about that query, please try again."
+	"prefixReminder_admin": "-# *If you wanna change it use my {{prefix}}conf command*",
+	"prefixReminder_other": "Hey there! My prefixes for this server are: {{prefixes, codeand}}"
 }

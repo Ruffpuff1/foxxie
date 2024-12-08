@@ -5,14 +5,13 @@ import { floatPromise } from '#utils/util';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canSendMessages } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
 import { cast } from '@sapphire/utilities';
-import { DiscordAPIError, EmbedBuilder, GuildTextBasedChannel, RESTJSONErrorCodes } from 'discord.js';
+import { DiscordAPIError, EmbedBuilder, GuildTextBasedChannel, RESTJSONErrorCodes, userMention } from 'discord.js';
 
-@ApplyOptions<Task.Options>({
+@ApplyOptions<Task.Options>(({ container }) => ({
 	name: Schedules.Reminder,
 	enabled: container.client.enabledProdOnlyEvent()
-})
+}))
 export class UserTask extends Task<Schedules.Reminder> {
 	public async run(data: ScheduleEntry.TaskData[Schedules.Reminder]): Promise<PartialResponseValue | null> {
 		const channel = await this.resolveChannel(data.channelId);
@@ -79,7 +78,7 @@ export class UserTask extends Task<Schedules.Reminder> {
 			content = t(LanguageKeys.Tasks[dm ? 'ReminderToDM' : 'ReminderToChannelWithUser'], {
 				text: data.text,
 				time: data.timeago,
-				user: this.container.client.users.cache.get(data.userId)?.toString()
+				user: userMention(data.userId)
 			});
 		}
 

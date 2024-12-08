@@ -5,6 +5,7 @@ import { seconds, toErrorCodeResult } from '#utils/common';
 import { getLogger, getLogPrefix, getStickyRoles } from '#utils/functions';
 import { getUserMentionWithFlagsString } from '#utils/functions/users';
 import { getFullEmbedAuthor } from '#utils/util';
+import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { TFunction } from '@sapphire/plugin-i18next';
 import { isNullish, Nullish } from '@sapphire/utilities';
@@ -23,6 +24,10 @@ import {
 
 const Root = LanguageKeys.Listeners.Guilds.Members;
 
+@ApplyOptions<Listener.Options>(({ container }) => ({
+	enabled: container.client.enabledProdOnlyEvent(),
+	event: Events.GuildMemberAdd
+}))
 export class UserListener extends Listener {
 	public async run(...[member]: EventArgs<Events.GuildMemberAdd>) {
 		if (await this.#handleStickyRoles(member)) return;

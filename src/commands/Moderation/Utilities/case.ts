@@ -1,3 +1,4 @@
+import { IdHints } from '#lib/discord';
 import { getSupportedLanguageT, getSupportedUserLanguageT, LanguageKeys } from '#lib/i18n';
 import { getAction, getEmbed, getTitle, ModerationManager } from '#lib/moderation';
 import { getTranslationKey } from '#lib/moderation/common/util';
@@ -117,9 +118,7 @@ export class UserCommand extends FoxxieSubcommand {
 							.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsRefrence).setMinValue(1).setRequired(false))
 					),
 			{
-				idHints: [
-					'1313102423719542844' // Foxxie Nightly
-				]
+				idHints: [IdHints.Nightly.Moderation.Utilities.Case]
 			}
 		);
 	}
@@ -143,9 +142,9 @@ export class UserCommand extends FoxxieSubcommand {
 		let entries = [...(await moderation.fetch({ userId: user?.id, moderatorId: moderator?.id })).values()];
 		if (!isNullish(type)) entries = entries.filter((entry) => entry.type === type);
 		if (pendingOnly) entries = entries.filter((entry) => !isNullishOrZero(entry.duration) && !entry.isCompleted());
-		const footer = this.#parseListFooter(user, moderator, type, pendingOnly, interaction.guild!);
-
 		const t = show ? getSupportedLanguageT(interaction) : getSupportedUserLanguageT(interaction);
+		const footer = this.#parseListFooter(user, moderator, type, pendingOnly, interaction.guild!, t);
+
 		return interaction.options.getBoolean('overview') //
 			? this.#listOverview(interaction, t, entries, user, show)
 			: this.#listDetails(interaction, t, this.#sortEntries(entries), isNullish(user), show, footer);
@@ -214,7 +213,7 @@ export class UserCommand extends FoxxieSubcommand {
 		new Date(4).toLocaleDateString();
 
 		const title = t(Root.ListDetailsTitle, { count: entries.length });
-		const color = resolveClientColor(interaction.guild);
+		const color = await resolveClientColor(interaction);
 		return new FoxxiePaginatedMessageEmbedFields()
 			.setTemplate(new EmbedBuilder().setTitle(title).setColor(color).setFooter({ text: footer }))
 			.setIdle(minutes(5))
@@ -257,7 +256,11 @@ export class UserCommand extends FoxxieSubcommand {
 			if (!isNullishOrZero(count) && channel && channel.isTextBased()) {
 				const channelInGuild = entry.guild.channels.cache.has(channel.id);
 				lines.push(
-					`:information_source: **Location:** ${channelInGuild ? channelMention(channel.id) : (channel as GuildBasedChannelTypes).name} (${channel.id})`
+					t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsLocation, {
+						emoji: Emojis.Information,
+						channel: channelInGuild ? channelMention(channel.id) : (channel as GuildBasedChannelTypes).name,
+						id: channel.id
+					})
 				);
 			}
 		}
@@ -267,7 +270,11 @@ export class UserCommand extends FoxxieSubcommand {
 			if (channel && channel.isTextBased()) {
 				const channelInGuild = entry.guild.channels.cache.has(channel.id);
 				lines.push(
-					`:information_source: **Location:** ${channelInGuild ? channelMention(channel.id) : (channel as GuildBasedChannelTypes).name} (${channel.id})`
+					t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsLocation, {
+						emoji: Emojis.Information,
+						channel: channelInGuild ? channelMention(channel.id) : (channel as GuildBasedChannelTypes).name,
+						id: channel.id
+					})
 				);
 			}
 		}
@@ -334,23 +341,25 @@ export class UserCommand extends FoxxieSubcommand {
 		await interaction.reply({ embeds: [embed], ephemeral: !show });
 	}
 
-	#parseListFooter(user: User | null, moderator: User | null, type: TypeVariation | null, pendingOnly: boolean, guild: Guild) {
+	#parseListFooter(user: User | null, moderator: User | null, type: TypeVariation | null, pendingOnly: boolean, guild: Guild, t: TFunction) {
 		const parts: string[] = [];
 		const { name } = guild;
 
-		if (user) parts.push(`of ${user.username}`);
-		if (moderator) parts.push(`by ${moderator.username}`);
-		if (type) parts.push(`of type ${type}`);
+		if (user) parts.push(t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterOfUser, { user: user.username }));
+		if (moderator) parts.push(t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterByModerator, { moderator: moderator.username }));
+		if (type)
+			parts.push(t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterOfType, { type: this.#formatTypeVariation(type, t) }));
 
 		if (!parts.length) {
-			if (pendingOnly) return `Pending moderation cases in ${name}.`;
-			return `Moderation cases in ${name}.`;
+			if (pendingOnly)
+				return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterPendingCases, { guild: name, context: 'noFilter' });
+			return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterCases, { guild: name, context: 'noFilter' });
 		}
 
 		const joined = parts.join(' ');
 
-		if (pendingOnly) return `Pending moderation cases ${joined} in ${name}.`;
-		return `Moderation cases ${joined} in ${name}.`;
+		if (pendingOnly) return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterPendingCases, { guild: name, cases: joined });
+		return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterCases, { guild: name, cases: joined });
 	}
 
 	#sortEntries(entries: ModerationManager.Entry[]) {
@@ -370,6 +379,25 @@ export class UserCommand extends FoxxieSubcommand {
 		return resolveTimeSpan(parameter, { minimum: 1000, maximum: years(5) }) //
 			.mapErr((key) => getSupportedUserLanguageT(interaction)(key, { parameter: parameter.toString() }))
 			.unwrapRaw();
+	}
+
+	#formatTypeVariation(type: TypeVariation, t: TFunction): string {
+		switch (type) {
+			case TypeVariation.Ban:
+				return t(LanguageKeys.Moderation.TypeBan);
+			case TypeVariation.Kick:
+				return t(LanguageKeys.Moderation.TypeKick);
+			case TypeVariation.Mute:
+				return t(LanguageKeys.Moderation.TypeKick);
+			case TypeVariation.Prune:
+				return t(LanguageKeys.Moderation.TypeKick);
+			case TypeVariation.Warning:
+				return t(LanguageKeys.Moderation.TypeWarning);
+			case TypeVariation.SetNickname:
+				return t(LanguageKeys.Moderation.TypeSetNickname);
+			default:
+				return type.toString();
+		}
 	}
 
 	async #getRefrence(interaction: FoxxieSubcommand.Interaction) {

@@ -1,7 +1,5 @@
 import { T } from '#lib/types';
 
-export const FilterArray = [
-	T('guilds/contentFilters:DISABLED'),
-	T('guilds/contentFilters:MEMBERS_WITHOUT_ROLES'),
-	T('guilds/contentFilters:ALL_MEMBERS')
-];
+export const ExplicitContentFilterDisabled = T('guilds/contentFilters:explicitContentFilterDisabled');
+export const ExplicitContentFilterMembersWithoutRoles = T('guilds/contentFilters:explicitContentFilterMembersWithoutRoles');
+export const ExplicitContentFilterAllMembers = T('guilds/contentFilters:explicitContentFilterAllMembers');

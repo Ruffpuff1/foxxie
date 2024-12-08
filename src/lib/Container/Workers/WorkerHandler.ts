@@ -1,12 +1,15 @@
 import { AsyncQueue } from '@sapphire/async-queue';
 import { WorkerResponse } from './WorkerResponse.js';
-import { IncomingPayload } from './types.js';
+import { IncomingPayload, OutgoingPayload, OutputType } from './types.js';
 import { once } from 'node:events';
-// import { cyan } from 'colorette';
-// import { container } from '@sapphire/framework';
+import { cyan, green, red, yellow } from 'colorette';
+import { container } from '@sapphire/framework';
+import { SHARE_ENV, Worker } from 'node:worker_threads';
 
 export class WorkerHandler {
 	private worker!: Worker;
+
+	public lastHeartBeat!: number;
 
 	private online!: boolean;
 
@@ -16,11 +19,7 @@ export class WorkerHandler {
 
 	private response = new WorkerResponse();
 
-	// private static readonly workerLoader = join(rootFolder, 'scripts', 'workerLoader.js');
-
-	// private static readonly filename = join(__dirname, `worker.js`);
-
-	private static readonly maximumId = Number.MAX_SAFE_INTEGER;
+	private threadId = -1;
 
 	public constructor() {
 		this.spawn();
@@ -28,17 +27,11 @@ export class WorkerHandler {
 
 	public spawn() {
 		this.online = false;
-		// this.worker = new Worker(WorkerHandler.workerLoader, {
-		// 	workerData: {
-		// 		path: WorkerHandler.filename
-		// 	}
-		// });
-		// this.worker.on('message', (message: OutgoingPayload) => {
-		// 	this.handle(message);
-		// });
-		// this.worker.once('online', () => {
-		// 	this.handlerOnline();
-		// });
+		this.lastHeartBeat = 0;
+		this.worker = new Worker(WorkerHandler.filename, { env: SHARE_ENV });
+		this.worker.on('message', (message: OutgoingPayload) => this.handleMessage(message));
+		this.worker.once('online', () => this.handleOnline());
+		this.worker.once('exit', (code: number) => this.handleExit(code));
 		return this;
 	}
 
@@ -66,20 +59,39 @@ export class WorkerHandler {
 		}
 	}
 
-	// private handle(message: OutgoingPayload) {
-	// 	if (message.type === 0) return;
+	private handleMessage(message: OutgoingPayload) {
+		if (message.type === OutputType.Heartbeat) {
+			this.lastHeartBeat = Date.now();
+			return;
+		}
 
-	// 	this.response.resolve(message.id, message);
-	// }
+		this.response.resolve(message.id, message);
+	}
 
-	// private handlerOnline() {
-	// 	this.online = true;
-	// 	this.id = this.worker.threadId;
+	private handleExit(code: number) {
+		this.online = false;
+		this.worker.removeAllListeners();
 
-	// 	const worker = `[${cyan('W')}]`;
-	// 	const thread = cyan(this.id.toString(16));
-	// 	container.logger.debug(`${worker} - Thread ${thread} is now ready.`);
-	// }
+		/* istanbul ignore if: logs are disabled in tests */
+		if (WorkerHandler.logsEnabled) {
+			const worker = `[${yellow('W')}]`;
+			const thread = cyan(this.threadId.toString(16));
+			const exit = code === 0 ? green('0') : red(code.toString());
+			container.logger.warn(`${worker} - Thread ${thread} closed with code ${exit}.`);
+		}
+	}
+
+	private handleOnline() {
+		this.online = true;
+		this.threadId = this.worker.threadId;
+
+		/* istanbul ignore if: logs are disabled in tests */
+		if (WorkerHandler.logsEnabled) {
+			const worker = `[${cyan('W')}]`;
+			const thread = cyan(this.threadId.toString(16));
+			container.logger.info(`${worker} - Thread ${thread} is now ready.`);
+		}
+	}
 
 	private generateId() {
 		if (this.id === WorkerHandler.maximumId) {
@@ -92,4 +104,9 @@ export class WorkerHandler {
 	public get remaining() {
 		return this.queue.remaining;
 	}
+
+	private static readonly logsEnabled = process.env.NODE_ENV !== 'test';
+	private static readonly filename = new URL('worker.js', import.meta.url);
+
+	private static readonly maximumId = Number.MAX_SAFE_INTEGER;
 }

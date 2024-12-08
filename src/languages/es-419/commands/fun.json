@@ -7,14 +7,8 @@
 		"subcommands": [
 			{
 				"command": "",
-				"description": [
-					""
-				],
-				"examples": [
-					"",
-					"",
-					""
-				]
+				"description": [""],
+				"examples": ["", "", ""]
 			}
 		]
 	},
@@ -65,36 +59,22 @@
 						"description": ""
 					}
 				],
-				"examples": [
-					"",
-					"",
-					""
-				]
+				"examples": ["", "", ""]
 			},
 			{
 				"command": "globalquiénsabe",
 				"description": "",
-				"examples": [
-					"",
-					""
-				]
+				"examples": ["", ""]
 			},
 			{
 				"command": "",
 				"description": "",
-				"examples": [
-					"",
-					""
-				]
+				"examples": ["", ""]
 			},
 			{
 				"command": "",
 				"description": "",
-				"examples": [
-					"",
-					"",
-					""
-				]
+				"examples": ["", "", ""]
 			}
 		]
 	},
