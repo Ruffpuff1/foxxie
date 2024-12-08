@@ -1,0 +1,22 @@
+name: Bug report
+description: Request a new feature
+title: 'bug:'
+labels: ["Type: Bug", "Bug: Confirmed"]
+assignees: [Ruffpuff1]
+body:
+  - type: dropdown
+    id: bot
+    attributes:
+      label: Which bot is this bug report for?
+      options:
+        - foxxie
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature
+      description: A clear and concise description of the bug and how to replicate it.
+      placeholder: I did this...This should be fixed because...
+    validations:
+      required: true
