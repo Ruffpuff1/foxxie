@@ -3,58 +3,46 @@
 	"reminderDefault": "",
 	"reminderDeleteNone": "",
 	"reminderDeleteSuccess": "",
+	"reminderDeleteSuccess_other": "",
 	"reminderDescription": "",
 	"reminderDetailedDescription": {
-		"description": "",
-		"usage": "",
-		"subcommands": [
-			{
-				"command": "",
-				"description": [
-					""
-				],
-				"examples": [
-					"",
-					""
-				]
-			},
-			{
-				"command": "mostrar",
-				"description": [
-					""
-				],
-				"examples": [
-					""
-				]
-			},
-			{
-				"command": "editar",
-				"description": [
-					""
-				],
-				"examples": [
-					""
-				]
-			},
-			{
-				"command": "",
-				"description": [
-					""
-				],
-				"examples": [
-					""
-				]
-			},
-			{
-				"command": "lista",
-				"description": [
-					""
-				],
-				"examples": [
-					""
-				]
-			}
-		]
+		"extendedHelp": "",
+		"usages": [
+			"",
+			"",
+			"",
+			"",
+			"",
+			"lista"
+		],
+		"examples": [
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"lista"
+		],
+		"explainedUsage": [
+			[
+				"",
+				""
+			],
+			[
+				"",
+				""
+			],
+			[
+				"",
+				""
+			],
+			[
+				"",
+				""
+			]
+		],
+		"reminder": ""
 	},
 	"reminderDMWarn": "",
 	"reminderEditSuccess": "",
