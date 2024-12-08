@@ -5,12 +5,12 @@ declare module '@skyra/env-utilities' {
 		CLIENT_VERSION: string;
 		CLIENT_NAME: string;
 		[EnvKeys.ClientId]: string;
-		CLIENT_PREFIX: string;
+		[EnvKeys.ClientPrefix]: string;
 		CLIENT_REGEX_PREFIX: string;
 		CLIENT_PRESENCE_NAME: string;
 		TIMEZONE: string;
 
-		LOG_LEVEL: IntegerString;
+		[EnvKeys.LogLevel]: IntegerString;
 		[EnvKeys.LogChannelId]: string;
 
 		CLIENT_OWNERS: ArrayString;
@@ -57,6 +57,7 @@ export const enum EnvKeys {
 	DiscogsConsumerKey = 'DISCOGS_CONSUMER_KEY',
 	DiscogsOAuthSignature = 'DISCOGS_OAUTH_SIGNATURE',
 	HasteToken = 'HASTE_TOKEN',
+	LogLevel = 'LOG_LEVEL',
 	PokemonUrl = 'POKEMON_URL',
 	LastFmToken = 'LASTFM_TOKEN',
 	LogChannelId = 'LOG_CHANNEL_ID',

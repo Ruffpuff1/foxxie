@@ -9,18 +9,18 @@ export abstract class AutomationListener<T extends keyof ClientEvents = keyof Cl
 
 	public abstract override run(...args: T extends keyof ClientEvents ? ClientEvents[T] : unknown[]): Promise<unknown>;
 
-	protected retriveAutomationContent(
+	protected async retriveAutomationContent(
 		member: GuildMember,
 		t: TFunction,
 		message: string | null,
 		embed: APIEmbed | null,
 		defaultMsg: string
-	): [APIEmbed[], string | undefined] {
+	): Promise<[APIEmbed[], string | undefined]> {
 		const embeds: APIEmbed[] = [];
 		const parsedMessage = this.format(message || defaultMsg, member, t);
 		const content = message ? parsedMessage : embed ? undefined : parsedMessage;
 
-		if (embed) embeds.push(this.prepareEmbed(embed, member, t));
+		if (embed) embeds.push(await this.prepareEmbed(embed, member, t));
 
 		return [embeds, content];
 	}
@@ -58,10 +58,10 @@ export abstract class AutomationListener<T extends keyof ClientEvents = keyof Cl
 		});
 	}
 
-	private prepareEmbed(embedData: APIEmbed, member: GuildMember, t: TFunction): APIEmbed {
+	private async prepareEmbed(embedData: APIEmbed, member: GuildMember, t: TFunction): Promise<APIEmbed> {
 		const embed = new EmbedBuilder(embedData);
 
-		embed.setColor(resolveClientColor(member.guild)).setThumbnail(member.displayAvatarURL());
+		embed.setColor(await resolveClientColor(member.guild)).setThumbnail(member.displayAvatarURL());
 
 		const embedResolved = embed.toJSON();
 

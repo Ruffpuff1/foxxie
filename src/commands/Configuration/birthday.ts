@@ -35,7 +35,7 @@ export class UserCommand extends FoxxieSubcommand {
 		const template = new EmbedBuilder()
 			.setAuthor({ name: `Upcoming birthdays in ${msg.guild.name}` })
 			.setThumbnail(msg.guild.iconURL()!)
-			.setColor(resolveClientColor(msg.guild))
+			.setColor(await resolveClientColor(msg))
 			.setFooter({ text: `${tasks.length} birthdays in ${msg.guild.name}` });
 
 		const display = new PaginatedMessage({ template });

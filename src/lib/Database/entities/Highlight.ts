@@ -1,7 +1,7 @@
 import { HighlightTypeEnum } from '#lib/Container/Workers/types';
 import { Column, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 
-export class Highlight<T extends HighlightTypeEnum> {
+export class Highlight<T extends HighlightTypeEnum = HighlightTypeEnum> {
 	@ObjectIdColumn()
 	public _id!: string;
 

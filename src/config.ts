@@ -1,8 +1,8 @@
 import { getHandler } from '#languages';
 import { readSettings } from '#lib/Database/settings/functions';
-import { LanguageKeys } from '#lib/i18n';
-import { CustomGet } from '#lib/types';
-import { emojis, LanguageFormatters, rootFolder } from '#utils/constants';
+import { LanguageKeys, SupportedLanguages } from '#lib/i18n';
+import { CustomGet, EnvKeys } from '#lib/types';
+import { Emojis, emojis, LanguageFormatters, rootFolder, Urls } from '#utils/constants';
 import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginatedMessageEmbedFields';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { container, LogLevel } from '@sapphire/framework';
@@ -23,15 +23,17 @@ import {
 	GuildExplicitContentFilter,
 	GuildVerificationLevel,
 	inlineCode,
+	italic,
 	LocaleString,
 	Partials,
+	PresenceUpdateStatus,
 	time,
 	TimestampStyles,
 	User,
 	userMention,
 	WebhookClientData
 } from 'discord.js';
-import { getFixedT, InterpolationOptions } from 'i18next';
+import i18next, { getFixedT, InterpolationOptions } from 'i18next';
 import { join } from 'path';
 
 setup(join(rootFolder, '.env'));
@@ -91,14 +93,14 @@ function parseWebhookError(): WebhookClientData | null {
 
 function parseInternationalizationDefaultVariables() {
 	return {
-		SUCCESS: emojis.success,
-		ERROR: emojis.error,
-		LOADING: emojis.loading,
+		SUCCESS: Emojis.Success,
+		ERROR: Emojis.Error,
+		LOADING: Emojis.Loading,
 		APPROVED: emojis.perms.granted,
 		UNSPECIFIED: emojis.perms.notSpecified,
 		CLIENT_ID: process.env.CLIENT_ID!,
-		TCS: 'https://tcs.reese.gay',
-		SUPPORT: 'https://derricknuno.com'
+		TCS: Urls.TheCornerStore,
+		SUPPORT: Urls.Support
 	};
 }
 
@@ -155,6 +157,8 @@ export function channelList(value: Collection<string, GuildChannel>, t: TFunctio
 }
 
 function parseInternationalizationFormatters(): I18nextFormatter[] {
+	const { t } = i18next;
+
 	return [
 		{
 			name: 'and',
@@ -284,21 +288,21 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 			format: (value, lng) => channelList(value, getFixedT(lng!))
 		},
 		{
-			name: 'contentfilter',
-			format: (value: GuildExplicitContentFilter, lng) => getFixedT(lng!)(LanguageKeys.Guilds.ContentFilters.FilterArray[value])
-		},
-
-		{
 			name: 'dateFormat',
 			format: (value) => formatLongDate(getDurationValue(value))
 		},
 		{
-			name: 'bold',
+			name: 'ordinal',
+			format: (_, lng) => getHandler(lng as LocaleString).name
+		},
+		{
+			name: LanguageFormatters.Bold,
 			format: (value) => bold(value)
 		},
 		{
-			name: 'ordinal',
-			format: (_, lng) => getHandler(lng as LocaleString).name
+			name: LanguageFormatters.ExplicitContentFilter,
+			format: (value, lng, options) =>
+				t(`guilds/contentFilters:explicitContentFilter${GuildExplicitContentFilter[value]}`, { lng, ...options }) as string
 		},
 		{
 			name: LanguageFormatters.DurationString,
@@ -307,6 +311,10 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 				const precision = (options?.precision as number) ?? 2;
 				return formatter.format(value, precision);
 			}
+		},
+		{
+			name: LanguageFormatters.Italic,
+			format: (value) => italic(value)
 		}
 	];
 }
@@ -321,7 +329,7 @@ function parseI18nOptions(): InternationalizationOptions {
 		formatters: parseInternationalizationFormatters(),
 		defaultLanguageDirectory: LANGUAGE_ROOT,
 		fetchLanguage: async ({ guild }) => {
-			if (!guild) return 'en-US';
+			if (!guild) return SupportedLanguages.EnglishUnitedStates;
 			return (await readSettings(guild)).language;
 		},
 		i18next: (_: string[], languages: string[]) => ({
@@ -331,14 +339,14 @@ function parseI18nOptions(): InternationalizationOptions {
 			returnEmptyString: false,
 			returnNull: false,
 			load: 'all',
-			lng: 'en-US',
+			lng: SupportedLanguages.EnglishUnitedStates,
 			fallbackLng: {
-				'es-419': ['es-ES', 'en-US'], // Latin America Spanish falls back to Spain Spanish
-				default: ['en-US']
+				[SupportedLanguages.SpanishLatinAmerica]: ['es-ES', SupportedLanguages.EnglishUnitedStates], // Latin America Spanish falls back to Spain Spanish
+				default: [SupportedLanguages.EnglishUnitedStates]
 			},
 			defaultNS: 'globals',
 			interpolation: parseInternationalizationInterpolation(),
-			overloadTranslationOptionHandler: (args: string[]) => ({ defaultValue: args[1] ?? 'globals:default' }),
+			overloadTranslationOptionHandler: (args: string[]) => ({ defaultValue: args[1] ?? LanguageKeys.Globals.DefaultT }),
 			initImmediate: false,
 			debug: false
 		})
@@ -346,10 +354,10 @@ function parseI18nOptions(): InternationalizationOptions {
 }
 
 export const clientOptions: ClientOptions = {
-	defaultPrefix: envParseString('CLIENT_PREFIX'),
+	defaultPrefix: envParseString(EnvKeys.ClientPrefix),
 	presence: {
 		activities: parsePresenceActivity(),
-		status: process.env.NODE_ENV === 'development' ? 'invisible' : 'idle'
+		status: process.env.NODE_ENV === 'development' ? PresenceUpdateStatus.Invisible : PresenceUpdateStatus.Idle
 	},
 	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 	regexPrefix: parseRegexPrefix(),
@@ -361,7 +369,7 @@ export const clientOptions: ClientOptions = {
 	caseInsensitivePrefixes: true,
 	allowedMentions: { parse: ['users'] },
 	logger: {
-		level: cast<LogLevel>(envParseInteger('LOG_LEVEL'))
+		level: cast<LogLevel>(envParseInteger(EnvKeys.LogLevel))
 	},
 	intents: [
 		GatewayIntentBits.Guilds,

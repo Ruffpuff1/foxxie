@@ -1,11 +1,16 @@
 import { readSettings } from '#lib/Database/settings/functions';
+import { EventArgs, FoxxieEvents } from '#lib/types';
 import { getModeration } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
+import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
-import type { GuildBan } from 'discord.js';
 
+@ApplyOptions<Listener.Options>(({ container }) => ({
+	enabled: container.client.enabledProdOnlyEvent(),
+	event: FoxxieEvents.GuildBanRemove
+}))
 export class UserListener extends Listener {
-	public async run({ guild, user }: GuildBan) {
+	public async run(...[{ guild, user }]: EventArgs<FoxxieEvents.GuildBanRemove>) {
 		if (!guild.available) return;
 
 		const settings = await readSettings(guild);

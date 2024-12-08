@@ -1,7 +1,7 @@
 import { Emojis } from '#utils/constants';
 import { userMention } from '@discordjs/builders';
 import { BitField } from '@sapphire/bitfield';
-import { UserFlags, type Snowflake } from 'discord.js';
+import { GuildMember, Message, User, UserFlags, type Snowflake } from 'discord.js';
 
 const ExtendedUserFlagBits = new BitField({
 	Quarantined: getExtendedBits(UserFlags.Quarantined),
@@ -32,4 +32,16 @@ export function getUserMentionWithFlagsString(bitfield: number, userId: Snowflak
 
 function getExtendedBits(bitfield: number) {
 	return (bitfield / (1 << 30)) | 0;
+}
+
+const disboardId = '302050872383242240';
+/**
+ * Determine weather a User, GuildMember or Message is from the Disboard.org Bot.
+ * @param input The input to check.
+ * @returns boolean
+ * @reference https://disboard.org/
+ */
+export function isDisboard(input: Message | User | GuildMember): boolean {
+	if (input instanceof Message) return input.author.id === disboardId;
+	return input.id === disboardId;
 }

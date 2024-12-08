@@ -4,7 +4,14 @@ import type { PickByValue } from '@sapphire/utilities';
 import { Collection, type GuildResolvable, type Snowflake } from 'discord.js';
 import { guilds } from '@prisma/client';
 import { maybeParseNumber } from '#utils/common';
-import { deleteSettingsContext, getDefaultGuildSettings, getSettingsContext, GuildData, ReadonlyGuildData, updateSettingsContext } from '#lib/database';
+import {
+	deleteSettingsContext,
+	getDefaultGuildSettings,
+	getSettingsContext,
+	GuildData,
+	ReadonlyGuildData,
+	updateSettingsContext
+} from '#lib/database';
 
 const cache = new Collection<string, GuildData>();
 const queue = new Collection<string, Promise<GuildData>>();

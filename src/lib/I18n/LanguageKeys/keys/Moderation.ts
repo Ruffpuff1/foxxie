@@ -1,4 +1,4 @@
-import { T, type RoleLanguageKeyData, FT } from '#lib/types';
+import { T, FT } from '#lib/types';
 
 // Action status
 export const ActionIsActive = T('moderation:actionIsActive');
@@ -21,34 +21,6 @@ export const ActionTargetSelf = T('moderation:actionTargetSelf');
 export const ActionTargetGuildOwner = T('moderation:actionTargetGuildOwner');
 export const ActionTargetFoxxie = T('moderation:actionTargetFoxxie');
 export const Ban = T('moderation:ban');
-export const Dm = FT<
-	{
-		guild: string;
-		tag: string | null;
-		duration: number | null;
-	},
-	{
-		Ban: string;
-		Kick: string;
-		Lock: never;
-		Mute: string;
-		Nickname: string;
-		Purge: never;
-		RestrictEmbed: string;
-		SoftBan: string;
-		TempBan: string;
-		TempMute: string;
-		TempNickname: string;
-		TempRestrictEmbed: string;
-		Unban: string;
-		Unlock: never;
-		Unmute: string;
-		Unnickname: string;
-		Unrestrictembed: string;
-		Unwarn: string;
-		Warn: string;
-	}
->('moderation:dm');
 export const FillReason = FT<{ command: string }>('moderation:fillReason');
 export const Kick = T('moderation:kick');
 export const Lock = T('moderation:lock');
@@ -58,8 +30,6 @@ export const Purge = T('moderation:purge');
 export const Nickname = T('moderation:nickname');
 export const RestrictEmbed = T('moderation:restrictEmbed');
 export const RestrictLowLevel = T('moderation:restrictLowLevel');
-export const RoleSetupEmbedRestrict = FT<{ channels: number; permissions: string[] }, RoleLanguageKeyData>('moderation:roleSetupEmbedRestrict');
-export const RoleSetupMute = FT<{ channels: number; permissions: string[] }, RoleLanguageKeyData>('moderation:roleSetupMute');
 export const SoftBan = T('moderation:softBan');
 export const TempBan = T('moderation:tempBan');
 export const TempMute = T('moderation:tempMute');

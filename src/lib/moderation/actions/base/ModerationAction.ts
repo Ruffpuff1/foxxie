@@ -4,7 +4,8 @@ import type { ModerationManager } from '#lib/moderation/managers/ModerationManag
 import type { TypedT } from '#lib/types';
 import { TypeMetadata, type TypeVariation } from '#lib/util/moderationConstants';
 import { seconds, years } from '#utils/common';
-import { getCodeStyle, getLogPrefix, getModeration } from '#utils/functions';
+import { getModeration } from '#utils/functions/guild';
+import { getCodeStyle, getLogPrefix } from '#utils/functions/pieces';
 import { getFullEmbedAuthor } from '#utils/util';
 import { EmbedBuilder } from '@discordjs/builders';
 import { container } from '@sapphire/framework';

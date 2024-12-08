@@ -1,12 +1,14 @@
 import { ReadonlyGuildData } from '#lib/database';
+import { SupportedLanguages } from '#lib/i18n';
+import { EnvKeys } from '#lib/types';
 import { envParseString } from '@skyra/env-utilities';
 
 let cachedDefaultGuildSettings: DefaultGuildData | null = null;
 
 export function getDefaultGuildSettings() {
 	cachedDefaultGuildSettings ??= Object.assign(Object.create(null), {
-		prefix: envParseString('CLIENT_PREFIX'),
-		language: 'en-US',
+		prefix: envParseString(EnvKeys.ClientPrefix),
+		language: SupportedLanguages.EnglishUnitedStates,
 		messageCount: 0,
 		disableNaturalPrefix: false,
 		disabledCommands: [],

@@ -14,7 +14,7 @@ import { Colors, type GatewayGuildMemberRemoveDispatchData, type Guild, type Gui
 
 const Root = LanguageKeys.Listeners.Guilds.Members;
 
-@ApplyOptions<Listener.Options>({ event: FoxxieEvents.RawMemberRemove })
+@ApplyOptions<Listener.Options>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: FoxxieEvents.RawMemberRemove }))
 export class UserListener extends Listener {
 	public async run(guild: Guild, member: GuildMember | null, { user }: GatewayGuildMemberRemoveDispatchData) {
 		const settings = await readSettings(guild);

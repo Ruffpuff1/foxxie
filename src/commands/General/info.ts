@@ -39,13 +39,13 @@ export class UserCommand extends FoxxieSubcommand {
 
 		const authorString = `${user.tag} [${user.id}]`;
 		let member: GuildMember | null = null;
-		const color = resolveClientColor(message.guild);
+		const color = await resolveClientColor(message);
 		const titles = args.t(LanguageKeys.Commands.General.InfoUserTitles);
 
 		if (message.guild) member = await resolveToNull(message.guild.members.fetch(user.id));
 
 		const template = new EmbedBuilder() //
-			.setColor(member ? member.displayColor || color : color)
+			.setColor(color)
 			.setAuthor({
 				name: authorString,
 				iconURL: user.displayAvatarURL()
