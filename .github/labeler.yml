@@ -1,0 +1,18 @@
+'Bot: Foxxie':
+  - src/**/*
+
+'I18n: en-US':
+  - src/languages/en-US/*
+  - src/languages/en-US/**/*
+
+'I18n: es-419':
+  - src/languages/es-419/*
+  - src/languages/es-419/**/*
+
+'Meta: Documentation':
+  - README.md
+  - LICENSE
+
+'Meta: Github':
+  - .github/*
+  - .github/**/*
