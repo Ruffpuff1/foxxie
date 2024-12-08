@@ -1,5 +1,5 @@
 {
-	"DISABLED": "No escanear ningún mensaje",
-	"MEMBERS_WITHOUT_ROLES": "Escanear mensajes de miembros sin rol",
-	"ALL_MEMBERS": "Escanear mensajes por todos los miembros"
+	"explicitContentFilterDisabled": "No escanear ningún mensaje",
+	"explicitContentFilterMembersWithoutRoles": "Escanear mensajes de miembros sin rol",
+	"explicitContentFilterAllMembers": "Escanear mensajes por todos los miembros"
 }
