@@ -13,7 +13,7 @@ import type { GuildMember } from 'discord.js';
 
 const Root = LanguageKeys.Listeners.Guilds.Members;
 
-@ApplyOptions<Listener.Options>({ event: FoxxieEvents.NotMutedMemberAdd })
+@ApplyOptions<Listener.Options>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: FoxxieEvents.NotMutedMemberAdd }))
 export class UserListener extends Listener {
 	public async run(member: GuildMember) {
 		const settings = await readSettings(member);

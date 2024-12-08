@@ -1,5 +1,6 @@
 import { compressPokemonCustomIdMetadata, fuzzyPokemonToSelectOption, PokemonSpriteTypes } from '#lib/Container/Api/Pokemon/index';
 import { SubcommandKeys } from '#lib/Container/Stores/Commands/Keys/index';
+import { IdHints } from '#lib/discord';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
@@ -16,6 +17,7 @@ import {
 	APIApplicationCommandOptionChoice,
 	APISelectMenuOption,
 	Awaitable,
+	InteractionContextType,
 	Locale,
 	Message,
 	PermissionFlagsBits,
@@ -47,6 +49,7 @@ export class UserCommand extends FoxxieSubcommand {
 				(builder) =>
 					builder //
 						.setName(this.name)
+						.setContexts(InteractionContextType.Guild)
 						.setDescription('desc')
 						.setDescriptionLocalizations({
 							[Locale.EnglishUS]: this.container.utilities.format.t.englishUS(LanguageKeys.Commands.Websearch.PokemonDescription)
@@ -80,7 +83,9 @@ export class UserCommand extends FoxxieSubcommand {
 										.setChoices(...this.spriteChoices)
 								)
 						),
-				{ idHints: ['1311971505709649960'] }
+				{
+					idHints: [IdHints.Nightly.Websearch.Pokemon]
+				}
 			);
 	}
 

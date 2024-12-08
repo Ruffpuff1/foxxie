@@ -4,15 +4,17 @@ import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
 import { LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
 import { Enumerable } from '@sapphire/decorators';
 import { container, SapphireClient } from '@sapphire/framework';
-import { WebhookClient } from 'discord.js';
+import { Message, WebhookClient } from 'discord.js';
 import { WorkerService } from './Container/Workers/WorkerService.js';
 import { ScheduleManager, TaskStore } from '#lib/schedule';
 import { ApiService } from './Container/Api/ApiService.js';
 import { SettingsService } from './Container/Services/SettingsService.js';
-import { SerializerStore } from '#lib/database';
+import { readSettings, SerializerStore } from '#lib/database';
 import { envParseBoolean, envParseInteger } from '@skyra/env-utilities';
 import { UtilityService } from './Container/Utility/UtilityService.js';
 import { magentaBright } from 'colorette';
+import { isGuildMessage } from '#utils/common';
+import { InternationalizationContext } from '@sapphire/plugin-i18next';
 
 export default class FoxxieClient extends SapphireClient {
 	@Enumerable(false)
@@ -52,6 +54,7 @@ export default class FoxxieClient extends SapphireClient {
 	}
 
 	public override async login(): Promise<string> {
+		await container.workers.start();
 		container.utilities = new UtilityService();
 
 		const { shardCount } = clientOptions;
@@ -64,11 +67,11 @@ export default class FoxxieClient extends SapphireClient {
 
 	public override destroy(): Promise<void> {
 		this.guildMemberFetchQueue.destroy();
+		container.schedule.destroy();
 		return super.destroy();
 	}
 
 	public override emit(event: string, ...args: any[]) {
-		// console.log(event);
 		return super.emit(event, ...args);
 	}
 
@@ -83,6 +86,31 @@ export default class FoxxieClient extends SapphireClient {
 
 		return true;
 	}
+
+	/**
+	 * Retrieves the prefix for the guild.
+	 * @param message The message that gives context.
+	 */
+	public override fetchPrefix = async (message: Message) => {
+		if (isGuildMessage(message)) {
+			if (this.development) {
+				if (this.developmentRecoveryMode) {
+					return (await readSettings(message.guild)).prefix;
+				}
+				return [process.env.CLIENT_PREFIX] as readonly string[];
+			}
+			return (await readSettings(message.guild)).prefix;
+		}
+		return [process.env.CLIENT_PREFIX] as readonly string[];
+	};
+
+	/**
+	 * Retrieves the language key for the message.
+	 * @param message The message that gives context.
+	 */
+	public fetchLanguage = async (message: InternationalizationContext) => {
+		return message.guild ? (await readSettings(message.guild)).language : 'en-US';
+	};
 
 	public override developmentRecoveryMode = false;
 }

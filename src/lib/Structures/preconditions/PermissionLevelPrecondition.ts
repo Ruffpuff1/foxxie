@@ -32,7 +32,7 @@ export abstract class PermissionLevelPrecondition extends Precondition {
 		if (clientOwners.includes(message.author.id)) return this.ok();
 
 		if (this.shouldRun(message.member, cast<FoxxieCommand>(command))) {
-			const allowed = true; // await this.runPreconditions(message.member, cast<FoxxieCommand>(command));
+			const allowed = await this.runPreconditions(message.member, cast<FoxxieCommand>(command));
 			if (allowed) return this.ok();
 			if (allowed === false)
 				return this.error({

@@ -226,7 +226,8 @@ export function getConfiguration() {
 		},
 		messagesModerationDm: {
 			type: 'boolean',
-			name: 'messages.moderation-dm'
+			name: 'messages.moderation-dm',
+			description: LanguageKeys.Settings.ModerationDm
 		},
 		messagesModerationReasonDisplay: {
 			type: 'boolean',
@@ -277,7 +278,8 @@ export function getConfiguration() {
 		},
 		rolesPersistEnabled: {
 			type: 'boolean',
-			name: 'roles.persist-roles-enabled'
+			name: 'roles.persist-roles-enabled',
+			description: LanguageKeys.Settings.RolesPersistEnabled
 		},
 		reactionRoles: {
 			type: 'notAllowed',
@@ -293,12 +295,14 @@ export function getConfiguration() {
 		rolesInitialHumans: {
 			type: 'role',
 			array: true,
-			name: 'roles.initial-humans'
+			name: 'roles.initial-humans',
+			description: LanguageKeys.Settings.Autoroles
 		},
 		rolesInitialBots: {
 			type: 'role',
 			array: true,
-			name: 'roles.initial-bots'
+			name: 'roles.initial-bots',
+			description: LanguageKeys.Settings.Botroles
 		},
 		rolesModerator: {
 			type: 'role',
@@ -320,7 +324,8 @@ export function getConfiguration() {
 		},
 		rolesRestrictedEmbed: {
 			type: 'role',
-			name: 'roles.restricted-embed'
+			name: 'roles.restricted-embed',
+			description: LanguageKeys.Settings.RolesEmbedRestrict
 		},
 		rolesRestrictedEmoji: {
 			type: 'role',

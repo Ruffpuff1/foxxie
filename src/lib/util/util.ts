@@ -21,6 +21,7 @@ import { ScheduleEntry } from '#lib/schedule';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
 import { readSettings } from '#lib/database';
 import { BrandingColors } from './constants.js';
+import { resolveToNull } from '@ruffpuff/utilities';
 
 /**
  * Checks whether or not the user uses the new username change, defined by the
@@ -192,9 +193,10 @@ export function getImage(message: Message): string | null {
 	return attachment ? attachment.proxyURL || attachment.url : null;
 }
 
-export function resolveClientColor(resolveable: GuildResolvable | Message | null, color?: ColorResolvable | number): ColorResolvable {
-	if (color) return color;
-
+export async function resolveClientColor(
+	resolveable: GuildResolvable | Message | null | ChatInputCommandInteraction,
+	color?: ColorResolvable | number
+): Promise<ColorResolvable> {
 	if (!resolveable) return BrandingColors.Primary;
 
 	if (resolveable instanceof Message) {
@@ -212,10 +214,24 @@ export function resolveClientColor(resolveable: GuildResolvable | Message | null
 		} else {
 			return BrandingColors.Primary;
 		}
-	}
+	} else if (resolveable instanceof ChatInputCommandInteraction) {
+		if (resolveable.inGuild()) {
+			const fetchedMember = await resolveToNull(resolveable.guild!.members.fetch(resolveable.user.id!));
+			if (fetchedMember) {
+				const memberColor = fetchedMember.roles.highest.color;
+				if (memberColor) return memberColor;
+			} else {
+				const { maybeMe } = container.utilities.guild(resolveable.guild!);
+				if (!maybeMe) return color || BrandingColors.Primary;
 
-	const { maybeMe } = container.utilities.guild(resolveable instanceof Message ? resolveable.guild : resolveable);
-	if (!maybeMe) return BrandingColors.Primary;
+				return maybeMe.displayColor;
+			}
+		}
+	}
+	const { maybeMe } = container.utilities.guild(
+		resolveable instanceof Message || resolveable instanceof ChatInputCommandInteraction ? resolveable.guild! : resolveable
+	);
+	if (!maybeMe) return color || BrandingColors.Primary;
 
 	return maybeMe.displayColor;
 }

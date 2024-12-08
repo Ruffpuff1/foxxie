@@ -18,9 +18,9 @@ export class Tag {
 		Object.assign(this, data);
 	}
 
-	public buildEmbed(message: Message) {
+	public async buildEmbed(message: Message) {
 		return new EmbedBuilder()
 			.setDescription(this.content)
-			.setColor(resolveClientColor(message.guild, this.color || message.member?.displayColor));
+			.setColor(await resolveClientColor(message.guild, this.color || message.member?.displayColor));
 	}
 }

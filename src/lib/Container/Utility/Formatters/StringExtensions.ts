@@ -1,4 +1,4 @@
-import { emojis } from '#utils/constants';
+import { Emojis } from '#utils/constants';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class StringFormattersService {
@@ -30,7 +30,7 @@ export class StringFormattersService {
 	public getDiscogsFormatEmote(format: string): string | null {
 		switch (format) {
 			case 'Vinyl':
-				return emojis.vinyl;
+				return Emojis.Vinyl;
 			case 'CD':
 				return '💿';
 			case 'Casette':

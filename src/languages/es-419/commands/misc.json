@@ -10,49 +10,28 @@
 		"subcommands": [
 			{
 				"command": "",
-				"description": [
-					""
-				],
-				"examples": [
-					"",
-					""
-				]
+				"description": [""],
+				"examples": ["", ""]
 			},
 			{
 				"command": "mostrar",
-				"description": [
-					""
-				],
-				"examples": [
-					""
-				]
+				"description": [""],
+				"examples": [""]
 			},
 			{
 				"command": "editar",
-				"description": [
-					""
-				],
-				"examples": [
-					""
-				]
+				"description": [""],
+				"examples": [""]
 			},
 			{
 				"command": "",
-				"description": [
-					""
-				],
-				"examples": [
-					""
-				]
+				"description": [""],
+				"examples": [""]
 			},
 			{
 				"command": "lista",
-				"description": [
-					""
-				],
-				"examples": [
-					""
-				]
+				"description": [""],
+				"examples": [""]
 			}
 		]
 	},
