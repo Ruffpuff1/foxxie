@@ -2,6 +2,10 @@
 	"aboutDescription": "",
 	"aboutSummary": "",
 	"avatarDescription": "",
+	"helpData": {
+		"footer": "",
+		"title": ""
+	},
 	"helpDescription": "Ver todos mis comandos, o el menú de ayuda para un comando específico.",
 	"helpMenu": "Comandos de {{name}}",
 	"helpTitles": {
