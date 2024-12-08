@@ -1,5 +1,11 @@
 {
-	"abortOptions": ["parar", "cancelar", "abortar", "fin", "hecho"],
+	"abortOptions": [
+		"parar",
+		"cancelar",
+		"abortar",
+		"fin",
+		"hecho"
+	],
 	"and": "",
 	"any": "alguno",
 	"case": "Caso",
@@ -32,7 +38,11 @@
 	"numberOrdinal": "",
 	"other": "otro",
 	"remaining": "",
-	"resetOptions": ["ninguno", "reajustar", "por defecto"],
+	"resetOptions": [
+		"ninguno",
+		"reajustar",
+		"por defecto"
+	],
 	"seconds": "",
 	"seconds_other": "",
 	"time": "",
