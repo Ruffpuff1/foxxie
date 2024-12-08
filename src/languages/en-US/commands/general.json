@@ -2,6 +2,10 @@
 	"aboutDescription": "View basic information about me.",
 	"aboutSummary": "{{version}} is a bot created for [The Corner Store]({{TCS}}), with advanced moderation, utilities, and configuration. Foxxie is made to best support community servers and everything they may need to foster a healthy enviroment.\n\nHe's built on top of [Sapphire Framework](https://sapphirejs.dev/), a \"plug-and-play\" object-oriented-framework made for the [Discord.js library](https://discord.js.org/).\n\nCreated **{{created, fulldate}}** a whole **{{created, duration}}**. Right now he's taking care of about **{{userCount, number}} users**, with more every day!\n\nTo learn more about Foxxie and how he may process your data you can refer to our [privacy policy]({{privacy}}).",
 	"avatarDescription": "Get an image of a user's avatar.",
+	"helpData": {
+		"footer": "Command help for {{footerName}}",
+		"title": "{{titleDescription}}"
+	},
 	"helpDescription": "View all of my commands, or the help menu for a specific command.",
 	"helpMenu": "{{name}}'s commands",
 	"helpTitles": {
