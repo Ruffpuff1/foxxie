@@ -6,13 +6,23 @@
 		"subcommands": [
 			{
 				"command": "lista",
-				"description": [""],
-				"examples": ["", ""]
+				"description": [
+					""
+				],
+				"examples": [
+					"",
+					""
+				]
 			},
 			{
 				"command": "",
-				"description": [""],
-				"examples": ["", ""]
+				"description": [
+					""
+				],
+				"examples": [
+					"",
+					""
+				]
 			}
 		]
 	},
@@ -47,8 +57,17 @@
 		"subcommands": [
 			{
 				"command": "",
-				"description": ["", "", "", ""],
-				"examples": ["", "", ""]
+				"description": [
+					"",
+					"",
+					"",
+					""
+				],
+				"examples": [
+					"",
+					"",
+					""
+				]
 			}
 		]
 	},
