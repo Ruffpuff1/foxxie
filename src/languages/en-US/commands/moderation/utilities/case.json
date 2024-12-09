@@ -45,7 +45,7 @@
 	"listDetailsFooterCases_noFilter": "Moderation cases in {{guild}}.",
 	"listDetailsFooterPendingCases": "Pending moderation cases {{cases}} in {{guild}}.",
 	"listDetailsFooterPendingCases_noFilter": "Moderation cases in {{guild}}.",
-	"listDetailsLocation": "{{emoji}} **Location:** {{channel}} {{id}}",
+	"listDetailsLocation": "{{emoji}} **Location:** {{channel}} ({{id}})",
 	"listOverviewFooter": "This server has {{warnings}}, {{mutes}}, {{timeouts}}, {{kicks}}, and {{bans}}",
 	"listOverviewFooterUser": "This user has {{warnings}}, {{mutes}}, {{timeouts}}, {{kicks}}, and {{bans}}",
 	"listOverviewFooterWarning_one": "{{count}} warning",

@@ -5,7 +5,7 @@ export const enum TypeVariation {
 	Prune, // 3
 	Softban, // 4
 	Warning, // 5
-	Lock, // 7
+	Lock = 7, // 7
 	VoiceMute, // 8
 	VoiceDeafen, // 9
 	VoiceDisconnect, // 10

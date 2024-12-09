@@ -62,7 +62,6 @@ export class UserTask extends Task<Schedules.Reminder> {
 	}
 
 	private handleRepeat(data: ScheduleEntry.TaskData[Schedules.Reminder]): PartialResponseValue {
-		console.log(data);
 		return { type: ResponseType.Delay, value: data.repeat! };
 	}
 

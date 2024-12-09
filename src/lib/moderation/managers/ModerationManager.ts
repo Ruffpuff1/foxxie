@@ -360,7 +360,6 @@ export class ModerationManager {
 	async #performInsert(entry: ModerationManager.Entry) {
 		container.client.emit(FoxxieEvents.ModerationEntryAdd, entry);
 		await this.#sendMessage(entry);
-		console.log(entry);
 
 		await this.db.moderation.create({
 			data: {

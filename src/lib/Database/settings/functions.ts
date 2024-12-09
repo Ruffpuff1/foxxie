@@ -50,6 +50,10 @@ export function readSettingsPermissionNodes(settings: ReadonlyGuildData) {
 	return getSettingsContext(settings).permissionNodes;
 }
 
+export function readSettingsHighlights(settings: ReadonlyGuildData) {
+	return getSettingsContext(settings).highlights;
+}
+
 export function readSettingsWordFilterRegExp(settings: ReadonlyGuildData) {
 	return getSettingsContext(settings).wordFilterRegExp;
 }

@@ -3,11 +3,11 @@ import { cast } from '@sapphire/utilities';
 
 export type SerializedEmoji = string & { __TYPE__: 'SerializedEmoji' };
 
-export const defaultStarboardEmojis = ['%E2%AD%90', encodeURIComponent('🌟'), encodeURIComponent('✨'), encodeURIComponent('💫')];
+export const defaultStarboardEmojis = ['⭐', '🌟', '✨', '💫'];
 
-export function isStarboardEmoji(emojis: string[], reacted: string): boolean {
+export function isStarboardEmoji(emojis: readonly string[], reacted: string): boolean {
 	const combinedEmojis = [...emojis, ...defaultStarboardEmojis];
-	if (combinedEmojis.includes(reacted)) return true;
+	if (combinedEmojis.includes(reacted.startsWith('%') ? decodeURIComponent(reacted) : reacted)) return true;
 	return false;
 }
 

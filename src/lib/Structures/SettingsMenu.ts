@@ -202,7 +202,7 @@ export class SettingsMenu {
 		if (reaction.emoji.name === EMOJIS.STOP) {
 			this.llrc?.end();
 		} else if (reaction.emoji.name === EMOJIS.BACK) {
-			floatPromise(this._removeReactionFromUser(EMOJIS.BACK, reaction.userId));
+			await floatPromise(this._removeReactionFromUser(EMOJIS.BACK, reaction.userId));
 			if (this.schema.parent) {
 				this.schema = this.schema.parent;
 				this.oldValue = undefined;

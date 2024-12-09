@@ -3,9 +3,7 @@ import { SchemaGroup } from '#lib/Database/settings/schema/SchemaGroup';
 import { LanguageKeys } from '#lib/i18n';
 import { years } from '#utils/common';
 import { objectEntries } from '@sapphire/utilities';
-import { Collection } from 'discord.js';
-import { EnvKeys } from '#lib/types';
-import { envParseString } from '@skyra/env-utilities';
+import { APIApplicationCommandOptionChoice, Collection } from 'discord.js';
 
 export type SchemaDataKey = Exclude<GuildDataKey, 'id' | 'messageCount' | 'starboardEmojis' | 'tags' | 'words'>;
 
@@ -30,7 +28,7 @@ export function getConfiguration() {
 			description: LanguageKeys.Settings.Prefix,
 			minimum: 1,
 			maximum: 10,
-			default: envParseString(EnvKeys.ClientPrefix)
+			default: 'd.'
 		},
 		language: {
 			type: 'language',
@@ -218,6 +216,11 @@ export function getConfiguration() {
 			type: 'boolean',
 			name: 'events.mute-remove',
 			description: LanguageKeys.Settings.EventsMuteRemove
+		},
+		highlights: {
+			type: 'notAllowed',
+			name: 'highlights',
+			dashboardOnly: true
 		},
 		messagesIgnoreChannels: {
 			type: 'guildTextChannel',
@@ -865,6 +868,37 @@ function makeKey(property: SchemaDataKey, options: ConfigurableKeyOptions) {
 
 	return value;
 }
+
+export const stringConfigurableKeys = () => getConfigurableKeys().map((key) => key.name);
+
+export const stringConfigurableKeyGroupChoices: () => APIApplicationCommandOptionChoice<string>[] = () =>
+	[
+		...stringConfigurableKeys(),
+		...[
+			'modules',
+			'modules.permissions',
+			'modules.birthday',
+			'modules.selfmod',
+			'modules.selfmod.attachments',
+			'modules.selfmod.capitals',
+			'modules.selfmod.links',
+			'modules.selfmod.messages',
+			'modules.selfmod.newlines',
+			'modules.selfmod.invites',
+			'modules.selfmod.filter',
+			'modules.selfmod.reactions',
+			'modules.starboard',
+			'channels',
+			'channels.logs',
+			'channels.ignore',
+			'events',
+			'messages',
+			'messages.auto-delete',
+			'roles'
+		]
+	]
+		.sort((a, b) => a.localeCompare(b))
+		.map((k) => ({ name: k, value: k }));
 
 interface ConfigurableKeyOptions
 	extends Omit<

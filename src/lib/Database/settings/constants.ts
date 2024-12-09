@@ -156,6 +156,7 @@ export function getDefaultGuildSettings() {
 		starboardEmojis: ['⭐️', '✨'],
 		starboardMinimum: 3,
 		starboardSelfStar: true,
+		highlights: [],
 		tags: [],
 		words: []
 	} as const satisfies DefaultGuildData);

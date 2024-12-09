@@ -8,7 +8,14 @@ import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { fetchT, resolveKey, type TOptions } from '@sapphire/plugin-i18next';
 import { cast } from '@sapphire/utilities';
-import { GuildTextBasedChannel, RESTJSONErrorCodes, type Message, type MessageCreateOptions, type UserResolvable } from 'discord.js';
+import {
+	AutocompleteInteraction,
+	GuildTextBasedChannel,
+	RESTJSONErrorCodes,
+	type Message,
+	type MessageCreateOptions,
+	type UserResolvable
+} from 'discord.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 const messageCommands = new WeakMap<Message, FoxxieCommand>();
@@ -215,12 +222,17 @@ export async function promptConfirmation(message: NonGroupMessage, options: stri
 }
 
 export async function promptForMessage(
-	message: NonGroupMessage,
+	message: NonGroupMessage | AutocompleteInteraction,
 	sendOptions: string | MessageCreateOptions,
 	time = minutes(1)
 ): Promise<string | null> {
-	const response = await message.channel.send(sendOptions);
-	const responses = await message.channel.awaitMessages({ filter: (msg) => msg.author === message.author, time, max: 1 });
+	let channel = message.channel;
+	const user = message instanceof AutocompleteInteraction ? message.user : message.author;
+
+	if (!channel || !channel.isSendable()) return null;
+
+	const response = await channel.send(sendOptions);
+	const responses = await channel.awaitMessages({ filter: (msg) => msg.author.id === user.id, time, max: 1 });
 	floatPromise(deleteMessage(response));
 
 	return responses.size === 0 ? null : responses.first()!.content;

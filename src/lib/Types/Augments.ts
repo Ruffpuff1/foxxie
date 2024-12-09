@@ -1,6 +1,6 @@
 import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
 import { LLRCData, LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
-import { Awaitable, Snowflake, User } from 'discord.js';
+import { Awaitable, GatewayMessageReactionRemoveDispatch, Snowflake, User } from 'discord.js';
 import { PickByValue } from '@sapphire/utilities';
 import { TFunction } from '@sapphire/plugin-i18next';
 import { API } from '@discordjs/core/http-only';
@@ -22,11 +22,13 @@ import { FoxxieCommand } from '#lib/structures';
 import { RedisManager } from '#lib/Structures/managers/RedisManager';
 import { WorkerService } from '#lib/Container/Workers/WorkerService';
 import { MongoDB } from '#lib/Database/MongoDB';
+import { HighlightData } from '#lib/Database/Models/highlight';
 
 declare global {
 	namespace PrismaJson {
 		export type PermissionNodeEntries = PermissionsNode[];
 		export type RolesPersistEntries = StickyRole[];
+		export type HighlightEntries = HighlightData[];
 	}
 }
 
@@ -57,7 +59,7 @@ declare module 'discord.js' {
 		[FoxxieEvents.ModerationEntryAdd]: [entry: Readonly<ModerationEntry>];
 		[FoxxieEvents.ModerationEntryEdit]: [old: Readonly<ModerationEntry>, entry: Readonly<ModerationEntry>];
 		[FoxxieEvents.RawReactionAdd]: [data: LLRCData, emoji: SerializedEmoji];
-		[FoxxieEvents.RawReactionRemove]: [data: LLRCData, emoji: SerializedEmoji];
+		[FoxxieEvents.RawReactionRemove]: [channel: TextChannel, data: GatewayMessageReactionRemoveDispatch['d']];
 		[FoxxieEvents.StatsMemberCount]: [guild: Guild, t: TFunction];
 		[FoxxieEvents.StatsMessage]: [guildId: Snowflake, member: GuildMember];
 		[FoxxieEvents.SystemMessage]: [message: GuildMessage];

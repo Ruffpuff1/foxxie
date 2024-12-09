@@ -12,7 +12,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { TFunction } from '@sapphire/plugin-i18next';
 import { toTitleCase } from '@sapphire/utilities';
-import { EmbedBuilder, GuildMember, PermissionFlagsBits, User } from 'discord.js';
+import { bold, EmbedBuilder, GuildMember, PermissionFlagsBits, User } from 'discord.js';
 
 @ApplyOptions<FoxxieSubcommand.Options>({
 	aliases: ['i', 'notes', 'warnings'],
@@ -58,9 +58,18 @@ export class UserCommand extends FoxxieSubcommand {
 			const about: (string | null)[] = [args.t(LanguageKeys.Commands.General.InfoUserDiscordJoin, { created: user.createdAt })];
 			if (member) this.addMemberData(member, about, args, memberSettings.messageCount, guildSettings.messageCount);
 
+			const starCount = await this.container.prisma.starboard
+				.findMany({
+					where: {
+						guildId: message.guild.id,
+						userId: user.id
+					}
+				})
+				.then((stars) => stars.reduce((acc, i) => (acc += i.stars), 0));
+
 			embed.addFields([
 				{
-					name: titles.about,
+					name: `${titles.about}${starCount ? ` ${this.#getStarboardStatsEmoji(starCount)} ${bold(starCount.toLocaleString())}` : ''}`,
 					value: about.filter((a) => Boolean(a)).join('\n')
 				}
 			]);
@@ -135,5 +144,14 @@ export class UserCommand extends FoxxieSubcommand {
 			}),
 			value: notes.map((n) => n.display(t)).join('\n')
 		});
+	}
+
+	#getStarboardStatsEmoji(stars: number) {
+		if (stars < 20) return '⭐';
+		if (stars < 50) return '🌟';
+		if (stars < 100) return '💫';
+		if (stars < 250) return '✨';
+		if (stars < 500) return '🌠';
+		return '🌌';
 	}
 }

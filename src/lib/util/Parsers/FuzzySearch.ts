@@ -5,6 +5,7 @@ import { UserError } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { codeBlock } from '@sapphire/utilities';
 import { decodeUtf8, jaroWinkler } from '@skyra/jaro-winkler';
+import { AutocompleteInteraction } from 'discord.js';
 
 type FuzzySearchAccess<V> = (value: V) => string;
 type FuzzySearchFilter<V> = (value: V) => boolean;
@@ -20,7 +21,7 @@ export class FuzzySearch<K extends string, V> {
 		this.kFilter = filter;
 	}
 
-	public run(message: NonGroupMessage, query: string, threshold?: number) {
+	public run(message: NonGroupMessage | AutocompleteInteraction, query: string, threshold?: number) {
 		const lowerCaseQuery = query.toLowerCase();
 		const decodedLowerCaseQuery = decodeUtf8(lowerCaseQuery);
 		const results: [K, V, number][] = [];
@@ -75,7 +76,7 @@ export class FuzzySearch<K extends string, V> {
 		return this.select(message, sorted);
 	}
 
-	private async select(message: NonGroupMessage, results: [K, V, number][]) {
+	private async select(message: NonGroupMessage | AutocompleteInteraction, results: [K, V, number][]) {
 		if (results.length === 1) return results[0];
 		if (results.length > 10) results.length = 10;
 

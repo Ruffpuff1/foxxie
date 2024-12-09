@@ -41,15 +41,17 @@ model moderation {
 }
 
 model starboard {
-  enabled         Boolean @default(true)
-  user_id         String? @db.VarChar(19)
-  message_id      String  @db.VarChar(19)
-  channel_id      String? @db.VarChar(19)
-  guild_id        String  @db.VarChar(19)
-  star_message_id String? @db.VarChar(19)
-  stars           Int     @default(0) @db.SmallInt
+  enabled       Boolean @default(true)
+  userId        String? @map("userid") @db.VarChar(19)
+  messageId     String  @map("messageid") @db.VarChar(19)
+  channelId     String? @map("channelid") @db.VarChar(19)
+  guildId       String  @map("guildid") @db.VarChar(19)
+  starMessageId String? @map("starmessageid") @db.VarChar
+  stars         Int     @default(0) @db.SmallInt
+  starChannelId String? @map("starchannelid") @db.VarChar
+  id            Int?
 
-  @@id([message_id, guild_id])
+  @@id([messageId, guildId])
 }
 
 model guilds {
@@ -208,6 +210,8 @@ model guilds {
   words                                Json     @default("[]")
   rolesBirthday                        String?  @map("roles.birthday") @db.VarChar(19)
   channelsBirthday                     String?  @map("channels.birthday") @db.VarChar(19)
+  /// [HighlightEntries]
+  highlights                           Json     @default("[]")
 }
 
 model memberNote {
