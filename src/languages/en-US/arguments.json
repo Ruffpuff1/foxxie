@@ -28,6 +28,7 @@
 	"reminder": "{{ERROR}} The taskId {{parameter, code}} either was not a valid taskId or was not a taskId of a task that you created.",
 	"roleError": "I could not resolve `{{parameter}}` to a role, please make sure you typed its name or ID correctly!\n\n> **Tip**: You can also mention it!",
 	"roleMissingGuild": "I was not able to resolve `{{parameter}}` because this argument requires to be run in a server channel.",
+	"snowflake": "{{ERROR}} I could not resolve `{{parameter}}` to a valid snowflake! They're numbers with 17 to 18 digits, for example, your message has a snowflake of `{{message.id}}`!",
 	"timespanTooLarge": "{{ERROR}} The timespan of {{parameter, code}} seems to be a timespan larger than **{{duration, remaining}}**, which isn't allowed.",
 	"timespanTooSmall": "{{ERROR}} A timespan of {{parameter, code}} is a timespan smaller than **{{duration, remaining}}**, which is too small.",
 	"unavailable": "Whoops! It seems I couldn't find a parser for a parameter, please contact my developer about it!\n"

@@ -1,6 +1,9 @@
 import { FT, T } from '#lib/types';
 
 export const InvalidCommand = FT<{ param: string }>('serializers:invalidCommand');
+export const InvalidFloat = FT<{ value: string }, string>('serializers:invalidFloat');
+export const InvalidGuild = FT<{ name: string }, string>('serializers:invalidGuild');
+export const InvalidInt = FT<{ value: string }, string>('serializers:invalidInt');
 export const InvalidRole = FT<{ name: string }>('serializers:invalidRole');
 export const MinMaxBothExclusive = FT<{
 	name: string;

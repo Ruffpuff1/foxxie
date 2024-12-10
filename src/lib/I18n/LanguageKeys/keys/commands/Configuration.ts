@@ -43,3 +43,5 @@ export const PermissionNodesReset = T<string>('commands/configuration:permission
 export const PermissionNodesShowAllow = FT<{ allow: string }, string>('commands/configuration:permissionNodesShowAllow');
 export const PermissionNodesShowDeny = FT<{ deny: string }, string>('commands/configuration:permissionNodesShowDeny');
 export const PermissionNodesShowName = FT<{ name: string }, string>('commands/configuration:permissionNodesShowName');
+
+export * from '#lib/I18n/LanguageKeys/keys/commands/configuration/index';

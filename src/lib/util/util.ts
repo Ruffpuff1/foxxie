@@ -94,7 +94,6 @@ export interface MappedTask<T extends ScheduleEntry.TaskId = ScheduleEntry.TaskI
 }
 
 export function getServerDetails() {
-	// eslint-disable-next-line @typescript-eslint/no-extra-parens
 	const totalmemory = ((totalmem() / 1024 / 1024 / 1024) * 1024).toFixed(0);
 	const memoryUsed = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
 	return {
