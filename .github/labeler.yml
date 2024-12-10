@@ -1,18 +1,23 @@
 'Bot: Foxxie':
+- changed-files:
   - src/**/*
 
 'I18n: en-US':
+- changed-files:
   - src/languages/en-US/*
   - src/languages/en-US/**/*
 
 'I18n: es-419':
+- changed-files:
   - src/languages/es-419/*
   - src/languages/es-419/**/*
 
 'Meta: Documentation':
+- changed-files:
   - README.md
   - LICENSE
 
 'Meta: Github':
+- changed-files:
   - .github/*
   - .github/**/*
