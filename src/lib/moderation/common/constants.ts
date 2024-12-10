@@ -6,21 +6,25 @@ import { Colors, Schedules } from '#utils/constants';
 import type { ModerationManager } from '../managers/ModerationManager.js';
 
 export const TranslationMappings = {
-	[TypeVariation.Ban]: LanguageKeys.Moderation.Ban,
-	[TypeVariation.Kick]: LanguageKeys.Moderation.Kick,
-	[TypeVariation.Mute]: LanguageKeys.Moderation.Mute,
+	[TypeVariation.Ban]: LanguageKeys.Moderation.TypeBan,
+	[TypeVariation.Kick]: LanguageKeys.Moderation.TypeKick,
+	[TypeVariation.Mute]: LanguageKeys.Moderation.TypeMute,
 	[TypeVariation.Prune]: LanguageKeys.Moderation.Purge,
 	// 4
-	[TypeVariation.Warning]: LanguageKeys.Moderation.Warn,
+	[TypeVariation.Warning]: LanguageKeys.Moderation.TypeWarning,
 	// 6
-	[TypeVariation.Lock]: LanguageKeys.Moderation.Lock
+	[TypeVariation.Lock]: LanguageKeys.Moderation.Lock,
+	[TypeVariation.SetNickname]: LanguageKeys.Moderation.TypeSetNickname,
+	[TypeVariation.Timeout]: LanguageKeys.Moderation.TypeTimeout,
+	[TypeVariation.RestrictedEmbed]: LanguageKeys.Moderation.TypeRestrictedEmbed
 } as Readonly<Record<TypeVariation, TypedT>>;
 
 export const UndoTaskNameMappings = {
 	[TypeVariation.Mute]: Schedules.EndTempMute,
 	[TypeVariation.Ban]: Schedules.EndTempBan,
 	[TypeVariation.RestrictedEmbed]: Schedules.EndTempRestrictEmbed,
-	[TypeVariation.SetNickname]: Schedules.EndTempNick
+	[TypeVariation.SetNickname]: Schedules.EndTempNick,
+	[TypeVariation.Timeout]: Schedules.EndTempTimeout
 } as const;
 
 const AllowedMetadataTypes = TypeMetadata.Undo | TypeMetadata.Temporary;

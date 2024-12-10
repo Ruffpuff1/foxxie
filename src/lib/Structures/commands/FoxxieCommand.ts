@@ -1,4 +1,4 @@
-import { CustomFunctionGet, DetailedDescription, PermissionLevels } from '#lib/types';
+import { CustomFunctionGet, DetailedDescription, PermissionLevels, TypedT } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { seconds } from '#utils/common';
 import { ChatInputCommandContext, Command, CommandOptionsRunTypeEnum, MessageCommand, MessageCommandContext, UserError } from '@sapphire/framework';
@@ -8,6 +8,7 @@ import FoxxieClient from '#lib/FoxxieClient';
 import first from 'lodash/first.js';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
+import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
 
 export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCommand.Options> {
 	public readonly guarded: boolean;
@@ -20,14 +21,16 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 
 	public permissionLevel: PermissionLevels;
 
-	declare public detailedDescription: CustomFunctionGet<
-		string,
-		{
-			prefix: string;
-			CHANNEL: string;
-		},
-		DetailedDescription
-	>;
+	declare public detailedDescription:
+		| CustomFunctionGet<
+				string,
+				{
+					prefix: string;
+					CHANNEL: string;
+				},
+				DetailedDescription
+		  >
+		| TypedT<LanguageHelpDisplayOptions>;
 
 	public constructor(context: Command.LoaderContext, options: FoxxieCommand.Options) {
 		super(context, {
@@ -83,24 +86,18 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 		}
 	}
 
+	/**
+	 * Retrieves the global command id from the application command registry.
+	 */
+	public getGlobalCommandId(): Snowflake {
+		const ids = this.applicationCommandRegistry.globalChatInputCommandIds;
+		return [...first([...ids.values()])!][0];
+	}
+
 	protected override parseConstructorPreConditions(options: FoxxieCommand.Options): void {
 		super.parseConstructorPreConditions(options);
 		this.addPermissionLevels(options);
 		this.addAllowedGuildsPrecondition(options);
-	}
-
-	/**
-	 * Retrieves the global command id from the application command registry.
-	 *
-	 * @remarks
-	 *
-	 * This method is used for slash commands, and will throw an error if the
-	 * global command ids are empty.
-	 */
-	public getGlobalCommandId(): Snowflake {
-		const ids = this.applicationCommandRegistry.guildIdToChatInputCommandIds;
-		if (ids.size === 0) throw new Error('The global command ids are empty.');
-		return [...first([...ids.values()])!][0];
 	}
 
 	protected error(identifier: string | UserError, context?: unknown): never {
@@ -126,14 +123,16 @@ export namespace FoxxieCommand {
 		usage?: string;
 		allowedGuilds?: string[];
 		permissionLevel?: PermissionLevels;
-		detailedDescription?: CustomFunctionGet<
-			string,
-			{
-				prefix: string;
-				CHANNEL: string;
-			},
-			DetailedDescription
-		>;
+		detailedDescription?:
+			| CustomFunctionGet<
+					string,
+					{
+						prefix: string;
+						CHANNEL: string;
+					},
+					DetailedDescription
+			  >
+			| TypedT<LanguageHelpDisplayOptions>;
 	};
 
 	export type Args = FoxxieArgs;
@@ -152,11 +151,13 @@ export type FoxxieCommandOptions = Subcommand.Options & {
 	allowedGuilds?: string[];
 	permissionLevel?: PermissionLevels;
 
-	detailedDescription?: CustomFunctionGet<
-		string,
-		{
-			prefix: string;
-		},
-		DetailedDescription
-	>;
+	detailedDescription?:
+		| CustomFunctionGet<
+				string,
+				{
+					prefix: string;
+				},
+				DetailedDescription
+		  >
+		| TypedT<LanguageHelpDisplayOptions>;
 };

@@ -17,7 +17,7 @@ export const enum LanguageFormatters {
 
 export const enum Colors {
 	PokemonBird = 0x969696,
-	Red = 0xff5c5c,
+	Red = 0xff5b5b,
 	Orange = 0xf79454,
 	Yellow = 0xffdb5c,
 	LemonYellow = 0xf1ab1d,
@@ -46,6 +46,7 @@ export const enum Schedules {
 	EndTempMute = 'moderationEndMute',
 	EndTempNick = 'moderationEndSetNickname',
 	EndTempRestrictEmbed = 'moderationEndRestrictionEmbed',
+	EndTempTimeout = 'moderationEndTimeout',
 	Reminder = 'reminder',
 	RemoveBirthdayRole = 'removeBirthdayRole',
 	UpdateDiscogsUsers = 'updateDiscogsUsers',
