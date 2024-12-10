@@ -48,7 +48,7 @@
     "@foxxie/lock-queue": "0.1.2",
     "@foxxie/sanitize": "^0.0.0",
     "@lionralfs/discogs-client": "^4.1.2",
-    "@prisma/client": "^6.0.1",
+    "@prisma/client": "^5.22.0",
     "@ruffpuff/utilities": "^4.0.0",
     "@sapphire/async-queue": "^1.5.5",
     "@sapphire/bitfield": "^1.2.4",
@@ -82,7 +82,7 @@
     "prism": "^4.1.2",
     "prisma-json-types-generator": "^3.2.2",
     "typeorm": "^0.3.20",
-    "undici": "^7.1.0"
+    "undici": "^5.25.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -139,9 +139,6 @@
   "funding": {
     "type": "individual",
     "url": "https://ko-fi.com/ruffpuff"
-  },
-  "engines": {
-    "node": "^22.11.0"
   },
   "prettier": "@sapphire/prettier-config",
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
