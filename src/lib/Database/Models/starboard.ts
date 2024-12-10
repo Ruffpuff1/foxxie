@@ -81,7 +81,7 @@ export class Starboard {
 
 	public setup(manager: StarboardManager) {
 		this.#manager = manager;
-		if (this.userId) floatPromise(this.#client.users.fetch(this.userId));
+		if (this.userId) void floatPromise(this.#client.users.fetch(this.userId));
 		return this;
 	}
 
@@ -161,6 +161,11 @@ export class Starboard {
 		}
 	}
 
+	public get starMessageURL() {
+		if (!this.#starMessage) return null;
+		return this.#starMessage.url;
+	}
+
 	public async downloadUserList(): Promise<void> {
 		try {
 			const { starboardEmojis, starboardSelfStar } = await readSettings(this.#message.guild);
@@ -186,7 +191,7 @@ export class Starboard {
 		this.stars = this.#users.size;
 	}
 
-	private async getStarContent(t: TFunction): Promise<MessageOptions | MessageEditOptions> {
+	public async getStarContent(t: TFunction): Promise<MessageOptions | MessageEditOptions> {
 		const color = await this.color();
 
 		const message = this.#message;
@@ -273,7 +278,7 @@ export class Starboard {
 		return [cutText(this.#message.content, 1800), '', url].join('\n');
 	}
 
-	private async getUrl() {
+	private getUrl() {
 		const url = `${this.emoji} ${bold(this.stars.toString())} | <#${this.channelId}> | [Jump to Message](${this.#message.url})`;
 		return url;
 	}

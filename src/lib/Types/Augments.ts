@@ -23,6 +23,7 @@ import { RedisManager } from '#lib/Structures/managers/RedisManager';
 import { WorkerService } from '#lib/Container/Workers/WorkerService';
 import { MongoDB } from '#lib/Database/MongoDB';
 import { HighlightData } from '#lib/Database/Models/highlight';
+import { Starboard } from '#lib/Database/Models/starboard';
 
 declare global {
 	namespace PrismaJson {
@@ -114,7 +115,9 @@ declare module '@sapphire/framework' {
 		moderationLog: number;
 		piece: Piece;
 		reminder: MappedTask<Schedules.Reminder>;
+		snowflake: Snowflake;
 		song: string[];
+		starboard: Starboard;
 		store: Store<any>;
 		timespan: number;
 		username: User;

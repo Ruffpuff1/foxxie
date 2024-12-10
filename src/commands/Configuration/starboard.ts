@@ -11,6 +11,8 @@ import { resolveClientColor } from '#utils/util';
 import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
 import { ApplyOptions, RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { send } from '@sapphire/plugin-editable-commands';
+import { TFunction } from '@sapphire/plugin-i18next';
 import { cast, cutText } from '@sapphire/utilities';
 import {
 	blockQuote,
@@ -19,32 +21,89 @@ import {
 	EmbedBuilder,
 	escapeMarkdown,
 	inlineCode,
+	italic,
+	Message,
 	PermissionFlagsBits,
 	TextChannel,
 	userMention
 } from 'discord.js';
 
+const Root = LanguageKeys.Commands.Configuration.Starboard;
+
 @ApplyOptions<FoxxieSubcommand.Options>({
 	aliases: ['sb', 'stars'],
-	description: LanguageKeys.Commands.Configuration.BirthdayDescription,
-	detailedDescription: LanguageKeys.Commands.Configuration.BirthdayDetailedDescription,
+	description: Root.Description,
+	detailedDescription: Root.DetailedDescription,
 	runIn: [CommandOptionsRunTypeEnum.GuildAny],
-	subcommands: [{ name: 'list', messageRun: 'list', default: true }]
+	subcommands: [
+		{ name: 'list', messageRun: 'messageRunList', default: true },
+		{ name: 'show', messageRun: 'messageRunShow' }
+	]
 })
 export class UserCommand extends FoxxieSubcommand {
 	@RequiresClientPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
 	@RequiresUserPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
-	public async list(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
+	public async messageRunList(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
 		const loading = await sendLoadingMessage(msg);
-		const starboard = getGuildStarboard(msg.guild);
-		const starboards = (await this.container.prisma.starboard.findMany({ where: { guildId: msg.guildId }, orderBy: { id: 'desc' } })).map(
+		await this.#makeList(msg, args.t);
+		await loading.delete();
+	}
+
+	@RequiresClientPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
+	@RequiresUserPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
+	public async messageRunShow(msg: GuildMessage, args: FoxxieSubcommand.Args) {
+		await sendLoadingMessage(msg);
+		const starboardEntity = await args.pick('starboard').catch(() =>
+			this.container.prisma.starboard
+				.findMany({
+					where: { guildId: msg.guildId! },
+					orderBy: { id: 'desc' }
+				})
+				.then((stars) => {
+					const first = stars[0];
+					if (!first) this.error('arguments:starboardEmpty');
+
+					return new Starboard(first);
+				})
+		);
+
+		const starMessageChannel = await resolveToNull(this.container.client.channels.fetch(starboardEntity.channelId));
+		if (!starMessageChannel || !starMessageChannel.isSendable()) this.error('could not fetch starmsg channel');
+
+		const starredMessage = await resolveToNull(starMessageChannel.messages.fetch(starboardEntity.messageId));
+		if (!starredMessage || !starredMessage.inGuild()) this.error('could not find starMessage');
+
+		const guildStarboard = getGuildStarboard(msg.guild);
+		starboardEntity.init(guildStarboard, starredMessage as GuildMessage);
+
+		await starboardEntity.downloadStarMessage();
+		await starboardEntity.downloadUserList();
+
+		const messageOptions = await starboardEntity.getStarContent(args.t);
+
+		const { starMessageURL } = starboardEntity;
+		if (starMessageURL) {
+			const { content } = messageOptions;
+			if (content) messageOptions.content = [content, italic(`[Jump to Star Message](${starMessageURL})`)].join('\n');
+			messageOptions.content = italic(`[Jump to Star Message](${starMessageURL})`);
+		}
+
+		await send(msg, messageOptions);
+	}
+
+	async #makeList(entity: GuildMessage | FoxxieSubcommand.Interaction, t: TFunction) {
+		const starboard = getGuildStarboard(entity.guild!);
+		const starboards = (await this.container.prisma.starboard.findMany({ where: { guildId: entity.guildId! }, orderBy: { id: 'desc' } })).map(
 			(star) => new Starboard(star).setup(starboard)
 		);
 
+		const guild = entity.guild!;
+		const user = entity instanceof Message ? entity.author : entity.user;
+
 		const template = new EmbedBuilder()
-			.setTitle(`Starred Messages in ${msg.guild.name}`)
-			.setColor(await resolveClientColor(msg))
-			.setFooter({ text: `${starboards.length} stars in ${msg.guild.name}` });
+			.setTitle(`Starred Messages in ${guild.name}`)
+			.setColor(await resolveClientColor(entity))
+			.setFooter({ text: `${starboards.length} stars in ${guild.name}` });
 
 		await new FoxxiePaginatedMessageEmbedFields()
 			.setTemplate(template)
@@ -67,22 +126,22 @@ export class UserCommand extends FoxxieSubcommand {
 						const { content, url } = message;
 
 						lines.push(
-							args.t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsLocation, {
+							t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsLocation, {
 								emoji: Emojis.Information,
 								channel: channelMention(channel.id),
 								id: channel.id
 							})
 						);
 
-						const userInGuild = msg.guild.members.cache.has(star.userId);
+						const userInGuild = guild.members.cache.has(star.userId);
 						lines.push(
-							args.t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsUser, {
+							t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsUser, {
 								emoji: user ? (user.bot ? Emojis.Bot : Emojis.ShieldMember) : Emojis.ShieldMember,
 								mention: user
 									? userInGuild
 										? userMention(user.id)
 										: escapeMarkdown(user.username)
-									: toTitleCase(args.t(LanguageKeys.Globals.Unknown)),
+									: toTitleCase(t(LanguageKeys.Globals.Unknown)),
 								userId: star.userId
 							})
 						);
@@ -96,11 +155,10 @@ export class UserCommand extends FoxxieSubcommand {
 							inline: false
 						};
 					})
+					// eslint-disable-next-line no-implicit-coercion
 				).then((r) => r.filter((c) => !!c))
 			)
 			.make()
-			.run(msg, msg.author);
-
-		await loading.delete();
+			.run(entity, user);
 	}
 }

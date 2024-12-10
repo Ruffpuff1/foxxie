@@ -1,0 +1,27 @@
+{
+    "description": "Manage the starboard in your server",
+    "detailedDescription": {
+		"extendedHelp": "Configuration and view my starboard module.",
+		"usages": [
+			"List",
+			"Show",
+            "Show StarMessageId"
+		],
+		"examples": [
+			"list",
+			"show",
+			"show 39"
+		],
+		"explainedUsage": [
+			[
+				"List/Show",
+				"\n- **List (default)**: List the indexed starmessages in this server.\n- **Show**: Display the full embed of a starmessage given it's ID."
+			],
+			[
+				"StarMessageId",
+				"The Id of the starmessage, usually found at the bottom of the star embed or can also be the message ID of the starmessage or original message."
+			]
+		]
+	},
+    "name": "starboard"
+}
