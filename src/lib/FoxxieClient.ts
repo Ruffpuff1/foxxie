@@ -29,6 +29,8 @@ export default class FoxxieClient extends SapphireClient {
 	@Enumerable(false)
 	public override invites = new InviteManager();
 
+	public override developmentRecoveryMode = false;
+
 	public constructor() {
 		super(clientOptions);
 
@@ -101,7 +103,7 @@ export default class FoxxieClient extends SapphireClient {
 			}
 			return (await readSettings(message.guild)).prefix;
 		}
-		return [process.env.CLIENT_PREFIX] as readonly string[];
+		return [process.env.CLIENT_PREFIX, ''] as readonly string[];
 	};
 
 	/**
@@ -111,6 +113,4 @@ export default class FoxxieClient extends SapphireClient {
 	public fetchLanguage = async (message: InternationalizationContext) => {
 		return message.guild ? (await readSettings(message.guild)).language : 'en-US';
 	};
-
-	public override developmentRecoveryMode = false;
 }

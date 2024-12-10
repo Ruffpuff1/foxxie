@@ -100,6 +100,8 @@ export class ModerationEntry<Type extends TypeVariation = TypeVariation> {
 		if (data.imageURL !== undefined) this.imageURL = data.imageURL;
 		if (data.metadata !== undefined) this.metadata = data.metadata;
 		if (data.refrenceId !== undefined) this.refrenceId = data.refrenceId;
+		if (data.logChannelId !== undefined) this.logChannelId = data.logChannelId;
+		if (data.logMessageId !== undefined) this.logMessageId = data.logMessageId;
 
 		this.#cacheExpiresTimeout = Date.now() + minutes(15);
 	}
