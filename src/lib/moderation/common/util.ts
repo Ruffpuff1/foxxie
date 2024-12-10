@@ -6,11 +6,10 @@ import { TypedT } from '#lib/types';
 import { getModeration } from '#utils/functions';
 import { TypeVariation } from '#utils/moderationConstants';
 import { messageLink } from '#utils/transformers';
-import { EmbedBuilder } from '@discordjs/builders';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import type { TFunction } from '@sapphire/plugin-i18next';
-import { chatInputApplicationCommandMention, User, type Snowflake } from 'discord.js';
+import { chatInputApplicationCommandMention, EmbedBuilder, type Snowflake } from 'discord.js';
 
 export function getTranslationKey<const Type extends TypeVariation>(type: Type): (typeof TranslationMappings)[Type] {
 	return TranslationMappings[type];
@@ -28,28 +27,15 @@ export function getUndoTaskName(type: TypeVariation) {
 
 export function getTitleUndo(t: TFunction, key: TypedT): string {
 	switch (key) {
-		case TranslationMappings[TypeVariation.Ban]:
-			return t(LanguageKeys.Moderation.Unban);
-		case TranslationMappings[TypeVariation.Mute]:
-			return t(LanguageKeys.Moderation.Unmute);
-		case TranslationMappings[TypeVariation.Warning]:
-			return t(LanguageKeys.Moderation.Unwarn);
 		case TranslationMappings[TypeVariation.Lock]:
 			return t(LanguageKeys.Moderation.Unlock);
 		default:
-			return t(key);
+			return `${t('moderation:remove')} ${t(key)}`;
 	}
 }
 
 export function getTitleTemporary(t: TFunction, key: TypedT): string {
-	switch (key) {
-		case TranslationMappings[TypeVariation.Ban]:
-			return t(LanguageKeys.Moderation.TempBan);
-		case TranslationMappings[TypeVariation.Mute]:
-			return t(LanguageKeys.Moderation.TempMute);
-		default:
-			return t(key);
-	}
+	return `${t('moderation:temp')} ${t(key)}`;
 }
 
 export function getTitle(t: TFunction, entry: ModerationManager.Entry): string {
@@ -59,19 +45,18 @@ export function getTitle(t: TFunction, entry: ModerationManager.Entry): string {
 	return t(key, Object(entry.extraData)) as string;
 }
 
-export async function getEmbed(t: TFunction, entry: ModerationManager.Entry) {
+export async function getEmbed(t: TFunction, entry: ModerationManager.Entry): Promise<EmbedBuilder> {
 	const moderator = await entry.fetchModerator();
 	const caseT = t(LanguageKeys.Globals.CaseT);
-	const type = getTitle(t, entry);
 	const modMember = await resolveToNull(entry.guild.members.fetch(moderator));
 
 	const embed = new EmbedBuilder()
 		.setColor(getColor(entry))
 		.setAuthor({
-			name: type,
+			name: `${modMember?.displayName || moderator.username} (${moderator.id})`,
 			iconURL: modMember?.displayAvatarURL() || moderator.displayAvatarURL()
 		})
-		.setDescription(await getEmbedDescription(t, entry, moderator))
+		.setDescription(await getEmbedDescription(t, entry))
 		.setFooter({
 			text: `${caseT} #${t(LanguageKeys.Globals.NumberFormat, {
 				value: entry.id
@@ -93,8 +78,9 @@ async function fetchEntryChannel(entry: ModerationManager.Entry) {
 	return channel;
 }
 
-async function getEmbedDescription(t: TFunction, entry: ModerationManager.Entry, moderator: User) {
-	const command = chatInputApplicationCommandMention('case', 'view');
+async function getEmbedDescription(t: TFunction, entry: ModerationManager.Entry) {
+	const command = getCaseEditMention();
+	const type = getTitle(t, entry);
 
 	const reason = entry.reason
 		? entry.imageURL
@@ -103,11 +89,12 @@ async function getEmbedDescription(t: TFunction, entry: ModerationManager.Entry,
 		: t(LanguageKeys.Moderation.FillReason, { command, count: entry.id });
 	const user = await resolveToNull(entry.fetchUser());
 	const refrence = await fetchRefrenceCase(entry);
-	const channel = await fetchEntryChannel(entry);
+	const refType = refrence ? t(getTranslationKey(refrence.type)) : null;
+	const channel = [TypeVariation.Lock, TypeVariation.Prune].includes(entry.type) ? await fetchEntryChannel(entry) : null;
 
-	const userLine = user ? t(LanguageKeys.Guilds.Logs.ArgsUser, { user }) : null;
+	const userLine = user && user.id !== entry.moderatorId ? t(LanguageKeys.Guilds.Logs.ArgsUser, { user }) : null;
+	const actionLine = `**Action**: ${type}`;
 	const channelLine = channel ? t(LanguageKeys.Guilds.Logs.ArgsChannel, { channel }) : null;
-	const modLine = moderator ? t(LanguageKeys.Guilds.Logs.ArgsModerator, { mod: moderator }) : null;
 	const durationLine = entry.duration
 		? entry.createdAt + entry.duration < Date.now()
 			? t(LanguageKeys.Guilds.Logs.ArgsDurationPast, { duration: entry.createdAt + entry.duration })
@@ -119,11 +106,12 @@ async function getEmbedDescription(t: TFunction, entry: ModerationManager.Entry,
 	const refrenceLine = refrence
 		? t(LanguageKeys.Guilds.Logs.ArgsRefrence, {
 				id: refrence.id,
-				url: messageLink(refrence.logChannelId!, refrence.logMessageId!, entry.guild.id)
+				type: refType,
+				url: messageLink(entry.guild.id, refrence.logChannelId!, refrence.logMessageId!)
 			})
 		: null;
 
-	return [userLine, modLine, channelLine, durationLine, reasonLine, refrenceLine].filter((a) => Boolean(a)).join('\n');
+	return [userLine, channelLine, actionLine, durationLine, reasonLine, refrenceLine].filter((a) => Boolean(a)).join('\n');
 }
 
 let caseCommandId: Snowflake | null = null;

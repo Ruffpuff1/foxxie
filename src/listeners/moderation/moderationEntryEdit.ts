@@ -8,7 +8,7 @@ import { canSendEmbeds, ChannelTypes } from '@sapphire/discord.js-utilities';
 import { Listener } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { cast, isNullish } from '@sapphire/utilities';
-import { GuildBasedChannel } from 'discord.js';
+import { Embed, EmbedBuilder, GuildBasedChannel } from 'discord.js';
 
 export class UserListener extends Listener {
 	public run(old: ModerationManager.Entry, entry: ModerationManager.Entry) {
@@ -23,8 +23,6 @@ export class UserListener extends Listener {
 		}
 
 		if (old.duration === entry.duration) return;
-
-		console.log(`editing duration of case ${entry.id}`);
 
 		const { task } = entry;
 		if (isNullish(task)) {
@@ -46,31 +44,18 @@ export class UserListener extends Listener {
 		if (channel === null || !canSendEmbeds(cast<ChannelTypes>(channel))) return;
 
 		const t = await fetchT(entry.guild);
-		const previous = await this.fetchModerationLogMessage(entry, channel);
-		const options = { embeds: [await getEmbed(t, entry)] };
+		const previous = await this.#fetchModerationLogMessage(entry, channel);
+		const embed = await getEmbed(t, entry);
+		const options = { embeds: [embed] };
 		try {
 			if (previous && previous.author.id === previous.client.id) {
-				await previous.edit(options);
-				console.log(`edited message of case ${entry.id}`);
+				const previousEmbed = previous.embeds[0]!;
+				if (!this.#embedsAreSame(embed, previousEmbed)) await previous.edit(options);
 			}
 		} catch (error) {
 			console.log(error);
 			// await writeSettings(entry.guild, { channelsLogsModeration: null });
 		}
-	}
-
-	private async fetchModerationLogMessage(entry: ModerationManager.Entry, channel: GuildBasedChannel) {
-		if (!channel.isSendable()) return null;
-		const message = await resolveToNull(channel.messages.fetch(entry.logMessageId!));
-		return message;
-	}
-
-	#isCompleteUpdate(old: ModerationManager.Entry, entry: ModerationManager.Entry) {
-		return !old.isCompleted() && entry.isCompleted();
-	}
-
-	async #tryDeleteTask(task: ScheduleEntry | null) {
-		if (!isNullish(task) && !task.running) await task.delete();
 	}
 
 	async #createNewTask(entry: ModerationManager.Entry) {
@@ -89,5 +74,23 @@ export class UserListener extends Listener {
 				[SchemaKeys.ExtraData]: entry.extraData as any
 			}
 		});
+	}
+
+	#embedsAreSame(embed: EmbedBuilder, previous: Embed) {
+		return embed.data.description === previous.description && embed.data.color === previous.color;
+	}
+
+	async #fetchModerationLogMessage(entry: ModerationManager.Entry, channel: GuildBasedChannel) {
+		if (!channel.isSendable()) return null;
+		const message = await resolveToNull(channel.messages.fetch(entry.logMessageId!));
+		return message;
+	}
+
+	#isCompleteUpdate(old: ModerationManager.Entry, entry: ModerationManager.Entry) {
+		return !old.isCompleted() && entry.isCompleted();
+	}
+
+	async #tryDeleteTask(task: ScheduleEntry | null) {
+		if (!isNullish(task) && !task.running) await task.delete();
 	}
 }

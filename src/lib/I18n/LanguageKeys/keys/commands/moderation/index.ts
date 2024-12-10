@@ -1,4 +1,7 @@
 export * as Utilities from '#lib/I18n/LanguageKeys/keys/commands/moderation/utilities/index';
+export * as Timeout from '#lib/I18n/LanguageKeys/keys/commands/moderation/Timeout';
+export * as Untimeout from '#lib/I18n/LanguageKeys/keys/commands/moderation/Untimeout';
+
 import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/types';
 
 export const BanDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:banDetailedDescription');

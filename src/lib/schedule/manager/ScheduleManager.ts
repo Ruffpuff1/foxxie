@@ -162,7 +162,7 @@ export class ScheduleManager {
 		if (!this.queue.length) {
 			this._clearInterval();
 		} else if (!this.interval) {
-			this.interval = setInterval(this.execute.bind(this), 5000).unref();
+			this.interval = setInterval(this.execute.bind(this), 1000).unref();
 		}
 	}
 

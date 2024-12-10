@@ -1,15 +1,13 @@
-import { Guild, RESTJSONErrorCodes, Snowflake } from 'discord.js';
+import { Guild, Snowflake } from 'discord.js';
 import { AsyncQueue } from '@sapphire/async-queue';
 import { container, UserError } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
-import { createReferPromise, desc, floatPromise, minutes, ReferredPromise, resolveOnErrorCodes, seconds } from '#utils/common';
+import { createReferPromise, desc, floatPromise, minutes, ReferredPromise, seconds } from '#utils/common';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieEvents } from '#lib/types';
 import { SortedCollection } from '#lib/Structures/data/SortedCollection';
-import { canSendEmbeds } from '@sapphire/discord.js-utilities';
-import { fetchT } from '@sapphire/plugin-i18next';
-import { getEmbed, ModerationEntry } from '#lib/moderation';
+import { ModerationEntry } from '#lib/moderation';
 import { readSettings } from '#lib/database';
 
 enum CacheActions {
@@ -90,7 +88,7 @@ export class ModerationManager {
 			const entry = new ModerationEntry({ ...data.toData(), id, createdAt: data.createdAt || Date.now() });
 			await this.#performInsert(entry);
 			return this.#addToCache(entry, CacheActions.Insert);
-		} finally {
+		}  finally {
 			this.#saveQueue.shift();
 		}
 	}
@@ -341,26 +339,7 @@ export class ModerationManager {
 		return entities.map((entity) => ModerationEntry.from(this.guild, entity));
 	}
 
-	async #sendMessage(entry: ModerationManager.Entry) {
-		const channel = await this.fetchChannel();
-		if (channel === null || !canSendEmbeds(channel) || !channel.isSendable()) return;
-
-		const t = await fetchT(entry.guild);
-		const options = { embeds: [await getEmbed(t, entry)] };
-		try {
-			const message = await resolveOnErrorCodes(channel.send(options), RESTJSONErrorCodes.MissingAccess, RESTJSONErrorCodes.MissingPermissions);
-			entry.logChannelId = channel.id;
-			if (message) entry.logMessageId = message.id;
-		} catch (error) {
-			console.log(error);
-			// await writeSettings(entry.guild, { channelsLogsModeration: null });
-		}
-	}
-
 	async #performInsert(entry: ModerationManager.Entry) {
-		container.client.emit(FoxxieEvents.ModerationEntryAdd, entry);
-		await this.#sendMessage(entry);
-
 		await this.db.moderation.create({
 			data: {
 				caseId: entry.id,
@@ -381,6 +360,7 @@ export class ModerationManager {
 			}
 		});
 
+		container.client.emit(FoxxieEvents.ModerationEntryAdd, entry);
 		return entry;
 	}
 

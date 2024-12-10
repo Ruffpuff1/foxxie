@@ -83,9 +83,9 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 	 * global command ids are empty.
 	 */
 	public getGlobalCommandId(): Snowflake {
-		const ids = this.applicationCommandRegistry.guildIdToChatInputCommandIds;
+		const ids = this.applicationCommandRegistry.globalChatInputCommandIds;
 		if (ids.size === 0) throw new Error('The global command ids are empty.');
-		return [...first([...ids.values()])!][0];
+		return first([...ids.values()])!;
 	}
 
 	protected override parseConstructorPreConditions(options: FoxxieSubcommand.Options): void {

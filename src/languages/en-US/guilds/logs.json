@@ -22,7 +22,7 @@
 	"argsModerator": "**Moderator**: {{mod.username, code}} ({{mod.id}})",
 	"argsPosition": "**Position**: {{position, ordinal}}",
 	"argsReason": "**Reason**: {{reason}}",
-	"argsRefrence": "**Refrence**: [#{{id, number}}]({{url}})",
+	"argsRefrence": "**Case Reference**: [#{{id, number}}]({{url}}) ({{type}})",
 	"argsTimeTaken": "**Time**: {{time, remaining}}",
 	"argsUser": "**User**: {{user.username, code}} ({{user.id}})",
 	"attachment": "Attachment"
