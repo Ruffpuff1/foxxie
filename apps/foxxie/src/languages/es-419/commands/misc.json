@@ -1,0 +1,25 @@
+{
+	"reminderCreateSuccess": "",
+	"reminderDefault": "",
+	"reminderDeleteNone": "",
+	"reminderDeleteSuccess": "",
+	"reminderDeleteSuccess_other": "",
+	"reminderDescription": "",
+	"reminderDetailedDescription": {
+		"extendedHelp": "",
+		"usages": ["", "", "", "", "", "lista"],
+		"examples": ["", "", "", "", "", "", "lista"],
+		"explainedUsage": [
+			["", ""],
+			["", ""],
+			["", ""],
+			["", ""]
+		],
+		"reminder": ""
+	},
+	"reminderDMWarn": "",
+	"reminderEditSuccess": "",
+	"reminderList": "",
+	"reminderNone": "",
+	"reminderShow": ""
+}

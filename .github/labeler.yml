@@ -1,20 +1,21 @@
 'Bot: Foxxie':
 - changed-files:
-  - any-glob-to-any-file: 'src/**/*'
+  - any-glob-to-any-file: 'apps/foxxie/**/*'
 
 'I18n: en-US':
 - changed-files:
-  - any-glob-to-any-file: 'src/languages/en-US/**/*'
+  - any-glob-to-any-file: 'apps/foxxie/src/languages/en-US/**/*'
 
 'I18n: es-419':
 - changed-files:
-  - any-glob-to-any-file: 'src/languages/es-419/**/*'
+  - any-glob-to-any-file: 'apps/foxxie/src/languages/es-419/**/*'
 
 'Meta: Documentation':
 - changed-files:
   - any-glob-to-any-file:
     - README.md
     - LICENSE
+    - apps/foxxie/README.md
 
 'Meta: Github':
 - changed-files:
