@@ -1,5 +1,5 @@
 <div align='center'>
-  <img src='https://cdn.ruffpuff.dev/foxxie.png' width='140' height='140' />
+  <img src='https://cdn.discordapp.com/avatars/825130284382289920/771c05d06525845e84b32998210f32a8.png?size=2048' width='140' height='140' />
   <h1>Foxxie ⚡️</h1>
   <blockquote>Monorepository containing all the source code for the Foxxie Project</blockquote>
 
@@ -9,7 +9,6 @@
 [![codecov](https://codecov.io/gh/Ruffpuff1/foxxie/branch/main/graph/badge.svg?token=XWI6XSC4QF)](https://codecov.io/gh/Ruffpuff1/foxxie)
 [![GitHub](https://img.shields.io/github/license/Ruffpuff1/foxxie?logo=github&style=flat-rounded)](https://github.com/Ruffpuff1/foxxie/blob/main/LICENSE)
 [![Crowdin](https://badges.crowdin.net/foxxie-bot/localized.svg)](https://crowdin.com)
-
 [![Discord server](https://img.shields.io/discord/761512748898844702?color=5865F2&logo=discord&logoColor=white)](https://rsehrk.com/tcs)
 [![wakatime](https://wakatime.com/badge/user/72bf611d-9557-4a85-aa1d-46f6a3346744/project/018a4c3a-54f9-47c0-a210-95bbd2c3d355.svg)](https://wakatime.com/badge/user/72bf611d-9557-4a85-aa1d-46f6a3346744/project/018a4c3a-54f9-47c0-a210-95bbd2c3d355)
 [![Twitter Follow](https://img.shields.io/twitter/follow/ruffpuff29?label=Follow%20@reeseharlak&logo=twitter&colorB=1DA1F2&style=flat-rounded)](https://twitter.com/reeseharlak)
