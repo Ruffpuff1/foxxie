@@ -1,0 +1,7 @@
+{
+	"ban": "Usuario Baneado",
+	"tempBan": "Usuario Temporalmente Prohibido",
+	"tempMute": "Miembro Temporalmente Silenciado",
+	"unban_reason": "`[Prohibir temp]` Liberado después de {{duration, durationString}}",
+	"unmute_reason": "`[Silencio Temp]` Liberado después de {{duration, durationString}}"
+}
