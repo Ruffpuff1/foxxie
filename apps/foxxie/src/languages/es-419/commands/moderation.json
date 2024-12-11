@@ -24,7 +24,11 @@
 				"description": ""
 			}
 		],
-		"examples": ["", "", ""]
+		"examples": [
+			"",
+			"",
+			""
+		]
 	},
 	"banSuccess": "",
 	"banSuccess_other": "",
@@ -50,7 +54,10 @@
 				"description": ""
 			}
 		],
-		"examples": ["", ""]
+		"examples": [
+			"",
+			""
+		]
 	},
 	"kickSuccess": "",
 	"kickSuccess_other": "",
@@ -86,7 +93,11 @@
 				"description": ""
 			}
 		],
-		"examples": ["", "", ""]
+		"examples": [
+			"",
+			"",
+			""
+		]
 	},
 	"muteSuccess": "",
 	"muteSuccess_other": "",
