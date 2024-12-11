@@ -1,27 +1,28 @@
+import { isNullishOrZero } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { TypedT } from '#lib/types';
-import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
-import { isNullishOrZero } from '@sapphire/utilities';
 import { Colors, Schedules } from '#utils/constants';
+import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
+
 import type { ModerationManager } from '../managers/ModerationManager.js';
 
 export const TranslationMappings = {
 	[TypeVariation.Ban]: LanguageKeys.Moderation.TypeBan,
 	[TypeVariation.Kick]: LanguageKeys.Moderation.TypeKick,
-	[TypeVariation.Mute]: LanguageKeys.Moderation.TypeMute,
-	[TypeVariation.Prune]: LanguageKeys.Moderation.Purge,
-	// 4
-	[TypeVariation.Warning]: LanguageKeys.Moderation.TypeWarning,
 	// 6
 	[TypeVariation.Lock]: LanguageKeys.Moderation.Lock,
+	[TypeVariation.Mute]: LanguageKeys.Moderation.TypeMute,
+	[TypeVariation.Prune]: LanguageKeys.Moderation.Purge,
+	[TypeVariation.RestrictedEmbed]: LanguageKeys.Moderation.TypeRestrictedEmbed,
 	[TypeVariation.SetNickname]: LanguageKeys.Moderation.TypeSetNickname,
 	[TypeVariation.Timeout]: LanguageKeys.Moderation.TypeTimeout,
-	[TypeVariation.RestrictedEmbed]: LanguageKeys.Moderation.TypeRestrictedEmbed
+	// 4
+	[TypeVariation.Warning]: LanguageKeys.Moderation.TypeWarning
 } as Readonly<Record<TypeVariation, TypedT>>;
 
 export const UndoTaskNameMappings = {
-	[TypeVariation.Mute]: Schedules.EndTempMute,
 	[TypeVariation.Ban]: Schedules.EndTempBan,
+	[TypeVariation.Mute]: Schedules.EndTempMute,
 	[TypeVariation.RestrictedEmbed]: Schedules.EndTempRestrictEmbed,
 	[TypeVariation.SetNickname]: Schedules.EndTempNick,
 	[TypeVariation.Timeout]: Schedules.EndTempTimeout
@@ -36,10 +37,9 @@ export function combineTypeData(type: TypeVariation, metadata?: TypeMetadata): T
 const TypeCodes = {
 	Ban: combineTypeData(TypeVariation.Ban),
 	Kick: combineTypeData(TypeVariation.Kick),
+	Lock: combineTypeData(TypeVariation.Lock),
 	Mute: combineTypeData(TypeVariation.Mute),
 	Prune: combineTypeData(TypeVariation.Prune),
-	Lock: combineTypeData(TypeVariation.Lock),
-	Unlock: combineTypeData(TypeVariation.Lock, TypeMetadata.Undo),
 	RestrictedAttachment: combineTypeData(TypeVariation.RestrictedAttachment),
 	RestrictedEmbed: combineTypeData(TypeVariation.RestrictedEmbed),
 	RestrictedEmoji: combineTypeData(TypeVariation.RestrictedEmoji),
@@ -49,10 +49,20 @@ const TypeCodes = {
 	RoleRemove: combineTypeData(TypeVariation.RoleRemove),
 	SetNickname: combineTypeData(TypeVariation.SetNickname),
 	SoftBan: combineTypeData(TypeVariation.Softban),
+	TemporaryBan: combineTypeData(TypeVariation.Ban, TypeMetadata.Temporary),
+	TemporaryMute: combineTypeData(TypeVariation.Mute, TypeMetadata.Temporary),
+	TemporaryRestrictedAttachment: combineTypeData(TypeVariation.RestrictedAttachment, TypeMetadata.Temporary),
+	TemporaryRestrictedEmbed: combineTypeData(TypeVariation.RestrictedEmbed, TypeMetadata.Temporary),
+	TemporaryRestrictedEmoji: combineTypeData(TypeVariation.RestrictedEmoji, TypeMetadata.Temporary),
+	TemporaryRestrictedReaction: combineTypeData(TypeVariation.RestrictedReaction, TypeMetadata.Temporary),
+	TemporaryRestrictedVoice: combineTypeData(TypeVariation.RestrictedVoice, TypeMetadata.Temporary),
+	TemporaryRoleAdd: combineTypeData(TypeVariation.RoleAdd, TypeMetadata.Temporary),
+	TemporaryRoleRemove: combineTypeData(TypeVariation.RoleRemove, TypeMetadata.Temporary),
+	TemporarySetNickname: combineTypeData(TypeVariation.SetNickname, TypeMetadata.Temporary),
+	TemporaryTimeout: combineTypeData(TypeVariation.Timeout, TypeMetadata.Temporary),
+	TemporaryVoiceMute: combineTypeData(TypeVariation.VoiceMute, TypeMetadata.Temporary),
+	TemporaryWarning: combineTypeData(TypeVariation.Warning, TypeMetadata.Temporary),
 	Timeout: combineTypeData(TypeVariation.Timeout),
-	VoiceKick: combineTypeData(TypeVariation.VoiceDisconnect),
-	VoiceMute: combineTypeData(TypeVariation.VoiceMute),
-	Warning: combineTypeData(TypeVariation.Warning),
 	UndoBan: combineTypeData(TypeVariation.Ban, TypeMetadata.Undo),
 	UndoMute: combineTypeData(TypeVariation.Mute, TypeMetadata.Undo),
 	UndoRestrictedAttachment: combineTypeData(TypeVariation.RestrictedAttachment, TypeMetadata.Undo),
@@ -66,22 +76,13 @@ const TypeCodes = {
 	UndoTimeout: combineTypeData(TypeVariation.Timeout, TypeMetadata.Undo),
 	UndoVoiceMute: combineTypeData(TypeVariation.VoiceMute, TypeMetadata.Undo),
 	UndoWarning: combineTypeData(TypeVariation.Warning, TypeMetadata.Undo),
-	TemporaryBan: combineTypeData(TypeVariation.Ban, TypeMetadata.Temporary),
-	TemporaryMute: combineTypeData(TypeVariation.Mute, TypeMetadata.Temporary),
-	TemporaryRestrictedAttachment: combineTypeData(TypeVariation.RestrictedAttachment, TypeMetadata.Temporary),
-	TemporaryRestrictedEmbed: combineTypeData(TypeVariation.RestrictedEmbed, TypeMetadata.Temporary),
-	TemporaryRestrictedEmoji: combineTypeData(TypeVariation.RestrictedEmoji, TypeMetadata.Temporary),
-	TemporaryRestrictedReaction: combineTypeData(TypeVariation.RestrictedReaction, TypeMetadata.Temporary),
-	TemporaryRestrictedVoice: combineTypeData(TypeVariation.RestrictedVoice, TypeMetadata.Temporary),
-	TemporaryRoleAdd: combineTypeData(TypeVariation.RoleAdd, TypeMetadata.Temporary),
-	TemporaryRoleRemove: combineTypeData(TypeVariation.RoleRemove, TypeMetadata.Temporary),
-	TemporarySetNickname: combineTypeData(TypeVariation.SetNickname, TypeMetadata.Temporary),
-	TemporaryTimeout: combineTypeData(TypeVariation.Timeout, TypeMetadata.Temporary),
-	TemporaryVoiceMute: combineTypeData(TypeVariation.VoiceMute, TypeMetadata.Temporary),
-	TemporaryWarning: combineTypeData(TypeVariation.Warning, TypeMetadata.Temporary)
+	Unlock: combineTypeData(TypeVariation.Lock, TypeMetadata.Undo),
+	VoiceKick: combineTypeData(TypeVariation.VoiceDisconnect),
+	VoiceMute: combineTypeData(TypeVariation.VoiceMute),
+	Warning: combineTypeData(TypeVariation.Warning)
 } as const;
 
-export type TypeCodes = number & { __TYPE__: 'TypeCodes' };
+export type TypeCodes = { __TYPE__: 'TypeCodes' } & number;
 
 export function getColor(entry: ModerationManager.Entry): number {
 	return Metadata.get(combineTypeData(entry.type, entry.metadata))!;
@@ -90,10 +91,9 @@ export function getColor(entry: ModerationManager.Entry): number {
 const Metadata = new Map<TypeCodes, Colors>([
 	[TypeCodes.Ban, Colors.Red],
 	[TypeCodes.Kick, Colors.Orange],
+	[TypeCodes.Lock, Colors.Red],
 	[TypeCodes.Mute, Colors.Orange],
 	[TypeCodes.Prune, Colors.Yellow],
-	[TypeCodes.Lock, Colors.Red],
-	[TypeCodes.Unlock, Colors.Green],
 	[TypeCodes.RestrictedAttachment, Colors.Orange],
 	[TypeCodes.RestrictedEmbed, Colors.Orange],
 	[TypeCodes.RestrictedEmoji, Colors.Orange],
@@ -103,10 +103,20 @@ const Metadata = new Map<TypeCodes, Colors>([
 	[TypeCodes.RoleRemove, Colors.Red],
 	[TypeCodes.SetNickname, Colors.Yellow],
 	[TypeCodes.SoftBan, Colors.Red],
+	[TypeCodes.TemporaryBan, Colors.Red],
+	[TypeCodes.TemporaryMute, Colors.Orange],
+	[TypeCodes.TemporaryRestrictedAttachment, Colors.Orange],
+	[TypeCodes.TemporaryRestrictedEmbed, Colors.Orange],
+	[TypeCodes.TemporaryRestrictedEmoji, Colors.Orange],
+	[TypeCodes.TemporaryRestrictedReaction, Colors.Orange],
+	[TypeCodes.TemporaryRestrictedVoice, Colors.Orange],
+	[TypeCodes.TemporaryRoleAdd, Colors.Green],
+	[TypeCodes.TemporaryRoleRemove, Colors.Red],
+	[TypeCodes.TemporarySetNickname, Colors.Yellow],
+	[TypeCodes.TemporaryTimeout, Colors.Orange],
+	[TypeCodes.TemporaryVoiceMute, Colors.Orange],
+	[TypeCodes.TemporaryWarning, Colors.Yellow],
 	[TypeCodes.Timeout, Colors.Orange],
-	[TypeCodes.VoiceKick, Colors.Orange],
-	[TypeCodes.VoiceMute, Colors.Orange],
-	[TypeCodes.Warning, Colors.Yellow],
 	[TypeCodes.UndoBan, Colors.Green],
 	[TypeCodes.UndoMute, Colors.Green],
 	[TypeCodes.UndoRestrictedAttachment, Colors.Green],
@@ -120,17 +130,8 @@ const Metadata = new Map<TypeCodes, Colors>([
 	[TypeCodes.UndoTimeout, Colors.Green],
 	[TypeCodes.UndoVoiceMute, Colors.Green],
 	[TypeCodes.UndoWarning, Colors.Green],
-	[TypeCodes.TemporaryBan, Colors.Red],
-	[TypeCodes.TemporaryMute, Colors.Orange],
-	[TypeCodes.TemporaryRestrictedAttachment, Colors.Orange],
-	[TypeCodes.TemporaryRestrictedEmbed, Colors.Orange],
-	[TypeCodes.TemporaryRestrictedEmoji, Colors.Orange],
-	[TypeCodes.TemporaryRestrictedReaction, Colors.Orange],
-	[TypeCodes.TemporaryRestrictedVoice, Colors.Orange],
-	[TypeCodes.TemporaryRoleAdd, Colors.Green],
-	[TypeCodes.TemporaryRoleRemove, Colors.Red],
-	[TypeCodes.TemporarySetNickname, Colors.Yellow],
-	[TypeCodes.TemporaryTimeout, Colors.Orange],
-	[TypeCodes.TemporaryVoiceMute, Colors.Orange],
-	[TypeCodes.TemporaryWarning, Colors.Yellow]
+	[TypeCodes.Unlock, Colors.Green],
+	[TypeCodes.VoiceKick, Colors.Orange],
+	[TypeCodes.VoiceMute, Colors.Orange],
+	[TypeCodes.Warning, Colors.Yellow]
 ]) as ReadonlyMap<TypeCodes, Colors>;

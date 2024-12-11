@@ -5,12 +5,12 @@ import { PermissionFlagsBits } from 'discord.js';
 export class ModerationActionRestrictedVoice extends RoleModerationAction<never, TypeVariation.RestrictedVoice> {
 	public constructor() {
 		super({
-			type: TypeVariation.RestrictedVoice,
 			logPrefix: 'Moderation => RestrictedVoice',
+			roleData: { hoist: false, mentionable: false, name: 'Voice Restricted', permissions: [] },
 			roleKey: RoleModerationAction.RoleKey.Voice,
-			roleData: { name: 'Voice Restricted', permissions: [], hoist: false, mentionable: false },
 			roleOverridesText: null,
-			roleOverridesVoice: PermissionFlagsBits.Connect
+			roleOverridesVoice: PermissionFlagsBits.Connect,
+			type: TypeVariation.RestrictedVoice
 		});
 	}
 }

@@ -1,31 +1,7 @@
 import type { FoxxieCommand } from '#lib/structures';
+
 import { CommandStore, container } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
-
-function getNameSpaceDetails(name: string): readonly [string | null, string] {
-	const index = name.indexOf('.');
-	if (index === -1) return [null, name];
-	return [name.substring(0, index), name.substring(index + 1)];
-}
-
-function matchName(name: string, command: FoxxieCommand): boolean {
-	return command.name === name || command.aliases.some((alias) => alias === name);
-}
-
-function matchNameAndCategory(name: string, category: string, command: FoxxieCommand): boolean {
-	return command.category === category && matchName(name, command);
-}
-
-function matchNameCategoryAndSubCategory(name: string, category: string, subCategory: string, command: FoxxieCommand): boolean {
-	return command.subCategory === subCategory && matchNameAndCategory(name, category, command);
-}
-
-export function matchAny(names: Iterable<string>, command: FoxxieCommand): boolean {
-	for (const name of names) {
-		if (match(name, command)) return true;
-	}
-	return false;
-}
 
 export function match(name: string, command: FoxxieCommand): boolean {
 	// Match All:
@@ -47,52 +23,14 @@ export function match(name: string, command: FoxxieCommand): boolean {
 	return matchNameCategoryAndSubCategory(subCategoryRest, category, subCategory, command);
 }
 
-function resolveCategory(commands: CommandStore, category: string): string | null {
-	const scanned = new Set<string>();
-	const lowerCaseCategory = category.toLowerCase();
-
-	for (const command of commands.values()) {
-		const value = command.category;
-		if (isNullish(value)) continue;
-		if (scanned.has(value)) continue;
-		if (value.toLowerCase() === lowerCaseCategory) return value;
-		scanned.add(value);
+export function matchAny(names: Iterable<string>, command: FoxxieCommand): boolean {
+	for (const name of names) {
+		if (match(name, command)) return true;
 	}
-
-	return null;
+	return false;
 }
 
-function resolveSubCategory(commands: CommandStore, category: string, subCategory: string): string | null {
-	const scanned = new Set<string>();
-	const lowerCaseSubCategory = subCategory.toLowerCase();
-
-	for (const command of commands.values()) {
-		if (command.category !== category) continue;
-
-		const { subCategory } = command;
-		if (isNullish(subCategory)) continue;
-
-		if (scanned.has(subCategory)) continue;
-		if (subCategory.toLowerCase() === lowerCaseSubCategory) return subCategory;
-		scanned.add(subCategory);
-	}
-
-	return null;
-}
-
-function resolveCommandWithCategory(commands: CommandStore, name: string, category: string): string | null {
-	const command = commands.get(name) as FoxxieCommand | undefined;
-	if (command === undefined) return null;
-	return command.category === category ? command.name : null;
-}
-
-function resolveCommandWithCategoryAndSubCategory(commands: CommandStore, name: string, category: string, subCategory: string): string | null {
-	const command = commands.get(name) as FoxxieCommand | undefined;
-	if (command === undefined) return null;
-	return command.category === category && command.subCategory === subCategory ? command.name : null;
-}
-
-export function resolve(name: string): string | null {
+export function resolve(name: string): null | string {
 	// Match All:
 	if (name === '*') return name;
 
@@ -117,4 +55,67 @@ export function resolve(name: string): string | null {
 	return parts[2] === '*'
 		? `${category}.${subCategory}.*`
 		: resolveCommandWithCategoryAndSubCategory(commands, parts[2].toLowerCase(), category, subCategory);
+}
+
+function getNameSpaceDetails(name: string): readonly [null | string, string] {
+	const index = name.indexOf('.');
+	if (index === -1) return [null, name];
+	return [name.substring(0, index), name.substring(index + 1)];
+}
+
+function matchName(name: string, command: FoxxieCommand): boolean {
+	return command.name === name || command.aliases.some((alias) => alias === name);
+}
+
+function matchNameAndCategory(name: string, category: string, command: FoxxieCommand): boolean {
+	return command.category === category && matchName(name, command);
+}
+
+function matchNameCategoryAndSubCategory(name: string, category: string, subCategory: string, command: FoxxieCommand): boolean {
+	return command.subCategory === subCategory && matchNameAndCategory(name, category, command);
+}
+
+function resolveCategory(commands: CommandStore, category: string): null | string {
+	const scanned = new Set<string>();
+	const lowerCaseCategory = category.toLowerCase();
+
+	for (const command of commands.values()) {
+		const value = command.category;
+		if (isNullish(value)) continue;
+		if (scanned.has(value)) continue;
+		if (value.toLowerCase() === lowerCaseCategory) return value;
+		scanned.add(value);
+	}
+
+	return null;
+}
+
+function resolveCommandWithCategory(commands: CommandStore, name: string, category: string): null | string {
+	const command = commands.get(name) as FoxxieCommand | undefined;
+	if (command === undefined) return null;
+	return command.category === category ? command.name : null;
+}
+
+function resolveCommandWithCategoryAndSubCategory(commands: CommandStore, name: string, category: string, subCategory: string): null | string {
+	const command = commands.get(name) as FoxxieCommand | undefined;
+	if (command === undefined) return null;
+	return command.category === category && command.subCategory === subCategory ? command.name : null;
+}
+
+function resolveSubCategory(commands: CommandStore, category: string, subCategory: string): null | string {
+	const scanned = new Set<string>();
+	const lowerCaseSubCategory = subCategory.toLowerCase();
+
+	for (const command of commands.values()) {
+		if (command.category !== category) continue;
+
+		const { subCategory } = command;
+		if (isNullish(subCategory)) continue;
+
+		if (scanned.has(subCategory)) continue;
+		if (subCategory.toLowerCase() === lowerCaseSubCategory) return subCategory;
+		scanned.add(subCategory);
+	}
+
+	return null;
 }

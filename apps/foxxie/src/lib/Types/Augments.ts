@@ -1,35 +1,35 @@
-import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
-import { LLRCData, LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
-import { Awaitable, GatewayMessageReactionRemoveDispatch, Snowflake, User } from 'discord.js';
-import { PickByValue } from '@sapphire/utilities';
-import { TFunction } from '@sapphire/plugin-i18next';
 import { API } from '@discordjs/core/http-only';
-import { ScheduleManager, TaskStore } from '#lib/schedule';
+import { Piece, Store } from '@sapphire/framework';
+import { TFunction } from '@sapphire/plugin-i18next';
+import { PickByValue } from '@sapphire/utilities';
 import { ApiService } from '#lib/Container/Api/ApiService';
 import { SettingsService } from '#lib/Container/Services/SettingsService';
 import { UtilityService } from '#lib/Container/Utility/UtilityService';
-import { Piece, Store } from '@sapphire/framework';
-import { MappedTask } from '#utils/util';
-import { Schedules } from '#utils/constants';
-import { SerializerStore } from '#lib/Database/settings/structures/SerializerStore';
-import { ModerationEntry } from '#lib/moderation';
-import { SerializedEmoji } from '#utils/discord';
-import { PermissionsNode, StickyRole } from '#lib/Database/settings/types';
-import { InviteManager } from '#lib/Structures/managers/InviteManager';
-import { ColorData, ConsoleState, FoxxieEvents, GuildMessage, LanguageString, TypedFT, TypedT, TypeOfEmbed } from '#lib/types';
-import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
-import { FoxxieCommand } from '#lib/structures';
-import { RedisManager } from '#lib/Structures/managers/RedisManager';
 import { WorkerService } from '#lib/Container/Workers/WorkerService';
-import { MongoDB } from '#lib/Database/MongoDB';
+import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
 import { HighlightData } from '#lib/Database/Models/highlight';
 import { Starboard } from '#lib/Database/Models/starboard';
+import { MongoDB } from '#lib/Database/MongoDB';
+import { SerializerStore } from '#lib/Database/settings/structures/SerializerStore';
+import { PermissionsNode, StickyRole } from '#lib/Database/settings/types';
+import { ModerationEntry } from '#lib/moderation';
+import { ScheduleManager, TaskStore } from '#lib/schedule';
+import { FoxxieCommand } from '#lib/structures';
+import { InviteManager } from '#lib/Structures/managers/InviteManager';
+import { RedisManager } from '#lib/Structures/managers/RedisManager';
+import { ColorData, ConsoleState, FoxxieEvents, GuildMessage, LanguageString, TypedFT, TypedT, TypeOfEmbed } from '#lib/types';
+import { Schedules } from '#utils/constants';
+import { SerializedEmoji } from '#utils/discord';
+import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
+import { LLRCData, LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
+import { MappedTask } from '#utils/util';
+import { Awaitable, GatewayMessageReactionRemoveDispatch, Snowflake, User } from 'discord.js';
 
 declare global {
 	namespace PrismaJson {
+		export type HighlightEntries = HighlightData[];
 		export type PermissionNodeEntries = PermissionsNode[];
 		export type RolesPersistEntries = StickyRole[];
-		export type HighlightEntries = HighlightData[];
 	}
 }
 
@@ -38,10 +38,10 @@ declare module 'discord.js' {
 		development: boolean;
 		developmentRecoveryMode: boolean;
 		enabledProdOnlyEvent(): boolean;
-		invites: InviteManager;
-		webhookError: WebhookClient | null;
 		guildMemberFetchQueue: GuildMemberFetchQueue;
+		invites: InviteManager;
 		llrCollectors: Set<LongLivingReactionCollector>;
+		webhookError: null | WebhookClient;
 	}
 
 	interface ClientEvents {
@@ -51,8 +51,8 @@ declare module 'discord.js' {
 		[FoxxieEvents.GuildMemberJoin]: [member: GuildMember];
 		[FoxxieEvents.GuildMessageLog]: [
 			guild: Guild,
-			key: PickByValue<GuildChannelSettingsService, Snowflake | null>,
-			makeEmbed: (t: TFunction) => Awaitable<TypeOfEmbed | MessageCreateOptions>
+			key: PickByValue<GuildChannelSettingsService, null | Snowflake>,
+			makeEmbed: (t: TFunction) => Awaitable<MessageCreateOptions | TypeOfEmbed>
 		];
 		[FoxxieEvents.LastFmUpdateUser]: [userId: string];
 		[FoxxieEvents.MemberIdleLog]: [Presence];
@@ -73,37 +73,27 @@ declare module 'discord.js' {
 declare module '@sapphire/pieces' {
 	interface Container {
 		api?: API;
-		db: MongoDB;
-		redis: RedisManager | null;
-		schedule: ScheduleManager;
-		workers: WorkerService;
 		/**
 		 * Api manager
 		 */
 		apis: ApiService;
-
+		db: MongoDB;
+		redis: null | RedisManager;
+		schedule: ScheduleManager;
 		settings: SettingsService;
 
 		utilities: UtilityService;
+
+		workers: WorkerService;
 	}
 
 	interface StoreRegistryEntries {
-		tasks: TaskStore;
 		serializers: SerializerStore;
+		tasks: TaskStore;
 	}
 }
 
 declare module '@sapphire/framework' {
-	interface DetailedDescriptionCommandObject {}
-
-	interface Preconditions {
-		Administrator: never;
-		AllowedGuilds: { allowedGuilds: string[] };
-		BotOwner: never;
-		Everyone: never;
-		Moderator: never;
-	}
-
 	interface ArgType {
 		boolean: boolean;
 		cleanString: string;
@@ -121,6 +111,14 @@ declare module '@sapphire/framework' {
 		store: Store<any>;
 		timespan: number;
 		username: User;
+	}
+
+	interface Preconditions {
+		Administrator: never;
+		AllowedGuilds: { allowedGuilds: string[] };
+		BotOwner: never;
+		Everyone: never;
+		Moderator: never;
 	}
 }
 

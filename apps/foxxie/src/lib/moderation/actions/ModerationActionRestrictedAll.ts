@@ -5,10 +5,10 @@ import { PermissionFlagsBits } from 'discord.js';
 export class ModerationActionRestrictedAll extends RoleModerationAction<string[], TypeVariation.Mute> {
 	public constructor() {
 		super({
-			type: TypeVariation.Mute,
 			logPrefix: 'Moderation => Mute',
+			replace: true,
+			roleData: { hoist: false, mentionable: false, name: 'Muted', permissions: [] },
 			roleKey: RoleModerationAction.RoleKey.All,
-			roleData: { name: 'Muted', permissions: [], hoist: false, mentionable: false },
 			roleOverridesText:
 				PermissionFlagsBits.SendMessages |
 				PermissionFlagsBits.SendMessagesInThreads |
@@ -19,7 +19,7 @@ export class ModerationActionRestrictedAll extends RoleModerationAction<string[]
 				PermissionFlagsBits.CreatePublicThreads |
 				PermissionFlagsBits.CreatePrivateThreads,
 			roleOverridesVoice: PermissionFlagsBits.Connect,
-			replace: true
+			type: TypeVariation.Mute
 		});
 	}
 }

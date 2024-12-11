@@ -1,6 +1,6 @@
-import { ConsoleState, EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
 import { ApplyOptions } from '@sapphire/decorators';
 import { container, Listener } from '@sapphire/framework';
+import { ConsoleState, EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
 import { ChannelType, italic } from 'discord.js';
 
 const CHANNELID = '1305722872458772591';

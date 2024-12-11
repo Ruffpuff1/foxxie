@@ -1,3 +1,31 @@
+export const enum SchemaKeys {
+	Case = 'caseId',
+	Channel = 'channelId',
+	CreatedAt = 'createdAt',
+	Duration = 'duration',
+	ExtraData = 'extraData',
+	Guild = 'guildId',
+	ImageURL = 'imageUrl',
+	LogChannel = 'logChannelId',
+	LogMessageId = 'logMessageId',
+	Metadata = 'metadata',
+	Moderator = 'moderatorId',
+	Reason = 'reason',
+	Refrence = 'refrenceId',
+	Type = 'type',
+	User = 'userId'
+}
+
+export const enum TypeMetadata {
+	Archived = 1 << 3,
+	Completed = 1 << 4,
+	/** @deprecated Use Temporary instead */
+	Fast = 1 << 2,
+	None = 0,
+	Temporary = 1 << 1,
+	Undo = 1 << 0
+}
+
 export const enum TypeVariation {
 	Ban, // 0
 	Kick, // 1
@@ -20,34 +48,6 @@ export const enum TypeVariation {
 	Dehoist, // 19
 	RestrictedEmbed, // 20
 	RaidBan // 21 prob final for now
-}
-
-export const enum TypeMetadata {
-	None = 0,
-	Undo = 1 << 0,
-	Temporary = 1 << 1,
-	/** @deprecated Use Temporary instead */
-	Fast = 1 << 2,
-	Archived = 1 << 3,
-	Completed = 1 << 4
-}
-
-export const enum SchemaKeys {
-	Case = 'caseId',
-	CreatedAt = 'createdAt',
-	Duration = 'duration',
-	ExtraData = 'extraData',
-	Guild = 'guildId',
-	Moderator = 'moderatorId',
-	Reason = 'reason',
-	ImageURL = 'imageUrl',
-	Type = 'type',
-	User = 'userId',
-	Refrence = 'refrenceId',
-	LogChannel = 'logChannelId',
-	LogMessageId = 'logMessageId',
-	Channel = 'channelId',
-	Metadata = 'metadata'
 }
 
 export interface ModerationTypeAssets {

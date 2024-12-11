@@ -5,46 +5,46 @@ export class LastFmArtistEntity extends BaseEntity {
 	@ObjectIdColumn()
 	public _id!: string;
 
-	@PrimaryColumn({ default: null })
-	public name!: string;
+	public countryCode!: string;
 
-	@Column('varchar', { default: null })
-	public lastFmUrl!: string;
+	public disambiguation!: string;
 
-	@Column('varchar', { default: null })
-	public lastFmDescription!: string;
+	public endDate?: Date;
+
+	public gender!: string;
 
 	@Column()
 	public lastFmDate!: Date;
 
-	@Column()
-	public spotifyImageUrl!: string;
+	@Column('varchar', { default: null })
+	public lastFmDescription!: string;
 
-	public spotifyImageDate?: Date;
+	@Column('varchar', { default: null })
+	public lastFmUrl!: string;
 
-	public spotifyId!: string;
-
-	public popularity?: number;
+	public location!: string;
 
 	public mbid?: string;
 
 	public musicBrainzDate?: Date;
 
-	public location!: string;
+	@PrimaryColumn({ default: null })
+	public name!: string;
 
-	public countryCode!: string;
+	public popularity?: number;
 
-	public type!: string;
+	public spotifyId!: string;
 
-	public gender!: string;
+	public spotifyImageDate?: Date;
 
-	public disambiguation!: string;
+	@Column()
+	public spotifyImageUrl!: string;
 
 	public startDate?: Date;
 
-	public endDate?: Date;
-
 	public tags: { name: string; url: string }[] = [];
+
+	public type!: string;
 
 	public constructor(data: Partial<LastFmArtistEntity>) {
 		super();

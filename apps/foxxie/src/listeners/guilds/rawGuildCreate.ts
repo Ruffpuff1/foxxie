@@ -1,10 +1,10 @@
-import { getModeration } from '#utils/functions';
-import { floatPromise } from '#utils/util';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
+import { getModeration } from '#utils/functions';
+import { floatPromise } from '#utils/util';
 import { GatewayDispatchEvents, GatewayGuildCreateDispatch } from 'discord.js';
 
-@ApplyOptions<ListenerOptions>({ event: GatewayDispatchEvents.GuildCreate, emitter: 'ws' })
+@ApplyOptions<ListenerOptions>({ emitter: 'ws', event: GatewayDispatchEvents.GuildCreate })
 export class UserListener extends Listener {
 	public run(data: GatewayGuildCreateDispatch['d'], shardId: number): Promise<void> {
 		this.container.client.guildMemberFetchQueue.add(shardId, data.id);

@@ -2,14 +2,14 @@ import { api } from '#lib/discord/Api';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { resolveOnErrorCodes } from '#utils/common';
 import { TypeVariation } from '#utils/moderationConstants';
-import { RESTJSONErrorCodes, type Guild, type Snowflake } from 'discord.js';
+import { type Guild, RESTJSONErrorCodes, type Snowflake } from 'discord.js';
 
 export class ModerationActionVoiceMute extends ModerationAction<never, TypeVariation.VoiceMute> {
 	public constructor() {
 		super({
-			type: TypeVariation.VoiceMute,
 			isUndoActionAvailable: true,
-			logPrefix: 'Moderation => VoiceMute'
+			logPrefix: 'Moderation => VoiceMute',
+			type: TypeVariation.VoiceMute
 		});
 	}
 

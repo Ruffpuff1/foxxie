@@ -1,7 +1,7 @@
 import { Snowflake } from 'discord.js';
 
 export class GuildStarboardSettingsService {
-	public channel: Snowflake | null = null;
+	public channel: null | Snowflake = null;
 
 	public emojis: string[] = [];
 

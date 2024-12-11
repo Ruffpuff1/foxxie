@@ -1,7 +1,7 @@
-import { LanguageKeys } from '#lib/i18n';
 import { seconds } from '@ruffpuff/utilities';
 import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 import { Duration } from '@sapphire/time-utilities';
+import { LanguageKeys } from '#lib/i18n';
 
 export class UserArgument extends Argument<number> {
 	public run(parameter: string, context: ArgumentContext): ArgumentResult<number> {
@@ -9,25 +9,25 @@ export class UserArgument extends Argument<number> {
 
 		if (!Number.isSafeInteger(duration)) {
 			return this.error({
-				parameter,
+				context,
 				identifier: LanguageKeys.Arguments.Duration,
-				context
+				parameter
 			});
 		}
 
 		if (typeof context.minimum === 'number' && duration < context.minimum) {
 			return this.error({
-				parameter,
+				context: { ...context, remaining: context.minimum },
 				identifier: LanguageKeys.Arguments.TimespanTooSmall,
-				context: { ...context, remaining: context.minimum }
+				parameter
 			});
 		}
 
 		if (typeof context.maximum === 'number' && duration > context.maximum) {
 			return this.error({
-				parameter,
+				context: { ...context, remaining: context.maximum },
 				identifier: LanguageKeys.Arguments.TimespanTooLarge,
-				context: { ...context, remaining: context.maximum }
+				parameter
 			});
 		}
 

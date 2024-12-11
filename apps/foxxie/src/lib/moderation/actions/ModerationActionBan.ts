@@ -1,21 +1,21 @@
-import { resolveOnErrorCodes } from '#utils/common';
-import { TypeVariation } from '#utils/moderationConstants';
-import { Guild, RESTJSONErrorCodes, Snowflake } from 'discord.js';
 import { isNullish } from '@sapphire/utilities';
 import { api } from '#lib/discord';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
+import { resolveOnErrorCodes } from '#utils/common';
+import { TypeVariation } from '#utils/moderationConstants';
+import { Guild, RESTJSONErrorCodes, Snowflake } from 'discord.js';
 
 export class ModerationActionBan extends ModerationAction<number, TypeVariation.Ban> {
 	public constructor() {
 		super({
-			type: TypeVariation.Ban,
 			isUndoActionAvailable: true,
-			logPrefix: 'Moderation => Ban'
+			logPrefix: 'Moderation => Ban',
+			type: TypeVariation.Ban
 		});
 	}
 
 	public override async isActive(guild: Guild, userId: Snowflake) {
-		const ban = await resolveOnErrorCodes(guild.bans.fetch({ user: userId, cache: false }), RESTJSONErrorCodes.UnknownBan);
+		const ban = await resolveOnErrorCodes(guild.bans.fetch({ cache: false, user: userId }), RESTJSONErrorCodes.UnknownBan);
 		return !isNullish(ban);
 	}
 

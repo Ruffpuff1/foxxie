@@ -1,46 +1,22 @@
-import { LanguageKeys } from '#lib/i18n/languageKeys';
-import { getTitle, getTranslationKey } from '#lib/moderation/common';
 import type { ModerationManager } from '#lib/moderation/managers/ModerationManager';
 import type { TypedT } from '#lib/types';
+
+import { EmbedBuilder } from '@discordjs/builders';
+import { container } from '@sapphire/framework';
+import { fetchT } from '@sapphire/plugin-i18next';
+import { type Awaitable, isNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
+import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { getTitle, getTranslationKey } from '#lib/moderation/common';
 import { TypeMetadata, type TypeVariation } from '#lib/util/moderationConstants';
 import { seconds, years } from '#utils/common';
 import { getModeration } from '#utils/functions/guild';
 import { getCodeStyle, getLogPrefix } from '#utils/functions/pieces';
 import { getFullEmbedAuthor } from '#utils/util';
-import { EmbedBuilder } from '@discordjs/builders';
-import { container } from '@sapphire/framework';
-import { fetchT } from '@sapphire/plugin-i18next';
-import { isNullish, isNullishOrEmpty, isNullishOrZero, type Awaitable } from '@sapphire/utilities';
-import { DiscordAPIError, HTTPError, RESTJSONErrorCodes, type Guild, type Snowflake, type User } from 'discord.js';
+import { DiscordAPIError, type Guild, HTTPError, RESTJSONErrorCodes, type Snowflake, type User } from 'discord.js';
 
 const Root = LanguageKeys.Commands.Moderation;
 
 export abstract class ModerationAction<ContextType = never, Type extends TypeVariation = TypeVariation> {
-	/**
-	 * Represents the type of moderation action.
-	 */
-	public readonly type: Type;
-
-	/**
-	 * The minimum duration for the action.
-	 */
-	public readonly minimumDuration: number;
-
-	/**
-	 * The maximum duration for the action.
-	 */
-	public readonly maximumDuration: number;
-
-	/**
-	 * Whether or not the action allows undoing.
-	 */
-	public readonly isUndoActionAvailable: boolean;
-
-	/**
-	 * Whether or not the action requires a duration.
-	 */
-	public readonly durationRequired: boolean;
-
 	/**
 	 * Whether or not the action uses an external timer. This is true for
 	 * actions that are not time-managed by the bot, such as timeouts.
@@ -53,14 +29,39 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 	public readonly durationExternal: boolean;
 
 	/**
-	 * The prefix used for logging moderation actions.
+	 * Whether or not the action requires a duration.
 	 */
-	protected readonly logPrefix: string;
+	public readonly durationRequired: boolean;
+
+	/**
+	 * Whether or not the action allows undoing.
+	 */
+	public readonly isUndoActionAvailable: boolean;
+
+	/**
+	 * The maximum duration for the action.
+	 */
+	public readonly maximumDuration: number;
+
+	/**
+	 * The minimum duration for the action.
+	 */
+	public readonly minimumDuration: number;
+
+	/**
+	 * Represents the type of moderation action.
+	 */
+	public readonly type: Type;
 
 	/**
 	 * The key of the moderation action.
 	 */
 	protected readonly actionKey: TypedT;
+
+	/**
+	 * The prefix used for logging moderation actions.
+	 */
+	protected readonly logPrefix: string;
 
 	public constructor(options: ModerationAction.ConstructorOptions<Type>) {
 		this.type = options.type;
@@ -74,16 +75,26 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 	}
 
 	/**
-	 * Checks if this action is active for a given user in a guild.
+	 * Applies a moderation action to a user in the specified guild.
 	 *
-	 * @param guild - The guild to check.
-	 * @param userId - The ID of the user.
-	 * @param context - The context for the action.
-	 * @returns A boolean indicating whether the action is active.
+	 * @param guild - The guild to apply the moderation action at.
+	 * @param options - The options for the moderation action.
+	 * @param data - The options for sending the direct message.
+	 * @returns A Promise that resolves to the created moderation entry.
 	 */
-	public isActive(guild: Guild, userId: Snowflake, context: ContextType): Awaitable<boolean>;
-	public isActive() {
-		return false;
+	public async apply(guild: Guild, options: ModerationAction.PartialOptions<Type>, data: ModerationAction.Data<ContextType> = {}) {
+		const moderation = getModeration(guild);
+		const entry = moderation.create(await this.resolveOptions(guild, options, data));
+		try {
+			this.handleApplyPreOnStart(guild, entry, data);
+			await this.handleApplyPre(guild, entry, data);
+		} catch (error) {
+			await this.handleApplyPreOnError(error as Error, guild, entry, data);
+			throw error;
+		}
+		await this.sendDirectMessage(guild, entry, data);
+		await this.handleApplyPost(guild, entry, data);
+		return moderation.insert(entry);
 	}
 
 	/**
@@ -102,6 +113,20 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 			await getModeration(options.guild).complete(entry);
 		}
 		return entry;
+	}
+
+	/**
+	 * Checks if this action is active for a given user in a guild.
+	 *
+	 * @param guild - The guild to check.
+	 * @param userId - The ID of the user.
+	 * @param context - The context for the action.
+	 * @returns A boolean indicating whether the action is active.
+	 */
+	public isActive(guild: Guild, userId: Snowflake, context: ContextType): Awaitable<boolean>;
+
+	public isActive() {
+		return false;
 	}
 
 	/**
@@ -137,29 +162,6 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 	}
 
 	/**
-	 * Applies a moderation action to a user in the specified guild.
-	 *
-	 * @param guild - The guild to apply the moderation action at.
-	 * @param options - The options for the moderation action.
-	 * @param data - The options for sending the direct message.
-	 * @returns A Promise that resolves to the created moderation entry.
-	 */
-	public async apply(guild: Guild, options: ModerationAction.PartialOptions<Type>, data: ModerationAction.Data<ContextType> = {}) {
-		const moderation = getModeration(guild);
-		const entry = moderation.create(await this.resolveOptions(guild, options, data));
-		try {
-			this.handleApplyPreOnStart(guild, entry, data);
-			await this.handleApplyPre(guild, entry, data);
-		} catch (error) {
-			await this.handleApplyPreOnError(error as Error, guild, entry, data);
-			throw error;
-		}
-		await this.sendDirectMessage(guild, entry, data);
-		await this.handleApplyPost(guild, entry, data);
-		return moderation.insert(entry);
-	}
-
-	/**
 	 * Undoes a moderation action to a user in the specified guild.
 	 *
 	 * @param guild - The guild to apply the moderation action at.
@@ -183,6 +185,33 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 	}
 
 	/**
+	 * Retrieves the reason for a moderation action.
+	 *
+	 * @param guild - The guild where the moderation action occurred.
+	 * @param reason - The reason for the moderation action.
+	 * @param undo - Whether the action is an undo action.
+	 * @returns The reason for the moderation action.
+	 */
+	protected async getReason(guild: Guild, reason: null | string | undefined, undo = false) {
+		const t = await fetchT(guild);
+		const action = t(this.actionKey);
+		return isNullishOrEmpty(reason)
+			? t(undo ? Root.ActionRevokeNoReason : Root.ActionApplyNoReason, { action })
+			: t(undo ? Root.ActionRevokeReason : Root.ActionApplyReason, { action, reason });
+	}
+
+	/**
+	 * Handles the post-apply of the moderation action. Executed after the moderation entry is created and the user has
+	 * been notified.
+	 *
+	 * @param guild - The guild to apply the moderation action at.
+	 * @param entry - The draft moderation action.
+	 * @param data - The data for the action.
+	 */
+	protected handleApplyPost(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): Awaitable<unknown>;
+
+	protected handleApplyPost() {}
+	/**
 	 * Handles the pre-apply of the moderation action. Executed before the moderation entry is created and the user has
 	 * been notified.
 	 *
@@ -191,17 +220,8 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 	 * @param data - The data for the action.
 	 */
 	protected handleApplyPre(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): Awaitable<unknown>;
-	protected handleApplyPre() {}
 
-	/**
-	 * Handles a hook that is executed before the moderation action is applied at {@linkcode handleApplyPre}.
-	 *
-	 * @param guild - The guild at which the moderation action is being applied.
-	 * @param entry - The draft moderation action.
-	 * @param data - The data for the action.
-	 */
-	protected handleApplyPreOnStart(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): unknown;
-	protected handleApplyPreOnStart() {}
+	protected handleApplyPre() {}
 
 	/**
 	 * Handles a hook that is executed when {@linkcode handleApplyPre} threw an error.
@@ -218,18 +238,27 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 	): unknown;
 
 	protected handleApplyPreOnError() {}
-
 	/**
-	 * Handles the post-apply of the moderation action. Executed after the moderation entry is created and the user has
-	 * been notified.
+	 * Handles a hook that is executed before the moderation action is applied at {@linkcode handleApplyPre}.
 	 *
-	 * @param guild - The guild to apply the moderation action at.
+	 * @param guild - The guild at which the moderation action is being applied.
 	 * @param entry - The draft moderation action.
 	 * @param data - The data for the action.
 	 */
-	protected handleApplyPost(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): Awaitable<unknown>;
-	protected handleApplyPost() {}
+	protected handleApplyPreOnStart(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): unknown;
 
+	protected handleApplyPreOnStart() {}
+	/**
+	 * Handles the post-undo of the moderation action. Executed after the moderation entry is created and the user has
+	 * been notified.
+	 *
+	 * @param guild - The guild to undo a moderation action at.
+	 * @param entry - The draft moderation action.
+	 * @param data - The data for the action.
+	 */
+	protected handleUndoPost(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): Awaitable<unknown>;
+
+	protected handleUndoPost() {}
 	/**
 	 * Handles the pre-undo of the moderation action. Executed before the moderation entry is created and the user has
 	 * been notified.
@@ -239,17 +268,8 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 	 * @param data - The data for the action.
 	 */
 	protected handleUndoPre(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): Awaitable<unknown>;
-	protected handleUndoPre() {}
 
-	/**
-	 * Handles a hook that is executed before the moderation action is applied at {@linkcode handleUndoPre}.
-	 *
-	 * @param guild - The guild at which the moderation action is being applied.
-	 * @param entry - The draft moderation action.
-	 * @param data - The data for the action.
-	 */
-	protected handleUndoPreOnStart(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): unknown;
-	protected handleUndoPreOnStart() {}
+	protected handleUndoPre() {}
 
 	/**
 	 * Handles a hook that is executed when {@linkcode handleUndoPre} threw an error.
@@ -266,17 +286,27 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 	): unknown;
 
 	protected handleUndoPreOnError() {}
-
 	/**
-	 * Handles the post-undo of the moderation action. Executed after the moderation entry is created and the user has
-	 * been notified.
+	 * Handles a hook that is executed before the moderation action is applied at {@linkcode handleUndoPre}.
 	 *
-	 * @param guild - The guild to undo a moderation action at.
+	 * @param guild - The guild at which the moderation action is being applied.
 	 * @param entry - The draft moderation action.
 	 * @param data - The data for the action.
 	 */
-	protected handleUndoPost(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): Awaitable<unknown>;
-	protected handleUndoPost() {}
+	protected handleUndoPreOnStart(guild: Guild, entry: ModerationManager.Entry<Type>, data: ModerationAction.Data<ContextType>): unknown;
+
+	protected handleUndoPreOnStart() {}
+
+	/**
+	 * Resolves the options for an appeal.
+	 *
+	 * @param guild - The guild where the moderation action occurred.
+	 * @param options - The original options for the moderation action.
+	 * @param data - The data for the action.
+	 */
+	protected async resolveAppealOptions(guild: Guild, options: ModerationAction.PartialOptions<Type>, data: ModerationAction.Data<ContextType>) {
+		return this.resolveOptions(guild, options, data, TypeMetadata.Undo);
+	}
 
 	protected async resolveOptions(
 		guild: Guild,
@@ -287,9 +317,9 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 		return {
 			...options,
 			duration: options.duration || null,
-			type: this.type,
+			extraData: options.extraData || (await this.resolveOptionsExtraData(guild, options, data)),
 			metadata,
-			extraData: options.extraData || (await this.resolveOptionsExtraData(guild, options, data))
+			type: this.type
 		};
 	}
 
@@ -311,17 +341,6 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 	}
 
 	/**
-	 * Resolves the options for an appeal.
-	 *
-	 * @param guild - The guild where the moderation action occurred.
-	 * @param options - The original options for the moderation action.
-	 * @param data - The data for the action.
-	 */
-	protected async resolveAppealOptions(guild: Guild, options: ModerationAction.PartialOptions<Type>, data: ModerationAction.Data<ContextType>) {
-		return this.resolveOptions(guild, options, data, TypeMetadata.Undo);
-	}
-
-	/**
 	 * Sends a direct message to the user associated with the moderation entry.
 	 *
 	 * @param guild - The guild where the moderation action occurred.
@@ -340,22 +359,6 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 		}
 	}
 
-	/**
-	 * Retrieves the reason for a moderation action.
-	 *
-	 * @param guild - The guild where the moderation action occurred.
-	 * @param reason - The reason for the moderation action.
-	 * @param undo - Whether the action is an undo action.
-	 * @returns The reason for the moderation action.
-	 */
-	protected async getReason(guild: Guild, reason: string | null | undefined, undo = false) {
-		const t = await fetchT(guild);
-		const action = t(this.actionKey);
-		return isNullishOrEmpty(reason)
-			? t(undo ? Root.ActionRevokeNoReason : Root.ActionApplyNoReason, { action })
-			: t(undo ? Root.ActionRevokeReason : Root.ActionApplyReason, { action, reason });
-	}
-
 	async #buildEmbed(guild: Guild, entry: ModerationManager.Entry, data: ModerationAction.Data<ContextType>) {
 		const descriptionKey = entry.reason
 			? entry.duration
@@ -367,10 +370,10 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 
 		const t = await fetchT(guild);
 		const description = t(descriptionKey, {
+			duration: entry.duration,
 			guild: guild.name,
-			title: getTitle(t, entry),
 			reason: entry.reason,
-			duration: entry.duration
+			title: getTitle(t, entry)
 		});
 		const embed = new EmbedBuilder() //
 			.setDescription(description)
@@ -380,16 +383,16 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 		return embed;
 	}
 
-	#handleDirectMessageError(error: Error) {
-		if (error instanceof DiscordAPIError) return this.#handleDirectMessageDiscordError(error);
-		if (error instanceof HTTPError) return this.#handleDirectMessageHTTPError(error);
-		throw error;
-	}
-
 	#handleDirectMessageDiscordError(error: DiscordAPIError) {
 		if (error.code === RESTJSONErrorCodes.CannotSendMessagesToThisUser) return;
 
 		container.logger.error(this.logPrefix, getCodeStyle(error.code), error.url);
+		throw error;
+	}
+
+	#handleDirectMessageError(error: Error) {
+		if (error instanceof DiscordAPIError) return this.#handleDirectMessageDiscordError(error);
+		if (error instanceof HTTPError) return this.#handleDirectMessageHTTPError(error);
 		throw error;
 	}
 
@@ -401,31 +404,31 @@ export abstract class ModerationAction<ContextType = never, Type extends TypeVar
 
 export namespace ModerationAction {
 	export interface ConstructorOptions<Type extends TypeVariation = TypeVariation> {
-		type: Type;
-		logPrefix: string;
-		isUndoActionAvailable: boolean;
-		minimumDuration?: number;
-		maximumDuration?: number;
-		durationRequired?: boolean;
 		durationExternal?: boolean;
+		durationRequired?: boolean;
+		isUndoActionAvailable: boolean;
+		logPrefix: string;
+		maximumDuration?: number;
+		minimumDuration?: number;
+		type: Type;
 	}
-
-	export type Options<Type extends TypeVariation = TypeVariation> = ModerationManager.CreateData<Type>;
-	export type PartialOptions<Type extends TypeVariation = TypeVariation> = Omit<Options<Type>, 'type' | 'metadata'>;
-
-	export type Entry<Type extends TypeVariation = TypeVariation> = ModerationManager.Entry<Type>;
 
 	export interface Data<ContextType = never> {
 		context?: ContextType;
+		moderator?: null | User;
 		sendDirectMessage?: boolean;
-		moderator?: User | null;
 	}
+	export type Entry<Type extends TypeVariation = TypeVariation> = ModerationManager.Entry<Type>;
 
 	export interface ModerationEntryFetchOptions<Type extends TypeVariation = TypeVariation> {
-		guild: Guild;
-		userId: Snowflake;
-		type?: Type;
-		metadata?: TypeMetadata | null;
 		filter?: (entry: ModerationManager.Entry<Type>) => boolean;
+		guild: Guild;
+		metadata?: null | TypeMetadata;
+		type?: Type;
+		userId: Snowflake;
 	}
+
+	export type Options<Type extends TypeVariation = TypeVariation> = ModerationManager.CreateData<Type>;
+
+	export type PartialOptions<Type extends TypeVariation = TypeVariation> = Omit<Options<Type>, 'metadata' | 'type'>;
 }

@@ -1,10 +1,14 @@
-import { EnvKeys } from '#lib/types';
-import { Urls } from '#utils/constants';
 import makeRequest from '@aero/http';
 import { envParseString } from '@skyra/env-utilities';
+import { EnvKeys } from '#lib/types';
+import { Urls } from '#utils/constants';
+
+export interface HastebinPostData {
+	key: string;
+}
 
 export class HastebinService {
-	public async post(body: string): Promise<string | null> {
+	public async post(body: string): Promise<null | string> {
 		const { key } = await makeRequest(Urls.Haste)
 			.path('documents')
 			.body({ body })
@@ -18,8 +22,4 @@ export class HastebinService {
 	private get token() {
 		return envParseString(EnvKeys.HasteToken);
 	}
-}
-
-export interface HastebinPostData {
-	key: string;
 }

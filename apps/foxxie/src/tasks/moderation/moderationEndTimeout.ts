@@ -1,11 +1,11 @@
+import { ApplyOptions } from '@sapphire/decorators';
+import { fetchT } from '@sapphire/plugin-i18next';
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationData, ModerationTask } from '#lib/moderation/structures/ModerationTask';
 import { Task } from '#lib/schedule';
 import { Schedules } from '#utils/constants';
 import { getModeration } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
-import { ApplyOptions } from '@sapphire/decorators';
-import { fetchT } from '@sapphire/plugin-i18next';
 import { type Guild } from 'discord.js';
 
 @ApplyOptions<Task.Options>(({ container: _ }) => ({
@@ -21,12 +21,12 @@ export class UserModerationTask extends ModerationTask {
 		const undo = await moderation.fetch(data.caseId);
 
 		const entry = moderation.create({
-			user: data.userId,
-			type: TypeVariation.Timeout,
 			metadata: TypeMetadata.Undo,
-			reason,
 			moderator: undo?.moderatorId,
-			refrenceId: data.caseId
+			reason,
+			refrenceId: data.caseId,
+			type: TypeVariation.Timeout,
+			user: data.userId
 		});
 
 		await moderation.insert(entry);

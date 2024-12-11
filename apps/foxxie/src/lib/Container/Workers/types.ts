@@ -1,5 +1,16 @@
-import { Highlight } from '#lib/database';
 import type { Snowflake } from 'discord.js';
+
+import { Highlight } from '#lib/database';
+
+export const enum HighlightTypeEnum {
+	Word,
+	Regex
+}
+
+export const enum IncomingType {
+	RunHighlightPayload,
+	RunWordFilter
+}
 
 export const enum OutputType {
 	Heartbeat,
@@ -9,25 +20,10 @@ export const enum OutputType {
 	FilterNoContent
 }
 
-export type OutgoingPayload = OutgoingHeartbeatPayload | OutgoingUnknownCommandPayload | OutgoingHighlightPayload | OutgoingWordFilterPayload;
-
-export interface OutgoingHeartbeatPayload {
-	type: OutputType.Heartbeat;
-}
-
-export interface OutgoingUnknownCommandPayload extends IdPayload {
-	type: OutputType.Unknown;
-}
-
-export interface OutgoingHighlightPayload extends IdPayload {
-	type: OutputType;
-	results: HighlightReturnData[];
-}
-
 export interface HighlightReturnData {
-	userId: Snowflake;
 	content: string;
 	trigger: string;
+	userId: Snowflake;
 }
 
 export interface IdPayload {
@@ -36,33 +32,38 @@ export interface IdPayload {
 
 export type IncomingPayload = RunHighlightPayload<HighlightTypeEnum> | RunWordFilterPayload;
 
-export const enum IncomingType {
-	RunHighlightPayload,
-	RunWordFilter
+export interface OutgoingHeartbeatPayload {
+	type: OutputType.Heartbeat;
 }
 
-export interface RunHighlightPayload<T extends HighlightTypeEnum> extends IdPayload {
-	type: IncomingType.RunHighlightPayload;
-	highlightType: T;
-	content: string;
-	authorId: Snowflake;
-	highlights: Highlight[];
+export interface OutgoingHighlightPayload extends IdPayload {
+	results: HighlightReturnData[];
+	type: OutputType;
 }
 
-export interface RunWordFilterPayload extends IdPayload {
-	type: IncomingType.RunWordFilter;
-	regex: RegExp;
-	content: string;
-}
+export type OutgoingPayload = OutgoingHeartbeatPayload | OutgoingHighlightPayload | OutgoingUnknownCommandPayload | OutgoingWordFilterPayload;
 
-export const enum HighlightTypeEnum {
-	Word,
-	Regex
+export interface OutgoingUnknownCommandPayload extends IdPayload {
+	type: OutputType.Unknown;
 }
 
 export interface OutgoingWordFilterPayload extends IdPayload {
-	type: OutputType.FilterNoContent | OutputType.FilterMatch;
 	filtered?: string;
 	highlighted?: string;
 	match?: string;
+	type: OutputType.FilterMatch | OutputType.FilterNoContent;
+}
+
+export interface RunHighlightPayload<T extends HighlightTypeEnum> extends IdPayload {
+	authorId: Snowflake;
+	content: string;
+	highlights: Highlight[];
+	highlightType: T;
+	type: IncomingType.RunHighlightPayload;
+}
+
+export interface RunWordFilterPayload extends IdPayload {
+	content: string;
+	regex: RegExp;
+	type: IncomingType.RunWordFilter;
 }

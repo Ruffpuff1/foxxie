@@ -1,8 +1,8 @@
+import { ApplyOptions } from '@sapphire/decorators';
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationCommand } from '#lib/moderation/structures/ModerationCommand';
 import { GuildMessage } from '#lib/types';
 import { TypeVariation } from '#utils/moderationConstants';
-import { ApplyOptions } from '@sapphire/decorators';
 import { PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<ModerationCommand.Options<TypeVariation.Timeout>>({

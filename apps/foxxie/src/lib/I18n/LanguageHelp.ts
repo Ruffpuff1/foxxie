@@ -1,49 +1,23 @@
+export interface LanguageHelpDisplayOptions {
+	examples?: (null | string)[];
+	explainedUsage?: [string, string][];
+	extendedHelp?: string;
+	possibleFormats?: [string, string][];
+	reminder?: string;
+	usages?: string[];
+}
+
 export class LanguageHelp {
 	private aliases: string = null!;
-	private usages: string = null!;
-	private extendedHelp: string = null!;
-	private explainedUsage: string = null!;
-	private possibleFormats: string = null!;
 	private examples: string = null!;
+	private explainedUsage: string = null!;
+	private extendedHelp: string = null!;
+	private possibleFormats: string = null!;
 	private reminder: string = null!;
+	private usages: string = null!;
 
-	public setAliases(text: string) {
-		this.aliases = text;
-		return this;
-	}
-
-	public setUsages(text: string) {
-		this.usages = text;
-		return this;
-	}
-
-	public setExplainedUsage(text: string) {
-		this.explainedUsage = text;
-		return this;
-	}
-
-	public setExtendedHelp(text: string) {
-		this.extendedHelp = text;
-		return this;
-	}
-
-	public setPossibleFormats(text: string) {
-		this.possibleFormats = text;
-		return this;
-	}
-
-	public setExamples(text: string) {
-		this.examples = text;
-		return this;
-	}
-
-	public setReminder(text: string) {
-		this.reminder = text;
-		return this;
-	}
-
-	public display(name: string, aliases: string | null, options: LanguageHelpDisplayOptions, prefixUsed: string) {
-		const { usages = [], extendedHelp, explainedUsage = [], possibleFormats = [], examples = [], reminder } = options;
+	public display(name: string, aliases: null | string, options: LanguageHelpDisplayOptions, prefixUsed: string) {
+		const { examples = [], explainedUsage = [], extendedHelp, possibleFormats = [], reminder, usages = [] } = options;
 		const output: string[] = [];
 
 		// Usages
@@ -84,13 +58,39 @@ export class LanguageHelp {
 
 		return output.join('\n');
 	}
-}
 
-export interface LanguageHelpDisplayOptions {
-	usages?: string[];
-	extendedHelp?: string;
-	explainedUsage?: [string, string][];
-	possibleFormats?: [string, string][];
-	examples?: (null | string)[];
-	reminder?: string;
+	public setAliases(text: string) {
+		this.aliases = text;
+		return this;
+	}
+
+	public setExamples(text: string) {
+		this.examples = text;
+		return this;
+	}
+
+	public setExplainedUsage(text: string) {
+		this.explainedUsage = text;
+		return this;
+	}
+
+	public setExtendedHelp(text: string) {
+		this.extendedHelp = text;
+		return this;
+	}
+
+	public setPossibleFormats(text: string) {
+		this.possibleFormats = text;
+		return this;
+	}
+
+	public setReminder(text: string) {
+		this.reminder = text;
+		return this;
+	}
+
+	public setUsages(text: string) {
+		this.usages = text;
+		return this;
+	}
 }

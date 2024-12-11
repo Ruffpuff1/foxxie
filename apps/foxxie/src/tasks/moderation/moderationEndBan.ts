@@ -1,16 +1,16 @@
+import { ApplyOptions } from '@sapphire/decorators';
+import { fetchT } from '@sapphire/plugin-i18next';
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationActions } from '#lib/moderation';
 import { ModerationData, ModerationTask } from '#lib/moderation/structures/ModerationTask';
 import { Task } from '#lib/schedule';
 import { Schedules } from '#utils/constants';
 import { getModeration } from '#utils/functions';
-import { ApplyOptions } from '@sapphire/decorators';
-import { fetchT } from '@sapphire/plugin-i18next';
-import { PermissionFlagsBits, type Guild } from 'discord.js';
+import { type Guild, PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<Task.Options>(({ container }) => ({
-	name: Schedules.EndTempBan,
-	enabled: container.client.enabledProdOnlyEvent()
+	enabled: container.client.enabledProdOnlyEvent(),
+	name: Schedules.EndTempBan
 }))
 export class UserModerationTask extends ModerationTask {
 	protected async handle(guild: Guild, data: ModerationData) {
@@ -28,7 +28,7 @@ export class UserModerationTask extends ModerationTask {
 
 		await ModerationActions.ban.undo(
 			guild,
-			{ user: data.userId, reason, refrenceId: data.caseId, moderator: undo?.moderatorId || undefined },
+			{ moderator: undo?.moderatorId || undefined, reason, refrenceId: data.caseId, user: data.userId },
 			actionData
 		);
 

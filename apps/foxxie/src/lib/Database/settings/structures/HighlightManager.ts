@@ -1,8 +1,9 @@
-import { Collection, Guild } from 'discord.js';
-import { ReadonlyGuildData } from '../types.js';
-import { Highlight, HighlightData } from '#lib/Database/Models/highlight';
-import { writeSettings } from '../index.js';
 import { container } from '@sapphire/framework';
+import { Highlight, HighlightData } from '#lib/Database/Models/highlight';
+import { Collection, Guild } from 'discord.js';
+
+import { writeSettings } from '../index.js';
+import { ReadonlyGuildData } from '../types.js';
 
 export class HighlightManager {
 	#cache = new Collection<string, Highlight>();

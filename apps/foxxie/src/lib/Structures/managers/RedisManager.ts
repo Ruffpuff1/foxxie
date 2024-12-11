@@ -1,7 +1,7 @@
-import { RedisData, RedisKeys, RedisValue } from '#lib/types';
 import { Result } from '@sapphire/result';
 import { cast } from '@sapphire/utilities';
-import { RedisOptions, Redis } from 'ioredis';
+import { RedisData, RedisKeys, RedisValue } from '#lib/types';
+import { Redis, RedisOptions } from 'ioredis';
 
 export class RedisManager extends Redis {
 	public constructor(options: RedisOptions) {

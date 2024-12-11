@@ -1,9 +1,9 @@
 import { createReferPromise, ReferredPromise } from '#utils/common';
 
 export class WorkerResponse {
-	private id = -1;
+	private handler: null | ReferredPromise<unknown> = null;
 
-	private handler: ReferredPromise<unknown> | null = null;
+	private id = -1;
 
 	private timer: NodeJS.Timeout | null = null;
 
@@ -14,7 +14,25 @@ export class WorkerResponse {
 		return this.handler.promise;
 	}
 
-	public timeout(delay: number | null) {
+	public reject(id: number, error: Error) {
+		if (this.id === id) {
+			this.id = -1;
+			this.clearTimeout();
+			this.handler!.reject(error);
+			this.handler = null;
+		}
+	}
+
+	public resolve(id: number, data: unknown) {
+		if (this.id === id) {
+			this.id = -1;
+			this.clearTimeout();
+			this.handler!.resolve(data);
+			this.handler = null;
+		}
+	}
+
+	public timeout(delay: null | number) {
 		if (delay === null) {
 			return this.clearTimeout();
 		}
@@ -29,24 +47,6 @@ export class WorkerResponse {
 			this.reject(id, new Error());
 		}, delay).unref();
 		return true;
-	}
-
-	public resolve(id: number, data: unknown) {
-		if (this.id === id) {
-			this.id = -1;
-			this.clearTimeout();
-			this.handler!.resolve(data);
-			this.handler = null;
-		}
-	}
-
-	public reject(id: number, error: Error) {
-		if (this.id === id) {
-			this.id = -1;
-			this.clearTimeout();
-			this.handler!.reject(error);
-			this.handler = null;
-		}
 	}
 
 	private clearTimeout() {

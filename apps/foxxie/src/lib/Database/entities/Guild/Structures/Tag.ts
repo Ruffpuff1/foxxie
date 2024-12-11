@@ -2,17 +2,17 @@ import { resolveClientColor } from '#utils/util';
 import { EmbedBuilder, Message } from 'discord.js';
 
 export class Tag {
-	public id!: string;
+	public aliases!: string[];
+
+	public color!: number;
+
+	public content!: string;
 
 	public delete!: boolean;
 
 	public embed!: boolean;
 
-	public aliases!: string[];
-
-	public content!: string;
-
-	public color!: number;
+	public id!: string;
 
 	public constructor(data: Partial<Tag>) {
 		Object.assign(this, data);

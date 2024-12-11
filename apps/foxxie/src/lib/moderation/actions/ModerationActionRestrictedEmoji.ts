@@ -5,12 +5,12 @@ import { PermissionFlagsBits } from 'discord.js';
 export class ModerationActionRestrictedEmoji extends RoleModerationAction<never, TypeVariation.RestrictedEmoji> {
 	public constructor() {
 		super({
-			type: TypeVariation.RestrictedEmoji,
 			logPrefix: 'Moderation => RestrictedEmoji',
+			roleData: { hoist: false, mentionable: false, name: 'Emoji Restricted', permissions: [] },
 			roleKey: RoleModerationAction.RoleKey.Emoji,
-			roleData: { name: 'Emoji Restricted', permissions: [], hoist: false, mentionable: false },
 			roleOverridesText: PermissionFlagsBits.UseExternalEmojis | PermissionFlagsBits.UseExternalStickers,
-			roleOverridesVoice: null
+			roleOverridesVoice: null,
+			type: TypeVariation.RestrictedEmoji
 		});
 	}
 }

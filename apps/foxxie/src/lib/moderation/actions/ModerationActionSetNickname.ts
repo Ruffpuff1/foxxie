@@ -1,24 +1,24 @@
+import { resolveKey } from '@sapphire/plugin-i18next';
+import { isNullish } from '@sapphire/utilities';
 import { api } from '#lib/discord/Api';
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { resolveOnErrorCodes } from '#utils/common';
 import { TypeVariation } from '#utils/moderationConstants';
-import { resolveKey } from '@sapphire/plugin-i18next';
-import { isNullish } from '@sapphire/utilities';
-import { RESTJSONErrorCodes, type Guild } from 'discord.js';
+import { type Guild, RESTJSONErrorCodes } from 'discord.js';
 
 const Root = LanguageKeys.Commands.Moderation;
 
-export class ModerationActionSetNickname extends ModerationAction<string | null, TypeVariation.SetNickname> {
+export class ModerationActionSetNickname extends ModerationAction<null | string, TypeVariation.SetNickname> {
 	public constructor() {
 		super({
-			type: TypeVariation.SetNickname,
 			isUndoActionAvailable: true,
-			logPrefix: 'Moderation => SetNickname'
+			logPrefix: 'Moderation => SetNickname',
+			type: TypeVariation.SetNickname
 		});
 	}
 
-	public override async isActive(guild: Guild, userId: string, context: string | null) {
+	public override async isActive(guild: Guild, userId: string, context: null | string) {
 		const member = await resolveOnErrorCodes(guild.members.fetch(userId), RESTJSONErrorCodes.UnknownMember);
 		return !isNullish(member) && member.nickname === context;
 	}

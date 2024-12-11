@@ -1,8 +1,13 @@
+import { err, ok, Result } from '@sapphire/result';
+import { Duration } from '@sapphire/time-utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { Parameter, TypedFT } from '#lib/types';
 import { seconds } from '#utils/common';
-import { err, ok, Result } from '@sapphire/result';
-import { Duration } from '@sapphire/time-utilities';
+
+export interface TimeSpanOptions {
+	maximum?: number;
+	minimum?: number;
+}
 
 export function resolveTimeSpan(parameter: string, options?: TimeSpanOptions): Result<number, TypedFT<Parameter>> {
 	const duration = parse(parameter);
@@ -33,9 +38,4 @@ function parse(parameter: string) {
 	if (!Number.isNaN(date)) return date - Date.now();
 
 	return NaN;
-}
-
-export interface TimeSpanOptions {
-	minimum?: number;
-	maximum?: number;
 }

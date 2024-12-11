@@ -2,11 +2,10 @@ import { PrismaClient } from '@prisma/client';
 import { container } from '@sapphire/framework';
 
 const prisma = new PrismaClient().$extends({
-	name: 'extensions',
 	model: {
 		moderation: {
 			async getGuildModerationMetadata(guildId: string): Promise<GuildModerationMetadata> {
-				const [entry] = await prisma.$queryRaw<{ latest: number | null; count: bigint }[]>`
+				const [entry] = await prisma.$queryRaw<{ count: bigint; latest: null | number }[]>`
 					SELECT
 						MAX(case_id) as "latest",
 						COUNT(*) as "count"
@@ -14,10 +13,11 @@ const prisma = new PrismaClient().$extends({
 					WHERE guild_id = ${guildId};
 				`;
 
-				return { latest: entry.latest ?? 0, count: Number(entry.count) };
+				return { count: Number(entry.count), latest: entry.latest ?? 0 };
 			}
 		}
-	}
+	},
+	name: 'extensions'
 });
 container.prisma = prisma;
 
@@ -28,6 +28,6 @@ declare module '@sapphire/pieces' {
 }
 
 interface GuildModerationMetadata {
-	latest: number;
 	count: number;
+	latest: number;
 }

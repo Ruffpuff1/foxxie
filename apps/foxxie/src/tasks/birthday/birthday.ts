@@ -1,28 +1,31 @@
+import { resolveToNull } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
 import { readSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
 import { getAge, nextBirthday } from '#utils/birthday';
 import { Schedules } from '#utils/constants';
 import { fetchChannel } from '#utils/discord';
-import { resolveToNull } from '@ruffpuff/utilities';
-import { ApplyOptions } from '@sapphire/decorators';
 import { Guild, GuildMember } from 'discord.js';
 import { getFixedT, TFunction } from 'i18next';
 
-const enum PartResult {
-	NotSet,
-	Invalid,
-	Success
+const enum BirthdayMessageMatches {
+	Age = '{member.age}',
+	Guild = '{member.guild}',
+	Member = '{member}',
+	Nick = '{member.nick}',
+	Tag = '{member.tag}',
+	Username = '{member.username}'
 }
 
 @ApplyOptions<Task.Options>(({ container }) => ({
-	name: Schedules.Birthday,
-	enabled: container.client.enabledProdOnlyEvent()
+	enabled: container.client.enabledProdOnlyEvent(),
+	name: Schedules.Birthday
 }))
 export class UserTask extends Task {
 	private matchRegex = /{member(\.(age|nick|username|tag|guild))?}/g;
 
-	public async run(data: ScheduleEntry.TaskData[Schedules.Birthday]): Promise<PartialResponseValue | null> {
+	public async run(data: ScheduleEntry.TaskData[Schedules.Birthday]): Promise<null | PartialResponseValue> {
 		const guild = this.container.client.guilds.cache.get(data.guildId);
 		if (!guild) return null;
 
@@ -42,22 +45,7 @@ export class UserTask extends Task {
 		return { type: ResponseType.Update, value: next };
 	}
 
-	private async handleRole(member: GuildMember, roleId: string | null): Promise<PartResult> {
-		if (!roleId) return PartResult.NotSet;
-
-		const role = member.guild.roles.cache.get(roleId);
-		if (!role) return PartResult.Invalid;
-
-		const me = this.container.client.user ? member.guild.members.cache.get(this.container.client.user.id) : null;
-
-		if (me && me.roles.highest.position > role.position) {
-			await this.addBirthdayRole(member, role.id);
-		}
-
-		return PartResult.Success;
-	}
-
-	private async addBirthdayRole(member: GuildMember, roleId: string | null): Promise<void> {
+	private async addBirthdayRole(member: GuildMember, roleId: null | string): Promise<void> {
 		if (!roleId) return;
 
 		await member.roles.add(roleId);
@@ -66,8 +54,8 @@ export class UserTask extends Task {
 
 		await this.container.schedule.add(Schedules.RemoveBirthdayRole, tomorrow, {
 			data: {
-				roleId,
 				guildId: member.guild.id,
+				roleId,
 				userId: member.id
 			}
 		});
@@ -87,13 +75,28 @@ export class UserTask extends Task {
 
 		const sent = await resolveToNull(
 			channel.send({
-				content,
-				allowedMentions: { parse: ['roles', 'users'] }
+				allowedMentions: { parse: ['roles', 'users'] },
+				content
 			})
 		);
 
 		if (sent) return PartResult.Success;
 		return PartResult.Invalid;
+	}
+
+	private async handleRole(member: GuildMember, roleId: null | string): Promise<PartResult> {
+		if (!roleId) return PartResult.NotSet;
+
+		const role = member.guild.roles.cache.get(roleId);
+		if (!role) return PartResult.Invalid;
+
+		const me = this.container.client.user ? member.guild.members.cache.get(this.container.client.user.id) : null;
+
+		if (me && me.roles.highest.position > role.position) {
+			await this.addBirthdayRole(member, role.id);
+		}
+
+		return PartResult.Success;
 	}
 
 	private parseMessage(message: string, member: GuildMember, data: ScheduleEntry.TaskData[Schedules.Birthday], t: TFunction): string {
@@ -102,18 +105,18 @@ export class UserTask extends Task {
 
 		return (message || t(messageKey)).replace(this.matchRegex, (match) => {
 			switch (match) {
-				case BirthdayMessageMatches.Member:
-					return member.toString();
 				case BirthdayMessageMatches.Age:
 					return age ? `${age}` : t(LanguageKeys.Tasks.BirthdayYearOlder);
-				case BirthdayMessageMatches.Nick:
-					return member.displayName;
-				case BirthdayMessageMatches.Username:
-					return member.user.username;
-				case BirthdayMessageMatches.Tag:
-					return member.user.tag;
 				case BirthdayMessageMatches.Guild:
 					return member.guild.name;
+				case BirthdayMessageMatches.Member:
+					return member.toString();
+				case BirthdayMessageMatches.Nick:
+					return member.displayName;
+				case BirthdayMessageMatches.Tag:
+					return member.user.tag;
+				case BirthdayMessageMatches.Username:
+					return member.user.username;
 				default:
 					return '';
 			}
@@ -121,11 +124,8 @@ export class UserTask extends Task {
 	}
 }
 
-const enum BirthdayMessageMatches {
-	Member = '{member}',
-	Age = '{member.age}',
-	Nick = '{member.nick}',
-	Username = '{member.username}',
-	Tag = '{member.tag}',
-	Guild = '{member.guild}'
+const enum PartResult {
+	NotSet,
+	Invalid,
+	Success
 }

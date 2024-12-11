@@ -1,7 +1,7 @@
-import { FoxxieEvents } from '#lib/types';
-import { createBanner } from '#utils/startBanner';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
+import { FoxxieEvents } from '#lib/types';
+import { createBanner } from '#utils/startBanner';
 import { blue, gray, yellow } from 'colorette';
 
 @ApplyOptions<Listener.Options>({ once: true })
@@ -21,6 +21,17 @@ export class UserListener extends Listener<FoxxieEvents.Ready> {
 		console.log(
 			String(
 				createBanner({
+					extra: [
+						String.raw`${`v${process.env.VERSION_NUM}${this.isDev ? '-dev' : ''}${process.env.VERSION_SIG ? ` ${process.env.VERSION_SIG}` : ''}${process.env.COPYRIGHT_YEAR ? ` © ${process.env.COPYRIGHT_YEAR}` : ''}`.padStart(
+							38,
+							' '
+						)}`,
+						String.raw`${pad}[${success}] Gateway`,
+						String.raw`${pad}[${success}] Moderation`,
+						String.raw`${pad}[${this.container.redis ? success : failed}] Redis`,
+						String.raw`${pad}[${this.store.has('rawMessageReactionAddStarboard') ? success : failed}] Starboard`,
+						String.raw`${this.isDev ? `${pad}</> DEVELOPMENT MODE` : ''}`
+					],
 					logo: [
 						String.raw`      {   }`,
 						String.raw`       }_{ __{`,
@@ -44,17 +55,6 @@ export class UserListener extends Listener<FoxxieEvents.Ready> {
 						String.raw`  \ \ \/\ \L\ \/>  </\/>  </\ \ \/\  __/`,
 						String.raw`   \ \_\ \____//\_/\_\/\_/\_\\ \_\ \___"\ `,
 						String.raw`    \/_/\/___/ \//\/_/\//\/_/ \/_/\/____/`
-					],
-					extra: [
-						String.raw`${`v${process.env.VERSION_NUM}${this.isDev ? '-dev' : ''}${process.env.VERSION_SIG ? ` ${process.env.VERSION_SIG}` : ''}${process.env.COPYRIGHT_YEAR ? ` © ${process.env.COPYRIGHT_YEAR}` : ''}`.padStart(
-							38,
-							' '
-						)}`,
-						String.raw`${pad}[${success}] Gateway`,
-						String.raw`${pad}[${success}] Moderation`,
-						String.raw`${pad}[${this.container.redis ? success : failed}] Redis`,
-						String.raw`${pad}[${this.store.has('rawMessageReactionAddStarboard') ? success : failed}] Starboard`,
-						String.raw`${this.isDev ? `${pad}</> DEVELOPMENT MODE` : ''}`
 					]
 				})
 			)

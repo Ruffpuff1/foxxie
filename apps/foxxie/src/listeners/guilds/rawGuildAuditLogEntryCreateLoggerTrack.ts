@@ -1,10 +1,10 @@
-import { getLogger } from '#utils/functions/guild';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
-import { AuditLogEvent, GatewayDispatchEvents, Guild, type GatewayGuildAuditLogEntryCreateDispatchData } from 'discord.js';
+import { getLogger } from '#utils/functions/guild';
+import { AuditLogEvent, GatewayDispatchEvents, type GatewayGuildAuditLogEntryCreateDispatchData, Guild } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({ event: GatewayDispatchEvents.GuildAuditLogEntryCreate, emitter: 'ws' })
+@ApplyOptions<Listener.Options>({ emitter: 'ws', event: GatewayDispatchEvents.GuildAuditLogEntryCreate })
 export class UserListener extends Listener {
 	public override run(data: GatewayGuildAuditLogEntryCreateDispatchData) {
 		const guild = this.container.client.guilds.cache.get(data.guild_id);
@@ -28,8 +28,8 @@ export class UserListener extends Listener {
 		if (isNullish(change)) return;
 
 		getLogger(guild).timeout.setFromAuditLogs(data.target_id!, {
-			userId: data.user_id!,
-			reason: data.reason
+			reason: data.reason,
+			userId: data.user_id!
 		});
 	}
 }

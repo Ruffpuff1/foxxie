@@ -1,11 +1,11 @@
-import { PollEntity } from '#lib/Database/entities/PollEntity';
 import { container } from '@sapphire/framework';
+import { PollEntity } from '#lib/Database/entities/PollEntity';
 import { Collection, Guild } from 'discord.js';
 
 export class GuildPollService extends Collection<number, PollEntity> {
-	public guild: Guild;
-
 	public alphabet = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷', '🇸', '🇹'];
+
+	public guild: Guild;
 
 	public numbers = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 
@@ -18,10 +18,15 @@ export class GuildPollService extends Collection<number, PollEntity> {
 		return new PollEntity(data).setup(this);
 	}
 
-	public async fetch(id: number | string): Promise<PollEntity | null>;
+	public entity(data: Partial<PollEntity>) {
+		return new PollEntity(data);
+	}
+
+	public async fetch(id: number | string): Promise<null | PollEntity>;
 	public async fetch(id: number[]): Promise<Collection<number, PollEntity>>;
 	public async fetch(id?: null): Promise<this>;
-	public async fetch(id?: number | number[] | null | string): Promise<PollEntity | null | Collection<number, PollEntity> | this> {
+
+	public async fetch(id?: null | number | number[] | string): Promise<Collection<number, PollEntity> | null | PollEntity | this> {
 		if (!id) {
 			const entries = await container.db.polls.find({
 				where: {
@@ -73,26 +78,22 @@ export class GuildPollService extends Collection<number, PollEntity> {
 		return null;
 	}
 
-	public insert(data: PollEntity | PollEntity[]): Collection<number, PollEntity> | PollEntity | null {
+	public insert(data: PollEntity | PollEntity[]): Collection<number, PollEntity> | null | PollEntity {
 		return this._cache(data);
-	}
-
-	public entity(data: Partial<PollEntity>) {
-		return new PollEntity(data);
 	}
 
 	public mapOptions(options: string[], emojis: string[]) {
 		return options.map((option, i) => {
 			return {
-				emoji: emojis[i],
 				count: 0,
+				emoji: emojis[i],
 				name: option,
 				optionNumber: i + 1
 			};
 		});
 	}
 
-	private _cache(entries: PollEntity | PollEntity[]): Collection<number, PollEntity> | PollEntity | null {
+	private _cache(entries: PollEntity | PollEntity[]): Collection<number, PollEntity> | null | PollEntity {
 		if (!entries) return null;
 
 		const parsedEntries = Array.isArray(entries) ? entries : [entries];

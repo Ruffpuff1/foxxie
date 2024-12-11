@@ -1,12 +1,13 @@
-import { Serializer } from '#lib/Database/settings/structures/Serializer';
 import type { Awaitable } from '@sapphire/utilities';
 
-export class UserSerializer extends Serializer<string> {
-	public async parse(args: Serializer.Args) {
-		return this.result(args, await args.pickResult('language'));
-	}
+import { Serializer } from '#lib/Database/settings/structures/Serializer';
 
+export class UserSerializer extends Serializer<string> {
 	public isValid(value: string): Awaitable<boolean> {
 		return this.container.i18n.languages.has(value);
+	}
+
+	public async parse(args: Serializer.Args) {
+		return this.result(args, await args.pickResult('language'));
 	}
 }

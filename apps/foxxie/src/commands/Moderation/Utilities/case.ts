@@ -1,3 +1,8 @@
+import { ApplyOptions } from '@sapphire/decorators';
+import { GuildBasedChannelTypes } from '@sapphire/discord.js-utilities';
+import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { applyLocalizedBuilder, createLocalizedChoice, TFunction } from '@sapphire/plugin-i18next';
+import { cutText, isNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
 import { IdHints } from '#lib/discord';
 import { getSupportedLanguageT, getSupportedUserLanguageT, LanguageKeys } from '#lib/i18n';
 import { getAction, getEmbed, getTitle, ModerationManager } from '#lib/moderation';
@@ -12,11 +17,6 @@ import { TypeVariation } from '#utils/moderationConstants';
 import { resolveCase } from '#utils/resolvers/Case';
 import { resolveTimeSpan } from '#utils/resolvers/TimeSpan';
 import { getFullEmbedAuthor, isUserSelf, resolveClientColor } from '#utils/util';
-import { ApplyOptions } from '@sapphire/decorators';
-import { GuildBasedChannelTypes } from '@sapphire/discord.js-utilities';
-import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { applyLocalizedBuilder, createLocalizedChoice, TFunction } from '@sapphire/plugin-i18next';
-import { cutText, isNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
 import {
 	Awaitable,
 	blockQuote,
@@ -40,23 +40,92 @@ const OverviewColors = [0x80f31f, 0xa5de0b, 0xc7c101, 0xe39e03, 0xf6780f, 0xfe53
 @ApplyOptions<FoxxieSubcommand.Options>({
 	description: Root.Description,
 	detailedDescription: LanguageKeys.Commands.Moderation.KickDetailedDescription,
+	hidden: true,
 	permissionLevel: PermissionLevels.Moderator,
 	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks],
 	runIn: [CommandOptionsRunTypeEnum.GuildAny],
-	hidden: true,
 	subcommands: [
-		{ name: 'view', chatInputRun: 'chatInputRunView', messageRun: 'messageRunView', default: true },
+		{ chatInputRun: 'chatInputRunView', default: true, messageRun: 'messageRunView', name: 'view' },
 		{
-			name: 'list',
-			chatInputRun: 'chatInputRunList'
+			chatInputRun: 'chatInputRunList',
+			name: 'list'
 		},
 		{
-			name: 'edit',
-			chatInputRun: 'chatInputRunEdit'
+			chatInputRun: 'chatInputRunEdit',
+			name: 'edit'
 		}
 	]
 })
 export class UserCommand extends FoxxieSubcommand {
+	public async chatInputRunEdit(interaction: FoxxieSubcommand.Interaction) {
+		const entry = await this.#getCase(interaction, true);
+		const reason = interaction.options.getString('reason');
+		const duration = this.#getDuration(interaction, entry);
+		const refrence = await this.#getRefrence(interaction);
+
+		const moderation = getModeration(interaction.guild!);
+		const t = getSupportedUserLanguageT(interaction);
+		if (!isNullish(duration)) {
+			const action = getAction(entry.type);
+			if (!action.isUndoActionAvailable) {
+				const content = t(Root.TimeNotAllowed, { type: t(getTranslationKey(entry.type)) });
+				return interaction.reply({ content, ephemeral: true });
+			}
+
+			if (entry.isCompleted()) {
+				const content = t(Root.TimeNotAllowedInCompletedEntries, { caseId: entry.id });
+				return interaction.reply({ content, ephemeral: true });
+			}
+
+			if (duration !== 0) {
+				const next = entry.createdAt + duration;
+				if (next <= Date.now()) {
+					const content = t(Root.TimeTooEarly, {
+						start: time(seconds.fromMilliseconds(entry.createdAt), TimestampStyles.LongDateTime),
+						time: time(seconds.fromMilliseconds(next), TimestampStyles.RelativeTime)
+					});
+					return interaction.reply({ content, ephemeral: true });
+				}
+			}
+		}
+
+		await moderation.edit(entry, {
+			duration: isNullish(duration) ? entry.duration : duration || null,
+			reason: isNullish(reason) ? entry.reason : reason,
+			refrenceId: isNullish(refrence) ? entry.refrenceId : refrence
+		});
+
+		const content = t(Root.EditSuccess, { caseId: entry.id });
+		return interaction.reply({ content, ephemeral: true });
+	}
+
+	public async chatInputRunList(interaction: FoxxieSubcommand.Interaction) {
+		const user = interaction.options.getUser('user');
+		const moderator = interaction.options.getUser('moderator');
+		const show = interaction.options.getBoolean('show') ?? false;
+		const type = interaction.options.getInteger('type') as null | TypeVariation;
+		const pendingOnly = interaction.options.getBoolean('pending-only') ?? false;
+
+		const moderation = getModeration(interaction.guild!);
+		let entries = [...(await moderation.fetch({ moderatorId: moderator?.id, userId: user?.id })).values()];
+		if (!isNullish(type)) entries = entries.filter((entry) => entry.type === type);
+		if (pendingOnly) entries = entries.filter((entry) => !isNullishOrZero(entry.duration) && !entry.isCompleted());
+		const t = show ? getSupportedLanguageT(interaction) : getSupportedUserLanguageT(interaction);
+		const footer = this.#parseListFooter(user, moderator, type, pendingOnly, interaction.guild!, t);
+
+		return interaction.options.getBoolean('overview') //
+			? this.#listOverview(interaction, t, entries, user, show)
+			: this.#listDetails(interaction, t, this.#sortEntries(entries), isNullish(user), show, footer);
+	}
+
+	public async chatInputRunView(interaction: FoxxieSubcommand.Interaction) {
+		const entry = await this.#getCase(interaction, true);
+		const show = interaction.options.getBoolean('show') ?? false;
+		const t = show ? getSupportedLanguageT(interaction) : getSupportedUserLanguageT(interaction);
+
+		return interaction.reply({ embeds: [await getEmbed(t, entry)], ephemeral: !show });
+	}
+
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry): Awaitable<void> {
 		registry.registerChatInputCommand(
 			(builder) =>
@@ -123,73 +192,62 @@ export class UserCommand extends FoxxieSubcommand {
 		);
 	}
 
-	public async chatInputRunView(interaction: FoxxieSubcommand.Interaction) {
-		const entry = await this.#getCase(interaction, true);
-		const show = interaction.options.getBoolean('show') ?? false;
-		const t = show ? getSupportedLanguageT(interaction) : getSupportedUserLanguageT(interaction);
-
-		return interaction.reply({ embeds: [await getEmbed(t, entry)], ephemeral: !show });
+	#formatTypeVariation(type: TypeVariation, t: TFunction): string {
+		switch (type) {
+			case TypeVariation.Ban:
+				return t(LanguageKeys.Moderation.TypeBan);
+			case TypeVariation.Kick:
+				return t(LanguageKeys.Moderation.TypeKick);
+			case TypeVariation.Mute:
+				return t(LanguageKeys.Moderation.TypeKick);
+			case TypeVariation.Prune:
+				return t(LanguageKeys.Moderation.TypeKick);
+			case TypeVariation.SetNickname:
+				return t(LanguageKeys.Moderation.TypeSetNickname);
+			case TypeVariation.Warning:
+				return t(LanguageKeys.Moderation.TypeWarning);
+			default:
+				return type.toString();
+		}
 	}
 
-	public async chatInputRunList(interaction: FoxxieSubcommand.Interaction) {
-		const user = interaction.options.getUser('user');
-		const moderator = interaction.options.getUser('moderator');
-		const show = interaction.options.getBoolean('show') ?? false;
-		const type = interaction.options.getInteger('type') as TypeVariation | null;
-		const pendingOnly = interaction.options.getBoolean('pending-only') ?? false;
+	async #getCase(interaction: FoxxieSubcommand.Interaction, required: true): Promise<ModerationManager.Entry>;
 
-		const moderation = getModeration(interaction.guild!);
-		let entries = [...(await moderation.fetch({ userId: user?.id, moderatorId: moderator?.id })).values()];
-		if (!isNullish(type)) entries = entries.filter((entry) => entry.type === type);
-		if (pendingOnly) entries = entries.filter((entry) => !isNullishOrZero(entry.duration) && !entry.isCompleted());
-		const t = show ? getSupportedLanguageT(interaction) : getSupportedUserLanguageT(interaction);
-		const footer = this.#parseListFooter(user, moderator, type, pendingOnly, interaction.guild!, t);
+	async #getCase(interaction: FoxxieSubcommand.Interaction, required?: false): Promise<ModerationManager.Entry | null>;
 
-		return interaction.options.getBoolean('overview') //
-			? this.#listOverview(interaction, t, entries, user, show)
-			: this.#listDetails(interaction, t, this.#sortEntries(entries), isNullish(user), show, footer);
-	}
+	async #getCase(interaction: FoxxieSubcommand.Interaction, required?: boolean) {
+		const caseId = required
+			? interaction.options.getInteger('case') || (await getModeration(interaction.guild!).getCurrentId())
+			: interaction.options.getInteger('case');
+		if (isNullish(caseId)) return null;
 
-	public async chatInputRunEdit(interaction: FoxxieSubcommand.Interaction) {
-		const entry = await this.#getCase(interaction, true);
-		const reason = interaction.options.getString('reason');
-		const duration = this.#getDuration(interaction, entry);
-		const refrence = await this.#getRefrence(interaction);
-
-		const moderation = getModeration(interaction.guild!);
+		const parameter = caseId.toString();
 		const t = getSupportedUserLanguageT(interaction);
-		if (!isNullish(duration)) {
-			const action = getAction(entry.type);
-			if (!action.isUndoActionAvailable) {
-				const content = t(Root.TimeNotAllowed, { type: t(getTranslationKey(entry.type)) });
-				return interaction.reply({ content, ephemeral: true });
-			}
+		return (await resolveCase(parameter, t, interaction.guild!)).unwrapRaw();
+	}
 
-			if (entry.isCompleted()) {
-				const content = t(Root.TimeNotAllowedInCompletedEntries, { caseId: entry.id });
-				return interaction.reply({ content, ephemeral: true });
-			}
+	#getDuration(interaction: FoxxieSubcommand.Interaction, entry: ModerationManager.Entry) {
+		const parameter = interaction.options.getString('duration');
+		if (isNullishOrEmpty(parameter)) return null;
 
-			if (duration !== 0) {
-				const next = entry.createdAt + duration;
-				if (next <= Date.now()) {
-					const content = t(Root.TimeTooEarly, {
-						start: time(seconds.fromMilliseconds(entry.createdAt), TimestampStyles.LongDateTime),
-						time: time(seconds.fromMilliseconds(next), TimestampStyles.RelativeTime)
-					});
-					return interaction.reply({ content, ephemeral: true });
-				}
-			}
+		const action = getAction(entry.type);
+		if (action.durationExternal) {
+			const t = getSupportedUserLanguageT(interaction);
+			throw t(Root.TimeEditNotSupported, { type: t(getTranslationKey(entry.type)) });
 		}
 
-		await moderation.edit(entry, {
-			reason: isNullish(reason) ? entry.reason : reason,
-			refrenceId: isNullish(refrence) ? entry.refrenceId : refrence,
-			duration: isNullish(duration) ? entry.duration : duration || null
-		});
+		return resolveTimeSpan(parameter, { maximum: years(5), minimum: 1000 }) //
+			.mapErr((key) => getSupportedUserLanguageT(interaction)(key, { parameter: parameter.toString() }))
+			.unwrapRaw();
+	}
 
-		const content = t(Root.EditSuccess, { caseId: entry.id });
-		return interaction.reply({ content, ephemeral: true });
+	async #getRefrence(interaction: FoxxieSubcommand.Interaction) {
+		const parameter = interaction.options.getInteger('refrence');
+		if (isNullishOrEmpty(parameter)) return null;
+
+		const t = getSupportedUserLanguageT(interaction);
+		const resolved = (await resolveCase(parameter.toString(), t, interaction.guild!)).unwrapRaw();
+		return resolved ? parameter : null;
 	}
 
 	async #listDetails(
@@ -257,8 +315,8 @@ export class UserCommand extends FoxxieSubcommand {
 				const channelInGuild = entry.guild.channels.cache.has(channel.id);
 				lines.push(
 					t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsLocation, {
-						emoji: Emojis.Information,
 						channel: channelInGuild ? channelMention(channel.id) : (channel as GuildBasedChannelTypes).name,
+						emoji: Emojis.Information,
 						id: channel.id
 					})
 				);
@@ -271,8 +329,8 @@ export class UserCommand extends FoxxieSubcommand {
 				const channelInGuild = entry.guild.channels.cache.has(channel.id);
 				lines.push(
 					t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsLocation, {
-						emoji: Emojis.Information,
 						channel: channelInGuild ? channelMention(channel.id) : (channel as GuildBasedChannelTypes).name,
+						emoji: Emojis.Information,
 						id: channel.id
 					})
 				);
@@ -288,9 +346,9 @@ export class UserCommand extends FoxxieSubcommand {
 		if (!isNullishOrEmpty(entry.reason)) lines.push(blockQuote(cutText(entry.reason, 350)));
 
 		return {
+			inline: false,
 			name: `${inlineCode(entry.id.toString())} → ${getTitle(t, entry)}`,
-			value: lines.join('\n'),
-			inline: false
+			value: lines.join('\n')
 		};
 	}
 
@@ -298,7 +356,7 @@ export class UserCommand extends FoxxieSubcommand {
 		interaction: FoxxieSubcommand.Interaction,
 		t: TFunction,
 		entries: ModerationManager.Entry[],
-		user: User | null,
+		user: null | User,
 		show: boolean
 	) {
 		let [warnings, mutes, timeouts, kicks, bans] = [0, 0, 0, 0, 0];
@@ -309,14 +367,14 @@ export class UserCommand extends FoxxieSubcommand {
 				case TypeVariation.Softban:
 					++bans;
 					break;
+				case TypeVariation.Kick:
+					++kicks;
+					break;
 				case TypeVariation.Mute:
 					++mutes;
 					break;
 				case TypeVariation.Timeout:
 					++timeouts;
-					break;
-				case TypeVariation.Kick:
-					++kicks;
 					break;
 				case TypeVariation.Warning:
 					++warnings;
@@ -327,11 +385,11 @@ export class UserCommand extends FoxxieSubcommand {
 		}
 
 		const footer = t(user ? Root.ListOverviewFooterUser : Root.ListOverviewFooter, {
-			warnings: t(Root.ListOverviewFooterWarning, { count: warnings }),
+			bans: t(Root.ListOverviewFooterBans, { count: bans }),
+			kicks: t(Root.ListOverviewFooterKicks, { count: kicks }),
 			mutes: t(Root.ListOverviewFooterMutes, { count: mutes }),
 			timeouts: t(Root.ListOverviewFooterTimeouts, { count: timeouts }),
-			kicks: t(Root.ListOverviewFooterKicks, { count: kicks }),
-			bans: t(Root.ListOverviewFooterBans, { count: bans })
+			warnings: t(Root.ListOverviewFooterWarning, { count: warnings })
 		});
 
 		const embed = new EmbedBuilder()
@@ -341,7 +399,7 @@ export class UserCommand extends FoxxieSubcommand {
 		await interaction.reply({ embeds: [embed], ephemeral: !show });
 	}
 
-	#parseListFooter(user: User | null, moderator: User | null, type: TypeVariation | null, pendingOnly: boolean, guild: Guild, t: TFunction) {
+	#parseListFooter(user: null | User, moderator: null | User, type: null | TypeVariation, pendingOnly: boolean, guild: Guild, t: TFunction) {
 		const parts: string[] = [];
 		const { name } = guild;
 
@@ -352,73 +410,17 @@ export class UserCommand extends FoxxieSubcommand {
 
 		if (!parts.length) {
 			if (pendingOnly)
-				return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterPendingCases, { guild: name, context: 'noFilter' });
-			return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterCases, { guild: name, context: 'noFilter' });
+				return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterPendingCases, { context: 'noFilter', guild: name });
+			return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterCases, { context: 'noFilter', guild: name });
 		}
 
 		const joined = parts.join(' ');
 
-		if (pendingOnly) return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterPendingCases, { guild: name, cases: joined });
-		return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterCases, { guild: name, cases: joined });
+		if (pendingOnly) return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterPendingCases, { cases: joined, guild: name });
+		return t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsFooterCases, { cases: joined, guild: name });
 	}
 
 	#sortEntries(entries: ModerationManager.Entry[]) {
 		return entries.sort((a, b) => desc(a.id, b.id));
-	}
-
-	#getDuration(interaction: FoxxieSubcommand.Interaction, entry: ModerationManager.Entry) {
-		const parameter = interaction.options.getString('duration');
-		if (isNullishOrEmpty(parameter)) return null;
-
-		const action = getAction(entry.type);
-		if (action.durationExternal) {
-			const t = getSupportedUserLanguageT(interaction);
-			throw t(Root.TimeEditNotSupported, { type: t(getTranslationKey(entry.type)) });
-		}
-
-		return resolveTimeSpan(parameter, { minimum: 1000, maximum: years(5) }) //
-			.mapErr((key) => getSupportedUserLanguageT(interaction)(key, { parameter: parameter.toString() }))
-			.unwrapRaw();
-	}
-
-	#formatTypeVariation(type: TypeVariation, t: TFunction): string {
-		switch (type) {
-			case TypeVariation.Ban:
-				return t(LanguageKeys.Moderation.TypeBan);
-			case TypeVariation.Kick:
-				return t(LanguageKeys.Moderation.TypeKick);
-			case TypeVariation.Mute:
-				return t(LanguageKeys.Moderation.TypeKick);
-			case TypeVariation.Prune:
-				return t(LanguageKeys.Moderation.TypeKick);
-			case TypeVariation.Warning:
-				return t(LanguageKeys.Moderation.TypeWarning);
-			case TypeVariation.SetNickname:
-				return t(LanguageKeys.Moderation.TypeSetNickname);
-			default:
-				return type.toString();
-		}
-	}
-
-	async #getRefrence(interaction: FoxxieSubcommand.Interaction) {
-		const parameter = interaction.options.getInteger('refrence');
-		if (isNullishOrEmpty(parameter)) return null;
-
-		const t = getSupportedUserLanguageT(interaction);
-		const resolved = (await resolveCase(parameter.toString(), t, interaction.guild!)).unwrapRaw();
-		return resolved ? parameter : null;
-	}
-
-	async #getCase(interaction: FoxxieSubcommand.Interaction, required: true): Promise<ModerationManager.Entry>;
-	async #getCase(interaction: FoxxieSubcommand.Interaction, required?: false): Promise<ModerationManager.Entry | null>;
-	async #getCase(interaction: FoxxieSubcommand.Interaction, required?: boolean) {
-		const caseId = required
-			? interaction.options.getInteger('case') || (await getModeration(interaction.guild!).getCurrentId())
-			: interaction.options.getInteger('case');
-		if (isNullish(caseId)) return null;
-
-		const parameter = caseId.toString();
-		const t = getSupportedUserLanguageT(interaction);
-		return (await resolveCase(parameter, t, interaction.guild!)).unwrapRaw();
 	}
 }

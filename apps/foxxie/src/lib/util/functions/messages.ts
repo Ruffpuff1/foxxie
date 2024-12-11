@@ -1,47 +1,60 @@
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { CustomFunctionGet, CustomGet, GuildMessage, NonGroupMessage, TypedFT, TypedT } from '#lib/types';
-import { floatPromise, minutes, resolveOnErrorCodes } from '#utils/common';
 import { randomArray } from '@ruffpuff/utilities';
 import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { fetchT, resolveKey, type TOptions } from '@sapphire/plugin-i18next';
 import { cast } from '@sapphire/utilities';
+import { LanguageKeys } from '#lib/i18n';
+import { FoxxieCommand } from '#lib/structures';
+import { CustomFunctionGet, CustomGet, GuildMessage, NonGroupMessage, TypedFT, TypedT } from '#lib/types';
+import { floatPromise, minutes, resolveOnErrorCodes } from '#utils/common';
 import {
 	AutocompleteInteraction,
 	GuildTextBasedChannel,
-	RESTJSONErrorCodes,
 	type Message,
 	type MessageCreateOptions,
+	RESTJSONErrorCodes,
 	type UserResolvable
 } from 'discord.js';
 import { setTimeout as sleep } from 'node:timers/promises';
 
 const messageCommands = new WeakMap<Message, FoxxieCommand>();
 
-/**
- * Sets or resets the tracking status of a message with a command.
- * @param message The message to track.
- * @param command The command that was run with the given message, if any.
- */
-export function setCommand(message: Message, command: FoxxieCommand | null) {
-	if (command === null) messageCommands.delete(message);
-	else messageCommands.set(message, command);
+const enum PromptConfirmationReactions {
+	No = '🇳',
+	Yes = '🇾'
 }
 
 /**
- * Gets the tracked command from a message.
- * @param message The message to get the command from.
- * @returns The command that was run with the given message, if any.
+ * The prompt confirmation options.
  */
-export function getCommand(message: Message): FoxxieCommand | null {
-	return messageCommands.get(message) ?? null;
+export interface PromptConfirmationMessageOptions extends MessageCreateOptions {
+	/**
+	 * The target.
+	 * @default message.author
+	 */
+	target?: UserResolvable;
+
+	/**
+	 * The time for the confirmation to run.
+	 * @default minutes(1)
+	 */
+	time?: number;
 }
 
-async function deleteMessageImmediately(message: Message): Promise<Message> {
-	return (await resolveOnErrorCodes(message.delete(), RESTJSONErrorCodes.UnknownMessage)) ?? message;
-}
+type LocalizedMessageOptions<TArgs extends object = object> = (
+	| {
+			formatOptions: TOptions<TArgs>;
+			key: TypedFT<TArgs, string>;
+	  }
+	| {
+			formatOptions?: TOptions<TArgs>;
+			key: LocalizedSimpleKey;
+	  }
+) &
+	Omit<MessageCreateOptions, 'content'>;
+
+type LocalizedSimpleKey = TypedT<string>;
 
 /**
  * Deletes a message, skipping if it was already deleted, and aborting if a non-zero timer was set and the message was
@@ -67,18 +80,34 @@ export async function deleteMessage(message: Message, time = 0): Promise<Message
 }
 
 /**
- * Sends a temporary editable message and then floats a {@link deleteMessage} with the given `timer`.
- * @param message The message to reply to.
- * @param options The options to be sent to the channel.
- * @param timer The timer in which the message should be deleted, using {@link deleteMessage}.
- * @returns The response message.
+ * Gets the tracked command from a message.
+ * @param message The message to get the command from.
+ * @returns The command that was run with the given message, if any.
  */
-export async function sendTemporaryMessage(message: Message, options: string | MessageCreateOptions, timer = minutes(1)): Promise<Message> {
-	if (typeof options === 'string') options = { content: options };
+export function getCommand(message: Message): FoxxieCommand | null {
+	return messageCommands.get(message) ?? null;
+}
+export async function sendLoadingMessage(
+	msg: GuildMessage,
+	key: CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]> = LanguageKeys.System.MessageLoading,
+	args = {}
+): Promise<GuildMessage | Message> {
+	const t = await fetchT(msg.guild);
+	const translated = t(key, args);
+	const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
 
-	const response = await send(message, options);
-	floatPromise(deleteMessage(response, timer));
-	return response;
+	return send(cast<Message>(msg), { content });
+}
+export async function sendLoadingMessageInChannel(
+	channel: GuildTextBasedChannel,
+	key: CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]> = LanguageKeys.System.MessageLoading,
+	args = {}
+): Promise<GuildMessage | Message> {
+	const t = await fetchT(channel.guild);
+	const translated = t(key, args);
+	const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
+
+	return channel.send({ content });
 }
 
 /**
@@ -115,7 +144,8 @@ export function sendLocalizedMessage(message: Message, key: LocalizedSimpleKey):
  * ```
  */
 export function sendLocalizedMessage<TArgs extends object>(message: Message, options: LocalizedMessageOptions<TArgs>): Promise<Message>;
-export async function sendLocalizedMessage(message: Message, options: LocalizedSimpleKey | LocalizedMessageOptions) {
+
+export async function sendLocalizedMessage(message: Message, options: LocalizedMessageOptions | LocalizedSimpleKey) {
 	if (typeof options === 'string') options = { key: options };
 
 	// @ts-expect-error 2345: Complex overloads
@@ -123,63 +153,33 @@ export async function sendLocalizedMessage(message: Message, options: LocalizedS
 	return send(message, { ...options, content });
 }
 
-type LocalizedSimpleKey = TypedT<string>;
-type LocalizedMessageOptions<TArgs extends object = object> = Omit<MessageCreateOptions, 'content'> &
-	(
-		| {
-				key: LocalizedSimpleKey;
-				formatOptions?: TOptions<TArgs>;
-		  }
-		| {
-				key: TypedFT<TArgs, string>;
-				formatOptions: TOptions<TArgs>;
-		  }
-	);
+/**
+ * Sends a temporary editable message and then floats a {@link deleteMessage} with the given `timer`.
+ * @param message The message to reply to.
+ * @param options The options to be sent to the channel.
+ * @param timer The timer in which the message should be deleted, using {@link deleteMessage}.
+ * @returns The response message.
+ */
+export async function sendTemporaryMessage(message: Message, options: MessageCreateOptions | string, timer = minutes(1)): Promise<Message> {
+	if (typeof options === 'string') options = { content: options };
+
+	const response = await send(message, options);
+	floatPromise(deleteMessage(response, timer));
+	return response;
+}
 
 /**
- * The prompt confirmation options.
+ * Sets or resets the tracking status of a message with a command.
+ * @param message The message to track.
+ * @param command The command that was run with the given message, if any.
  */
-export interface PromptConfirmationMessageOptions extends MessageCreateOptions {
-	/**
-	 * The target.
-	 * @default message.author
-	 */
-	target?: UserResolvable;
-
-	/**
-	 * The time for the confirmation to run.
-	 * @default minutes(1)
-	 */
-	time?: number;
+export function setCommand(message: Message, command: FoxxieCommand | null) {
+	if (command === null) messageCommands.delete(message);
+	else messageCommands.set(message, command);
 }
 
-export async function sendLoadingMessage(
-	msg: GuildMessage,
-	key: CustomGet<string, string[]> | CustomFunctionGet<any, string, string[]> = LanguageKeys.System.MessageLoading,
-	args = {}
-): Promise<Message | GuildMessage> {
-	const t = await fetchT(msg.guild);
-	const translated = t(key, args);
-	const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
-
-	return send(cast<Message>(msg), { content });
-}
-
-export async function sendLoadingMessageInChannel(
-	channel: GuildTextBasedChannel,
-	key: CustomGet<string, string[]> | CustomFunctionGet<any, string, string[]> = LanguageKeys.System.MessageLoading,
-	args = {}
-): Promise<Message | GuildMessage> {
-	const t = await fetchT(channel.guild);
-	const translated = t(key, args);
-	const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
-
-	return channel.send({ content });
-}
-
-const enum PromptConfirmationReactions {
-	Yes = '🇾',
-	No = '🇳'
+async function deleteMessageImmediately(message: Message): Promise<Message> {
+	return (await resolveOnErrorCodes(message.delete(), RESTJSONErrorCodes.UnknownMessage)) ?? message;
 }
 
 async function promptConfirmationReaction(message: NonGroupMessage, response: NonGroupMessage, options: PromptConfirmationMessageOptions) {
@@ -187,7 +187,7 @@ async function promptConfirmationReaction(message: NonGroupMessage, response: No
 	await response.react(PromptConfirmationReactions.No);
 
 	const target = container.client.users.resolveId(options.target ?? message.author);
-	const reactions = await response.awaitReactions({ filter: (__, user) => user.id === target, time: minutes(1), max: 1 });
+	const reactions = await response.awaitReactions({ filter: (__, user) => user.id === target, max: 1, time: minutes(1) });
 
 	// Remove all reactions if the user has permissions to do so
 	if (canRemoveAllReactions(response.channel)) {
@@ -198,20 +198,13 @@ async function promptConfirmationReaction(message: NonGroupMessage, response: No
 }
 
 const promptConfirmationMessageRegExp = /^y|yes?|yeah?$/i;
-async function promptConfirmationMessage(message: NonGroupMessage, response: NonGroupMessage, options: PromptConfirmationMessageOptions) {
-	const target = container.client.users.resolveId(options.target ?? message.author);
-	const messages = await response.channel.awaitMessages({ filter: (message) => message.author.id === target, time: minutes(1), max: 1 });
-
-	return messages.size === 0 ? null : promptConfirmationMessageRegExp.test(messages.first()!.content);
-}
-
 /**
  * Sends a boolean confirmation prompt asking the `target` for either of two choices.
  * @param message The message to ask for a confirmation from.
  * @param options The options for the message to be sent, alongside the prompt options.
  * @returns `null` if no response was given within the requested time, `boolean` otherwise.
  */
-export async function promptConfirmation(message: NonGroupMessage, options: string | PromptConfirmationMessageOptions) {
+export async function promptConfirmation(message: NonGroupMessage, options: PromptConfirmationMessageOptions | string) {
 	if (typeof options === 'string') options = { content: options };
 
 	// TODO: v13 | Switch to buttons only when available.
@@ -222,18 +215,25 @@ export async function promptConfirmation(message: NonGroupMessage, options: stri
 }
 
 export async function promptForMessage(
-	message: NonGroupMessage | AutocompleteInteraction,
-	sendOptions: string | MessageCreateOptions,
+	message: AutocompleteInteraction | NonGroupMessage,
+	sendOptions: MessageCreateOptions | string,
 	time = minutes(1)
-): Promise<string | null> {
-	let channel = message.channel;
+): Promise<null | string> {
+	const { channel } = message;
 	const user = message instanceof AutocompleteInteraction ? message.user : message.author;
 
 	if (!channel || !channel.isSendable()) return null;
 
 	const response = await channel.send(sendOptions);
-	const responses = await channel.awaitMessages({ filter: (msg) => msg.author.id === user.id, time, max: 1 });
+	const responses = await channel.awaitMessages({ filter: (msg) => msg.author.id === user.id, max: 1, time });
 	floatPromise(deleteMessage(response));
 
 	return responses.size === 0 ? null : responses.first()!.content;
+}
+
+async function promptConfirmationMessage(message: NonGroupMessage, response: NonGroupMessage, options: PromptConfirmationMessageOptions) {
+	const target = container.client.users.resolveId(options.target ?? message.author);
+	const messages = await response.channel.awaitMessages({ filter: (message) => message.author.id === target, max: 1, time: minutes(1) });
+
+	return messages.size === 0 ? null : promptConfirmationMessageRegExp.test(messages.first()!.content);
 }

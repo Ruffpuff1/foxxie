@@ -1,22 +1,22 @@
-import { LanguageKeys } from '#lib/i18n';
 import { memberNote } from '@prisma/client';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { TFunction } from '@sapphire/plugin-i18next';
+import { LanguageKeys } from '#lib/i18n';
 import { bold } from 'discord.js';
 
 export class Note {
-	id!: number;
+	public authorId!: string;
 
-	createdAt!: Date;
+	public createdAt!: Date;
 
-	guildId!: string;
+	public guildId!: string;
 
-	userId!: string;
+	public id!: number;
 
-	authorId!: string;
+	public reason!: null | string;
 
-	reason!: string | null;
+	public userId!: string;
 
 	public constructor(data: memberNote) {
 		Object.assign(this, data);

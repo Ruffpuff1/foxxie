@@ -4,6 +4,12 @@ import { TFunction } from '@sapphire/plugin-i18next';
 import { Message } from 'discord.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
+export interface FoxxieArgs extends Args {
+	command: MessageCommand;
+	t: TFunction;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class FoxxieArgs extends Args {
 	public override t: TFunction;
 
@@ -11,6 +17,17 @@ export class FoxxieArgs extends Args {
 	public constructor(message: Message, command: MessageCommand, parser: ArgumentStream, context: MessageCommandContext, t: TFunction) {
 		super(message, command, parser, context);
 		this.t = t;
+	}
+
+	/**
+	 * Consumes the entire parser and splits it by the delimiter, filtering out empty values.
+	 * @param delimiter The delimiter to be used, defaults to `,`.
+	 * @returns An array of values.
+	 */
+	public nextSplit(options?: FoxxieArgs.NextSplitOptions) {
+		const result = this.nextSplitResult(options);
+		if (result.isOk()) return result.unwrap();
+		throw result.unwrapErr();
 	}
 
 	/**
@@ -39,17 +56,6 @@ export class FoxxieArgs extends Args {
 		return values.length > 0 ? Args.ok(values) : this.missingArguments();
 	}
 
-	/**
-	 * Consumes the entire parser and splits it by the delimiter, filtering out empty values.
-	 * @param delimiter The delimiter to be used, defaults to `,`.
-	 * @returns An array of values.
-	 */
-	public nextSplit(options?: FoxxieArgs.NextSplitOptions) {
-		const result = this.nextSplitResult(options);
-		if (result.isOk()) return result.unwrap();
-		throw result.unwrapErr();
-	}
-
 	public restStringOrEmpty(): Promise<string> {
 		return this.rest('string').catch(() => '');
 	}
@@ -60,12 +66,6 @@ export class FoxxieArgs extends Args {
 		const args = new ArgumentStream(parser.run(command['lexer'].run(parameters)));
 		return new FoxxieArgs(message, command, args, context, t);
 	}
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
-export interface FoxxieArgs extends Args {
-	command: MessageCommand;
-	t: TFunction;
 }
 
 // eslint-disable-next-line no-redeclare
@@ -87,7 +87,7 @@ export namespace FoxxieArgs {
 
 declare module '@sapphire/framework' {
 	export interface Args {
-		t: TFunction;
 		color: number;
+		t: TFunction;
 	}
 }

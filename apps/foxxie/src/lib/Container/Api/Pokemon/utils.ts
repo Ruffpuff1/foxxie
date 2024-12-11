@@ -1,9 +1,10 @@
 import { MovesEnum, PokemonEnum } from '@favware/graphql-pokemon';
-import { PokemonSpriteTypes } from './Builders/index.js';
-import { brotliCompressSync, brotliDecompressSync } from 'node:zlib';
 import { container, Events, InteractionHandler, Result, UserError } from '@sapphire/framework';
 import { deserialize, serialize } from 'binarytf';
 import { Interaction } from 'discord.js';
+import { brotliCompressSync, brotliDecompressSync } from 'node:zlib';
+
+import { PokemonSpriteTypes } from './Builders/index.js';
 
 export type KeysContaining<O, Str extends string, Keys extends keyof O = keyof O> = Keys extends string
 	? Lowercase<Keys> extends `${string}${Lowercase<Str>}${string}`
@@ -63,7 +64,7 @@ export function compressCustomIdMetadata<T>(params: T, customMessagePart?: strin
 
 export function decompressCustomIdMetadata<T>(
 	content: string,
-	{ handler, interaction }: { interaction: Interaction; handler: InteractionHandler }
+	{ handler, interaction }: { handler: InteractionHandler; interaction: Interaction }
 ): T {
 	const result = Result.from<T, Error>(() =>
 		//
@@ -71,17 +72,17 @@ export function decompressCustomIdMetadata<T>(
 	);
 
 	return result.match({
-		ok: (data) => data,
 		err: (error) => {
 			// Emit the error
-			container.client.emit(Events.InteractionHandlerParseError, error, { interaction, handler });
+			container.client.emit(Events.InteractionHandlerParseError, error, { handler, interaction });
 
 			throw new UserError({
 				identifier: 'CustomIdFailedToDeserialize',
 				message:
 					'I am sorry, but that query failed. Please try again. If the problem persists, then please join the support server (use the /info command)'
 			});
-		}
+		},
+		ok: (data) => data
 	});
 }
 
@@ -90,10 +91,10 @@ export const compressPokemonCustomIdMetadata = compressCustomIdMetadata<PokemonS
 export const decompressPokemonCustomIdMetadata = decompressCustomIdMetadata<PokemonSelectMenuData>;
 
 export interface PokemonSelectMenuData {
-	type: ResponseToGenerate;
-	spriteToGet?: PokemonSpriteTypes;
 	generation?: number;
 	moves?: MovesEnum[];
+	spriteToGet?: PokemonSpriteTypes;
+	type: ResponseToGenerate;
 }
 
-type ResponseToGenerate = 'pokemon' | 'flavor' | 'learn' | 'sprite';
+type ResponseToGenerate = 'flavor' | 'learn' | 'pokemon' | 'sprite';

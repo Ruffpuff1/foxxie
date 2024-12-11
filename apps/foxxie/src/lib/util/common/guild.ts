@@ -1,5 +1,6 @@
-import { container } from '@sapphire/framework';
 import type { Guild, GuildResolvable } from 'discord.js';
+
+import { container } from '@sapphire/framework';
 
 export function resolveGuild(resolvable: GuildResolvable): Guild {
 	const guild = container.client.guilds.resolve(resolvable);

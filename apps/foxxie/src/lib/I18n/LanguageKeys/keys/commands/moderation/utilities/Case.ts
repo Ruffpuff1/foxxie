@@ -28,13 +28,13 @@ export const ListDetailsExpires = FT<{ emoji: string; time: string }>('commands/
 export const ListDetailsFooterByModerator = FT<{ moderator: string }>('commands/moderation/utilities/case:listDetailsFooterByModerator');
 export const ListDetailsFooterOfType = FT<{ type: string }>('commands/moderation/utilities/case:listDetailsFooterOfType');
 export const ListDetailsFooterOfUser = FT<{ user: string }>('commands/moderation/utilities/case:listDetailsFooterOfUser');
-export const ListDetailsFooterCases = FT<{ guild: string; cases?: string; context?: 'noFilter' }>(
+export const ListDetailsFooterCases = FT<{ cases?: string; context?: 'noFilter'; guild: string }>(
 	'commands/moderation/utilities/case:listDetailsFooterCases'
 );
-export const ListDetailsFooterPendingCases = FT<{ guild: string; cases?: string; context?: 'noFilter' }>(
+export const ListDetailsFooterPendingCases = FT<{ cases?: string; context?: 'noFilter'; guild: string }>(
 	'commands/moderation/utilities/case:listDetailsFooterPendingCases'
 );
-export const ListDetailsLocation = FT<{ emoji: string; channel: string; id: string }>('commands/moderation/utilities/case:listDetailsLocation');
+export const ListDetailsLocation = FT<{ channel: string; emoji: string; id: string }>('commands/moderation/utilities/case:listDetailsLocation');
 export const ListOverviewFooter = FT<ListOverview>('commands/moderation/utilities/case:listOverviewFooter');
 export const ListOverviewFooterUser = FT<ListOverview>('commands/moderation/utilities/case:listOverviewFooterUser');
 export const ListOverviewFooterWarning = FT<{ count: number }>('commands/moderation/utilities/case:listOverviewFooterWarning');
@@ -47,9 +47,9 @@ export const ArchiveSuccess = FT<{ caseId: number }>('commands/moderation/utilit
 export const DeleteSuccess = FT<{ caseId: number }>('commands/moderation/utilities/case:deleteSuccess');
 
 interface ListOverview {
-	warnings: string;
+	bans: string;
+	kicks: string;
 	mutes: string;
 	timeouts: string;
-	kicks: string;
-	bans: string;
+	warnings: string;
 }

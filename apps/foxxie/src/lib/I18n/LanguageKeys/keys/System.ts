@@ -2,13 +2,13 @@ import { FT, T } from '#lib/types';
 
 export const HelpTitles = T<{
 	aliases: string;
-	usages: string;
-	extendedHelp: string;
-	explainedUsage: string;
-	possibleFormats: string;
 	examples: string;
+	explainedUsage: string;
+	extendedHelp: string;
+	possibleFormats: string;
 	reminders: string;
+	usages: string;
 }>('system:helpTitles');
 export const MessageLoading = T<string[]>('system:messageLoading');
-export const PrefixReminder = FT<{ prefixes?: string[]; count?: number; prefix?: string; context?: 'admin' }>('system:prefixReminder');
+export const PrefixReminder = FT<{ context?: 'admin'; count?: number; prefix?: string; prefixes?: string[] }>('system:prefixReminder');
 export const QueryFail = T('system:queryFail');

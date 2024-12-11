@@ -1,5 +1,5 @@
-import { Serializer } from '#lib/database';
 import { AliasStore } from '@sapphire/framework';
+import { Serializer } from '#lib/database';
 
 export class SerializerStore extends AliasStore<Serializer<unknown>> {
 	public constructor() {

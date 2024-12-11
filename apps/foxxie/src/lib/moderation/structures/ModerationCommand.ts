@@ -1,16 +1,17 @@
-import { LanguageKeys } from '#lib/i18n';
-import { TypeVariation } from '#utils/moderationConstants';
-import { getImage, getTag, isUserSelf } from '#utils/util';
-import { Args, CommandOptionsRunTypeEnum, type Awaitable } from '@sapphire/framework';
-import { free, send } from '@sapphire/plugin-editable-commands';
 import type { User } from 'discord.js';
+
+import { Args, type Awaitable, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { free, send } from '@sapphire/plugin-editable-commands';
+import { readSettings } from '#lib/Database/settings/functions';
+import { LanguageKeys } from '#lib/i18n';
+import { ActionByType, getAction, GetContextType, ModerationAction, ModerationManager } from '#lib/moderation';
+import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage, PermissionLevels, TypedT } from '#lib/types';
 import { asc, floatPromise, seconds } from '#utils/common';
-import { FoxxieCommand } from '#lib/structures';
-import { readSettings } from '#lib/Database/settings/functions';
-import { ActionByType, getAction, GetContextType, ModerationAction, ModerationManager } from '#lib/moderation';
-import { deleteMessage } from '#utils/functions/messages';
 import { isGuildOwner } from '#utils/discord';
+import { deleteMessage } from '#utils/functions/messages';
+import { TypeVariation } from '#utils/moderationConstants';
+import { getImage, getTag, isUserSelf } from '#utils/util';
 
 const Root = LanguageKeys.Moderation;
 
@@ -21,24 +22,14 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 	protected readonly action: ActionByType<Type>;
 
 	/**
-	 * Whether this command executes an undo action.
-	 */
-	protected readonly isUndoAction: boolean;
-
-	/**
 	 * The key for the action is active language key.
 	 */
 	protected readonly actionStatusKey: TypedT;
 
 	/**
-	 * Whether this command supports schedules.
+	 * Whether this command executes an undo action.
 	 */
-	protected readonly supportsSchedule: boolean;
-
-	/**
-	 * The minimum duration for this command.
-	 */
-	protected readonly minimumDuration: number;
+	protected readonly isUndoAction: boolean;
 
 	/**
 	 * The maximum duration for this command.
@@ -46,14 +37,24 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 	protected readonly maximumDuration: number;
 
 	/**
-	 * Whether a member is required or not.
+	 * The minimum duration for this command.
 	 */
-	protected readonly requiredMember: boolean;
+	protected readonly minimumDuration: number;
 
 	/**
 	 * Whether a duration is required or not.
 	 */
 	protected readonly requiredDuration: boolean;
+
+	/**
+	 * Whether a member is required or not.
+	 */
+	protected readonly requiredMember: boolean;
+
+	/**
+	 * Whether this command supports schedules.
+	 */
+	protected readonly supportsSchedule: boolean;
 
 	protected constructor(context: ModerationCommand.LoaderContext, options: ModerationCommand.Options<Type>) {
 		super(context, {
@@ -92,7 +93,7 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 		const { targets, ...handledRaw } = resolved;
 		for (const target of new Set(targets)) {
 			try {
-				const handled = { ...handledRaw, args, target, preHandled };
+				const handled = { ...handledRaw, args, preHandled, target };
 				await this.checkTargetCanBeModerated(message, handled);
 				const log = await this.handle(message, handled);
 				processed.push({ log, target });
@@ -124,12 +125,12 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 				const key = reason //
 					? LanguageKeys.Commands.Moderation.ModerationOutputWithReason
 					: LanguageKeys.Commands.Moderation.ModerationOutput;
-				output.push(args.t(key, { count: cases.length, range, users, reason }));
+				output.push(args.t(key, { count: cases.length, range, reason, users }));
 			}
 
 			if (errored.length) {
 				const users = errored.map(({ error, target }) => `- ${getTag(target)} → ${typeof error === 'string' ? error : error.message}`);
-				output.push(args.t(LanguageKeys.Commands.Moderation.ModerationFailed, { users: users.join('\n'), count: users.length }));
+				output.push(args.t(LanguageKeys.Commands.Moderation.ModerationFailed, { count: users.length, users: users.join('\n') }));
 			}
 
 			// Else send the message as usual.
@@ -146,107 +147,6 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 			return response;
 		}
 
-		return null;
-	}
-
-	/**
-	 * Handles an action before taking the moderation action.
-	 *
-	 * @param message - The message that triggered the command.
-	 * @param context - The context for the moderation command, shared for all targets.
-	 * @returns The value that will be set in {@linkcode ModerationCommand.HandlerParameters.preHandled}.
-	 */
-	protected preHandle(message: GuildMessage, context: ModerationCommand.Parameters): Awaitable<ValueType>;
-	protected preHandle() {
-		return null as ValueType;
-	}
-
-	/**
-	 * Handles the moderation action.
-	 *
-	 * @param message - The message that triggered the command.
-	 * @param context - The context for the moderation command, for a single target.
-	 */
-	protected handle(
-		message: GuildMessage,
-		context: ModerationCommand.HandlerParameters<ValueType>
-	): Promise<ModerationManager.Entry> | ModerationManager.Entry;
-
-	protected async handle(message: GuildMessage, context: ModerationCommand.HandlerParameters<ValueType>) {
-		const dataContext = this.getHandleDataContext(message, context);
-
-		const options = this.resolveOptions(message, context);
-		const data = await this.getActionData(message, context.args, context.target, dataContext);
-		const isActive = await this.isActionActive(message, context, dataContext);
-
-		if (this.isUndoAction) {
-			// If this command is an undo action, and the action is not active, throw an error.
-			if (!isActive) {
-				throw context.args.t(this.getActionStatusKey(context));
-			}
-
-			// @ts-expect-error mismatching types due to unions
-			return this.action.undo(message.guild, options, data);
-		}
-
-		// If this command is not an undo action, and the action is active, throw an error.
-		if (isActive) {
-			throw context.args.t(this.getActionStatusKey(context));
-		}
-
-		// @ts-expect-error mismatching types due to unions
-		return this.action.apply(message.guild, options, data);
-	}
-
-	/**
-	 * Gets the data context required for some actions, if any.
-	 *
-	 * @param message - The message that triggered the command.
-	 * @param context - The context for the moderation command, for a single target.
-	 */
-	protected getHandleDataContext(message: GuildMessage, context: ModerationCommand.HandlerParameters<ValueType>): GetContextType<Type>;
-	protected getHandleDataContext(): GetContextType<Type> {
-		return null as GetContextType<Type>;
-	}
-
-	/**
-	 * Checks if the action is active.
-	 *
-	 * @param message - The message that triggered the command.
-	 * @param context - The context for the moderation command, for a single target.
-	 * @param dataContext - The data context required for some actions, if any.
-	 * @returns
-	 */
-	protected isActionActive(
-		message: GuildMessage,
-		context: ModerationCommand.HandlerParameters<ValueType>,
-		dataContext: GetContextType<Type>
-	): Awaitable<boolean> {
-		return this.action.isActive(message.guild, context.target.id, dataContext as never);
-	}
-
-	/**
-	 * Gets the key for the action status language key.
-	 *
-	 * @remarks
-	 *
-	 * Unless overridden, this method just returns the value of {@linkcode ModerationCommand.actionStatusKey}.
-	 *
-	 * @param context - The context for the moderation command, for a single target.
-	 */
-	protected getActionStatusKey(context: ModerationCommand.HandlerParameters<ValueType>): TypedT;
-	protected getActionStatusKey(): TypedT {
-		return this.actionStatusKey;
-	}
-
-	/**
-	 * Handles an action after taking the moderation action.
-	 *
-	 * @param message - The message that triggered the command.
-	 * @param context - The context for the moderation command, shared for all targets.
-	 */
-	protected postHandle(message: GuildMessage, context: ModerationCommand.PostHandleParameters<ValueType>): unknown;
-	protected postHandle() {
 		return null;
 	}
 
@@ -294,6 +194,7 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 	): Promise<ModerationAction.Data<GetContextType<Type>>> {
 		const settings = await readSettings(message.guild);
 		return {
+			context,
 			moderator: args.getFlags('no-author') ? null : args.getFlags('authored') || settings.messagesModeratorNameDisplay ? message.author : null,
 			sendDirectMessage:
 				// --no-dm disables
@@ -301,19 +202,121 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 				// --dm and enabledDM enable
 				(args.getFlags('dm') || settings.messagesModerationDm) &&
 				// user settings
-				true,
-			context
+				true
 		};
+	}
+
+	/**
+	 * Gets the key for the action status language key.
+	 *
+	 * @remarks
+	 *
+	 * Unless overridden, this method just returns the value of {@linkcode ModerationCommand.actionStatusKey}.
+	 *
+	 * @param context - The context for the moderation command, for a single target.
+	 */
+	protected getActionStatusKey(context: ModerationCommand.HandlerParameters<ValueType>): TypedT;
+
+	protected getActionStatusKey(): TypedT {
+		return this.actionStatusKey;
+	}
+
+	/**
+	 * Gets the data context required for some actions, if any.
+	 *
+	 * @param message - The message that triggered the command.
+	 * @param context - The context for the moderation command, for a single target.
+	 */
+	protected getHandleDataContext(message: GuildMessage, context: ModerationCommand.HandlerParameters<ValueType>): GetContextType<Type>;
+	protected getHandleDataContext(): GetContextType<Type> {
+		return null as GetContextType<Type>;
+	}
+
+	/**
+	 * Handles the moderation action.
+	 *
+	 * @param message - The message that triggered the command.
+	 * @param context - The context for the moderation command, for a single target.
+	 */
+	protected handle(
+		message: GuildMessage,
+		context: ModerationCommand.HandlerParameters<ValueType>
+	): ModerationManager.Entry | Promise<ModerationManager.Entry>;
+
+	protected async handle(message: GuildMessage, context: ModerationCommand.HandlerParameters<ValueType>) {
+		const dataContext = this.getHandleDataContext(message, context);
+
+		const options = this.resolveOptions(message, context);
+		const data = await this.getActionData(message, context.args, context.target, dataContext);
+		const isActive = await this.isActionActive(message, context, dataContext);
+
+		if (this.isUndoAction) {
+			// If this command is an undo action, and the action is not active, throw an error.
+			if (!isActive) {
+				throw context.args.t(this.getActionStatusKey(context));
+			}
+
+			// @ts-expect-error mismatching types due to unions
+			return this.action.undo(message.guild, options, data);
+		}
+
+		// If this command is not an undo action, and the action is active, throw an error.
+		if (isActive) {
+			throw context.args.t(this.getActionStatusKey(context));
+		}
+
+		// @ts-expect-error mismatching types due to unions
+		return this.action.apply(message.guild, options, data);
+	}
+
+	/**
+	 * Checks if the action is active.
+	 *
+	 * @param message - The message that triggered the command.
+	 * @param context - The context for the moderation command, for a single target.
+	 * @param dataContext - The data context required for some actions, if any.
+	 * @returns
+	 */
+	protected isActionActive(
+		message: GuildMessage,
+		context: ModerationCommand.HandlerParameters<ValueType>,
+		dataContext: GetContextType<Type>
+	): Awaitable<boolean> {
+		return this.action.isActive(message.guild, context.target.id, dataContext as never);
+	}
+
+	/**
+	 * Handles an action after taking the moderation action.
+	 *
+	 * @param message - The message that triggered the command.
+	 * @param context - The context for the moderation command, shared for all targets.
+	 */
+	protected postHandle(message: GuildMessage, context: ModerationCommand.PostHandleParameters<ValueType>): unknown;
+	protected postHandle() {
+		return null;
+	}
+
+	/**
+	 * Handles an action before taking the moderation action.
+	 *
+	 * @param message - The message that triggered the command.
+	 * @param context - The context for the moderation command, shared for all targets.
+	 * @returns The value that will be set in {@linkcode ModerationCommand.HandlerParameters.preHandled}.
+	 */
+	protected preHandle(message: GuildMessage, context: ModerationCommand.Parameters): Awaitable<ValueType>;
+
+	protected preHandle() {
+		return null as ValueType;
 	}
 
 	protected resolveOptions(message: GuildMessage, context: ModerationCommand.HandlerParameters<ValueType>): ModerationAction.PartialOptions<Type> {
 		return {
-			user: context.target,
-			moderator: message.author,
 			channelId: message.channelId,
-			reason: context.reason,
+			duration: context.duration,
 			imageURL: getImage(message),
-			duration: context.duration
+			moderator: message.author,
+			reason: context.reason,
+			user: context.target
 		};
 	}
 
@@ -325,19 +328,10 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 	 */
 	protected async resolveParameters(args: ModerationCommand.Args): Promise<ModerationCommand.Parameters> {
 		return {
-			targets: await this.resolveParametersUser(args),
 			duration: await this.resolveParametersDuration(args),
-			reason: await this.resolveParametersReason(args)
+			reason: await this.resolveParametersReason(args),
+			targets: await this.resolveParametersUser(args)
 		};
-	}
-
-	/**
-	 * Resolves the value for {@linkcode Parameters.targets}.
-	 *
-	 * @param args - The arguments for the moderation command.
-	 */
-	protected resolveParametersUser(args: ModerationCommand.Args): Promise<User[]> {
-		return args.repeat('user', { times: 10 });
 	}
 
 	/**
@@ -351,13 +345,13 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 			if (!this.supportsSchedule) return null;
 		}
 
-		const result = await args.pickResult('timespan', { minimum: this.minimumDuration, maximum: this.maximumDuration });
+		const result = await args.pickResult('timespan', { maximum: this.maximumDuration, minimum: this.minimumDuration });
 		return result.match({
-			ok: (value) => value,
 			err: (error) => {
 				if (!this.requiredDuration && error.identifier === LanguageKeys.Arguments.Duration) return null;
 				throw error;
-			}
+			},
+			ok: (value) => value
 		});
 	}
 
@@ -366,39 +360,48 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 	 *
 	 * @param args - The arguments for the moderation command.
 	 */
-	protected resolveParametersReason(args: ModerationCommand.Args): Promise<string | null> {
+	protected resolveParametersReason(args: ModerationCommand.Args): Promise<null | string> {
 		return args.finished ? Promise.resolve(null) : args.rest('string');
+	}
+
+	/**
+	 * Resolves the value for {@linkcode Parameters.targets}.
+	 *
+	 * @param args - The arguments for the moderation command.
+	 */
+	protected resolveParametersUser(args: ModerationCommand.Args): Promise<User[]> {
+		return args.repeat('user', { times: 10 });
 	}
 }
 
 export namespace ModerationCommand {
+	export type Args = FoxxieCommand.Args;
+
+	export interface HandlerParameters<ValueType> extends Omit<Parameters, 'targets'> {
+		args: Args;
+		preHandled: ValueType;
+		target: User;
+	}
+	export type LoaderContext = FoxxieCommand.LoaderContext;
 	/**
 	 * The ModerationCommand Options
 	 */
 	export interface Options<Type extends TypeVariation> extends FoxxieCommand.Options {
-		type: Type;
-		isUndoAction?: boolean;
 		actionStatusKey?: TypedT;
+		isUndoAction?: boolean;
 		requiredMember?: boolean;
+		type: Type;
 	}
-
-	export type Args = FoxxieCommand.Args;
-	export type LoaderContext = FoxxieCommand.LoaderContext;
-	export type RunContext = FoxxieCommand.RunContext;
 
 	export interface Parameters {
+		duration: null | number;
+		reason: null | string;
 		targets: User[];
-		duration: number | null;
-		reason: string | null;
-	}
-
-	export interface HandlerParameters<ValueType> extends Omit<Parameters, 'targets'> {
-		args: Args;
-		target: User;
-		preHandled: ValueType;
 	}
 
 	export interface PostHandleParameters<ValueType> extends Parameters {
 		preHandled: ValueType;
 	}
+
+	export type RunContext = FoxxieCommand.RunContext;
 }

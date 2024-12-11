@@ -1,26 +1,34 @@
-import { DataSource, Repository } from 'typeorm';
-import { ClientRepository, LastFmArtistRepository, MemberRepository } from './repository/index.js';
-import { PollEntity } from './entities/PollEntity.js';
-import { UserRepository } from './repository/UserRepository.js';
 import { TaskStore } from '#lib/schedule';
 import { BrandingColors } from '#utils/constants';
 import { Message } from 'discord.js';
+import { DataSource, Repository } from 'typeorm';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
+import { PollEntity } from './entities/PollEntity.js';
+import { ClientRepository, LastFmArtistRepository, MemberRepository } from './repository/index.js';
+import { UserRepository } from './repository/UserRepository.js';
+
+export interface MongoDB {
+	clients: ClientRepository;
+	dataSource: DataSource;
+	members: MemberRepository;
+	polls: Repository<PollEntity>;
+	users: UserRepository;
+}
+
 export class MongoDB {
-	public readonly dataSource: DataSource;
+	public clients: ClientRepository;
 
-	public readonly clients: ClientRepository;
+	public dataSource: DataSource;
 
-	public readonly members: MemberRepository;
+	public lastFmArtists: LastFmArtistRepository;
 
-	public readonly lastFmArtists: LastFmArtistRepository;
+	public members: MemberRepository;
 
-	public readonly polls: Repository<PollEntity>;
-
-	public readonly users: UserRepository;
+	public polls: Repository<PollEntity>;
 
 	public tasks = new TaskStore();
+
+	public users: UserRepository;
 
 	public constructor(
 		dataSource: DataSource,
@@ -40,13 +48,4 @@ export class MongoDB {
 	public fetchColor(msg: Message): number {
 		return msg.member?.displayColor || BrandingColors.Primary;
 	}
-}
-
-// eslint-disable-next-line no-redeclare, @typescript-eslint/no-unsafe-declaration-merging
-export interface MongoDB {
-	readonly dataSource: DataSource;
-	readonly clients: ClientRepository;
-	readonly members: MemberRepository;
-	readonly polls: Repository<PollEntity>;
-	readonly users: UserRepository;
 }

@@ -1,15 +1,58 @@
-import { LanguageKeys } from '#lib/i18n/languageKeys';
-import { TranslationMappings, UndoTaskNameMappings, getColor } from '#lib/moderation/common/constants';
+import type { TFunction } from '@sapphire/plugin-i18next';
 import type { ModerationManager } from '#lib/moderation/managers/ModerationManager';
 import type { FoxxieCommand } from '#lib/structures';
+
+import { resolveToNull } from '@ruffpuff/utilities';
+import { container } from '@sapphire/framework';
+import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { getColor, TranslationMappings, UndoTaskNameMappings } from '#lib/moderation/common/constants';
 import { TypedT } from '#lib/types';
 import { getModeration } from '#utils/functions';
 import { TypeVariation } from '#utils/moderationConstants';
 import { messageLink } from '#utils/transformers';
-import { resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
 import { chatInputApplicationCommandMention, EmbedBuilder, type Snowflake } from 'discord.js';
+
+export async function getEmbed(t: TFunction, entry: ModerationManager.Entry): Promise<EmbedBuilder> {
+	const moderator = await entry.fetchModerator();
+	const caseT = t(LanguageKeys.Globals.CaseT);
+	const modMember = await resolveToNull(entry.guild.members.fetch(moderator));
+
+	const embed = new EmbedBuilder()
+		.setColor(getColor(entry))
+		.setAuthor({
+			iconURL: modMember?.displayAvatarURL() || moderator.displayAvatarURL(),
+			name: `${modMember?.displayName || moderator.username} (${moderator.id})`
+		})
+		.setDescription(await getEmbedDescription(t, entry))
+		.setFooter({
+			text: `${caseT} #${t(LanguageKeys.Globals.NumberFormat, {
+				value: entry.id
+			})}`
+		})
+		.setTimestamp(entry.createdAt);
+
+	return embed;
+}
+
+export function getTitle(t: TFunction, entry: ModerationManager.Entry): string {
+	const key = getTranslationKey(entry.type);
+	if (entry.isUndo()) return getTitleUndo(t, key);
+	if (entry.isTemporary()) return getTitleTemporary(t, key);
+	return t(key, Object(entry.extraData)) as string;
+}
+
+export function getTitleTemporary(t: TFunction, key: TypedT): string {
+	return `${t('moderation:temp')} ${t(key)}`;
+}
+
+export function getTitleUndo(t: TFunction, key: TypedT): string {
+	switch (key) {
+		case TranslationMappings[TypeVariation.Lock]:
+			return t(LanguageKeys.Moderation.Unlock);
+		default:
+			return `${t('moderation:remove')} ${t(key)}`;
+	}
+}
 
 export function getTranslationKey<const Type extends TypeVariation>(type: Type): (typeof TranslationMappings)[Type] {
 	return TranslationMappings[type];
@@ -25,57 +68,15 @@ export function getUndoTaskName(type: TypeVariation) {
 	return type in UndoTaskNameMappings ? UndoTaskNameMappings[type as keyof typeof UndoTaskNameMappings] : null;
 }
 
-export function getTitleUndo(t: TFunction, key: TypedT): string {
-	switch (key) {
-		case TranslationMappings[TypeVariation.Lock]:
-			return t(LanguageKeys.Moderation.Unlock);
-		default:
-			return `${t('moderation:remove')} ${t(key)}`;
-	}
-}
-
-export function getTitleTemporary(t: TFunction, key: TypedT): string {
-	return `${t('moderation:temp')} ${t(key)}`;
-}
-
-export function getTitle(t: TFunction, entry: ModerationManager.Entry): string {
-	const key = getTranslationKey(entry.type);
-	if (entry.isUndo()) return getTitleUndo(t, key);
-	if (entry.isTemporary()) return getTitleTemporary(t, key);
-	return t(key, Object(entry.extraData)) as string;
-}
-
-export async function getEmbed(t: TFunction, entry: ModerationManager.Entry): Promise<EmbedBuilder> {
-	const moderator = await entry.fetchModerator();
-	const caseT = t(LanguageKeys.Globals.CaseT);
-	const modMember = await resolveToNull(entry.guild.members.fetch(moderator));
-
-	const embed = new EmbedBuilder()
-		.setColor(getColor(entry))
-		.setAuthor({
-			name: `${modMember?.displayName || moderator.username} (${moderator.id})`,
-			iconURL: modMember?.displayAvatarURL() || moderator.displayAvatarURL()
-		})
-		.setDescription(await getEmbedDescription(t, entry))
-		.setFooter({
-			text: `${caseT} #${t(LanguageKeys.Globals.NumberFormat, {
-				value: entry.id
-			})}`
-		})
-		.setTimestamp(entry.createdAt);
-
-	return embed;
+async function fetchEntryChannel(entry: ModerationManager.Entry) {
+	const channel = entry.channelId ? await resolveToNull(entry.guild.channels.fetch(entry.channelId)) : null;
+	return channel;
 }
 
 async function fetchRefrenceCase(entry: ModerationManager.Entry) {
 	if (!entry.refrenceId) return null;
 	const ref = await getModeration(entry.guild).fetch(entry.refrenceId);
 	return ref;
-}
-
-async function fetchEntryChannel(entry: ModerationManager.Entry) {
-	const channel = entry.channelId ? await resolveToNull(entry.guild.channels.fetch(entry.channelId)) : null;
-	return channel;
 }
 
 async function getEmbedDescription(t: TFunction, entry: ModerationManager.Entry) {
@@ -114,7 +115,7 @@ async function getEmbedDescription(t: TFunction, entry: ModerationManager.Entry)
 	return [userLine, channelLine, actionLine, durationLine, reasonLine, refrenceLine].filter((a) => Boolean(a)).join('\n');
 }
 
-let caseCommandId: Snowflake | null = null;
+let caseCommandId: null | Snowflake = null;
 export function getCaseEditMention() {
 	caseCommandId ??= (container.stores.get('commands').get('case') as FoxxieCommand).getGlobalCommandId();
 	return chatInputApplicationCommandMention('case', 'edit', caseCommandId);

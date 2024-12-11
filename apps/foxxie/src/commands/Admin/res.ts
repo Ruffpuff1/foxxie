@@ -1,10 +1,10 @@
+import { resolveToNull } from '@ruffpuff/utilities';
+import { envParseString } from '@skyra/env-utilities';
 import { readSettings } from '#lib/database';
 import { combineMessageReactionUsers, StarboardData, truncateStarboardEmojis } from '#lib/Database/Models/starboard';
 import { FoxxieCommand } from '#lib/structures';
 import { EnvKeys, GuildMessage } from '#lib/types';
 import { emojis } from '#utils/constants';
-import { resolveToNull } from '@ruffpuff/utilities';
-import { envParseString } from '@skyra/env-utilities';
 import { DiscordAPIError, Message, RESTJSONErrorCodes, TextChannel } from 'discord.js';
 
 export class UserCommand extends FoxxieCommand {
@@ -22,6 +22,7 @@ export class UserCommand extends FoxxieCommand {
 		const { content, embeds } = starMessage;
 		const [embed] = embeds;
 
+		// eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
 		const channelId = /<#(?<id>\d{17,20})>$/.exec(content)?.groups!.id!;
 		const messageChannel = msg.guild!.channels.cache.get(channelId);
 
@@ -57,15 +58,15 @@ export class UserCommand extends FoxxieCommand {
 		}
 
 		const data: StarboardData = {
-			id: ID,
-			enabled: true,
-			userId: starredMessage.author.id,
-			messageId: starredMessage.id,
 			channelId,
+			enabled: true,
 			guildId: msg.guildId!,
-			starMessageId: starMessage.id,
+			id: ID,
+			messageId: starredMessage.id,
 			starChannelId: starChannel.id,
-			stars: users.size
+			starMessageId: starMessage.id,
+			stars: users.size,
+			userId: starredMessage.author.id
 		};
 
 		const created = await this.container.prisma.starboard.create({ data });

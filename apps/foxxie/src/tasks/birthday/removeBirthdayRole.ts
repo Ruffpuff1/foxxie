@@ -1,16 +1,16 @@
+import { resolveToNull } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
 import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
 import { seconds } from '#utils/common';
 import { Schedules } from '#utils/constants';
-import { resolveToNull } from '@ruffpuff/utilities';
-import { ApplyOptions } from '@sapphire/decorators';
 import { PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<Task.Options>(({ container }) => ({
-	name: Schedules.RemoveBirthdayRole,
-	enabled: container.client.enabledProdOnlyEvent()
+	enabled: container.client.enabledProdOnlyEvent(),
+	name: Schedules.RemoveBirthdayRole
 }))
 export class UserTask extends Task {
-	public async run(data: ScheduleEntry.TaskData[Schedules.RemoveBirthdayRole]): Promise<PartialResponseValue | null> {
+	public async run(data: ScheduleEntry.TaskData[Schedules.RemoveBirthdayRole]): Promise<null | PartialResponseValue> {
 		const guild = this.container.client.guilds.cache.get(data.guildId);
 		if (!guild) return null;
 

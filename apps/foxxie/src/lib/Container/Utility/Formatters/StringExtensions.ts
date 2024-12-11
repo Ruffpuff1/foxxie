@@ -27,14 +27,14 @@ export class StringFormattersService {
 	//     return description;
 	// }
 
-	public getDiscogsFormatEmote(format: string): string | null {
+	public getDiscogsFormatEmote(format: string): null | string {
 		switch (format) {
-			case 'Vinyl':
-				return Emojis.Vinyl;
-			case 'CD':
-				return '💿';
 			case 'Casette':
 				return '📼';
+			case 'CD':
+				return '💿';
+			case 'Vinyl':
+				return Emojis.Vinyl;
 		}
 
 		return null;
@@ -46,6 +46,10 @@ export class StringFormattersService {
 				return 'C';
 			case 1:
 				return 'C#';
+			case 10:
+				return 'A#';
+			case 11:
+				return 'B';
 			case 2:
 				return 'D';
 			case 3:
@@ -62,10 +66,6 @@ export class StringFormattersService {
 				return 'G#';
 			case 9:
 				return 'A';
-			case 10:
-				return 'A#';
-			case 11:
-				return 'B';
 			default:
 				return null;
 		}

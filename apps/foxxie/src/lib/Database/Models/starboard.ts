@@ -1,9 +1,3 @@
-import { readSettings } from '#lib/Database/settings/functions';
-import { StarboardManager } from '#lib/structures';
-import { EnvKeys, GuildMessage } from '#lib/types';
-import { defaultStarboardEmojis } from '#utils/discord';
-import { getGuildStarboard } from '#utils/functions';
-import { fetchReactionUsers, floatPromise, getAttachment, getImage, isVideo, resolveClientColor } from '#utils/util';
 import { starboard } from '@prisma/client';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
@@ -11,107 +5,46 @@ import { MessageOptions } from '@sapphire/plugin-editable-commands';
 import { fetchT, TFunction } from '@sapphire/plugin-i18next';
 import { cast, cutText, debounce, isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
+import { readSettings } from '#lib/Database/settings/functions';
+import { StarboardManager } from '#lib/structures';
+import { EnvKeys, GuildMessage } from '#lib/types';
+import { defaultStarboardEmojis } from '#utils/discord';
+import { getGuildStarboard } from '#utils/functions';
+import { fetchReactionUsers, floatPromise, getAttachment, getImage, isVideo, resolveClientColor } from '#utils/util';
 import { bold, Client, DiscordAPIError, EmbedBuilder, HTTPError, Message, MessageEditOptions, RESTJSONErrorCodes, TextChannel } from 'discord.js';
 
 export type StarboardData = starboard;
 
-export async function getStarboard(guildId: string, messageId: string) {
-	const { starboard } = container.prisma;
-	const previous = await starboard.findFirst({ where: { guildId: guildId, messageId: messageId } });
-	if (!previous) return null;
-
-	const channel =
-		container.client.channels.cache.get(previous.channelId!) || (await resolveToNull(container.client.channels.fetch(previous.channelId!)));
-	if (!channel || !channel.isSendable()) return null;
-
-	const message = channel.messages.cache.get(messageId) || (await resolveToNull(channel.messages.fetch(messageId)));
-	if (!message || !message.inGuild()) return null;
-
-	return previous ? new Starboard(previous).init(getGuildStarboard(guildId), cast<GuildMessage>(message)) : null;
-}
-
-export function truncateStarboardEmojis(settings: readonly string[], fallback: string[] = defaultStarboardEmojis) {
-	console.log(new Set([...settings, ...fallback]));
-	return ['%E2%AD%90'];
-}
-
-export async function combineMessageReactionUsers(emojis: string[], ...messages: (GuildMessage | null)[]) {
-	const users = [];
-
-	for (const message of messages) {
-		if (!message) continue;
-		const userResult = await fetchReactionUsers(message.channel.id, message.id, emojis);
-		users.push(...userResult);
-	}
-
-	return users;
-}
-
 export class Starboard {
-	#users = new Set<string>();
-	#manager: StarboardManager = null!;
-	#client: Client = container.client;
-	#message: GuildMessage = null!;
-	#starMessage: GuildMessage | null = null;
-	#updateStarMessage = debounce(this.updateStarMessage.bind(this), { wait: 2500, maxWait: 10000 });
-
-	public id: number = null!;
-
+	public channelId: string = null!;
 	public enabled = true;
-
-	public userId: string = null!;
-
+	public guildId: string = null!;
+	public id: number = null!;
+	public lastUpdated = Date.now();
 	public messageId: string = null!;
 
-	public channelId: string = null!;
+	public starChannelId: null | string = null;
 
-	public guildId: string = null!;
-
-	public starChannelId: string | null = null;
-
-	public starMessageId: string | null = null;
+	public starMessageId: null | string = null;
 
 	public stars = 0;
 
-	public lastUpdated = Date.now();
+	public userId: string = null!;
+
+	#client: Client = container.client;
+
+	#manager: StarboardManager = null!;
+
+	#message: GuildMessage = null!;
+
+	#starMessage: GuildMessage | null = null;
+
+	#updateStarMessage = debounce(this.updateStarMessage.bind(this), { maxWait: 10000, wait: 2500 });
+
+	#users = new Set<string>();
 
 	public constructor(data?: Partial<StarboardData>) {
 		Object.assign(this, data);
-	}
-
-	public setup(manager: StarboardManager) {
-		this.#manager = manager;
-		if (this.userId) void floatPromise(this.#client.users.fetch(this.userId));
-		return this;
-	}
-
-	public init(manager: StarboardManager, message: GuildMessage) {
-		this.setup(manager);
-		this.#message = message;
-		this.messageId = message.id;
-		this.channelId = message.channel.id;
-		this.guildId = manager.guild.id;
-		this.userId = message.author.id;
-		return this;
-	}
-
-	public async disable(): Promise<boolean> {
-		if (!this.enabled) return false;
-		await this.edit({ enabled: false });
-		return true;
-	}
-
-	public async enable(): Promise<boolean> {
-		if (this.enabled) return false;
-		await this.edit({ enabled: true });
-		await this.downloadUserList();
-		return true;
-	}
-
-	public async increment(id: string, selfStarring: boolean): Promise<void> {
-		if (this.#message.author.id === id && !selfStarring) return;
-		this.#users.add(id);
-		await this.edit({ stars: this.#users.size });
 	}
 
 	public async decrement(id: string): Promise<void> {
@@ -120,27 +53,10 @@ export class Starboard {
 		await this.edit({ stars: this.#users.size });
 	}
 
-	public async edit(options: Partial<Starboard>): Promise<this> {
-		this.lastUpdated = Date.now();
-
-		// If a message was in progress to be sent, await it first
-		const previousUpdate = this.#manager.syncMessageMap.get(this);
-		if (previousUpdate) await previousUpdate;
-
-		if (Reflect.has(options, 'enabled')) {
-			this.enabled = options.enabled!;
-		}
-		if (Reflect.has(options, 'stars') && this.enabled) {
-			this.stars = options.stars!;
-			await this.#updateStarMessage();
-		}
-		if (options.starMessageId === null) {
-			this.starMessageId = null;
-			this.#starMessage = null;
-		}
-
-		await this.update();
-		return this;
+	public async disable(): Promise<boolean> {
+		if (!this.enabled) return false;
+		await this.edit({ enabled: false });
+		return true;
 	}
 
 	public async downloadStarMessage(): Promise<void> {
@@ -159,11 +75,6 @@ export class Starboard {
 				if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.remove();
 			}
 		}
-	}
-
-	public get starMessageURL() {
-		if (!this.#starMessage) return null;
-		return this.#starMessage.url;
 	}
 
 	public async downloadUserList(): Promise<void> {
@@ -191,19 +102,49 @@ export class Starboard {
 		this.stars = this.#users.size;
 	}
 
-	public async getStarContent(t: TFunction): Promise<MessageOptions | MessageEditOptions> {
+	public async edit(options: Partial<Starboard>): Promise<this> {
+		this.lastUpdated = Date.now();
+
+		// If a message was in progress to be sent, await it first
+		const previousUpdate = this.#manager.syncMessageMap.get(this);
+		if (previousUpdate) await previousUpdate;
+
+		if (Reflect.has(options, 'enabled')) {
+			this.enabled = options.enabled!;
+		}
+		if (Reflect.has(options, 'stars') && this.enabled) {
+			this.stars = options.stars!;
+			await this.#updateStarMessage();
+		}
+		if (options.starMessageId === null) {
+			this.starMessageId = null;
+			this.#starMessage = null;
+		}
+
+		await this.update();
+		return this;
+	}
+
+	public async enable(): Promise<boolean> {
+		if (this.enabled) return false;
+		await this.edit({ enabled: true });
+		await this.downloadUserList();
+		return true;
+	}
+
+	public async getStarContent(t: TFunction): Promise<MessageEditOptions | MessageOptions> {
 		const color = await this.color();
 
 		const message = this.#message;
 		const attachment = getAttachment(message);
 		const video = isVideo(attachment);
 
-		const options: { embeds: EmbedBuilder[]; content: null | string } = { embeds: [], content: null };
+		const options: { content: null | string; embeds: EmbedBuilder[] } = { content: null, embeds: [] };
 
 		const starMessageEmbed = new EmbedBuilder()
 			.setAuthor({
-				name: message.member?.displayName || message.author.username,
-				iconURL: message.member?.displayAvatarURL() || message.author.displayAvatarURL()
+				iconURL: message.member?.displayAvatarURL() || message.author.displayAvatarURL(),
+				name: message.member?.displayName || message.author.username
 			})
 			.setColor(color)
 			.setImage(getImage(message)!)
@@ -219,6 +160,28 @@ export class Starboard {
 		}
 
 		return { ...options, embeds };
+	}
+
+	public async increment(id: string, selfStarring: boolean): Promise<void> {
+		if (this.#message.author.id === id && !selfStarring) return;
+		this.#users.add(id);
+		await this.edit({ stars: this.#users.size });
+	}
+
+	public init(manager: StarboardManager, message: GuildMessage) {
+		this.setup(manager);
+		this.#message = message;
+		this.messageId = message.id;
+		this.channelId = message.channel.id;
+		this.guildId = manager.guild.id;
+		this.userId = message.author.id;
+		return this;
+	}
+
+	public setup(manager: StarboardManager) {
+		this.#manager = manager;
+		if (this.userId) void floatPromise(this.#client.users.fetch(this.userId));
+		return this;
 	}
 
 	private async addRefrencedEmbeds(embeds: EmbedBuilder[], message: GuildMessage = this.#message) {
@@ -238,8 +201,8 @@ export class Starboard {
 
 				const embedOfReferencedMessage = new EmbedBuilder()
 					.setAuthor({
-						name: `Replying to ${referencedMessage.member?.displayName || referencedMessage.author.username}`,
-						iconURL: referencedMessage.member?.displayAvatarURL() || referencedMessage.author.displayAvatarURL()
+						iconURL: referencedMessage.member?.displayAvatarURL() || referencedMessage.author.displayAvatarURL(),
+						name: `Replying to ${referencedMessage.member?.displayName || referencedMessage.author.username}`
 					})
 					.setColor(await this.refrencedColor(referencedMessage))
 					.setImage(getImage(referencedMessage)!)
@@ -265,14 +228,6 @@ export class Starboard {
 		return member.displayColor || resolveClientColor(this.#message.guild);
 	}
 
-	private async refrencedColor(ref: Message) {
-		const guild = this.#client.guilds.cache.get(this.guildId);
-		if (!guild) return resolveClientColor(this.#message.guild);
-		const member = await resolveToNull(guild.members.fetch(ref.author.id));
-		if (!member) return resolveClientColor(this.#message.guild);
-		return member.displayColor || resolveClientColor(this.#message.guild);
-	}
-
 	private async getContent(_: TFunction) {
 		const url = await this.getUrl();
 		return [cutText(this.#message.content, 1800), '', url].join('\n');
@@ -283,8 +238,62 @@ export class Starboard {
 		return url;
 	}
 
+	private async refrencedColor(ref: Message) {
+		const guild = this.#client.guilds.cache.get(this.guildId);
+		if (!guild) return resolveClientColor(this.#message.guild);
+		const member = await resolveToNull(guild.members.fetch(ref.author.id));
+		if (!member) return resolveClientColor(this.#message.guild);
+		return member.displayColor || resolveClientColor(this.#message.guild);
+	}
+
+	private async remove() {
+		await container.prisma.starboard.delete({
+			where: {
+				messageId_guildId: { guildId: this.guildId, messageId: this.messageId }
+			}
+		});
+	}
+
+	private async save() {
+		await container.prisma.starboard.create({
+			data: {
+				channelId: this.channelId,
+				enabled: this.enabled,
+				guildId: this.guildId,
+				id: this.id,
+				messageId: this.messageId,
+				starChannelId: this.starChannelId,
+				starMessageId: this.starMessageId,
+				stars: this.stars,
+				userId: this.userId
+			}
+		});
+	}
+
+	private async update() {
+		await container.prisma.starboard.update({
+			data: {
+				channelId: this.channelId,
+				enabled: this.enabled,
+				guildId: this.guildId,
+				id: this.id,
+				messageId: this.messageId,
+				starChannelId: this.starChannelId,
+				starMessageId: this.starMessageId,
+				stars: this.stars,
+				userId: this.userId
+			},
+			where: {
+				messageId_guildId: {
+					guildId: this.guildId,
+					messageId: this.messageId
+				}
+			}
+		});
+	}
+
 	private async updateStarMessage(): Promise<void> {
-		const { starboardMinimum, starboardChannelId } = await readSettings(this.#message.guild);
+		const { starboardChannelId, starboardMinimum } = await readSettings(this.#message.guild);
 		const t = await fetchT(this.#message);
 
 		// If number of stars is 0 try to delete the starmessage and db entry.
@@ -299,7 +308,7 @@ export class Starboard {
 				if (!(error instanceof DiscordAPIError) || !(error instanceof HTTPError)) return;
 
 				if (error.code === RESTJSONErrorCodes.MissingAccess) return;
-				if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.edit({ starMessageId: null, enabled: false });
+				if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.edit({ enabled: false, starMessageId: null });
 			}
 		}
 
@@ -315,7 +324,7 @@ export class Starboard {
 				if (!(error instanceof DiscordAPIError) || !(error instanceof HTTPError)) return;
 
 				if (error.code === RESTJSONErrorCodes.MissingAccess) return;
-				if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.edit({ starMessageId: null, enabled: false });
+				if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.edit({ enabled: false, starMessageId: null });
 			}
 
 			return;
@@ -330,7 +339,7 @@ export class Starboard {
 
 		const options = await this.getStarContent(t);
 		const promise = channel
-			.send({ embeds: options.embeds!, content: options.content ?? undefined })
+			.send({ content: options.content ?? undefined, embeds: options.embeds! })
 			.then((message) => {
 				this.#starMessage = cast<GuildMessage>(message);
 				this.starMessageId = message.id;
@@ -355,52 +364,6 @@ export class Starboard {
 		await promise;
 	}
 
-	private async remove() {
-		await container.prisma.starboard.delete({
-			where: {
-				messageId_guildId: { messageId: this.messageId, guildId: this.guildId }
-			}
-		});
-	}
-
-	private async update() {
-		await container.prisma.starboard.update({
-			where: {
-				messageId_guildId: {
-					messageId: this.messageId,
-					guildId: this.guildId
-				}
-			},
-			data: {
-				id: this.id,
-				enabled: this.enabled,
-				userId: this.userId,
-				messageId: this.messageId,
-				channelId: this.channelId,
-				guildId: this.guildId,
-				starChannelId: this.starChannelId,
-				starMessageId: this.starMessageId,
-				stars: this.stars
-			}
-		});
-	}
-
-	private async save() {
-		await container.prisma.starboard.create({
-			data: {
-				id: this.id,
-				enabled: this.enabled,
-				userId: this.userId,
-				messageId: this.messageId,
-				channelId: this.channelId,
-				guildId: this.guildId,
-				starChannelId: this.starChannelId,
-				starMessageId: this.starMessageId,
-				stars: this.stars
-			}
-		});
-	}
-
 	public get emoji() {
 		const { stars } = this;
 		if (stars < 5) return '⭐';
@@ -410,4 +373,41 @@ export class Starboard {
 		if (stars < 25) return '🌠';
 		return '🌌';
 	}
+
+	public get starMessageURL() {
+		if (!this.#starMessage) return null;
+		return this.#starMessage.url;
+	}
+}
+
+export async function combineMessageReactionUsers(emojis: string[], ...messages: (GuildMessage | null)[]) {
+	const users = [];
+
+	for (const message of messages) {
+		if (!message) continue;
+		const userResult = await fetchReactionUsers(message.channel.id, message.id, emojis);
+		users.push(...userResult);
+	}
+
+	return users;
+}
+
+export async function getStarboard(guildId: string, messageId: string) {
+	const { starboard } = container.prisma;
+	const previous = await starboard.findFirst({ where: { guildId, messageId } });
+	if (!previous) return null;
+
+	const channel =
+		container.client.channels.cache.get(previous.channelId!) || (await resolveToNull(container.client.channels.fetch(previous.channelId!)));
+	if (!channel || !channel.isSendable()) return null;
+
+	const message = channel.messages.cache.get(messageId) || (await resolveToNull(channel.messages.fetch(messageId)));
+	if (!message || !message.inGuild()) return null;
+
+	return previous ? new Starboard(previous).init(getGuildStarboard(guildId), cast<GuildMessage>(message)) : null;
+}
+
+export function truncateStarboardEmojis(settings: readonly string[], fallback: string[] = defaultStarboardEmojis) {
+	console.log(new Set([...fallback, ...settings]));
+	return ['%E2%AD%90'];
 }

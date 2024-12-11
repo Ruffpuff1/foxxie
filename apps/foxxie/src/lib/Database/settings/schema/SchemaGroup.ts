@@ -1,31 +1,23 @@
-import { ISchemaValue, ReadonlyGuildData, SchemaKey } from '#lib/database';
 import type { TFunction } from '@sapphire/plugin-i18next';
+
 import { codeBlock, isNullish, toTitleCase } from '@sapphire/utilities';
+import { ISchemaValue, ReadonlyGuildData, SchemaKey } from '#lib/database';
 import { AliasedCollection } from '#lib/Database/settings/structures/collections/AliasedCollection';
 
 export type NonEmptyArray<T> = [T, ...T[]];
 
 export class SchemaGroup extends AliasedCollection<string, SchemaGroup | SchemaKey> implements ISchemaValue {
-	public readonly key: string;
-	public readonly parent: SchemaGroup | null;
-	public readonly name: string;
 	public readonly dashboardOnly = false;
+	public readonly key: string;
+	public readonly name: string;
+	public readonly parent: null | SchemaGroup;
 	public readonly type = 'Group';
 
-	public constructor(key: string, name = 'Root', parent: SchemaGroup | null = null) {
+	public constructor(key: string, name = 'Root', parent: null | SchemaGroup = null) {
 		super();
 		this.key = key;
 		this.name = name;
 		this.parent = parent;
-	}
-
-	public override set(key: string, value: SchemaGroup | SchemaKey) {
-		// Add auto-alias:
-		if (key.includes('-')) {
-			this.aliases.set(key.replaceAll('-', ''), value);
-		}
-
-		return super.set(key, value);
 	}
 
 	public add([key, ...tail]: NonEmptyArray<string>, value: SchemaKey): SchemaGroup {
@@ -61,21 +53,6 @@ export class SchemaGroup extends AliasedCollection<string, SchemaGroup | SchemaK
 		}
 	}
 
-	public getPathArray([key, ...tail]: NonEmptyArray<string>): SchemaGroup | SchemaKey | null {
-		if (tail.length === 0) {
-			return key === '' || key === '.' ? this : (this.get(key) ?? null);
-		}
-
-		const value = this.get(key);
-		if (isNullish(value)) return null;
-		if (value instanceof SchemaGroup) return value.getPathArray(tail as NonEmptyArray<string>);
-		return null;
-	}
-
-	public getPathString(key: string): SchemaGroup | SchemaKey | null {
-		return this.getPathArray(key.split('.') as NonEmptyArray<string>);
-	}
-
 	public display(settings: ReadonlyGuildData, language: TFunction) {
 		const folders: string[] = [];
 		const sections = new Map<string, string[]>();
@@ -109,5 +86,29 @@ export class SchemaGroup extends AliasedCollection<string, SchemaGroup | SchemaK
 		}
 
 		return codeBlock('asciidoc', array.join('\n'));
+	}
+
+	public getPathArray([key, ...tail]: NonEmptyArray<string>): null | SchemaGroup | SchemaKey {
+		if (tail.length === 0) {
+			return key === '' || key === '.' ? this : (this.get(key) ?? null);
+		}
+
+		const value = this.get(key);
+		if (isNullish(value)) return null;
+		if (value instanceof SchemaGroup) return value.getPathArray(tail as NonEmptyArray<string>);
+		return null;
+	}
+
+	public getPathString(key: string): null | SchemaGroup | SchemaKey {
+		return this.getPathArray(key.split('.') as NonEmptyArray<string>);
+	}
+
+	public override set(key: string, value: SchemaGroup | SchemaKey) {
+		// Add auto-alias:
+		if (key.includes('-')) {
+			this.aliases.set(key.replaceAll('-', ''), value);
+		}
+
+		return super.set(key, value);
 	}
 }

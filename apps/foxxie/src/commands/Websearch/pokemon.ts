@@ -1,3 +1,8 @@
+import { PokemonEnum } from '@favware/graphql-pokemon';
+import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
+import { ChatInputCommand } from '@sapphire/framework';
+import { fetchT, TFunction } from '@sapphire/plugin-i18next';
+import { cast, isNullish } from '@sapphire/utilities';
 import { compressPokemonCustomIdMetadata, fuzzyPokemonToSelectOption, PokemonSpriteTypes } from '#lib/Container/Api/Pokemon/index';
 import { SubcommandKeys } from '#lib/Container/Stores/Commands/Keys/index';
 import { IdHints } from '#lib/discord';
@@ -7,11 +12,6 @@ import { GuildMessage } from '#lib/types';
 import { floatPromise } from '#utils/common';
 import { SelectMenuCustomIds } from '#utils/constants';
 import { sendLoadingMessage } from '#utils/functions/messages';
-import { PokemonEnum } from '@favware/graphql-pokemon';
-import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
-import { ChatInputCommand } from '@sapphire/framework';
-import { fetchT, TFunction } from '@sapphire/plugin-i18next';
-import { cast, isNullish } from '@sapphire/utilities';
 import {
 	ActionRowBuilder,
 	APIApplicationCommandOptionChoice,
@@ -31,8 +31,8 @@ import {
 	detailedDescription: LanguageKeys.Commands.Websearch.PokemonDetailedDescription,
 	flags: ['shiny', 'back'],
 	subcommands: [
-		{ name: SubcommandKeys.Websearch.Pokemon, messageRun: SubcommandKeys.Websearch.Pokemon, default: true },
-		{ name: 'dex', messageRun: SubcommandKeys.Websearch.Pokemon, chatInputRun: 'chatInputRunPokemon' }
+		{ default: true, messageRun: SubcommandKeys.Websearch.Pokemon, name: SubcommandKeys.Websearch.Pokemon },
+		{ chatInputRun: 'chatInputRunPokemon', messageRun: SubcommandKeys.Websearch.Pokemon, name: 'dex' }
 	]
 })
 export class UserCommand extends FoxxieSubcommand {
@@ -42,6 +42,15 @@ export class UserCommand extends FoxxieSubcommand {
 		{ name: 'Shiny Sprite', value: 'shinySprite' },
 		{ name: 'Shiny Back Sprite', value: 'shinyBackSprite' }
 	];
+
+	public async chatInputRunPokemon(interaction: ChatInputCommand.Interaction): Promise<void> {
+		await interaction.deferReply();
+
+		const pokemon = interaction.options.getString('pokemon', true);
+		const spriteToGet: PokemonSpriteTypes = (interaction.options.getString('sprite') as null | PokemonSpriteTypes) ?? 'sprite';
+
+		await this.sendInteractionPokemonReply(pokemon, spriteToGet, interaction);
+	}
 
 	public override registerApplicationCommands(registry: ChatInputCommand.Registry): Awaitable<void> {
 		registry //
@@ -89,17 +98,8 @@ export class UserCommand extends FoxxieSubcommand {
 			);
 	}
 
-	public async chatInputRunPokemon(interaction: ChatInputCommand.Interaction): Promise<void> {
-		await interaction.deferReply();
-
-		const pokemon = interaction.options.getString('pokemon', true);
-		const spriteToGet: PokemonSpriteTypes = (interaction.options.getString('sprite') as PokemonSpriteTypes | null) ?? 'sprite';
-
-		await this.sendInteractionPokemonReply(pokemon, spriteToGet, interaction);
-	}
-
 	@RequiresClientPermissions([PermissionFlagsBits.AddReactions, PermissionFlagsBits.EmbedLinks])
-	public async [SubcommandKeys.Websearch.Pokemon](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<unknown | Message> {
+	public async [SubcommandKeys.Websearch.Pokemon](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message | unknown> {
 		const { t } = args;
 		const response = await sendLoadingMessage(msg);
 
@@ -130,8 +130,8 @@ export class UserCommand extends FoxxieSubcommand {
 			const options = fuzzyPokemon.map<APISelectMenuOption>((fuzzyEntry) => fuzzyPokemonToSelectOption(fuzzyEntry, 'label'));
 
 			const metadata = compressPokemonCustomIdMetadata({
-				type: 'pokemon',
-				spriteToGet
+				spriteToGet,
+				type: 'pokemon'
 			});
 
 			const customIdStringified = `${SelectMenuCustomIds.Pokemon}|${metadata}`;
@@ -146,8 +146,8 @@ export class UserCommand extends FoxxieSubcommand {
 
 			await interaction.deleteReply();
 			return interaction.followUp({
-				content: t(LanguageKeys.Commands.Websearch.PokemonDexNone, { pokemon }),
 				components: [messageActionRow],
+				content: t(LanguageKeys.Commands.Websearch.PokemonDexNone, { pokemon }),
 				ephemeral: true
 			});
 		}
@@ -170,8 +170,8 @@ export class UserCommand extends FoxxieSubcommand {
 			const options = fuzzyPokemon.map<APISelectMenuOption>((fuzzyEntry) => fuzzyPokemonToSelectOption(fuzzyEntry, 'label'));
 
 			const metadata = compressPokemonCustomIdMetadata({
-				type: 'pokemon',
-				spriteToGet
+				spriteToGet,
+				type: 'pokemon'
 			});
 
 			const customIdStringified = `${SelectMenuCustomIds.Pokemon}|${metadata}`;
@@ -186,8 +186,8 @@ export class UserCommand extends FoxxieSubcommand {
 
 			await floatPromise(message.delete());
 			return cast<TextChannel>(message.channel).send({
-				content: t(LanguageKeys.Commands.Websearch.PokemonDexNone, { pokemon }),
-				components: [messageActionRow]
+				components: [messageActionRow],
+				content: t(LanguageKeys.Commands.Websearch.PokemonDexNone, { pokemon })
 			});
 		}
 

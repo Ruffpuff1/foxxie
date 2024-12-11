@@ -1,18 +1,6 @@
 import { TimeTypes } from '@sapphire/time-utilities';
 
 export const duration = {
-	[TimeTypes.Year]: {
-		1: 'year',
-		DEFAULT: 'years'
-	},
-	[TimeTypes.Month]: {
-		1: 'month',
-		DEFAULT: 'months'
-	},
-	[TimeTypes.Week]: {
-		1: 'week',
-		DEFAULT: 'weeks'
-	},
 	[TimeTypes.Day]: {
 		1: 'day',
 		DEFAULT: 'days'
@@ -25,9 +13,21 @@ export const duration = {
 		1: 'minute',
 		DEFAULT: 'minutes'
 	},
+	[TimeTypes.Month]: {
+		1: 'month',
+		DEFAULT: 'months'
+	},
 	[TimeTypes.Second]: {
 		1: 'second',
 		DEFAULT: 'seconds'
+	},
+	[TimeTypes.Week]: {
+		1: 'week',
+		DEFAULT: 'weeks'
+	},
+	[TimeTypes.Year]: {
+		1: 'year',
+		DEFAULT: 'years'
 	}
 };
 

@@ -1,30 +1,31 @@
-import { join } from 'node:path';
-import 'reflect-metadata';
-import { DataSource } from 'typeorm';
 import { container } from '@sapphire/framework';
-import { ClientRepository } from './repository/ClientRepository.js';
-import { MemberRepository } from './repository/MemberRepository.js';
+import 'reflect-metadata';
+import { rootFolder } from '#utils/constants';
+import { join } from 'node:path';
+import { DataSource } from 'typeorm';
+
 import { ClientEntity } from './entities/ClientEntity.js';
-import { MemberEntity } from './entities/MemberEntity.js';
 import { LastFmArtistEntity } from './entities/LastFmArtistEntity.js';
-import { LastFmArtistRepository } from './repository/LastFmArtistRepository.js';
-import { UserRepository } from './repository/UserRepository.js';
+import { MemberEntity } from './entities/MemberEntity.js';
 import { UserEntity } from './entities/UserEntity.js';
 import { MongoDB } from './MongoDB.js';
-import { rootFolder } from '#utils/constants';
+import { ClientRepository } from './repository/ClientRepository.js';
+import { LastFmArtistRepository } from './repository/LastFmArtistRepository.js';
+import { MemberRepository } from './repository/MemberRepository.js';
+import { UserRepository } from './repository/UserRepository.js';
 
 export async function config(): Promise<void> {
 	const dataSource = new DataSource({
-		type: 'mongodb',
-		host: 'local',
-		url: process.env.MONGO_URL,
-		port: 3306,
-		username: process.env.MONGO_USER,
-		password: process.env.MONGO_PASSWORD,
-		entities: [join(rootFolder, 'src/lib/Database/entities/*Entity.js')],
 		authSource: 'admin',
+		entities: [join(rootFolder, 'src/lib/Database/entities/*Entity.js')],
+		host: 'local',
+		logging: true,
+		password: process.env.MONGO_PASSWORD,
+		port: 3306,
 		ssl: true,
-		logging: true
+		type: 'mongodb',
+		url: process.env.MONGO_URL,
+		username: process.env.MONGO_USER
 	});
 
 	await dataSource.initialize();

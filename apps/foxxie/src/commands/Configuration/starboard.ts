@@ -1,3 +1,7 @@
+import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
+import { ApplyOptions, RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
+import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { cast, cutText } from '@sapphire/utilities';
 import { Starboard } from '#lib/Database/Models/starboard';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
@@ -8,10 +12,6 @@ import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginat
 import { getGuildStarboard } from '#utils/functions';
 import { sendLoadingMessage } from '#utils/functions/messages';
 import { resolveClientColor } from '#utils/util';
-import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
-import { ApplyOptions, RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
-import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { cast, cutText } from '@sapphire/utilities';
 import {
 	blockQuote,
 	bold,
@@ -26,10 +26,10 @@ import {
 
 @ApplyOptions<FoxxieSubcommand.Options>({
 	aliases: ['sb', 'stars'],
-	description: LanguageKeys.Commands.Configuration.BirthdayDescription,
-	detailedDescription: LanguageKeys.Commands.Configuration.BirthdayDetailedDescription,
+	description: LanguageKeys.Commands.Configuration.Starboard.Description,
+	detailedDescription: LanguageKeys.Commands.Configuration.Starboard.DetailedDescription,
 	runIn: [CommandOptionsRunTypeEnum.GuildAny],
-	subcommands: [{ name: 'list', messageRun: 'list', default: true }]
+	subcommands: [{ default: true, messageRun: 'list', name: 'list' }]
 })
 export class UserCommand extends FoxxieSubcommand {
 	@RequiresClientPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
@@ -37,7 +37,7 @@ export class UserCommand extends FoxxieSubcommand {
 	public async list(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
 		const loading = await sendLoadingMessage(msg);
 		const starboard = getGuildStarboard(msg.guild);
-		const starboards = (await this.container.prisma.starboard.findMany({ where: { guildId: msg.guildId }, orderBy: { id: 'desc' } })).map(
+		const starboards = (await this.container.prisma.starboard.findMany({ orderBy: { id: 'desc' }, where: { guildId: msg.guildId } })).map(
 			(star) => new Starboard(star).setup(starboard)
 		);
 
@@ -68,8 +68,8 @@ export class UserCommand extends FoxxieSubcommand {
 
 						lines.push(
 							args.t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsLocation, {
-								emoji: Emojis.Information,
 								channel: channelMention(channel.id),
+								emoji: Emojis.Information,
 								id: channel.id
 							})
 						);
@@ -91,9 +91,9 @@ export class UserCommand extends FoxxieSubcommand {
 						if (content) lines.push(blockQuote(cutText(content, 150)));
 
 						return {
+							inline: false,
 							name: `${inlineCode(star.id.toString())} → ${bold(star.stars.toLocaleString())} Stars`,
-							value: lines.join('\n'),
-							inline: false
+							value: lines.join('\n')
 						};
 					})
 				).then((r) => r.filter((c) => !!c))

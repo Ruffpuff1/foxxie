@@ -1,5 +1,5 @@
-import { ConsoleState, EventArgs, FoxxieEvents } from '#lib/types';
 import { Listener } from '@sapphire/framework';
+import { ConsoleState, EventArgs, FoxxieEvents } from '#lib/types';
 import { blue } from 'colorette';
 
 export class UserListener extends Listener<FoxxieEvents.MessageCommandLogging> {

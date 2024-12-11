@@ -28,6 +28,12 @@ export class NumberExtensions {
 			case 1:
 			case '1':
 				return 'February';
+			case 10:
+			case '10':
+				return 'November';
+			case 11:
+			case '11':
+				return 'December';
 			case 2:
 			case '2':
 				return 'March';
@@ -52,12 +58,6 @@ export class NumberExtensions {
 			case 9:
 			case '9':
 				return 'October';
-			case 10:
-			case '10':
-				return 'November';
-			case 11:
-			case '11':
-				return 'December';
 			default:
 				return '';
 		}

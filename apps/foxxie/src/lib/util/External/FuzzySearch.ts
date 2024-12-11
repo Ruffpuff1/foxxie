@@ -1,14 +1,15 @@
-import { jaroWinkler } from '@skyra/jaro-winkler';
 import type { Collection } from 'discord.js';
+
+import { jaroWinkler } from '@skyra/jaro-winkler';
 
 /**
  * @license MIT
  * @copyright 2019 Favware
  */
 export class FuzzySearch<K extends string, V> {
-	readonly #collection: Collection<K, V>;
-
 	readonly #accessKeys: (keyof V)[];
+
+	readonly #collection: Collection<K, V>;
 
 	public constructor(collection: Collection<K, V>, keys: (keyof V)[]) {
 		this.#collection = collection;

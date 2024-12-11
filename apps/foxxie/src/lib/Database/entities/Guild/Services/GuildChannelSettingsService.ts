@@ -1,39 +1,39 @@
 import { Snowflake } from 'discord.js';
 
 export class GuildChannelSettingsService {
-	public boost: Snowflake | null = null;
+	public boost: null | Snowflake = null;
 
 	public command: Snowflake[] = [];
 
 	public disabled: Snowflake[] = [];
 
-	public disboard: Snowflake | null = null;
+	public disboard: null | Snowflake = null;
 
-	public goodbye: Snowflake | null = null;
+	public goodbye: null | Snowflake = null;
 
 	public ignoreAll: Snowflake[] = [];
 
-	public logsFilterInvites: Snowflake | null = null;
+	public logsFilterInvites: null | Snowflake = null;
 
-	public logsFilterWords: Snowflake | null = null;
+	public logsFilterWords: null | Snowflake = null;
 
-	public logsMemberJoin: Snowflake | null = null;
+	public logsMemberJoin: null | Snowflake = null;
 
-	public logsMemberLeave: Snowflake | null = null;
+	public logsMemberLeave: null | Snowflake = null;
 
-	public logsMemberScreening: Snowflake | null = null;
+	public logsMemberScreening: null | Snowflake = null;
 
-	public logsMessageDelete: Snowflake | null = null;
+	public logsMessageDelete: null | Snowflake = null;
 
-	public logsMessageEdit: Snowflake | null = null;
+	public logsMessageEdit: null | Snowflake = null;
 
-	public logsMessageVoice: Snowflake | null = null;
+	public logsMessageVoice: null | Snowflake = null;
 
-	public logsModeration: Snowflake | null = null;
+	public logsModeration: null | Snowflake = null;
 
-	public logsRoleUpdate: Snowflake | null = null;
+	public logsRoleUpdate: null | Snowflake = null;
 
-	public welcome: Snowflake | null = null;
+	public welcome: null | Snowflake = null;
 
 	public constructor(data: Partial<GuildChannelSettingsService>) {
 		Object.assign(this, data);

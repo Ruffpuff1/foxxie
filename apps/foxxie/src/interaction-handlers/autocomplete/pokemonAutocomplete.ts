@@ -1,16 +1,12 @@
-import { fuzzyPokemonToSelectOption } from '#lib/Container/Api/Pokemon/index';
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
+import { fuzzyPokemonToSelectOption } from '#lib/Container/Api/Pokemon/index';
 import { AutocompleteInteraction } from 'discord.js';
 
 @ApplyOptions<InteractionHandler.Options>({
 	interactionHandlerType: InteractionHandlerTypes.Autocomplete
 })
 export class AutocompleteHandler extends InteractionHandler {
-	public override async run(interaction: AutocompleteInteraction, result: InteractionHandler.ParseResult<this>) {
-		return interaction.respond(result);
-	}
-
 	public override async parse(interaction: AutocompleteInteraction) {
 		if (
 			interaction.commandName !== 'pokemon' &&
@@ -36,5 +32,9 @@ export class AutocompleteHandler extends InteractionHandler {
 			default:
 				return this.none();
 		}
+	}
+
+	public override async run(interaction: AutocompleteInteraction, result: InteractionHandler.ParseResult<this>) {
+		return interaction.respond(result);
 	}
 }
