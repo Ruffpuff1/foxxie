@@ -60,6 +60,8 @@
 	"reminder": "",
 	"roleError": "",
 	"roleMissingGuild": "",
+	"snowflake": "",
+	"starboardEmpty": "",
 	"timespanTooLarge": "",
 	"timespanTooSmall": "",
 	"unavailable": ""
