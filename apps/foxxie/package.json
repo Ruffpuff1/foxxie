@@ -82,7 +82,7 @@
     "prism": "^4.1.2",
     "prisma-json-types-generator": "^3.2.2",
     "typeorm": "^0.3.20",
-    "undici": "^5.25.3"
+    "undici": "^7.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
