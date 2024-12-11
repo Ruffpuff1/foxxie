@@ -1,11 +1,23 @@
 {
 	"description": "",
 	"detailedDescription": {
-		"usages": ["", ""],
-		"explainedUsage": [
-			["", ""],
-			["", ""]
+		"usages": [
+			"",
+			""
 		],
-		"examples": ["", ""]
+		"explainedUsage": [
+			[
+				"",
+				""
+			],
+			[
+				"",
+				""
+			]
+		],
+		"examples": [
+			"",
+			""
+		]
 	}
 }
