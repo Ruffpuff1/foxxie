@@ -1,4 +1,5 @@
 import { Starboard, StarboardData } from '#lib/Database/Models/starboard';
+import { LanguageKeys } from '#lib/i18n';
 import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 import type { Message, Snowflake } from 'discord.js';
 
@@ -13,7 +14,7 @@ export class UserArgument extends Argument<Starboard> {
 			const latest = this.#fallbackToLatest(guildStarboards);
 			if (latest) return this.ok(new Starboard(latest));
 
-			return this.error({ parameter, identifier: 'arguments:starboardEmpty', context });
+			return this.error({ parameter, identifier: LanguageKeys.Arguments.StarboardEmpty, context });
 		}
 
 		const resolveNumber = await this.number.run(parameter, { ...context, argument: this.number });
@@ -31,7 +32,7 @@ export class UserArgument extends Argument<Starboard> {
 		const latest = this.#fallbackToLatest(guildStarboards);
 		if (latest) return this.ok(new Starboard(latest));
 
-		return this.error({ parameter, identifier: 'arguments:starboardEmpty', context });
+		return this.error({ parameter, identifier: LanguageKeys.Arguments.StarboardEmpty, context });
 	}
 
 	#fallbackToLatest(starboards: StarboardData[]) {

@@ -3,7 +3,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
 import { minutes } from '#utils/common';
-import { Emojis } from '#utils/constants';
+import { Emojis, SubcommandKeys } from '#utils/constants';
 import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginatedMessageEmbedFields';
 import { getGuildStarboard } from '#utils/functions';
 import { sendLoadingMessage } from '#utils/functions/messages';
@@ -11,7 +11,7 @@ import { resolveClientColor } from '#utils/util';
 import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
 import { ApplyOptions, RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { send } from '@sapphire/plugin-editable-commands';
+import { MessageOptions, send } from '@sapphire/plugin-editable-commands';
 import { TFunction } from '@sapphire/plugin-i18next';
 import { cast, cutText } from '@sapphire/utilities';
 import {
@@ -20,6 +20,7 @@ import {
 	channelMention,
 	EmbedBuilder,
 	escapeMarkdown,
+	hyperlink,
 	inlineCode,
 	italic,
 	Message,
@@ -36,14 +37,14 @@ const Root = LanguageKeys.Commands.Configuration.Starboard;
 	detailedDescription: Root.DetailedDescription,
 	runIn: [CommandOptionsRunTypeEnum.GuildAny],
 	subcommands: [
-		{ name: 'list', messageRun: 'messageRunList', default: true },
-		{ name: 'show', messageRun: 'messageRunShow' }
+		{ name: SubcommandKeys.List, messageRun: SubcommandKeys.List, default: true },
+		{ name: SubcommandKeys.Show, messageRun: SubcommandKeys.Show }
 	]
 })
 export class UserCommand extends FoxxieSubcommand {
 	@RequiresClientPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
 	@RequiresUserPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
-	public async messageRunList(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
+	public async [SubcommandKeys.List](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
 		const loading = await sendLoadingMessage(msg);
 		await this.#makeList(msg, args.t);
 		await loading.delete();
@@ -51,44 +52,25 @@ export class UserCommand extends FoxxieSubcommand {
 
 	@RequiresClientPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
 	@RequiresUserPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
-	public async messageRunShow(msg: GuildMessage, args: FoxxieSubcommand.Args) {
+	public async [SubcommandKeys.Show](msg: GuildMessage, args: FoxxieSubcommand.Args) {
 		await sendLoadingMessage(msg);
-		const starboardEntity = await args.pick('starboard').catch(() =>
-			this.container.prisma.starboard
-				.findMany({
-					where: { guildId: msg.guildId! },
-					orderBy: { id: 'desc' }
-				})
-				.then((stars) => {
-					const first = stars[0];
-					if (!first) this.error('arguments:starboardEmpty');
+		const entity = await this.#retrieveStarEntry(args);
+		await send(msg, await this.#makeDisplay(entity, args.t));
+	}
 
-					return new Starboard(first);
-				})
-		);
+	async #makeDisplay(entity: Starboard, t: TFunction): Promise<MessageOptions> {
+		const messageOptions = await entity.getStarContent(t);
 
-		const starMessageChannel = await resolveToNull(this.container.client.channels.fetch(starboardEntity.channelId));
-		if (!starMessageChannel || !starMessageChannel.isSendable()) this.error('could not fetch starmsg channel');
-
-		const starredMessage = await resolveToNull(starMessageChannel.messages.fetch(starboardEntity.messageId));
-		if (!starredMessage || !starredMessage.inGuild()) this.error('could not find starMessage');
-
-		const guildStarboard = getGuildStarboard(msg.guild);
-		starboardEntity.init(guildStarboard, starredMessage as GuildMessage);
-
-		await starboardEntity.downloadStarMessage();
-		await starboardEntity.downloadUserList();
-
-		const messageOptions = await starboardEntity.getStarContent(args.t);
-
-		const { starMessageURL } = starboardEntity;
+		const { starMessageURL } = entity;
 		if (starMessageURL) {
 			const { content } = messageOptions;
-			if (content) messageOptions.content = [content, italic(`[Jump to Star Message](${starMessageURL})`)].join('\n');
-			messageOptions.content = italic(`[Jump to Star Message](${starMessageURL})`);
+			const linkContent = italic(hyperlink(t(Root.JumpToStarMessage), starMessageURL));
+
+			if (content) messageOptions.content = [content, linkContent].join('\n');
+			messageOptions.content = linkContent;
 		}
 
-		await send(msg, messageOptions);
+		return messageOptions;
 	}
 
 	async #makeList(entity: GuildMessage | FoxxieSubcommand.Interaction, t: TFunction) {
@@ -160,5 +142,35 @@ export class UserCommand extends FoxxieSubcommand {
 			)
 			.make()
 			.run(entity, user);
+	}
+
+	async #retrieveStarEntry(args: FoxxieSubcommand.Args): Promise<Starboard> {
+		const entity = await args.pick('starboard').catch(() =>
+			this.container.prisma.starboard
+				.findMany({
+					where: { guildId: args.message.guildId! },
+					orderBy: { id: 'desc' }
+				})
+				.then((stars) => {
+					const first = stars[0];
+					if (!first) this.error(LanguageKeys.Arguments.StarboardEmpty);
+
+					return new Starboard(first);
+				})
+		);
+
+		const starMessageChannel = await resolveToNull(this.container.client.channels.fetch(entity.channelId));
+		if (!starMessageChannel || !starMessageChannel.isSendable()) this.error(Root.ShowNoChannel);
+
+		const starredMessage = await resolveToNull(starMessageChannel.messages.fetch(entity.messageId));
+		if (!starredMessage || !starredMessage.inGuild()) this.error(Root.ShowNoMessage);
+
+		const guildStarboard = getGuildStarboard(args.message.guild!);
+		entity.init(guildStarboard, starredMessage as GuildMessage);
+
+		await entity.downloadStarMessage();
+		await entity.downloadUserList();
+
+		return entity;
 	}
 }

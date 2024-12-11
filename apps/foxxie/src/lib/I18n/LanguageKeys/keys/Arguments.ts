@@ -31,6 +31,7 @@ export const Reminder = FT<{ parameter: string }>('arguments:reminder');
 export const RoleError = FT<{ parameter: string }>('arguments:roleError');
 export const RoleMissingGuild = FT<{ parameter: string }>('arguments:roleMissingGuild');
 export const Snowflake = FT<{ parameter: string; message: Message }>('arguments:snowflake');
+export const StarboardEmpty = T('arguments:starboardEmpty');
 export const TimespanTooLarge = FT<{ duration: number; parameter: string }, string>('arguments:timespanTooLarge');
 export const TimespanTooSmall = FT<{ duration: number; parameter: string }, string>('arguments:timespanTooSmall');
 export const Unavailable = T('arguments:unavailable');

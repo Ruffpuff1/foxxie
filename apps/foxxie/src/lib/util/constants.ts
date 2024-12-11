@@ -144,3 +144,8 @@ export const allowedInviteIds = [
 export const enum SelectMenuCustomIds {
 	Pokemon = 'pokemon-select-menu'
 }
+
+export const enum SubcommandKeys {
+	List = 'list',
+	Show = 'show'
+}

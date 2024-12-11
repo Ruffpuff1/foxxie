@@ -1,0 +1,8 @@
+{
+	"extends": "./apps/foxxie/tsconfig.base.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true
+	},
+	"include": ["./apps/foxxie/src", "./apps/foxxie/tests", "./apps/foxxie/scripts", "./apps/foxxie/ormconfig.js", "./apps/foxxie/vitest.config.ts"]
+}
