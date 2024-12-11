@@ -1,13 +1,5 @@
-import { getConfigurableGroups } from '#lib/Database/settings/configuration';
-import { readSettings, writeSettingsTransaction } from '#lib/Database/settings/functions';
-import { SchemaKey } from '#lib/Database/settings/schema/SchemaKey';
-import { isSchemaKey, remove, reset, set } from '#lib/Database/settings/Utils';
-import { LanguageKeys } from '#lib/i18n';
-import { SettingsMenu } from '#lib/structures';
-import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import type { GuildMessage } from '#lib/types';
-import { PermissionLevels } from '#lib/types';
-import { isValidCustomEmoji, isValidSerializedTwemoji, isValidTwemoji } from '#utils/functions/emojis';
+
 import { inlineCode } from '@discordjs/builders';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
@@ -16,6 +8,15 @@ import { map } from '@sapphire/iterator-utilities/map';
 import { toArray } from '@sapphire/iterator-utilities/toArray';
 import { send } from '@sapphire/plugin-editable-commands';
 import { isNullish, toTitleCase } from '@sapphire/utilities';
+import { getConfigurableGroups } from '#lib/Database/settings/configuration';
+import { readSettings, writeSettingsTransaction } from '#lib/Database/settings/functions';
+import { SchemaKey } from '#lib/Database/settings/schema/SchemaKey';
+import { isSchemaKey, remove, reset, set } from '#lib/Database/settings/Utils';
+import { LanguageKeys } from '#lib/i18n';
+import { SettingsMenu } from '#lib/structures';
+import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
+import { PermissionLevels } from '#lib/types';
+import { isValidCustomEmoji, isValidSerializedTwemoji, isValidTwemoji } from '#utils/functions/emojis';
 import { ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<FoxxieSubcommand.Options>({
@@ -26,51 +27,18 @@ import { ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
 	permissionLevel: PermissionLevels.Administrator,
 	runIn: [CommandOptionsRunTypeEnum.GuildAny],
 	subcommands: [
-		{ name: 'set', messageRun: 'set' },
-		{ name: 'add', messageRun: 'set' },
-		{ name: 'show', messageRun: 'show' },
-		{ name: 'remove', messageRun: 'remove' },
-		{ name: 'reset', messageRun: 'reset' },
-		{ name: 'menu', messageRun: 'menu', default: true }
+		{ messageRun: 'set', name: 'set' },
+		{ messageRun: 'set', name: 'add' },
+		{ messageRun: 'show', name: 'show' },
+		{ messageRun: 'remove', name: 'remove' },
+		{ messageRun: 'reset', name: 'reset' },
+		{ default: true, messageRun: 'menu', name: 'menu' }
 	]
 })
 export class UserCommand extends FoxxieSubcommand {
 	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
 	public menu(message: GuildMessage, args: FoxxieSubcommand.Args, context: FoxxieSubcommand.RunContext) {
 		return new SettingsMenu(message, args.t).init(context);
-	}
-
-	public async show(message: GuildMessage, args: FoxxieSubcommand.Args) {
-		const key = args.finished ? '' : await args.pick('string');
-		const schemaValue = this.#resolveSchemaValue(key);
-
-		const settings = await readSettings(message.guild);
-		const output = schemaValue.display(settings, args.t);
-
-		if (isSchemaKey(schemaValue)) {
-			const content = args.t(LanguageKeys.Commands.Admin.ConfGet, { key: schemaValue.name, value: output });
-			return send(message, { content, allowedMentions: { users: [], roles: [] } });
-		}
-
-		const title = this.#getShowTitle(key);
-
-		return send(message, {
-			content: args.t(LanguageKeys.Commands.Admin.Conf, { key: title, list: output }),
-			allowedMentions: { users: [], roles: [] }
-		});
-	}
-
-	public async set(message: GuildMessage, args: FoxxieSubcommand.Args) {
-		const [key, schemaKey] = await this.#fetchKey(args);
-
-		using trx = await writeSettingsTransaction(message.guild);
-		await trx.write(await set(trx.settings, schemaKey, args)).submit();
-
-		const response = schemaKey.display(trx.settings, args.t);
-		return send(message, {
-			content: args.t(LanguageKeys.Commands.Admin.ConfUpdated, { key, response: this.#getTextResponse(response) }),
-			allowedMentions: { users: [], roles: [] }
-		});
 	}
 
 	public async remove(message: GuildMessage, args: FoxxieSubcommand.Args) {
@@ -81,8 +49,8 @@ export class UserCommand extends FoxxieSubcommand {
 
 		const response = schemaKey.display(trx.settings, args.t);
 		return send(message, {
-			content: args.t(LanguageKeys.Commands.Admin.ConfUpdated, { key, response: this.#getTextResponse(response) }),
-			allowedMentions: { users: [], roles: [] }
+			allowedMentions: { roles: [], users: [] },
+			content: args.t(LanguageKeys.Commands.Admin.ConfUpdated, { key, response: this.#getTextResponse(response) })
 		});
 	}
 
@@ -94,16 +62,45 @@ export class UserCommand extends FoxxieSubcommand {
 
 		const response = schemaKey.display(trx.settings, args.t);
 		return send(message, {
-			content: args.t(LanguageKeys.Commands.Admin.ConfReset, { key, value: response }),
-			allowedMentions: { users: [], roles: [] }
+			allowedMentions: { roles: [], users: [] },
+			content: args.t(LanguageKeys.Commands.Admin.ConfReset, { key, value: response })
 		});
 	}
 
-	#getTextResponse(response: string) {
-		return isValidCustomEmoji(response) || isValidSerializedTwemoji(response) || isValidTwemoji(response) ? response : inlineCode(response);
+	public async set(message: GuildMessage, args: FoxxieSubcommand.Args) {
+		const [key, schemaKey] = await this.#fetchKey(args);
+
+		using trx = await writeSettingsTransaction(message.guild);
+		await trx.write(await set(trx.settings, schemaKey, args)).submit();
+
+		const response = schemaKey.display(trx.settings, args.t);
+		return send(message, {
+			allowedMentions: { roles: [], users: [] },
+			content: args.t(LanguageKeys.Commands.Admin.ConfUpdated, { key, response: this.#getTextResponse(response) })
+		});
 	}
 
-	async #fetchKey(args: FoxxieSubcommand.Args | ChatInputCommandInteraction) {
+	public async show(message: GuildMessage, args: FoxxieSubcommand.Args) {
+		const key = args.finished ? '' : await args.pick('string');
+		const schemaValue = this.#resolveSchemaValue(key);
+
+		const settings = await readSettings(message.guild);
+		const output = schemaValue.display(settings, args.t);
+
+		if (isSchemaKey(schemaValue)) {
+			const content = args.t(LanguageKeys.Commands.Admin.ConfGet, { key: schemaValue.name, value: output });
+			return send(message, { allowedMentions: { roles: [], users: [] }, content });
+		}
+
+		const title = this.#getShowTitle(key);
+
+		return send(message, {
+			allowedMentions: { roles: [], users: [] },
+			content: args.t(LanguageKeys.Commands.Admin.Conf, { key: title, list: output })
+		});
+	}
+
+	async #fetchKey(args: ChatInputCommandInteraction | FoxxieSubcommand.Args) {
 		const key = args instanceof ChatInputCommandInteraction ? args.options.getString('key', true) : await args.pick('string');
 
 		const value = getConfigurableGroups().getPathString(key.toLowerCase());
@@ -122,12 +119,6 @@ export class UserCommand extends FoxxieSubcommand {
 		this.error(LanguageKeys.Settings.Gateway.ChooseKey, { keys: toArray(keys) });
 	}
 
-	#resolveSchemaValue(key: string) {
-		const schemaValue = getConfigurableGroups().getPathString(key.toLowerCase());
-		if (schemaValue === null) this.error(LanguageKeys.Commands.Admin.ConfGetNoExt, { key });
-		return schemaValue;
-	}
-
 	#getShowTitle(key: string) {
 		return key
 			? `: ${key
@@ -135,5 +126,15 @@ export class UserCommand extends FoxxieSubcommand {
 					.map((key) => toTitleCase(key))
 					.join('/')}`
 			: '';
+	}
+
+	#getTextResponse(response: string) {
+		return isValidCustomEmoji(response) || isValidSerializedTwemoji(response) || isValidTwemoji(response) ? response : inlineCode(response);
+	}
+
+	#resolveSchemaValue(key: string) {
+		const schemaValue = getConfigurableGroups().getPathString(key.toLowerCase());
+		if (schemaValue === null) this.error(LanguageKeys.Commands.Admin.ConfGetNoExt, { key });
+		return schemaValue;
 	}
 }

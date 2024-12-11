@@ -1,20 +1,24 @@
-import { ResponseType, ResponseValue, ScheduleEntry } from '#lib/schedule';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';
+import { ResponseType, ResponseValue, ScheduleEntry } from '#lib/schedule';
+
+export interface ScheduleManagerAddOptions<Type extends ScheduleEntry.TaskId> {
+	/**
+	 * If the task should try to catch up if the bot is down.
+	 */
+	catchUp?: boolean;
+
+	/**
+	 * The data to pass to the Task piece when the ScheduledTask is ready for execution.
+	 */
+	data: ScheduleEntry.TaskData[Type];
+}
+
+export type TimeResolvable = Cron | Date | number | string;
 
 export class ScheduleManager {
 	public queue: ScheduleEntry[] = [];
 	private interval: NodeJS.Timeout | null = null;
-
-	public destroy() {
-		this._clearInterval();
-	}
-
-	public async init() {
-		const entries = await container.prisma.schedule.findMany();
-		for (const entry of entries) this._insert(new ScheduleEntry(entry));
-		this._checkInterval();
-	}
 
 	public async add<const Type extends ScheduleEntry.TaskId = ScheduleEntry.TaskId>(
 		taskId: Type,
@@ -25,11 +29,11 @@ export class ScheduleManager {
 
 		const [time, cron] = this._resolveTime(timeResolvable);
 		const entry = await ScheduleEntry.create({
-			taskId,
-			time,
-			recurring: cron ? cron.cron : null,
 			catchUp: options.catchUp ?? true,
-			data: options.data
+			data: options.data,
+			recurring: cron ? cron.cron : null,
+			taskId,
+			time
 		});
 
 		this._insert(entry);
@@ -37,37 +41,8 @@ export class ScheduleManager {
 		return entry;
 	}
 
-	public async reschedule(entityOrId: ScheduleEntry | number, time: Date | number) {
-		if (typeof entityOrId === 'number') {
-			entityOrId = this.queue.find((entry) => entry.id === entityOrId)!;
-			if (!entityOrId) return false;
-		}
-
-		try {
-			entityOrId.pause();
-
-			await entityOrId.update({ time: new Date(time) });
-			this._remove(entityOrId);
-			this._insert(entityOrId);
-		} finally {
-			entityOrId.resume();
-		}
-
-		return true;
-	}
-
-	public async remove(entityOrId: ScheduleEntry | number) {
-		if (typeof entityOrId === 'number') {
-			entityOrId = this.queue.find((entity) => entity.id === entityOrId)!;
-			if (!entityOrId) return false;
-		}
-
-		entityOrId.pause();
-		await container.prisma.schedule.delete({ where: { id: entityOrId.id } });
-
-		this._remove(entityOrId);
-		this._checkInterval();
-		return true;
+	public destroy() {
+		this._clearInterval();
 	}
 
 	public async execute() {
@@ -88,23 +63,63 @@ export class ScheduleManager {
 		this._checkInterval();
 	}
 
-	private _insert(entity: ScheduleEntry) {
-		const index = this.queue.findIndex((entry) => entry.time > entity.time);
-		if (index === -1) this.queue.push(entity);
-		else this.queue.splice(index, 0, entity);
-
-		return entity;
+	public async init() {
+		const entries = await container.prisma.schedule.findMany();
+		for (const entry of entries) this._insert(new ScheduleEntry(entry));
+		this._checkInterval();
 	}
 
-	private _remove(entity: ScheduleEntry) {
-		const index = this.queue.indexOf(entity);
-		if (index !== -1) this.queue.splice(index, 1);
+	public async remove(entityOrId: number | ScheduleEntry) {
+		if (typeof entityOrId === 'number') {
+			entityOrId = this.queue.find((entity) => entity.id === entityOrId)!;
+			if (!entityOrId) return false;
+		}
+
+		entityOrId.pause();
+		await container.prisma.schedule.delete({ where: { id: entityOrId.id } });
+
+		this._remove(entityOrId);
+		this._checkInterval();
+		return true;
 	}
 
-	private async _handleResponses(responses: readonly ResponseValue[]) {
-		const results = await Promise.allSettled(responses.map((response) => this._handleResponse(response)));
-		for (const result of results) {
-			if (result.status === 'rejected') container.logger.error(result.reason);
+	public async reschedule(entityOrId: number | ScheduleEntry, time: Date | number) {
+		if (typeof entityOrId === 'number') {
+			entityOrId = this.queue.find((entry) => entry.id === entityOrId)!;
+			if (!entityOrId) return false;
+		}
+
+		try {
+			entityOrId.pause();
+
+			await entityOrId.update({ time: new Date(time) });
+			this._remove(entityOrId);
+			this._insert(entityOrId);
+		} finally {
+			entityOrId.resume();
+		}
+
+		return true;
+	}
+
+	/**
+	 * Sets the interval when needed
+	 */
+	private _checkInterval(): void {
+		if (!this.queue.length) {
+			this._clearInterval();
+		} else if (!this.interval) {
+			this.interval = setInterval(this.execute.bind(this), 1000).unref();
+		}
+	}
+
+	/**
+	 * Clear the current interval
+	 */
+	private _clearInterval(): void {
+		if (this.interval) {
+			clearInterval(this.interval);
+			this.interval = null;
 		}
 	}
 
@@ -145,25 +160,24 @@ export class ScheduleManager {
 		response.entry.resume();
 	}
 
-	/**
-	 * Clear the current interval
-	 */
-	private _clearInterval(): void {
-		if (this.interval) {
-			clearInterval(this.interval);
-			this.interval = null;
+	private async _handleResponses(responses: readonly ResponseValue[]) {
+		const results = await Promise.allSettled(responses.map((response) => this._handleResponse(response)));
+		for (const result of results) {
+			if (result.status === 'rejected') container.logger.error(result.reason);
 		}
 	}
 
-	/**
-	 * Sets the interval when needed
-	 */
-	private _checkInterval(): void {
-		if (!this.queue.length) {
-			this._clearInterval();
-		} else if (!this.interval) {
-			this.interval = setInterval(this.execute.bind(this), 1000).unref();
-		}
+	private _insert(entity: ScheduleEntry) {
+		const index = this.queue.findIndex((entry) => entry.time > entity.time);
+		if (index === -1) this.queue.push(entity);
+		else this.queue.splice(index, 0, entity);
+
+		return entity;
+	}
+
+	private _remove(entity: ScheduleEntry) {
+		const index = this.queue.indexOf(entity);
+		if (index !== -1) this.queue.splice(index, 1);
 	}
 
 	/**
@@ -181,17 +195,3 @@ export class ScheduleManager {
 		throw new Error('invalid time passed');
 	}
 }
-
-export interface ScheduleManagerAddOptions<Type extends ScheduleEntry.TaskId> {
-	/**
-	 * If the task should try to catch up if the bot is down.
-	 */
-	catchUp?: boolean;
-
-	/**
-	 * The data to pass to the Task piece when the ScheduledTask is ready for execution.
-	 */
-	data: ScheduleEntry.TaskData[Type];
-}
-
-export type TimeResolvable = number | Date | string | Cron;

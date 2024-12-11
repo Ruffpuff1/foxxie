@@ -1,24 +1,38 @@
+import { schedule } from '@prisma/client';
+import { container } from '@sapphire/framework';
+import { Cron } from '@sapphire/time-utilities';
+import { isNullishOrEmpty } from '@sapphire/utilities';
 import { ModerationManager } from '#lib/moderation';
 import { FoxxieEvents } from '#lib/types';
 import { JSONEmbed } from '#root/commands/Misc/reminder';
 import { BirthdayData } from '#utils/birthday';
 import { SchemaKeys, TypeVariation } from '#utils/moderationConstants';
-import { schedule } from '@prisma/client';
-import { container } from '@sapphire/framework';
-import { Cron } from '@sapphire/time-utilities';
-import { isNullishOrEmpty } from '@sapphire/utilities';
+
+export const enum ResponseType {
+	Ignore,
+	Delay,
+	Update,
+	Finished
+}
+
+export type PartialResponseValue =
+	| { type: ResponseType.Delay; value: number }
+	| { type: ResponseType.Finished | ResponseType.Ignore }
+	| { type: ResponseType.Update; value: Date };
+
+export type ResponseValue = { entry: ScheduleEntry } & PartialResponseValue;
 
 export class ScheduleEntry<Type extends ScheduleEntry.TaskId = ScheduleEntry.TaskId> {
-	public id: number;
-	public taskId: ScheduleEntry.TaskId;
-	public time!: Date;
-	public recurring!: Cron | null;
 	public catchUp!: boolean;
 	public data!: ScheduleEntry.TaskData[Type];
-
-	#running = false;
+	public id: number;
+	public recurring!: Cron | null;
+	public taskId: ScheduleEntry.TaskId;
+	public time!: Date;
 
 	#paused = false;
+
+	#running = false;
 
 	public constructor(data: schedule) {
 		this.id = data.id;
@@ -26,17 +40,8 @@ export class ScheduleEntry<Type extends ScheduleEntry.TaskId = ScheduleEntry.Tas
 		this.#patch(data);
 	}
 
-	public get task() {
-		return container.stores.get('tasks').get(this.taskId) ?? null;
-	}
-
-	public get running(): boolean {
-		return this.#running;
-	}
-
-	public resume() {
-		this.#paused = false;
-		return this;
+	public delete() {
+		return container.schedule.remove(this);
 	}
 
 	public pause() {
@@ -44,12 +49,20 @@ export class ScheduleEntry<Type extends ScheduleEntry.TaskId = ScheduleEntry.Tas
 		return this;
 	}
 
+	public async reload() {
+		const entry = await container.prisma.schedule.findUnique({ where: { id: this.id } });
+		if (entry === null) throw new Error('Failed to reload the entity');
+
+		this.#patch(entry);
+	}
+
 	public reschedule(time: Date | number) {
 		return container.schedule.reschedule(this, time);
 	}
 
-	public delete() {
-		return container.schedule.remove(this);
+	public resume() {
+		this.#paused = false;
+		return this;
 	}
 
 	public async run(): Promise<ResponseValue> {
@@ -57,11 +70,11 @@ export class ScheduleEntry<Type extends ScheduleEntry.TaskId = ScheduleEntry.Tas
 		if (!task?.enabled || this.#running || this.#paused) return { entry: this, type: ResponseType.Ignore };
 
 		this.#running = true;
-		let response: PartialResponseValue | null = null;
+		let response: null | PartialResponseValue = null;
 		try {
-			response = (await task.run({ ...(this.data ?? {}), id: this.id })) as PartialResponseValue | null;
+			response = (await task.run({ ...(this.data ?? {}), id: this.id })) as null | PartialResponseValue;
 		} catch (error) {
-			container.client.emit(FoxxieEvents.TaskError, error, { piece: task, entity: this });
+			container.client.emit(FoxxieEvents.TaskError, error, { entity: this, piece: task });
 		}
 
 		this.#running = false;
@@ -75,16 +88,9 @@ export class ScheduleEntry<Type extends ScheduleEntry.TaskId = ScheduleEntry.Tas
 
 	public async update(data: ScheduleEntry.UpdateData<Type>) {
 		const entry = await container.prisma.schedule.update({
-			where: { id: this.id },
-			data: data as any
+			data: data as any,
+			where: { id: this.id }
 		});
-
-		this.#patch(entry);
-	}
-
-	public async reload() {
-		const entry = await container.prisma.schedule.findUnique({ where: { id: this.id } });
-		if (entry === null) throw new Error('Failed to reload the entity');
 
 		this.#patch(entry);
 	}
@@ -96,33 +102,63 @@ export class ScheduleEntry<Type extends ScheduleEntry.TaskId = ScheduleEntry.Tas
 		this.data = data.data as ScheduleEntry.TaskData[Type];
 	}
 
+	public get running(): boolean {
+		return this.#running;
+	}
+
+	public get task() {
+		return container.stores.get('tasks').get(this.taskId) ?? null;
+	}
+
 	public static async create<const Type extends ScheduleEntry.TaskId>(data: ScheduleEntry.CreateData<Type>): Promise<ScheduleEntry<Type>> {
 		const entry = await container.prisma.schedule.create({ data: data as any });
 		return new ScheduleEntry(entry);
 	}
 }
 
-export const enum ResponseType {
-	Ignore,
-	Delay,
-	Update,
-	Finished
-}
-
-export type PartialResponseValue =
-	| { type: ResponseType.Ignore | ResponseType.Finished }
-	| { type: ResponseType.Delay; value: number }
-	| { type: ResponseType.Update; value: Date };
-
-export type ResponseValue = PartialResponseValue & { entry: ScheduleEntry };
-
 export namespace ScheduleEntry {
-	export type TaskId = keyof TaskData;
+	export interface BirthdayTaskData extends BirthdayData {
+		guildId: string;
+		userId: string;
+	}
+
+	export interface CreateData<Type extends TaskId> {
+		catchUp: boolean;
+		data: TaskData[Type];
+		recurring: null | string;
+		taskId: Type;
+		time: Date | string;
+	}
+
+	export interface ReminderTaskData {
+		channelId: null | string;
+		createdChannelId: string;
+		json: JSONEmbed | null;
+		repeat: null | number;
+		text: null | string;
+		timeago: Date;
+		userId: string;
+	}
+
+	export interface RemoveBirthdayRoleTaskData {
+		guildId: string;
+		roleId: string;
+		userId: string;
+	}
+
+	export interface SharedModerationTaskData<Type extends TypeVariation> {
+		[SchemaKeys.Case]: number;
+		[SchemaKeys.Duration]: null | number;
+		[SchemaKeys.ExtraData]: ModerationManager.ExtraData<Type>;
+		[SchemaKeys.Guild]: string;
+		[SchemaKeys.Refrence]: null | number;
+		[SchemaKeys.Type]: number;
+		[SchemaKeys.User]: string;
+		scheduleRetryCount?: number;
+	}
 
 	export interface TaskData {
 		birthday: BirthdayTaskData;
-		poststats: null;
-		syncResourceAnalytics: null;
 		moderationEndAddRole: SharedModerationTaskData<TypeVariation.RoleAdd>;
 		moderationEndBan: SharedModerationTaskData<TypeVariation.Ban>;
 		moderationEndMute: SharedModerationTaskData<TypeVariation.Mute>;
@@ -136,54 +172,18 @@ export namespace ScheduleEntry {
 		moderationEndTimeout: SharedModerationTaskData<TypeVariation.Timeout>;
 		moderationEndVoiceMute: SharedModerationTaskData<TypeVariation.VoiceMute>;
 		moderationEndWarning: SharedModerationTaskData<TypeVariation.Warning>;
+		poststats: null;
 		reminder: ReminderTaskData;
 		removeBirthdayRole: RemoveBirthdayRoleTaskData;
+		syncResourceAnalytics: null;
 	}
 
-	export interface SharedModerationTaskData<Type extends TypeVariation> {
-		[SchemaKeys.Case]: number;
-		[SchemaKeys.User]: string;
-		[SchemaKeys.Guild]: string;
-		[SchemaKeys.Type]: number;
-		[SchemaKeys.Duration]: number | null;
-		[SchemaKeys.ExtraData]: ModerationManager.ExtraData<Type>;
-		[SchemaKeys.Refrence]: number | null;
-		scheduleRetryCount?: number;
-	}
-
-	export interface BirthdayTaskData extends BirthdayData {
-		guildId: string;
-		userId: string;
-	}
-
-	export interface ReminderTaskData {
-		channelId: string | null;
-		createdChannelId: string;
-		userId: string;
-		text: string | null;
-		json: JSONEmbed | null;
-		repeat: number | null;
-		timeago: Date;
-	}
-
-	export interface RemoveBirthdayRoleTaskData {
-		roleId: string;
-		guildId: string;
-		userId: string;
-	}
-
-	export interface CreateData<Type extends TaskId> {
-		taskId: Type;
-		time: Date | string;
-		recurring: string | null;
-		catchUp: boolean;
-		data: TaskData[Type];
-	}
+	export type TaskId = keyof TaskData;
 
 	export interface UpdateData<Type extends TaskId> {
-		time?: Date;
-		recurring?: string | null;
 		catchUp?: boolean;
 		data?: TaskData[Type];
+		recurring?: null | string;
+		time?: Date;
 	}
 }

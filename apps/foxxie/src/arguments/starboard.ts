@@ -1,20 +1,21 @@
+import type { Message, Snowflake } from 'discord.js';
+
+import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 import { Starboard, StarboardData } from '#lib/Database/Models/starboard';
 import { LanguageKeys } from '#lib/i18n';
-import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
-import type { Message, Snowflake } from 'discord.js';
 
 export class UserArgument extends Argument<Starboard> {
 	public async run(parameter: string, context: ArgumentContext<Starboard>): Promise<ArgumentResult<Starboard>> {
 		const guildStarboards = await this.container.prisma.starboard.findMany({
-			where: { guildId: context.message.guildId! },
-			orderBy: { id: 'desc' }
+			orderBy: { id: 'desc' },
+			where: { guildId: context.message.guildId! }
 		});
 
 		if (!parameter) {
 			const latest = this.#fallbackToLatest(guildStarboards);
 			if (latest) return this.ok(new Starboard(latest));
 
-			return this.error({ parameter, identifier: LanguageKeys.Arguments.StarboardEmpty, context });
+			return this.error({ context, identifier: LanguageKeys.Arguments.StarboardEmpty, parameter });
 		}
 
 		const resolveNumber = await this.number.run(parameter, { ...context, argument: this.number });
@@ -32,7 +33,7 @@ export class UserArgument extends Argument<Starboard> {
 		const latest = this.#fallbackToLatest(guildStarboards);
 		if (latest) return this.ok(new Starboard(latest));
 
-		return this.error({ parameter, identifier: LanguageKeys.Arguments.StarboardEmpty, context });
+		return this.error({ context, identifier: LanguageKeys.Arguments.StarboardEmpty, parameter });
 	}
 
 	#fallbackToLatest(starboards: StarboardData[]) {
@@ -49,12 +50,12 @@ export class UserArgument extends Argument<Starboard> {
 		return found || null;
 	}
 
-	public get number() {
-		return this.store.get('number') as Argument<number>;
-	}
-
 	public get message() {
 		return this.store.get('message') as Argument<Message<true>>;
+	}
+
+	public get number() {
+		return this.store.get('number') as Argument<number>;
 	}
 
 	public get snowflake() {

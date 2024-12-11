@@ -1,23 +1,23 @@
-import { Emojis } from '#utils/constants';
 import { userMention } from '@discordjs/builders';
 import { BitField } from '@sapphire/bitfield';
-import { GuildMember, Message, User, UserFlags, type Snowflake } from 'discord.js';
+import { Emojis } from '#utils/constants';
+import { GuildMember, Message, type Snowflake, User, UserFlags } from 'discord.js';
 
 const ExtendedUserFlagBits = new BitField({
-	Quarantined: getExtendedBits(UserFlags.Quarantined),
 	Collaborator: getExtendedBits(UserFlags.Collaborator),
+	Quarantined: getExtendedBits(UserFlags.Quarantined),
 	RestrictedCollaborator: getExtendedBits(UserFlags.RestrictedCollaborator)
 });
 
 export function getModerationFlags(bitfield: number) {
 	return {
-		spammer: (bitfield & UserFlags.Spammer) === UserFlags.Spammer,
-		quarantined: ExtendedUserFlagBits.has(getExtendedBits(bitfield), ExtendedUserFlagBits.flags.Quarantined)
+		quarantined: ExtendedUserFlagBits.has(getExtendedBits(bitfield), ExtendedUserFlagBits.flags.Quarantined),
+		spammer: (bitfield & UserFlags.Spammer) === UserFlags.Spammer
 	};
 }
 
 export function getModerationFlagsString(bitfield: number) {
-	const { spammer, quarantined } = getModerationFlags(bitfield);
+	const { quarantined, spammer } = getModerationFlags(bitfield);
 	if (spammer && quarantined) return Emojis.SpammerIcon + Emojis.QuarantinedIcon;
 	if (spammer) return Emojis.SpammerIcon;
 	if (quarantined) return Emojis.QuarantinedIcon;
@@ -41,7 +41,7 @@ const disboardId = '302050872383242240';
  * @returns boolean
  * @reference https://disboard.org/
  */
-export function isDisboard(input: Message | User | GuildMember): boolean {
+export function isDisboard(input: GuildMember | Message | User): boolean {
 	if (input instanceof Message) return input.author.id === disboardId;
 	return input.id === disboardId;
 }

@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// @ts-expect-error unused vars for eval
-import { writeSettings, readSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { PermissionLevels } from '#lib/types';
-import { Urls } from '#utils/constants';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
 import { Stopwatch } from '@sapphire/stopwatch';
 import { Type } from '@sapphire/type';
 import { isThenable } from '@sapphire/utilities';
+// @ts-expect-error unused vars for eval
+import { readSettings, writeSettings } from '#lib/database';
+import { LanguageKeys } from '#lib/i18n';
+import { FoxxieCommand } from '#lib/structures';
+import { PermissionLevels } from '#lib/types';
+import { Urls } from '#utils/constants';
 import { codeBlock, Message } from 'discord.js';
 import { hostname } from 'node:os';
 import { inspect } from 'node:util';
@@ -25,25 +25,25 @@ const enum OutputType {
 
 @ApplyOptions<FoxxieCommand.Options>({
 	aliases: ['ev'],
-	options: [...depthOptions, ...langOptions, 'output'],
-	quotes: [],
-	permissionLevel: PermissionLevels.BotOwner,
-	flags: [...msgFlags, 'showHidden', 'sh', 's', 'silent', 'a', 'async'],
 	description: LanguageKeys.Commands.Admin.EvalDescription,
-	usage: '[code]',
-	guarded: true
+	flags: [...msgFlags, 'showHidden', 'sh', 's', 'silent', 'a', 'async'],
+	guarded: true,
+	options: [...depthOptions, ...langOptions, 'output'],
+	permissionLevel: PermissionLevels.BotOwner,
+	quotes: [],
+	usage: '[code]'
 })
 export class UserCommand extends FoxxieCommand {
 	public async messageRun(message: Message, args: FoxxieCommand.Args): Promise<void> {
 		const code = await args.rest('string');
-		const { success, result, time, type } = await this.eval(message, args, code);
+		const { result, success, time, type } = await this.eval(message, args, code);
 
 		const formatted = codeBlock(args.getOption(...langOptions) ?? 'js', result);
 
 		const footer = codeBlock('ts', type.toString());
 		let output = args.t(LanguageKeys.Commands.Admin[`Eval${success ? 'Output' : 'Error'}`], {
-			time,
 			output: formatted,
+			time,
 			type: footer
 		});
 
@@ -54,10 +54,10 @@ export class UserCommand extends FoxxieCommand {
 			await send(
 				message,
 				args.t(LanguageKeys.Commands.Admin.EvalConsole, {
-					time,
-					output: formatted,
 					footer,
-					name: hostname()
+					name: hostname(),
+					output: formatted,
+					time
 				})
 			);
 			return;
@@ -73,9 +73,9 @@ export class UserCommand extends FoxxieCommand {
 			await send(
 				message,
 				args.t(LanguageKeys.Commands.Admin.EvalHaste, {
-					time,
+					footer,
 					output: `${Urls.Haste}/share/${key}`,
-					footer
+					time
 				})
 			);
 			return;
@@ -132,10 +132,10 @@ export class UserCommand extends FoxxieCommand {
 		}
 
 		return {
+			result,
 			success,
-			type,
 			time: this.formatTime(syncTime, asyncTime),
-			result
+			type
 		};
 	}
 

@@ -1,3 +1,7 @@
+import { EmbedBuilder, time, TimestampStyles } from '@discordjs/builders';
+import { ApplyOptions } from '@sapphire/decorators';
+import { Listener } from '@sapphire/framework';
+import { isNullish } from '@sapphire/utilities';
 import { readSettings } from '#lib/Database/settings/functions';
 import { getT, LanguageKeys } from '#lib/i18n';
 import { FoxxieEvents } from '#lib/types';
@@ -6,10 +10,6 @@ import { getLogger, getModeration } from '#utils/functions';
 import { getUserMentionWithFlagsString } from '#utils/functions/users';
 import { TypeVariation } from '#utils/moderationConstants';
 import { getFullEmbedAuthor } from '#utils/util';
-import { EmbedBuilder, TimestampStyles, time } from '@discordjs/builders';
-import { ApplyOptions } from '@sapphire/decorators';
-import { Listener } from '@sapphire/framework';
-import { isNullish } from '@sapphire/utilities';
 import { Colors, type GatewayGuildMemberRemoveDispatchData, type Guild, type GuildMember } from 'discord.js';
 
 const Root = LanguageKeys.Listeners.Guilds.Members;
@@ -34,13 +34,13 @@ export class UserListener extends Listener {
 
 		const joinedTimestamp = this.processJoinedTimestamp(member);
 		await getLogger(guild).send({
-			key: 'channelsLogsMemberRemove',
 			channelId: targetChannelId,
+			key: 'channelsLogsMemberRemove',
 			makeMessage: () => {
 				const key = joinedTimestamp === -1 ? Root.GuildMemberRemoveDescription : Root.GuildMemberRemoveDescriptionWithJoinedAt;
 				const description = t(key, {
-					user: getUserMentionWithFlagsString(user.flags ?? 0, user.id),
-					relativeTime: time(seconds.fromMilliseconds(joinedTimestamp), TimestampStyles.RelativeTime)
+					relativeTime: time(seconds.fromMilliseconds(joinedTimestamp), TimestampStyles.RelativeTime),
+					user: getUserMentionWithFlagsString(user.flags ?? 0, user.id)
 				});
 
 				return new EmbedBuilder()
@@ -61,15 +61,15 @@ export class UserListener extends Listener {
 
 		if (latestLogForUser === null) {
 			return {
-				kicked: false,
 				banned: false,
+				kicked: false,
 				softbanned: false
 			};
 		}
 
 		return {
-			kicked: latestLogForUser.type === TypeVariation.Kick,
 			banned: latestLogForUser.type === TypeVariation.Ban,
+			kicked: latestLogForUser.type === TypeVariation.Kick,
 			softbanned: latestLogForUser.type === TypeVariation.Softban
 		};
 	}
@@ -82,7 +82,7 @@ export class UserListener extends Listener {
 }
 
 interface IsModerationAction {
-	readonly kicked: boolean;
 	readonly banned: boolean;
+	readonly kicked: boolean;
 	readonly softbanned: boolean;
 }

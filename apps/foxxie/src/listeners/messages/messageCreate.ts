@@ -1,7 +1,7 @@
-import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
-import { floatPromise } from '#utils/util';
 import { Listener } from '@sapphire/framework';
 import { cast, isNullish } from '@sapphire/utilities';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
+import { floatPromise } from '#utils/util';
 
 export class UserListener extends Listener<FoxxieEvents.MessageCreate> {
 	public async run(...[message]: EventArgs<FoxxieEvents.MessageCreate>): Promise<void> {

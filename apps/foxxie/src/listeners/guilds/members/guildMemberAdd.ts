@@ -1,3 +1,7 @@
+import { ApplyOptions } from '@sapphire/decorators';
+import { Listener } from '@sapphire/framework';
+import { TFunction } from '@sapphire/plugin-i18next';
+import { isNullish, Nullish } from '@sapphire/utilities';
 import { readSettings, writeSettings } from '#lib/Database/settings/functions';
 import { getT, LanguageKeys } from '#lib/i18n';
 import { EventArgs, FoxxieEvents } from '#lib/types';
@@ -5,10 +9,6 @@ import { seconds, toErrorCodeResult } from '#utils/common';
 import { getLogger, getLogPrefix, getStickyRoles } from '#utils/functions';
 import { getUserMentionWithFlagsString } from '#utils/functions/users';
 import { getFullEmbedAuthor } from '#utils/util';
-import { ApplyOptions } from '@sapphire/decorators';
-import { Listener } from '@sapphire/framework';
-import { TFunction } from '@sapphire/plugin-i18next';
-import { isNullish, Nullish } from '@sapphire/utilities';
 import {
 	Colors,
 	EmbedBuilder,
@@ -32,28 +32,6 @@ export class UserListener extends Listener {
 	public async run(...[member]: EventArgs<Events.GuildMemberAdd>) {
 		if (await this.#handleStickyRoles(member)) return;
 		this.container.client.emit(FoxxieEvents.NotMutedMemberAdd, member);
-	}
-
-	async #handleStickyRoles(member: GuildMember) {
-		if (!member.guild.members.me!.permissions.has(PermissionFlagsBits.ManageRoles)) return false;
-
-		const stickyRoles = await getStickyRoles(member).fetch(member.id);
-		if (stickyRoles.length === 0) return false;
-
-		// Handle the case the user is muted
-		const settings = await readSettings(member);
-		const mutedRoleId = settings.rolesMuted;
-		const targetChannelId = settings.channelsLogsMemberAdd;
-		if (mutedRoleId && stickyRoles.includes(mutedRoleId)) {
-			void this.#handleMutedMemberAddRole(member, mutedRoleId);
-			void this.#handleMutedMemberNotify(getT(settings.language), member, targetChannelId);
-
-			return true;
-		}
-
-		void this.#handleStickyRolesAddRoles(member, stickyRoles);
-
-		return false;
 	}
 
 	async #handleMutedMemberAddRole(member: GuildMember, mutedRoleId: Snowflake) {
@@ -81,15 +59,15 @@ export class UserListener extends Listener {
 		this.container.logger.error(`${getLogPrefix(this)} Failed to add the muted role to a member.`);
 	}
 
-	async #handleMutedMemberNotify(t: TFunction, member: GuildMember, targetChannelId: Snowflake | Nullish) {
+	async #handleMutedMemberNotify(t: TFunction, member: GuildMember, targetChannelId: Nullish | Snowflake) {
 		await getLogger(member.guild).send({
-			key: 'channelsLogsMemberAdd',
 			channelId: targetChannelId,
+			key: 'channelsLogsMemberAdd',
 			makeMessage: () => {
 				const { user } = member;
 				const description = t(Root.GuildMemberAddDescription, {
-					user: getUserMentionWithFlagsString(user.flags?.bitfield ?? 0, user.id),
-					relativeTime: time(seconds.fromMilliseconds(user.createdTimestamp), TimestampStyles.RelativeTime)
+					relativeTime: time(seconds.fromMilliseconds(user.createdTimestamp), TimestampStyles.RelativeTime),
+					user: getUserMentionWithFlagsString(user.flags?.bitfield ?? 0, user.id)
 				});
 				return new EmbedBuilder()
 					.setColor(Colors.Yellow)
@@ -99,6 +77,28 @@ export class UserListener extends Listener {
 					.setTimestamp();
 			}
 		});
+	}
+
+	async #handleStickyRoles(member: GuildMember) {
+		if (!member.guild.members.me!.permissions.has(PermissionFlagsBits.ManageRoles)) return false;
+
+		const stickyRoles = await getStickyRoles(member).fetch(member.id);
+		if (stickyRoles.length === 0) return false;
+
+		// Handle the case the user is muted
+		const settings = await readSettings(member);
+		const mutedRoleId = settings.rolesMuted;
+		const targetChannelId = settings.channelsLogsMemberAdd;
+		if (mutedRoleId && stickyRoles.includes(mutedRoleId)) {
+			void this.#handleMutedMemberAddRole(member, mutedRoleId);
+			void this.#handleMutedMemberNotify(getT(settings.language), member, targetChannelId);
+
+			return true;
+		}
+
+		void this.#handleStickyRolesAddRoles(member, stickyRoles);
+
+		return false;
 	}
 
 	async #handleStickyRolesAddRoles(member: GuildMember, stickyRoles: readonly Snowflake[]) {

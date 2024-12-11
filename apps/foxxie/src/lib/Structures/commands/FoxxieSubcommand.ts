@@ -1,32 +1,32 @@
+import { Command, CommandOptionsRunTypeEnum, MessageCommand, UserError } from '@sapphire/framework';
+import { Subcommand } from '@sapphire/plugin-subcommands';
+import { cast } from '@sapphire/utilities';
+import FoxxieClient from '#lib/FoxxieClient';
+import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
+import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
 import { DetailedDescription, DetailedDescriptionArgs, PermissionLevels, TypedFT, TypedT } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { seconds } from '#utils/common';
-import { Command, CommandOptionsRunTypeEnum, MessageCommand, UserError } from '@sapphire/framework';
-import { Subcommand } from '@sapphire/plugin-subcommands';
 import { ChatInputCommandInteraction, Message, Snowflake } from 'discord.js';
-import FoxxieClient from '#lib/FoxxieClient';
-import { cast } from '@sapphire/utilities';
 import first from 'lodash/first.js';
-import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
-import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
 
 export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSubcommand.Options> {
+	public allowedGuilds: string[];
+	declare public readonly description: TypedT<string>;
+	declare public readonly detailedDescription: TypedFT<DetailedDescriptionArgs, DetailedDescription> | TypedT<LanguageHelpDisplayOptions>;
 	public readonly guarded: boolean;
 	public readonly hidden: boolean;
 	public readonly permissionLevel: PermissionLevels;
-	public allowedGuilds: string[];
-	public usage: string | null = null;
-	declare public readonly detailedDescription: TypedFT<DetailedDescriptionArgs, DetailedDescription> | TypedT<LanguageHelpDisplayOptions>;
-	declare public readonly description: TypedT<string>;
+	public usage: null | string = null;
 
 	public constructor(context: FoxxieSubcommand.LoaderContext, options: FoxxieSubcommand.Options) {
 		super(context, {
 			...{
 				cooldownDelay: seconds(5),
-				cooldownLimit: 2,
-				runIn: [CommandOptionsRunTypeEnum.GuildAny],
 				cooldownFilteredUsers: clientOwners,
+				cooldownLimit: 2,
 				generateDashLessAliases: true,
+				runIn: [CommandOptionsRunTypeEnum.GuildAny],
 				...options
 			},
 			...options
@@ -42,32 +42,28 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 		if (options.guarded) this.guarded = true;
 	}
 
-	public override messagePreParse(message: Message, parameters: string, context: MessageCommand.RunContext): Promise<FoxxieSubcommand.Args> {
-		return FoxxieCommandUtilities.ImplementFoxxieCommandPreParse(this as MessageCommand, message, parameters, context);
-	}
-
 	public addAllowedGuildsPrecondition(options: FoxxieSubcommand.Options): void {
 		if (options.allowedGuilds?.length) {
 			this.preconditions.append({
-				name: 'AllowedGuilds',
-				context: { allowedGuilds: options.allowedGuilds }
+				context: { allowedGuilds: options.allowedGuilds },
+				name: 'AllowedGuilds'
 			});
 		}
 	}
 
 	public addPermissionLevels(options: FoxxieSubcommand.Options) {
 		switch (options.permissionLevel) {
-			case PermissionLevels.Everyone:
-				this.preconditions.append('Everyone');
-				break;
-			case PermissionLevels.Moderator:
-				this.preconditions.append('Moderator');
-				break;
 			case PermissionLevels.Administrator:
 				this.preconditions.append('Administrator');
 				break;
 			case PermissionLevels.BotOwner:
 				this.preconditions.append('BotOwner');
+				break;
+			case PermissionLevels.Everyone:
+				this.preconditions.append('Everyone');
+				break;
+			case PermissionLevels.Moderator:
+				this.preconditions.append('Moderator');
 				break;
 			default:
 				this.preconditions.append('Everyone');
@@ -88,17 +84,21 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 		return first([...ids.values()])!;
 	}
 
+	public override messagePreParse(message: Message, parameters: string, context: MessageCommand.RunContext): Promise<FoxxieSubcommand.Args> {
+		return FoxxieCommandUtilities.ImplementFoxxieCommandPreParse(this as MessageCommand, message, parameters, context);
+	}
+
+	protected error(identifier: string | UserError, context?: unknown): never {
+		throw typeof identifier === 'string' ? new UserError({ context, identifier }) : identifier;
+	}
+
 	protected override parseConstructorPreConditions(options: FoxxieSubcommand.Options): void {
 		super.parseConstructorPreConditions(options);
 		this.addPermissionLevels(options);
 		this.addAllowedGuildsPrecondition(options);
 	}
 
-	protected error(identifier: string | UserError, context?: unknown): never {
-		throw typeof identifier === 'string' ? new UserError({ identifier, context }) : identifier;
-	}
-
-	public override get category(): string | null {
+	public override get category(): null | string {
 		return this.fullCategory.length > 0 ? this.fullCategory[0] : null;
 	}
 
@@ -108,20 +108,20 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 }
 
 export namespace FoxxieSubcommand {
-	export type Options = ExtendOptions<Subcommand.Options>;
 	export type Args = FoxxieArgs;
-	export type LoaderContext = Command.LoaderContext;
-	export type RunContext = MessageCommand.RunContext;
-
 	export type Interaction = ChatInputCommandInteraction;
+	export type LoaderContext = Command.LoaderContext;
+	export type Options = ExtendOptions<Subcommand.Options>;
+
+	export type RunContext = MessageCommand.RunContext;
 }
 
-export type ExtendOptions<T> = T & {
+export type ExtendOptions<T> = {
+	allowedGuilds?: string[];
 	description: TypedT<string>;
 	detailedDescription: TypedFT<DetailedDescriptionArgs, DetailedDescription> | TypedT<LanguageHelpDisplayOptions>;
 	guarded?: boolean;
 	hidden?: boolean;
-	usage?: string;
 	permissionLevel?: number;
-	allowedGuilds?: string[];
-};
+	usage?: string;
+} & T;

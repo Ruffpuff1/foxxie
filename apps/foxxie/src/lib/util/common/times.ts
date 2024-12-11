@@ -65,21 +65,21 @@ minutes.toSeconds = (value: number): number => {
 };
 
 /**
- * Converts a number of hours to milliseconds.
- * @param hours The amount of hours
- * @returns The amount of milliseconds `hours` equals to.
- */
-export function hours(hours: number): number {
-	return hours * Time.Hour;
-}
-
-/**
  * Converts a number of days to milliseconds.
  * @param days The amount of days
  * @returns The amount of milliseconds `days` equals to.
  */
 export function days(days: number): number {
 	return days * Time.Day;
+}
+
+/**
+ * Converts a number of hours to milliseconds.
+ * @param hours The amount of hours
+ * @returns The amount of milliseconds `hours` equals to.
+ */
+export function hours(hours: number): number {
+	return hours * Time.Hour;
 }
 
 /**

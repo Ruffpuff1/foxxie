@@ -1,5 +1,5 @@
-import { LoggerTypeManager } from '#lib/moderation/managers/loggers/base/LoggerTypeManager';
 import { isNullishOrEmpty } from '@sapphire/utilities';
+import { LoggerTypeManager } from '#lib/moderation/managers/loggers/base/LoggerTypeManager';
 import { AuditLogEvent } from 'discord.js';
 
 export class TimeoutLoggerTypeManager extends LoggerTypeManager {

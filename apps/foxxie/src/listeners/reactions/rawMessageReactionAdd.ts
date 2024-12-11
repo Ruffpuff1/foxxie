@@ -1,13 +1,13 @@
-import { FoxxieEvents } from '#lib/types';
-import { getEmojiString } from '#utils/discord';
-import { LLRCData } from '#utils/External/LongLivingReactionCollector';
 import { ApplyOptions } from '@sapphire/decorators';
 import { canReadMessages, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
 import { Listener } from '@sapphire/framework';
 import { cast } from '@sapphire/utilities';
-import { GatewayDispatchEvents, GuildTextBasedChannelTypes, type GatewayMessageReactionAddDispatch, type TextChannel } from 'discord.js';
+import { FoxxieEvents } from '#lib/types';
+import { getEmojiString } from '#utils/discord';
+import { LLRCData } from '#utils/External/LongLivingReactionCollector';
+import { GatewayDispatchEvents, type GatewayMessageReactionAddDispatch, GuildTextBasedChannelTypes, type TextChannel } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({ event: GatewayDispatchEvents.MessageReactionAdd, emitter: 'ws' })
+@ApplyOptions<Listener.Options>({ emitter: 'ws', event: GatewayDispatchEvents.MessageReactionAdd })
 export class UserListener extends Listener {
 	public run(raw: GatewayMessageReactionAddDispatch['d']) {
 		const channel = this.container.client.channels.cache.get(raw.channel_id) as TextChannel | undefined;

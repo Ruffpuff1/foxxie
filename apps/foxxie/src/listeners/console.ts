@@ -1,8 +1,8 @@
-import { ConsoleState, EventArgs, FoxxieEvents } from '#lib/types';
-import { BrandingColors } from '#utils/constants';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
+import { ConsoleState, EventArgs, FoxxieEvents } from '#lib/types';
+import { BrandingColors } from '#utils/constants';
 import { ChannelType, codeBlock, EmbedBuilder } from 'discord.js';
 
 const MESSAGEID = '1308177739546755224';
@@ -20,6 +20,20 @@ export class UserListener extends Listener {
 		if (!this.container.client.isReady()) return;
 		this.runLog(state, message);
 		await this.runEdit(state, message);
+	}
+
+	private formatContent(state: ConsoleState, message: string) {
+		if (this.messages.join('\n').length >= 3800) {
+			this.messages = [`[${this.stringState(state)}] ${message}`.replace(COLORREG, '')];
+			return this.messages.join('\n');
+		}
+		if (this.messages.length >= 10) {
+			this.messages.push(`[${this.stringState(state)}] ${message}`.replace(COLORREG, ''));
+			this.messages.shift();
+			return this.messages.join('\n');
+		}
+		this.messages.push(`[${this.stringState(state)}] ${message}`.replace(COLORREG, ''));
+		return this.messages.join('\n');
 	}
 
 	private async runEdit(state: ConsoleState, message: string) {
@@ -51,40 +65,8 @@ export class UserListener extends Listener {
 		});
 	}
 
-	private formatContent(state: ConsoleState, message: string) {
-		if (this.messages.join('\n').length >= 3800) {
-			this.messages = [`[${this.stringState(state)}] ${message}`.replace(COLORREG, '')];
-			return this.messages.join('\n');
-		}
-		if (this.messages.length >= 10) {
-			this.messages.push(`[${this.stringState(state)}] ${message}`.replace(COLORREG, ''));
-			this.messages.shift();
-			return this.messages.join('\n');
-		}
-		this.messages.push(`[${this.stringState(state)}] ${message}`.replace(COLORREG, ''));
-		return this.messages.join('\n');
-	}
-
-	private stringState(state: ConsoleState) {
-		switch (state) {
-			case ConsoleState.Log:
-				return 'INFO';
-			case ConsoleState.Debug:
-				return 'DEBUG';
-			case ConsoleState.Error:
-				return 'ERROR';
-			case ConsoleState.Fatal:
-				return 'FATAL';
-			case ConsoleState.Warn:
-				return 'WARN';
-		}
-	}
-
 	private runLog(state: ConsoleState, message: string) {
 		switch (state) {
-			case ConsoleState.Log:
-				this.container.logger.info(message);
-				break;
 			case ConsoleState.Debug:
 				this.container.logger.debug(message);
 				break;
@@ -94,9 +76,27 @@ export class UserListener extends Listener {
 			case ConsoleState.Fatal:
 				this.container.logger.fatal(message);
 				break;
+			case ConsoleState.Log:
+				this.container.logger.info(message);
+				break;
 			case ConsoleState.Warn:
 				this.container.logger.warn(message);
 				break;
+		}
+	}
+
+	private stringState(state: ConsoleState) {
+		switch (state) {
+			case ConsoleState.Debug:
+				return 'DEBUG';
+			case ConsoleState.Error:
+				return 'ERROR';
+			case ConsoleState.Fatal:
+				return 'FATAL';
+			case ConsoleState.Log:
+				return 'INFO';
+			case ConsoleState.Warn:
+				return 'WARN';
 		}
 	}
 }

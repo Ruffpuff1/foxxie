@@ -1,11 +1,11 @@
 export class Response<T> {
-	public success: boolean = false;
+	public content: null | T = null;
+
+	public message: null | string = null;
 
 	public responseStatus?: Error;
 
-	public message: string | null = null;
-
-	public content: T | null = null;
+	public success: boolean = false;
 
 	public constructor(data?: Partial<Response<T>>) {
 		Object.assign(this, data);

@@ -1,7 +1,7 @@
-import { EventArgs, FoxxieEvents } from '#lib/types';
-import { floatPromise } from '#utils/util';
 import { Listener } from '@sapphire/framework';
 import { envParseString } from '@skyra/env-utilities';
+import { EventArgs, FoxxieEvents } from '#lib/types';
+import { floatPromise } from '#utils/util';
 import { ActivityType, PresenceStatusData, PresenceUpdateStatus } from 'discord.js';
 
 export class UserListener extends Listener {
@@ -13,21 +13,21 @@ export class UserListener extends Listener {
 				if (this.cache.has(presence.userId)) return;
 				this.cache.add(presence.userId);
 				this.container.client.developmentRecoveryMode = true;
-				this.reloadStores();
+				await this.reloadStores();
 				await this.setStatus('idle');
 			} else {
 				if (this.cache.has(presence.userId)) return;
 				this.cache.add(presence.userId);
 
 				this.container.client.developmentRecoveryMode = false;
-				this.reloadStores();
+				await this.reloadStores();
 				await this.setStatus('invisible');
 			}
 		}
 	}
 
 	private reloadStores() {
-		return this.container.stores.map((store) => store.loadAll());
+		return Promise.all(this.container.stores.map((store) => store.loadAll()));
 	}
 
 	private async setStatus(status: PresenceStatusData) {

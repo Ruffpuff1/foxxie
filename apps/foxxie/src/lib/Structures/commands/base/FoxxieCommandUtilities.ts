@@ -1,7 +1,7 @@
 import { MessageCommand } from '@sapphire/framework';
-import { Message } from 'discord.js';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { FoxxieArgs } from '#lib/structures';
+import { Message } from 'discord.js';
 
 export class FoxxieCommandUtilities {
 	public static async ImplementFoxxieCommandPreParse(

@@ -1,34 +1,54 @@
-import { writeSettings, type GuildSettingsOfType } from '#lib/database';
+import { EmbedBuilder } from '@discordjs/builders';
+import { container } from '@sapphire/framework';
+import { type Awaitable, isFunction, isNullish, isNullishOrEmpty, type Nullish } from '@sapphire/utilities';
+import { type GuildSettingsOfType, writeSettings } from '#lib/database';
 import { PruneLoggerTypeManager, TimeoutLoggerTypeManager } from '#lib/moderation';
 import { toErrorCodeResult } from '#utils/common';
 import { getCodeStyle, getLogPrefix } from '#utils/functions/pieces';
-import { EmbedBuilder } from '@discordjs/builders';
-import { container } from '@sapphire/framework';
-import { isFunction, isNullish, isNullishOrEmpty, type Awaitable, type Nullish } from '@sapphire/utilities';
 import {
-	PermissionFlagsBits,
-	RESTJSONErrorCodes,
 	type Guild,
 	type GuildBasedChannel,
 	type GuildTextBasedChannel,
 	type MessageCreateOptions,
+	PermissionFlagsBits,
+	RESTJSONErrorCodes,
 	type Snowflake
 } from 'discord.js';
 
+export type LoggerManagerSendMessageOptions = EmbedBuilder | EmbedBuilder[] | MessageCreateOptions | null;
+
+export interface LoggerManagerSendOptions {
+	/**
+	 * The channel ID to send the message to, if any.
+	 */
+	channelId: Nullish | string;
+	/**
+	 * The condition to check before sending the message, if any.
+	 */
+	condition?: (() => boolean) | boolean;
+	/**
+	 * The settings key to reset if the channel is not found.
+	 */
+	key: GuildSettingsOfType<Nullish | string>;
+	/**
+	 * Makes the options for the message to send.
+	 * @returns The message options to send.
+	 */
+	makeMessage: (channel: GuildTextBasedChannel) => Awaitable<LoggerManagerSendMessageOptions>;
+	/**
+	 * The function to call when the log operation was aborted before calling
+	 * {@linkcode makeMessage}.
+	 */
+	onAbort?: () => void;
+}
+
 export class LoggerManager {
-	public readonly timeout = new TimeoutLoggerTypeManager(this);
-	public readonly prune = new PruneLoggerTypeManager(this);
 	public readonly guild: Guild;
+	public readonly prune = new PruneLoggerTypeManager(this);
+	public readonly timeout = new TimeoutLoggerTypeManager(this);
 
 	public constructor(guild: Guild) {
 		this.guild = guild;
-	}
-
-	/**
-	 * Whether or not the bot can view audit logs.
-	 */
-	public get canViewAuditLogs() {
-		return this.guild.members.me!.permissions.has(PermissionFlagsBits.ViewAuditLog);
 	}
 
 	/**
@@ -44,9 +64,38 @@ export class LoggerManager {
 
 		const result = await toErrorCodeResult(this.guild.channels.fetch(options.channelId));
 		return result.match({
-			ok: (channel) => this.#sendChannelOk(options, channel),
-			err: (code) => this.#sendChannelErr(options, code)
+			err: (code) => this.#sendChannelErr(options, code),
+			ok: (channel) => this.#sendChannelOk(options, channel)
 		});
+	}
+
+	#logError(code: RESTJSONErrorCodes, channelId: Snowflake, content: string) {
+		container.logger.error(`${LogPrefix} ${getCodeStyle(code)} ${content} ${channelId}`);
+	}
+
+	#resolveMessageOptions(options: NonNullable<LoggerManagerSendMessageOptions>) {
+		if (Array.isArray(options)) return { embeds: options };
+		if (options instanceof EmbedBuilder) return { embeds: [options] };
+		return options;
+	}
+
+	#resolveSendCondition(condition: (() => boolean) | boolean | Nullish) {
+		if (isNullish(condition)) return true;
+		if (isFunction(condition)) return condition();
+		return condition;
+	}
+
+	async #sendChannelErr(options: LoggerManagerSendOptions, code: RESTJSONErrorCodes) {
+		options.onAbort?.();
+
+		// If the channel was not found, clear the settings:
+		if (code === RESTJSONErrorCodes.UnknownChannel) {
+			await writeSettings(this.guild, { [options.key]: null });
+		} else {
+			this.#logError(code, options.channelId!, 'Failed to fetch channel');
+		}
+
+		return false;
 	}
 
 	async #sendChannelOk(options: LoggerManagerSendOptions, channel: GuildBasedChannel | null) {
@@ -74,61 +123,12 @@ export class LoggerManager {
 			.isOk();
 	}
 
-	async #sendChannelErr(options: LoggerManagerSendOptions, code: RESTJSONErrorCodes) {
-		options.onAbort?.();
-
-		// If the channel was not found, clear the settings:
-		if (code === RESTJSONErrorCodes.UnknownChannel) {
-			await writeSettings(this.guild, { [options.key]: null });
-		} else {
-			this.#logError(code, options.channelId!, 'Failed to fetch channel');
-		}
-
-		return false;
-	}
-
-	#resolveSendCondition(condition: boolean | (() => boolean) | Nullish) {
-		if (isNullish(condition)) return true;
-		if (isFunction(condition)) return condition();
-		return condition;
-	}
-
-	#resolveMessageOptions(options: NonNullable<LoggerManagerSendMessageOptions>) {
-		if (Array.isArray(options)) return { embeds: options };
-		if (options instanceof EmbedBuilder) return { embeds: [options] };
-		return options;
-	}
-
-	#logError(code: RESTJSONErrorCodes, channelId: Snowflake, content: string) {
-		container.logger.error(`${LogPrefix} ${getCodeStyle(code)} ${content} ${channelId}`);
+	/**
+	 * Whether or not the bot can view audit logs.
+	 */
+	public get canViewAuditLogs() {
+		return this.guild.members.me!.permissions.has(PermissionFlagsBits.ViewAuditLog);
 	}
 }
-
-export interface LoggerManagerSendOptions {
-	/**
-	 * The settings key to reset if the channel is not found.
-	 */
-	key: GuildSettingsOfType<string | Nullish>;
-	/**
-	 * The channel ID to send the message to, if any.
-	 */
-	channelId: string | Nullish;
-	/**
-	 * The condition to check before sending the message, if any.
-	 */
-	condition?: boolean | (() => boolean);
-	/**
-	 * Makes the options for the message to send.
-	 * @returns The message options to send.
-	 */
-	makeMessage: (channel: GuildTextBasedChannel) => Awaitable<LoggerManagerSendMessageOptions>;
-	/**
-	 * The function to call when the log operation was aborted before calling
-	 * {@linkcode makeMessage}.
-	 */
-	onAbort?: () => void;
-}
-
-export type LoggerManagerSendMessageOptions = MessageCreateOptions | EmbedBuilder | EmbedBuilder[] | null;
 
 const LogPrefix = getLogPrefix('LoggerManager');

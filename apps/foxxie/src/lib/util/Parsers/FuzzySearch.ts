@@ -1,18 +1,19 @@
-import { LanguageKeys } from '#lib/i18n';
 import type { NonGroupMessage } from '#lib/types';
-import { promptForMessage } from '#utils/functions/messages';
+
 import { UserError } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { codeBlock } from '@sapphire/utilities';
 import { decodeUtf8, jaroWinkler } from '@skyra/jaro-winkler';
+import { LanguageKeys } from '#lib/i18n';
+import { promptForMessage } from '#utils/functions/messages';
 import { AutocompleteInteraction } from 'discord.js';
 
 type FuzzySearchAccess<V> = (value: V) => string;
 type FuzzySearchFilter<V> = (value: V) => boolean;
 
 export class FuzzySearch<K extends string, V> {
-	private readonly kCollection: Map<K, V>;
 	private readonly kAccess: FuzzySearchAccess<V>;
+	private readonly kCollection: Map<K, V>;
 	private readonly kFilter: FuzzySearchFilter<V>;
 
 	public constructor(collection: Map<K, V>, access: FuzzySearchAccess<V>, filter: FuzzySearchFilter<V> = () => true) {
@@ -21,7 +22,7 @@ export class FuzzySearch<K extends string, V> {
 		this.kFilter = filter;
 	}
 
-	public run(message: NonGroupMessage | AutocompleteInteraction, query: string, threshold?: number) {
+	public run(message: AutocompleteInteraction | NonGroupMessage, query: string, threshold?: number) {
 		const lowerCaseQuery = query.toLowerCase();
 		const decodedLowerCaseQuery = decodeUtf8(lowerCaseQuery);
 		const results: [K, V, number][] = [];
@@ -76,7 +77,7 @@ export class FuzzySearch<K extends string, V> {
 		return this.select(message, sorted);
 	}
 
-	private async select(message: NonGroupMessage | AutocompleteInteraction, results: [K, V, number][]) {
+	private async select(message: AutocompleteInteraction | NonGroupMessage, results: [K, V, number][]) {
 		if (results.length === 1) return results[0];
 		if (results.length > 10) results.length = 10;
 
@@ -84,8 +85,8 @@ export class FuzzySearch<K extends string, V> {
 		const n = await promptForMessage(
 			message,
 			t(LanguageKeys.FuzzySearch.Matches, {
-				matches: results.length - 1,
-				codeblock: codeBlock('http', results.map(([id, result], i) => `${i} : [ ${id.padEnd(18, ' ')} ] ${this.kAccess(result)}`).join('\n'))
+				codeblock: codeBlock('http', results.map(([id, result], i) => `${i} : [ ${id.padEnd(18, ' ')} ] ${this.kAccess(result)}`).join('\n')),
+				matches: results.length - 1
 			})
 		);
 		if (n === null || n.toLowerCase() === 'abort') {

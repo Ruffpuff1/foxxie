@@ -1,8 +1,8 @@
-import { ConsoleState, EnvKeys, EventArgs, FoxxieEvents } from '#lib/types';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { captureException } from '@sentry/node';
 import { envParseBoolean } from '@skyra/env-utilities';
+import { ConsoleState, EnvKeys, EventArgs, FoxxieEvents } from '#lib/types';
 
 @ApplyOptions<ListenerOptions>({
 	event: FoxxieEvents.ListenerError

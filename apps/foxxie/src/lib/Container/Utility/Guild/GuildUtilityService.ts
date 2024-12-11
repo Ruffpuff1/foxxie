@@ -1,8 +1,9 @@
-import { EnvKeys } from '#lib/types';
-import { Result, container } from '@sapphire/framework';
-import { Guild, GuildAuditLogsEntry, GuildAuditLogsResolvable, GuildResolvable } from 'discord.js';
-import { GuildPollService } from './GuildPollService.js';
+import { container, Result } from '@sapphire/framework';
 import { envParseString } from '@skyra/env-utilities';
+import { EnvKeys } from '#lib/types';
+import { Guild, GuildAuditLogsEntry, GuildAuditLogsResolvable, GuildResolvable } from 'discord.js';
+
+import { GuildPollService } from './GuildPollService.js';
 
 /**
  * Utility service for a Discord guild.

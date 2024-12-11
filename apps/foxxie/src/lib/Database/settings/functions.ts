@@ -1,9 +1,8 @@
-import { AsyncQueue } from '@sapphire/async-queue';
-import { container, type Awaitable } from '@sapphire/framework';
 import type { PickByValue } from '@sapphire/utilities';
-import { Collection, type GuildResolvable, type Snowflake } from 'discord.js';
+
 import { guilds } from '@prisma/client';
-import { maybeParseNumber } from '#utils/common';
+import { AsyncQueue } from '@sapphire/async-queue';
+import { type Awaitable, container } from '@sapphire/framework';
 import {
 	deleteSettingsContext,
 	getDefaultGuildSettings,
@@ -12,6 +11,8 @@ import {
 	ReadonlyGuildData,
 	updateSettingsContext
 } from '#lib/database';
+import { maybeParseNumber } from '#utils/common';
+import { Collection, type GuildResolvable, type Snowflake } from 'discord.js';
 
 const cache = new Collection<string, GuildData>();
 const queue = new Collection<string, Promise<GuildData>>();
@@ -29,8 +30,78 @@ const transformers = {
 	selfmodReactionsHardActionDuration: maybeParseNumber
 } satisfies Record<PickByValue<ReadonlyGuildData, bigint | null>, typeof maybeParseNumber>;
 
-export function serializeSettings(data: ReadonlyGuildData, space?: string | number) {
-	return JSON.stringify(data, (key, value) => (key in transformers ? transformers[key as keyof typeof transformers](value) : value), space);
+export class Transaction {
+	#changes = Object.create(null) as Partial<ReadonlyGuildData>;
+	#hasChanges = false;
+	#locking = true;
+
+	public constructor(
+		public readonly settings: ReadonlyGuildData,
+		private readonly queue: AsyncQueue
+	) {}
+
+	public abort() {
+		if (this.#locking) {
+			this.queue.shift();
+			this.#locking = false;
+		}
+	}
+
+	public dispose() {
+		if (this.#locking) {
+			this.queue.shift();
+			this.#locking = false;
+		}
+	}
+
+	public async submit() {
+		if (!this.#hasChanges) {
+			return;
+		}
+
+		try {
+			if (WeakMapNotInitialized.has(this.settings)) {
+				await container.prisma.guilds.create({
+					data: { ...this.settings, ...this.#changes } as guilds
+				});
+				WeakMapNotInitialized.delete(this.settings);
+			} else {
+				await container.prisma.guilds.update({
+					data: this.#changes as guilds,
+					where: { id: this.settings.id }
+				});
+			}
+
+			Object.assign(this.settings, this.#changes);
+			this.#hasChanges = false;
+			updateSettingsContext(this.settings, this.#changes);
+		} finally {
+			this.#changes = Object.create(null);
+
+			if (this.#locking) {
+				this.queue.shift();
+				this.#locking = false;
+			}
+		}
+	}
+
+	public [Symbol.dispose]() {
+		return this.dispose();
+	}
+
+	public write(data: Partial<ReadonlyGuildData>) {
+		Object.assign(this.#changes, data);
+		this.#hasChanges = true;
+		return this;
+	}
+
+	public get hasChanges() {
+		return this.#hasChanges;
+	}
+
+	public get locking() {
+		return this.#locking;
+	}
 }
 
 export function deleteSettingsCached(guild: GuildResolvable) {
@@ -46,25 +117,29 @@ export function readSettings(guild: GuildResolvable): Awaitable<ReadonlyGuildDat
 	return cache.get(id) ?? processFetch(id);
 }
 
-export function readSettingsPermissionNodes(settings: ReadonlyGuildData) {
-	return getSettingsContext(settings).permissionNodes;
+export function readSettingsCached(guild: GuildResolvable): null | ReadonlyGuildData {
+	return cache.get(resolveGuildId(guild)) ?? null;
 }
 
 export function readSettingsHighlights(settings: ReadonlyGuildData) {
 	return getSettingsContext(settings).highlights;
 }
 
+export function readSettingsPermissionNodes(settings: ReadonlyGuildData) {
+	return getSettingsContext(settings).permissionNodes;
+}
+
 export function readSettingsWordFilterRegExp(settings: ReadonlyGuildData) {
 	return getSettingsContext(settings).wordFilterRegExp;
 }
 
-export function readSettingsCached(guild: GuildResolvable): ReadonlyGuildData | null {
-	return cache.get(resolveGuildId(guild)) ?? null;
+export function serializeSettings(data: ReadonlyGuildData, space?: number | string) {
+	return JSON.stringify(data, (key, value) => (key in transformers ? transformers[key as keyof typeof transformers](value) : value), space);
 }
 
 export async function writeSettings(
 	guild: GuildResolvable,
-	data: Partial<ReadonlyGuildData> | ((settings: ReadonlyGuildData) => Awaitable<Partial<ReadonlyGuildData>>)
+	data: ((settings: ReadonlyGuildData) => Awaitable<Partial<ReadonlyGuildData>>) | Partial<ReadonlyGuildData>
 ) {
 	using trx = await writeSettingsTransaction(guild);
 
@@ -88,87 +163,18 @@ export async function writeSettingsTransaction(guild: GuildResolvable) {
 	return new Transaction(settings, queue);
 }
 
-export class Transaction {
-	#changes = Object.create(null) as Partial<ReadonlyGuildData>;
-	#hasChanges = false;
-	#locking = true;
-
-	public constructor(
-		public readonly settings: ReadonlyGuildData,
-		private readonly queue: AsyncQueue
-	) {}
-
-	public get hasChanges() {
-		return this.#hasChanges;
+async function fetch(id: string): Promise<GuildData> {
+	const { guilds } = container.prisma;
+	const existing = await guilds.findUnique({ where: { id } });
+	if (existing) {
+		cache.set(id, existing);
+		return existing;
 	}
 
-	public get locking() {
-		return this.#locking;
-	}
-
-	public write(data: Partial<ReadonlyGuildData>) {
-		Object.assign(this.#changes, data);
-		this.#hasChanges = true;
-		return this;
-	}
-
-	public async submit() {
-		if (!this.#hasChanges) {
-			return;
-		}
-
-		try {
-			if (WeakMapNotInitialized.has(this.settings)) {
-				await container.prisma.guilds.create({
-					data: { ...this.settings, ...this.#changes } as guilds
-				});
-				WeakMapNotInitialized.delete(this.settings);
-			} else {
-				await container.prisma.guilds.update({
-					where: { id: this.settings.id },
-					data: this.#changes as guilds
-				});
-			}
-
-			Object.assign(this.settings, this.#changes);
-			this.#hasChanges = false;
-			updateSettingsContext(this.settings, this.#changes);
-		} finally {
-			this.#changes = Object.create(null);
-
-			if (this.#locking) {
-				this.queue.shift();
-				this.#locking = false;
-			}
-		}
-	}
-
-	public abort() {
-		if (this.#locking) {
-			this.queue.shift();
-			this.#locking = false;
-		}
-	}
-
-	public dispose() {
-		if (this.#locking) {
-			this.queue.shift();
-			this.#locking = false;
-		}
-	}
-
-	public [Symbol.dispose]() {
-		return this.dispose();
-	}
-}
-
-async function unlockOnThrow(promise: Promise<ReadonlyGuildData>, lock: AsyncQueue) {
-	try {
-		return await promise;
-	} catch (error) {
-		lock.shift();
-		throw error;
-	}
+	const created = Object.assign(Object.create(null), getDefaultGuildSettings(), { id }) as GuildData;
+	cache.set(id, created);
+	WeakMapNotInitialized.add(created);
+	return created;
 }
 
 async function processFetch(id: string): Promise<ReadonlyGuildData> {
@@ -186,22 +192,17 @@ async function processFetch(id: string): Promise<ReadonlyGuildData> {
 	}
 }
 
-async function fetch(id: string): Promise<GuildData> {
-	const { guilds } = container.prisma;
-	const existing = await guilds.findUnique({ where: { id } });
-	if (existing) {
-		cache.set(id, existing);
-		return existing;
-	}
-
-	const created = Object.assign(Object.create(null), getDefaultGuildSettings(), { id }) as GuildData;
-	cache.set(id, created);
-	WeakMapNotInitialized.add(created);
-	return created;
-}
-
 function resolveGuildId(guild: GuildResolvable): Snowflake {
 	const resolvedId = container.client.guilds.resolveId(guild);
 	if (resolvedId === null) throw new TypeError(`Cannot resolve "guild" to a Guild instance.`);
 	return resolvedId;
+}
+
+async function unlockOnThrow(promise: Promise<ReadonlyGuildData>, lock: AsyncQueue) {
+	try {
+		return await promise;
+	} catch (error) {
+		lock.shift();
+		throw error;
+	}
 }

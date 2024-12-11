@@ -1,7 +1,7 @@
-import { LanguageKeys } from '#lib/i18n';
-import { CustomGet } from '#lib/types';
 import { createMethodDecorator } from '@sapphire/decorators';
 import { TFunction } from '@sapphire/plugin-i18next';
+import { LanguageKeys } from '#lib/i18n';
+import { CustomGet } from '#lib/types';
 import {
 	ApplicationCommandAttachmentOption,
 	ApplicationCommandAutocompleteStringOptionData,
@@ -17,7 +17,7 @@ import {
 } from 'discord.js';
 import { getFixedT } from 'i18next';
 
-export const commandsCache = new Map<string | symbol, (ApplicationCommandOptionData & { translate?: boolean })[]>();
+export const commandsCache = new Map<string | symbol, ({ translate?: boolean } & ApplicationCommandOptionData)[]>();
 
 export const AddAttachmentOption = (
 	name: string,
@@ -26,8 +26,8 @@ export const AddAttachmentOption = (
 ): MethodDecorator => {
 	return createMethodDecorator((_, propertyKey) => {
 		const options: ApplicationCommandAttachmentOption = {
-			name,
 			description,
+			name,
 			type: ApplicationCommandOptionType.Attachment,
 			...optionOptions
 		};
@@ -56,8 +56,8 @@ export const AddStringOption = (
 ): MethodDecorator => {
 	return createMethodDecorator((_, propertyKey) => {
 		const options: ApplicationCommandStringOptionData = {
-			name,
 			description,
+			name,
 			type: ApplicationCommandOptionType.String,
 			...optionOptions
 		};
@@ -82,16 +82,16 @@ export const AddStringOption = (
 export const AddStringAutoCompleteOption = (
 	name: string,
 	description: string,
-	optionOptions?: Omit<ApplicationCommandAutocompleteStringOptionData, 'name' | 'description' | 'type' | 'autocomplete'> & {
+	optionOptions?: {
 		translate?: boolean;
-	}
+	} & Omit<ApplicationCommandAutocompleteStringOptionData, 'autocomplete' | 'description' | 'name' | 'type'>
 ): MethodDecorator => {
 	return createMethodDecorator((_, propertyKey) => {
 		const options: ApplicationCommandAutocompleteStringOptionData = {
-			name,
-			description,
-			type: ApplicationCommandOptionType.String,
 			autocomplete: true,
+			description,
+			name,
+			type: ApplicationCommandOptionType.String,
 			...optionOptions
 		};
 
@@ -110,8 +110,8 @@ export const AddBooleanOption = (
 ): MethodDecorator => {
 	return createMethodDecorator((_, propertyKey) => {
 		const options: ApplicationCommandBooleanOption = {
-			name,
 			description,
+			name,
 			type: ApplicationCommandOptionType.Boolean,
 			...optionOptions
 		};
@@ -131,8 +131,8 @@ export const AddUserOption = (
 ): MethodDecorator => {
 	return createMethodDecorator((_, propertyKey) => {
 		const options: ApplicationCommandUserOption = {
-			name,
 			description,
+			name,
 			type: ApplicationCommandOptionType.User,
 			...optionOptions
 		};
@@ -154,37 +154,37 @@ export const MapStringOptionsToChoices: (...choices: string[]) => ApplicationCom
 	choices.map((opt) => ({ name: opt, value: opt }));
 
 export const NameAndDescriptionsToSubcommands: (
-	...options: { name: string; description: string }[]
-) => { name: string; description: string; type: ApplicationCommandOptionType.Subcommand }[] = (...options) =>
+	...options: { description: string; name: string }[]
+) => { description: string; name: string; type: ApplicationCommandOptionType.Subcommand }[] = (...options) =>
 	options.map((opt) => ({
-		name: opt.name,
 		description: opt.description,
+		name: opt.name,
 		type: ApplicationCommandOptionType.Subcommand
 	}));
 
 export const NameAndDescriptionToLocalizedSubCommands: (
 	...options: (
-		| { name: CustomGet<string, string>; description: CustomGet<string, string>; translate?: true }
-		| { name: string; description: string; translate?: false }
+		| { description: CustomGet<string, string>; name: CustomGet<string, string>; translate?: true }
+		| { description: string; name: string; translate?: false }
 	)[]
 ) => ApplicationCommandSubCommandData[] = (...options) => {
 	const englishUS = getFixedT('en-US');
 	const spanishMX = getFixedT('es-ES');
 
 	return options.map((opt) => {
-		if (!opt.translate) return { name: opt.name, description: opt.description, type: ApplicationCommandOptionType.Subcommand };
+		if (!opt.translate) return { description: opt.description, name: opt.name, type: ApplicationCommandOptionType.Subcommand };
 
 		return {
-			name: englishUS(opt.name),
 			description: englishUS(opt.description),
+			descriptionLocalizations: {
+				[Locale.SpanishES]: spanishMX(opt.description)
+			},
 
-			type: ApplicationCommandOptionType.Subcommand,
+			name: englishUS(opt.name),
 			nameLocalizations: {
 				[Locale.SpanishES]: spanishMX(opt.name)
 			},
-			descriptionLocalizations: {
-				[Locale.SpanishES]: spanishMX(opt.description)
-			}
+			type: ApplicationCommandOptionType.Subcommand
 		} as ApplicationCommandSubCommandData;
 	});
 };
@@ -192,10 +192,10 @@ export const NameAndDescriptionToLocalizedSubCommands: (
 export const AddTranslatedStringOption = (
 	nameKey: CustomGet<string, string>,
 	descriptionKey: CustomGet<string, string>,
-	options: TranslatedOptionOptions<ApplicationCommandStringOptionData | ApplicationCommandAutocompleteStringOptionData>
+	options: TranslatedOptionOptions<ApplicationCommandAutocompleteStringOptionData | ApplicationCommandStringOptionData>
 ) => {
 	if (options.autocomplete) return AddStringAutoCompleteOption(nameKey, descriptionKey, { ...options, translate: true });
-	return AddStringOption(nameKey, descriptionKey, { ...options, translate: true, autocomplete: false });
+	return AddStringOption(nameKey, descriptionKey, { ...options, autocomplete: false, translate: true });
 };
 
 export const AddTranslatedBooleanOption = (
@@ -206,10 +206,17 @@ export const AddTranslatedBooleanOption = (
 	return AddBooleanOption(nameKey, descriptionKey, { ...options, translate: true });
 };
 
+export type ETranslatedOptionOptions<T extends ApplicationCommandOption> = {
+	commandName?: string;
+	translate?: boolean;
+} & Omit<T, 'description' | 'name' | 'type'>;
+
 export interface TranslatedOptionChoice {
 	key: CustomGet<string, string>;
 	value: string;
 }
+
+export type TranslatedOptionOptions<T extends ApplicationCommandOption> = Omit<T, 'description' | 'name' | 'type'>;
 
 export class T {
 	public englishUS: TFunction;
@@ -222,10 +229,3 @@ export class T {
 		this.spanishMX = spanishMX;
 	}
 }
-
-export type TranslatedOptionOptions<T extends ApplicationCommandOption> = Omit<T, 'name' | 'description' | 'type'>;
-
-export type ETranslatedOptionOptions<T extends ApplicationCommandOption> = Omit<T, 'name' | 'description' | 'type'> & {
-	translate?: boolean;
-	commandName?: string;
-};

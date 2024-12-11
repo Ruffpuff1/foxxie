@@ -7,14 +7,14 @@ import {
 	PreconditionOptions,
 	PreconditionResult
 } from '@sapphire/framework';
-import { ChatInputCommandInteraction, GuildMember } from 'discord.js';
-import { GuildMessage, PermissionLevels } from '#lib/types';
-import { isGuildOwner } from '#utils/discord';
 import { cast } from '@sapphire/utilities';
-import { LanguageKeys } from '#lib/i18n';
-import { clientOwners } from '#root/config';
-import { FoxxieCommand } from '#lib/structures';
 import { readSettings } from '#lib/database';
+import { LanguageKeys } from '#lib/i18n';
+import { FoxxieCommand } from '#lib/structures';
+import { GuildMessage, PermissionLevels } from '#lib/types';
+import { clientOwners } from '#root/config';
+import { isGuildOwner } from '#utils/discord';
+import { ChatInputCommandInteraction, GuildMember } from 'discord.js';
 
 export abstract class PermissionLevelPrecondition extends Precondition {
 	private readonly guildOnly: boolean;
@@ -22,28 +22,6 @@ export abstract class PermissionLevelPrecondition extends Precondition {
 	public constructor(context: LoaderPieceContext<'preconditions'>, options: PermissionLevelPrecondition.Options = {}) {
 		super(context, options);
 		this.guildOnly = options.guildOnly ?? true;
-	}
-
-	public override async messageRun(message: GuildMessage, command: Command, context: PermissionLevelPrecondition.Context) {
-		if (!message.guild || !message.member) {
-			return this.guildOnly ? this.error({ identifier: Identifiers.PreconditionGuildOnly }) : this.ok();
-		}
-
-		if (clientOwners.includes(message.author.id)) return this.ok();
-
-		if (this.shouldRun(message.member, cast<FoxxieCommand>(command))) {
-			const allowed = await this.runPreconditions(message.member, cast<FoxxieCommand>(command));
-			if (allowed) return this.ok();
-			if (allowed === false)
-				return this.error({
-					identifier: LanguageKeys.Preconditions.PermNodes,
-					context: {
-						node: `${command.category!.toLowerCase()}.${command.name.toLowerCase()}`
-					}
-				});
-		}
-
-		return this.handle(message, cast<FoxxieCommand>(command), context);
 	}
 
 	public override async chatInputRun(interaction: ChatInputCommandInteraction, command: Command, context: PermissionLevelPrecondition.Context) {
@@ -59,31 +37,43 @@ export abstract class PermissionLevelPrecondition extends Precondition {
 			if (allowed) return this.ok();
 			if (allowed === false)
 				return this.error({
-					identifier: LanguageKeys.Preconditions.PermNodes,
 					context: {
 						node: `${command.category!.toLowerCase()}.${command.name.toLowerCase()}`
-					}
+					},
+					identifier: LanguageKeys.Preconditions.PermNodes
 				});
 		}
 
 		return this.handle(interaction, cast<FoxxieCommand>(command), context);
 	}
 
+	public override async messageRun(message: GuildMessage, command: Command, context: PermissionLevelPrecondition.Context) {
+		if (!message.guild || !message.member) {
+			return this.guildOnly ? this.error({ identifier: Identifiers.PreconditionGuildOnly }) : this.ok();
+		}
+
+		if (clientOwners.includes(message.author.id)) return this.ok();
+
+		if (this.shouldRun(message.member, cast<FoxxieCommand>(command))) {
+			const allowed = await this.runPreconditions(message.member, cast<FoxxieCommand>(command));
+			if (allowed) return this.ok();
+			if (allowed === false)
+				return this.error({
+					context: {
+						node: `${command.category!.toLowerCase()}.${command.name.toLowerCase()}`
+					},
+					identifier: LanguageKeys.Preconditions.PermNodes
+				});
+		}
+
+		return this.handle(message, cast<FoxxieCommand>(command), context);
+	}
+
 	protected abstract handle(
-		message: GuildMessage | ChatInputCommandInteraction,
+		message: ChatInputCommandInteraction | GuildMessage,
 		command: FoxxieCommand,
 		context: PermissionLevelPrecondition.Context
 	): PermissionLevelPrecondition.Result;
-
-	private shouldRun(member: GuildMember, command: FoxxieCommand) {
-		if (command.guarded) return false;
-
-		if (command.permissionLevel === PermissionLevels.BotOwner) return false;
-
-		if (isGuildOwner(member)) return false;
-
-		return true;
-	}
 
 	private async runPreconditions(member: GuildMember, command: FoxxieCommand) {
 		const { permissionsRoles, permissionsUsers } = await readSettings(member.guild);
@@ -126,11 +116,21 @@ export abstract class PermissionLevelPrecondition extends Precondition {
 		// otherwise the command should not be stopped.
 		return null;
 	}
+
+	private shouldRun(member: GuildMember, command: FoxxieCommand) {
+		if (command.guarded) return false;
+
+		if (command.permissionLevel === PermissionLevels.BotOwner) return false;
+
+		if (isGuildOwner(member)) return false;
+
+		return true;
+	}
 }
 export namespace PermissionLevelPrecondition {
 	export type Context = PreconditionContext;
-	export type Result = PreconditionResult;
 	export interface Options extends PreconditionOptions {
 		guildOnly?: boolean;
 	}
+	export type Result = PreconditionResult;
 }

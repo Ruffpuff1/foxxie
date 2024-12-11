@@ -1,10 +1,10 @@
+import { ApplyOptions } from '@sapphire/decorators';
+import { Events, Listener } from '@sapphire/framework';
+import { isNumber } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
 import { ModerationActions } from '#lib/moderation';
 import { getLogger, getModeration } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
-import { ApplyOptions } from '@sapphire/decorators';
-import { Events, Listener } from '@sapphire/framework';
-import { isNumber } from '@sapphire/utilities';
 import { GuildMember } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({ event: Events.GuildMemberUpdate })
@@ -15,7 +15,7 @@ export class UserListener extends Listener {
 
 		if (prevTimeout === nextTimeout) return;
 
-		const { user, guild } = next;
+		const { guild, user } = next;
 		const logger = getLogger(guild);
 
 		// If the action was done by Foxxie, skip:
@@ -39,27 +39,27 @@ export class UserListener extends Listener {
 		const duration = this.#getDuration(nextTimeout);
 
 		const entry = moderation.create({
-			user,
-			moderator: context?.userId,
-			type: TypeVariation.Timeout,
-			metadata: duration ? TypeMetadata.Temporary : TypeMetadata.Undo,
 			duration,
-			reason: context?.reason
+			metadata: duration ? TypeMetadata.Temporary : TypeMetadata.Undo,
+			moderator: context?.userId,
+			reason: context?.reason,
+			type: TypeVariation.Timeout,
+			user
 		});
 
 		if (!nextTimeout) await ModerationActions.timeout.completeLastModerationEntryFromUser({ guild, userId: user.id });
 		await moderation.insert(entry);
 	}
 
-	#getTimeout(member: GuildMember) {
-		const timeout = member.communicationDisabledUntilTimestamp;
-		return isNumber(timeout) && timeout >= Date.now() ? timeout : null;
-	}
-
-	#getDuration(timeout: number | null) {
+	#getDuration(timeout: null | number) {
 		if (timeout === null) return null;
 
 		const now = Date.now();
 		return timeout > now ? timeout - now : null;
+	}
+
+	#getTimeout(member: GuildMember) {
+		const timeout = member.communicationDisabledUntilTimestamp;
+		return isNumber(timeout) && timeout >= Date.now() ? timeout : null;
 	}
 }

@@ -1,4 +1,4 @@
-export function create(words: string[] | string) {
+export function create(words: string | string[]) {
 	const toProcess = Array.isArray(words) ? words : [words];
 	let processedWords = 0;
 	let string = '\\b(?:';

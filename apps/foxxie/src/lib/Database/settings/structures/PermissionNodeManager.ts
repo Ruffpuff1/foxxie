@@ -1,46 +1,39 @@
-import { resolveGuild } from '#utils/common';
 import { UserError } from '@sapphire/framework';
-import { Collection, Role, type GuildMember, type User } from 'discord.js';
-import { FoxxieCommand } from '#lib/structures';
-import { LanguageKeys } from '#lib/i18n';
-import { matchAny } from '#lib/Database/utils/matchers/Command';
 import { PermissionsNode, ReadonlyGuildData } from '#lib/database';
+import { matchAny } from '#lib/Database/utils/matchers/Command';
+import { LanguageKeys } from '#lib/i18n';
+import { FoxxieCommand } from '#lib/structures';
+import { resolveGuild } from '#utils/common';
+import { Collection, type GuildMember, Role, type User } from 'discord.js';
 
 export const enum PermissionNodeAction {
 	Allow,
 	Deny
 }
 
+interface PermissionsManagerNode {
+	allow: Set<string>;
+	deny: Set<string>;
+}
+
 export class PermissionNodeManager {
-	private sorted = new Collection<string, PermissionsManagerNode>();
 	#cachedRawPermissionRoles: readonly PermissionsNode[] = [];
 	#cachedRawPermissionUsers: readonly PermissionsNode[] = [];
+	private sorted = new Collection<string, PermissionsManagerNode>();
 
 	public constructor(settings: ReadonlyGuildData) {
 		this.refresh(settings);
 	}
 
-	public settingsPropertyFor(target: Role | GuildMember | User) {
-		return (target instanceof Role ? 'permissionsRoles' : 'permissionsUsers') satisfies keyof ReadonlyGuildData;
-	}
-
-	public run(member: GuildMember, command: FoxxieCommand) {
-		return this.runUser(member, command) ?? this.runRole(member, command);
-	}
-
-	public has(roleId: string) {
-		return this.sorted.has(roleId);
-	}
-
-	public add(target: Role | GuildMember | User, command: string, action: PermissionNodeAction): readonly PermissionsNode[] {
+	public add(target: GuildMember | Role | User, command: string, action: PermissionNodeAction): readonly PermissionsNode[] {
 		const nodes = this.#getPermissionNodes(target);
 
 		const nodeIndex = nodes.findIndex((n) => n.id === target.id);
 		if (nodeIndex === -1) {
 			const node: PermissionsNode = {
-				id: target.id,
 				allow: action === PermissionNodeAction.Allow ? [command] : [],
-				deny: action === PermissionNodeAction.Deny ? [command] : []
+				deny: action === PermissionNodeAction.Deny ? [command] : [],
+				id: target.id
 			};
 
 			return nodes.concat(node);
@@ -51,53 +44,20 @@ export class PermissionNodeManager {
 			(action === PermissionNodeAction.Allow && previous.allow.includes(command)) ||
 			(action === PermissionNodeAction.Deny && previous.deny.includes(command))
 		) {
-			throw new UserError({ identifier: LanguageKeys.Serializers.PermissionNodeDuplicatedCommand, context: { command } });
+			throw new UserError({ context: { command }, identifier: LanguageKeys.Serializers.PermissionNodeDuplicatedCommand });
 		}
 
 		const node: PermissionsNode = {
-			id: target.id,
 			allow: action === PermissionNodeAction.Allow ? previous.allow.concat(command) : previous.allow,
-			deny: action === PermissionNodeAction.Deny ? previous.deny.concat(command) : previous.deny
+			deny: action === PermissionNodeAction.Deny ? previous.deny.concat(command) : previous.deny,
+			id: target.id
 		};
 
 		return nodes.with(nodeIndex, node);
 	}
 
-	public remove(target: Role | GuildMember | User, command: string, action: PermissionNodeAction): readonly PermissionsNode[] {
-		const nodes = this.#getPermissionNodes(target);
-
-		const nodeIndex = nodes.findIndex((n) => n.id === target.id);
-		if (nodeIndex === -1) {
-			throw new UserError({ identifier: LanguageKeys.Commands.Configuration.PermissionNodesNodeNotExists });
-		}
-
-		const property = this.getName(action);
-		const previous = nodes[nodeIndex];
-		const commandIndex = previous[property].indexOf(command);
-		if (commandIndex === -1) {
-			throw new UserError({ identifier: LanguageKeys.Commands.Configuration.PermissionNodesCommandNotExists });
-		}
-
-		const node: PermissionsNode = {
-			id: target.id,
-			allow: previous.allow.toSpliced(commandIndex, 1),
-			deny: previous.deny.toSpliced(commandIndex, 1)
-		};
-
-		return node.allow.length === 0 && node.deny.length === 0 //
-			? nodes.toSpliced(nodeIndex, 1)
-			: nodes.with(nodeIndex, node);
-	}
-
-	public reset(target: Role | GuildMember | User): readonly PermissionsNode[] {
-		const nodes = this.#getPermissionNodes(target);
-
-		const nodeIndex = nodes.findIndex((n) => n.id === target.id);
-		if (nodeIndex === -1) {
-			throw new UserError({ identifier: LanguageKeys.Commands.Configuration.PermissionNodesNodeNotExists, context: { target } });
-		}
-
-		return nodes.toSpliced(nodeIndex, 1);
+	public has(roleId: string) {
+		return this.sorted.has(roleId);
 	}
 
 	public refresh(settings: ReadonlyGuildData): readonly PermissionsNode[] {
@@ -124,7 +84,7 @@ export class PermissionNodeManager {
 
 		this.sorted = sorted;
 
-		let copy: PermissionsNode[] | null = null;
+		let copy: null | PermissionsNode[] = null;
 
 		// Delete redundant entries
 		for (const removedItem of pendingToRemove) {
@@ -138,30 +98,53 @@ export class PermissionNodeManager {
 		return copy ?? nodes;
 	}
 
-	private runUser(member: GuildMember, command: FoxxieCommand) {
-		// Assume sorted data
-		const permissionNodeRoles = this.#cachedRawPermissionUsers;
-		const memberId = member.id;
-		for (const node of permissionNodeRoles) {
-			if (node.id !== memberId) continue;
-			if (matchAny(node.allow, command)) return true;
-			if (matchAny(node.deny, command)) return false;
+	public remove(target: GuildMember | Role | User, command: string, action: PermissionNodeAction): readonly PermissionsNode[] {
+		const nodes = this.#getPermissionNodes(target);
+
+		const nodeIndex = nodes.findIndex((n) => n.id === target.id);
+		if (nodeIndex === -1) {
+			throw new UserError({ identifier: LanguageKeys.Commands.Configuration.PermissionNodesNodeNotExists });
 		}
 
-		return null;
+		const property = this.getName(action);
+		const previous = nodes[nodeIndex];
+		const commandIndex = previous[property].indexOf(command);
+		if (commandIndex === -1) {
+			throw new UserError({ identifier: LanguageKeys.Commands.Configuration.PermissionNodesCommandNotExists });
+		}
+
+		const node: PermissionsNode = {
+			allow: previous.allow.toSpliced(commandIndex, 1),
+			deny: previous.deny.toSpliced(commandIndex, 1),
+			id: target.id
+		};
+
+		return node.allow.length === 0 && node.deny.length === 0 //
+			? nodes.toSpliced(nodeIndex, 1)
+			: nodes.with(nodeIndex, node);
 	}
 
-	private runRole(member: GuildMember, command: FoxxieCommand) {
-		const roles = member.roles.cache;
+	public reset(target: GuildMember | Role | User): readonly PermissionsNode[] {
+		const nodes = this.#getPermissionNodes(target);
 
-		// Assume sorted data
-		for (const [id, node] of this.sorted.entries()) {
-			if (!roles.has(id)) continue;
-			if (matchAny(node.allow, command)) return true;
-			if (matchAny(node.deny, command)) return false;
+		const nodeIndex = nodes.findIndex((n) => n.id === target.id);
+		if (nodeIndex === -1) {
+			throw new UserError({ context: { target }, identifier: LanguageKeys.Commands.Configuration.PermissionNodesNodeNotExists });
 		}
 
-		return null;
+		return nodes.toSpliced(nodeIndex, 1);
+	}
+
+	public run(member: GuildMember, command: FoxxieCommand) {
+		return this.runUser(member, command) ?? this.runRole(member, command);
+	}
+
+	public settingsPropertyFor(target: GuildMember | Role | User) {
+		return (target instanceof Role ? 'permissionsRoles' : 'permissionsUsers') satisfies keyof ReadonlyGuildData;
+	}
+
+	#getPermissionNodes(target: GuildMember | Role | User): readonly PermissionsNode[] {
+		return target instanceof Role ? this.#cachedRawPermissionRoles : this.#cachedRawPermissionUsers;
 	}
 
 	private generateSorted(settings: ReadonlyGuildData, nodes: readonly PermissionsNode[]) {
@@ -179,6 +162,17 @@ export class PermissionNodeManager {
 			pendingToAdd: sortedNodes,
 			pendingToRemove
 		};
+	}
+
+	private getName(type: PermissionNodeAction) {
+		switch (type) {
+			case PermissionNodeAction.Allow:
+				return 'allow';
+			case PermissionNodeAction.Deny:
+				return 'deny';
+			default:
+				throw new Error('Unreachable');
+		}
 	}
 
 	private getSortedRoles(settings: ReadonlyGuildData, rawNodes: readonly PermissionsNode[]) {
@@ -215,23 +209,29 @@ export class PermissionNodeManager {
 		};
 	}
 
-	private getName(type: PermissionNodeAction) {
-		switch (type) {
-			case PermissionNodeAction.Allow:
-				return 'allow';
-			case PermissionNodeAction.Deny:
-				return 'deny';
-			default:
-				throw new Error('Unreachable');
+	private runRole(member: GuildMember, command: FoxxieCommand) {
+		const roles = member.roles.cache;
+
+		// Assume sorted data
+		for (const [id, node] of this.sorted.entries()) {
+			if (!roles.has(id)) continue;
+			if (matchAny(node.allow, command)) return true;
+			if (matchAny(node.deny, command)) return false;
 		}
+
+		return null;
 	}
 
-	#getPermissionNodes(target: Role | GuildMember | User): readonly PermissionsNode[] {
-		return target instanceof Role ? this.#cachedRawPermissionRoles : this.#cachedRawPermissionUsers;
-	}
-}
+	private runUser(member: GuildMember, command: FoxxieCommand) {
+		// Assume sorted data
+		const permissionNodeRoles = this.#cachedRawPermissionUsers;
+		const memberId = member.id;
+		for (const node of permissionNodeRoles) {
+			if (node.id !== memberId) continue;
+			if (matchAny(node.allow, command)) return true;
+			if (matchAny(node.deny, command)) return false;
+		}
 
-interface PermissionsManagerNode {
-	allow: Set<string>;
-	deny: Set<string>;
+		return null;
+	}
 }

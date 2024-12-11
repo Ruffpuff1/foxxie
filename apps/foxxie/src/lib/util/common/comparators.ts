@@ -1,7 +1,7 @@
-export function asc(a: number | string | bigint, b: number | string | bigint): -1 | 0 | 1 {
+export function asc(a: bigint | number | string, b: bigint | number | string): -1 | 0 | 1 {
 	return a < b ? -1 : a > b ? 1 : 0;
 }
 
-export function desc(a: number | string | bigint, b: number | string | bigint): -1 | 0 | 1 {
+export function desc(a: bigint | number | string, b: bigint | number | string): -1 | 0 | 1 {
 	return a > b ? -1 : a < b ? 1 : 0;
 }

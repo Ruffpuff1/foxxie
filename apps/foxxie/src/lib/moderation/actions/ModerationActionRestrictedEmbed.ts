@@ -5,12 +5,12 @@ import { PermissionFlagsBits } from 'discord.js';
 export class ModerationActionRestrictedEmbed extends RoleModerationAction<never, TypeVariation.RestrictedEmbed> {
 	public constructor() {
 		super({
-			type: TypeVariation.RestrictedEmbed,
 			logPrefix: 'Moderation => RestrictedEmbed',
+			roleData: { hoist: false, mentionable: false, name: 'Embed Restricted', permissions: [] },
 			roleKey: RoleModerationAction.RoleKey.Embed,
-			roleData: { name: 'Embed Restricted', permissions: [], hoist: false, mentionable: false },
 			roleOverridesText: PermissionFlagsBits.EmbedLinks,
-			roleOverridesVoice: null
+			roleOverridesVoice: null,
+			type: TypeVariation.RestrictedEmbed
 		});
 	}
 }

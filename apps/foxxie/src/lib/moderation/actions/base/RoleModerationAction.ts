@@ -1,26 +1,27 @@
+import type { GuildMessage } from '#lib/types';
+
+import { GuildLimits, isCategoryChannel, isTextBasedChannel, isThreadChannel, isVoiceBasedChannel } from '@sapphire/discord.js-utilities';
+import { type Awaitable, container, UserError } from '@sapphire/framework';
+import { isNullish } from '@sapphire/utilities';
 import { readSettings, writeSettings, writeSettingsTransaction } from '#lib/Database/settings/functions';
 import { getT, LanguageKeys } from '#lib/i18n';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
-import type { GuildMessage } from '#lib/types';
 import { PermissionsBits } from '#utils/bits';
 import { resolveOnErrorCodes } from '#utils/common';
 import { getCodeStyle, getStickyRoles } from '#utils/functions';
 import { promptConfirmation } from '#utils/functions/messages';
 import { TypeVariation } from '#utils/moderationConstants';
-import { GuildLimits, isCategoryChannel, isTextBasedChannel, isThreadChannel, isVoiceBasedChannel } from '@sapphire/discord.js-utilities';
-import { UserError, container, type Awaitable } from '@sapphire/framework';
-import { isNullish } from '@sapphire/utilities';
 import {
 	DiscordAPIError,
 	Guild,
 	GuildMember,
 	HTTPError,
-	PermissionFlagsBits,
-	RESTJSONErrorCodes,
-	Role,
 	inlineCode,
 	type NonThreadGuildBasedChannel,
+	PermissionFlagsBits,
 	type PermissionOverwriteOptions,
+	RESTJSONErrorCodes,
+	Role,
 	type RoleData,
 	type Snowflake
 } from 'discord.js';
@@ -28,8 +29,8 @@ import {
 const Root = LanguageKeys.Commands.Moderation;
 
 interface Overrides {
-	bitfield: bigint;
 	array: readonly (keyof typeof PermissionFlagsBits)[];
+	bitfield: bigint;
 	options: PermissionOverwriteOptions;
 }
 
@@ -53,6 +54,10 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 	protected readonly roleData: RoleData;
 
 	/**
+	 * The representation of the role overrides for generic and mixed channels.
+	 */
+	protected readonly roleOverridesMerged: Overrides;
+	/**
 	 * The representation of the role overrides for text-based channels.
 	 */
 	protected readonly roleOverridesText: Overrides;
@@ -60,10 +65,6 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 	 * The representation of the role overrides for voice-based channels.
 	 */
 	protected readonly roleOverridesVoice: Overrides;
-	/**
-	 * The representation of the role overrides for generic and mixed channels.
-	 */
-	protected readonly roleOverridesMerged: Overrides;
 
 	public constructor(options: RoleModerationAction.ConstructorOptions<Type>) {
 		super({ isUndoActionAvailable: true, ...options });
@@ -114,10 +115,25 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 			0
 		);
 		const permissions = this.roleOverridesMerged.array.map((key) => inlineCode(t(`permissions:${key}`)));
-		const content = t(Root.ActionSharedRoleSetupAsk, { role: role.name, channels: manageableChannelCount, permissions });
+		const content = t(Root.ActionSharedRoleSetupAsk, { channels: manageableChannelCount, permissions, role: role.name });
 		if (await promptConfirmation(message, content)) {
 			await this.updateChannelsOverrides(guild, role);
 		}
+	}
+
+	/**
+	 * Updates the channel overrides for a given role.
+	 *
+	 * @param channel - The channel to update the overrides for.
+	 * @param role - The role to update the overrides with.
+	 * @returns A promise that resolves to `true` if the overrides were updated successfully, or `false` otherwise.
+	 */
+	public async updateChannelOverrides(channel: NonThreadGuildBasedChannel, role: Role) {
+		const options = this.#getChannelOverrides(channel);
+		if (options === null) return false;
+
+		await channel.permissionOverwrites.edit(role, options);
+		return true;
 	}
 
 	/**
@@ -141,21 +157,6 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 			// Update the channel overrides:
 			await this.updateChannelOverrides(channel, role);
 		}
-	}
-
-	/**
-	 * Updates the channel overrides for a given role.
-	 *
-	 * @param channel - The channel to update the overrides for.
-	 * @param role - The role to update the overrides with.
-	 * @returns A promise that resolves to `true` if the overrides were updated successfully, or `false` otherwise.
-	 */
-	public async updateChannelOverrides(channel: NonThreadGuildBasedChannel, role: Role) {
-		const options = this.#getChannelOverrides(channel);
-		if (options === null) return false;
-
-		await channel.permissionOverwrites.edit(role, options);
-		return true;
 	}
 
 	protected override handleApplyPre(
@@ -213,6 +214,103 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 		}
 	}
 
+	#extractRoles(member: GuildMember, highestPosition: number) {
+		const keepRoles = new Set<Snowflake>();
+		const removedRoles = new Set<Snowflake>();
+
+		// Iterate over all the member's roles.
+		for (const [id, role] of member.roles.cache.entries()) {
+			// Managed roles cannot be removed.
+			if (role.managed) keepRoles.add(id);
+			// Roles with higher hierarchy position cannot be removed.
+			else if (role.position >= highestPosition) keepRoles.add(id);
+			// Else it is fine to remove the role.
+			else removedRoles.add(id);
+		}
+
+		return { keepRoles, removedRoles };
+	}
+
+	/**
+	 * Fetches the member from the guild using the provided options.
+	 *
+	 * @remarks
+	 * If the member is not found, a {@link UserError} with the identifier {@link Root.ActionRequiredMember} is thrown.
+	 * Otherwise, the error is re-thrown.
+	 *
+	 * @param guild The guild to fetch the member from.
+	 * @param entry The entry containing the user ID.
+	 * @returns A Promise that resolves to the fetched member.
+	 */
+	async #fetchMember(guild: Guild, entry: ModerationAction.Entry<Type>) {
+		try {
+			return await guild.members.fetch(entry.userId);
+		} catch (error) {
+			this.#handleFetchMemberError(error as Error);
+		}
+	}
+
+	/**
+	 * Fetches the role associated with this moderation action from the guild.
+	 * Throws an error if the role is not configured, doesn't exist, or is a managed role.
+	 *
+	 * @param guild - The guild to fetch the role from.
+	 * @returns The fetched role.
+	 * @throws If the role is not configured or if it is a managed role.
+	 */
+	async #fetchRole(guild: Guild) {
+		const settings = await readSettings(guild);
+		const roleId = settings[this.roleKey];
+		if (isNullish(roleId)) throw new UserError({ identifier: Root.ActionRoleNotConfigured });
+
+		const role = guild.roles.cache.get(roleId);
+		if (isNullish(role)) {
+			await writeSettings(guild, { [this.roleKey]: null });
+			throw new UserError({ identifier: Root.ActionRoleNotConfigured });
+		}
+
+		if (role.managed) {
+			throw new UserError({ identifier: Root.ActionRoleManaged });
+		}
+
+		return role;
+	}
+
+	/**
+	 * Retrieves the channel overrides for the given channel.
+	 * If the channel is a category channel, it returns the merged role overrides options.
+	 * If the channel is both a text-based and voice-based channel, it returns the merged role overrides options.
+	 * If the channel is a text-based channel, it returns the text-based role overrides options.
+	 * If the channel is a voice-based channel, it returns the voice-based role overrides options.
+	 * If the channel does not match any of the above conditions, it returns null.
+	 *
+	 * @param channel - The channel to retrieve the overrides for.
+	 * @returns The channel overrides options or null if no overrides are found.
+	 */
+	#getChannelOverrides(channel: NonThreadGuildBasedChannel) {
+		if (isCategoryChannel(channel)) return this.roleOverridesMerged.options;
+
+		const isText = isTextBasedChannel(channel);
+		const isVoice = isVoiceBasedChannel(channel);
+		if (isText && isVoice) return this.roleOverridesMerged.options;
+		if (isText) return this.roleOverridesText.options;
+		if (isVoice) return this.roleOverridesVoice.options;
+		return null;
+	}
+
+	/**
+	 * Handles the apply action for adding the action role to a member.
+	 *
+	 * @param member - The guild member to apply the roles to.
+	 * @param role - The role to add to the member.
+	 * @param reason - The reason for adding the role.
+	 * @returns A Promise that resolves to `null` when the role addition is complete.
+	 */
+	async #handleApplyPreRolesAdd(member: GuildMember, role: Role, reason: string) {
+		await member.roles.add(role, reason);
+		return null;
+	}
+
 	/**
 	 * Handles the roles replace operation for a given member.
 	 *
@@ -229,21 +327,38 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 		const { keepRoles, removedRoles } = this.#extractRoles(member, position);
 		keepRoles.add(role.id);
 
-		await member.edit({ roles: [...keepRoles], reason });
+		await member.edit({ reason, roles: [...keepRoles] });
 		return [...removedRoles];
 	}
 
+	#handleFetchMemberDiscordError(error: DiscordAPIError): never {
+		if (error.code === RESTJSONErrorCodes.UnknownMember) {
+			throw new UserError({ identifier: Root.ActionRequiredMember });
+		}
+
+		throw error;
+	}
+
+	#handleFetchMemberError(error: Error): never {
+		if (error instanceof DiscordAPIError) this.#handleFetchMemberDiscordError(error);
+		if (error instanceof HTTPError) this.#handleFetchMemberHttpError(error);
+		throw error;
+	}
+
+	#handleFetchMemberHttpError(error: HTTPError): never {
+		container.logger.error(this.logPrefix, getCodeStyle(error.status), error.url);
+		throw error;
+	}
+
 	/**
-	 * Handles the apply action for adding the action role to a member.
+	 * Handles the undo action for removing the action role from a member.
 	 *
-	 * @param member - The guild member to apply the roles to.
-	 * @param role - The role to add to the member.
-	 * @param reason - The reason for adding the role.
-	 * @returns A Promise that resolves to `null` when the role addition is complete.
+	 * @param member - The guild member to remove the role from.
+	 * @param role - The role to be removed.
+	 * @param reason - The reason for removing the role.
 	 */
-	async #handleApplyPreRolesAdd(member: GuildMember, role: Role, reason: string) {
-		await member.roles.add(role, reason);
-		return null;
+	async #handleUndoPreRolesRemove(member: GuildMember, role: Role, reason: string) {
+		await member.roles.remove(role, reason);
 	}
 
 	/**
@@ -278,40 +393,7 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 		// Remove the action role from the set:
 		roles.delete(role.id);
 
-		await member.edit({ roles: [...roles], reason });
-	}
-
-	/**
-	 * Handles the undo action for removing the action role from a member.
-	 *
-	 * @param member - The guild member to remove the role from.
-	 * @param role - The role to be removed.
-	 * @param reason - The reason for removing the role.
-	 */
-	async #handleUndoPreRolesRemove(member: GuildMember, role: Role, reason: string) {
-		await member.roles.remove(role, reason);
-	}
-
-	/**
-	 * Retrieves the channel overrides for the given channel.
-	 * If the channel is a category channel, it returns the merged role overrides options.
-	 * If the channel is both a text-based and voice-based channel, it returns the merged role overrides options.
-	 * If the channel is a text-based channel, it returns the text-based role overrides options.
-	 * If the channel is a voice-based channel, it returns the voice-based role overrides options.
-	 * If the channel does not match any of the above conditions, it returns null.
-	 *
-	 * @param channel - The channel to retrieve the overrides for.
-	 * @returns The channel overrides options or null if no overrides are found.
-	 */
-	#getChannelOverrides(channel: NonThreadGuildBasedChannel) {
-		if (isCategoryChannel(channel)) return this.roleOverridesMerged.options;
-
-		const isText = isTextBasedChannel(channel);
-		const isVoice = isVoiceBasedChannel(channel);
-		if (isText && isVoice) return this.roleOverridesMerged.options;
-		if (isText) return this.roleOverridesText.options;
-		if (isVoice) return this.roleOverridesVoice.options;
-		return null;
+		await member.edit({ reason, roles: [...roles] });
 	}
 
 	/**
@@ -323,112 +405,31 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 	#resolveOverrides(bitfield: bigint): Overrides {
 		const array = PermissionsBits.toArray(bitfield);
 		const options = Object.fromEntries(array.map((key) => [key, false]));
-		return { bitfield, array, options };
-	}
-
-	/**
-	 * Fetches the member from the guild using the provided options.
-	 *
-	 * @remarks
-	 * If the member is not found, a {@link UserError} with the identifier {@link Root.ActionRequiredMember} is thrown.
-	 * Otherwise, the error is re-thrown.
-	 *
-	 * @param guild The guild to fetch the member from.
-	 * @param entry The entry containing the user ID.
-	 * @returns A Promise that resolves to the fetched member.
-	 */
-	async #fetchMember(guild: Guild, entry: ModerationAction.Entry<Type>) {
-		try {
-			return await guild.members.fetch(entry.userId);
-		} catch (error) {
-			this.#handleFetchMemberError(error as Error);
-		}
-	}
-
-	#handleFetchMemberError(error: Error): never {
-		if (error instanceof DiscordAPIError) this.#handleFetchMemberDiscordError(error);
-		if (error instanceof HTTPError) this.#handleFetchMemberHttpError(error);
-		throw error;
-	}
-
-	#handleFetchMemberDiscordError(error: DiscordAPIError): never {
-		if (error.code === RESTJSONErrorCodes.UnknownMember) {
-			throw new UserError({ identifier: Root.ActionRequiredMember });
-		}
-
-		throw error;
-	}
-
-	#handleFetchMemberHttpError(error: HTTPError): never {
-		container.logger.error(this.logPrefix, getCodeStyle(error.status), error.url);
-		throw error;
-	}
-
-	/**
-	 * Fetches the role associated with this moderation action from the guild.
-	 * Throws an error if the role is not configured, doesn't exist, or is a managed role.
-	 *
-	 * @param guild - The guild to fetch the role from.
-	 * @returns The fetched role.
-	 * @throws If the role is not configured or if it is a managed role.
-	 */
-	async #fetchRole(guild: Guild) {
-		const settings = await readSettings(guild);
-		const roleId = settings[this.roleKey];
-		if (isNullish(roleId)) throw new UserError({ identifier: Root.ActionRoleNotConfigured });
-
-		const role = guild.roles.cache.get(roleId);
-		if (isNullish(role)) {
-			await writeSettings(guild, { [this.roleKey]: null });
-			throw new UserError({ identifier: Root.ActionRoleNotConfigured });
-		}
-
-		if (role.managed) {
-			throw new UserError({ identifier: Root.ActionRoleManaged });
-		}
-
-		return role;
-	}
-
-	#extractRoles(member: GuildMember, highestPosition: number) {
-		const keepRoles = new Set<Snowflake>();
-		const removedRoles = new Set<Snowflake>();
-
-		// Iterate over all the member's roles.
-		for (const [id, role] of member.roles.cache.entries()) {
-			// Managed roles cannot be removed.
-			if (role.managed) keepRoles.add(id);
-			// Roles with higher hierarchy position cannot be removed.
-			else if (role.position >= highestPosition) keepRoles.add(id);
-			// Else it is fine to remove the role.
-			else removedRoles.add(id);
-		}
-
-		return { keepRoles, removedRoles };
+		return { array, bitfield, options };
 	}
 }
 
 export namespace RoleModerationAction {
+	export const enum RoleKey {
+		All = 'rolesMuted',
+		Attachment = 'rolesRestrictedAttachment',
+		Embed = 'rolesRestrictedEmbed',
+		Emoji = 'rolesRestrictedEmoji',
+		Reaction = 'rolesRestrictedReaction',
+		Voice = 'rolesRestrictedVoice'
+	}
+
 	export interface ConstructorOptions<Type extends TypeVariation = TypeVariation>
 		extends Omit<ModerationAction.ConstructorOptions<Type>, 'isUndoActionAvailable'> {
 		replace?: boolean;
-		roleKey: RoleKey;
 		roleData: RoleData;
+		roleKey: RoleKey;
 		roleOverridesText: bigint | null;
 		roleOverridesVoice: bigint | null;
 	}
-
-	export type Options<Type extends TypeVariation = TypeVariation> = ModerationAction.Options<Type>;
-	export type PartialOptions<Type extends TypeVariation = TypeVariation> = ModerationAction.PartialOptions<Type>;
-
 	export type Data = ModerationAction.Data;
 
-	export const enum RoleKey {
-		All = 'rolesMuted',
-		Reaction = 'rolesRestrictedReaction',
-		Embed = 'rolesRestrictedEmbed',
-		Emoji = 'rolesRestrictedEmoji',
-		Attachment = 'rolesRestrictedAttachment',
-		Voice = 'rolesRestrictedVoice'
-	}
+	export type Options<Type extends TypeVariation = TypeVariation> = ModerationAction.Options<Type>;
+
+	export type PartialOptions<Type extends TypeVariation = TypeVariation> = ModerationAction.PartialOptions<Type>;
 }

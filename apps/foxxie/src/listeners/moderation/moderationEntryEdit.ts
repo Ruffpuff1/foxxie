@@ -1,18 +1,54 @@
-import { getEmbed, getUndoTaskName } from '#lib/moderation';
-import { ModerationManager } from '#lib/moderation/managers';
-import { ScheduleEntry } from '#lib/schedule';
-import { getModeration } from '#utils/functions';
-import { SchemaKeys } from '#utils/moderationConstants';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { canSendEmbeds, ChannelTypes } from '@sapphire/discord.js-utilities';
 import { Listener } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { cast, isNullish } from '@sapphire/utilities';
+import { getEmbed, getUndoTaskName } from '#lib/moderation';
+import { ModerationManager } from '#lib/moderation/managers';
+import { ScheduleEntry } from '#lib/schedule';
+import { getModeration } from '#utils/functions';
+import { SchemaKeys } from '#utils/moderationConstants';
 import { Embed, EmbedBuilder, GuildBasedChannel } from 'discord.js';
 
 export class UserListener extends Listener {
 	public run(old: ModerationManager.Entry, entry: ModerationManager.Entry) {
 		return Promise.all([this.scheduleDuration(old, entry), this.sendMessage(old, entry)]);
+	}
+
+	async #createNewTask(entry: ModerationManager.Entry) {
+		const taskName = getUndoTaskName(entry.type);
+		if (isNullish(taskName)) return;
+
+		await this.container.schedule.add(taskName, entry.expiresTimestamp!, {
+			catchUp: true,
+			data: {
+				[SchemaKeys.Case]: entry.id,
+				[SchemaKeys.Duration]: entry.duration,
+				[SchemaKeys.ExtraData]: entry.extraData as any,
+				[SchemaKeys.Guild]: entry.guild.id,
+				[SchemaKeys.Refrence]: entry.refrenceId,
+				[SchemaKeys.Type]: entry.type,
+				[SchemaKeys.User]: entry.userId
+			}
+		});
+	}
+
+	#embedsAreSame(embed: EmbedBuilder, previous: Embed) {
+		return embed.data.description === previous.description && embed.data.color === previous.color;
+	}
+
+	async #fetchModerationLogMessage(entry: ModerationManager.Entry, channel: GuildBasedChannel) {
+		if (!channel.isSendable()) return null;
+		const message = await resolveToNull(channel.messages.fetch(entry.logMessageId!));
+		return message;
+	}
+
+	#isCompleteUpdate(old: ModerationManager.Entry, entry: ModerationManager.Entry) {
+		return !old.isCompleted() && entry.isCompleted();
+	}
+
+	async #tryDeleteTask(task: null | ScheduleEntry) {
+		if (!isNullish(task) && !task.running) await task.delete();
 	}
 
 	private async scheduleDuration(old: ModerationManager.Entry, entry: ModerationManager.Entry) {
@@ -56,41 +92,5 @@ export class UserListener extends Listener {
 			console.log(error);
 			// await writeSettings(entry.guild, { channelsLogsModeration: null });
 		}
-	}
-
-	async #createNewTask(entry: ModerationManager.Entry) {
-		const taskName = getUndoTaskName(entry.type);
-		if (isNullish(taskName)) return;
-
-		await this.container.schedule.add(taskName, entry.expiresTimestamp!, {
-			catchUp: true,
-			data: {
-				[SchemaKeys.Case]: entry.id,
-				[SchemaKeys.User]: entry.userId,
-				[SchemaKeys.Guild]: entry.guild.id,
-				[SchemaKeys.Type]: entry.type,
-				[SchemaKeys.Duration]: entry.duration,
-				[SchemaKeys.Refrence]: entry.refrenceId,
-				[SchemaKeys.ExtraData]: entry.extraData as any
-			}
-		});
-	}
-
-	#embedsAreSame(embed: EmbedBuilder, previous: Embed) {
-		return embed.data.description === previous.description && embed.data.color === previous.color;
-	}
-
-	async #fetchModerationLogMessage(entry: ModerationManager.Entry, channel: GuildBasedChannel) {
-		if (!channel.isSendable()) return null;
-		const message = await resolveToNull(channel.messages.fetch(entry.logMessageId!));
-		return message;
-	}
-
-	#isCompleteUpdate(old: ModerationManager.Entry, entry: ModerationManager.Entry) {
-		return !old.isCompleted() && entry.isCompleted();
-	}
-
-	async #tryDeleteTask(task: ScheduleEntry | null) {
-		if (!isNullish(task) && !task.running) await task.delete();
 	}
 }

@@ -1,4 +1,4 @@
-import { T, type HelpDisplayData, FT } from '#lib/types';
+import { FT, type HelpDisplayData, T } from '#lib/types';
 
 export const ConfGet = FT<{ key: string; value: string }, string>('commands/admin:confGet');
 export const ConfGetNoExt = FT<{ key: string }, string>('commands/admin:confGetNoExt');
@@ -24,13 +24,13 @@ export const ConfSettingNotSet = T<string>('commands/admin:confSettingNotSet');
 export const ConfUpdated = FT<{ key: string; response: string }, string>('commands/admin:confUpdated');
 export const ConfDashboardOnlyKey = FT<{ key: string }, string>('commands/admin:confDashboardOnlyKey');
 
-export const EvalConsole = FT<{ name: string; footer: string; time: string }>('commands/admin:evalConsole');
+export const EvalConsole = FT<{ footer: string; name: string; time: string }>('commands/admin:evalConsole');
 export const EvalDescription = T('commands/admin:evalDescription');
-export const EvalError = FT<{ output: string; type: string; time: string }>('commands/admin:evalError');
-export const EvalHaste = FT<{ output: string; footer: string; time: string }>('commands/admin:evalHaste');
-export const EvalOutput = FT<{ output: string; footer: string; time: string }>('commands/admin:evalOutput');
-export const Reload = FT<{ type: string; name: string; time: string }>('commands/admin:reload');
-export const ReloadAll = FT<{ type: string; time: string }>('commands/admin:reloadAll');
+export const EvalError = FT<{ output: string; time: string; type: string }>('commands/admin:evalError');
+export const EvalHaste = FT<{ footer: string; output: string; time: string }>('commands/admin:evalHaste');
+export const EvalOutput = FT<{ footer: string; output: string; time: string }>('commands/admin:evalOutput');
+export const Reload = FT<{ name: string; time: string; type: string }>('commands/admin:reload');
+export const ReloadAll = FT<{ time: string; type: string }>('commands/admin:reloadAll');
 export const ReloadDescription = T('commands/admin:reloadDescription');
 export const ReloadDetailedDescription = T<HelpDisplayData>('commands/admin:reloadDetailedDescription');
 export const ReloadEverything = FT<{ time: string }>('commands/admin:reloadEverything');

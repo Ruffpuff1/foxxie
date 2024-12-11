@@ -1,7 +1,8 @@
+import type { Guild } from 'discord.js';
+
+import { isNullish } from '@sapphire/utilities';
 import { readSettings, type StickyRole } from '#lib/database';
 import { writeSettingsTransaction } from '#lib/Database/settings/functions';
-import { isNullish } from '@sapphire/utilities';
-import type { Guild } from 'discord.js';
 
 export interface StickyRoleManagerExtraContext {
 	author: string;
@@ -14,14 +15,51 @@ export class StickyRoleManager {
 		this.#guild = guild;
 	}
 
-	public async get(userId: string): Promise<readonly string[]> {
-		const settings = await readSettings(this.#guild);
-		return settings.rolesPersist.find((entry) => entry.user === userId)?.roles ?? [];
+	public async add(userId: string, roleId: string): Promise<readonly string[]> {
+		using trx = await writeSettingsTransaction(this.#guild);
+
+		// 1.0. Get the index for the entry:
+		const entries = trx.settings.rolesPersist;
+		const index = entries.findIndex((entry) => entry.user === userId);
+
+		// 2.0. If the entry does not exist:
+		if (index === -1) {
+			// 3.0.a. Proceed to create a new sticky roles entry:
+			const entry: StickyRole = { roles: [roleId], user: userId };
+			await trx.write({ rolesPersist: entries.concat(entry) }).submit();
+
+			return entry.roles;
+		}
+
+		// 3. Get the entry and append the role:
+		const entry = entries[index];
+		const roles = [...this.addRole(roleId, entry.roles)];
+
+		// 4. Write the new roles to the settings:
+		await trx.write({ rolesPersist: entries.with(index, { roles, user: entry.user }) }).submit();
+
+		// 5. Return the updated roles:
+		return roles;
 	}
 
-	public async has(userId: string, roleId: string): Promise<boolean> {
-		const roles = await this.get(userId);
-		return roles.includes(roleId);
+	public async clear(userId: string): Promise<readonly string[]> {
+		using trx = await writeSettingsTransaction(this.#guild);
+
+		// 1.0. Get the index for the entry:
+		const entries = trx.settings.rolesPersist;
+		const index = entries.findIndex((entry) => entry.user === userId);
+
+		// 1.1. If the index is negative, return empty array, as the entry does not exist:
+		if (index === -1) return [];
+
+		// 2.0. Read the previous entry:
+		const entry = entries[index];
+
+		// 3.0. Remove the entry from the settings:
+		await trx.write({ rolesPersist: entries.toSpliced(index, 1) }).submit();
+
+		// 4.0. Return the previous roles:
+		return entry.roles;
 	}
 
 	public async fetch(userId: string): Promise<readonly string[]> {
@@ -49,38 +87,21 @@ export class StickyRoleManager {
 		const index = settings.rolesPersist.findIndex((entry) => entry.user === userId);
 		if (index === -1) return [];
 
-		const clone: StickyRole = { user: userId, roles };
+		const clone: StickyRole = { roles, user: userId };
 		await trx.write({ rolesPersist: settings.rolesPersist.with(index, clone) }).submit();
 
 		// 4.0. Return the updated roles:
 		return clone.roles;
 	}
 
-	public async add(userId: string, roleId: string): Promise<readonly string[]> {
-		using trx = await writeSettingsTransaction(this.#guild);
+	public async get(userId: string): Promise<readonly string[]> {
+		const settings = await readSettings(this.#guild);
+		return settings.rolesPersist.find((entry) => entry.user === userId)?.roles ?? [];
+	}
 
-		// 1.0. Get the index for the entry:
-		const entries = trx.settings.rolesPersist;
-		const index = entries.findIndex((entry) => entry.user === userId);
-
-		// 2.0. If the entry does not exist:
-		if (index === -1) {
-			// 3.0.a. Proceed to create a new sticky roles entry:
-			const entry: StickyRole = { user: userId, roles: [roleId] };
-			await trx.write({ rolesPersist: entries.concat(entry) }).submit();
-
-			return entry.roles;
-		}
-
-		// 3. Get the entry and append the role:
-		const entry = entries[index];
-		const roles = [...this.addRole(roleId, entry.roles)];
-
-		// 4. Write the new roles to the settings:
-		await trx.write({ rolesPersist: entries.with(index, { user: entry.user, roles }) }).submit();
-
-		// 5. Return the updated roles:
-		return roles;
+	public async has(userId: string, roleId: string): Promise<boolean> {
+		const roles = await this.get(userId);
+		return roles.includes(roleId);
 	}
 
 	public async remove(userId: string, roleId: string): Promise<readonly string[]> {
@@ -102,31 +123,11 @@ export class StickyRoleManager {
 			trx.write({ rolesPersist: entries.toSpliced(index, 1) });
 		} else {
 			// 3.1.b. Otherwise patch it:
-			trx.write({ rolesPersist: entries.with(index, { user: entry.user, roles }) });
+			trx.write({ rolesPersist: entries.with(index, { roles, user: entry.user }) });
 		}
 		await trx.submit();
 
 		// 4.0. Return the updated roles:
-		return entry.roles;
-	}
-
-	public async clear(userId: string): Promise<readonly string[]> {
-		using trx = await writeSettingsTransaction(this.#guild);
-
-		// 1.0. Get the index for the entry:
-		const entries = trx.settings.rolesPersist;
-		const index = entries.findIndex((entry) => entry.user === userId);
-
-		// 1.1. If the index is negative, return empty array, as the entry does not exist:
-		if (index === -1) return [];
-
-		// 2.0. Read the previous entry:
-		const entry = entries[index];
-
-		// 3.0. Remove the entry from the settings:
-		await trx.write({ rolesPersist: entries.toSpliced(index, 1) }).submit();
-
-		// 4.0. Return the previous roles:
 		return entry.roles;
 	}
 
@@ -142,6 +143,13 @@ export class StickyRoleManager {
 		if (!emitted.has(roleId)) yield roleId;
 	}
 
+	private *cleanRoles(roleIds: readonly string[]) {
+		const { roles } = this.#guild;
+		for (const roleId of roleIds) {
+			if (roles.cache.has(roleId)) yield roleId;
+		}
+	}
+
 	private *removeRole(roleId: string, roleIds: readonly string[]) {
 		const emitted = new Set<string>();
 		for (const role of this.cleanRoles(roleIds)) {
@@ -150,13 +158,6 @@ export class StickyRoleManager {
 
 			emitted.add(role);
 			yield role;
-		}
-	}
-
-	private *cleanRoles(roleIds: readonly string[]) {
-		const { roles } = this.#guild;
-		for (const roleId of roleIds) {
-			if (roles.cache.has(roleId)) yield roleId;
 		}
 	}
 }

@@ -1,48 +1,48 @@
+import { container, UserError } from '@sapphire/framework';
+import { isNullishOrZero } from '@sapphire/utilities';
 import { ModerationData } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { ScheduleEntry } from '#lib/schedule';
 import { minutes } from '#utils/common';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
-import { container, UserError } from '@sapphire/framework';
-import { isNullishOrZero } from '@sapphire/utilities';
 import { Guild, Snowflake, User } from 'discord.js';
 
 export class ModerationEntry<Type extends TypeVariation = TypeVariation> {
-	public readonly id: number;
+	public channelId: null | string;
 
 	public readonly createdAt: number;
 
-	public duration!: number | null;
+	public duration!: null | number;
 
 	public readonly extraData: ExtraDataTypes[Type];
 
 	public readonly guild: Guild;
 
-	public readonly moderatorId: Snowflake;
+	public readonly id: number;
 
-	public readonly userId: Snowflake;
+	public imageURL: null | string;
 
-	public reason: string | null;
+	public logChannelId: null | string;
 
-	public imageURL: string | null;
-
-	public refrenceId: number | null;
-
-	public channelId: string | null;
-
-	public logChannelId: string | null;
-
-	public logMessageId: string | null;
-
-	public readonly type: Type;
+	public logMessageId: null | string;
 
 	public metadata: TypeMetadata;
 
-	#moderator: User | null;
+	public readonly moderatorId: Snowflake;
 
-	#user: User | null;
+	public reason: null | string;
+
+	public refrenceId: null | number;
+
+	public readonly type: Type;
+
+	public readonly userId: Snowflake;
 
 	#cacheExpiresTimeout = Date.now() + minutes(15);
+
+	#moderator: null | User;
+
+	#user: null | User;
 
 	public constructor(data: ModerationEntry.Data<Type>) {
 		this.id = data.id;
@@ -85,6 +85,52 @@ export class ModerationEntry<Type extends TypeVariation = TypeVariation> {
 	}
 
 	/**
+	 * Fetches the moderator who created the moderation entry.
+	 */
+	public async fetchModerator() {
+		return (this.#moderator ??= await container.client.users.fetch(this.moderatorId));
+	}
+
+	/**
+	 * Fetches the target user of the moderation entry.
+	 */
+	public async fetchUser() {
+		return (this.#user ??= await container.client.users.fetch(this.userId));
+	}
+
+	/**
+	 * Checks if the entry is archived.
+	 */
+	public isArchived() {
+		return (this.metadata & TypeMetadata.Archived) === TypeMetadata.Archived;
+	}
+
+	/**
+	 * Checks if the entry is completed.
+	 */
+	public isCompleted() {
+		return (this.metadata & TypeMetadata.Completed) === TypeMetadata.Completed;
+	}
+
+	public isNotUserDependant() {
+		return [TypeVariation.Lock, TypeVariation.Prune].includes(this.type);
+	}
+
+	/**
+	 * Checks if the entry is temporary.
+	 */
+	public isTemporary() {
+		return (this.metadata & TypeMetadata.Temporary) === TypeMetadata.Temporary;
+	}
+
+	/**
+	 * Checks if the entry is an undo action.
+	 */
+	public isUndo() {
+		return (this.metadata & TypeMetadata.Undo) === TypeMetadata.Undo;
+	}
+
+	/**
 	 * Updates the moderation entry with the given data.
 	 *
 	 * @remarks
@@ -107,21 +153,78 @@ export class ModerationEntry<Type extends TypeVariation = TypeVariation> {
 	}
 
 	/**
-	 * The scheduled task for this moderation entry.
+	 * Returns a clone of the data for this moderation manager entry.
 	 */
-	public get task() {
-		return container.schedule.queue.find((task) => this.#isMatchingTask(task)) ?? null;
+	public toData(): ModerationEntry.Data<Type> {
+		return {
+			channelId: this.channelId,
+			createdAt: this.createdAt,
+			duration: this.duration,
+			extraData: this.extraData,
+			guild: this.guild,
+			id: this.id,
+			imageURL: this.imageURL,
+			logChannelId: this.logChannelId,
+			logMessageId: this.logMessageId,
+			metadata: this.metadata,
+			moderator: this.moderatorId,
+			reason: this.reason,
+			refrenceId: this.refrenceId,
+			type: this.type,
+			user: this.userId
+		};
+	}
+
+	public toJSON() {
+		return {
+			channelId: this.channelId,
+			createdAt: this.createdAt,
+			duration: this.duration,
+			extraData: this.extraData,
+			guildId: this.guild.id,
+			id: this.id,
+			imageURL: this.imageURL,
+			logChannelId: this.logChannelId,
+			logMessageId: this.logMessageId,
+			metadata: this.metadata,
+			moderatorId: this.moderatorId,
+			reason: this.reason,
+			refrenceId: this.refrenceId,
+			type: this.type,
+			userId: this.userId
+		};
+	}
+
+	#isMatchingTask(task: ScheduleEntry) {
+		return (
+			task.data !== null &&
+			(task.data as ScheduleEntry.SharedModerationTaskData<TypeVariation.Ban>).caseId === this.id &&
+			(task.data as ScheduleEntry.SharedModerationTaskData<TypeVariation.Ban>).guildId === this.guild.id
+		);
+	}
+
+	#setDuration(duration: bigint | null | number) {
+		if (typeof duration === 'bigint') duration = Number(duration);
+		if (isNullishOrZero(duration)) {
+			this.duration = null;
+			this.metadata &= ~TypeMetadata.Temporary;
+		} else {
+			this.duration = duration;
+			this.metadata |= TypeMetadata.Temporary;
+		}
 	}
 
 	/**
-	 * The timestamp when the moderation entry expires, if any.
+	 * Whether the moderation entry is cache expired, after 15 minutes.
 	 *
 	 * @remarks
 	 *
-	 * If {@linkcode duration} is `null` or `0`, this property will be `null`.
+	 * This property is used to determine if the entry should be removed from
+	 * the cache, and will be updated to extend the cache life when
+	 * {@linkcode patch} is called.
 	 */
-	public get expiresTimestamp() {
-		return isNullishOrZero(this.duration) ? null : this.createdAt + this.duration;
+	public get cacheExpired() {
+		return this.#cacheExpiresTimeout < Date.now();
 	}
 
 	/**
@@ -138,203 +241,100 @@ export class ModerationEntry<Type extends TypeVariation = TypeVariation> {
 	}
 
 	/**
-	 * Whether the moderation entry is cache expired, after 15 minutes.
+	 * The timestamp when the moderation entry expires, if any.
 	 *
 	 * @remarks
 	 *
-	 * This property is used to determine if the entry should be removed from
-	 * the cache, and will be updated to extend the cache life when
-	 * {@linkcode patch} is called.
+	 * If {@linkcode duration} is `null` or `0`, this property will be `null`.
 	 */
-	public get cacheExpired() {
-		return this.#cacheExpiresTimeout < Date.now();
-	}
-
-	public isNotUserDependant() {
-		return [TypeVariation.Prune, TypeVariation.Lock].includes(this.type);
+	public get expiresTimestamp() {
+		return isNullishOrZero(this.duration) ? null : this.createdAt + this.duration;
 	}
 
 	/**
-	 * Checks if the entry is an undo action.
+	 * The scheduled task for this moderation entry.
 	 */
-	public isUndo() {
-		return (this.metadata & TypeMetadata.Undo) === TypeMetadata.Undo;
-	}
-
-	/**
-	 * Checks if the entry is temporary.
-	 */
-	public isTemporary() {
-		return (this.metadata & TypeMetadata.Temporary) === TypeMetadata.Temporary;
-	}
-
-	/**
-	 * Checks if the entry is archived.
-	 */
-	public isArchived() {
-		return (this.metadata & TypeMetadata.Archived) === TypeMetadata.Archived;
-	}
-
-	/**
-	 * Checks if the entry is completed.
-	 */
-	public isCompleted() {
-		return (this.metadata & TypeMetadata.Completed) === TypeMetadata.Completed;
-	}
-
-	/**
-	 * Fetches the moderator who created the moderation entry.
-	 */
-	public async fetchModerator() {
-		return (this.#moderator ??= await container.client.users.fetch(this.moderatorId));
-	}
-
-	/**
-	 * Fetches the target user of the moderation entry.
-	 */
-	public async fetchUser() {
-		return (this.#user ??= await container.client.users.fetch(this.userId));
-	}
-
-	/**
-	 * Returns a clone of the data for this moderation manager entry.
-	 */
-	public toData(): ModerationEntry.Data<Type> {
-		return {
-			id: this.id,
-			createdAt: this.createdAt,
-			duration: this.duration,
-			extraData: this.extraData,
-			guild: this.guild,
-			moderator: this.moderatorId,
-			user: this.userId,
-			reason: this.reason,
-			imageURL: this.imageURL,
-			refrenceId: this.refrenceId,
-			channelId: this.channelId,
-			logChannelId: this.logChannelId,
-			logMessageId: this.logMessageId,
-			type: this.type,
-			metadata: this.metadata
-		};
-	}
-
-	public toJSON() {
-		return {
-			id: this.id,
-			createdAt: this.createdAt,
-			duration: this.duration,
-			extraData: this.extraData,
-			guildId: this.guild.id,
-			moderatorId: this.moderatorId,
-			userId: this.userId,
-			reason: this.reason,
-			imageURL: this.imageURL,
-			refrenceId: this.refrenceId,
-			channelId: this.channelId,
-			logChannelId: this.logChannelId,
-			logMessageId: this.logMessageId,
-			type: this.type,
-			metadata: this.metadata
-		};
-	}
-
-	#isMatchingTask(task: ScheduleEntry) {
-		return (
-			task.data !== null &&
-			(task.data as ScheduleEntry.SharedModerationTaskData<TypeVariation.Ban>).caseId === this.id &&
-			(task.data as ScheduleEntry.SharedModerationTaskData<TypeVariation.Ban>).guildId === this.guild.id
-		);
-	}
-
-	#setDuration(duration: bigint | number | null) {
-		if (typeof duration === 'bigint') duration = Number(duration);
-		if (isNullishOrZero(duration)) {
-			this.duration = null;
-			this.metadata &= ~TypeMetadata.Temporary;
-		} else {
-			this.duration = duration;
-			this.metadata |= TypeMetadata.Temporary;
-		}
+	public get task() {
+		return container.schedule.queue.find((task) => this.#isMatchingTask(task)) ?? null;
 	}
 
 	public static from(guild: Guild, entity: ModerationData) {
 		if (guild.id !== entity.guildId) {
-			throw new UserError({ identifier: LanguageKeys.Arguments.CaseNotInThisGuild, context: { parameter: entity.caseId } });
+			throw new UserError({ context: { parameter: entity.caseId }, identifier: LanguageKeys.Arguments.CaseNotInThisGuild });
 		}
 
 		return new this({
-			id: entity.caseId,
+			channelId: entity.channelId,
 			createdAt: entity.createdAt ? entity.createdAt.getTime() : Date.now(),
 			duration: entity.duration,
 			extraData: entity.extraData as any,
 			guild,
-			moderator: entity.moderatorId,
-			user: entity.userId!,
-			reason: entity.reason,
+			id: entity.caseId,
 			imageURL: entity.imageUrl,
-			refrenceId: entity.refrenceId,
-			channelId: entity.channelId,
 			logChannelId: entity.logChannelId,
 			logMessageId: entity.logMessageId,
+			metadata: entity.metadata,
+			moderator: entity.moderatorId,
+			reason: entity.reason,
+			refrenceId: entity.refrenceId,
 			type: entity.type,
-			metadata: entity.metadata
+			user: entity.userId!
 		});
 	}
 }
 
 export namespace ModerationEntry {
+	export type CreateData<Type extends TypeVariation = TypeVariation> = MakeOptional<
+		Omit<Data<Type>, 'createdAt' | 'guild' | 'id'>,
+		'channelId' | 'duration' | 'extraData' | 'imageURL' | 'logChannelId' | 'logMessageId' | 'metadata' | 'moderator' | 'reason' | 'refrenceId'
+	>;
+
 	export interface Data<Type extends TypeVariation = TypeVariation> {
-		id: number;
+		channelId: null | string;
 		createdAt: number;
-		duration: bigint | number | null;
+		duration: bigint | null | number;
 		extraData: ExtraData<Type>;
 		guild: Guild;
-		moderator: User | Snowflake;
-		user: User | Snowflake;
-		reason: string | null;
-		imageURL: string | null;
-		refrenceId: number | null;
-		channelId: string | null;
-		logChannelId: string | null;
-		logMessageId: string | null;
-		type: Type;
+		id: number;
+		imageURL: null | string;
+		logChannelId: null | string;
+		logMessageId: null | string;
 		metadata: TypeMetadata;
+		moderator: Snowflake | User;
+		reason: null | string;
+		refrenceId: null | number;
+		type: Type;
+		user: Snowflake | User;
 	}
-
-	export type CreateData<Type extends TypeVariation = TypeVariation> = MakeOptional<
-		Omit<Data<Type>, 'id' | 'guild' | 'createdAt'>,
-		'duration' | 'imageURL' | 'extraData' | 'metadata' | 'moderator' | 'reason' | 'refrenceId' | 'channelId' | 'logChannelId' | 'logMessageId'
-	>;
-	export type UpdateData<Type extends TypeVariation = TypeVariation> = Partial<
-		Omit<Data<Type>, 'id' | 'extraData' | 'moderator' | 'user' | 'type' | 'guild' | 'channelId'>
-	>;
-
 	export type ExtraData<Type extends TypeVariation = TypeVariation> = ExtraDataTypes[Type];
-}
 
-type MakeOptional<Type, OptionalKeys extends keyof Type> = Omit<Type, OptionalKeys> & Partial<Pick<Type, OptionalKeys>>;
+	export type UpdateData<Type extends TypeVariation = TypeVariation> = Partial<
+		Omit<Data<Type>, 'channelId' | 'extraData' | 'guild' | 'id' | 'moderator' | 'type' | 'user'>
+	>;
+}
 
 interface ExtraDataTypes {
 	[TypeVariation.Ban]: null;
+	[TypeVariation.Dehoist]: { oldName: null | string };
 	[TypeVariation.Kick]: null;
+	[TypeVariation.Lock]: null;
 	[TypeVariation.Mute]: Snowflake[];
 	[TypeVariation.Prune]: { count: number };
-	[TypeVariation.Softban]: null;
-	[TypeVariation.Warning]: { id: number };
-	[TypeVariation.Lock]: null;
-	[TypeVariation.VoiceMute]: null;
-	[TypeVariation.VoiceDeafen]: null;
-	[TypeVariation.VoiceDisconnect]: null;
-	[TypeVariation.SetNickname]: { oldName: string | null };
-	[TypeVariation.RestrictedReaction]: null;
-	[TypeVariation.RestrictedEmbed]: null;
+	[TypeVariation.RaidBan]: { userCount: number };
 	[TypeVariation.RestrictedAttachment]: null;
+	[TypeVariation.RestrictedEmbed]: null;
+	[TypeVariation.RestrictedEmoji]: null;
+	[TypeVariation.RestrictedReaction]: null;
 	[TypeVariation.RestrictedVoice]: null;
 	[TypeVariation.RoleAdd]: { role: Snowflake };
 	[TypeVariation.RoleRemove]: { role: Snowflake };
-	[TypeVariation.RestrictedEmoji]: null;
+	[TypeVariation.SetNickname]: { oldName: null | string };
+	[TypeVariation.Softban]: null;
 	[TypeVariation.Timeout]: null;
-	[TypeVariation.Dehoist]: { oldName: string | null };
-	[TypeVariation.RaidBan]: { userCount: number };
+	[TypeVariation.VoiceDeafen]: null;
+	[TypeVariation.VoiceDisconnect]: null;
+	[TypeVariation.VoiceMute]: null;
+	[TypeVariation.Warning]: { id: number };
 }
+
+type MakeOptional<Type, OptionalKeys extends keyof Type> = Omit<Type, OptionalKeys> & Partial<Pick<Type, OptionalKeys>>;

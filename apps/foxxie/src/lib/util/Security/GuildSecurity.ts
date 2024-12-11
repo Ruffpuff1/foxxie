@@ -1,5 +1,6 @@
-import { LockdownManager } from '#lib/Structures/managers/LockdownManager';
 import type { Guild } from 'discord.js';
+
+import { LockdownManager } from '#lib/Structures/managers/LockdownManager';
 
 /**
  * @version 3.0.0

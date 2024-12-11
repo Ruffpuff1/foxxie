@@ -1,16 +1,40 @@
-import { AccurateTimeout } from '#utils/Timers';
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
+
+import { AccurateTimeout } from '#utils/Timers';
 import { Collection, type Role } from 'discord.js';
 
 export class LockdownManager extends Collection<string, Collection<string, LockdownManager.Entry>> {
+	public acquire(channel: LockdownManager.Channel) {
+		let collection = this.get(channel.id);
+		if (collection === undefined) {
+			collection = new Collection();
+			this.set(channel.id, collection);
+		}
+
+		return collection;
+	}
+
 	public add(role: Role, channel: LockdownManager.Channel, value: LockdownManager.Entry) {
 		const roles = this.acquire(channel);
 		roles.get(role.id)?.timeout?.stop();
 		roles.set(role.id, value);
 	}
 
+	public override delete(id: string) {
+		const roles = this.get(id);
+		if (roles === undefined) return false;
+
+		for (const role of roles.values()) {
+			role.timeout?.stop();
+		}
+
+		return super.delete(id);
+	}
+
 	public remove(role: Role): this;
+
 	public remove(role: Role, channel: LockdownManager.Channel): boolean;
+
 	public remove(role: Role, channel?: LockdownManager.Channel) {
 		if (channel === undefined) return this.removeRole(role);
 
@@ -28,27 +52,6 @@ export class LockdownManager extends Collection<string, Collection<string, Lockd
 		}
 
 		return true;
-	}
-
-	public override delete(id: string) {
-		const roles = this.get(id);
-		if (roles === undefined) return false;
-
-		for (const role of roles.values()) {
-			role.timeout?.stop();
-		}
-
-		return super.delete(id);
-	}
-
-	public acquire(channel: LockdownManager.Channel) {
-		let collection = this.get(channel.id);
-		if (collection === undefined) {
-			collection = new Collection();
-			this.set(channel.id, collection);
-		}
-
-		return collection;
 	}
 
 	private removeRole(role: Role) {

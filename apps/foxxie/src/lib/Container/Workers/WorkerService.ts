@@ -1,5 +1,5 @@
 import { cpus } from 'node:os';
-import { WorkerHandler } from './WorkerHandler.js';
+
 import type {
 	HighlightTypeEnum,
 	IncomingPayload,
@@ -8,6 +8,8 @@ import type {
 	RunHighlightPayload,
 	RunWordFilterPayload
 } from './types.js';
+
+import { WorkerHandler } from './WorkerHandler.js';
 
 export class WorkerService {
 	public readonly workers: WorkerHandler[] = [];
@@ -18,15 +20,15 @@ export class WorkerService {
 		}
 	}
 
-	public async start() {
-		await Promise.all(this.workers.map((worker) => worker.start()));
+	public async send(data: Omit<RunWordFilterPayload, 'id'>, delay?: null | number): Promise<OutgoingWordFilterPayload>;
+
+	public async send(data: Omit<RunHighlightPayload<HighlightTypeEnum>, 'id'>, delay?: null | number): Promise<OutgoingHighlightPayload>;
+	public async send(data: Omit<IncomingPayload, 'id'>, delay?: null | number) {
+		return this.getWorker().send(data, delay);
 	}
 
-	public async send(data: Omit<RunWordFilterPayload, 'id'>, delay?: number | null): Promise<OutgoingWordFilterPayload>;
-	public async send(data: Omit<RunHighlightPayload<HighlightTypeEnum>, 'id'>, delay?: number | null): Promise<OutgoingHighlightPayload>;
-
-	public async send(data: Omit<IncomingPayload, 'id'>, delay?: number | null) {
-		return this.getWorker().send(data, delay);
+	public async start() {
+		await Promise.all(this.workers.map((worker) => worker.start()));
 	}
 
 	private getWorker() {

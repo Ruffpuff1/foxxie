@@ -1,5 +1,5 @@
-import { clientOwners } from '#root/config';
 import { Precondition } from '@sapphire/framework';
+import { clientOwners } from '#root/config';
 import { Message } from 'discord.js';
 
 export class UserPrecondition extends Precondition {

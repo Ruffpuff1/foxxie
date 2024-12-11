@@ -1,7 +1,7 @@
+import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 import { LanguageKeys } from '#lib/i18n';
 import { Schedules } from '#lib/util/constants';
 import { fetchTasks, MappedTask } from '#lib/util/util';
-import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
 
 export default class UserArgument extends Argument<MappedTask<Schedules.Reminder>> {
 	public async run(parameter: string, { userId }: ArgumentContext): Promise<ArgumentResult<MappedTask<Schedules.Reminder>>> {
@@ -10,9 +10,9 @@ export default class UserArgument extends Argument<MappedTask<Schedules.Reminder
 
 		if (!task)
 			return this.error({
-				parameter,
+				context: { parameter },
 				identifier: LanguageKeys.Arguments.Reminder,
-				context: { parameter }
+				parameter
 			});
 
 		return this.ok(task);

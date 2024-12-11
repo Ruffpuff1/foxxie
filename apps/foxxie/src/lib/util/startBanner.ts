@@ -22,33 +22,20 @@ export const ansiRegExp = new RegExp(
 	'g'
 );
 
-export function escapedLength(line: string) {
-	return line.replaceAll(ansiRegExp, '').length;
-}
-
-export function generateLineData(lines: readonly string[]): readonly LineData[] {
-	return lines.map((line) => ({ line, length: escapedLength(line) }));
-}
-
-export interface LineData {
-	line: string;
-	length: number;
-}
-
-export function generateFrameData(lines?: readonly string[]): FrameData {
-	if (!lines?.length) return { length: 0, lines: [] };
-
-	const entries = generateLineData(lines);
-	const length = entries.reduce((prev, entry) => Math.max(prev, entry.length), 0);
-	return {
-		length,
-		lines: entries.map((entry) => `${entry.line}${' '.repeat(length - entry.length)}`)
-	};
+export interface BannerOptions {
+	extra?: readonly string[];
+	logo?: readonly string[];
+	name?: readonly string[];
 }
 
 export interface FrameData {
 	length: number;
 	lines: readonly string[];
+}
+
+export interface LineData {
+	length: number;
+	line: string;
 }
 
 export function createBanner(options: BannerOptions) {
@@ -74,7 +61,7 @@ export function createBanner(options: BannerOptions) {
 	const logoPadding = ' '.repeat(logoFrame.length);
 
 	const lines: string[] = [];
-	for (let i = 0, nl = 0, el = 0; i < fullHeight; ++i) {
+	for (let el = 0, i = 0, nl = 0; i < fullHeight; ++i) {
 		const left = i < logoHeight ? logoFrame.lines[i] : logoPadding;
 		const right = nl < nameHeight ? options.name![nl++] : el < extraHeight ? options.extra![el++] : '';
 		lines.push(right.length === 0 ? left.trimEnd() : `${left} ${right}`);
@@ -83,8 +70,21 @@ export function createBanner(options: BannerOptions) {
 	return lines.join('\n');
 }
 
-export interface BannerOptions {
-	logo?: readonly string[];
-	name?: readonly string[];
-	extra?: readonly string[];
+export function escapedLength(line: string) {
+	return line.replaceAll(ansiRegExp, '').length;
+}
+
+export function generateFrameData(lines?: readonly string[]): FrameData {
+	if (!lines?.length) return { length: 0, lines: [] };
+
+	const entries = generateLineData(lines);
+	const length = entries.reduce((prev, entry) => Math.max(prev, entry.length), 0);
+	return {
+		length,
+		lines: entries.map((entry) => `${entry.line}${' '.repeat(length - entry.length)}`)
+	};
+}
+
+export function generateLineData(lines: readonly string[]): readonly LineData[] {
+	return lines.map((line) => ({ length: escapedLength(line), line }));
 }

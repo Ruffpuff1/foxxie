@@ -4,9 +4,9 @@ import { TypeVariation } from '#utils/moderationConstants';
 export class ModerationActionPrune extends ModerationAction<number, TypeVariation.Prune> {
 	public constructor() {
 		super({
-			type: TypeVariation.Prune,
 			isUndoActionAvailable: false,
-			logPrefix: 'Moderation => Prune'
+			logPrefix: 'Moderation => Prune',
+			type: TypeVariation.Prune
 		});
 	}
 }

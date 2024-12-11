@@ -1,14 +1,14 @@
-import { getSupportedUserLanguageT, LanguageKeys, translate } from '#lib/i18n';
-import { FoxxieArgs, FoxxieCommand } from '#lib/structures';
-import { EnvKeys, FoxxieEvents } from '#lib/types';
-import { clientOwners } from '#root/config';
-import { getCodeStyle, getLogPrefix, sendTemporaryMessage } from '#utils/functions';
 import { ArgumentError, Command, container, MessageCommand, MessageCommandErrorPayload, ResultError, UserError } from '@sapphire/framework';
 import { fetchT, type TFunction } from '@sapphire/plugin-i18next';
 import { ChatInputSubcommandErrorPayload, MessageSubcommandErrorPayload, Subcommand } from '@sapphire/plugin-subcommands';
 import { cast, cutText } from '@sapphire/utilities';
 import { captureException } from '@sentry/node';
 import { envParseBoolean, envParseString } from '@skyra/env-utilities';
+import { getSupportedUserLanguageT, LanguageKeys, translate } from '#lib/i18n';
+import { FoxxieArgs, FoxxieCommand } from '#lib/structures';
+import { EnvKeys, FoxxieEvents } from '#lib/types';
+import { clientOwners } from '#root/config';
+import { getCodeStyle, getLogPrefix, sendTemporaryMessage } from '#utils/functions';
 import { codeBlock, DiscordAPIError, HTTPError, Message, RESTJSONErrorCodes, Routes, Snowflake } from 'discord.js';
 import { exists } from 'i18next';
 
@@ -16,32 +16,37 @@ const Root = LanguageKeys.Listeners.Errors;
 
 export function stringifyError(t: TFunction, error: unknown): string {
 	switch (typeof error) {
-		case 'string':
-			return stringifyErrorString(t, error);
-		case 'number':
 		case 'bigint':
 		case 'boolean':
-		case 'undefined':
-		case 'symbol':
 		case 'function':
+		case 'number':
+		case 'symbol':
+		case 'undefined':
 			return String(error);
 		case 'object':
 			return stringifyErrorObject(t, error);
+		case 'string':
+			return stringifyErrorString(t, error);
 	}
+}
+
+function stringifyErrorObject(t: TFunction, error: null | object): string {
+	return error instanceof Error ? stringifyErrorException(t, error) : String(error);
 }
 
 function stringifyErrorString(t: TFunction, error: string): string {
 	return exists(error) ? (t(error) as string) : error;
 }
 
-function stringifyErrorObject(t: TFunction, error: object | null): string {
-	return error instanceof Error ? stringifyErrorException(t, error) : String(error);
-}
-
 const isSuppressedError =
 	typeof SuppressedError === 'undefined'
 		? (error: Error): error is SuppressedError => 'error' in error && 'suppressed' in error
 		: (error: Error): error is SuppressedError => error instanceof SuppressedError;
+
+function stringifyDiscordAPIError(t: TFunction, error: DiscordAPIError) {
+	const key = getDiscordError(Number(error.code));
+	return t(key!);
+}
 
 function stringifyErrorException(t: TFunction, error: Error): string {
 	if (error.name === 'AbortError') return t(LanguageKeys.Listeners.Errors.Abort);
@@ -54,11 +59,6 @@ function stringifyErrorException(t: TFunction, error: Error): string {
 	return error.message;
 }
 
-function stringifyDiscordAPIError(t: TFunction, error: DiscordAPIError) {
-	const key = getDiscordError(Number(error.code));
-	return t(key!);
-}
-
 function stringifyHTTPError(t: TFunction, error: HTTPError) {
 	const key = getHttpError(error.status);
 	return t(key!);
@@ -66,8 +66,23 @@ function stringifyHTTPError(t: TFunction, error: HTTPError) {
 
 const ignoredDiscordCodes = [RESTJSONErrorCodes.UnknownChannel, RESTJSONErrorCodes.UnknownMessage];
 
+export async function handleChatInputCommandError(error: unknown, payload: ChatInputSubcommandErrorPayload) {
+	const { interaction } = payload;
+	const t = getSupportedUserLanguageT(interaction);
+	const resolved = flattenError(payload.command, error);
+	const content = resolved ? resolveError(t, resolved) : generateUnexpectedErrorMessage(interaction.user.id, payload.command, t, error);
+
+	try {
+		if (interaction.replied) await interaction.followUp({ content, ephemeral: true });
+		else if (interaction.deferred) await interaction.editReply({ content });
+		else await interaction.reply({ content, ephemeral: true });
+	} catch (e) {
+		console.log(e);
+	}
+}
+
 export async function handleMessageCommandError(error: unknown, payload: MessageCommandErrorPayload | MessageSubcommandErrorPayload) {
-	const { message, command } = payload;
+	const { command, message } = payload;
 	let t: TFunction;
 	let parameters: string;
 	if ('args' in payload) {
@@ -110,99 +125,11 @@ export async function handleMessageCommandError(error: unknown, payload: Message
 	return undefined;
 }
 
-function messageIsSilencedError(message: Message, error: DiscordAPIError) {
-	return ignoredDiscordCodes.includes(error.code as number) || messageIsDirectMessageReplyAfterBlock(message, error);
-}
-
-function messageIsDirectMessageReplyAfterBlock(message: Message, error: DiscordAPIError) {
-	// When sending a message to a user who has blocked the bot, Discord replies with 50007 "Cannot send messages to this user":
-	if (error.code !== RESTJSONErrorCodes.CannotSendMessagesToThisUser) return false;
-
-	// If it's not a Direct Message, return false:
-	if (message.guild !== null) return false;
-
-	// If the query was made to the message's channel, then it was a DM response:
-	return error.url === Routes.channelMessages(message.channel.id);
-}
-
-function messageStringError(message: Message, error: string) {
-	return messageAlert(message, error);
-}
-
-function messageArgumentError(message: Message, t: TFunction, error: ArgumentError<unknown>) {
-	const argument = error.argument.name;
-	const identifier = translate(error.identifier);
-	const parameter = error.parameter.replaceAll('`', '῾');
-	const prefix = Reflect.get(Object(error.context), 'prefix') || envParseString(EnvKeys.ClientPrefix);
-	const command = Reflect.get(Object(error.context), 'command') as FoxxieCommand | undefined;
-	const commandName = command ? command.name : null;
-
-	return messageAlert(
-		message,
-		t(identifier, {
-			...error,
-			...(error.context as object),
-			argument,
-			parameter: cutText(parameter, 50),
-			prefix,
-			context: commandName
-		})
-	);
-}
-
-function messageUserError(message: Message, t: TFunction, error: UserError) {
-	// `context: { silent: true }` should make UserError silent:
-	// Use cases for this are for example permissions error when running the `eval` command.
-	if (Reflect.get(Object(error.context), 'silent')) return;
-
-	const prefix = Reflect.get(Object(error.context), 'prefix') || envParseString(EnvKeys.ClientPrefix);
-	const command = Reflect.get(Object(error.context), 'command') as FoxxieCommand | undefined;
-	const commandName = command ? command.name : null;
-	const identifier = translate(error.identifier);
-	const content = t(identifier, { ...Object(error.context), prefix, context: commandName }) as string;
-	return messageAlert(message, content);
-}
-
-function generateUnexpectedErrorMessage(userId: Snowflake, command: MessageCommand | Subcommand, t: TFunction, error: unknown) {
-	if (clientOwners.includes(userId)) return codeBlock('js', String(error));
-	if (!envParseBoolean(EnvKeys.SentryEnabled)) return t(LanguageKeys.Listeners.Errors.Unexpected);
-
-	try {
-		const report = captureException(error, { tags: { command: command.name } });
-		return t(LanguageKeys.Listeners.Errors.UnexpectedWithCode, { report });
-	} catch (error) {
-		return t(LanguageKeys.Listeners.Errors.Unexpected);
-	}
-}
-
-function messageAlert(message: Message, content: string) {
-	return sendTemporaryMessage(message, { content, allowedMentions: { users: [message.author.id], roles: [] } });
-}
-
-function messageGetWarnError(message: Message) {
-	return `ERROR: /${message.guild ? `${message.guild.id}/${message.channel.id}` : `DM/${message.author.id}`}/${message.id}`;
-}
-
-export async function handleChatInputCommandError(error: unknown, payload: ChatInputSubcommandErrorPayload) {
-	const { interaction } = payload;
-	const t = getSupportedUserLanguageT(interaction);
-	const resolved = flattenError(payload.command, error);
-	const content = resolved ? resolveError(t, resolved) : generateUnexpectedErrorMessage(interaction.user.id, payload.command, t, error);
-
-	try {
-		if (interaction.replied) await interaction.followUp({ content, ephemeral: true });
-		else if (interaction.deferred) await interaction.editReply({ content });
-		else await interaction.reply({ content, ephemeral: true });
-	} catch (e) {
-		console.log(e);
-	}
-}
-
-export function resolveError(t: TFunction, error: UserError | string) {
+export function resolveError(t: TFunction, error: string | UserError) {
 	return typeof error === 'string' ? resolveStringError(t, error) : resolveUserError(t, error);
 }
 
-function flattenError(command: Command, error: unknown): UserError | string | null {
+function flattenError(command: Command, error: unknown): null | string | UserError {
 	if (typeof error === 'string') return error;
 
 	if (!(error instanceof Error)) {
@@ -231,22 +158,22 @@ function flattenError(command: Command, error: unknown): UserError | string | nu
 	return null;
 }
 
-function resolveStringError(t: TFunction, error: string) {
-	return exists(error) ? t(error) : error;
-}
+function generateUnexpectedErrorMessage(userId: Snowflake, command: MessageCommand | Subcommand, t: TFunction, error: unknown) {
+	if (clientOwners.includes(userId)) return codeBlock('js', String(error));
+	if (!envParseBoolean(EnvKeys.SentryEnabled)) return t(LanguageKeys.Listeners.Errors.Unexpected);
 
-function resolveUserError(t: TFunction, error: UserError) {
-	const identifier = translate(error.identifier);
-	return t(
-		identifier,
-		error instanceof ArgumentError
-			? { ...error, ...(error.context as object), argument: error.argument.name, parameter: cutText(error.parameter.replaceAll('`', '῾'), 50) }
-			: (error.context as any)
-	) as string;
+	try {
+		const report = captureException(error, { tags: { command: command.name } });
+		return t(LanguageKeys.Listeners.Errors.UnexpectedWithCode, { report });
+	} catch (error) {
+		return t(LanguageKeys.Listeners.Errors.Unexpected);
+	}
 }
 
 function getDiscordError(code: RESTJSONErrorCodes) {
 	switch (code) {
+		case RESTJSONErrorCodes.MissingAccess:
+			return Root.GenericMissingAccess;
 		case RESTJSONErrorCodes.UnknownChannel:
 			return Root.GenericUnknownChannel;
 		case RESTJSONErrorCodes.UnknownGuild:
@@ -257,8 +184,6 @@ function getDiscordError(code: RESTJSONErrorCodes) {
 			return Root.GenericUnknownMessage;
 		case RESTJSONErrorCodes.UnknownRole:
 			return Root.GenericUnknownRole;
-		case RESTJSONErrorCodes.MissingAccess:
-			return Root.GenericMissingAccess;
 		default:
 			return null;
 	}
@@ -276,4 +201,79 @@ function getHttpError(status: number) {
 		default:
 			return null;
 	}
+}
+
+function messageAlert(message: Message, content: string) {
+	return sendTemporaryMessage(message, { allowedMentions: { roles: [], users: [message.author.id] }, content });
+}
+
+function messageArgumentError(message: Message, t: TFunction, error: ArgumentError<unknown>) {
+	const argument = error.argument.name;
+	const identifier = translate(error.identifier);
+	const parameter = error.parameter.replaceAll('`', '῾');
+	const prefix = Reflect.get(Object(error.context), 'prefix') || envParseString(EnvKeys.ClientPrefix);
+	const command = Reflect.get(Object(error.context), 'command') as FoxxieCommand | undefined;
+	const commandName = command ? command.name : null;
+
+	return messageAlert(
+		message,
+		t(identifier, {
+			...error,
+			...(error.context as object),
+			argument,
+			context: commandName,
+			parameter: cutText(parameter, 50),
+			prefix
+		})
+	);
+}
+
+function messageGetWarnError(message: Message) {
+	return `ERROR: /${message.guild ? `${message.guild.id}/${message.channel.id}` : `DM/${message.author.id}`}/${message.id}`;
+}
+
+function messageIsDirectMessageReplyAfterBlock(message: Message, error: DiscordAPIError) {
+	// When sending a message to a user who has blocked the bot, Discord replies with 50007 "Cannot send messages to this user":
+	if (error.code !== RESTJSONErrorCodes.CannotSendMessagesToThisUser) return false;
+
+	// If it's not a Direct Message, return false:
+	if (message.guild !== null) return false;
+
+	// If the query was made to the message's channel, then it was a DM response:
+	return error.url === Routes.channelMessages(message.channel.id);
+}
+
+function messageIsSilencedError(message: Message, error: DiscordAPIError) {
+	return ignoredDiscordCodes.includes(error.code as number) || messageIsDirectMessageReplyAfterBlock(message, error);
+}
+
+function messageStringError(message: Message, error: string) {
+	return messageAlert(message, error);
+}
+
+function messageUserError(message: Message, t: TFunction, error: UserError) {
+	// `context: { silent: true }` should make UserError silent:
+	// Use cases for this are for example permissions error when running the `eval` command.
+	if (Reflect.get(Object(error.context), 'silent')) return;
+
+	const prefix = Reflect.get(Object(error.context), 'prefix') || envParseString(EnvKeys.ClientPrefix);
+	const command = Reflect.get(Object(error.context), 'command') as FoxxieCommand | undefined;
+	const commandName = command ? command.name : null;
+	const identifier = translate(error.identifier);
+	const content = t(identifier, { ...Object(error.context), context: commandName, prefix }) as string;
+	return messageAlert(message, content);
+}
+
+function resolveStringError(t: TFunction, error: string) {
+	return exists(error) ? t(error) : error;
+}
+
+function resolveUserError(t: TFunction, error: UserError) {
+	const identifier = translate(error.identifier);
+	return t(
+		identifier,
+		error instanceof ArgumentError
+			? { ...error, ...(error.context as object), argument: error.argument.name, parameter: cutText(error.parameter.replaceAll('`', '῾'), 50) }
+			: (error.context as any)
+	) as string;
 }

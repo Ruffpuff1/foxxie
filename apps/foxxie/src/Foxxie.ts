@@ -1,11 +1,10 @@
 import '#lib/setup';
-
-import { config } from '#lib/Database/config';
-import FoxxieClient from '#lib/FoxxieClient';
-import { EnvKeys } from '#lib/types';
 import { container } from '@sapphire/framework';
 import { init } from '@sentry/node';
 import { envParseBoolean } from '@skyra/env-utilities';
+import { config } from '#lib/Database/config';
+import FoxxieClient from '#lib/FoxxieClient';
+import { EnvKeys } from '#lib/types';
 
 const client = new FoxxieClient();
 

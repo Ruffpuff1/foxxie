@@ -1,5 +1,5 @@
-import { ConsoleState, FoxxieEvents } from '#lib/types';
 import { Listener } from '@sapphire/framework';
+import { ConsoleState, FoxxieEvents } from '#lib/types';
 import { DiscordAPIError } from 'discord.js';
 
 const NEWLINE = '\n';

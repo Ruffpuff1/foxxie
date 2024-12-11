@@ -1,5 +1,6 @@
-import { FT, T } from '#lib/types';
 import type { GuildTextBasedChannel, User } from 'discord.js';
+
+import { FT, T } from '#lib/types';
 
 export const ActionDelete = T('guilds/logs:actionDelete');
 export const ActionEdit = T('guilds/logs:actionEdit');
@@ -14,16 +15,16 @@ export const ArgsChannel = FT<{ channel: GuildTextBasedChannel }>('guilds/logs:a
 export const ArgsCreated = FT<{ date: Date }>('guilds/logs:argsCreated');
 export const ArgsDuration = FT<{ duration: number }>('guilds/logs:argsDuration');
 export const ArgsDurationPast = FT<{ duration: number }>('guilds/logs:argsDurationPast');
-export const ArgsInvites = FT<{ invites: string[]; count: number }>('guilds/logs:argsInvites');
+export const ArgsInvites = FT<{ count: number; invites: string[] }>('guilds/logs:argsInvites');
 export const ArgsJoinedAt = FT<{ date: Date }>('guilds/logs:argsJoinedAt');
 export const ArgsLink = FT<{ link: string }>('guilds/logs:argsLink');
 export const ArgsMessage = FT<{ content: string }>('guilds/logs:argsMessage');
 export const ArgsMessageCount = FT<{ count: number }>('guilds/logs:argsMessageCount');
-export const ArgsMessages = FT<{ old: string; new: string }>('guilds/logs:argsMessages');
+export const ArgsMessages = FT<{ new: string; old: string }>('guilds/logs:argsMessages');
 export const ArgsModerator = FT<{ mod: User }>('guilds/logs:argsModerator');
 export const ArgsPosition = FT<{ position: number }>('guilds/logs:argsPosition');
 export const ArgsReason = FT<{ reason: string }>('guilds/logs:argsReason');
-export const ArgsRefrence = FT<{ id: number; url: string; type: string | null }>('guilds/logs:argsRefrence');
+export const ArgsRefrence = FT<{ id: number; type: null | string; url: string }>('guilds/logs:argsRefrence');
 export const ArgsTimeTaken = FT<{ time: number }>('guilds/logs:argsTimeTaken');
 export const ArgsUser = FT<{ user: User }>('guilds/logs:argsUser');
 export const Attachment = T('guilds/logs:attachment');

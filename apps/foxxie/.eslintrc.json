@@ -1,19 +1,125 @@
 {
-	"extends": "@sapphire",
-	"rules": {
-		"@typescript-eslint/no-base-to-string": 0,
-		"@typescript-eslint/no-throw-literal": 0,
-		"no-catch-shadow": 0
-	},
+	"plugins": [
+		"perfectionist"
+	],
+	"extends": [
+		"plugin:perfectionist/recommended-alphabetical-legacy",
+		"@sapphire"
+	],
 	"parserOptions": {
 		"warnOnUnsupportedTypeScriptVersion": false
 	},
-	"overrides": [
-		{
-			"files": ["src/commands/**/*.ts", "**/jest.config.ts"],
-			"rules": {
-				"@typescript-eslint/require-await": 0
+	"rules": {
+		"@typescript-eslint/no-extraneous-class": "off",
+		"@typescript-eslint/no-empty-object-type": "off",
+		"@typescript-eslint/member-ordering": "off",
+		"@typescript-eslint/no-base-to-string": 0,
+		"@typescript-eslint/no-duplicate-enum-values": 0,
+		"@typescript-eslint/no-throw-literal": "off",
+		"no-catch-shadow": 0,
+		"no-implicit-coercion": "warn",
+		"sort-keys": "off",
+		"sort-vars": "off",
+		"perfectionist/sort-classes": [
+			"error",
+			{
+				"type": "alphabetical",
+				"groups": [
+					"index-signature",
+					[
+						"property",
+						"accessor-property"
+					],
+					[
+						"protected-property",
+						"protected-accessor-property"
+					],
+					[
+						"private-property",
+						"private-accessor-property"
+					],
+					// constructor
+					"constructor",
+					// methods
+					[
+						"method",
+						"function-property",
+						"async-method",
+						"async-function-property"
+					],
+					[
+						"protected-method",
+						"protected-function-property",
+						"async-protected-method",
+						"async-protected-function-property"
+					],
+					[
+						"private-method",
+						"private-function-property",
+						"async-private-method",
+						"async-private-function-property"
+					],
+					// getters
+					[
+						"get-method",
+						"set-method"
+					],
+					[
+						"protected-get-method",
+						"protected-set-method"
+					],
+					[
+						"private-get-method",
+						"private-set-method"
+					],
+					// static
+					[
+						"static-method",
+						"static-function-property",
+						"async-static-method",
+						"async-static-function-property"
+					],
+					[
+						"static-get-method",
+						"static-set-method"
+					],
+					[
+						"static-property",
+						"static-accessor-property"
+					],
+					[
+						"protected-static-method",
+						"protected-static-function-property",
+						"async-protected-static-method",
+						"async-protected-static-function-property"
+					],
+					[
+						"protected-static-get-method",
+						"protected-static-set-method"
+					],
+					[
+						"protected-static-property",
+						"protected-static-accessor-property"
+					],
+					[
+						"private-static-method",
+						"private-static-function-property",
+						"async-private-static-method",
+						"async-private-static-function-property"
+					],
+					[
+						"private-static-get-method",
+						"private-static-set-method"
+					],
+					[
+						"private-static-property",
+						"private-static-accessor-property"
+					],
+					"static-block",
+					"unknown"
+				]
 			}
-		}
-	]
+		],
+		"@typescript-eslint/require-await": 0
+	}
 }

@@ -1,3 +1,10 @@
+import type { TextChannel } from 'discord.js';
+
+import { cast } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
+import { canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
+import { Listener, ListenerOptions } from '@sapphire/framework';
+import { isNullishOrZero } from '@sapphire/utilities';
 import { readSettings, writeSettings } from '#lib/database';
 import { Starboard } from '#lib/Database/Models/starboard';
 import { api } from '#lib/discord';
@@ -7,14 +14,8 @@ import { isStarboardEmoji, SerializedEmoji } from '#utils/discord';
 import { LLRCData } from '#utils/External/LongLivingReactionCollector';
 import { getGuildStarboard } from '#utils/functions';
 import { floatPromise, snowflakeAge } from '#utils/util';
-import { cast } from '@ruffpuff/utilities';
-import { ApplyOptions } from '@sapphire/decorators';
-import { canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
-import { Listener, ListenerOptions } from '@sapphire/framework';
-import { isNullishOrZero } from '@sapphire/utilities';
-import type { TextChannel } from 'discord.js';
 
-@ApplyOptions<ListenerOptions>(({ container }) => ({ event: 'rawReactionAdd', enabled: container.client.enabledProdOnlyEvent() }))
+@ApplyOptions<ListenerOptions>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: 'rawReactionAdd' }))
 export class UserListener extends Listener {
 	public async run(data: LLRCData, emojiId: SerializedEmoji) {
 		const channel = cast<TextChannel>(data.channel);
@@ -57,10 +58,10 @@ export class UserListener extends Listener {
 		// Process the starboard
 		const previousEntity = await this.container.prisma.starboard.findFirst({ where: { guildId: data.guild.id, starMessageId: data.messageId } });
 		let previousEntityMessage: GuildMessage | null = null;
-		let previousEntityChannel: TextChannel | null = null;
+		let previousEntityChannel: null | TextChannel = null;
 
 		if (previousEntity) {
-			previousEntityChannel = (await this.container.client.channels.fetch(previousEntity.channelId!)) as TextChannel | null;
+			previousEntityChannel = (await this.container.client.channels.fetch(previousEntity.channelId!)) as null | TextChannel;
 			previousEntityMessage = previousEntityChannel
 				? ((await previousEntityChannel.messages.fetch(previousEntity.messageId)) as GuildMessage)
 				: null;
@@ -74,7 +75,7 @@ export class UserListener extends Listener {
 		if (sMessage) await sMessage.increment(data.userId, starboardSelfStar);
 	}
 
-	private async fetchPrevious(previousEntity: Starboard, starboard: StarboardManager, prevChannel: TextChannel | null) {
+	private async fetchPrevious(previousEntity: Starboard, starboard: StarboardManager, prevChannel: null | TextChannel) {
 		if (prevChannel && previousEntity) return starboard.fetch(cast<TextChannel>(prevChannel), previousEntity?.messageId);
 		return null;
 	}

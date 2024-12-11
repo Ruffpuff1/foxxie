@@ -1,4 +1,4 @@
-import { T, FT } from '#lib/types';
+import { FT, T } from '#lib/types';
 
 // Action status
 export const ActionIsActive = T('moderation:actionIsActive');

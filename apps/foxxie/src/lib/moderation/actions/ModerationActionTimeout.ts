@@ -1,20 +1,20 @@
+import { isNullish } from '@sapphire/utilities';
 import { api } from '#lib/discord/Api';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { days, resolveOnErrorCodes } from '#utils/common';
 import { getLogger } from '#utils/functions';
 import { TypeVariation } from '#utils/moderationConstants';
-import { isNullish } from '@sapphire/utilities';
-import { RESTJSONErrorCodes, type Guild, type Snowflake } from 'discord.js';
+import { type Guild, RESTJSONErrorCodes, type Snowflake } from 'discord.js';
 
 export class ModerationActionTimeout extends ModerationAction<TypeVariation.Timeout> {
 	public constructor() {
 		super({
-			type: TypeVariation.Timeout,
-			isUndoActionAvailable: true,
-			maximumDuration: days(28),
-			durationRequired: true,
 			durationExternal: true,
-			logPrefix: 'Moderation => Timeout'
+			durationRequired: true,
+			isUndoActionAvailable: true,
+			logPrefix: 'Moderation => Timeout',
+			maximumDuration: days(28),
+			type: TypeVariation.Timeout
 		});
 	}
 
@@ -31,12 +31,12 @@ export class ModerationActionTimeout extends ModerationAction<TypeVariation.Time
 		await this.completeLastModerationEntryFromUser({ guild, userId: entry.userId });
 	}
 
-	protected override handleApplyPreOnStart(guild: Guild, entry: ModerationAction.Entry) {
-		getLogger(guild).timeout.set(entry.userId, { userId: entry.moderatorId, reason: entry.reason });
-	}
-
 	protected override handleApplyPreOnError(_error: Error, guild: Guild, entry: ModerationAction.Entry) {
 		getLogger(guild).timeout.unset(entry.userId);
+	}
+
+	protected override handleApplyPreOnStart(guild: Guild, entry: ModerationAction.Entry) {
+		getLogger(guild).timeout.set(entry.userId, { reason: entry.reason, userId: entry.moderatorId });
 	}
 
 	protected override async handleUndoPre(guild: Guild, entry: ModerationAction.Entry) {
@@ -46,11 +46,11 @@ export class ModerationActionTimeout extends ModerationAction<TypeVariation.Time
 		await this.completeLastModerationEntryFromUser({ guild, userId: entry.userId });
 	}
 
-	protected override handleUndoPreOnStart(guild: Guild, entry: ModerationAction.Entry) {
-		getLogger(guild).timeout.set(entry.userId, { userId: entry.moderatorId, reason: entry.reason });
-	}
-
 	protected override handleUndoPreOnError(_error: Error, guild: Guild, entry: ModerationAction.Entry) {
 		getLogger(guild).timeout.unset(entry.userId);
+	}
+
+	protected override handleUndoPreOnStart(guild: Guild, entry: ModerationAction.Entry) {
+		getLogger(guild).timeout.set(entry.userId, { reason: entry.reason, userId: entry.moderatorId });
 	}
 }

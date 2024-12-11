@@ -1,10 +1,20 @@
+import type { Guild, Snowflake } from 'discord.js';
+
+import { isNullish } from '@sapphire/utilities';
+import { readSettings } from '#lib/Database/settings/functions';
+import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { PartialResponseValue, ResponseType, Task } from '#lib/schedule';
 import { getModeration } from '#utils/functions';
-import { isNullish } from '@sapphire/utilities';
-import type { Guild, Snowflake } from 'discord.js';
-import { readSettings } from '#lib/Database/settings/functions';
 import { SchemaKeys } from '#utils/moderationConstants';
-import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
+
+export interface ModerationData<T = unknown> {
+	[SchemaKeys.Case]: number;
+	[SchemaKeys.Duration]: number;
+	[SchemaKeys.ExtraData]: T;
+	[SchemaKeys.Guild]: string;
+	[SchemaKeys.User]: string;
+	scheduleRetryCount?: number;
+}
 
 export abstract class ModerationTask<T = unknown> extends Task {
 	public async run(data: ModerationData<T>): Promise<PartialResponseValue> {
@@ -36,9 +46,9 @@ export abstract class ModerationTask<T = unknown> extends Task {
 	): Promise<ModerationAction.Data<ContextType>> {
 		const settings = await readSettings(guild);
 		return {
+			context,
 			moderator: null,
-			sendDirectMessage: settings.messagesModerationDm,
-			context
+			sendDirectMessage: settings.messagesModerationDm
 		};
 	}
 
@@ -50,13 +60,4 @@ export abstract class ModerationTask<T = unknown> extends Task {
 	}
 
 	protected abstract handle(guild: Guild, data: ModerationData<T>): unknown;
-}
-
-export interface ModerationData<T = unknown> {
-	[SchemaKeys.Case]: number;
-	[SchemaKeys.Guild]: string;
-	[SchemaKeys.User]: string;
-	[SchemaKeys.Duration]: number;
-	[SchemaKeys.ExtraData]: T;
-	scheduleRetryCount?: number;
 }

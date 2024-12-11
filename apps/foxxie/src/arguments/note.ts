@@ -1,5 +1,5 @@
-import { Note } from '#lib/Database/Models/Discord/Member/Note';
 import { Argument, ArgumentResult } from '@sapphire/framework';
+import { Note } from '#lib/Database/Models/Discord/Member/Note';
 
 export default class UserArgument extends Argument<Note> {
 	public async run(parameter: string): Promise<ArgumentResult<Note>> {

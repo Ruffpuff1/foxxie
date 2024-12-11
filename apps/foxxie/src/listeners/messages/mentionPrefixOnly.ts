@@ -1,13 +1,13 @@
-import { readSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
-import { EnvKeys, EventArgs, FoxxieEvents } from '#lib/types';
-import { isAdmin } from '#utils/discord';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { fetchT, TFunction } from '@sapphire/plugin-i18next';
 import { cast } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
+import { readSettings } from '#lib/database';
+import { LanguageKeys } from '#lib/i18n';
+import { EnvKeys, EventArgs, FoxxieEvents } from '#lib/types';
+import { isAdmin } from '#utils/discord';
 import { LocaleString, Message, userMention } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({
@@ -18,13 +18,24 @@ export class UserListener extends Listener<FoxxieEvents.MentionPrefixOnly> {
 		return message.inGuild() ? this.runGuildContext(message) : this.runDMContext(message);
 	}
 
-	private async runGuildContext(message: Message<true>) {
-		const { prefix, language } = await readSettings(message.guild);
-		const t = this.container.i18n.getT(cast<LocaleString>(language));
+	private formatPrefix(prefix: string, t: TFunction, isAdmin = false): string {
+		const lines = [
+			t(LanguageKeys.System.PrefixReminder, {
+				count: 1,
+				prefixes: [prefix]
+			})
+		];
 
-		const content = this.formatPrefix(prefix, t, isAdmin(message.member!));
+		if (isAdmin) {
+			lines.push(
+				t(LanguageKeys.System.PrefixReminder, {
+					context: 'admin',
+					prefix
+				})
+			);
+		}
 
-		return send(message, content);
+		return lines.join('\n');
 	}
 
 	private async runDMContext(message: Message) {
@@ -39,23 +50,12 @@ export class UserListener extends Listener<FoxxieEvents.MentionPrefixOnly> {
 		return send(message, content);
 	}
 
-	private formatPrefix(prefix: string, t: TFunction, isAdmin = false): string {
-		const lines = [
-			t(LanguageKeys.System.PrefixReminder, {
-				prefixes: [prefix],
-				count: 1
-			})
-		];
+	private async runGuildContext(message: Message<true>) {
+		const { language, prefix } = await readSettings(message.guild);
+		const t = this.container.i18n.getT(cast<LocaleString>(language));
 
-		if (isAdmin) {
-			lines.push(
-				t(LanguageKeys.System.PrefixReminder, {
-					context: 'admin',
-					prefix
-				})
-			);
-		}
+		const content = this.formatPrefix(prefix, t, isAdmin(message.member!));
 
-		return lines.join('\n');
+		return send(message, content);
 	}
 }

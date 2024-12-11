@@ -3,6 +3,11 @@ import { getFixedT, TFunction } from 'i18next';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Timespan {
+	public static Days(days?: number) {
+		if (!days) return 86400000;
+		return days * 86400000;
+	}
+
 	public static FromMilliseconds(ms: number): TimespanData {
 		if (ms < Timespan.Seconds()) {
 			return new TimespanData(ms);
@@ -73,9 +78,9 @@ export class Timespan {
 		);
 	}
 
-	public static Seconds(seconds?: number) {
-		if (!seconds) return 1000;
-		return seconds * 1000;
+	public static Hours(hours?: number) {
+		if (!hours) return 3600000;
+		return hours * 3600000;
 	}
 
 	public static Minutes(minutes?: number) {
@@ -83,24 +88,19 @@ export class Timespan {
 		return minutes * 60000;
 	}
 
-	public static Hours(hours?: number) {
-		if (!hours) return 3600000;
-		return hours * 3600000;
+	public static Months(months?: number) {
+		if (!months) return Timespan.Weeks(4);
+		return Timespan.Weeks() * 4 * months;
 	}
 
-	public static Days(days?: number) {
-		if (!days) return 86400000;
-		return days * 86400000;
+	public static Seconds(seconds?: number) {
+		if (!seconds) return 1000;
+		return seconds * 1000;
 	}
 
 	public static Weeks(weeks?: number) {
 		if (!weeks) return Timespan.Days(7);
 		return Timespan.Days(7) * weeks;
-	}
-
-	public static Months(months?: number) {
-		if (!months) return Timespan.Weeks(4);
-		return Timespan.Weeks() * 4 * months;
 	}
 
 	public static Years(years?: number) {

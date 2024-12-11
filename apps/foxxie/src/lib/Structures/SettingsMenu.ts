@@ -1,26 +1,28 @@
+import type { TFunction } from '@sapphire/plugin-i18next';
+
+import { EmbedBuilder } from '@discordjs/builders';
+import { ZeroWidthSpace } from '@ruffpuff/utilities';
+import { container, type MessageCommand } from '@sapphire/framework';
+import { filter } from '@sapphire/iterator-utilities/filter';
+import { partition } from '@sapphire/iterator-utilities/partition';
+import { getConfigurableGroups } from '#lib/Database/settings/configuration';
+import { readSettings, writeSettingsTransaction } from '#lib/Database/settings/functions';
 import { SchemaGroup } from '#lib/Database/settings/schema/SchemaGroup';
 import { SchemaKey } from '#lib/Database/settings/schema/SchemaKey';
+import { isSchemaGroup, remove, reset, set } from '#lib/Database/settings/Utils';
+import { api } from '#lib/discord';
+import { getT, LanguageKeys } from '#lib/i18n';
 import { GuildMessage } from '#lib/types';
 import { floatPromise, minutes } from '#utils/common';
-import { LLRCData, LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
-import { getFullEmbedAuthor } from '#utils/util';
-import { EmbedBuilder } from '@discordjs/builders';
-import { container, type MessageCommand } from '@sapphire/framework';
-import type { TFunction } from '@sapphire/plugin-i18next';
-import { DiscordAPIError, Events, MessageCollector, RESTJSONErrorCodes } from 'discord.js';
-import { BrandingColors } from '#utils/constants';
-import { ZeroWidthSpace } from '@ruffpuff/utilities';
-import { partition } from '@sapphire/iterator-utilities/partition';
-import { filter } from '@sapphire/iterator-utilities/filter';
-import { getT, LanguageKeys } from '#lib/i18n';
-import { readSettings, writeSettingsTransaction } from '#lib/Database/settings/functions';
-import { api } from '#lib/discord';
-import { isSchemaGroup, reset, set, remove } from '#lib/Database/settings/Utils';
 import { stringifyError } from '#utils/common/error';
-import { getConfigurableGroups } from '#lib/Database/settings/configuration';
+import { BrandingColors } from '#utils/constants';
+import { LLRCData, LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
 import { deleteMessage, sendLoadingMessage } from '#utils/functions/messages';
-import { FoxxieCommand } from './commands/FoxxieCommand.js';
+import { getFullEmbedAuthor } from '#utils/util';
+import { DiscordAPIError, Events, MessageCollector, RESTJSONErrorCodes } from 'discord.js';
+
 import { FoxxieArgs } from './commands/FoxxieArgs.js';
+import { FoxxieCommand } from './commands/FoxxieCommand.js';
 
 const EMOJIS = { BACK: '◀', STOP: '⏹' };
 const TIMEOUT = minutes(15);
@@ -33,29 +35,21 @@ const enum UpdateType {
 }
 
 export class SettingsMenu {
-	private readonly message: GuildMessage;
-	private t: TFunction;
-	private schema: SchemaKey | SchemaGroup;
-	private messageCollector: MessageCollector | null = null;
-	private errorMessage: string | null = null;
-	private llrc: LongLivingReactionCollector | null = null;
 	private readonly embed: EmbedBuilder;
-	private response: GuildMessage | null = null;
+	private errorMessage: null | string = null;
+	private llrc: LongLivingReactionCollector | null = null;
+	private readonly message: GuildMessage;
+	private messageCollector: MessageCollector | null = null;
 	private oldValue: unknown = undefined;
+	private response: GuildMessage | null = null;
+	private schema: SchemaGroup | SchemaKey;
+	private t: TFunction;
 
 	public constructor(message: GuildMessage, language: TFunction) {
 		this.message = message;
 		this.t = language;
 		this.schema = getConfigurableGroups();
 		this.embed = new EmbedBuilder().setAuthor(getFullEmbedAuthor(this.message.author)).setTitle(message.guild.name);
-	}
-
-	public get client() {
-		return container.client;
-	}
-
-	private get updatedValue(): boolean {
-		return this.oldValue !== undefined;
 	}
 
 	public async init(context: FoxxieCommand.RunContext): Promise<void> {
@@ -70,82 +64,60 @@ export class SettingsMenu {
 		await this._renderResponse();
 	}
 
-	private async render() {
-		const description = isSchemaGroup(this.schema) ? this.renderGroup(this.schema) : await this.renderKey(this.schema);
-
-		const { parent } = this.schema;
-		if (parent) floatPromise(this._reactResponse(EMOJIS.BACK));
-		else floatPromise(this._removeReactionFromUser(EMOJIS.BACK, this.client.id!));
-
-		this.embed
-			.setColor(BrandingColors.Primary) //
-			.setDescription(description.concat(ZeroWidthSpace).join('\n'))
-			.setTimestamp();
-
-		// If there is a parent, show the back option:
-		if (parent) {
-			this.embed.setFooter({ text: this.t(LanguageKeys.Commands.Admin.ConfMenuRenderBack) });
+	private async _reactResponse(emoji: string) {
+		if (!this.response) return;
+		try {
+			await this.response.react(emoji);
+		} catch (error) {
+			if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownMessage) {
+				this.response = null;
+				this.llrc?.end();
+			} else {
+				this.client.emit(Events.Error, error as Error);
+			}
 		}
-
-		return this.embed;
 	}
 
-	private async renderKey(entry: SchemaKey) {
-		const settings = await readSettings(this.message.guild);
+	private async _removeReactionFromUser(reaction: string, userId: string) {
+		if (!this.response) return;
 
-		this.t = getT(settings.language);
-		const { t } = this;
+		const channelId = this.response.channel.id;
+		const messageId = this.response.id;
+		try {
+			return await (userId === this.client.id
+				? api().channels.deleteUserMessageReaction(channelId, messageId, reaction, userId)
+				: api().channels.deleteOwnMessageReaction(channelId, messageId, reaction));
+		} catch (error) {
+			if (error instanceof DiscordAPIError) {
+				if (error.code === RESTJSONErrorCodes.UnknownMessage) {
+					this.response = null;
+					this.llrc?.end();
+					return this;
+				}
 
-		const description = [t(LanguageKeys.Commands.Admin.ConfMenuRenderAtPiece, { path: this.schema.name })];
-		if (this.errorMessage) description.push('', this.errorMessage, '');
-		description.push(t(entry.description), '', t(LanguageKeys.Commands.Admin.ConfMenuRenderUpdate));
+				if (error.code === RESTJSONErrorCodes.UnknownEmoji) {
+					return this;
+				}
+			}
 
-		const value = settings[entry.property];
-
-		// If the key is an array and has elements, show the remove option:
-		if (entry.array && (value as unknown[]).length) {
-			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderRemove));
+			// Log any other error
+			this.client.emit(Events.Error, error as Error);
 		}
-
-		// If the value is different from the default value, show the reset option:
-		if (value !== entry.default) {
-			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderReset));
-		}
-
-		// If there is undo data, show the undo option:
-		if (this.updatedValue) {
-			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderUndo));
-		}
-
-		const serialized = entry.display(settings, this.t);
-		description.push('', t(LanguageKeys.Commands.Admin.ConfMenuRenderCvalue, { value: serialized }));
-
-		return description;
 	}
 
-	private renderGroup(entry: SchemaGroup) {
-		const { t } = this;
-
-		const description = [t(LanguageKeys.Commands.Admin.ConfMenuRenderAtFolder, { path: entry.name })];
-		if (this.errorMessage) description.push(this.errorMessage);
-
-		const [folders, keys] = partition(
-			filter(entry.values(), (value) => !value.dashboardOnly),
-			(value) => isSchemaGroup(value)
-		);
-
-		if (!folders.length && !keys.length) {
-			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderNokeys));
-		} else {
-			description.push(
-				t(LanguageKeys.Commands.Admin.ConfMenuRenderSelect),
-				'',
-				...folders.map(({ key }) => `📁 ${key}`),
-				...keys.map(({ key }) => `⚙️ ${key}`)
-			);
+	private async _renderResponse() {
+		if (!this.response) return;
+		try {
+			const embed = await this.render();
+			await this.response.edit({ content: null, embeds: [embed] });
+		} catch (error) {
+			if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownMessage) {
+				this.response = null;
+				this.llrc?.end();
+			} else {
+				this.client.emit(Events.Error, error as Error);
+			}
 		}
-
-		return description;
 	}
 
 	private async onMessage(message: GuildMessage, context: FoxxieCommand.RunContext) {
@@ -157,7 +129,7 @@ export class SettingsMenu {
 		if (isSchemaGroup(this.schema)) {
 			const schema = this.schema.get(message.content.toLowerCase());
 			if (schema && !schema.dashboardOnly) {
-				this.schema = schema as SchemaKey | SchemaGroup;
+				this.schema = schema as SchemaGroup | SchemaKey;
 				this.oldValue = undefined;
 			} else {
 				this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfMenuInvalidKey);
@@ -167,14 +139,14 @@ export class SettingsMenu {
 			const args = FoxxieArgs.from(conf, message, message.content, context, this.t);
 
 			switch (args.next().toLowerCase()) {
-				case 'set':
-					await this.tryUpdate(UpdateType.Set, args);
-					break;
 				case 'remove':
 					await this.tryUpdate(UpdateType.Remove, args);
 					break;
 				case 'reset':
 					await this.tryUpdate(UpdateType.Reset);
+					break;
+				case 'set':
+					await this.tryUpdate(UpdateType.Set, args);
 					break;
 				case 'undo':
 					await this.tryUndo();
@@ -211,100 +183,82 @@ export class SettingsMenu {
 		}
 	}
 
-	private async _removeReactionFromUser(reaction: string, userId: string) {
-		if (!this.response) return;
+	private async render() {
+		const description = isSchemaGroup(this.schema) ? this.renderGroup(this.schema) : await this.renderKey(this.schema);
 
-		const channelId = this.response.channel.id;
-		const messageId = this.response.id;
-		try {
-			return await (userId === this.client.id
-				? api().channels.deleteUserMessageReaction(channelId, messageId, reaction, userId)
-				: api().channels.deleteOwnMessageReaction(channelId, messageId, reaction));
-		} catch (error) {
-			if (error instanceof DiscordAPIError) {
-				if (error.code === RESTJSONErrorCodes.UnknownMessage) {
-					this.response = null;
-					this.llrc?.end();
-					return this;
-				}
+		const { parent } = this.schema;
+		if (parent) floatPromise(this._reactResponse(EMOJIS.BACK));
+		else floatPromise(this._removeReactionFromUser(EMOJIS.BACK, this.client.id!));
 
-				if (error.code === RESTJSONErrorCodes.UnknownEmoji) {
-					return this;
-				}
-			}
+		this.embed
+			.setColor(BrandingColors.Primary) //
+			.setDescription(description.concat(ZeroWidthSpace).join('\n'))
+			.setTimestamp();
 
-			// Log any other error
-			this.client.emit(Events.Error, error as Error);
+		// If there is a parent, show the back option:
+		if (parent) {
+			this.embed.setFooter({ text: this.t(LanguageKeys.Commands.Admin.ConfMenuRenderBack) });
 		}
+
+		return this.embed;
 	}
 
-	private async _reactResponse(emoji: string) {
-		if (!this.response) return;
-		try {
-			await this.response.react(emoji);
-		} catch (error) {
-			if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownMessage) {
-				this.response = null;
-				this.llrc?.end();
-			} else {
-				this.client.emit(Events.Error, error as Error);
-			}
-		}
-	}
+	private renderGroup(entry: SchemaGroup) {
+		const { t } = this;
 
-	private async _renderResponse() {
-		if (!this.response) return;
-		try {
-			const embed = await this.render();
-			await this.response.edit({ embeds: [embed], content: null });
-		} catch (error) {
-			if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.UnknownMessage) {
-				this.response = null;
-				this.llrc?.end();
-			} else {
-				this.client.emit(Events.Error, error as Error);
-			}
-		}
-	}
+		const description = [t(LanguageKeys.Commands.Admin.ConfMenuRenderAtFolder, { path: entry.name })];
+		if (this.errorMessage) description.push(this.errorMessage);
 
-	private async tryUpdate(action: UpdateType, args: FoxxieArgs | null = null, value: unknown = null) {
-		try {
-			const key = this.schema as SchemaKey;
-			using trx = await writeSettingsTransaction(this.message.guild);
+		const [folders, keys] = partition(
+			filter(entry.values(), (value) => !value.dashboardOnly),
+			(value) => isSchemaGroup(value)
+		);
 
-			this.t = getT(trx.settings.language);
-			this.oldValue = trx.settings[key.property];
-			switch (action) {
-				case UpdateType.Set: {
-					trx.write(await set(trx.settings, key, args!));
-					break;
-				}
-				case UpdateType.Remove: {
-					trx.write(await remove(trx.settings, key, args!));
-					break;
-				}
-				case UpdateType.Reset: {
-					trx.write(reset(key));
-					break;
-				}
-				case UpdateType.Replace: {
-					trx.write({ [key.property]: value });
-					break;
-				}
-			}
-			await trx.submit();
-		} catch (error) {
-			this.errorMessage = stringifyError(this.t, error);
-		}
-	}
-
-	private async tryUndo() {
-		if (this.updatedValue) {
-			await this.tryUpdate(UpdateType.Replace, null, this.oldValue);
+		if (!folders.length && !keys.length) {
+			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderNokeys));
 		} else {
-			const key = this.schema as SchemaKey;
-			this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfNochange, { key: key.name });
+			description.push(
+				t(LanguageKeys.Commands.Admin.ConfMenuRenderSelect),
+				'',
+				...folders.map(({ key }) => `📁 ${key}`),
+				...keys.map(({ key }) => `⚙️ ${key}`)
+			);
 		}
+
+		return description;
+	}
+
+	private async renderKey(entry: SchemaKey) {
+		const settings = await readSettings(this.message.guild);
+
+		this.t = getT(settings.language);
+		const { t } = this;
+
+		const description = [t(LanguageKeys.Commands.Admin.ConfMenuRenderAtPiece, { path: this.schema.name })];
+		if (this.errorMessage) description.push('', this.errorMessage, '');
+		description.push(t(entry.description), '', t(LanguageKeys.Commands.Admin.ConfMenuRenderUpdate));
+
+		const value = settings[entry.property];
+
+		// If the key is an array and has elements, show the remove option:
+		if (entry.array && (value as unknown[]).length) {
+			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderRemove));
+		}
+
+		// If the value is different from the default value, show the reset option:
+		if (value !== entry.default) {
+			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderReset));
+		}
+
+		// If there is undo data, show the undo option:
+		if (this.updatedValue) {
+			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderUndo));
+		}
+
+		const serialized = entry.display(settings, this.t);
+		description.push('', t(LanguageKeys.Commands.Admin.ConfMenuRenderCvalue, { value: serialized }));
+
+		return description;
 	}
 
 	private stop(): void {
@@ -318,5 +272,53 @@ export class SettingsMenu {
 		}
 
 		if (!this.messageCollector!.ended) this.messageCollector!.stop();
+	}
+
+	private async tryUndo() {
+		if (this.updatedValue) {
+			await this.tryUpdate(UpdateType.Replace, null, this.oldValue);
+		} else {
+			const key = this.schema as SchemaKey;
+			this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfNochange, { key: key.name });
+		}
+	}
+
+	private async tryUpdate(action: UpdateType, args: FoxxieArgs | null = null, value: unknown = null) {
+		try {
+			const key = this.schema as SchemaKey;
+			using trx = await writeSettingsTransaction(this.message.guild);
+
+			this.t = getT(trx.settings.language);
+			this.oldValue = trx.settings[key.property];
+			switch (action) {
+				case UpdateType.Remove: {
+					trx.write(await remove(trx.settings, key, args!));
+					break;
+				}
+				case UpdateType.Replace: {
+					trx.write({ [key.property]: value });
+					break;
+				}
+				case UpdateType.Reset: {
+					trx.write(reset(key));
+					break;
+				}
+				case UpdateType.Set: {
+					trx.write(await set(trx.settings, key, args!));
+					break;
+				}
+			}
+			await trx.submit();
+		} catch (error) {
+			this.errorMessage = stringifyError(this.t, error);
+		}
+	}
+
+	public get client() {
+		return container.client;
+	}
+
+	private get updatedValue(): boolean {
+		return this.oldValue !== undefined;
 	}
 }

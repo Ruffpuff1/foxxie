@@ -1,8 +1,8 @@
+import { DiscordSnowflake } from '@sapphire/snowflake';
 import { api } from '#lib/discord';
+import { LoggerManager } from '#lib/moderation/managers/LoggerManager';
 import { createReferPromise, ReferredPromise, seconds } from '#utils/common';
 import { APIAuditLogEntry, AuditLogEvent, Collection, Snowflake } from 'discord.js';
-import { LoggerManager } from '#lib/moderation/managers/LoggerManager';
-import { DiscordSnowflake } from '@sapphire/snowflake';
 
 const MaximumTimeForAuditLogEntryCreate = seconds(3);
 const MaximumTimeForContextRetrieval = seconds(30);
@@ -33,14 +33,14 @@ const MaximumTimeForAuditLogRewind = seconds(60);
  * to the guild's configuration settings. However, it may not call `wait` twice.
  */
 export abstract class LoggerTypeManager {
+	protected readonly auditLogEventType: AuditLogEvent;
+
 	/**
 	 * The manager that created this instance.
 	 */
 	protected readonly manager: LoggerTypeManager.Manager;
 
-	protected readonly auditLogEventType: AuditLogEvent;
-
-	#context = new Collection<Snowflake, { timeout: NodeJS.Timeout; entry: LoggerTypeContext }>();
+	#context = new Collection<Snowflake, { entry: LoggerTypeContext; timeout: NodeJS.Timeout }>();
 	#promises = new Collection<Snowflake, ReferredPromise<LoggerTypeContext | null>>();
 
 	public constructor(manager: LoggerTypeManager.Manager, auditLogEventType: AuditLogEvent) {
@@ -55,6 +55,41 @@ export abstract class LoggerTypeManager {
 	 */
 	public isSet(id: Snowflake) {
 		return this.#context.has(id);
+	}
+
+	/**
+	 * Sets the context data for the given ID, happens before {@linkcode wait}
+	 * is called.
+	 * @param id The ID of the context data to set.
+	 * @param data The context data to set.
+	 */
+	public set(id: Snowflake, entry: LoggerTypeContext) {
+		this.#context.set(id, {
+			entry,
+			timeout: setTimeout(() => this.#context.delete(id), MaximumTimeForContextRetrieval).unref()
+		});
+	}
+
+	/**
+	 * Sets the context data from the audit logs, will always happen after
+	 * {@linkcode wait} is called.
+	 * @param id The ID of the context data to set.
+	 * @param data The context data to set.
+	 */
+	public setFromAuditLogs(id: Snowflake, data: LoggerTypeContext) {
+		this.#promises.get(id)?.resolve(data);
+	}
+
+	/**
+	 * Unsets the context data for the given ID, useful when the action failed.
+	 * @param id The ID of the context data to unset.
+	 */
+	public unset(id: Snowflake) {
+		const entry = this.#context.get(id);
+		if (entry) {
+			clearTimeout(entry.timeout);
+			this.#context.delete(id);
+		}
 	}
 
 	/**
@@ -95,38 +130,14 @@ export abstract class LoggerTypeManager {
 	}
 
 	/**
-	 * Sets the context data for the given ID, happens before {@linkcode wait}
-	 * is called.
-	 * @param id The ID of the context data to set.
-	 * @param data The context data to set.
+	 * Fetches the audit logs for a specific type of event.
+	 *
+	 * @param type - The type of audit log event to fetch.
+	 * @param signal - An optional `AbortSignal` to abort the request.
+	 * @returns A promise that resolves to the fetched audit logs.
 	 */
-	public set(id: Snowflake, entry: LoggerTypeContext) {
-		this.#context.set(id, {
-			timeout: setTimeout(() => this.#context.delete(id), MaximumTimeForContextRetrieval).unref(),
-			entry
-		});
-	}
-
-	/**
-	 * Unsets the context data for the given ID, useful when the action failed.
-	 * @param id The ID of the context data to unset.
-	 */
-	public unset(id: Snowflake) {
-		const entry = this.#context.get(id);
-		if (entry) {
-			clearTimeout(entry.timeout);
-			this.#context.delete(id);
-		}
-	}
-
-	/**
-	 * Sets the context data from the audit logs, will always happen after
-	 * {@linkcode wait} is called.
-	 * @param id The ID of the context data to set.
-	 * @param data The context data to set.
-	 */
-	public setFromAuditLogs(id: Snowflake, data: LoggerTypeContext) {
-		this.#promises.get(id)?.resolve(data);
+	protected fetchAuditLogs(signal?: AbortSignal) {
+		return api().guilds.getAuditLogs(this.manager.guild.id, { action_type: this.auditLogEventType }, { signal });
 	}
 
 	/**
@@ -147,7 +158,7 @@ export abstract class LoggerTypeManager {
 			if (DiscordSnowflake.timestampFrom(entry.id) < oldestTimestamp) break;
 			// If the entry is the desired one, return it:
 			if (this.filterAuditLogEntry(entry)) {
-				return { userId: entry.user_id!, reason: entry.reason };
+				return { reason: entry.reason, userId: entry.user_id! };
 			}
 		}
 
@@ -155,19 +166,9 @@ export abstract class LoggerTypeManager {
 	}
 
 	protected filterAuditLogEntry(entry: LoggerTypeManager.AuditLogEntry): boolean;
+
 	protected filterAuditLogEntry(): boolean {
 		return true;
-	}
-
-	/**
-	 * Fetches the audit logs for a specific type of event.
-	 *
-	 * @param type - The type of audit log event to fetch.
-	 * @param signal - An optional `AbortSignal` to abort the request.
-	 * @returns A promise that resolves to the fetched audit logs.
-	 */
-	protected fetchAuditLogs(signal?: AbortSignal) {
-		return api().guilds.getAuditLogs(this.manager.guild.id, { action_type: this.auditLogEventType }, { signal });
 	}
 
 	/**
@@ -189,11 +190,11 @@ export abstract class LoggerTypeManager {
 }
 
 export namespace LoggerTypeManager {
-	export type Manager = LoggerManager;
 	export type AuditLogEntry = APIAuditLogEntry;
+	export type Manager = LoggerManager;
 }
 
 export interface LoggerTypeContext {
+	reason?: null | string;
 	userId: Snowflake;
-	reason?: string | null;
 }

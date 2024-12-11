@@ -1,16 +1,16 @@
+import { isNullish } from '@sapphire/utilities';
 import { api } from '#lib/discord/Api';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { resolveOnErrorCodes } from '#utils/common';
 import { TypeVariation } from '#utils/moderationConstants';
-import { isNullish } from '@sapphire/utilities';
-import { RESTJSONErrorCodes, type Guild, type Role } from 'discord.js';
+import { type Guild, RESTJSONErrorCodes, type Role } from 'discord.js';
 
 export class ModerationActionRoleRemove extends ModerationAction<Role, TypeVariation.RoleRemove> {
 	public constructor() {
 		super({
-			type: TypeVariation.RoleRemove,
 			isUndoActionAvailable: true,
-			logPrefix: 'Moderation => RoleRemove'
+			logPrefix: 'Moderation => RoleRemove',
+			type: TypeVariation.RoleRemove
 		});
 	}
 
@@ -26,9 +26,9 @@ export class ModerationActionRoleRemove extends ModerationAction<Role, TypeVaria
 		});
 
 		await this.completeLastModerationEntryFromUser({
+			filter: (log) => log.extraData?.role === role.id,
 			guild,
-			userId: entry.userId,
-			filter: (log) => log.extraData?.role === role.id
+			userId: entry.userId
 		});
 	}
 
@@ -37,9 +37,9 @@ export class ModerationActionRoleRemove extends ModerationAction<Role, TypeVaria
 		await api().guilds.addRoleToMember(guild.id, entry.userId, role.id, { reason: entry.reason ?? undefined });
 
 		await this.completeLastModerationEntryFromUser({
+			filter: (log) => log.extraData?.role === role.id,
 			guild,
-			userId: entry.userId,
-			filter: (log) => log.extraData?.role === role.id
+			userId: entry.userId
 		});
 	}
 

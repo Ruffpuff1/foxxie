@@ -1,11 +1,11 @@
 import { EmbedBuilder, MessageCreateOptions } from 'discord.js';
 
 export class MessageOptions {
-	public content: string | null = null;
+	public content: null | string = null;
 
 	public embeds: EmbedBuilder[] = [];
 
-	public constructor(data: Partial<MessageOptions> | string | null | EmbedBuilder) {
+	public constructor(data: EmbedBuilder | null | Partial<MessageOptions> | string) {
 		if (typeof data === 'string') {
 			this.content = data;
 		} else if (data) {
@@ -25,8 +25,8 @@ export class MessageOptions {
 
 	public toJSON(): MessageCreateOptions {
 		return {
-			embeds: this.embeds,
-			content: this.content || undefined
+			content: this.content || undefined,
+			embeds: this.embeds
 		};
 	}
 }

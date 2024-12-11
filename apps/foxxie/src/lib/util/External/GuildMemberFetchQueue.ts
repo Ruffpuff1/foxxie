@@ -10,14 +10,14 @@ import { Time } from '@sapphire/time-utilities';
  */
 interface GuildMemberFetchQueueShardEntry {
 	/**
-	 * The guild IDs pending to be fetched.
-	 */
-	pending: string[];
-
-	/**
 	 * The amount of guilds which members are currently being fetched.
 	 */
 	fetching: number;
+
+	/**
+	 * The guild IDs pending to be fetched.
+	 */
+	pending: string[];
 }
 
 const kMaximumQueriesPerMinute = 90;
@@ -35,13 +35,6 @@ export class GuildMemberFetchQueue {
 	 * The shard queues.
 	 */
 	private readonly shards = new Map<number, GuildMemberFetchQueueShardEntry>();
-
-	/**
-	 * Destroys the instance
-	 */
-	public destroy(): void {
-		clearInterval(this.interval);
-	}
 
 	/**
 	 * Adds a guild to the fetch queue.
@@ -62,6 +55,20 @@ export class GuildMemberFetchQueue {
 	}
 
 	/**
+	 * Destroys the instance
+	 */
+	public destroy(): void {
+		clearInterval(this.interval);
+	}
+
+	/**
+	 * Fetches the members for each shard.
+	 */
+	public fetch(): void {
+		for (const entry of this.shards.values()) this.fetchShard(entry);
+	}
+
+	/**
 	 * Removes a guild from the fetch queue.
 	 * @param shardId The shard id of the guild.
 	 * @param guildId The guild id to queue.
@@ -75,13 +82,6 @@ export class GuildMemberFetchQueue {
 		if (index === -1) return;
 
 		entry.pending.splice(index, 1);
-	}
-
-	/**
-	 * Fetches the members for each shard.
-	 */
-	public fetch(): void {
-		for (const entry of this.shards.values()) this.fetchShard(entry);
 	}
 
 	/**

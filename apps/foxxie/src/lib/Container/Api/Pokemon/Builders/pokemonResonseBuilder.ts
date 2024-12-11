@@ -8,7 +8,10 @@ import {
 	resolveColor,
 	resolveSerebiiUrl
 } from '@favware/graphql-pokemon/utilities';
-import { FavouredEntry, KeysContaining } from '../utils.js';
+import { PaginatedMessage, PaginatedMessageAction } from '@sapphire/discord.js-utilities';
+import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
+import { LanguageKeys } from '#lib/i18n';
+import { Emojis } from '#lib/util/constants';
 import {
 	APIButtonComponentWithURL,
 	APISelectMenuOption,
@@ -20,16 +23,14 @@ import {
 	inlineCode,
 	italic
 } from 'discord.js';
-import { PaginatedMessage, PaginatedMessageAction } from '@sapphire/discord.js-utilities';
-import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import { TFunction } from 'i18next';
-import { LanguageKeys } from '#lib/i18n';
-import { Emojis } from '#lib/util/constants';
+
+import { FavouredEntry, KeysContaining } from '../utils.js';
 
 enum StatsEnum {
-	hp = 'HP',
 	attack = 'ATK',
 	defense = 'DEF',
+	hp = 'HP',
 	specialattack = 'SPA',
 	specialdefense = 'SPD',
 	speed = 'SPE'
@@ -37,20 +38,22 @@ enum StatsEnum {
 
 export type PokeDetails = Omit<Pokemon, '__typename'>;
 
+export type PokemonSpriteTypes = keyof Pick<Pokemon, KeysContaining<Pokemon, 'sprite'>>;
+
 export class PokemonResponseBuilder {
+	private abilities!: string[];
+
+	private baseStats!: string[];
+
+	private evoChain!: string;
+
+	private evYields!: string[];
+
 	private pokeDetails: PokeDetails;
 
 	private spriteToGet: PokemonSpriteTypes;
 
 	private t: TFunction;
-
-	private abilities!: string[];
-
-	private baseStats!: string[];
-
-	private evYields!: string[];
-
-	private evoChain!: string;
 
 	public constructor(pokeDetails: PokeDetails, spriteToGet: PokemonSpriteTypes, t: TFunction) {
 		this.pokeDetails = pokeDetails;
@@ -71,8 +74,8 @@ export class PokemonResponseBuilder {
 			template: new EmbedBuilder()
 				.setColor(resolveColor(this.pokeDetails.color))
 				.setAuthor({
-					name: `#${this.pokeDetails.num} - ${pokemonEnumToSpecies(this.pokeDetails.key)}`,
-					iconURL: this.pokeDetails[this.spriteToGet]
+					iconURL: this.pokeDetails[this.spriteToGet],
+					name: `#${this.pokeDetails.num} - ${pokemonEnumToSpecies(this.pokeDetails.key)}`
 				})
 				.setThumbnail(this.pokeDetails[this.spriteToGet])
 		})
@@ -81,21 +84,21 @@ export class PokemonResponseBuilder {
 			.addPageEmbed((embed) => {
 				embed.addFields(
 					{
+						inline: true,
 						name: this.t(`${LanguageKeys.Commands.Websearch.PokemonTitles}.type`, {
 							count: this.pokeDetails.types.length
 						}),
-						value: this.pokeDetails.types.map((type) => type.name).join(', '),
-						inline: true
+						value: this.pokeDetails.types.map((type) => type.name).join(', ')
 					},
 					{
+						inline: true,
 						name: titles.abilities,
-						value: this.t(LanguageKeys.Globals.And, { value: this.abilities }),
-						inline: true
+						value: this.t(LanguageKeys.Globals.And, { value: this.abilities })
 					},
 					{
+						inline: true,
 						name: titles.gender,
-						value: this.parseGenderRatio(this.pokeDetails.gender),
-						inline: true
+						value: this.parseGenderRatio(this.pokeDetails.gender)
 					},
 					{
 						name: titles.evolutions,
@@ -112,57 +115,57 @@ export class PokemonResponseBuilder {
 			.addPageEmbed((embed) => {
 				embed.addFields(
 					{
+						inline: true,
 						name: titles.height,
-						value: `${this.t(LanguageKeys.Globals.NumberFormat, { value: this.pokeDetails.height })}m`,
-						inline: true
+						value: `${this.t(LanguageKeys.Globals.NumberFormat, { value: this.pokeDetails.height })}m`
 					},
 					{
+						inline: true,
 						name: titles.weight,
-						value: `${this.t(LanguageKeys.Globals.NumberFormat, { value: this.pokeDetails.weight })}kg`,
-						inline: true
+						value: `${this.t(LanguageKeys.Globals.NumberFormat, { value: this.pokeDetails.weight })}kg`
 					}
 				);
 
 				if (isRegularPokemon(this.pokeDetails)) {
 					if (this.pokeDetails.levellingRate) {
 						embed.addFields({
+							inline: true,
 							name: titles.levelingRate,
-							value: this.pokeDetails.levellingRate,
-							inline: true
+							value: this.pokeDetails.levellingRate
 						});
 					}
 				}
 
 				if (!isMissingNoOrM00(this.pokeDetails)) {
 					embed.addFields({
+						inline: true,
 						name: titles.eggGroups,
-						value: this.pokeDetails.eggGroups?.join(', ') || '',
-						inline: true
+						value: this.pokeDetails.eggGroups?.join(', ') || ''
 					});
 				}
 
 				if (isRegularPokemon(this.pokeDetails)) {
 					embed.addFields({
+						inline: true,
 						name: titles.eggObtainable,
-						value: this.pokeDetails.isEggObtainable ? this.t(LanguageKeys.Globals.Yes) : this.t(LanguageKeys.Globals.No),
-						inline: true
+						value: this.pokeDetails.isEggObtainable ? this.t(LanguageKeys.Globals.Yes) : this.t(LanguageKeys.Globals.No)
 					});
 
 					if (!isNullish(this.pokeDetails.minimumHatchTime) && !isNullish(this.pokeDetails.maximumHatchTime)) {
 						embed.addFields(
 							{
+								inline: true,
 								name: titles.minHatch,
 								value: this.t(LanguageKeys.Globals.NumberFormat, {
 									value: this.pokeDetails.minimumHatchTime
-								}),
-								inline: true
+								})
 							},
 							{
+								inline: true,
 								name: titles.maxHatch,
 								value: this.t(LanguageKeys.Globals.NumberFormat, {
 									value: this.pokeDetails.maximumHatchTime
-								}),
-								inline: true
+								})
 							}
 						);
 					}
@@ -235,6 +238,13 @@ export class PokemonResponseBuilder {
 		return display;
 	}
 
+	private constructEvoLink(key: Pokemon['key'], level: Pokemon['evolutionLevel'], evoChain: string, isEvo = true) {
+		if (isEvo) {
+			return `${evoChain} → ${inlineCode(pokemonEnumToSpecies(key))} ${level ? `(${level})` : ''}`;
+		}
+		return `${inlineCode(pokemonEnumToSpecies(key))} ${level ? `(${level})` : ''} → ${evoChain}`;
+	}
+
 	private getAbilities(abilitiesData: Abilities) {
 		const abilities: string[] = [];
 		for (const [type, ability] of Object.entries(abilitiesData)) {
@@ -252,15 +262,6 @@ export class PokemonResponseBuilder {
 		}
 
 		this.baseStats = baseStats;
-	}
-
-	private getEvYields(evYieldsData: EvYields) {
-		const evYields: string[] = [];
-		for (const [stat, value] of Object.entries(evYieldsData)) {
-			evYields.push(`${StatsEnum[stat as keyof Omit<EvYields, '__typename'>]}: ${bold(value.toString())}`);
-		}
-
-		this.evYields = evYields;
 	}
 
 	private getEvoChain(pokeDetails: Pokemon) {
@@ -306,11 +307,13 @@ export class PokemonResponseBuilder {
 		this.evoChain = evoChain;
 	}
 
-	private constructEvoLink(key: Pokemon['key'], level: Pokemon['evolutionLevel'], evoChain: string, isEvo = true) {
-		if (isEvo) {
-			return `${evoChain} → ${inlineCode(pokemonEnumToSpecies(key))} ${level ? `(${level})` : ''}`;
+	private getEvYields(evYieldsData: EvYields) {
+		const evYields: string[] = [];
+		for (const [stat, value] of Object.entries(evYieldsData)) {
+			evYields.push(`${StatsEnum[stat as keyof Omit<EvYields, '__typename'>]}: ${bold(value.toString())}`);
 		}
-		return `${inlineCode(pokemonEnumToSpecies(key))} ${level ? `(${level})` : ''} → ${evoChain}`;
+
+		this.evYields = evYields;
 	}
 
 	private parseExternalResources(pokeDetails: PokeDetails): PaginatedMessageAction[] {
@@ -357,10 +360,8 @@ export class PokemonResponseBuilder {
 	}
 }
 
-export type PokemonSpriteTypes = keyof Pick<Pokemon, KeysContaining<Pokemon, 'sprite'>>;
-
-export function fuzzyPokemonToSelectOption<L extends 'name' | 'label'>(
-	fuzzyMatch: Pokemon | FavouredEntry<PokemonEnum>,
+export function fuzzyPokemonToSelectOption<L extends 'label' | 'name'>(
+	fuzzyMatch: FavouredEntry<PokemonEnum> | Pokemon,
 	labelLikeKey: L
 ): L extends 'name' ? ApplicationCommandOptionChoiceData : APISelectMenuOption {
 	const label = isFavouredEntry(fuzzyMatch) ? fuzzyMatch.name : pokemonEnumToSpecies(fuzzyMatch.key);
@@ -369,6 +370,6 @@ export function fuzzyPokemonToSelectOption<L extends 'name' | 'label'>(
 	return { [labelLikeKey]: label, value: fuzzyMatch.key };
 }
 
-function isFavouredEntry(fuzzyMatch: Pokemon | FavouredEntry<PokemonEnum>): fuzzyMatch is FavouredEntry<PokemonEnum> {
+function isFavouredEntry(fuzzyMatch: FavouredEntry<PokemonEnum> | Pokemon): fuzzyMatch is FavouredEntry<PokemonEnum> {
 	return (fuzzyMatch as FavouredEntry<PokemonEnum>).name !== undefined;
 }

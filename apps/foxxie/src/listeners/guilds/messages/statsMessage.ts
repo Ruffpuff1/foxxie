@@ -1,14 +1,14 @@
+import { ApplyOptions } from '@sapphire/decorators';
+import { Listener, ListenerOptions } from '@sapphire/framework';
 import { writeSettings } from '#lib/database';
 import { acquireMember, createMember, updateMember } from '#lib/Database/Models/member';
 import { EventArgs, FoxxieEvents } from '#lib/types';
 import { minutes } from '#utils/common';
-import { ApplyOptions } from '@sapphire/decorators';
-import { Listener, ListenerOptions } from '@sapphire/framework';
 import { GuildMember } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>(({ container }) => ({
-	event: FoxxieEvents.StatsMessage,
-	enabled: container.client.enabledProdOnlyEvent()
+	enabled: container.client.enabledProdOnlyEvent(),
+	event: FoxxieEvents.StatsMessage
 }))
 export class UserListener extends Listener<FoxxieEvents.StatsMessage> {
 	public timeout = minutes(5);

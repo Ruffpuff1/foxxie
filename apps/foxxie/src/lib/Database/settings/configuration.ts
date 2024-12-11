@@ -1,8 +1,8 @@
-import { ConfigurableKeyValueOptions, NonEmptyArray, SchemaKey, type GuildDataKey } from '#lib/database';
+import { objectEntries } from '@sapphire/utilities';
+import { ConfigurableKeyValueOptions, type GuildDataKey, NonEmptyArray, SchemaKey } from '#lib/database';
 import { SchemaGroup } from '#lib/Database/settings/schema/SchemaGroup';
 import { LanguageKeys } from '#lib/i18n';
 import { years } from '#utils/common';
-import { objectEntries } from '@sapphire/utilities';
 import { APIApplicationCommandOptionChoice, Collection } from 'discord.js';
 
 export type SchemaDataKey = Exclude<GuildDataKey, 'id' | 'messageCount' | 'starboardEmojis' | 'tags' | 'words'>;
@@ -10,840 +10,838 @@ export type SchemaDataKey = Exclude<GuildDataKey, 'id' | 'messageCount' | 'starb
 const configurableKeys = new Collection<SchemaDataKey, SchemaKey>();
 const configurableGroups = new SchemaGroup('::ROOT::');
 
-export function getConfigurableKeys(): Collection<SchemaDataKey, SchemaKey> {
-	getConfiguration();
-	return configurableKeys;
-}
-
 export function getConfigurableGroups(): SchemaGroup {
 	getConfiguration();
 	return configurableGroups;
 }
 
-let cachedConfiguration: Record<SchemaDataKey, SchemaKey> | null = null;
+export function getConfigurableKeys(): Collection<SchemaDataKey, SchemaKey> {
+	getConfiguration();
+	return configurableKeys;
+}
+
+let cachedConfiguration: null | Record<SchemaDataKey, SchemaKey> = null;
 export function getConfiguration() {
 	cachedConfiguration ??= makeKeys({
-		prefix: {
-			type: 'string',
-			description: LanguageKeys.Settings.Prefix,
-			minimum: 1,
-			maximum: 10,
-			default: 'd.'
-		},
-		language: {
-			type: 'language',
-			description: LanguageKeys.Settings.Language,
-			default: 'en-US'
-		},
-		disableNaturalPrefix: {
-			name: 'disable-natural-prefix',
-			type: 'boolean',
-			default: false
-		},
-		disabledCommands: {
-			name: 'disabled-commands',
-			type: 'commandMatch',
-			description: LanguageKeys.Settings.DisabledCommands,
-			maximum: 32,
-			array: true
-		},
-		permissionsUsers: {
-			type: 'permissionNode',
-			name: 'modules.permissions.users',
-			array: true,
-			dashboardOnly: true
-		},
-		permissionsRoles: {
-			type: 'permissionNode',
-			name: 'modules.permissions.roles',
-			array: true,
-			dashboardOnly: true
-		},
-		channelsMediaOnly: {
-			type: 'guildTextChannel',
-			name: 'channels.media-only',
-			array: true
-		},
-		channelsLogsModeration: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.moderation'
-		},
-		channelsLogsImage: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.image'
-		},
-		channelsLogsMemberAdd: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.member-add'
-		},
-		channelsLogsMemberRemove: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.member-remove'
-		},
-		channelsLogsMemberNicknameUpdate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.member-nickname-update'
-		},
-		channelsLogsMemberUsernameUpdate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.member-username-update'
-		},
-		channelsLogsMemberRolesUpdate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.member-roles-update'
-		},
-		channelsLogsMessageDelete: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.message-delete'
-		},
-		channelsLogsMessageDeleteNsfw: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.message-delete-nsfw'
-		},
-		channelsLogsMessageUpdate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.message-update'
-		},
-		channelsLogsMessageUpdateNsfw: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.message-update-nsfw'
-		},
-		channelsLogsPrune: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.prune'
-		},
-		channelsLogsReaction: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.reaction'
-		},
-		channelsLogsRoleCreate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.role-create'
-		},
-		channelsLogsRoleUpdate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.role-update'
-		},
-		channelsLogsRoleDelete: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.role-delete'
-		},
-		channelsLogsChannelCreate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.channel-create'
-		},
-		channelsLogsChannelUpdate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.channel-update'
-		},
-		channelsLogsChannelDelete: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.channel-delete'
-		},
-		channelsLogsEmojiCreate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.emoji-create'
-		},
-		channelsLogsEmojiUpdate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.emoji-update'
-		},
-		channelsLogsEmojiDelete: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.emoji-delete'
-		},
-		channelsLogsServerUpdate: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.server-update'
-		},
-		channelsLogsVoiceActivity: {
-			type: 'guildTextChannel',
-			name: 'channels.logs.voice-activity'
+		channelsBirthday: {
+			name: 'modules.birthday.channel',
+			type: 'guildTextChannel'
 		},
 		channelsIgnoreAll: {
-			type: 'guildTextChannel',
+			array: true,
 			name: 'channels.ignore.all',
-			array: true
-		},
-		channelsIgnoreMessageEdit: {
-			type: 'guildTextChannel',
-			name: 'channels.ignore.message-edit',
-			array: true
+			type: 'guildTextChannel'
 		},
 		channelsIgnoreMessageDelete: {
-			type: 'guildTextChannel',
+			array: true,
 			name: 'channels.ignore.message-delete',
-			array: true
+			type: 'guildTextChannel'
+		},
+		channelsIgnoreMessageEdit: {
+			array: true,
+			name: 'channels.ignore.message-edit',
+			type: 'guildTextChannel'
 		},
 		channelsIgnoreReactionAdd: {
-			type: 'guildTextChannel',
+			array: true,
 			name: 'channels.ignore.reaction-add',
-			array: true
+			type: 'guildTextChannel'
+		},
+		channelsLogsChannelCreate: {
+			name: 'channels.logs.channel-create',
+			type: 'guildTextChannel'
+		},
+		channelsLogsChannelDelete: {
+			name: 'channels.logs.channel-delete',
+			type: 'guildTextChannel'
+		},
+		channelsLogsChannelUpdate: {
+			name: 'channels.logs.channel-update',
+			type: 'guildTextChannel'
+		},
+		channelsLogsEmojiCreate: {
+			name: 'channels.logs.emoji-create',
+			type: 'guildTextChannel'
+		},
+		channelsLogsEmojiDelete: {
+			name: 'channels.logs.emoji-delete',
+			type: 'guildTextChannel'
+		},
+		channelsLogsEmojiUpdate: {
+			name: 'channels.logs.emoji-update',
+			type: 'guildTextChannel'
+		},
+		channelsLogsImage: {
+			name: 'channels.logs.image',
+			type: 'guildTextChannel'
+		},
+		channelsLogsMemberAdd: {
+			name: 'channels.logs.member-add',
+			type: 'guildTextChannel'
+		},
+		channelsLogsMemberNicknameUpdate: {
+			name: 'channels.logs.member-nickname-update',
+			type: 'guildTextChannel'
+		},
+		channelsLogsMemberRemove: {
+			name: 'channels.logs.member-remove',
+			type: 'guildTextChannel'
+		},
+		channelsLogsMemberRolesUpdate: {
+			name: 'channels.logs.member-roles-update',
+			type: 'guildTextChannel'
+		},
+		channelsLogsMemberUsernameUpdate: {
+			name: 'channels.logs.member-username-update',
+			type: 'guildTextChannel'
+		},
+		channelsLogsMessageDelete: {
+			name: 'channels.logs.message-delete',
+			type: 'guildTextChannel'
+		},
+		channelsLogsMessageDeleteNsfw: {
+			name: 'channels.logs.message-delete-nsfw',
+			type: 'guildTextChannel'
+		},
+		channelsLogsMessageUpdate: {
+			name: 'channels.logs.message-update',
+			type: 'guildTextChannel'
+		},
+		channelsLogsMessageUpdateNsfw: {
+			name: 'channels.logs.message-update-nsfw',
+			type: 'guildTextChannel'
+		},
+		channelsLogsModeration: {
+			name: 'channels.logs.moderation',
+			type: 'guildTextChannel'
+		},
+		channelsLogsPrune: {
+			name: 'channels.logs.prune',
+			type: 'guildTextChannel'
+		},
+		channelsLogsReaction: {
+			name: 'channels.logs.reaction',
+			type: 'guildTextChannel'
+		},
+		channelsLogsRoleCreate: {
+			name: 'channels.logs.role-create',
+			type: 'guildTextChannel'
+		},
+		channelsLogsRoleDelete: {
+			name: 'channels.logs.role-delete',
+			type: 'guildTextChannel'
+		},
+		channelsLogsRoleUpdate: {
+			name: 'channels.logs.role-update',
+			type: 'guildTextChannel'
+		},
+		channelsLogsServerUpdate: {
+			name: 'channels.logs.server-update',
+			type: 'guildTextChannel'
+		},
+		channelsLogsVoiceActivity: {
+			name: 'channels.logs.voice-activity',
+			type: 'guildTextChannel'
+		},
+		channelsMediaOnly: {
+			array: true,
+			name: 'channels.media-only',
+			type: 'guildTextChannel'
 		},
 		disabledChannels: {
-			type: 'guildTextChannel',
-			name: 'disabled-channels',
-			description: LanguageKeys.Settings.DisabledChannels,
-			array: true
-		},
-		disabledCommandsChannels: {
-			type: 'notAllowed',
-			name: 'disabled-commands-channels',
 			array: true,
-			dashboardOnly: true
+			description: LanguageKeys.Settings.DisabledChannels,
+			name: 'disabled-channels',
+			type: 'guildTextChannel'
 		},
+		disabledCommands: {
+			array: true,
+			description: LanguageKeys.Settings.DisabledCommands,
+			maximum: 32,
+			name: 'disabled-commands',
+			type: 'commandMatch'
+		},
+
+		disabledCommandsChannels: {
+			array: true,
+			dashboardOnly: true,
+			name: 'disabled-commands-channels',
+			type: 'notAllowed'
+		},
+
+		disableNaturalPrefix: {
+			default: false,
+			name: 'disable-natural-prefix',
+			type: 'boolean'
+		},
+
 		eventsBanAdd: {
-			type: 'boolean',
+			description: LanguageKeys.Settings.EventsBanAdd,
 			name: 'events.ban-add',
-			description: LanguageKeys.Settings.EventsBanAdd
+			type: 'boolean'
 		},
 		eventsBanRemove: {
-			type: 'boolean',
+			description: LanguageKeys.Settings.EventsBanRemove,
 			name: 'events.ban-remove',
-			description: LanguageKeys.Settings.EventsBanRemove
+			type: 'boolean'
 		},
 		eventsKick: {
-			type: 'boolean',
+			description: LanguageKeys.Settings.EventsKick,
 			name: 'events.kick',
-			description: LanguageKeys.Settings.EventsKick
+			type: 'boolean'
 		},
 		eventsMuteAdd: {
-			type: 'boolean',
+			description: LanguageKeys.Settings.EventsMuteAdd,
 			name: 'events.mute-add',
-			description: LanguageKeys.Settings.EventsMuteAdd
+			type: 'boolean'
 		},
 		eventsMuteRemove: {
-			type: 'boolean',
+			description: LanguageKeys.Settings.EventsMuteRemove,
 			name: 'events.mute-remove',
-			description: LanguageKeys.Settings.EventsMuteRemove
+			type: 'boolean'
 		},
 		highlights: {
-			type: 'notAllowed',
+			dashboardOnly: true,
 			name: 'highlights',
-			dashboardOnly: true
+			type: 'notAllowed'
 		},
-		messagesIgnoreChannels: {
-			type: 'guildTextChannel',
-			name: 'messages.ignore-channels',
-			array: true
-		},
-		messagesModerationDm: {
-			type: 'boolean',
-			name: 'messages.moderation-dm',
-			description: LanguageKeys.Settings.ModerationDm
-		},
-		messagesModerationReasonDisplay: {
-			type: 'boolean',
-			name: 'messages.moderation-reason-display',
-			default: true
-		},
-		messagesModerationMessageDisplay: {
-			type: 'boolean',
-			name: 'messages.moderation-message-display',
-			default: true
-		},
-		messagesModerationAutoDelete: {
-			type: 'boolean',
-			name: 'messages.moderation-auto-delete',
-			description: LanguageKeys.Settings.MessagesModerationAutoDelete,
-			default: false
-		},
-		messagesModeratorNameDisplay: {
-			type: 'boolean',
-			name: 'messages.moderator-name-display',
-			default: true
+		language: {
+			default: 'en-US',
+			description: LanguageKeys.Settings.Language,
+			type: 'language'
 		},
 		messagesAutoDeleteIgnoredAll: {
-			type: 'boolean',
+			default: false,
 			name: 'messages.auto-delete.ignored-all',
-			default: false
-		},
-		messagesAutoDeleteIgnoredRoles: {
-			type: 'role',
-			name: 'messages.auto-delete.ignored-roles',
-			array: true
+			type: 'boolean'
 		},
 		messagesAutoDeleteIgnoredChannels: {
-			type: 'guildTextChannel',
+			array: true,
 			name: 'messages.auto-delete.ignored-channels',
-			array: true
+			type: 'guildTextChannel'
 		},
 		messagesAutoDeleteIgnoredCommands: {
-			type: 'commandMatch',
-			name: 'messages.auto-delete.ignored-commands',
-			array: true
-		},
-		rolesPersist: {
-			type: 'notAllowed',
-			name: 'modules.persist-roles',
 			array: true,
-			dashboardOnly: true
+			name: 'messages.auto-delete.ignored-commands',
+			type: 'commandMatch'
 		},
-		rolesPersistEnabled: {
-			type: 'boolean',
-			name: 'roles.persist-roles-enabled',
-			description: LanguageKeys.Settings.RolesPersistEnabled
+		messagesAutoDeleteIgnoredRoles: {
+			array: true,
+			name: 'messages.auto-delete.ignored-roles',
+			type: 'role'
+		},
+		messagesIgnoreChannels: {
+			array: true,
+			name: 'messages.ignore-channels',
+			type: 'guildTextChannel'
+		},
+		messagesModerationAutoDelete: {
+			default: false,
+			description: LanguageKeys.Settings.MessagesModerationAutoDelete,
+			name: 'messages.moderation-auto-delete',
+			type: 'boolean'
+		},
+		messagesModerationDm: {
+			description: LanguageKeys.Settings.ModerationDm,
+			name: 'messages.moderation-dm',
+			type: 'boolean'
+		},
+		messagesModerationMessageDisplay: {
+			default: true,
+			name: 'messages.moderation-message-display',
+			type: 'boolean'
+		},
+		messagesModerationReasonDisplay: {
+			default: true,
+			name: 'messages.moderation-reason-display',
+			type: 'boolean'
+		},
+		messagesModeratorNameDisplay: {
+			default: true,
+			name: 'messages.moderator-name-display',
+			type: 'boolean'
+		},
+		permissionsRoles: {
+			array: true,
+			dashboardOnly: true,
+			name: 'modules.permissions.roles',
+			type: 'permissionNode'
+		},
+		permissionsUsers: {
+			array: true,
+			dashboardOnly: true,
+			name: 'modules.permissions.users',
+			type: 'permissionNode'
+		},
+		prefix: {
+			default: 'd.',
+			description: LanguageKeys.Settings.Prefix,
+			maximum: 10,
+			minimum: 1,
+			type: 'string'
 		},
 		reactionRoles: {
-			type: 'notAllowed',
-			name: 'roles.reaction-roles',
 			array: true,
-			dashboardOnly: true
+			dashboardOnly: true,
+			name: 'roles.reaction-roles',
+			type: 'notAllowed'
 		},
 		rolesAdmin: {
-			type: 'role',
+			array: true,
 			name: 'roles.admin',
-			array: true
-		},
-		rolesInitialHumans: {
-			type: 'role',
-			array: true,
-			name: 'roles.initial-humans',
-			description: LanguageKeys.Settings.Autoroles
-		},
-		rolesInitialBots: {
-			type: 'role',
-			array: true,
-			name: 'roles.initial-bots',
-			description: LanguageKeys.Settings.Botroles
-		},
-		rolesModerator: {
-			type: 'role',
-			name: 'roles.moderator',
-			array: true
-		},
-		rolesMuted: {
-			type: 'role',
-			name: 'roles.muted',
-			description: LanguageKeys.Settings.RolesMuted
-		},
-		rolesRestrictedAttachment: {
-			type: 'role',
-			name: 'roles.restricted-attachment'
-		},
-		rolesRestrictedReaction: {
-			type: 'role',
-			name: 'roles.restricted-reaction'
-		},
-		rolesRestrictedEmbed: {
-			type: 'role',
-			name: 'roles.restricted-embed',
-			description: LanguageKeys.Settings.RolesEmbedRestrict
-		},
-		rolesRestrictedEmoji: {
-			type: 'role',
-			name: 'roles.restricted-emoji'
-		},
-		rolesRestrictedVoice: {
-			type: 'role',
-			name: 'roles.restricted-voice'
+			type: 'role'
 		},
 		rolesBirthday: {
-			type: 'role',
-			name: 'modules.birthday.role'
+			name: 'modules.birthday.role',
+			type: 'role'
 		},
-		channelsBirthday: {
-			type: 'guildTextChannel',
-			name: 'modules.birthday.channel'
+		rolesInitialBots: {
+			array: true,
+			description: LanguageKeys.Settings.Botroles,
+			name: 'roles.initial-bots',
+			type: 'role'
+		},
+		rolesInitialHumans: {
+			array: true,
+			description: LanguageKeys.Settings.Autoroles,
+			name: 'roles.initial-humans',
+			type: 'role'
+		},
+		rolesModerator: {
+			array: true,
+			name: 'roles.moderator',
+			type: 'role'
+		},
+		rolesMuted: {
+			description: LanguageKeys.Settings.RolesMuted,
+			name: 'roles.muted',
+			type: 'role'
+		},
+		rolesPersist: {
+			array: true,
+			dashboardOnly: true,
+			name: 'modules.persist-roles',
+			type: 'notAllowed'
+		},
+		rolesPersistEnabled: {
+			description: LanguageKeys.Settings.RolesPersistEnabled,
+			name: 'roles.persist-roles-enabled',
+			type: 'boolean'
+		},
+		rolesRestrictedAttachment: {
+			name: 'roles.restricted-attachment',
+			type: 'role'
+		},
+		rolesRestrictedEmbed: {
+			description: LanguageKeys.Settings.RolesEmbedRestrict,
+			name: 'roles.restricted-embed',
+			type: 'role'
+		},
+		rolesRestrictedEmoji: {
+			name: 'roles.restricted-emoji',
+			type: 'role'
+		},
+		rolesRestrictedReaction: {
+			name: 'roles.restricted-reaction',
+			type: 'role'
+		},
+		rolesRestrictedVoice: {
+			name: 'roles.restricted-voice',
+			type: 'role'
 		},
 		selfmodAttachmentsEnabled: {
-			type: 'boolean',
+			default: false,
 			name: 'modules.selfmod.attachments.enabled',
-			default: false
-		},
-		selfmodAttachmentsIgnoredRoles: {
-			type: 'role',
-			name: 'modules.selfmod.attachments.ignored-roles',
-			array: true
-		},
-		selfmodAttachmentsIgnoredChannels: {
-			type: 'guildTextChannel',
-			name: 'modules.selfmod.attachments.ignored-channels',
-			array: true
-		},
-		selfmodAttachmentsSoftAction: {
-			type: 'integer',
-			name: 'modules.selfmod.attachments.soft-action',
-			default: 0,
-			dashboardOnly: true
+			type: 'boolean'
 		},
 		selfmodAttachmentsHardAction: {
-			type: 'integer',
-			name: 'modules.selfmod.attachments.hard-action',
+			dashboardOnly: true,
 			default: 0,
-			dashboardOnly: true
+			name: 'modules.selfmod.attachments.hard-action',
+			type: 'integer'
 		},
 		selfmodAttachmentsHardActionDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.attachments.hard-action-duration',
-			minimum: 0,
+			dashboardOnly: true,
 			maximum: years(5),
-			dashboardOnly: true
-		},
-		selfmodAttachmentsThresholdMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.attachments.threshold-maximum',
 			minimum: 0,
-			maximum: 100,
-			default: 10,
-			dashboardOnly: true
+			name: 'modules.selfmod.attachments.hard-action-duration',
+			type: 'timespan'
+		},
+		selfmodAttachmentsIgnoredChannels: {
+			array: true,
+			name: 'modules.selfmod.attachments.ignored-channels',
+			type: 'guildTextChannel'
+		},
+		selfmodAttachmentsIgnoredRoles: {
+			array: true,
+			name: 'modules.selfmod.attachments.ignored-roles',
+			type: 'role'
+		},
+		selfmodAttachmentsSoftAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.attachments.soft-action',
+			type: 'integer'
 		},
 		selfmodAttachmentsThresholdDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.attachments.threshold-duration',
-			minimum: 0,
-			maximum: years(5),
+			dashboardOnly: true,
 			default: 60000,
-			dashboardOnly: true
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.attachments.threshold-duration',
+			type: 'timespan'
+		},
+		selfmodAttachmentsThresholdMaximum: {
+			dashboardOnly: true,
+			default: 10,
+			maximum: 100,
+			minimum: 0,
+			name: 'modules.selfmod.attachments.threshold-maximum',
+			type: 'integer'
 		},
 		selfmodCapitalsEnabled: {
-			type: 'boolean',
+			default: false,
 			name: 'modules.selfmod.capitals.enabled',
-			default: false
-		},
-		selfmodCapitalsIgnoredRoles: {
-			type: 'role',
-			name: 'modules.selfmod.capitals.ignored-roles',
-			array: true
-		},
-		selfmodCapitalsIgnoredChannels: {
-			type: 'guildTextChannel',
-			name: 'modules.selfmod.capitals.ignored-channels',
-			array: true
-		},
-		selfmodCapitalsMinimum: {
-			type: 'integer',
-			name: 'modules.selfmod.capitals.minimum',
-			minimum: 5,
-			maximum: 2000,
-			default: 15
-		},
-		selfmodCapitalsMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.capitals.maximum',
-			minimum: 10,
-			maximum: 100,
-			default: 50
-		},
-		selfmodCapitalsSoftAction: {
-			type: 'integer',
-			name: 'modules.selfmod.capitals.soft-action',
-			default: 0,
-			dashboardOnly: true
+			type: 'boolean'
 		},
 		selfmodCapitalsHardAction: {
-			type: 'integer',
-			name: 'modules.selfmod.capitals.hard-action',
+			dashboardOnly: true,
 			default: 0,
-			dashboardOnly: true
+			name: 'modules.selfmod.capitals.hard-action',
+			type: 'integer'
 		},
 		selfmodCapitalsHardActionDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.capitals.hard-action-duration',
-			minimum: 0,
+			dashboardOnly: true,
 			maximum: years(5),
-			dashboardOnly: true
-		},
-		selfmodCapitalsThresholdMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.capitals.threshold-maximum',
 			minimum: 0,
+			name: 'modules.selfmod.capitals.hard-action-duration',
+			type: 'timespan'
+		},
+		selfmodCapitalsIgnoredChannels: {
+			array: true,
+			name: 'modules.selfmod.capitals.ignored-channels',
+			type: 'guildTextChannel'
+		},
+		selfmodCapitalsIgnoredRoles: {
+			array: true,
+			name: 'modules.selfmod.capitals.ignored-roles',
+			type: 'role'
+		},
+		selfmodCapitalsMaximum: {
+			default: 50,
 			maximum: 100,
-			default: 10,
-			dashboardOnly: true
+			minimum: 10,
+			name: 'modules.selfmod.capitals.maximum',
+			type: 'integer'
+		},
+		selfmodCapitalsMinimum: {
+			default: 15,
+			maximum: 2000,
+			minimum: 5,
+			name: 'modules.selfmod.capitals.minimum',
+			type: 'integer'
+		},
+		selfmodCapitalsSoftAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.capitals.soft-action',
+			type: 'integer'
 		},
 		selfmodCapitalsThresholdDuration: {
-			type: 'timespan',
+			dashboardOnly: true,
+			default: 60000,
+			maximum: years(5),
+			minimum: 0,
 			name: 'modules.selfmod.capitals.threshold-duration',
-			minimum: 0,
-			maximum: years(5),
-			default: 60000,
-			dashboardOnly: true
+			type: 'timespan'
 		},
-		selfmodLinksEnabled: {
-			type: 'boolean',
-			name: 'modules.selfmod.links.enabled',
-			default: false
-		},
-		selfmodLinksAllowed: {
-			type: 'string',
-			name: 'modules.selfmod.links.allowed',
-			array: true
-		},
-		selfmodLinksIgnoredRoles: {
-			type: 'role',
-			name: 'modules.selfmod.links.ignored-roles',
-			array: true
-		},
-		selfmodLinksIgnoredChannels: {
-			type: 'guildTextChannel',
-			name: 'modules.selfmod.links.ignored-channels',
-			array: true
-		},
-		selfmodLinksSoftAction: {
-			type: 'integer',
-			name: 'modules.selfmod.links.soft-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodLinksHardAction: {
-			type: 'integer',
-			name: 'modules.selfmod.links.hard-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodLinksHardActionDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.links.hard-action-duration',
-			minimum: 0,
-			maximum: years(5),
-			dashboardOnly: true
-		},
-		selfmodLinksThresholdMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.links.threshold-maximum',
-			minimum: 0,
-			maximum: 100,
+		selfmodCapitalsThresholdMaximum: {
+			dashboardOnly: true,
 			default: 10,
-			dashboardOnly: true
-		},
-		selfmodLinksThresholdDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.links.threshold-duration',
-			minimum: 0,
-			maximum: years(5),
-			default: 60000,
-			dashboardOnly: true
-		},
-		selfmodMessagesEnabled: {
-			type: 'boolean',
-			name: 'modules.selfmod.messages.enabled',
-			default: false
-		},
-		selfmodMessagesIgnoredRoles: {
-			type: 'role',
-			name: 'modules.selfmod.messages.ignored-roles',
-			array: true
-		},
-		selfmodMessagesIgnoredChannels: {
-			type: 'guildTextChannel',
-			name: 'modules.selfmod.messages.ignored-channels',
-			array: true
-		},
-		selfmodMessagesMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.messages.maximum',
-			minimum: 2,
 			maximum: 100,
-			default: 5
-		},
-		selfmodMessagesQueueSize: {
-			type: 'integer',
-			name: 'modules.selfmod.messages.queue-size',
-			minimum: 10,
-			maximum: 100,
-			default: 50
-		},
-		selfmodMessagesSoftAction: {
-			type: 'integer',
-			name: 'modules.selfmod.messages.soft-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodMessagesHardAction: {
-			type: 'integer',
-			name: 'modules.selfmod.messages.hard-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodMessagesHardActionDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.messages.hard-action-duration',
 			minimum: 0,
-			maximum: years(5),
-			dashboardOnly: true
-		},
-		selfmodMessagesThresholdMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.messages.threshold-maximum',
-			minimum: 0,
-			maximum: 100,
-			default: 10,
-			dashboardOnly: true
-		},
-		selfmodMessagesThresholdDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.messages.threshold-duration',
-			minimum: 0,
-			maximum: years(5),
-			default: 60000,
-			dashboardOnly: true
-		},
-		selfmodNewlinesEnabled: {
-			type: 'boolean',
-			name: 'modules.selfmod.newlines.enabled',
-			default: false
-		},
-		selfmodNewlinesIgnoredRoles: {
-			type: 'role',
-			name: 'modules.selfmod.newlines.ignored-roles',
-			array: true
-		},
-		selfmodNewlinesIgnoredChannels: {
-			type: 'guildTextChannel',
-			name: 'modules.selfmod.newlines.ignored-channels',
-			array: true
-		},
-		selfmodNewlinesMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.newlines.maximum',
-			minimum: 10,
-			maximum: 100,
-			default: 20
-		},
-		selfmodNewlinesSoftAction: {
-			type: 'integer',
-			name: 'modules.selfmod.newlines.soft-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodNewlinesHardAction: {
-			type: 'integer',
-			name: 'modules.selfmod.newlines.hard-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodNewlinesHardActionDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.newlines.hard-action-duration',
-			minimum: 0,
-			maximum: years(5),
-			dashboardOnly: true
-		},
-		selfmodNewlinesThresholdMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.newlines.threshold-maximum',
-			minimum: 0,
-			maximum: 100,
-			default: 10,
-			dashboardOnly: true
-		},
-		selfmodNewlinesThresholdDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.newlines.threshold-duration',
-			minimum: 0,
-			maximum: years(5),
-			default: 60000,
-			dashboardOnly: true
-		},
-		selfmodInvitesEnabled: {
-			type: 'boolean',
-			name: 'modules.selfmod.invites.enabled',
-			default: false
-		},
-		selfmodInvitesIgnoredCodes: {
-			type: 'string',
-			name: 'modules.selfmod.invites.ignored-codes',
-			array: true
-		},
-		selfmodInvitesIgnoredGuilds: {
-			type: 'string',
-			name: 'modules.selfmod.invites.ignored-guilds',
-			array: true
-		},
-		selfmodInvitesIgnoredRoles: {
-			type: 'role',
-			name: 'modules.selfmod.invites.ignored-roles',
-			array: true
-		},
-		selfmodInvitesIgnoredChannels: {
-			type: 'guildTextChannel',
-			name: 'modules.selfmod.invites.ignored-channels',
-			array: true
-		},
-		selfmodInvitesSoftAction: {
-			type: 'integer',
-			name: 'modules.selfmod.invites.soft-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodInvitesHardAction: {
-			type: 'integer',
-			name: 'modules.selfmod.invites.hard-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodInvitesHardActionDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.invites.hard-action-duration',
-			minimum: 0,
-			maximum: years(5),
-			dashboardOnly: true
-		},
-		selfmodInvitesThresholdMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.invites.threshold-maximum',
-			minimum: 0,
-			maximum: 100,
-			default: 10,
-			dashboardOnly: true
-		},
-		selfmodInvitesThresholdDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.invites.threshold-duration',
-			minimum: 0,
-			maximum: years(5),
-			default: 60000,
-			dashboardOnly: true
+			name: 'modules.selfmod.capitals.threshold-maximum',
+			type: 'integer'
 		},
 		selfmodFilterEnabled: {
-			type: 'boolean',
+			default: false,
 			name: 'modules.selfmod.filter.enabled',
-			default: false
-		},
-		selfmodFilterRaw: {
-			type: 'string',
-			name: 'modules.selfmod.filter.raw',
-			array: true,
-			dashboardOnly: true
-		},
-		selfmodFilterIgnoredRoles: {
-			type: 'role',
-			name: 'modules.selfmod.filter.ignored-roles',
-			array: true
-		},
-		selfmodFilterIgnoredChannels: {
-			type: 'guildTextChannel',
-			name: 'modules.selfmod.filter.ignored-channels',
-			array: true
-		},
-		selfmodFilterSoftAction: {
-			type: 'integer',
-			name: 'modules.selfmod.filter.soft-action',
-			default: 0,
-			dashboardOnly: true
+			type: 'boolean'
 		},
 		selfmodFilterHardAction: {
-			type: 'integer',
-			name: 'modules.selfmod.filter.hard-action',
+			dashboardOnly: true,
 			default: 0,
-			dashboardOnly: true
+			name: 'modules.selfmod.filter.hard-action',
+			type: 'integer'
 		},
 		selfmodFilterHardActionDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.filter.hard-action-duration',
-			minimum: 0,
+			dashboardOnly: true,
 			maximum: years(5),
-			dashboardOnly: true
-		},
-		selfmodFilterThresholdMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.filter.threshold-maximum',
 			minimum: 0,
-			maximum: 100,
-			default: 10,
-			dashboardOnly: true
+			name: 'modules.selfmod.filter.hard-action-duration',
+			type: 'timespan'
+		},
+		selfmodFilterIgnoredChannels: {
+			array: true,
+			name: 'modules.selfmod.filter.ignored-channels',
+			type: 'guildTextChannel'
+		},
+		selfmodFilterIgnoredRoles: {
+			array: true,
+			name: 'modules.selfmod.filter.ignored-roles',
+			type: 'role'
+		},
+		selfmodFilterRaw: {
+			array: true,
+			dashboardOnly: true,
+			name: 'modules.selfmod.filter.raw',
+			type: 'string'
+		},
+		selfmodFilterSoftAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.filter.soft-action',
+			type: 'integer'
 		},
 		selfmodFilterThresholdDuration: {
-			type: 'timespan',
+			dashboardOnly: true,
+			default: 60000,
+			maximum: years(5),
+			minimum: 0,
 			name: 'modules.selfmod.filter.threshold-duration',
-			minimum: 0,
-			maximum: years(5),
-			default: 60000,
-			dashboardOnly: true
+			type: 'timespan'
 		},
-		selfmodReactionsEnabled: {
-			type: 'boolean',
-			name: 'modules.selfmod.reactions.enabled',
-			default: false
-		},
-		selfmodReactionsIgnoredRoles: {
-			type: 'role',
-			name: 'modules.selfmod.reactions.ignored-roles',
-			array: true
-		},
-		selfmodReactionsIgnoredChannels: {
-			type: 'guildTextChannel',
-			name: 'modules.selfmod.reactions.ignored-channels',
-			array: true
-		},
-		selfmodReactionsMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.reactions.maximum',
-			minimum: 1,
-			maximum: 100,
-			default: 10
-		},
-		selfmodReactionsAllowed: {
-			type: 'emoji',
-			name: 'modules.selfmod.reactions.allowed',
-			array: true
-		},
-		selfmodReactionsBlocked: {
-			type: 'emoji',
-			name: 'modules.selfmod.reactions.blocked',
-			array: true
-		},
-		selfmodReactionsSoftAction: {
-			type: 'integer',
-			name: 'modules.selfmod.reactions.soft-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodReactionsHardAction: {
-			type: 'integer',
-			name: 'modules.selfmod.reactions.hard-action',
-			default: 0,
-			dashboardOnly: true
-		},
-		selfmodReactionsHardActionDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.reactions.hard-action-duration',
-			minimum: 0,
-			maximum: years(5),
-			dashboardOnly: true
-		},
-		selfmodReactionsThresholdMaximum: {
-			type: 'integer',
-			name: 'modules.selfmod.reactions.threshold-maximum',
-			minimum: 0,
-			maximum: 100,
+		selfmodFilterThresholdMaximum: {
+			dashboardOnly: true,
 			default: 10,
-			dashboardOnly: true
-		},
-		selfmodReactionsThresholdDuration: {
-			type: 'timespan',
-			name: 'modules.selfmod.reactions.threshold-duration',
+			maximum: 100,
 			minimum: 0,
-			maximum: years(5),
-			default: 60000,
-			dashboardOnly: true
+			name: 'modules.selfmod.filter.threshold-maximum',
+			type: 'integer'
 		},
 		selfmodIgnoredChannels: {
-			type: 'guildTextChannel',
+			array: true,
 			name: 'modules.selfmod.ignored-channels',
-			array: true
+			type: 'guildTextChannel'
+		},
+		selfmodInvitesEnabled: {
+			default: false,
+			name: 'modules.selfmod.invites.enabled',
+			type: 'boolean'
+		},
+		selfmodInvitesHardAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.invites.hard-action',
+			type: 'integer'
+		},
+		selfmodInvitesHardActionDuration: {
+			dashboardOnly: true,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.invites.hard-action-duration',
+			type: 'timespan'
+		},
+		selfmodInvitesIgnoredChannels: {
+			array: true,
+			name: 'modules.selfmod.invites.ignored-channels',
+			type: 'guildTextChannel'
+		},
+		selfmodInvitesIgnoredCodes: {
+			array: true,
+			name: 'modules.selfmod.invites.ignored-codes',
+			type: 'string'
+		},
+		selfmodInvitesIgnoredGuilds: {
+			array: true,
+			name: 'modules.selfmod.invites.ignored-guilds',
+			type: 'string'
+		},
+		selfmodInvitesIgnoredRoles: {
+			array: true,
+			name: 'modules.selfmod.invites.ignored-roles',
+			type: 'role'
+		},
+		selfmodInvitesSoftAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.invites.soft-action',
+			type: 'integer'
+		},
+		selfmodInvitesThresholdDuration: {
+			dashboardOnly: true,
+			default: 60000,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.invites.threshold-duration',
+			type: 'timespan'
+		},
+		selfmodInvitesThresholdMaximum: {
+			dashboardOnly: true,
+			default: 10,
+			maximum: 100,
+			minimum: 0,
+			name: 'modules.selfmod.invites.threshold-maximum',
+			type: 'integer'
+		},
+		selfmodLinksAllowed: {
+			array: true,
+			name: 'modules.selfmod.links.allowed',
+			type: 'string'
+		},
+		selfmodLinksEnabled: {
+			default: false,
+			name: 'modules.selfmod.links.enabled',
+			type: 'boolean'
+		},
+		selfmodLinksHardAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.links.hard-action',
+			type: 'integer'
+		},
+		selfmodLinksHardActionDuration: {
+			dashboardOnly: true,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.links.hard-action-duration',
+			type: 'timespan'
+		},
+		selfmodLinksIgnoredChannels: {
+			array: true,
+			name: 'modules.selfmod.links.ignored-channels',
+			type: 'guildTextChannel'
+		},
+		selfmodLinksIgnoredRoles: {
+			array: true,
+			name: 'modules.selfmod.links.ignored-roles',
+			type: 'role'
+		},
+		selfmodLinksSoftAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.links.soft-action',
+			type: 'integer'
+		},
+		selfmodLinksThresholdDuration: {
+			dashboardOnly: true,
+			default: 60000,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.links.threshold-duration',
+			type: 'timespan'
+		},
+		selfmodLinksThresholdMaximum: {
+			dashboardOnly: true,
+			default: 10,
+			maximum: 100,
+			minimum: 0,
+			name: 'modules.selfmod.links.threshold-maximum',
+			type: 'integer'
+		},
+		selfmodMessagesEnabled: {
+			default: false,
+			name: 'modules.selfmod.messages.enabled',
+			type: 'boolean'
+		},
+		selfmodMessagesHardAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.messages.hard-action',
+			type: 'integer'
+		},
+		selfmodMessagesHardActionDuration: {
+			dashboardOnly: true,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.messages.hard-action-duration',
+			type: 'timespan'
+		},
+		selfmodMessagesIgnoredChannels: {
+			array: true,
+			name: 'modules.selfmod.messages.ignored-channels',
+			type: 'guildTextChannel'
+		},
+		selfmodMessagesIgnoredRoles: {
+			array: true,
+			name: 'modules.selfmod.messages.ignored-roles',
+			type: 'role'
+		},
+		selfmodMessagesMaximum: {
+			default: 5,
+			maximum: 100,
+			minimum: 2,
+			name: 'modules.selfmod.messages.maximum',
+			type: 'integer'
+		},
+		selfmodMessagesQueueSize: {
+			default: 50,
+			maximum: 100,
+			minimum: 10,
+			name: 'modules.selfmod.messages.queue-size',
+			type: 'integer'
+		},
+		selfmodMessagesSoftAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.messages.soft-action',
+			type: 'integer'
+		},
+		selfmodMessagesThresholdDuration: {
+			dashboardOnly: true,
+			default: 60000,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.messages.threshold-duration',
+			type: 'timespan'
+		},
+		selfmodMessagesThresholdMaximum: {
+			dashboardOnly: true,
+			default: 10,
+			maximum: 100,
+			minimum: 0,
+			name: 'modules.selfmod.messages.threshold-maximum',
+			type: 'integer'
+		},
+		selfmodNewlinesEnabled: {
+			default: false,
+			name: 'modules.selfmod.newlines.enabled',
+			type: 'boolean'
+		},
+		selfmodNewlinesHardAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.newlines.hard-action',
+			type: 'integer'
+		},
+		selfmodNewlinesHardActionDuration: {
+			dashboardOnly: true,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.newlines.hard-action-duration',
+			type: 'timespan'
+		},
+		selfmodNewlinesIgnoredChannels: {
+			array: true,
+			name: 'modules.selfmod.newlines.ignored-channels',
+			type: 'guildTextChannel'
+		},
+		selfmodNewlinesIgnoredRoles: {
+			array: true,
+			name: 'modules.selfmod.newlines.ignored-roles',
+			type: 'role'
+		},
+		selfmodNewlinesMaximum: {
+			default: 20,
+			maximum: 100,
+			minimum: 10,
+			name: 'modules.selfmod.newlines.maximum',
+			type: 'integer'
+		},
+		selfmodNewlinesSoftAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.newlines.soft-action',
+			type: 'integer'
+		},
+		selfmodNewlinesThresholdDuration: {
+			dashboardOnly: true,
+			default: 60000,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.newlines.threshold-duration',
+			type: 'timespan'
+		},
+		selfmodNewlinesThresholdMaximum: {
+			dashboardOnly: true,
+			default: 10,
+			maximum: 100,
+			minimum: 0,
+			name: 'modules.selfmod.newlines.threshold-maximum',
+			type: 'integer'
+		},
+		selfmodReactionsAllowed: {
+			array: true,
+			name: 'modules.selfmod.reactions.allowed',
+			type: 'emoji'
+		},
+		selfmodReactionsBlocked: {
+			array: true,
+			name: 'modules.selfmod.reactions.blocked',
+			type: 'emoji'
+		},
+		selfmodReactionsEnabled: {
+			default: false,
+			name: 'modules.selfmod.reactions.enabled',
+			type: 'boolean'
+		},
+		selfmodReactionsHardAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.reactions.hard-action',
+			type: 'integer'
+		},
+		selfmodReactionsHardActionDuration: {
+			dashboardOnly: true,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.reactions.hard-action-duration',
+			type: 'timespan'
+		},
+		selfmodReactionsIgnoredChannels: {
+			array: true,
+			name: 'modules.selfmod.reactions.ignored-channels',
+			type: 'guildTextChannel'
+		},
+		selfmodReactionsIgnoredRoles: {
+			array: true,
+			name: 'modules.selfmod.reactions.ignored-roles',
+			type: 'role'
+		},
+		selfmodReactionsMaximum: {
+			default: 10,
+			maximum: 100,
+			minimum: 1,
+			name: 'modules.selfmod.reactions.maximum',
+			type: 'integer'
+		},
+		selfmodReactionsSoftAction: {
+			dashboardOnly: true,
+			default: 0,
+			name: 'modules.selfmod.reactions.soft-action',
+			type: 'integer'
+		},
+		selfmodReactionsThresholdDuration: {
+			dashboardOnly: true,
+			default: 60000,
+			maximum: years(5),
+			minimum: 0,
+			name: 'modules.selfmod.reactions.threshold-duration',
+			type: 'timespan'
+		},
+		selfmodReactionsThresholdMaximum: {
+			dashboardOnly: true,
+			default: 10,
+			maximum: 100,
+			minimum: 0,
+			name: 'modules.selfmod.reactions.threshold-maximum',
+			type: 'integer'
 		},
 		starboardChannelId: {
-			type: 'guildTextChannel',
-			name: 'modules.starboard.channel'
+			name: 'modules.starboard.channel',
+			type: 'guildTextChannel'
 		},
 		starboardMinimum: {
-			type: 'number',
-			name: 'modules.starboard.minimum'
+			name: 'modules.starboard.minimum',
+			type: 'number'
 		},
 		starboardSelfStar: {
-			type: 'boolean',
-			name: 'modules.starboard.self-star'
+			name: 'modules.starboard.self-star',
+			type: 'boolean'
 		}
 	});
 
 	return cachedConfiguration;
-}
-
-function makeKeys(record: Record<SchemaDataKey, ConfigurableKeyOptions>): Record<SchemaDataKey, SchemaKey> {
-	const entries = objectEntries(record).map(([key, value]) => [key, makeKey(key, value)] as const);
-	return Object.fromEntries(entries) as Record<SchemaDataKey, SchemaKey>;
 }
 
 function makeKey(property: SchemaDataKey, options: ConfigurableKeyOptions) {
@@ -852,21 +850,26 @@ function makeKey(property: SchemaDataKey, options: ConfigurableKeyOptions) {
 
 	const value = new SchemaKey({
 		...options,
-		key: parts.at(-1)!,
-		name,
-		property,
 		array: options.array ?? false,
-		inclusive: options.inclusive ?? true,
-		minimum: options.minimum ?? null,
-		maximum: options.maximum ?? null,
+		dashboardOnly: options.dashboardOnly ?? false,
 		default: options.default ?? (options.array ? [] : options.type === 'boolean' ? false : null),
-		dashboardOnly: options.dashboardOnly ?? false
+		inclusive: options.inclusive ?? true,
+		key: parts.at(-1)!,
+		maximum: options.maximum ?? null,
+		minimum: options.minimum ?? null,
+		name,
+		property
 	});
 
 	configurableKeys.set(property, value);
 	value.parent = configurableGroups.add(value.name.split('.') as NonEmptyArray<string>, value);
 
 	return value;
+}
+
+function makeKeys(record: Record<SchemaDataKey, ConfigurableKeyOptions>): Record<SchemaDataKey, SchemaKey> {
+	const entries = objectEntries(record).map(([key, value]) => [key, makeKey(key, value)] as const);
+	return Object.fromEntries(entries) as Record<SchemaDataKey, SchemaKey>;
 }
 
 export const stringConfigurableKeys = () => getConfigurableKeys().map((key) => key.name);
@@ -903,6 +906,6 @@ export const stringConfigurableKeyGroupChoices: () => APIApplicationCommandOptio
 interface ConfigurableKeyOptions
 	extends Omit<
 			ConfigurableKeyValueOptions,
-			'key' | 'property' | 'name' | 'array' | 'inclusive' | 'minimum' | 'maximum' | 'default' | 'dashboardOnly'
+			'array' | 'dashboardOnly' | 'default' | 'inclusive' | 'key' | 'maximum' | 'minimum' | 'name' | 'property'
 		>,
-		Partial<Pick<ConfigurableKeyValueOptions, 'name' | 'array' | 'inclusive' | 'minimum' | 'maximum' | 'default' | 'dashboardOnly'>> {}
+		Partial<Pick<ConfigurableKeyValueOptions, 'array' | 'dashboardOnly' | 'default' | 'inclusive' | 'maximum' | 'minimum' | 'name'>> {}

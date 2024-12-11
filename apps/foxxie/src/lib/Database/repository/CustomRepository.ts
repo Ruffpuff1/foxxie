@@ -11,12 +11,12 @@ export abstract class CustomRepository<T extends DeepPartial<BaseEntity>> {
 		this.entity = entity;
 	}
 
-	public findOne(options: FindOneOptions<T>) {
-		return this.dataSource.getRepository(this.entity).findOne(options);
+	public findMany(options?: FilterOperators<T> | FindManyOptions<T> | Partial<T>) {
+		return this.dataSource.getMongoRepository(this.entity).find(options);
 	}
 
-	public findMany(options?: FindManyOptions<T> | Partial<T> | FilterOperators<T>) {
-		return this.dataSource.getMongoRepository(this.entity).find(options);
+	public findOne(options: FindOneOptions<T>) {
+		return this.dataSource.getRepository(this.entity).findOne(options);
 	}
 
 	public get repository() {

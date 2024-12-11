@@ -1,11 +1,11 @@
-export * as Utilities from '#lib/I18n/LanguageKeys/keys/commands/moderation/utilities/index';
 export * as Timeout from '#lib/I18n/LanguageKeys/keys/commands/moderation/Timeout';
 export * as Untimeout from '#lib/I18n/LanguageKeys/keys/commands/moderation/Untimeout';
+export * as Utilities from '#lib/I18n/LanguageKeys/keys/commands/moderation/utilities/index';
 
 import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/types';
 
 export const BanDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:banDetailedDescription');
-export const BanSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:banSuccess');
+export const BanSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:banSuccess');
 
 export const CaseDescription = T('commands/moderation:caseDescription');
 export const CaseNoExist = FT<{ caseId: number }>('commands/moderation:caseNoExist');
@@ -15,26 +15,26 @@ export const GuildBansEmpty = T('commands/moderation:guildBansEmpty');
 export const GuildBansNotFound = T('commands/moderation:guildBansNotFound');
 
 export const KickDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:kickDetailedDescription');
-export const KickSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:kickSuccess');
+export const KickSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:kickSuccess');
 
 export const MuteDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:muteDetailedDescription');
-export const MuteSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:muteSuccess');
+export const MuteSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:muteSuccess');
 
 export const ReasonDescription = T('commands/moderation:reasonDescription');
 export const ReasonSuccess = FT<{ reason: string }>('commands/moderation:reasonSuccess');
 export const ReasonUsage = T('commands/moderation:reasonUsage');
 
 export const RestrictEmbedDescription = T('commands/moderation:restrictEmbedDescription');
-export const RestrictEmbedSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:restrictEmbedSuccess');
+export const RestrictEmbedSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:restrictEmbedSuccess');
 
 export const UnbanDescription = T('commands/moderation:unbanDescription');
-export const UnbanSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:unbanSuccess');
+export const UnbanSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:unbanSuccess');
 
 export const UnmuteDescription = T('commands/moderation:unmuteDescription');
-export const UnmuteSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:unmuteSuccess');
+export const UnmuteSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:unmuteSuccess');
 
 export const UnRestrictEmbedDescription = T('commands/moderation:unRestrictEmbedDescription');
-export const UnRestrictEmbedSuccess = FT<{ users: string[]; range: string | number; count: number }>('commands/moderation:unRestrictEmbedSuccess');
+export const UnRestrictEmbedSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:unRestrictEmbedSuccess');
 
 export const ActionApplyReason = FT<{ action: string; reason: string }>('moderationActions:applyReason');
 export const ActionApplyNoReason = FT<{ action: string }>('moderationActions:applyNoReason');
@@ -53,40 +53,40 @@ export const ActionSetupTooManyRoles = T('moderationActions:setupTooManyRoles');
 export const ActionSharedRoleSetupExisting = T('moderationActions:sharedRoleSetupExisting');
 export const ActionSharedRoleSetupExistingName = T('moderationActions:sharedRoleSetupExistingName');
 export const ActionSharedRoleSetupNew = T('moderationActions:sharedRoleSetupNew');
-export const ActionSharedRoleSetupAsk = FT<{ role: string; channels: number; permissions: string }>('moderationActions:sharedRoleSetupAsk');
+export const ActionSharedRoleSetupAsk = FT<{ channels: number; permissions: string; role: string }>('moderationActions:sharedRoleSetupAsk');
 export const ActionSharedRoleSetupNoMessage = T('moderationActions:sharedRoleSetupNoMessage');
 export const ActionRequiredMember = T('moderationActions:requiredMember');
 export const ActionCannotManageRoles = T('moderationActions:actionCannotManageRoles');
 export const ActionRoleNotConfigured = T('moderationActions:actionRoleNotConfigured');
 export const ActionRoleHigherPosition = T('moderationActions:actionRoleHigherPosition');
 export const ActionRoleManaged = T('moderationActions:actionRoleManaged');
-export const ModerationFailed = FT<{ users: string; count: number }>('commands/moderation:moderationFailed');
+export const ModerationFailed = FT<{ count: number; users: string }>('commands/moderation:moderationFailed');
 export const ModerationDmFooter = T('commands/moderation:moderationDmFooter');
-export const ModerationDmDescription = FT<{ guild: string; title: string; reason: string | null; duration: number | null }>(
+export const ModerationDmDescription = FT<{ duration: null | number; guild: string; reason: null | string; title: string }>(
 	'commands/moderation:moderationDmDescription'
 );
 export const ModerationDmDescriptionWithReason = FT<{
+	duration: null | number;
 	guild: string;
+	reason: null | string;
 	title: string;
-	reason: string | null;
-	duration: number | null;
 }>('commands/moderation:moderationDmDescriptionWithReason');
 export const ModerationDmDescriptionWithDuration = FT<{
+	duration: null | number;
 	guild: string;
+	reason: null | string;
 	title: string;
-	reason: string | null;
-	duration: number | null;
 }>('commands/moderation:moderationDmDescriptionWithDuration');
 export const ModerationDmDescriptionWithReasonWithDuration = FT<
-	{ guild: string; title: string; reason: string | null; duration: number | null },
+	{ duration: null | number; guild: string; reason: null | string; title: string },
 	string
 >('commands/moderation:moderationDmDescriptionWithReasonWithDuration');
-export const ModerationOutput = FT<{ count: number; range: string | number; users: string; reason: string | null }>(
+export const ModerationOutput = FT<{ count: number; range: number | string; reason: null | string; users: string }>(
 	'commands/moderation:moderationOutput'
 );
-export const ModerationOutputWithReason = FT<{ count: number; range: string | number; users: string; reason: string | null }>(
+export const ModerationOutputWithReason = FT<{ count: number; range: number | string; reason: null | string; users: string }>(
 	'commands/moderation:moderationOutputWithReason'
 );
-export const Permissions = FT<{ username: string; id: string }>('commands/moderation:permissions');
+export const Permissions = FT<{ id: string; username: string }>('commands/moderation:permissions');
 export const PermissionsAll = T('commands/moderation:permissionsAll');
 export const Success = T('commands/moderation:success');

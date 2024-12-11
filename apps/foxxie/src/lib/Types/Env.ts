@@ -2,51 +2,51 @@ import { ArrayString, BooleanString, IntegerString } from '@skyra/env-utilities'
 
 declare module '@skyra/env-utilities' {
 	interface Env {
-		CLIENT_VERSION: string;
-		CLIENT_NAME: string;
 		[EnvKeys.ClientId]: string;
 		[EnvKeys.ClientPrefix]: string;
-		CLIENT_REGEX_PREFIX: string;
-		CLIENT_PRESENCE_NAME: string;
-		TIMEZONE: string;
-
-		[EnvKeys.LogLevel]: IntegerString;
+		[EnvKeys.DiscogsConsumerKey]: string;
+		[EnvKeys.DiscogsOAuthSignature]: string;
+		[EnvKeys.HasteToken]: string;
+		[EnvKeys.LastFmToken]: string;
 		[EnvKeys.LogChannelId]: string;
 
-		CLIENT_OWNERS: ArrayString;
-		THE_CORNER_STORE_URL: string;
+		[EnvKeys.LogLevel]: IntegerString;
+		[EnvKeys.PokemonUrl]: string;
 
-		PROD_HOST: string;
-		VERSION_SIG: string;
-		VERSION_NUM: string;
-		COPYRIGHT_YEAR: string;
 		[EnvKeys.SentryEnabled]: BooleanString;
+		[EnvKeys.SpotifyClientId]: string;
 
-		WEBHOOK_ERROR_ID: string;
-		WEBHOOK_ERROR_TOKEN: string;
+		[EnvKeys.SpotifyClientSecret]: string;
+		CLIENT_NAME: string;
+		CLIENT_OWNERS: ArrayString;
+		CLIENT_PRESENCE_NAME: string;
+		CLIENT_REGEX_PREFIX: string;
 
+		CLIENT_VERSION: string;
+		COPYRIGHT_YEAR: string;
+
+		DISCORD_TOKEN: string;
+		MONGO_HOST: string;
+		MONGO_PASSWORD: string;
+		MONGO_URL: string;
+
+		MONGO_USER: string;
+		PERSPECTIVE_TOKEN: string;
+		PROD_HOST: string;
 		REDIS_ENABLED: BooleanString;
+
 		REDIS_HOST: string;
 		REDIS_PASSWORD: string;
 		REDIS_PORT: IntegerString;
-
-		MONGO_USER: string;
-		MONGO_PASSWORD: string;
-		MONGO_HOST: string;
-		MONGO_URL: string;
-
-		DISCORD_TOKEN: string;
-		PERSPECTIVE_TOKEN: string;
 		SENTRY_TOKEN: string;
-		[EnvKeys.HasteToken]: string;
-		[EnvKeys.LastFmToken]: string;
+		THE_CORNER_STORE_URL: string;
 
-		[EnvKeys.PokemonUrl]: string;
-		[EnvKeys.SpotifyClientId]: string;
-		[EnvKeys.SpotifyClientSecret]: string;
+		TIMEZONE: string;
+		VERSION_NUM: string;
+		VERSION_SIG: string;
 
-		[EnvKeys.DiscogsConsumerKey]: string;
-		[EnvKeys.DiscogsOAuthSignature]: string;
+		WEBHOOK_ERROR_ID: string;
+		WEBHOOK_ERROR_TOKEN: string;
 	}
 }
 
@@ -57,10 +57,10 @@ export const enum EnvKeys {
 	DiscogsConsumerKey = 'DISCOGS_CONSUMER_KEY',
 	DiscogsOAuthSignature = 'DISCOGS_OAUTH_SIGNATURE',
 	HasteToken = 'HASTE_TOKEN',
-	LogLevel = 'LOG_LEVEL',
-	PokemonUrl = 'POKEMON_URL',
 	LastFmToken = 'LASTFM_TOKEN',
 	LogChannelId = 'LOG_CHANNEL_ID',
+	LogLevel = 'LOG_LEVEL',
+	PokemonUrl = 'POKEMON_URL',
 	SentryEnabled = 'SENTRY_ENABLED',
 	SpotifyClientId = 'SPOTIFY_CLIENT_ID',
 	SpotifyClientSecret = 'SPOTIFY_CLIENT_SECRET'

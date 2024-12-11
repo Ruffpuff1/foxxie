@@ -1,7 +1,7 @@
-import { LanguageKeys } from '#lib/i18n';
-import { GuildMessage } from '#lib/types';
 import { createFunctionPrecondition } from '@sapphire/decorators';
 import { container, UserError } from '@sapphire/framework';
+import { LanguageKeys } from '#lib/i18n';
+import { GuildMessage } from '#lib/types';
 
 export const RequiresLastFmUsername = (
 	thrownError: string = LanguageKeys.Preconditions.LastFmUsername,
