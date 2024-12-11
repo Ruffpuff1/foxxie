@@ -10,6 +10,7 @@ import {
 	ChatInputCommandInteraction,
 	ColorResolvable,
 	EmbedAuthorData,
+	GuildMember,
 	GuildResolvable,
 	ImageURLOptions,
 	makeURLSearchParams,
@@ -97,8 +98,12 @@ export function getEmbedAuthor(user: APIUser | User, url?: string | undefined): 
 	return { iconURL: getDisplayAvatar(user, { size: 128 }), name: getTag(user), url };
 }
 
-export function getFullEmbedAuthor(user: APIUser | User, url?: string | undefined): EmbedAuthorData {
-	return { iconURL: getDisplayAvatar(user, { size: 128 }), name: `${getTag(user)} [${user.id}]`, url };
+export function getFullEmbedAuthor(user: APIUser | GuildMember | User, url?: string | undefined): EmbedAuthorData {
+	return {
+		iconURL: user instanceof GuildMember ? user.displayAvatarURL() : getDisplayAvatar(user, { size: 128 }),
+		name: `${user instanceof GuildMember ? user.displayName : getTag(user)} (${user.id})`,
+		url
+	};
 }
 
 export function getServerDetails() {

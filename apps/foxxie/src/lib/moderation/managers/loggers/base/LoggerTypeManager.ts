@@ -5,7 +5,7 @@ import { createReferPromise, ReferredPromise, seconds } from '#utils/common';
 import { APIAuditLogEntry, AuditLogEvent, Collection, Snowflake } from 'discord.js';
 
 const MaximumTimeForAuditLogEntryCreate = seconds(3);
-const MaximumTimeForContextRetrieval = seconds(30);
+const MaximumTimeForContextRetrieval = seconds(15);
 const MaximumTimeForAuditLogRewind = seconds(60);
 
 /**
@@ -157,7 +157,7 @@ export abstract class LoggerTypeManager {
 			// If the entry is older than the desired one, skip:
 			if (DiscordSnowflake.timestampFrom(entry.id) < oldestTimestamp) break;
 			// If the entry is the desired one, return it:
-			if (this.filterAuditLogEntry(entry)) {
+			if (await this.filterAuditLogEntry(entry)) {
 				return { reason: entry.reason, userId: entry.user_id! };
 			}
 		}
@@ -165,9 +165,9 @@ export abstract class LoggerTypeManager {
 		return null;
 	}
 
-	protected filterAuditLogEntry(entry: LoggerTypeManager.AuditLogEntry): boolean;
+	protected filterAuditLogEntry(entry: LoggerTypeManager.AuditLogEntry): boolean | Promise<boolean>;
 
-	protected filterAuditLogEntry(): boolean {
+	protected filterAuditLogEntry(): boolean | Promise<boolean> {
 		return true;
 	}
 

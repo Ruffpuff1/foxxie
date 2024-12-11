@@ -8,6 +8,8 @@ export abstract class Handler {
 		this.name = options.name;
 		this.duration = new DurationFormatter(options.duration);
 	}
+
+	public abstract ordinal(cardinal: number): string;
 }
 
 export namespace Handler {

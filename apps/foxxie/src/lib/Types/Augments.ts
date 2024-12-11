@@ -49,6 +49,9 @@ declare module 'discord.js' {
 		[FoxxieEvents.ChatInputCommandLogging]: [interaction: ChatInputCommandInteraction, command: FoxxieCommand];
 		[FoxxieEvents.Console]: [state: ConsoleState, message: string];
 		[FoxxieEvents.GuildMemberJoin]: [member: GuildMember];
+		[FoxxieEvents.GuildMemberUpdateRolesManualMute]: [member: GuildMember];
+		[FoxxieEvents.GuildMemberUpdateRolesManualUnmute]: [member: GuildMember];
+		[FoxxieEvents.GuildMemberUpdateRolesModeration]: [member: GuildMember, added: Role[], removed: Role[]];
 		[FoxxieEvents.GuildMessageLog]: [
 			guild: Guild,
 			key: PickByValue<GuildChannelSettingsService, null | Snowflake>,

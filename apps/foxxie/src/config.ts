@@ -270,7 +270,7 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 			name: 'dateFormat'
 		},
 		{
-			format: (_, lng) => getHandler(lng as LocaleString).name,
+			format: (value, lng) => getHandler(lng as LocaleString).ordinal(value),
 			name: 'ordinal'
 		},
 		{

@@ -1,4 +1,3 @@
-import { EmbedBuilder, time, TimestampStyles } from '@discordjs/builders';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
@@ -10,7 +9,7 @@ import { getLogger, getModeration } from '#utils/functions';
 import { getUserMentionWithFlagsString } from '#utils/functions/users';
 import { TypeVariation } from '#utils/moderationConstants';
 import { getFullEmbedAuthor } from '#utils/util';
-import { Colors, type GatewayGuildMemberRemoveDispatchData, type Guild, type GuildMember } from 'discord.js';
+import { Colors, EmbedBuilder, type GatewayGuildMemberRemoveDispatchData, type Guild, type GuildMember, time, TimestampStyles } from 'discord.js';
 
 const Root = LanguageKeys.Listeners.Guilds.Members;
 

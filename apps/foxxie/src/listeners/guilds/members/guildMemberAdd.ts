@@ -30,6 +30,7 @@ const Root = LanguageKeys.Listeners.Guilds.Members;
 }))
 export class UserListener extends Listener {
 	public async run(...[member]: EventArgs<Events.GuildMemberAdd>) {
+		await this.container.client.invites.findUsedInvite(member);
 		if (await this.#handleStickyRoles(member)) return;
 		this.container.client.emit(FoxxieEvents.NotMutedMemberAdd, member);
 	}
@@ -40,12 +41,14 @@ export class UserListener extends Listener {
 		if (isNullish(role)) {
 			await writeSettings(member, { rolesMuted: null });
 		} else {
+			getLogger(guild).mute.set(member.id, { userId: this.container.client.id! });
 			const result = await toErrorCodeResult(member.roles.add(role));
-			await result.inspectErrAsync((code) => this.#handleMutedMemberAddRoleErr(guild, code));
+			await result.inspectErrAsync((code) => this.#handleMutedMemberAddRoleErr(guild, code, member.id));
 		}
 	}
 
-	async #handleMutedMemberAddRoleErr(guild: Guild, code: RESTJSONErrorCodes) {
+	async #handleMutedMemberAddRoleErr(guild: Guild, code: RESTJSONErrorCodes, userId: string) {
+		getLogger(guild).mute.unset(userId);
 		// The member left the guild before we could add the role, ignore:
 		if (code === RESTJSONErrorCodes.UnknownMember) return;
 
@@ -82,11 +85,13 @@ export class UserListener extends Listener {
 	async #handleStickyRoles(member: GuildMember) {
 		if (!member.guild.members.me!.permissions.has(PermissionFlagsBits.ManageRoles)) return false;
 
+		const settings = await readSettings(member);
+		if (!settings.rolesPersistEnabled) return false;
+
 		const stickyRoles = await getStickyRoles(member).fetch(member.id);
 		if (stickyRoles.length === 0) return false;
 
 		// Handle the case the user is muted
-		const settings = await readSettings(member);
 		const mutedRoleId = settings.rolesMuted;
 		const targetChannelId = settings.channelsLogsMemberAdd;
 		if (mutedRoleId && stickyRoles.includes(mutedRoleId)) {

@@ -1,11 +1,11 @@
-import { EmbedBuilder } from '@discordjs/builders';
 import { container } from '@sapphire/framework';
 import { type Awaitable, isFunction, isNullish, isNullishOrEmpty, type Nullish } from '@sapphire/utilities';
 import { type GuildSettingsOfType, writeSettings } from '#lib/database';
-import { PruneLoggerTypeManager, TimeoutLoggerTypeManager } from '#lib/moderation';
+import { MuteLoggerTypeManager, PruneLoggerTypeManager, TimeoutLoggerTypeManager, UnmuteLoggerTypeManager } from '#lib/moderation';
 import { toErrorCodeResult } from '#utils/common';
 import { getCodeStyle, getLogPrefix } from '#utils/functions/pieces';
 import {
+	EmbedBuilder,
 	type Guild,
 	type GuildBasedChannel,
 	type GuildTextBasedChannel,
@@ -44,8 +44,10 @@ export interface LoggerManagerSendOptions {
 
 export class LoggerManager {
 	public readonly guild: Guild;
+	public readonly mute = new MuteLoggerTypeManager(this);
 	public readonly prune = new PruneLoggerTypeManager(this);
 	public readonly timeout = new TimeoutLoggerTypeManager(this);
+	public readonly unmute = new UnmuteLoggerTypeManager(this);
 
 	public constructor(guild: Guild) {
 		this.guild = guild;

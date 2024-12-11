@@ -1,8 +1,16 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
+import { readSettings } from '#lib/database';
 import { getLogger } from '#utils/functions/guild';
-import { AuditLogEvent, GatewayDispatchEvents, type GatewayGuildAuditLogEntryCreateDispatchData, Guild } from 'discord.js';
+import {
+	APIAuditLogChangeKey$Add,
+	APIAuditLogChangeKey$Remove,
+	AuditLogEvent,
+	GatewayDispatchEvents,
+	type GatewayGuildAuditLogEntryCreateDispatchData,
+	Guild
+} from 'discord.js';
 
 @ApplyOptions<Listener.Options>({ emitter: 'ws', event: GatewayDispatchEvents.GuildAuditLogEntryCreate })
 export class UserListener extends Listener {
@@ -11,6 +19,8 @@ export class UserListener extends Listener {
 		if (!guild) return;
 
 		switch (data.action_type) {
+			case AuditLogEvent.MemberRoleUpdate:
+				return this.#handleMemberRoleUpdate(guild, data);
 			case AuditLogEvent.MemberUpdate:
 				return this.#handleMemberUpdateTimeout(guild, data);
 			case AuditLogEvent.MessageBulkDelete:
@@ -19,6 +29,34 @@ export class UserListener extends Listener {
 			default:
 				break;
 		}
+	}
+
+	async #handleMemberRoleUpdate(guild: Guild, data: GatewayGuildAuditLogEntryCreateDispatchData) {
+		if (isNullishOrEmpty(data.changes)) return;
+
+		const settings = await readSettings(guild);
+
+		const change = data.changes.find((change) => ['$add', '$remove'].includes(change.key)) as
+			| APIAuditLogChangeKey$Add
+			| APIAuditLogChangeKey$Remove
+			| undefined;
+
+		if (isNullish(change) || isNullish(change.new_value)) return;
+
+		const muteChange = change.new_value.find((r) => r.id === settings.rolesMuted);
+		if (isNullish(muteChange)) return;
+
+		if (change.key === '$add')
+			getLogger(guild).mute.setFromAuditLogs(data.target_id!, {
+				reason: data.reason,
+				userId: data.user_id!
+			});
+
+		if (change.key === '$remove')
+			getLogger(guild).unmute.setFromAuditLogs(data.target_id!, {
+				reason: data.reason,
+				userId: data.user_id!
+			});
 	}
 
 	#handleMemberUpdateTimeout(guild: Guild, data: GatewayGuildAuditLogEntryCreateDispatchData) {

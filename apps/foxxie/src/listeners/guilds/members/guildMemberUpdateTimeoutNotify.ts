@@ -7,7 +7,7 @@ import { getLogger, getModeration } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { GuildMember } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({ event: Events.GuildMemberUpdate })
+@ApplyOptions<Listener.Options>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: Events.GuildMemberUpdate }))
 export class UserListener extends Listener {
 	public async run(previous: GuildMember, next: GuildMember) {
 		const prevTimeout = this.#getTimeout(previous);

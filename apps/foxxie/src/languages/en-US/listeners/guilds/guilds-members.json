@@ -1,5 +1,5 @@
 {
-	"guildMemberAdd": "User Joined",
+	"guildMemberAdd": "Member Joined",
 	"guildMemberAddDescription": "{{user}} joined Discord {{relativeTime}}",
 	"guildMemberAddedRoles_other": "**Added roles**: {{addedRoles, list(conjunction)}}",
 	"guildMemberAddedRoles_one": "**Added role**: {{addedRoles}}",
