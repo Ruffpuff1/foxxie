@@ -1,15 +1,15 @@
+import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
+import { ensureMember } from '#lib/Database/Models/member';
 import { readSettings } from '#lib/Database/settings/functions';
 import { getT, LanguageKeys } from '#lib/i18n';
 import { FoxxieEvents } from '#lib/types';
-import { seconds } from '#utils/common';
+import { GuildMemberRemoveBuilder } from '#utils/Discord/builders/GuildMemberRemoveBuilder';
 import { getLogger, getModeration } from '#utils/functions';
-import { getUserMentionWithFlagsString } from '#utils/functions/users';
 import { TypeVariation } from '#utils/moderationConstants';
-import { getFullEmbedAuthor } from '#utils/util';
-import { Colors, EmbedBuilder, type GatewayGuildMemberRemoveDispatchData, type Guild, type GuildMember, time, TimestampStyles } from 'discord.js';
+import { type GatewayGuildMemberRemoveDispatchData, type Guild, type GuildMember } from 'discord.js';
 
 const Root = LanguageKeys.Listeners.Guilds.Members;
 
@@ -21,34 +21,30 @@ export class UserListener extends Listener {
 		if (isNullish(targetChannelId)) return;
 
 		const isModerationAction = await this.isModerationAction(guild, user);
+		const { messageCount } = await ensureMember(user.id, guild.id);
+		const fetchedUser = await resolveToNull(this.container.client.users.fetch(user.id));
+
+		if (!fetchedUser) return;
 
 		const t = getT(settings.language);
 		const footer = isModerationAction.kicked
-			? t(Root.GuildMemberKicked)
+			? Root.RemoveKicked
 			: isModerationAction.banned
-				? t(Root.GuildMemberBanned)
+				? Root.RemoveBanned
 				: isModerationAction.softbanned
-					? t(Root.GuildMemberSoftBanned)
-					: t(Root.GuildMemberRemove);
+					? Root.RemoveSoftBanned
+					: Root.Remove;
 
-		const joinedTimestamp = this.processJoinedTimestamp(member);
 		await getLogger(guild).send({
 			channelId: targetChannelId,
 			key: 'channelsLogsMemberRemove',
-			makeMessage: () => {
-				const key = joinedTimestamp === -1 ? Root.GuildMemberRemoveDescription : Root.GuildMemberRemoveDescriptionWithJoinedAt;
-				const description = t(key, {
-					relativeTime: time(seconds.fromMilliseconds(joinedTimestamp), TimestampStyles.RelativeTime),
-					user: getUserMentionWithFlagsString(user.flags ?? 0, user.id)
-				});
-
-				return new EmbedBuilder()
-					.setColor(Colors.Red)
-					.setAuthor(getFullEmbedAuthor(user))
-					.setDescription(description)
-					.setFooter({ text: footer })
-					.setTimestamp();
-			}
+			makeMessage: () =>
+				new GuildMemberRemoveBuilder(t) //
+					.setMember(member)
+					.setUser(fetchedUser)
+					.setFooterKey(footer)
+					.setMessageCount(messageCount)
+					.build()
 		});
 	}
 
@@ -71,12 +67,6 @@ export class UserListener extends Listener {
 			kicked: latestLogForUser.type === TypeVariation.Kick,
 			softbanned: latestLogForUser.type === TypeVariation.Softban
 		};
-	}
-
-	private processJoinedTimestamp(member: GuildMember | null) {
-		if (member === null) return -1;
-		if (member.joinedTimestamp === null) return -1;
-		return member.joinedTimestamp;
 	}
 }
 

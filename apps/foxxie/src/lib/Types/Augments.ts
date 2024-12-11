@@ -11,7 +11,7 @@ import { HighlightData } from '#lib/Database/Models/highlight';
 import { Starboard } from '#lib/Database/Models/starboard';
 import { MongoDB } from '#lib/Database/MongoDB';
 import { SerializerStore } from '#lib/Database/settings/structures/SerializerStore';
-import { PermissionsNode, StickyRole } from '#lib/Database/settings/types';
+import { PermissionsNode, ReadonlyGuildData, StickyRole } from '#lib/Database/settings/types';
 import { ModerationEntry } from '#lib/moderation';
 import { ScheduleManager, TaskStore } from '#lib/schedule';
 import { FoxxieCommand } from '#lib/structures';
@@ -48,6 +48,7 @@ declare module 'discord.js' {
 		[FoxxieEvents.BotMessage]: [message: GuildMessage];
 		[FoxxieEvents.ChatInputCommandLogging]: [interaction: ChatInputCommandInteraction, command: FoxxieCommand];
 		[FoxxieEvents.Console]: [state: ConsoleState, message: string];
+		[FoxxieEvents.GuildMemberAddMuted]: [member: GuildMember, settings: ReadonlyGuildData];
 		[FoxxieEvents.GuildMemberJoin]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberUpdateRolesManualMute]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberUpdateRolesManualUnmute]: [member: GuildMember];
@@ -60,6 +61,7 @@ declare module 'discord.js' {
 		[FoxxieEvents.LastFmUpdateUser]: [userId: string];
 		[FoxxieEvents.MemberIdleLog]: [Presence];
 		[FoxxieEvents.MessageCommandLogging]: [message: Message, command: FoxxieCommand];
+		[FoxxieEvents.MinecraftBotMessage]: [message: GuildMessage];
 		[FoxxieEvents.ModerationEntryAdd]: [entry: Readonly<ModerationEntry>];
 		[FoxxieEvents.ModerationEntryEdit]: [old: Readonly<ModerationEntry>, entry: Readonly<ModerationEntry>];
 		[FoxxieEvents.RawReactionAdd]: [data: LLRCData, emoji: SerializedEmoji];

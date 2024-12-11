@@ -1,15 +1,17 @@
 import { TFunction } from '@sapphire/plugin-i18next';
 import { LanguageKeys } from '#lib/i18n';
-import { seconds } from '#utils/common';
-import { Colors } from '#utils/constants';
+import { TypedT } from '#lib/types';
+import { discordInviteLink, userLink } from '#utils/transformers';
 import { getFullEmbedAuthor } from '#utils/util';
-import { GuildMember, hyperlink, inlineCode, time, TimestampStyles } from 'discord.js';
+import { GuildMember, hyperlink, inlineCode } from 'discord.js';
 
 import { FoxxieBuilder } from './base/FoxxieBuilder.js';
 
 const Root = LanguageKeys.Listeners.Guilds.Members;
 
 export class GuildMemberAddBuilder extends FoxxieBuilder {
+	public footerKey: TypedT<string> = Root.Add;
+
 	public invite: null | string = null;
 
 	public member!: GuildMember;
@@ -25,17 +27,21 @@ export class GuildMemberAddBuilder extends FoxxieBuilder {
 	public override build() {
 		const { user } = this.member;
 
-		this.setColor(Colors.Green)
-			.setAuthor(getFullEmbedAuthor(this.member, `https://discord.com/users/${user.id}`))
+		this.setAuthor(getFullEmbedAuthor(this.member, userLink(user.id)))
 			.setDescription(this.#formatDescription())
-			.setFooter({ text: this.t(Root.GuildMemberAdd) })
+			.setFooter({ text: this.t(this.footerKey) })
 			.setTimestamp(this.member.joinedTimestamp);
 
 		return super.build();
 	}
 
-	public setInvite(code: null | string) {
-		this.invite = code;
+	public setFooterKey(key: TypedT<string>) {
+		this.footerKey = key;
+		return this;
+	}
+
+	public setInvite(code: null | string | undefined) {
+		this.invite = code || null;
 		return this;
 	}
 
@@ -45,15 +51,13 @@ export class GuildMemberAddBuilder extends FoxxieBuilder {
 	}
 
 	#formatDescription() {
-		const createdLine = `**Created**: ${time(this.memberCreatedSeconds, TimestampStyles.LongDate)} (${time(this.memberCreatedSeconds, TimestampStyles.RelativeTime)})`;
-		const positionLine = `**Position**: ${this.t(LanguageKeys.Globals.NumberOrdinal, { value: this.memberPosition })}`;
-		const inviteLine = this.invite ? `**Invite**: ${hyperlink(inlineCode(this.invite), `https://discord.gg/${this.invite}`)}` : null;
+		const createdLine = this.t(Root.AddCreated, { time: this.memberTimestamp });
+		const positionLine = this.t(Root.AddPosition, { position: this.memberPosition });
+		const inviteLine = this.invite
+			? this.t(Root.AddInvite, { invite: hyperlink(inlineCode(this.invite), discordInviteLink(this.invite)) })
+			: null;
 
 		return [createdLine, inviteLine, positionLine].filter((a) => a !== null);
-	}
-
-	private get memberCreatedSeconds() {
-		return seconds.fromMilliseconds(this.member.user.createdTimestamp);
 	}
 
 	private get memberPosition() {
@@ -63,5 +67,9 @@ export class GuildMemberAddBuilder extends FoxxieBuilder {
 				.map((s) => s.id)
 				.findIndex((m) => m === this.member.id) + 1
 		);
+	}
+
+	private get memberTimestamp() {
+		return this.member.user.createdTimestamp;
 	}
 }

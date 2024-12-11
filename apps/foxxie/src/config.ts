@@ -163,7 +163,7 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 			name: LanguageFormatters.Duration
 		},
 		{
-			format: (value) => time(typeof value === 'string' ? new Date(value) : value, TimestampStyles.LongDate),
+			format: (value) => time(getDurationValue(value), TimestampStyles.LongDate),
 			name: 'fulldate'
 		},
 		{

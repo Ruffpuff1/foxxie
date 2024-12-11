@@ -5,6 +5,7 @@ import { Listener } from '@sapphire/framework';
 import { readSettings } from '#lib/Database/settings/functions';
 import { getT } from '#lib/i18n';
 import { FoxxieEvents } from '#lib/types';
+import { Colors } from '#utils/constants';
 import { GuildMemberAddBuilder } from '#utils/discord';
 import { getLogger } from '#utils/functions';
 
@@ -20,9 +21,10 @@ export class UserListener extends Listener {
 			channelId: logChannelId,
 			key: 'channelsLogsMemberAdd',
 			makeMessage: () =>
-				new GuildMemberAddBuilder(t)
+				new GuildMemberAddBuilder(t) //
+					.setColor(Colors.Green)
 					.setMember(member)
-					.setInvite(invite || null)
+					.setInvite(invite)
 					.build()
 		});
 	}

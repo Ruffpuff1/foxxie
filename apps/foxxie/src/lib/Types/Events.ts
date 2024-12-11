@@ -13,6 +13,7 @@ export const enum FoxxieEvents {
 	GuildBanAdd = 'guildBanAdd',
 	GuildBanRemove = 'guildBanRemove',
 	GuildMemberAdd = 'guildMemberAdd',
+	GuildMemberAddMuted = 'guildMemberAddMuted',
 	GuildMemberJoin = 'guildMemberJoin',
 	GuildMemberRemove = 'guildMemberRemove',
 	GuildMemberUpdate = 'guildMemberUpdate',
@@ -35,6 +36,7 @@ export const enum FoxxieEvents {
 	MessageSubcommandNoMatch = 'messageSubcommandNoMatch',
 	// eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
 	MessageUpdate = 'messageUpdate',
+	MinecraftBotMessage = 'minecraftBotMessage',
 	ModerationEntryAdd = 'moderationEntryAdd',
 	ModerationEntryEdit = 'moderationEntryEdit',
 	NotMutedMemberAdd = 'notMutedMemberAdd',

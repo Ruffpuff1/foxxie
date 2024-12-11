@@ -141,6 +141,10 @@ export const allowedInviteIds = [
 	'508357248330760243'
 ];
 
+export const enum BotIds {
+	RealmBot = '840681796914905100'
+}
+
 export const enum SelectMenuCustomIds {
 	Pokemon = 'pokemon-select-menu'
 }
