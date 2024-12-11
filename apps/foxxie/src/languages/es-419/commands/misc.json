@@ -7,40 +7,13 @@
 	"reminderDescription": "",
 	"reminderDetailedDescription": {
 		"extendedHelp": "",
-		"usages": [
-			"",
-			"",
-			"",
-			"",
-			"",
-			"lista"
-		],
-		"examples": [
-			"",
-			"",
-			"",
-			"",
-			"",
-			"",
-			"lista"
-		],
+		"usages": ["", "", "", "", "", "lista"],
+		"examples": ["", "", "", "", "", "", "lista"],
 		"explainedUsage": [
-			[
-				"",
-				""
-			],
-			[
-				"",
-				""
-			],
-			[
-				"",
-				""
-			],
-			[
-				"",
-				""
-			]
+			["", ""],
+			["", ""],
+			["", ""],
+			["", ""]
 		],
 		"reminder": ""
 	},
