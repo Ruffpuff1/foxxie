@@ -1,0 +1,27 @@
+{
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist/**"]
+		},
+        "dev": {
+			"dependsOn": ["^dev"],
+			"outputs": []
+		},
+		"test": {
+			"dependsOn": ["^build"],
+			"outputs": []
+		},
+		"lint": {
+			"dependsOn": ["^build"],
+			"outputs": []
+		},
+		"format": {
+			"outputs": []
+		},
+		"bump": {
+			"dependsOn": [],
+			"outputs": ["CHANGELOG.md"]
+		}
+	}
+}

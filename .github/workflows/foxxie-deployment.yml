@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'src/**'
-      - 'Dockerfile'
+      - 'apps/foxxie/src/**'
+      - 'apps/foxxie/Dockerfile'
       - '.github/workflows/foxxie-deployment.yml'
       - 'apps/foxxie/package.json'
   workflow_dispatch:
@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355 # v6.10.0
         with:
           push: true
-          context: .
+          context: ./apps/foxxie
           tags: |
             ruffpuff/foxxie:latest
             ghcr.io/ruffpuff1/foxxie:latest
