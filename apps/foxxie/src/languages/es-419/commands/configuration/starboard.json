@@ -1,0 +1,30 @@
+{
+    "description": "",
+    "detailedDescription": {
+        "extendedHelp": "",
+        "usages": [
+            "",
+            "",
+            ""
+        ],
+        "examples": [
+            "lista",
+            "mostrar",
+            ""
+        ],
+        "explainedUsage": [
+            [
+                "",
+                ""
+            ],
+            [
+                "",
+                ""
+            ]
+        ]
+    },
+    "jumpToStarMessage": "",
+    "name": "",
+    "showNoChannel": "",
+    "showNoMessage": ""
+}
