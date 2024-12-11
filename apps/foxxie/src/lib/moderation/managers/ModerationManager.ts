@@ -88,7 +88,7 @@ export class ModerationManager {
 			const entry = new ModerationEntry({ ...data.toData(), id, createdAt: data.createdAt || Date.now() });
 			await this.#performInsert(entry);
 			return this.#addToCache(entry, CacheActions.Insert);
-		}  finally {
+		} finally {
 			this.#saveQueue.shift();
 		}
 	}
