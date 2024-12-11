@@ -1,5 +1,8 @@
 {
 	"invalidCommand": "{{name}} doesn't seem to be one of my commands. If you forgot, feel free to run my `help` command.",
+	"invalidFloat": "{{name}} must be a valid number.",
+	"invalidGuild": "{{name}} must be a valid server ID.",
+	"invalidInt": "{{name}} must be an integer.",
 	"invalidRole": "{{name}} must be a mention or id of a role in this server.",
 	"minMaxBothExclusive": "{{name}} must be between {{min}} and {{max}} exclusively.",
 	"minMaxBothInclusive": "{{name}} must be between {{min}} and {{max}} inclusively.",
