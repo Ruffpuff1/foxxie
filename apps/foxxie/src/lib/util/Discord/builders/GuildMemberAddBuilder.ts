@@ -1,4 +1,3 @@
-import { TFunction } from '@sapphire/plugin-i18next';
 import { LanguageKeys } from '#lib/i18n';
 import { TypedT } from '#lib/types';
 import { discordInviteLink, userLink } from '#utils/transformers';
@@ -15,14 +14,6 @@ export class GuildMemberAddBuilder extends FoxxieBuilder {
 	public invite: null | string = null;
 
 	public member!: GuildMember;
-
-	public t: TFunction;
-
-	public constructor(t: TFunction) {
-		super();
-
-		this.t = t;
-	}
 
 	public override build() {
 		const { user } = this.member;

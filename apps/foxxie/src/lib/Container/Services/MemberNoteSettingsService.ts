@@ -1,4 +1,4 @@
-import { memberNote } from '@prisma/client';
+import { MemberNote } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { Note } from '#lib/Database/Models/Discord/Member/Note';
 import { Collection } from 'discord.js';
@@ -21,19 +21,7 @@ export class MemberNoteSettingsService {
 		return this.mapAndSet(notes);
 	}
 
-	public async findById(id: number): Promise<Note | null> {
-		const cached = this.cache.get(id);
-		if (cached) return cached;
-
-		const note = await container.prisma.memberNote.findFirst({ where: { id } });
-		if (!note) return null;
-
-		const created = new Note(note);
-		this.cache.set(created.id, created);
-		return created;
-	}
-
-	private mapAndSet(notes: memberNote[]): Note[] {
+	private mapAndSet(notes: MemberNote[]): Note[] {
 		const created = notes.map((d) => new Note(d));
 		created.forEach((c) => this.cache.set(c.id, c));
 		return created;

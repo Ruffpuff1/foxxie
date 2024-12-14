@@ -1,4 +1,4 @@
-import { memberNote } from '@prisma/client';
+import { MemberNote } from '@prisma/client';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { TFunction } from '@sapphire/plugin-i18next';
@@ -18,7 +18,7 @@ export class Note {
 
 	public userId!: string;
 
-	public constructor(data: memberNote) {
+	public constructor(data: MemberNote) {
 		Object.assign(this, data);
 	}
 

@@ -2,18 +2,18 @@ import { API } from '@discordjs/core/http-only';
 import { Piece, Store } from '@sapphire/framework';
 import { TFunction } from '@sapphire/plugin-i18next';
 import { PickByValue } from '@sapphire/utilities';
-import { ApiService } from '#lib/Container/Api/ApiService';
+import { ApiService } from '#lib/api/ApiService';
 import { SettingsService } from '#lib/Container/Services/SettingsService';
 import { UtilityService } from '#lib/Container/Utility/UtilityService';
 import { WorkerService } from '#lib/Container/Workers/WorkerService';
 import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
 import { HighlightData } from '#lib/Database/Models/highlight';
 import { Starboard } from '#lib/Database/Models/starboard';
-import { MongoDB } from '#lib/Database/MongoDB';
 import { SerializerStore } from '#lib/Database/settings/structures/SerializerStore';
 import { PermissionsNode, ReadonlyGuildData, StickyRole } from '#lib/Database/settings/types';
 import { ModerationEntry } from '#lib/moderation';
 import { ScheduleManager, TaskStore } from '#lib/schedule';
+import { PrismaDatabase } from '#lib/Setup/prisma';
 import { FoxxieCommand } from '#lib/structures';
 import { InviteManager } from '#lib/Structures/managers/InviteManager';
 import { RedisManager } from '#lib/Structures/managers/RedisManager';
@@ -53,6 +53,7 @@ declare module 'discord.js' {
 		[FoxxieEvents.GuildMemberUpdateRolesManualMute]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberUpdateRolesManualUnmute]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberUpdateRolesModeration]: [member: GuildMember, added: Role[], removed: Role[]];
+		[FoxxieEvents.GuildMessageDelete]: [message: GuildMessage | undefined, guild: Guild, channel: GuildTextBasedChannel];
 		[FoxxieEvents.GuildMessageLog]: [
 			guild: Guild,
 			key: PickByValue<GuildChannelSettingsService, null | Snowflake>,
@@ -82,7 +83,7 @@ declare module '@sapphire/pieces' {
 		 * Api manager
 		 */
 		apis: ApiService;
-		db: MongoDB;
+		db: PrismaDatabase;
 		redis: null | RedisManager;
 		schedule: ScheduleManager;
 		settings: SettingsService;

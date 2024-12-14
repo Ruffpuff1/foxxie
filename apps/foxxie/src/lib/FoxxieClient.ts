@@ -12,7 +12,8 @@ import { LongLivingReactionCollector } from '#utils/External/LongLivingReactionC
 import { magentaBright } from 'colorette';
 import { Message, WebhookClient } from 'discord.js';
 
-import { ApiService } from './Container/Api/ApiService.js';
+import { LastFmDataSourceFactory } from './api/Last.fm/factories/DataSourceFactory.js';
+import { ApiService } from './api/ApiService.js';
 import { SettingsService } from './Container/Services/SettingsService.js';
 import { UtilityService } from './Container/Utility/UtilityService.js';
 import { WorkerService } from './Container/Workers/WorkerService.js';
@@ -25,6 +26,8 @@ export default class FoxxieClient extends SapphireClient {
 
 	@Enumerable(false)
 	public override invites = new InviteManager();
+
+	public lfm = new LastFmDataSourceFactory();
 
 	@Enumerable(false)
 	public override llrCollectors = new Set<LongLivingReactionCollector>();

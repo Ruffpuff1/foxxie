@@ -150,10 +150,6 @@ export class PollEntity extends BaseEntity {
 		);
 	}
 
-	public override save() {
-		return container.db.polls.save(this);
-	}
-
 	public setup(service: GuildPollService): PollEntity {
 		this.#service = service;
 		if (service.guild) this.guildId = service.guild.id;

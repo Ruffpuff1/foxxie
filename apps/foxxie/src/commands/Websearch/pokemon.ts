@@ -1,15 +1,15 @@
 import { PokemonEnum } from '@favware/graphql-pokemon';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { ChatInputCommand } from '@sapphire/framework';
+import { send } from '@sapphire/plugin-editable-commands';
 import { fetchT, TFunction } from '@sapphire/plugin-i18next';
-import { cast, isNullish } from '@sapphire/utilities';
-import { compressPokemonCustomIdMetadata, fuzzyPokemonToSelectOption, PokemonSpriteTypes } from '#lib/Container/Api/Pokemon/index';
+import { isNullish } from '@sapphire/utilities';
+import { compressPokemonCustomIdMetadata, fuzzyPokemonToSelectOption, PokemonSpriteTypes } from '#lib/api/Pokemon/index';
 import { SubcommandKeys } from '#lib/Container/Stores/Commands/Keys/index';
 import { IdHints } from '#lib/discord';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
-import { floatPromise } from '#utils/common';
 import { SelectMenuCustomIds } from '#utils/constants';
 import { sendLoadingMessage } from '#utils/functions/messages';
 import {
@@ -21,8 +21,7 @@ import {
 	Locale,
 	Message,
 	PermissionFlagsBits,
-	StringSelectMenuBuilder,
-	TextChannel
+	StringSelectMenuBuilder
 } from 'discord.js';
 
 @ApplyOptions<FoxxieSubcommand.Options>({
@@ -101,14 +100,14 @@ export class UserCommand extends FoxxieSubcommand {
 	@RequiresClientPermissions([PermissionFlagsBits.AddReactions, PermissionFlagsBits.EmbedLinks])
 	public async [SubcommandKeys.Websearch.Pokemon](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message | unknown> {
 		const { t } = args;
-		const response = await sendLoadingMessage(msg);
+		const loadingMessage = await sendLoadingMessage(msg);
 
 		const pokemon = (await args.rest('string')).toLowerCase();
 		const backSprite = args.getFlags('back');
 		const shinySprite = args.getFlags('shiny');
 		const spriteToGet: PokemonSpriteTypes = this.getSpriteTypePokemonMessage(backSprite, shinySprite);
 
-		return this.sendMessagePokemonReply(pokemon, spriteToGet, response, t, msg);
+		return this.sendMessagePokemonReply(pokemon, spriteToGet, t, msg, loadingMessage as GuildMessage);
 	}
 
 	private getSpriteTypePokemonMessage(backSprite: boolean, shinySprite: boolean): PokemonSpriteTypes {
@@ -159,9 +158,9 @@ export class UserCommand extends FoxxieSubcommand {
 	private async sendMessagePokemonReply(
 		pokemon: string,
 		spriteToGet: PokemonSpriteTypes,
-		message: Message,
 		t: TFunction,
-		userMessage: GuildMessage
+		userMessage: GuildMessage,
+		loadingMessage: GuildMessage
 	) {
 		const pokemonDetails = await this.container.apis.pokemon.getPokemon(pokemon as PokemonEnum);
 
@@ -184,15 +183,14 @@ export class UserCommand extends FoxxieSubcommand {
 						.setOptions(options)
 				);
 
-			await floatPromise(message.delete());
-			return cast<TextChannel>(message.channel).send({
+			return send(userMessage, {
 				components: [messageActionRow],
-				content: t(LanguageKeys.Commands.Websearch.PokemonDexNone, { pokemon })
+				content: t(LanguageKeys.Commands.Websearch.PokemonDexNone, { pokemon }),
+				embeds: []
 			});
 		}
 
 		const paginatedMessage = new this.container.apis.pokemon.builders.pokemon(pokemonDetails!, spriteToGet, t).build();
-		await paginatedMessage.run(userMessage);
-		return floatPromise(message.delete());
+		return paginatedMessage.run(loadingMessage, userMessage.author);
 	}
 }

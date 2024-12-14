@@ -1,4 +1,3 @@
-import { TFunction } from '@sapphire/plugin-i18next';
 import { toTitleCase } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { TypedT } from '#lib/types';
@@ -17,15 +16,7 @@ export class GuildMemberRemoveBuilder extends FoxxieBuilder {
 
 	public messageCount = 0;
 
-	public t: TFunction;
-
 	public user!: User;
-
-	public constructor(t: TFunction) {
-		super();
-
-		this.t = t;
-	}
 
 	public override build() {
 		this.setAuthor(getFullEmbedAuthor(this.member || this.user, userLink(this.user.id)))

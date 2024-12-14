@@ -130,6 +130,11 @@ export namespace ScheduleEntry {
 		time: Date | string;
 	}
 
+	export interface IndexUserQueueItem {
+		indexQueue: boolean;
+		userId: string;
+	}
+
 	export interface ReminderTaskData {
 		channelId: null | string;
 		createdChannelId: string;
@@ -159,6 +164,7 @@ export namespace ScheduleEntry {
 
 	export interface TaskData {
 		birthday: BirthdayTaskData;
+		indexUser: IndexUserQueueItem;
 		moderationEndAddRole: SharedModerationTaskData<TypeVariation.RoleAdd>;
 		moderationEndBan: SharedModerationTaskData<TypeVariation.Ban>;
 		moderationEndMute: SharedModerationTaskData<TypeVariation.Mute>;

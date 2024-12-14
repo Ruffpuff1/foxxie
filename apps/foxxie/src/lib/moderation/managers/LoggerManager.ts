@@ -1,7 +1,13 @@
 import { container } from '@sapphire/framework';
 import { type Awaitable, isFunction, isNullish, isNullishOrEmpty, type Nullish } from '@sapphire/utilities';
 import { type GuildSettingsOfType, writeSettings } from '#lib/database';
-import { MuteLoggerTypeManager, PruneLoggerTypeManager, TimeoutLoggerTypeManager, UnmuteLoggerTypeManager } from '#lib/moderation';
+import {
+	DeleteLoggerTypeManager,
+	MuteLoggerTypeManager,
+	PruneLoggerTypeManager,
+	TimeoutLoggerTypeManager,
+	UnmuteLoggerTypeManager
+} from '#lib/moderation';
 import { toErrorCodeResult } from '#utils/common';
 import { getCodeStyle, getLogPrefix } from '#utils/functions/pieces';
 import {
@@ -43,6 +49,7 @@ export interface LoggerManagerSendOptions {
 }
 
 export class LoggerManager {
+	public readonly delete = new DeleteLoggerTypeManager(this);
 	public readonly guild: Guild;
 	public readonly mute = new MuteLoggerTypeManager(this);
 	public readonly prune = new PruneLoggerTypeManager(this);

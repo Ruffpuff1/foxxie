@@ -1,12 +1,10 @@
-import { member } from '@prisma/client';
+import { Member } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { Collection } from 'discord.js';
 
-const cache = new Collection<string, MemberData>();
+const cache = new Collection<string, Member>();
 
-export type MemberData = member;
-
-export async function acquireMember(userId: string, guildId: string): Promise<MemberData | null> {
+export async function acquireMember(userId: string, guildId: string): Promise<Member | null> {
 	const cached = cache.get(memberCacheKey(userId, guildId));
 	if (cached) return cached;
 
@@ -15,17 +13,17 @@ export async function acquireMember(userId: string, guildId: string): Promise<Me
 	return found;
 }
 
-export async function createMember(userId: string, guildId: string, data: Partial<MemberData> = {}) {
+export async function createMember(userId: string, guildId: string, data: Partial<Member> = {}) {
 	const created = await container.prisma.member.create({ data: { guildId, userId, ...data } });
 	cache.set(memberCacheKey(userId, guildId), created);
 	return created;
 }
 
-export async function ensureMember(userId: string, guildId: string): Promise<MemberData> {
+export async function ensureMember(userId: string, guildId: string): Promise<Member> {
 	return (await acquireMember(userId, guildId)) ?? { guildId, messageCount: 0, userId };
 }
 
-export async function updateMember(userId: string, guildId: string, data: Partial<MemberData> = {}) {
+export async function updateMember(userId: string, guildId: string, data: Partial<Member> = {}) {
 	const existing = await acquireMember(userId, guildId);
 	if (existing) cache.set(memberCacheKey(userId, guildId), { ...existing, ...data });
 

@@ -47,6 +47,7 @@ export const enum Schedules {
 	EndTempNick = 'moderationEndSetNickname',
 	EndTempRestrictEmbed = 'moderationEndRestrictionEmbed',
 	EndTempTimeout = 'moderationEndTimeout',
+	IndexUser = 'indexUser',
 	Reminder = 'reminder',
 	RemoveBirthdayRole = 'removeBirthdayRole',
 	UpdateDiscogsUsers = 'updateDiscogsUsers',
@@ -100,7 +101,7 @@ export const enum Emojis {
 	AutoModerator = ':fox:',
 	Bot = ':robot:',
 	/** The logo of https://bulbapedia.bulbagarden.net */
-	Bulbapedia = '910209205636579421',
+	Bulbapedia = '1317612914370285569',
 	Calendar = ':calendar_spiral:',
 	Error = '<:TickNo:894420222084280331>',
 	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
@@ -116,10 +117,10 @@ export const enum Emojis {
 	QuarantinedIcon = ':speech_balloon:',
 	RuffThink = '<:RuffThink:910209205636579421>',
 	/** The logo of https://serebii.net */
-	Serebii = '910209205636579421',
+	Serebii = '1317612983530164294',
 	ShieldMember = ':bust_in_silhouette:',
 	/** The logo of https://www.smogon.com */
-	Smogon = '910209205636579421',
+	Smogon = '1317613005734674495',
 	SpammerIcon = ':warning:',
 	Success = '<:TickYes:894419647439466556>',
 	Vinyl = '<:Vinyl:1155284004656910397>'

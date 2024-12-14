@@ -6,6 +6,10 @@ export function discordInviteLink<C extends string>(code: C): `https://discord.g
 	return `https://discord.gg/${code}`;
 }
 
+export function lastFmUserUrl<U extends string>(userName: U): `https://last.fm/user/${U}` {
+	return `https://last.fm/user/${encodeURIComponent(userName) as U}`;
+}
+
 /**
  * Formats a message url link.
  * @param guildId The Guildid of the message

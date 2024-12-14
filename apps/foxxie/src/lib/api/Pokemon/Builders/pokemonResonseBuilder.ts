@@ -71,13 +71,18 @@ export class PokemonResponseBuilder {
 		const pageLabels = this.t(LanguageKeys.Commands.Websearch.PokemonDexSelectPages);
 
 		const display = new PaginatedMessage({
-			template: new EmbedBuilder()
-				.setColor(resolveColor(this.pokeDetails.color))
-				.setAuthor({
-					iconURL: this.pokeDetails[this.spriteToGet],
-					name: `#${this.pokeDetails.num} - ${pokemonEnumToSpecies(this.pokeDetails.key)}`
-				})
-				.setThumbnail(this.pokeDetails[this.spriteToGet])
+			template: {
+				content: null!,
+				embeds: [
+					new EmbedBuilder()
+						.setColor(resolveColor(this.pokeDetails.color))
+						.setAuthor({
+							iconURL: this.pokeDetails[this.spriteToGet],
+							name: `#${this.pokeDetails.num} - ${pokemonEnumToSpecies(this.pokeDetails.key)}`
+						})
+						.setThumbnail(this.pokeDetails[this.spriteToGet])
+				]
+			}
 		})
 			.addActions(this.parseExternalResources(this.pokeDetails))
 			.setSelectMenuOptions((pageIndex) => ({ label: pageLabels[pageIndex - 1] }))

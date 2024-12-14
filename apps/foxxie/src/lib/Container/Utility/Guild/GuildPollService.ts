@@ -1,4 +1,3 @@
-import { container } from '@sapphire/framework';
 import { PollEntity } from '#lib/Database/entities/PollEntity';
 import { Collection, Guild } from 'discord.js';
 
@@ -28,21 +27,12 @@ export class GuildPollService extends Collection<number, PollEntity> {
 
 	public async fetch(id?: null | number | number[] | string): Promise<Collection<number, PollEntity> | null | PollEntity | this> {
 		if (!id) {
-			const entries = await container.db.polls.find({
-				where: {
-					guildId: this.guild?.id
-				}
-			});
+			const entries: PollEntity[] = [];
 			return this._cache(entries.map((data) => new PollEntity(data).setup(this)));
 		}
 
 		if (typeof id === 'string') {
-			const entry = await container.db.polls.findOne({
-				where: {
-					guildId: this.guild.id,
-					messageId: id
-				}
-			});
+			const entry = null;
 
 			if (!entry) return null;
 
@@ -50,29 +40,13 @@ export class GuildPollService extends Collection<number, PollEntity> {
 		}
 
 		if (Array.isArray(id)) {
-			const entries = await Promise.all(
-				id.map(async (pollId) =>
-					container.db.polls
-						.findOne({
-							where: {
-								guildId: this.guild!.id,
-								pollId
-							}
-						})
-						.then((data) => new PollEntity(data!).setup(this))
-				)
-			);
+			const entries: PollEntity[] = [];
 			return this._cache(entries);
 		}
 
 		if (super.has(id)) return super.get(id)!;
 
-		const found = await container.db.polls.findOne({
-			where: {
-				guildId: this.guild!.id,
-				pollId: id
-			}
-		});
+		const found = null;
 
 		if (found) return this._cache(new PollEntity(found).setup(this));
 		return null;

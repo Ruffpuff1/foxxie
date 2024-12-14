@@ -1,3 +1,4 @@
+export * from '#utils/common/array';
 export * from '#utils/common/comparators';
 export * from '#utils/common/error';
 export * from '#utils/common/guards';

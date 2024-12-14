@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
-import { fuzzyPokemonToSelectOption } from '#lib/Container/Api/Pokemon/index';
+import { fuzzyPokemonToSelectOption } from '#lib/api/Pokemon/index';
 import { AutocompleteInteraction } from 'discord.js';
 
 @ApplyOptions<InteractionHandler.Options>({

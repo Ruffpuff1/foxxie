@@ -20,6 +20,7 @@ export const enum FoxxieEvents {
 	GuildMemberUpdateRolesManualMute = 'guildMemberUpdateRolesManualMute',
 	GuildMemberUpdateRolesManualUnmute = 'guildMemberUpdateRolesManualUnmute',
 	GuildMemberUpdateRolesModeration = 'guildMemberUpdateRolesModeration',
+	GuildMessageDelete = 'guildMessageDelete',
 	GuildMessageLog = 'guildMessageLog',
 	GuildMessageUpdateLog = 'messageUpdate',
 	LastFmUpdateUser = 'lastFmUpdateUser',

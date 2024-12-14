@@ -9,7 +9,8 @@ export type DefaultGuildData = Omit<ReadonlyGuildData, 'id'>;
 
 export function getDefaultGuildSettings() {
 	cachedDefaultGuildSettings ??= Object.assign(Object.create(null), {
-		channelsBirthday: null,
+		birthdayChannel: null,
+		birthdayRole: null,
 		channelsIgnoreAll: [],
 		channelsIgnoreMessageDelete: [],
 		channelsIgnoreMessageEdit: [],
@@ -66,7 +67,6 @@ export function getDefaultGuildSettings() {
 		prefix: envParseString(EnvKeys.ClientPrefix),
 		reactionRoles: [],
 		rolesAdmin: [],
-		rolesBirthday: null,
 		rolesInitialBots: [],
 		rolesInitialHumans: [],
 		rolesModerator: [],
@@ -157,6 +157,7 @@ export function getDefaultGuildSettings() {
 		selfmodReactionsThresholdMaximum: 10,
 		starboardChannelId: null,
 		starboardEmojis: ['⭐️', '✨'],
+		starboardIgnoredChannels: [],
 		starboardMinimum: 3,
 		starboardSelfStar: true,
 		tags: [],

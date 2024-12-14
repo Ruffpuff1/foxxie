@@ -32,10 +32,10 @@ export class UserTask extends Task {
 		const member = await resolveToNull(guild.members.fetch(data.userId));
 		if (!member) return null;
 
-		const { rolesBirthday } = await readSettings(guild);
+		const { birthdayRole } = await readSettings(guild);
 		const [message, t] = [null, getFixedT('en-US')];
 
-		const results = await Promise.all([this.handleMessage(message!, guild, member, data, t), this.handleRole(member, rolesBirthday)]);
+		const results = await Promise.all([this.handleMessage(message!, guild, member, data, t), this.handleRole(member, birthdayRole)]);
 
 		const isSuccess = results.includes(PartResult.Success);
 		if (!isSuccess) return null;
@@ -68,7 +68,7 @@ export class UserTask extends Task {
 		data: ScheduleEntry.TaskData[Schedules.Birthday],
 		t: TFunction
 	): Promise<PartResult> {
-		const channel = await fetchChannel(guild, 'channelsBirthday');
+		const channel = await fetchChannel(guild, 'birthdayChannel');
 		if (!channel) return PartResult.NotSet;
 
 		const content = this.parseMessage(message, member, data, t);
