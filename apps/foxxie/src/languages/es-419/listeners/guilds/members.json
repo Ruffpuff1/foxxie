@@ -1,0 +1,5 @@
+{
+	"add": "Miembro unido",
+	"addPosition": "**Posición**: {{position, ordinal}}",
+	"remove": "Miembro dejado"
+}
