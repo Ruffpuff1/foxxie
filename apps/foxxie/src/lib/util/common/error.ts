@@ -93,7 +93,7 @@ export async function handleMessageCommandError(error: unknown, payload: Message
 		parameters = message.content.slice(payload.context.commandPrefix.length + payload.context.commandName.length).trim();
 	}
 
-	console.log(parameters);
+	console.log(parameters, error);
 
 	if (!(error instanceof Error)) return messageStringError(message, String(error));
 	if (error instanceof ArgumentError) return messageArgumentError(message, t, error);

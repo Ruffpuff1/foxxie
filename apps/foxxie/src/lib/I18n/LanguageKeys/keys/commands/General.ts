@@ -15,6 +15,14 @@ export const AvatarDescription = T('commands/general:avatarDescription');
 export const DonateDescription = T('commands/general:donateDescription');
 export const DonateHeader = T('commands/general:donateHeader');
 
+export const HelpCategories = T<{
+	admin: string;
+	configuration: string;
+	general: string;
+	misc: string;
+	moderation: string;
+	websearch: string;
+}>('commands/general:helpCategories');
 export const HelpData = FT<{ footerName: string; titleDescription: string }, { footer: string; title: string }>('commands/general:helpData');
 export const HelpDescription = T('commands/general:helpDescription');
 export const HelpMenu = FT<{ name: string }>('commands/general:helpMenu');

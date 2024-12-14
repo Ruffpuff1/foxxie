@@ -4,7 +4,7 @@ import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { InteractionHandler, InteractionHandlerTypes, UserError } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
-import { decompressPokemonCustomIdMetadata, PokeDetails } from '#lib/Container/Api/Pokemon/index';
+import { decompressPokemonCustomIdMetadata, PokeDetails } from '#lib/api/Pokemon/index';
 import { SelectMenuCustomIds } from '#utils/constants';
 import { StringSelectMenuInteraction } from 'discord.js';
 
@@ -14,8 +14,10 @@ import { StringSelectMenuInteraction } from 'discord.js';
 export class SelectMenuHandler extends InteractionHandler {
 	public override async parse(interaction: StringSelectMenuInteraction) {
 		if (!interaction.customId.startsWith(SelectMenuCustomIds.Pokemon)) return this.none();
-
-		await interaction.deferReply();
+		await interaction.deferUpdate({ fetchReply: true });
+		// await interaction.message.edit({
+		// 	content: `${Emojis.Loading} Searching the Pokédex...`
+		// });
 		const t = await fetchT(interaction.guild!);
 
 		const pokemon = interaction.values[0];
@@ -67,6 +69,6 @@ export class SelectMenuHandler extends InteractionHandler {
 			}
 		}
 
-		return paginatedMessage!.run(interaction, interaction.user);
+		return paginatedMessage!.run(interaction.message, interaction.user);
 	}
 }

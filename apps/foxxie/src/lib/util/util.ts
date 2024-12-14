@@ -1,5 +1,7 @@
 import { resolveToNull } from '@ruffpuff/utilities';
+import { isImageAttachment } from '@sapphire/discord.js-utilities';
 import { ArgType, container } from '@sapphire/framework';
+import { first } from '@sapphire/iterator-utilities/first';
 import { cast, isNullishOrEmpty, isNumber, isThenable } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
 import { ScheduleEntry } from '#lib/schedule';
@@ -10,6 +12,8 @@ import {
 	ChatInputCommandInteraction,
 	ColorResolvable,
 	EmbedAuthorData,
+	EmbedBuilder,
+	GuildMember,
 	GuildResolvable,
 	ImageURLOptions,
 	makeURLSearchParams,
@@ -18,6 +22,7 @@ import {
 	Routes,
 	Snowflake,
 	SnowflakeUtil,
+	StickerFormatType,
 	User
 } from 'discord.js';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
@@ -84,6 +89,15 @@ export function floatPromise(promise: Promise<unknown>) {
 	return promise;
 }
 
+export function getContent(message: Message): null | string {
+	if (message.content) return message.content;
+	for (const embed of message.embeds) {
+		if (embed.description) return embed.description;
+		if (embed.fields.length) return embed.fields[0].value;
+	}
+	return null;
+}
+
 export function getDisplayAvatar(user: APIUser | User, options?: Readonly<ImageURLOptions>) {
 	if (user.avatar === null) {
 		const id = usesPomelo(user) ? Number(BigInt(user.id) >> 22n) % 6 : Number(user.discriminator) % 5;
@@ -97,8 +111,43 @@ export function getEmbedAuthor(user: APIUser | User, url?: string | undefined): 
 	return { iconURL: getDisplayAvatar(user, { size: 128 }), name: getTag(user), url };
 }
 
-export function getFullEmbedAuthor(user: APIUser | User, url?: string | undefined): EmbedAuthorData {
-	return { iconURL: getDisplayAvatar(user, { size: 128 }), name: `${getTag(user)} [${user.id}]`, url };
+export function getFullEmbedAuthor(user: APIUser | GuildMember | User, url?: string | undefined): EmbedAuthorData {
+	return {
+		iconURL: user instanceof GuildMember ? user.displayAvatarURL() : getDisplayAvatar(user, { size: 128 }),
+		name: `${user instanceof GuildMember ? user.displayName : getTag(user)} (${user.id})`,
+		url
+	};
+}
+
+/**
+ * Get the image url from a message.
+ * @param message The Message instance to get the image url from
+ */
+export function getImage(message: Message): null | string {
+	return first(getImages(message)) ?? null;
+}
+
+export function* getImages(message: Message): IterableIterator<string> {
+	for (const attachment of message.attachments.values()) {
+		if (isImageAttachment(attachment)) yield attachment.proxyURL ?? attachment.url;
+	}
+
+	for (const embed of message.embeds) {
+		if (embed.image) {
+			yield embed.image.proxyURL ?? embed.image.url;
+		}
+
+		if (embed.thumbnail) {
+			yield embed.thumbnail.proxyURL ?? embed.thumbnail.url;
+		}
+	}
+
+	for (const sticker of message.stickers.values()) {
+		// Skip if the sticker is a lottie sticker:
+		if (sticker.format === StickerFormatType.Lottie) continue;
+
+		yield sticker.url;
+	}
 }
 
 export function getServerDetails() {
@@ -132,6 +181,25 @@ export async function resolveKey(message: ChatInputCommandInteraction | GuildMes
 	const result = container.i18n.getT(guild.language)(key, { ...variables });
 
 	return result;
+}
+
+export function setMultipleEmbedImages(embed: EmbedBuilder, urls: string[]) {
+	const embeds = [embed];
+	let count = 0;
+	for (const url of urls) {
+		if (count === 0) {
+			embed.setImage(url);
+		} else {
+			embeds.push(new EmbedBuilder().setImage(url));
+
+			// We only want to send 4 embeds at most
+			if (count === 3) break;
+		}
+
+		count++;
+	}
+
+	return embeds;
 }
 
 export function snowflakeAge(snowflake: string) {
@@ -185,15 +253,6 @@ export function getAttachment(message: Message): ImageAttachment | null {
 	}
 
 	return null;
-}
-
-/**
- * Get the image url from a message.
- * @param message The Message instance to get the image url from
- */
-export function getImage(message: Message): null | string {
-	const attachment = getAttachment(message);
-	return attachment ? attachment.proxyURL || attachment.url : null;
 }
 
 export function getOption(commandName: string, name: string, description: DetailedDescription) {

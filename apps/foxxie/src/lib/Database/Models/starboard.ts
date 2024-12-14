@@ -184,6 +184,13 @@ export class Starboard {
 		return this;
 	}
 
+	async #fetchNextId() {
+		const star = await container.prisma.starboard.findFirst({ orderBy: { id: 'desc' }, where: { guildId: this.guildId } });
+		// if no stars in server start from 1
+		if (!star) return 1;
+		return star.id! + 1;
+	}
+
 	private async addRefrencedEmbeds(embeds: EmbedBuilder[], message: GuildMessage = this.#message) {
 		if (
 			embeds.length <= 9 &&
@@ -336,6 +343,8 @@ export class Starboard {
 		// fetch the starboard channel;
 		const channel = cast<TextChannel | undefined>(this.#message.guild.channels.cache.get(starboardChannelId));
 		if (!channel) return;
+
+		this.id = await this.#fetchNextId();
 
 		const options = await this.getStarContent(t);
 		const promise = channel

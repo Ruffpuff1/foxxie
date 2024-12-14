@@ -208,27 +208,192 @@ model guilds {
   starboardSelfStar                    Boolean  @default(true) @map("starboard.self-star")
   tags                                 Json     @default("[]")
   words                                Json     @default("[]")
-  rolesBirthday                        String?  @map("roles.birthday") @db.VarChar(19)
-  channelsBirthday                     String?  @map("channels.birthday") @db.VarChar(19)
+  birthdayRole                         String?  @map("roles.birthday") @db.VarChar(19)
+  birthdayChannel                      String?  @map("channels.birthday") @db.VarChar(19)
   /// [HighlightEntries]
   highlights                           Json     @default("[]")
+  starboardIgnoredChannels             String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("starboard.ignored-channels") @db.VarChar(19)
 }
 
-model memberNote {
-  createdAt DateTime? @db.Timestamp(6)
-  reason    String?   @db.VarChar(2000)
+model User {
+  userid       String      @id @db.VarChar(19)
+  moderationDm Boolean     @default(true) @map("moderationDm")
+  user         UserLastFM?
+}
+
+model UserLastFM {
+  userid           String               @id @db.VarChar(19)
+  blocked          Boolean              @default(false)
+  userType         Int                  @default(0)
+  dataSource       Int                  @default(1)
+  usernameLastFM   String
+  sessionKeyLastFM String
+  lastFmPro        Boolean?
+  registeredLastFM DateTime?
+  totalPlaycount   Int?
+  rymEnabled       Boolean?
+  embedType        Int                  @default(0)
+  footerOption     Int                  @default(1)
+  responseMode     Int                  @default(1)
+  privacyLevel     Int                  @default(1)
+  lastIndexed      DateTime
+  lastSmallIndexed DateTime?
+  lastUpdated DateTime
+  lastScrobbleUpdate DateTime
+  lastUsed         DateTime?
+  emoteReactions   String[]
+  timeZone         String
+  numberFormat     Int                  @default(1)
+  user          User                 @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "userlastfm_user_fkey")
+  albums           UserAlbum[]
+  artists          UserArtist[]
+  discogsReleases  UserDiscogsReleases?
+  discogs          UserDiscogs          @relation(fields: [userid], references: [userid])
+  plays            UserPlay[]
+  tracks           UserTrack[]
+}
+
+model UserDiscogs {
+  userid              String      @id @db.VarChar(19)
+  discogsId           Int?
+  username            String?
+  accessToken         String?
+  accessTokenSecret   String?
+  minimumValue        String?
+  medianValue         String?
+  maximumValue        String?
+  hideValue           Boolean?    @default(false)
+  lastUpdated         DateTime?
+  releasesLastUpdated DateTime?
+  user                UserLastFM?
+}
+
+model UserArtist {
+  userArtistId Int        @default(autoincrement())
+  userId       String     @db.VarChar(19)
+  name         String
+  playCount    Int
+  user         UserLastFM @relation(fields: [userId], references: [userid])
+
+  @@id([userArtistId, userId])
+}
+
+model UserAlbum {
+  userAlbumId Int        @default(autoincrement())
+  userId      String     @db.VarChar(19)
+  name        String
+  artistName  String
+  playCount   Int
+  user        UserLastFM @relation(fields: [userId], references: [userid])
+
+  @@id([userAlbumId, userId])
+}
+
+model UserTrack {
+  userTrackId Int        @default(autoincrement())
+  userId      String     @db.VarChar(19)
+  name        String
+  artistName  String
+  playCount   Int
+  user        UserLastFM @relation(fields: [userId], references: [userid])
+
+  @@id([userTrackId, userId])
+}
+
+model UserPlay {
+  userPlayId Int        @default(autoincrement())
+  userId     String     @db.VarChar(19)
+  trackName  String
+  albumName  String?
+  artistName String
+  timePlayed DateTime
+  msPlayed   Int?
+  playSource Int?       @default(0)
+  user       UserLastFM @relation(fields: [userId], references: [userid])
+
+  @@id([userPlayId, userId])
+}
+
+model UserDiscogsReleases {
+  userDiscogsReleaseId Int            @default(autoincrement())
+  userId               String         @id @db.VarChar(19)
+  instanceId           Int
+  dateAdded            DateTime
+  rating               Int?
+  quantity             String
+  releaseId            Int
+  release              DiscogsRelease @relation(fields: [releaseId], references: [discogsId])
+  user                 UserLastFM     @relation(fields: [userId], references: [userid])
+}
+
+model DiscogsRelease {
+  discogsId                Int                         @id
+  masterId                 Int?
+  albumId                  Int?
+  title                    String
+  artist                   String
+  artistId                 Int?
+  artistDiscogsId          Int
+  featuringArtistJoin      String
+  featuringArtist          String
+  featuringArtistId        Int?
+  featuringArtistDiscogsId Int?
+  coverUrl                 String
+  year                     Int?
+  format                   String
+  formatText               String
+  label                    String
+  secondLabel              String
+  lowestPrice              Int?
+  formatDescriptions       DiscogsFormatDescriptions[]
+  genres                   DiscogsGenre[]
+  styles                   DiscogsStyle[]
+  userDiscogsReleases      UserDiscogsReleases[]
+}
+
+model DiscogsFormatDescriptions {
+  id             Int            @default(autoincrement())
+  releaseId      Int
+  description    String
+  discogsRelease DiscogsRelease @relation(fields: [releaseId], references: [discogsId])
+
+  @@id([id, releaseId])
+}
+
+model DiscogsGenre {
+  id             Int            @default(autoincrement())
+  releaseId      Int
+  description    String
+  discogsRelease DiscogsRelease @relation(fields: [releaseId], references: [discogsId])
+
+  @@id([id, releaseId])
+}
+
+model DiscogsStyle {
+  id             Int            @default(autoincrement())
+  releaseId      Int
+  description    String
+  discogsRelease DiscogsRelease @relation(fields: [releaseId], references: [discogsId])
+
+  @@id([id, releaseId])
+}
+
+model MemberNote {
   userId    String    @db.VarChar(19)
   guildId   String    @db.VarChar(19)
   authorId  String?   @db.VarChar(19)
-  id        Int?
+  reason    String?   @db.VarChar(2000)
+  createdAt DateTime? @db.Timestamp(6)
+  member    Member    @relation(fields: [userId, guildId], references: [userId, guildId])
 
   @@id([userId, guildId])
 }
 
-model member {
-  userId       String @map("userid") @db.VarChar(19)
-  guildId      String @map("guildid") @db.VarChar(19)
-  messageCount Int    @default(0) @map("messagecount")
+model Member {
+  userId       String      @db.VarChar(19)
+  guildId      String      @db.VarChar(19)
+  messageCount Int         @default(0)
+  notes        MemberNote?
 
   @@id([userId, guildId])
 }

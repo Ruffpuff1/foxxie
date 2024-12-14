@@ -8,9 +8,9 @@ import { getModeration } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { type Guild } from 'discord.js';
 
-@ApplyOptions<Task.Options>(({ container: _ }) => ({
+@ApplyOptions<Task.Options>(({ container }) => ({
+	enabled: container.client.enabledProdOnlyEvent(),
 	name: Schedules.EndTempTimeout
-	// enabled: container.client.enabledProdOnlyEvent()
 }))
 export class UserModerationTask extends ModerationTask {
 	protected async handle(guild: Guild, data: ModerationData) {

@@ -327,10 +327,12 @@ export abstract class ModerationCommand<Type extends TypeVariation, ValueType> e
 	 * @returns A promise that resolves to a CommandContext object containing the resolved targets, duration, and reason.
 	 */
 	protected async resolveParameters(args: ModerationCommand.Args): Promise<ModerationCommand.Parameters> {
+		const targets = await this.resolveParametersUser(args);
+
 		return {
 			duration: await this.resolveParametersDuration(args),
 			reason: await this.resolveParametersReason(args),
-			targets: await this.resolveParametersUser(args)
+			targets
 		};
 	}
 

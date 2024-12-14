@@ -6,5 +6,6 @@ import { GatewayDispatchEvents, GatewayGuildDeleteDispatch } from 'discord.js';
 export class UserListener extends Listener {
 	public run(data: GatewayGuildDeleteDispatch['d'], shardId: number): void {
 		this.container.client.guildMemberFetchQueue.remove(shardId, data.id);
+		this.container.client.invites.usesCache.delete(data.id);
 	}
 }

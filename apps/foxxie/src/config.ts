@@ -41,13 +41,16 @@ setup(join(rootFolder, '.env'));
 export const formatDuration = (value: Date) => time(value, TimestampStyles.RelativeTime);
 export const formatLongDate = (value: Date) => time(value, TimestampStyles.LongDate);
 
-FoxxiePaginatedMessageEmbedFields.defaultActions = [
+const defaultPaginationOptions = [
 	PaginatedMessage.defaultActions[1], // first
 	PaginatedMessage.defaultActions[2], // previous
 	PaginatedMessage.defaultActions[5], // stop
 	PaginatedMessage.defaultActions[3], // next
 	PaginatedMessage.defaultActions[4] // last
 ];
+
+FoxxiePaginatedMessageEmbedFields.defaultActions = defaultPaginationOptions;
+PaginatedMessage.defaultActions = defaultPaginationOptions;
 
 export const clientOwners = envParseArray('CLIENT_OWNERS');
 export const webhookError = parseWebhookError();
@@ -163,7 +166,7 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 			name: LanguageFormatters.Duration
 		},
 		{
-			format: (value) => time(typeof value === 'string' ? new Date(value) : value, TimestampStyles.LongDate),
+			format: (value) => time(getDurationValue(value), TimestampStyles.LongDate),
 			name: 'fulldate'
 		},
 		{
@@ -270,7 +273,7 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 			name: 'dateFormat'
 		},
 		{
-			format: (_, lng) => getHandler(lng as LocaleString).name,
+			format: (value, lng) => getHandler(lng as LocaleString).ordinal(value),
 			name: 'ordinal'
 		},
 		{

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { Prisma } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
 import { Stopwatch } from '@sapphire/stopwatch';
@@ -9,6 +10,7 @@ import { readSettings, writeSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';
+import { days } from '#utils/common';
 import { Urls } from '#utils/constants';
 import { codeBlock, Message } from 'discord.js';
 import { hostname } from 'node:os';
@@ -17,6 +19,7 @@ import { inspect } from 'node:util';
 const langOptions = ['lang', 'lng'];
 const depthOptions = ['depth', 'd'];
 const msgFlags = ['msg', 'message', 'm'];
+const sqlFlags = ['s', 'sql'];
 
 const enum OutputType {
 	Console = 'console',
@@ -26,7 +29,7 @@ const enum OutputType {
 @ApplyOptions<FoxxieCommand.Options>({
 	aliases: ['ev'],
 	description: LanguageKeys.Commands.Admin.EvalDescription,
-	flags: [...msgFlags, 'showHidden', 'sh', 's', 'silent', 'a', 'async'],
+	flags: [...msgFlags, ...sqlFlags, 'showHidden', 'sh', 's', 'silent', 'a', 'async'],
 	guarded: true,
 	options: [...depthOptions, ...langOptions, 'output'],
 	permissionLevel: PermissionLevels.BotOwner,
@@ -36,7 +39,7 @@ const enum OutputType {
 export class UserCommand extends FoxxieCommand {
 	public async messageRun(message: Message, args: FoxxieCommand.Args): Promise<void> {
 		const code = await args.rest('string');
-		const { result, success, time, type } = await this.eval(message, args, code);
+		const { result, success, time, type } = args.getFlags(...sqlFlags) ? await this.sql(code) : await this.eval(message, args, code);
 
 		const formatted = codeBlock(args.getOption(...langOptions) ?? 'js', result);
 
@@ -86,12 +89,14 @@ export class UserCommand extends FoxxieCommand {
 	}
 
 	private async eval(message: Message, args: FoxxieCommand.Args, code: string) {
-		// @ts-expect-error value is never read, this is so `msg` is possible as an alias when sending the eval.
+		// @ts-expect-error value is never read, this is so `guild` is possible as an alias when sending the eval.
 		const { guild } = message;
-		// @ts-expect-error value is never read, this is so `msg` is possible as an alias when sending the eval.
+		// @ts-expect-error value is never read, this is so `client` is possible as an alias when sending the eval.
 		const { client } = this.container;
 		// @ts-expect-error value is never read, this is so `msg` is possible as an alias when sending the eval.
 		const msg = message;
+		// @ts-expect-error value is never read, this is so `d` is possible as an alias when sending the eval.
+		const d = days;
 
 		code = code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
 		const stopwatch = new Stopwatch();
@@ -139,7 +144,39 @@ export class UserCommand extends FoxxieCommand {
 		};
 	}
 
-	private formatTime(syncTime: string, asyncTime: string | undefined): string {
+	private formatTime(syncTime: string, asyncTime?: string): string {
 		return asyncTime ? `⏱ ${asyncTime} <${syncTime}>` : `⏱ ${syncTime}`;
+	}
+
+	private async sql(code: string) {
+		const stopwatch = new Stopwatch();
+		let success: boolean;
+		let time: string;
+		let result: unknown;
+		let type: Type;
+
+		let str = ``;
+		str += code;
+
+		try {
+			result = await this.container.prisma.$queryRaw(Prisma.sql([code]));
+			time = stopwatch.toString();
+			type = new Type(result);
+			success = true;
+		} catch (error) {
+			time = stopwatch.toString();
+			type = new Type(error);
+			result = error;
+			success = false;
+		}
+
+		stopwatch.stop();
+
+		return {
+			result: JSON.stringify(result, null, 2),
+			success,
+			time: this.formatTime(time),
+			type: type!
+		};
 	}
 }

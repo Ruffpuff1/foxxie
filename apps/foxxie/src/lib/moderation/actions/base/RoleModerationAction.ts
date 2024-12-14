@@ -8,7 +8,7 @@ import { getT, LanguageKeys } from '#lib/i18n';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { PermissionsBits } from '#utils/bits';
 import { resolveOnErrorCodes } from '#utils/common';
-import { getCodeStyle, getStickyRoles } from '#utils/functions';
+import { getCodeStyle } from '#utils/functions';
 import { promptConfirmation } from '#utils/functions/messages';
 import { TypeVariation } from '#utils/moderationConstants';
 import {
@@ -179,8 +179,6 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 			throw new UserError({ identifier: Root.ActionRoleHigherPosition });
 		}
 
-		await getStickyRoles(guild).add(entry.userId, role.id);
-
 		const reason = await this.getReason(guild, entry.reason);
 		const data = this.replace
 			? await this.#handleApplyPreRolesReplace(member, role, reason, position)
@@ -203,8 +201,6 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 		if (role.position >= position) {
 			throw new UserError({ identifier: Root.ActionRoleHigherPosition });
 		}
-
-		await getStickyRoles(guild).remove(entry.userId, role.id);
 
 		const reason = await this.getReason(guild, entry.reason, true);
 		if (this.replace) {

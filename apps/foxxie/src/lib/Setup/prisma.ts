@@ -21,6 +21,23 @@ const prisma = new PrismaClient().$extends({
 });
 container.prisma = prisma;
 
+export class PrismaDatabase {
+	public constructor(private connection: typeof prisma) {}
+
+	public async sql<R, Q extends string = string>(query: (() => Q) | Q, variables: any[] = []): Promise<R> {
+		const queryString = typeof query === 'function' ? query() : query;
+		return this.connection.$queryRaw(this.#toTemplateStringsArray(queryString.split('?')), ...variables) as R;
+	}
+
+	#toTemplateStringsArray = (array: string[]): TemplateStringsArray => {
+		const stringsArray: any = [...array];
+		stringsArray.raw = array;
+		return stringsArray as TemplateStringsArray;
+	};
+}
+
+container.db = new PrismaDatabase(prisma);
+
 declare module '@sapphire/pieces' {
 	interface Container {
 		prisma: typeof prisma;

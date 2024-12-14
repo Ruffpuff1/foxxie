@@ -5,6 +5,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { LanguageHelp, LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
+import { clientOwners } from '#root/config';
 import { resolveClientColor } from '#utils/util';
 import { EmbedBuilder, PermissionFlagsBits } from 'discord.js';
 
@@ -68,10 +69,15 @@ export default class UserCommand extends FoxxieCommand {
 			})
 			.setColor(await resolveClientColor(message));
 
+		const tCategories = args.t(LanguageKeys.Commands.General.HelpCategories);
+
 		const commands = this.container.stores.get('commands');
 		const categories = [...new Set(this.container.stores.get('commands').map((c) => c.category!))]
-			.filter((c) => c !== 'Admin')
+			.filter((c) => (clientOwners.includes(message.author.id) ? true : c !== 'Admin'))
+			.map((c) => tCategories[c.toLowerCase() as keyof typeof tCategories])
 			.sort((a, b) => a.localeCompare(b));
+
+		console.log(categories);
 
 		for (const category of categories)
 			embed.addFields([

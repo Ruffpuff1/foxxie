@@ -82,7 +82,7 @@
     "prism": "^4.1.2",
     "prisma-json-types-generator": "^3.2.2",
     "typeorm": "^0.3.20",
-    "undici": "^5.25.3"
+    "undici": "5.25.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -116,6 +116,7 @@
     "#utils/functions": "./dist/lib/util/functions/index.js",
     "#utils/resolvers": "./dist/lib/util/resolvers/index.js",
     "#utils/*": "./dist/lib/util/*.js",
+    "#apis/last.fm/*": "./dist/lib/api/Last.fm/*.js",
     "#lib/database/entities": "./dist/lib/database/entities/index.js",
     "#lib/database/settings": "./dist/lib/database/settings/index.js",
     "#lib/database": "./dist/lib/Database/index.js",

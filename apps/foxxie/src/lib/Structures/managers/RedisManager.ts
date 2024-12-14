@@ -1,6 +1,6 @@
 import { Result } from '@sapphire/result';
 import { cast } from '@sapphire/utilities';
-import { RedisData, RedisKeys, RedisValue } from '#lib/types';
+import { RedisData, RedisKey, RedisValue } from '#lib/types';
 import { Redis, RedisOptions } from 'ioredis';
 
 export class RedisManager extends Redis {
@@ -8,7 +8,7 @@ export class RedisManager extends Redis {
 		super(options);
 	}
 
-	public async fetch<T extends RedisKeys>(key: T, string = true): Promise<RedisValue<T>> {
+	public async fetch<T extends RedisKey>(key: T, string = true): Promise<RedisValue<T>> {
 		const value = await this.get(key);
 
 		if (string) {
@@ -20,13 +20,17 @@ export class RedisManager extends Redis {
 		return cast<RedisValue<T>>(result.unwrap());
 	}
 
-	public async insert<T extends RedisKeys>(key: T, value: RedisData<T>, string = true) {
-		const result = await this.set(key, string ? value! : JSON.stringify(value));
+	public async insert<T extends RedisKey>(key: T, value: RedisData<T>, string = true) {
+		const result = await this.set(key, string ? (typeof value === 'string' ? value : JSON.stringify(value)) : JSON.stringify(value));
 		return result;
 	}
 
-	public async pinsertex<T extends RedisKeys>(key: T, milliseconds: number, value: RedisData<T>, string = true) {
-		const result = await this.psetex(key, milliseconds, string ? value! : JSON.stringify(value));
+	public async pinsertex(key: string, milliseconds: number, value: unknown, string = true) {
+		const result = await this.psetex(
+			key,
+			Number(Math.round(milliseconds)),
+			string ? (typeof value === 'string' ? value : JSON.stringify(value)) : JSON.stringify(value)
+		);
 		return result;
 	}
 }

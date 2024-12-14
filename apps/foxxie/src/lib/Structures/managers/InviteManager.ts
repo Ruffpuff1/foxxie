@@ -1,7 +1,7 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { cast } from '@sapphire/utilities';
-import { Collection, RESTGetAPIInviteResult, Routes } from 'discord.js';
+import { Collection, GuildMember, RESTGetAPIInviteResult, Routes, Snowflake } from 'discord.js';
 
 export type InviteCode = {
 	fetchedAt: number;
@@ -21,6 +21,10 @@ export interface InviteCodeValid {
 }
 
 export class InviteManager extends Collection<string, InviteCode> {
+	public memberUseCache = new Collection<string, string>();
+
+	public usesCache = new Collection<Snowflake, Collection<string, null | number>>();
+
 	public async fetch(code: string, force = false) {
 		if (!force) {
 			const previous = this.get(code);
@@ -52,5 +56,29 @@ export class InviteManager extends Collection<string, InviteCode> {
 
 		this.set(code, resolved);
 		return resolved;
+	}
+
+	public async findUsedInvite(member: GuildMember): Promise<null | string> {
+		const fetchedInvites = await member.guild.invites.fetch();
+		const cachedInvites = this.usesCache.get(member.guild.id);
+		if (!cachedInvites) return null;
+
+		const usedInvite = fetchedInvites.find((invite) => {
+			console.log(invite.uses);
+			const cached = cachedInvites.get(invite.code);
+			console.log(cached);
+			if (!cached || !invite.uses) return false;
+
+			return invite.uses > cached;
+		});
+
+		const inviteCode = usedInvite?.code || null;
+
+		if (inviteCode) {
+			this.memberUseCache.set(`${member.guild.id}_${member.id}`, inviteCode);
+			cachedInvites.set(usedInvite!.code, usedInvite!.uses);
+		}
+
+		return inviteCode;
 	}
 }

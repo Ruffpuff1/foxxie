@@ -1,30 +1,13 @@
-import { cast } from '@sapphire/utilities';
-import { CustomGet } from '#lib/types';
-import { DiscordAPIError, RESTJSONErrorCodes } from 'discord.js';
-
 export function channelLink<G extends string, C extends string>(guildId: G, channelId: C): `https://discord.com/channels/${G}/${C}` {
 	return `https://discord.com/channels/${guildId}/${channelId}`;
 }
 
-/**
- * Transforms a Discord APi Error code into a usable error language key.
- * @param error {@link DiscordAPIError} The Discord API error.
- * @returns The i18next key for the error message.
- */
-export function handleDiscordAPIError(error: DiscordAPIError | Error): {
-	identifier: '' | CustomGet<string, string>;
-	message: string;
-} {
-	let identifier: '' | CustomGet<string, string> = '';
+export function discordInviteLink<C extends string>(code: C): `https://discord.gg/${C}` {
+	return `https://discord.gg/${code}`;
+}
 
-	if (error instanceof DiscordAPIError) {
-		switch (cast<RESTJSONErrorCodes>(error.code)) {
-			case RESTJSONErrorCodes.UnknownUser:
-				identifier = '';
-		}
-	}
-
-	return { identifier, message: error.message };
+export function lastFmUserUrl<U extends string>(userName: U): `https://last.fm/user/${U}` {
+	return `https://last.fm/user/${encodeURIComponent(userName) as U}`;
 }
 
 /**
@@ -40,4 +23,8 @@ export function messageLink<G extends string, C extends string, M extends string
 	messageId: M
 ): `https://discord.com/channels/${G}/${C}/${M}` {
 	return `https://discord.com/channels/${guildId}/${channelId}/${messageId}`;
+}
+
+export function userLink<I extends string>(userId: I): `https://discord.com/users/${I}` {
+	return `https://discord.com/users/${userId}`;
 }
