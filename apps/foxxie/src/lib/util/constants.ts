@@ -109,6 +109,7 @@ export const enum Emojis {
 	FoxWiggle = '<a:foxwiggle:799197027568713748>',
 	Hourglass = ':hourglass:',
 	Information = ':information_source:',
+	LastFm = '<:lastfm:882227627287515166>',
 	Loading = '<a:HotCoffee:905458108225183765>',
 	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
 	MaleSignEmoji = '<:Male:950037521126023208>',

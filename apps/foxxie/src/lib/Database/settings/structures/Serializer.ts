@@ -167,6 +167,7 @@ export namespace Serializer {
 		| 'permissionNode'
 		| 'reactionRole'
 		| 'role'
+		| 'sendableChannel'
 		| 'snowflake'
 		| 'stickyRole'
 		| 'string'

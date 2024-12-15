@@ -25,7 +25,7 @@ export function getConfiguration() {
 	cachedConfiguration ??= makeKeys({
 		birthdayChannel: {
 			name: 'modules.birthday.channel',
-			type: 'guildTextChannel'
+			type: 'sendableChannel'
 		},
 		birthdayRole: {
 			name: 'modules.birthday.role',

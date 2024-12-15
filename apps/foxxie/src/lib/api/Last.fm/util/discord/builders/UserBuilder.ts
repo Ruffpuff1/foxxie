@@ -146,6 +146,10 @@ export class UserBuilder {
 				.setEmoji(Emojis.Vinyl)
 		);
 
+		components.addComponents(
+			new ButtonBuilder().setLabel('Last.fm').setStyle(ButtonStyle.Link).setURL(lastFmUserUrl(user.usernameLastFM)).setEmoji(Emojis.LastFm)
+		);
+
 		return response.setContent(null!).setEmbeds([embed]).setComponents([components]);
 	}
 }

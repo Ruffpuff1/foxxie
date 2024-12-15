@@ -23,7 +23,7 @@ import { SerializedEmoji } from '#utils/discord';
 import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
 import { LLRCData, LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
 import { MappedTask } from '#utils/util';
-import { Awaitable, GatewayMessageReactionRemoveDispatch, Snowflake, User } from 'discord.js';
+import { Awaitable, GatewayMessageReactionRemoveDispatch, GuildChannel, GuildTextBasedChannel, Snowflake, ThreadChannel, User } from 'discord.js';
 
 declare global {
 	namespace PrismaJson {
@@ -102,6 +102,7 @@ declare module '@sapphire/pieces' {
 declare module '@sapphire/framework' {
 	interface ArgType {
 		boolean: boolean;
+		channelName: GuildChannel | ThreadChannel;
 		cleanString: string;
 		color: ColorData;
 		command: FoxxieCommand;
@@ -111,6 +112,7 @@ declare module '@sapphire/framework' {
 		moderationLog: number;
 		piece: Piece;
 		reminder: MappedTask<Schedules.Reminder>;
+		sendableChannel: GuildTextBasedChannel;
 		snowflake: Snowflake;
 		song: string[];
 		starboard: Starboard;
