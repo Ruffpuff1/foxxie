@@ -10,7 +10,7 @@ import { green } from 'colorette';
  * @remark Capture group one is the id of the youtube video titled `id`.
  * @credit https://github.com/lorey/social-media-profiles-regexs
  */
-export const YoutubeVideoRegex = /(?:https?:)?\/\/(?:(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)(?<id>[A-z0-9\-_]+)/;
+export const YoutubeVideoRegex = /(?:https?:)?\/\/(?:(?:www\.)?youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)(?<id>[A-Za-z0-9\-_]+)/;
 export const SpotifyPlaylistRegExp = /https?:\/\/(?:open|play)\.spotify\.com\/playlist\/(?<id>[\w\d]+)\??(si=(?<referer>[\w\d]+))?/i;
 export const SpotifySongRegExp = /https?:\/\/(?:open|play)\.spotify\.com\/track\/(?<id>[\w\d]+)\??(si=(?<referer>[\w\d]+))?/i;
 
