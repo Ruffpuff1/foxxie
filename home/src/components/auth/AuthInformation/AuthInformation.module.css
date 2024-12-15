@@ -1,0 +1,16 @@
+.auth_image_wrapper {
+    @apply flex items-center justify-center rounded-full p-1 hover:bg-gray-100;
+    transition: margin-right .2s ease-in
+}
+
+.auth_image_wrapper_shift_left {
+    margin-right: 18rem
+}
+
+.auth_image_wrapper_shift_none {
+    margin-right: 0rem;
+}
+
+.auth_image {
+    border-radius: 9999px;
+}

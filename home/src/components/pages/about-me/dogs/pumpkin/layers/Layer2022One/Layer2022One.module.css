@@ -1,0 +1,4 @@
+.wrap {
+    background-image: url('https://rsehrk.com/cdn/assets/reese/pumpkin/timeline/timeline_2022_1.svg');
+    @apply my-20 flex h-full items-center justify-between bg-cover bg-center bg-no-repeat px-10 lg:p-40;
+}

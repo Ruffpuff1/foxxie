@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+html {
+    height: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    @apply font-open-sans !important;
+}
+
+.foxxie-main-panel {
+    width: 100%;
+}
+
+@keyframes animate-fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  80% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.sign-in {
+  animation: .4s ease 0s 1 fadeIn;
+}
+
+.foxxie-navbar {
+    transition: top 0.3s, box-shadow 0.3s, border-bottom 0.3s;
+}
+
+.foxxie-bottom-scroll-up {
+    transition: bottom 0.3s, box-shadow 0.3s
+}
+
+@media (min-width: 768px) {
+    .foxxie-main-panel {
+       width: calc(100% - 312px);
+    }
+}
+
+.jump-link {
+    margin-top: -80px;
+    padding-top: 80px;
+}
+
+.project-menu {
+    transition: height 0.3s ease;
+}
+
+.slide-step {
+    transition: transform 0.8s ease, opacity 0.3s ease 0.8s;
+}
+
+.scale-btn {
+    transition: transform 0.3s ease;
+}
+
+#hire-description-textarea {
+    transition: width 0.5s ease;
+    max-height: 14rem;
+}
+
+.card {
+    background-image: url('https://i.pinimg.com/originals/86/69/7e/86697e05d21d06f4d84eb946d015417e.jpg');
+    backdrop-filter: blur(20px);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.slide {
+    background-repeat: no-repeat;
+    animation: 2s ease 0s 1 slideIn;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(15rem)
+  }
+  20% {
+    transform: translateX(10.5rem)
+  }
+  30% {
+    transform: translateX(10.5rem)
+  }
+  100% {
+    transform: translateX(0rem)
+  }
+}

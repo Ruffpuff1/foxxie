@@ -1,0 +1,46 @@
+import { useAuth } from '@hooks/useAuth';
+import { File, Folder, useFolder } from '@hooks/useFolder';
+import Link from '@ui/Link/Link';
+import { MdInfo } from 'react-icons/md';
+import Files from '../files/Files';
+import Folders from '../folders/Folders';
+
+export default function StoreBody(props: FolderData) {
+    const [{ sharedFiles }] = useFolder(props.folder?.id, props.folder);
+    const [, { message }] = useAuth();
+
+    if (message === 'no-valid') {
+        return (
+            <div className='mx-20 mb-10 mt-20 flex w-[80%] items-center space-x-2 border bg-white p-2 shadow-sm'>
+                <MdInfo className='text-2xl text-blue-500' />
+                <div className='flex items-center space-x-2 text-base font-normal'>
+                    <h2>Your current account can&apos;t use Cdn. To continue, switch to an account with Cdn privileges.</h2>
+                    <Link blue popup href='/support/cdn'>
+                        Learn More
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className='pb-10 pt-20'>
+            <div>
+                {Boolean(props.childFolders?.length || props.sharedFolders?.length) && (
+                    <Folders folders={[...(props.childFolders || []), ...(props.sharedFolders || [])].sort((a, b) => a.name.localeCompare(b.name))} />
+                )}
+
+                {Boolean(props.childFiles?.length || sharedFiles?.length) && (
+                    <Files childFiles={[...(props.childFiles || []), ...(sharedFiles || [])].sort((a, b) => a.name.localeCompare(b.name))} folder={props.folder} />
+                )}
+            </div>
+        </div>
+    );
+}
+
+interface FolderData {
+    folder: Folder | null;
+    childFolders: Folder[];
+    sharedFolders: Folder[];
+    childFiles: File[];
+}

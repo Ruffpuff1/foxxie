@@ -1,0 +1,14 @@
+.copyright {
+    line-height: 1.25rem;
+    font-size: 13px;
+    width: 85%;
+    color: rgb(0 0 0 / 0.5);
+}
+
+.copyright a {
+    color: rgb(59 130 246);
+}
+
+.copyright a:hover {
+    text-decoration: underline;
+}

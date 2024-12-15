@@ -1,0 +1,89 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "downlevelIteration": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "@about-me/*": [
+        "src/components/pages/about-me/*"
+      ],
+      "@api/*": [
+        "src/pages/api/*"
+      ],
+      "@arts-culture/*": [
+        "src/components/pages/arts-and-culture/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@auth/*": [
+        "src/components/auth/*"
+      ],
+      "@cdn/*": [
+        "src/components/pages/cdn/*"
+      ],
+      "@contact-me/*": [
+        "src/components/pages/contact-me/*"
+      ],
+      "@developers/*": [
+        "src/components/pages/developers/*"
+      ],
+      "@foxxie/*": [
+        "src/components/pages/foxxie/*"
+      ],
+      "@hire/*": [
+        "src/components/pages/hire/*"
+      ],
+      "@home/*": [
+        "src/components/pages/home/*"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@music/*": [
+        "src/components/pages/music/*"
+      ],
+      "@my-work/*": [
+        "src/components/pages/my-work/*"
+      ],
+      "@providers/*": [
+        "src/providers/*"
+      ],
+      "@style-guide/*": [
+        "src/components/pages/developers/style-guide/*"
+      ],
+      "@ui/*": [
+        "src/components/ui/*"
+      ],
+      "@util/*": [
+        "src/util/*"
+      ]
+    },
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

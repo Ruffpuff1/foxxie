@@ -1,0 +1,108 @@
+{
+    "aboutMe": {
+        "description": "",
+        "nav": {
+            "about": "About",
+            "contact": "Contact",
+            "myWork": "My work"
+        },
+        "title": "About Me - Reese Harlak"
+    },
+    "book": {
+        "coffee": "Coffee",
+        "coffeeBeansEnum": "Coffee Beans Enum",
+        "coffeeMilkEnum": "Coffee Milk Enum",
+        "coffeeSugarEnum": "Coffee Sugar Enum",
+        "errors": "Errors",
+        "gamesEnum": "Games Enum",
+        "genderEnum": "Gender Enum",
+        "introduction": "Introduction",
+        "kkSliderSongs": "K.K. Slider Songs",
+        "personalitiesEnum": "Personalities Enum",
+        "speciesEnum": "Species Enum",
+        "methods": "Methods",
+        "overview": "Overview",
+        "types": "Types",
+        "villager": "Villager"
+    },
+    "developers": {
+        "breadcrumbs": {
+            "duration": "Duration",
+            "home": "Home",
+            "packages": "Packages"
+        },
+        "celestia": {
+            "api": {
+                "description": "",
+                "documentation": "Documentation",
+                "documentationDescription": "Read the documentation for the entire API. It's endpoints, structures, and errors.",
+                "getStarted": "Get Started",
+                "getStartedDescription": "Learn how to use the API.",
+                "title": "Villager API"
+            },
+            "description": "",
+            "developers": "Developers",
+            "home": "Home",
+            "refrence": "Refrence",
+            "title": "Animal Crossing API | Celestia",
+            "villagerRefrence": {
+                "coffee": "Object representing a Villager's Coffee request in Animal Crossing New Leaf.",
+                "coffeeBeanEnum": "The enum of coffee bean types."
+            }
+        },
+        "copyright": {
+            "intl": "Intl translations by their",
+            "licensed": ". Licensed under the",
+            "mitLicense": "MIT License",
+            "respectiveAuthors": "respective authors",
+            "start": "Unless otherwise noted, the text on this page is Copyright © 2022 Reese Harlak &"
+        },
+        "description": "",
+        "footer": {
+            "blog": "Blog",
+            "contactUs": "Contact Us",
+            "privacy":"Privacy",
+            "terms": "Terms"
+        },
+        "onThisPage": "On this page",
+        "nav": {
+            "learn": "Learn",
+            "packages": "Packages"
+        },
+        "title": "Developers: Tooling and APIs"
+    },
+    "filter": "Filter",
+    "home": {
+        "aboutMe": "About me",
+        "aboutMeTag": "Read a bit about me and what I like to do.",
+        "description": "Hi I' m Reese, a Typescript web developer and musician.",
+        "hi": "Hi I'm",
+        "musician": "musician",
+        "nav": {
+            "contact": "Contact",
+            "home": "Home"
+        },
+        "tag": "A eighteen-year-old web developer and",
+        "title": "Reese Harlak - My Personal Website"
+    },
+    "music": {
+        "concertArchive": "Concert Archive",
+        "description": "",
+        "music": "Music",
+        "orchestra": {
+            "bass": "Bass",
+            "cello": "Cello",
+            "concertMaster": "Concert Master",
+            "orchestra": "Orchestra",
+            "piano": "Piano",
+            "solo": "Solo",
+            "viola": "Viola",
+            "violin": "Violin"
+        },
+        "title": ""
+    },
+    "notFound": {
+        "tag": "I couldn't find the page you were looking for, click here to go home."
+    },
+    "readNow": "Read now"
+}

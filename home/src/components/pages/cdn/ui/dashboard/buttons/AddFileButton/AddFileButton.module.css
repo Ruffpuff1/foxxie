@@ -1,0 +1,27 @@
+.wrapper {
+    @apply py-2 px-4 w-full;
+}
+
+.button {
+    @apply flex items-center w-full justify-start space-x-2;
+}
+
+.button_text {
+    @apply text-base font-[450] tracking-wide;
+}
+
+.folder_icon {
+    @apply text-3xl font-normal;
+}
+
+.add_file_name_input {
+    @apply border-2 rounded-md p-2 w-full bg-transparent mb-5;
+}
+
+.close_button {
+    @apply bg-[#818181];
+}
+
+.upload_button {
+    @apply bg-[#24853D] hover:border-[#2b9d48];
+}
