@@ -1,4 +1,4 @@
-const mongo = require('../lib/structures/database/mongo')
+const mongo = require('./structures/database/mongo')
 const { serverSchema } = require('./structures/schemas')
 module.exports.serverSettings = async (message) => {
     if (message.guild == undefined) return;
