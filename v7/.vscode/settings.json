@@ -1,0 +1,23 @@
+{
+    "workbench.iconTheme": "material-icon-theme",
+    "material-icon-theme.folders.associations": {
+        "fetch": "Connection",
+        "releases": "Download",
+        "time": "Temp",
+        "foxxie": "Upload",
+        "kettu": "Project",
+        "node_modules": "Node"
+    },
+    "material-icon-theme.files.associations": {
+        "*.tsbuildinfo": "Tsconfig"
+    },
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+}

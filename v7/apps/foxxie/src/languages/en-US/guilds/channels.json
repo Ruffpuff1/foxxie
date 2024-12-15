@@ -1,0 +1,12 @@
+{
+    "GUILD_NEWS": "News",
+    "GUILD_NEWS_short": "News: **{{count, number}}**",
+    "GUILD_STAGE_VOICE": "Stage",
+    "GUILD_STAGE_VOICE_short": "Stage: **{{count, number}}**",
+    "GUILD_TEXT": "Text",
+    "GUILD_TEXT_short": "Text: **{{count, number}}**",
+    "GUILD_PUBLIC_THREAD": "Thread",
+    "GUILD_PUBLIC_THREAD_short": "Threads: **{{count, number}}**",
+    "GUILD_VOICE": "Voice",
+    "GUILD_VOICE_short": "Voice: **{{count, number}}**"
+}
