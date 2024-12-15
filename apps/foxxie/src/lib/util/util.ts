@@ -13,17 +13,21 @@ import {
 	ColorResolvable,
 	EmbedAuthorData,
 	EmbedBuilder,
+	GuildChannel,
 	GuildMember,
 	GuildResolvable,
 	ImageURLOptions,
 	makeURLSearchParams,
 	Message,
+	PermissionFlagsBits,
 	RESTGetAPIChannelMessageReactionUsersResult,
 	Routes,
 	Snowflake,
 	SnowflakeUtil,
 	StickerFormatType,
-	User
+	ThreadChannel,
+	User,
+	UserResolvable
 } from 'discord.js';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
 
@@ -215,6 +219,17 @@ export function snowflakeAge(snowflake: string) {
  */
 export function usesPomelo(user: APIUser | User) {
 	return isNullishOrEmpty(user.discriminator) || user.discriminator === '0';
+}
+
+/**
+ * Validates that a user has VIEW_CHANNEL permissions to a channel
+ * @param channel The TextChannel to check
+ * @param user The user for which to check permission
+ * @returns Whether the user has access to the channel
+ * @example validateChannelAccess(channel, message.author)
+ */
+export function validateChannelAccess(channel: GuildChannel | ThreadChannel, user: UserResolvable) {
+	return (channel.guild !== null && channel.permissionsFor(user)?.has(PermissionFlagsBits.ViewChannel)) || false;
 }
 
 export const VIDEO_EXTENSION = /\.(mp4|mov)/i;

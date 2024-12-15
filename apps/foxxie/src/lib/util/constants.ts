@@ -103,12 +103,14 @@ export const enum Emojis {
 	/** The logo of https://bulbapedia.bulbagarden.net */
 	Bulbapedia = '1317612914370285569',
 	Calendar = ':calendar_spiral:',
+	Cassette = '<:Cassette:1317747854550503525>',
 	Error = '<:TickNo:894420222084280331>',
 	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
 	FemaleSignEmoji = '<:Female:950037546212147200>',
 	FoxWiggle = '<a:foxwiggle:799197027568713748>',
 	Hourglass = ':hourglass:',
 	Information = ':information_source:',
+	LastFm = '<:lastfm:882227627287515166>',
 	Loading = '<a:HotCoffee:905458108225183765>',
 	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
 	MaleSignEmoji = '<:Male:950037521126023208>',

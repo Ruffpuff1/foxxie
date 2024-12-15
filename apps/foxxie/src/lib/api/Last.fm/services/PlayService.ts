@@ -33,7 +33,7 @@ export class PlayService {
 			countGroup(
 				groupBy<UserPlay, string>(
 					userPlays.filter((w) => w.playSource === PlaySource.LastFm),
-					(g) => g.timePlayed.toISOString()
+					(g) => g.timePlayed.toDateString()
 				),
 				(w) => w.length > 2500
 			) >= 7

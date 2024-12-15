@@ -1,4 +1,4 @@
-import { UserLastFM } from '@prisma/client';
+import { UserDiscogs, UserLastFM } from '@prisma/client';
 import { TFunction } from '@sapphire/plugin-i18next';
 import { Guild, GuildTextBasedChannel, Message, MessageReference, Snowflake, StringSelectMenuBuilder, User } from 'discord.js';
 
@@ -11,7 +11,7 @@ export interface LfmCommandContext {
 }
 
 export class ContextModel {
-	public contextUser: null | UserLastFM;
+	public contextUser: ({ discogs?: UserDiscogs } & UserLastFM) | null;
 	public discordChannel: GuildTextBasedChannel;
 	public discordGuild?: Guild;
 	public discordUser?: User;

@@ -92,7 +92,7 @@ export class LastFmRepository {
 						queryParams.page = (i + 1).toString();
 						let pageResponse = await this._lastFmApi.callApi(queryParams, Call.RecentTracks);
 
-						if (pageResponse.success) {
+						if (pageResponse.success && pageResponse.content?.recenttracks?.track) {
 							recentTracksCall.content.recenttracks.track.push(...pageResponse.content.recenttracks.track);
 							if (pageResponse.content.recenttracks.track.length < 1000) break;
 						} else if (pageResponse.error === ResponseStatus.Failure) {

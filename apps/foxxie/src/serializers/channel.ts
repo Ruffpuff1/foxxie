@@ -6,7 +6,7 @@ import { type Awaitable, isNullish } from '@sapphire/utilities';
 import { Serializer } from '#lib/Database/settings/structures/Serializer';
 
 @ApplyOptions<Serializer.Options>({
-	aliases: ['guildTextChannel', 'guildVoiceChannel', 'guildCategoryChannel'] satisfies SerializerType[]
+	aliases: ['guildTextChannel', 'guildVoiceChannel', 'guildCategoryChannel', 'sendableChannel'] satisfies SerializerType[]
 })
 export class UserSerializer extends Serializer<string> {
 	public isValid(value: string, context: Serializer.UpdateContext): Awaitable<boolean> {
@@ -34,6 +34,8 @@ export class UserSerializer extends Serializer<string> {
 	private isValidChannel(channel: Channel, type: SerializerType): boolean {
 		if (!isGuildBasedChannelByGuildKey(channel)) return false;
 
+		console.log(channel);
+
 		switch (type) {
 			case 'guildCategoryChannel':
 				return isCategoryChannel(channel);
@@ -41,10 +43,12 @@ export class UserSerializer extends Serializer<string> {
 				return isTextChannel(channel) || isNewsChannel(channel);
 			case 'guildVoiceChannel':
 				return isVoiceChannel(channel);
+			case 'sendableChannel':
+				return channel.isSendable();
 			default:
 				return false;
 		}
 	}
 }
 
-type SerializerType = 'guildCategoryChannel' | 'guildTextChannel' | 'guildVoiceChannel';
+type SerializerType = 'guildCategoryChannel' | 'guildTextChannel' | 'guildVoiceChannel' | 'sendableChannel';

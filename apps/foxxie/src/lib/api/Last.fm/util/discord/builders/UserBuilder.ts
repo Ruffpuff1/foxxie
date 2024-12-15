@@ -2,9 +2,11 @@ import { ButtonStyle } from '@discordjs/core/http-only';
 import { MessageBuilder } from '@sapphire/discord.js-utilities';
 import { isNullishOrEmpty } from '@sapphire/utilities';
 import { ArtistsService, PlayService, UserService } from '#apis/last.fm/services/index';
+import { DiscogsService } from '#apis/last.fm/services/third-party/DiscogsService';
 import { DataSource } from '#apis/last.fm/types/enums/DataSource';
 import { LastFmDataSourceFactory } from '#lib/api/Last.fm/factories/DataSourceFactory';
 import { NumberExtensions } from '#lib/Container/Utility/Extensions/NumberExtensions';
+import { StringFormattersService } from '#lib/Container/Utility/Formatters/StringExtensions';
 import { days, first, seconds } from '#utils/common';
 import { Emojis } from '#utils/constants';
 import { lastFmUserUrl } from '#utils/transformers';
@@ -18,6 +20,8 @@ export class UserBuilder {
 	#artistsService = new ArtistsService();
 
 	#dataSourceFactory = new LastFmDataSourceFactory();
+
+	#discogsService = new DiscogsService();
 
 	#playService = new PlayService();
 
@@ -89,8 +93,6 @@ export class UserBuilder {
 		const totalDays = Math.floor(age / days(1));
 		const avgPerDay = userInfo!.playcount / totalDays;
 
-		console.log(age, totalDays, avgPerDay);
-
 		const playcounts = [
 			`${bold(userInfo!.playcount.toLocaleString())} scrobbles`,
 			`${bold(userInfo!.trackcount.toLocaleString())} different tracks`,
@@ -130,6 +132,30 @@ export class UserBuilder {
 
 		if (stats.length) embed.addFields({ name: 'Stats', value: stats.join('\n') });
 
+		let discogs = false;
+		console.log(user);
+		if (user.discogs) {
+			const collection: string[] = [];
+
+			const discogsCollection = await this.#discogsService.getUserCollection(user.userid);
+
+			if (discogsCollection.length) {
+				const collectionTypes = _.groupBy(discogsCollection, (g) => g.release.format);
+
+				for (const [type, entries] of Object.entries(collectionTypes).sort((a, b) => b[1].length - a[1].length)) {
+					collection.push(
+						`${new StringFormattersService().getDiscogsFormatEmote(type)} ${bold(type)} - ${italic(entries.length.toLocaleString())} items`
+					);
+				}
+
+				discogs = true;
+			}
+
+			if (collection.length) {
+				embed.addFields({ name: 'Your Discogs Collection', value: collection.join('\n') });
+			}
+		}
+
 		const components = new ActionRowBuilder<ButtonBuilder>().addComponents(
 			new ButtonBuilder()
 				.setLabel('History')
@@ -138,12 +164,17 @@ export class UserBuilder {
 				.setEmoji('📖')
 		);
 
+		if (discogs)
+			components.addComponents(
+				new ButtonBuilder()
+					.setLabel('Collection')
+					.setCustomId(`collection-${user.userid}-${context.contextUser?.userid}`)
+					.setStyle(ButtonStyle.Secondary)
+					.setEmoji(Emojis.Vinyl)
+			);
+
 		components.addComponents(
-			new ButtonBuilder()
-				.setLabel('Collection')
-				.setCustomId(`collection-${user.userid}-${context.contextUser?.userid}`)
-				.setStyle(ButtonStyle.Secondary)
-				.setEmoji(Emojis.Vinyl)
+			new ButtonBuilder().setLabel('Last.fm').setStyle(ButtonStyle.Link).setURL(lastFmUserUrl(user.usernameLastFM)).setEmoji(Emojis.LastFm)
 		);
 
 		return response.setContent(null!).setEmbeds([embed]).setComponents([components]);

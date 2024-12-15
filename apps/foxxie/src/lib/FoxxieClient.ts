@@ -12,8 +12,8 @@ import { LongLivingReactionCollector } from '#utils/External/LongLivingReactionC
 import { magentaBright } from 'colorette';
 import { Message, WebhookClient } from 'discord.js';
 
-import { LastFmDataSourceFactory } from './api/Last.fm/factories/DataSourceFactory.js';
 import { ApiService } from './api/ApiService.js';
+import { LastFmDataSourceFactory } from './api/Last.fm/factories/DataSourceFactory.js';
 import { SettingsService } from './Container/Services/SettingsService.js';
 import { UtilityService } from './Container/Utility/UtilityService.js';
 import { WorkerService } from './Container/Workers/WorkerService.js';
@@ -70,9 +70,9 @@ export default class FoxxieClient extends SapphireClient {
 	}
 
 	public override enabledProdOnlyEvent() {
-		if (this.development) {
-			return this.developmentRecoveryMode;
-		}
+		// if (this.development) {
+		// 	return this.developmentRecoveryMode;
+		// }
 
 		return true;
 	}

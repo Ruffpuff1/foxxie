@@ -9,13 +9,10 @@ declare module '@skyra/env-utilities' {
 		[EnvKeys.HasteToken]: string;
 		[EnvKeys.LastFmToken]: string;
 		[EnvKeys.LogChannelId]: string;
-
 		[EnvKeys.LogLevel]: IntegerString;
 		[EnvKeys.PokemonUrl]: string;
-
 		[EnvKeys.SentryEnabled]: BooleanString;
 		[EnvKeys.SpotifyClientId]: string;
-
 		[EnvKeys.SpotifyClientSecret]: string;
 		CLIENT_NAME: string;
 		CLIENT_OWNERS: ArrayString;
@@ -37,6 +34,7 @@ declare module '@skyra/env-utilities' {
 
 		REDIS_HOST: string;
 		REDIS_PASSWORD: string;
+
 		REDIS_PORT: IntegerString;
 		SENTRY_TOKEN: string;
 		THE_CORNER_STORE_URL: string;

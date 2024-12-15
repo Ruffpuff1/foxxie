@@ -8,7 +8,10 @@ import { LastFmRepository } from '../repository/LastFmRepository.js';
 import { PlayDataSourceRepository } from '../repository/PlayDataSourceRepository.js';
 import { DataSource } from '../types/enums/DataSource.js';
 import { ImportUser } from '../types/models/domain/ImportUser.js';
+import { TimeSettingsModel } from '../types/models/domain/OptionModels.js';
+import { TopArtistList } from '../types/models/domain/TopArtist.js';
 import { parseLastFmUserResponse } from '../util/cacheParsers.js';
+import { Response } from '../util/Response.js';
 
 export class LastFmDataSourceFactory {
 	#lastfmRepository: LastFmRepository;
@@ -33,7 +36,7 @@ export class LastFmDataSourceFactory {
 			if (lastImportPlay.length) {
 				return cast<ImportUser>({
 					dataSource: user.dataSource,
-					lastImportPlay: lastImportPlay[0],
+					lastImportPlay: lastImportPlay[0].timePlayed,
 					userId: user.userid,
 					usernameLastFM: user.usernameLastFM
 				});
@@ -82,6 +85,24 @@ export class LastFmDataSourceFactory {
 		}
 
 		return recentTracks;
+	}
+
+	public async getTopArtists(lastFmUserName: string, timeSettings: TimeSettingsModel, count = 2, amountOfPages = 1) {
+		const importUser = await this.getImportUserForLastFmUserName(lastFmUserName);
+
+		console.log(importUser, timeSettings);
+
+		let topArtists: Response<TopArtistList>;
+		if (importUser && timeSettings.startDateTime! <= importUser.lastImportPlay!) {
+			topArtists = await this.#playDataSourceRepository.getTopArtists(importUser, timeSettings, count * amountOfPages);
+
+			return topArtists;
+		}
+
+		return new Response<TopArtistList>({
+			message: 'No import User',
+			success: false
+		});
 	}
 
 	public async getUser(usernameLastFM: string): Promise<null | UserLastFM> {
