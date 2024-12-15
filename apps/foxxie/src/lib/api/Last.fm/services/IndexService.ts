@@ -1,4 +1,4 @@
-import { UserLastFM, UserPlay } from '@prisma/client';
+import { UserArtist, UserLastFM, UserPlay } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
 import { ScheduleEntry } from '#lib/schedule';
@@ -7,9 +7,11 @@ import { blue, white } from 'colorette';
 import _ from 'lodash';
 
 import { LastFmDataSourceFactory } from '../factories/DataSourceFactory.js';
+import { ArtistRepository } from '../repository/ArtistRepository.js';
 import { PlayRepository } from '../repository/PlayRepository.js';
 import { UserRepository } from '../repository/UserRepository.js';
 import { PlaySource } from '../types/enums/PlaySource.js';
+import { TimePeriod } from '../types/enums/TimePeriod.js';
 import { UpdateType, UpdateTypeBitfield } from '../types/enums/UpdateType.js';
 import { IndexedUserStats } from '../types/models/domain/IndexedUserStats.js';
 
@@ -47,7 +49,7 @@ export class IndexService {
 			if (isNullish(user)) {
 				return null;
 			}
-			if (user.lastIndexed.getTime() > Date.now() - days(1)) {
+			if (user.lastIndexed.getTime() < Date.now() - days(1)) {
 				container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: Skipped for ${queueItem.userId} | ${user?.usernameLastFM}`);
 				return null;
 			}
@@ -64,14 +66,14 @@ export class IndexService {
 	public async modularUpdate(user: UserLastFM, updateType: UpdateTypeBitfield) {
 		container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Starting`);
 
-		const stats: IndexedUserStats = {};
+		const stats: IndexedUserStats = { failedUpdates: new UpdateTypeBitfield() };
 
 		const userInfo = await this.#dataSourceFactory.getLfmUserInfo(user.usernameLastFM);
 		if (isNullish(userInfo?.registered)) {
 			container.logger.warn(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Fetching UserInfo failed`);
 
 			stats.updateError = true;
-			stats.failedUpdates = new UpdateTypeBitfield(UpdateType.Full);
+			stats.failedUpdates?.add(UpdateType.Full);
 			void container.redis?.del(IndexService.IndexConcurrencyCacheKey(user.userid));
 			return stats;
 		}
@@ -92,6 +94,22 @@ export class IndexService {
 				await PlayRepository.ReplaceAllPlays(plays, user.userid);
 				stats.playCount = plays.length;
 				await UserRepository.SetUserIndexTime(user.userid, plays);
+			}
+		}
+
+		if (updateType.has(UpdateType.Artist) || updateType.has(UpdateType.Full)) {
+			const artists = await this.getTopArtistsForUser(user);
+
+			if (userInfo.artistcount >= 1000 && artists.length < 200) {
+				container.logger.warn(
+					`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Fetching artists failed - ${userInfo.artistcount} expected, ${artists.length} fetched`
+				);
+
+				stats.updateError = true;
+				stats.failedUpdates?.add(UpdateType.Artist);
+			} else {
+				await ArtistRepository.AddOrReplaceUserArtistsInDatabase(artists, user.userid);
+				stats.artistCount = artists.length;
 			}
 		}
 
@@ -135,6 +153,32 @@ export class IndexService {
 						userId: user.userid
 					}) as UserPlay
 			);
+	}
+
+	private async getTopArtistsForUser(user: UserLastFM) {
+		container.logger.warn(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Getting top artists`);
+
+		const indexLimit = 200;
+
+		const topArtists = await this.#dataSourceFactory.getTopArtists(
+			user.usernameLastFM,
+			{ apiParameter: 'overall', playDays: 99999, startDateTime: user.registeredLastFM!, timePeriod: TimePeriod.AllTime },
+			1000,
+			indexLimit
+		);
+
+		if (!topArtists.success || topArtists.content.topArtists === null || !topArtists.content.topArtists.length) {
+			return [] as UserArtist[];
+		}
+
+		return topArtists.content.topArtists.map(
+			(a) =>
+				({
+					name: a.artistName,
+					playCount: a.userPlaycount,
+					userId: user.userid
+				}) as UserArtist
+		);
 	}
 
 	public static IndexConcurrencyCacheKey(userId: string) {

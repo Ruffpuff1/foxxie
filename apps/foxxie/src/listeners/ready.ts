@@ -1,21 +1,31 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
-import { FoxxieEvents } from '#lib/types';
+import { envIsDefined } from '@skyra/env-utilities';
+import { resetSpotifyToken } from '#lib/api/Spotify/util';
+import { EnvKeys, FoxxieEvents } from '#lib/types';
 import { createBanner } from '#utils/startBanner';
-import { blue, gray, yellow } from 'colorette';
+import { blue, gray, green, red, yellow } from 'colorette';
 
 @ApplyOptions<Listener.Options>({ once: true })
 export class UserListener extends Listener<FoxxieEvents.Ready> {
 	private readonly style = this.isDev ? yellow : blue;
 
-	public run() {
-		this.printBanner();
+	public async run() {
+		const [spotify] = await Promise.all([this.#initSpotify()]);
+
+		this.printBanner(spotify);
 		this.printStoreDebugInformation();
 	}
 
-	private printBanner() {
-		const success = '+';
-		const failed = '-';
+	async #initSpotify() {
+		if (!envIsDefined(EnvKeys.SpotifyClientId) || !envIsDefined(EnvKeys.SpotifyClientSecret)) return false;
+		const success = await resetSpotifyToken();
+		return success;
+	}
+
+	private printBanner(spotify: boolean) {
+		const success = green('+');
+		const failed = red('-');
 		const pad = ' '.repeat(5);
 
 		console.log(
@@ -29,6 +39,7 @@ export class UserListener extends Listener<FoxxieEvents.Ready> {
 						String.raw`${pad}[${success}] Gateway`,
 						String.raw`${pad}[${success}] Moderation`,
 						String.raw`${pad}[${this.container.redis ? success : failed}] Redis`,
+						String.raw`${pad}[${spotify ? success : failed}] Spotify`,
 						String.raw`${pad}[${this.store.has('rawMessageReactionAddStarboard') ? success : failed}] Starboard`,
 						String.raw`${this.isDev ? `${pad}</> DEVELOPMENT MODE` : ''}`
 					],

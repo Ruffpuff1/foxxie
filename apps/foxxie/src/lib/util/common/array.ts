@@ -1,3 +1,13 @@
+export function countArray<T>(array: T[], filter: (obj: T) => boolean) {
+	let success = 0;
+	for (const entry of array) {
+		const output = filter(entry);
+		if (output) success++;
+	}
+
+	return success;
+}
+
 export function countGroup<T, K extends keyof any>(group: Record<K, T[]>, filter: (obj: T[]) => boolean) {
 	const entries = Object.entries(group) as [K, T[]][];
 

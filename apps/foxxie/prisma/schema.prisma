@@ -247,7 +247,7 @@ model UserLastFM {
   user          User                 @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "userlastfm_user_fkey")
   albums           UserAlbum[]
   artists          UserArtist[]
-  discogsReleases  UserDiscogsReleases?
+  discogsReleases  UserDiscogsReleases[]
   discogs          UserDiscogs          @relation(fields: [userid], references: [userid])
   plays            UserPlay[]
   tracks           UserTrack[]
@@ -315,8 +315,8 @@ model UserPlay {
 }
 
 model UserDiscogsReleases {
-  userDiscogsReleaseId Int            @default(autoincrement())
-  userId               String         @id @db.VarChar(19)
+  userDiscogsReleaseId Int            @id @default(autoincrement())
+  userId               String         @db.VarChar(19)
   instanceId           Int
   dateAdded            DateTime
   rating               Int?
@@ -334,16 +334,16 @@ model DiscogsRelease {
   artist                   String
   artistId                 Int?
   artistDiscogsId          Int
-  featuringArtistJoin      String
-  featuringArtist          String
+  featuringArtistJoin      String?
+  featuringArtist          String?
   featuringArtistId        Int?
   featuringArtistDiscogsId Int?
   coverUrl                 String
   year                     Int?
   format                   String
-  formatText               String
+  formatText               String?
   label                    String
-  secondLabel              String
+  secondLabel              String?
   lowestPrice              Int?
   formatDescriptions       DiscogsFormatDescriptions[]
   genres                   DiscogsGenre[]

@@ -29,10 +29,12 @@ export class StringFormattersService {
 
 	public getDiscogsFormatEmote(format: string): null | string {
 		switch (format) {
-			case 'Casette':
-				return '📼';
+			case 'Box Set':
+				return ':package:';
+			case 'Cassette':
+				return Emojis.Cassette;
 			case 'CD':
-				return '💿';
+				return ':cd:';
 			case 'Vinyl':
 				return Emojis.Vinyl;
 		}

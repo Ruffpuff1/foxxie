@@ -3,9 +3,10 @@ import { IndexService } from '#apis/last.fm/services/IndexService';
 import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
 import { Schedules } from '#utils/constants';
 
-@ApplyOptions<Task.Options>({
+@ApplyOptions<Task.Options>(({ container }) => ({
+	enabled: container.client.enabledProdOnlyEvent(),
 	name: Schedules.IndexUser
-})
+}))
 export class UserTask extends Task {
 	#indexService = new IndexService();
 

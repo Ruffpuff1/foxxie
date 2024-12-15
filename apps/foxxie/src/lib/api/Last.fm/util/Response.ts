@@ -1,3 +1,4 @@
+import { PlaySource } from '../types/enums/PlaySource.js';
 import { ResponseStatus } from '../types/ResponseStatus.js';
 
 export class Response<T> {
@@ -6,6 +7,8 @@ export class Response<T> {
 	public error?: ResponseStatus;
 
 	public message!: string;
+
+	public playSources?: PlaySource[];
 
 	public success!: boolean;
 

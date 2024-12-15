@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import makeRequest from '@aero/http';
 import { Prisma } from '@prisma/client';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
+import { Result } from '@sapphire/result';
 import { Stopwatch } from '@sapphire/stopwatch';
 import { Type } from '@sapphire/type';
 import { isThenable } from '@sapphire/utilities';
@@ -97,6 +99,10 @@ export class UserCommand extends FoxxieCommand {
 		const msg = message;
 		// @ts-expect-error value is never read, this is so `d` is possible as an alias when sending the eval.
 		const d = days;
+		// @ts-expect-error value is never read, this is so `req` is possible as an alias when sending the eval.
+		const req = makeRequest;
+		// @ts-expect-error value is never read, this is so `req` is possible as an alias when sending the eval.
+		const { fromAsync } = Result;
 
 		code = code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
 		const stopwatch = new Stopwatch();
