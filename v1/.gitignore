@@ -1,0 +1,10 @@
+*.DS_Store
+*node_modules
+package.json
+package-lock.json
+lib/config.js
+things-to-check
+spanish.json
+*.sqlite
+user.example.json
+db.all.js
