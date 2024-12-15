@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400');
+
+* {
+    font-family: Raleway;
+    box-sizing:inherit
+}
+#particle-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    opacity: 0.48;
+}
+canvas {
+    position: fixed;
+}
+article, aside, figure, footer, header, hgroup, section {
+    display:block
+}
+html, body, p, ol, ul, li, dl, dt, dd, blockquote, figure, fieldset, legend, textarea, pre, iframe, hr, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding:0
+}
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight:400
+}
+.nav-item {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    font-size: 1rem;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    line-height: 1.5;
+    padding:.5rem .75rem
+}
+.nav-item a, a.nav-item {
+    color:#7a7a7a
+}
+.nav-item a:hover, a.nav-item:hover {
+    color:#363636
+}
+.nav-item a.is-active, a.nav-item.is-active {
+    color:#363636
+}
+.nav-item a.is-tab, a.nav-item.is-tab {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    padding:calc(0.75rem - 1px) 1rem calc(0.75rem - 1px) 1rem
+}
+.nav-item a.is-tab:hover, a.nav-item.is-tab:hover {
+    border-bottom-color: #00d1b2;
+    border-top-color:transparent
+}
+
+.nav-item a.is-tab.is-active, a.nav-item.is-tab.is-active {
+    border-bottom: 3px solid #00d1b2;
+    color: #00d1b2;
+    padding-bottom:calc(0.75rem - 3px)
+}
+
+@media screen and (min-width: 1000px) {
+    .nav-item a.is-brand, a.nav-item.is-brand {
+        padding-left:0
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav-menu {
+        background-color: #fff;
+        box-shadow: 0 4px 7px rgba(10, 10, 10, 0.1);
+        left: 0;
+        display: none;
+        right: 0;
+        top: 100%;
+        position:absolute
+    }
+
+
+    .nav-menu .nav-item {
+        border-top: 1px solid rgba(219, 219, 219, 0.5);
+        padding:.75rem;
+    }
+}
+.menu-list a {
+    border-radius: 2px;
+    color: #4a4a4a;
+    display: block;
+    padding:.5em .75em
+}
+
+.menu-list a:hover {
+    background-color: #f5f5f5;
+    color:#00d1b2
+}
+
+.menu-list a.is-active {
+    background-color: #00d1b2;
+    color:#fff
+}
