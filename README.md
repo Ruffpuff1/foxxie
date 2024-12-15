@@ -1,7 +1,7 @@
 <div align='center'>
   <img src='https://cdn.discordapp.com/avatars/825130284382289920/771c05d06525845e84b32998210f32a8.png?size=2048' width='140' height='140' />
-  <h1>Foxxie ⚡️</h1>
-  <blockquote>Monorepository containing all the source code for the Foxxie Project</blockquote>
+  <h1>Foxxie ⚡️⌛️🎶</h1>
+  <blockquote>Monorepository containing all the source code for the Foxxie Project ∞</blockquote>
 
   <br />
 
