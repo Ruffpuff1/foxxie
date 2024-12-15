@@ -1,60 +1,5 @@
-# docker-compose to run the entire foxxie environment at the same time.
-# usually only used for absolute hosting.
-# for testing each service refer to their own Dockerfile or docker-compose.yml.
 version: '3'
 services:
-
-  foxxie:
-    build:
-      context: ./apps/foxxie
-    container_name: foxxie
-    env_file:
-      - .env.foxxie
-    depends_on:
-      - lavalink
-      - redis
-    networks:
-      - foxxie
-    ports:
-      - '8282:8282'
-      - '7282:7282'
-    restart: always
-    tty: true
-
-  kettu:
-    build:
-      context: ./apps/kettu
-    container_name: kettu
-    depends_on:
-      - celestia
-      - saelem
-      - ravy.lgbt
-      - redis
-    env_file:
-      - .env.kettu
-    restart: always
-    networks:
-      - kettu
-
-  ravy.lgbt:
-    build:
-      context: ./docker/ravy.lgbt
-    container_name: ravy.lgbt
-    restart: always
-    networks:
-      - kettu
-
-  stardrop:
-    container_name: stardrop
-    build:
-      context: '../../graphql/stardrop'
-    networks:
-      - kettu
-    environment:
-      - PORT: 5060
-    ports:
-      - '5060:5060'
-    restart: always
 
   redis:
     command: 'redis-server --bind redis --port 8287 --requirepass redis'
@@ -62,7 +7,6 @@ services:
     image: 'redis:alpine'
     networks:
       - foxxie
-      - kettu
     ports:
       - '8287:8287'
     volumes:
@@ -80,40 +24,23 @@ services:
       - '2333:2333'
     restart: always
 
-  celestia:
-    container_name: celestia
-    platform: linux/amd64
-    image: 'ruffpuff/celestia:latest'
-    environment:
-      PORT: 1234
-      NODE_ENV: development
-    networks:
-      - kettu
-    ports:
-      - '1234:1234'
-    restart: always
-
-  saelem:
-    container_name: saelem
+  foxxie:
+    build:
+      context: .
+    container_name: foxxie
     depends_on:
+      - lavalink
       - redis
-    environment:
-      PORT: 8284
-      SAELEM_REDIS_DATABASE: 0
-      SAELEM_REDIS_HOST: redis
-      SAELEM_REDIS_PASSWORD: redis
-      SAELEM_REDIS_PORT: 8287
-    image: 'skyrabot/saelem:latest'
     networks:
-     - kettu
-     - foxxie
+      - foxxie
     ports:
-      - '8284:8284'
+      - '8282:8282'
+      - '7282:7282'
     restart: always
+    tty: true
 
 networks:
   foxxie:
-  kettu:
 
 volumes:
   redis_data:
