@@ -1,0 +1,42 @@
+{
+  "name": "@foxxie/i18n",
+  "version": "0.0.6",
+  "description": "I18n management utility for Foxxie projects.",
+  "scripts": {
+    "build": "tsup",
+    "lint": "prettier --write src && eslint src --ext mjs,js,ts --fix"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
+  "directories": {
+    "lib": "src"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "foxxie",
+    "i18n",
+    "translations",
+    "internalization",
+    "crowdin",
+    "i10n"
+  ],
+  "devDependencies": {
+    "@ruffpuff/eslint-config": "1.1.0",
+    "@ruffpuff/ts": "^1.0.4",
+    "@types/i18next-fs-backend": "^1.1.2",
+    "discord-api-types": "^0.31.2"
+  },
+  "dependencies": {
+    "@discordjs/collection": "^0.6.0",
+    "i18next": "^21.6.16",
+    "i18next-fs-backend": "^1.1.4"
+  }
+}

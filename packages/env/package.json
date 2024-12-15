@@ -1,0 +1,32 @@
+{
+  "name": "@foxxie/env",
+  "version": "0.0.2",
+  "description": "A utility for easily parsing env values.",
+  "scripts": {
+    "build": "tsup",
+    "lint": "prettier --write src && eslint src --ext mjs,js,ts --fix",
+    "test": "jest --pass-with-no-tests --collect-coverage --verbose"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
+  "directories": {
+    "lib": "src"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "foxxie",
+    "env",
+    "parser"
+  ],
+  "devDependencies": {
+    "@ruffpuff/eslint-config": "1.1.0"
+  }
+}
