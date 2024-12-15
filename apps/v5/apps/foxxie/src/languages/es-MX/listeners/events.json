@@ -1,0 +1,24 @@
+{
+    "boostMessageDefault": "",
+    "highlightAttachment": "",
+    "highlightJumpTo": "",
+    "highlightContentWord": "",
+    "highlightEmbed": "",
+    "highlightSize": "El contenido del mensaje es muy largo. Oprime **[here]({{url}})** para verlo.",
+    "goodbyeDefault": "",
+    "pointsMessages": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "pointsRoleMessages": [
+        "",
+        "",
+        "",
+        "",
+        ""
+    ],
+    "welcomeDefault": ""
+}

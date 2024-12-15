@@ -1,0 +1,5 @@
+{
+    "optionEphemeralDefaultFalse": "Si el mensaje debe ser ocultado, el valor por defecto es falso.",
+    "optionEphemeralDefaultTrue": "Si el mensaje debe ser ocultado, el valor predeterminado es verdadero.",
+    "queryFail": "{{ERROR}} No pude encontrar ningún dato del servidor sobre esa consulta, por favor inténtalo de nuevo."
+}

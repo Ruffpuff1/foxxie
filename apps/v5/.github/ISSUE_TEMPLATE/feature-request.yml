@@ -1,0 +1,42 @@
+name: Feature request
+description: Request a new feature
+title: 'request:'
+labels: ["Type: Request"]
+assignees: [Ruffpuff1]
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Which package is the feature request for?
+      options:
+        - foxxie
+        - kettu
+        - fetch
+        - fuzzysearch
+        - graphql-stardrop
+        - eslint-config
+        - stardrop
+        - ravy.lgbt
+        - lock-queue
+        - types
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: What type does this request pertain to?
+      options:
+        - 'new command'
+        - 'infrastructure'
+        - 'meta feature'
+        - 'documentation'
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature
+      description: A clear and concise description of what the feature is.
+      placeholder: Using this...Would be a good idea because...
+    validations:
+      required: true

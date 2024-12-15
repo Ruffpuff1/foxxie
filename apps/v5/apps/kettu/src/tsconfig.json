@@ -1,0 +1,29 @@
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": "../dist",
+        "rootDir": ".",
+        "baseUrl": ".",
+        "moduleResolution": "node",
+        "strictNullChecks": true,
+        "allowSyntheticDefaultImports": true,
+        "paths": {
+            "#utils/*": [
+                "lib/util/*"
+            ],
+            "#types/*": [
+                "lib/types/*"
+            ],
+            "#lib/*": [
+                "lib/*"
+            ],
+            "#root/*": [
+                "*"
+            ],
+        },
+    },
+    "include": [
+        ".",
+        "./languages/**/*.json"
+    ]
+}

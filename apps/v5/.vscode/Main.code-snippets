@@ -1,0 +1,11 @@
+{
+    "registry": {
+        "prefix": "npm",
+        "description": "autocompletes the npm registry",
+        "body": [
+            "\"publishConfig\": {",
+            "\t\"registry\": \"https://npm.pkg.github.com\"",
+            "},"
+        ]
+    }
+}

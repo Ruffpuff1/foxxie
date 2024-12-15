@@ -1,0 +1,7 @@
+{
+    "confDescription": "Configura la configuración de tu servidor para mí.",
+    "confGet": "El valor para la clave **{{key}}** es: `{{value}}`",
+    "confMenuRenderAtFolder": "Actualmente en: 📁 {{path}}",
+    "confMenuRenderAtPiece": "Actualmente en: ⚙️ {{path}}",
+    "confMenuRenderCValue": "Valor actual: **`{{value}}`**"
+}

@@ -1,0 +1,59 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Ruffpuff1",
+      "name": "Ruff",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73779441?v=4",
+      "profile": "https://github.com/Ruffpuff1",
+      "contributions": [
+        "code",
+        "ideas",
+        "content",
+        "financial"
+      ]
+    },
+    {
+      "login": "Raindrop-Droptop",
+      "name": "Raindrop-Droptop",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81828616?v=4",
+      "profile": "https://github.com/Raindrop-Droptop",
+      "contributions": [
+        "ideas",
+        "financial",
+        "translation"
+      ]
+    },
+    {
+      "login": "orihuu",
+      "name": "Ori",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81810945?v=4",
+      "profile": "https://github.com/orihuu",
+      "contributions": [
+        "content",
+        "test",
+        "bug"
+      ]
+    },
+    {
+      "login": "foxxiedev[bot]",
+      "name": "foxxiedev[bot]",
+      "avatar_url": "https://avatars.githubusercontent.com/in/180135?v=4",
+      "profile": "https://github.com/apps/foxxiedev",
+      "contributions": [
+        "content",
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "foxxie",
+  "projectOwner": "FoxxieBot",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}

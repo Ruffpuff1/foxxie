@@ -1,0 +1,19 @@
+{
+    "colorDescription": "Vista previa de una imagen de un color usando su código hexadecimal o rgb.",
+    "colorDominant": "dominante",
+    "colorNotFound": "{{ERROR}} No pude analizar `{{color}}` a un color válido.",
+    "colorOptionColor": "El color que desea previsualizar, en formato hexadecimal o rgb.",
+    "colorRandom": "aleatorio",
+    "prideDescription": "Cubre tu perfil con una imagen de bandera de orgullo.",
+    "prideOptionFlag": "La bandera de orgullo con la que vas a cubrir la imagen de perfil.",
+    "prideOptionGuildAvatar": "Si debo usar el avatar de tu hermandad o el avatar del usuario, por defecto para el usuario.",
+    "setcolorDescription": "Establecer el color de un rol en el servidor.",
+    "setcolorError": "{{ERROR}} No pude establecer el color de **{{role}}**.",
+    "setcolorNoPerms": "{{ERROR}} No pude establecer el color de **{{role}}**, asegúrate de que mi rol más alto está por encima.",
+    "setcolorNoPerms_mine": "{{ERROR}} No pude establecer el color de **{{role}}**, no puedo establecer el color de mi propio rol.",
+    "setcolorOptionColor": "El color que desea establecer, en formato hexadecimal o rgb.",
+    "setcolorOptionReason": "La razón para establecer el color que se mostrará en los registros de auditoría.",
+    "setcolorOptionRole": "El rol al que quieres asignar el color.",
+    "setcolorReason": "`[Setcolor]` Establecer color de rol usando el comando.",
+    "setcolorSuccess": "Bien, he establecido el color de **{{role}}** a `{{color}}`."
+}

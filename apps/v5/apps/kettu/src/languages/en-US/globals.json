@@ -1,0 +1,12 @@
+{
+    "and": "{{value, and}}",
+    "by": "By",
+    "codeand": "{{value, codeand}}",
+    "dateFormat": "{{value, dateFormat}}",
+    "duration": "{{value, duration}}",
+    "in": "In",
+    "no": "No",
+    "none": "None",
+    "number": "{{value, number}}",
+    "yes": "Yes"
+}

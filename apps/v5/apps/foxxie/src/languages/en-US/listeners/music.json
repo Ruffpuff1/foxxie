@@ -1,0 +1,10 @@
+{
+    "addPlaylist": "{{SUCCESS}} Added {{count, number}} songs to the queue {{MUSIC}}",
+    "addSong": "{{SUCCESS}} Added **{{title}}** to the queue {{MUSIC}}",
+    "setReplayNotifySet": "{{SUCCESS}} Started replaying **{{title}}** {{MUSIC}}",
+    "setReplayNotifyEnd": "{{SUCCESS}} Stopped replaying **{{title}}**, I'll move on to the next after it's over.",
+    "songPlayNotify": "{{MUSIC}} Playing **{{title}}** as requested by **{{requester}}**.",
+    "songPauseNotify": "{{SUCCESS}} Paused the queue :radio:",
+    "songReplayNotify": "{{MUSIC}} Replaying **{{title}}** as requested by **{{requester}}**.",
+    "songResumeNotify": "{{SUCCESS}} Resumed playing **{{title}}** {{MUSIC}}"
+}

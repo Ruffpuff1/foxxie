@@ -1,0 +1,67 @@
+{
+    "FoxxieCommand": {
+		"prefix": "command",
+		"description": "Create a default FoxxieCommand",
+		"body": [
+			"import { FoxxieCommand } from '#lib/structures';",
+			"import { LanguageKeys } from '#lib/i18n';",
+			"import { ApplyOptions } from '@sapphire/decorators';",
+			"import type { Message } from 'discord.js';",
+			"",
+			"@ApplyOptions<FoxxieCommand.Options>({",
+			"\tdescription: LanguageKeys.Commands.$1.${TM_FILENAME_BASE/(.{1})/${1:/upcase}/}Description,",
+			"\tdetailedDescription: LanguageKeys.Commands.$1.${TM_FILENAME_BASE/(.{1})/${1:/upcase}/}DetailedDescription",
+			"})",
+			"export class UserCommand extends FoxxieCommand {",
+			"\tpublic async messageRun(msg: Message, args: FoxxieCommand.Args): Promise<void> {",
+			"",
+			"\t}",
+			"}",
+			""
+		]
+	},
+    "Listener": {
+        "prefix": "listener",
+        "description": "Create a default listener",
+        "body": [
+            "import { Events, EventArgs } from '#lib/types';",
+            "import { Listener, ListenerOptions } from '@sapphire/framework';",
+            "import { ApplyOptions } from '@sapphire/decorators';",
+            "",
+            "@ApplyOptions<ListenerOptions>({",
+            "\tevent: Events.$1",
+            "})",
+            "export class UserListener extends Listener<Events.$1> {",
+            "\tpublic async run(...[$2]: EventArgs<Events.$1>): Promise<$3> {",
+            "",
+            "\t}",
+            "}",
+            ""
+        ]
+    },
+    "embed": {
+        "prefix": "embed",
+        "description": "create a base embed",
+        "body": [
+            "const embed = new MessageEmbed()",
+            "\t.setAuthor({ name: '', iconURL: '' })",
+            "\t.setColor($1);"
+        ]
+    },
+    "paginate": {
+        "prefix": "paginate",
+        "description": "create a base paginated message",
+        "body": [
+            "const template = new MessageEmbed()",
+            "\t.setAuthor({ name: '', iconURL: '' })",
+            "\t.setColor($t)",
+            "",
+            "const display = new PaginatedMessage({ template });"
+        ]
+    },
+    "sleep": {
+        "prefix": "sleep",
+        "description": "imports sleep function",
+        "body": ["import { setTimeout as sleep } from 'node:timers/promises';"]
+    }
+}

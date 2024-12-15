@@ -1,0 +1,79 @@
+{
+    "disconnectDescription": "Make me leave the channel you're in, and clear the server's queue.",
+    "disconnectDetailedDescription": {
+        "usages": [""],
+        "extendedHelp": "With this command I'll leave the channel I'm currently playing music it. Clearing the queue and stopping the song.",
+        "examples": [""]
+    },
+    "disconnectSuccess": "{{SUCCESS}} Successfully left {{channel}}.",
+    "playAlreadyPlaying": "{{ERROR}} I'm already playing music in this channel.",
+    "playDescription": "Play music for you and your friends while in vc.",
+    "playDetailedDescription": {
+        "usages": [
+            "Song",
+            "YoutubeLink",
+            "SpotifyPlaylist"
+        ],
+        "extendedHelp": "Play songs and add them to the queue. I can search for a song by name, or you can give me a youtube link of the song to play. I also support spotify playlist links. In addition, if I am currently paused this command will resume the music.",
+        "examples": [
+            "What does the fox say?",
+            "https://www.youtube.com/watch?v=2xx_2XNxxfA",
+            "https://open.spotify.com/playlist/3bevTxSrGdh3qShUcODtxE"
+        ]
+    },
+    "playNoSongs": "{{ERROR}} I couldn't find any results for the given song.",
+    "playQueueEmpty": "{{ERROR}} The queue is currently empty, try adding some songs first.",
+    "joinDescription": "Joins the voice channel you're in.",
+    "joinDetailedDescription": {
+        "extendedHelp": "This command can be used when you want me to join the voice channel you're in, but not play music just yet."
+    },
+    "joinFailed": "{{ERROR}} Something went wrong when I tried joining.",
+    "joinSuccess": "{{SUCCESS}} Successfully joined {{channel}}.",
+    "joinVoiceChannelFull": "{{ERROR}} It seems the voice channel you're in is full (maybe clear some of them out).",
+    "joinVoiceChannelNoConnect": "{{ERROR}} I'm not allowed to connect to the voice channel you're in.",
+    "joinVoiceChannelNoSpeak": "{{ERROR}} I am unable to speak in the voice channel you're in, thus I wouldn't be able to play music.",
+    "joinVoiceDifferent": "{{ERROR}} Sorry I'm in a different voice channel right now.",
+    "joinVoiceSame": "{{ERROR}} I'm already in the voice channel you're in.",
+    "savequeueAlreadyExists": "{{ERROR}} A playlist with the name {{name, code}} already exists.",
+    "savequeueDescription": "Save the current queue into playlists for playing later!",
+    "savequeueDetailedDescription": {
+        "usages": [
+            "create Name",
+            "list"
+        ],
+        "explainedUsage": [
+            [
+                "Create/List",
+                [
+                    "Create a new playlist of the current queue.",
+                    "List your current saved playlists."
+                ]
+            ],
+            [
+                "Name",
+                "The name of the playlist."
+            ]
+        ],
+        "exampes": [
+            "create Music",
+            "list"
+        ]
+    },
+    "savequeueListNone": "{{ERROR}} You currently have no saved playlists.",
+    "savequeueSuccess": "{{SUCCESS}} Saved the current queue under the name {{name, code}}.",
+    "shuffleDescription": "Shuffle the queue's songs.",
+    "shuffleDetailedDescription": {
+        "usages": [""],
+        "extendedHelp": "This command will shuffle the currently playing music queue in place.",
+        "examples": [""]
+    },
+    "shuffleSuccess": "{{SUCCESS}} Successfully shuffled {{count, number}} song, although it did nothing... {{MUSIC}}",
+    "shuffleSuccess_other": "{{SUCCESS}} Successfully shuffled {{count, number}} songs {{MUSIC}}",
+    "skipDescription": "Skip the current playing song.",
+    "skipDetailedDescription": {
+        "usages": [""],
+        "extendedHelp": "If a current song is playing, this command will skip to the next one in the queue.",
+        "examples": [""]
+    },
+    "skipSuccess": "{{SUCCESS}} Successfully skipped to the next song."
+}

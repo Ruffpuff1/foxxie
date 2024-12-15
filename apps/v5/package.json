@@ -1,0 +1,51 @@
+{
+  "name": "@foxxie/foxxie",
+  "version": "0.0.0",
+  "description": "Monorepository containing all the source code for the Foxxie Project.",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "turbo run format",
+    "dev": "turbo run dev",
+    "changelog": "turbo run changelog"
+  },
+  "contributors": [
+    "Ruffpuff1 <contact@ruffpuff.dev>",
+    "Raindrop-Droptop"
+  ],
+  "keywords": [
+    "bot",
+    "npm",
+    "turbo",
+    "packages",
+    "monorepo",
+    "yarn",
+    "discord",
+    "foxxie"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FoxxieBot/foxxie.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FoxxieBot/foxxie/issues"
+  },
+  "homepage": "https://github.com/FoxxieBot/foxxie",
+  "devDependencies": {
+    "@octokit/action": "^3.18.0",
+    "@sapphire/ts-config": "3.3.2",
+    "conventional-changelog-angular": "^5.0.13",
+    "conventional-recommended-bump": "^6.1.0",
+    "ts-jest": "27.1.3",
+    "ts-node": "10.7.0",
+    "turbo": "1.1.6"
+  },
+  "workspaces": [
+    "apps/*",
+    "graphql/*",
+    "packages/*"
+  ],
+  "packageManager": "yarn@1.22.17"
+}

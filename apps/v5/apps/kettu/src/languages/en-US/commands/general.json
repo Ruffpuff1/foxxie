@@ -1,0 +1,18 @@
+{
+    "donateDescription": "Donate to help further my development.",
+    "donateHeader": "Donation links",
+    "inviteBody": "Heres some invite links for me and my fellow bots,\nyou can also invite me by clicking the \"add to server\" button on my profile.",
+    "inviteDescription": "Get an invite for me and other bots you may like.",
+    "inviteHeader": "Bot invite links",
+    "statsDescription": "Shows my stats and uptime.",
+    "statsGeneral": "• **Channels**: {{channels, number}}\n• **Servers**: {{guilds, number}}\n• **Users**: {{users, number}}\n• **Node.js**: {{nodeJs}}\n• **Discord.js**: {{version}}",
+    "statsTitles": {
+        "stats": "**:chart_with_upwards_trend: Statistics**",
+        "uptime": "**:timer: Uptime**",
+        "usage": "**:battery: Usage**"
+    },
+    "statsUptime": "• **Client**: {{client}}\n• **Host**: {{host}}\n• **Process**: {{process}}",
+    "statsUsage": "• **CPU Load**: {{cpuLoad}}\n• **Heap**: {{ramUsed, number}}MB (Total {{ramTotal, number}}MB)",
+    "supportDescription": "Get an invite link to my server if you need help.",
+    "supportMessage": "Need some help? Try coming and asking at {{url}}."
+}

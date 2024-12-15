@@ -1,0 +1,16 @@
+{
+    "abort": "{{ERROR}} I couldn't reach Discord in time to run this command, go ahead and try again.",
+    "moderationBannable": "I don't have permission to ban {{target}}.",
+    "moderationFoxxie": "Why would you try to ban me? With myself too?",
+    "moderationHasError": "{{ERROR}} That moderation action couldn't be completed.",
+    "moderationHasError_other": "{{ERROR}} Some moderation actions couldn't be completed.",
+    "moderationKickable": "I don't have permission to kick this member.",
+    "moderationMember": "It seems that {{target}} is not a server member, please make sure they are.",
+    "moderationRole": "Your highest role must be above the highest role of {{target}}.",
+    "moderationRoleBot": "My highest role is below the highest role of {{target}}, therefore I can't ban them.",
+    "moderationSelf": "I'm sorry but I can't have you trying to ban yourself.",
+    "string": "{{ERROR}} Hey {{mention}}, {{message}}",
+    "tooManyRoles": "{{ERROR}} I could not create a new role because this server already has 250 roles!",
+    "unexpected": "{{ERROR}} Whoops, I ran into an unexpected error, please report the steps you've taken to my developers.",
+    "unexpectedWithCode": "$t(listeners/errors:unexpected) You may also send them `{{report}}` so they can look up what triggered the error."
+}

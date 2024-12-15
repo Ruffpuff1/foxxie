@@ -1,0 +1,37 @@
+{
+  "name": "stardrop",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "dev": "yarn build && yarn start",
+    "gen": "graphql-codegen",
+    "lint": "prettier --check . && eslint . --ext mjs,js,ts",
+    "format": "prettier --write . && eslint . --ext mjs,js,ts --fix",
+    "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'graphql/stardrop/*'"
+  },
+  "devDependencies": {
+    "@foxxie/eslint-config": "0.0.0",
+    "@graphql-codegen/cli": "2.6.2",
+    "@graphql-codegen/typescript": "2.4.7",
+    "@graphql-codegen/typescript-resolvers": "2.5.4",
+    "@types/koa": "2.13.4",
+    "eslint": "8.11.0",
+    "prettier": "2.5.1",
+    "tsup": "5.12.1"
+  },
+  "dependencies": {
+    "@foxxie/fuzzysearch": "^0.0.2",
+    "apollo-server-core": "^3.6.3",
+    "apollo-server-koa": "^3.6.3",
+    "class-validator": "^0.13.2",
+    "graphql": "15.8.0",
+    "graphql-parse-resolve-info": "^4.12.0",
+    "koa": "^2.13.4",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1",
+    "utility-types": "^3.10.0"
+  }
+}

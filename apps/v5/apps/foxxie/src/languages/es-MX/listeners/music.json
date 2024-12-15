@@ -1,0 +1,5 @@
+{
+    "addPlaylist": "{{SUCCESS}} Añadido {{count, number}} canciones a la cola {{MUSIC}}",
+    "addSong": "{{SUCCESS}} Añadido **{{title}}** a la cola {{MUSIC}}",
+    "songPlayNotify": "{{MUSIC}} Tocando **{{title}}** pedido por **{{requester}}**."
+}

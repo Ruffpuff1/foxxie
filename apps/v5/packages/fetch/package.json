@@ -1,0 +1,58 @@
+{
+  "name": "@foxxie/fetch",
+  "version": "0.0.2",
+  "description": "A centra inspired http client for Foxxie bots",
+  "scripts": {
+    "build": "tsup",
+    "lint": "prettier --check . && eslint src --ext mjs,js,ts",
+    "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
+    "test": "jest --pass-with-no-tests --collect-coverage --verbose",
+    "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'packages/fetch/*'"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
+  "directories": {
+    "lib": "src",
+    "test": "__tests__"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FoxxieBot/foxxie.git",
+    "directory": "packages/fetch"
+  },
+  "bugs": {
+    "url": "https://github.com/FoxxieBot/foxxie/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "foxxie",
+    "http",
+    "fetch",
+    "yarn"
+  ],
+  "devDependencies": {
+    "@types/jest": "27.4.1",
+    "@types/node": "17.0.21",
+    "@typescript-eslint/eslint-plugin": "5.15.0",
+    "@typescript-eslint/parser": "5.15.0",
+    "eslint": "8.11.0",
+    "jest": "27.5.1",
+    "nock": "13.2.4",
+    "prettier": "2.5.1",
+    "tsup": "5.12.1",
+    "typescript": "4.6.2"
+  },
+  "dependencies": {
+    "@foxxie/eslint-config": "^0.0.0",
+    "@ruffpuff/utilities": "^4.0.0",
+    "undici": "^4.15.0"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "name": "@foxxie/fuzzysearch",
+  "version": "0.0.3",
+  "description": "A tool for returning fuzzyily searched results.",
+  "scripts": {
+    "build": "tsup",
+    "test": "jest --pass-with-no-tests --collect-coverage --verbose",
+    "lint": "prettier --check . && eslint src --ext mjs,js,ts",
+    "format": "prettier --write . && eslint src --ext mjs,js,ts --fix",
+    "changelog": "rm -f CHANGELOG.md && touch CHANGELOG.md && git cliff --prepend ./CHANGELOG.md -l -c ./cliff.toml -r ../../ --include-path 'packages/fuzzysearch/*'"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
+  "directories": {
+    "lib": "src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FoxxieBot/foxxie.git",
+    "directory": "packages/fuzzysearch"
+  },
+  "bugs": {
+    "url": "https://github.com/FoxxieBot/foxxie/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "foxxie",
+    "search",
+    "fuzzysearch"
+  ],
+  "devDependencies": {
+    "@foxxie/eslint-config": "^0.0.0",
+    "@types/jest": "27.4.1",
+    "@types/node": "17.0.21",
+    "@typescript-eslint/eslint-plugin": "5.15.0",
+    "@typescript-eslint/parser": "5.15.0",
+    "eslint": "8.11.0",
+    "jest": "27.5.1",
+    "prettier": "2.5.1",
+    "tsup": "5.12.1",
+    "typescript": "4.6.2"
+  },
+  "private": false,
+  "dependencies": {
+    "@discordjs/collection": "^0.5.0",
+    "@skyra/jaro-winkler": "^1.0.0"
+  }
+}

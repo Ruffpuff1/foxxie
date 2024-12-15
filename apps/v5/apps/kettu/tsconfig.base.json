@@ -1,0 +1,18 @@
+{
+    "extends": "@sapphire/ts-config",
+    "compilerOptions": {
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "skipLibCheck": true,
+        "target": "ESNext",
+        "baseUrl": ".",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    },
+    "include": [
+        "src",
+        ".eslintrc.js"
+    ]
+}

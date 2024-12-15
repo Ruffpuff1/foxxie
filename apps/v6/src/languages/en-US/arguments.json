@@ -1,0 +1,13 @@
+{
+    "booleanDisabled": "Disabled",
+    "booleanEnabled": "Enabled",
+    "command": "{{ERROR}} I don't have a command named `{{parameter}}`! Maybe you spelled it wrong?",
+    "duration": "{{ERROR}} I couldn't resolve `{{parameter}}` to a duration. Try things such as `1d` or `1week`.",
+    "language": "{{ERROR}} I don't currently support `{{parameter}}` as a language. Please choose between {{list, codeand}}.",
+    "latest": "latest",
+    "moderationLogNone": "{{ERROR}} It seems this server doesn't have any moderation logs.",
+    "piece": "{{ERROR}} I could not resolve {{parameter, code}} to a valid piece of mine.",
+     "timespanTooLarge": "{{ERROR}} The timespan of {{parameter, code}} seems to be a timespan larger than **{{duration, remaining}}**, which isn't allowed.",
+    "timespanTooSmall": "{{ERROR}} A timespan of {{parameter, code}} is a timespan smaller than **{{duration, remaining}}**, which is too small.",
+    "unavailable": "Whoops! It seems I couldn't find a parser for a parameter, please contact my developer about it!\n"
+}
