@@ -2,6 +2,14 @@
 	"aboutDescription": "",
 	"aboutSummary": "",
 	"avatarDescription": "",
+	"helpCategories": {
+		"admin": "",
+		"configuration": "",
+		"general": "",
+		"misc": "",
+		"moderation": "",
+		"websearch": ""
+	},
 	"helpData": {
 		"footer": "",
 		"title": ""
