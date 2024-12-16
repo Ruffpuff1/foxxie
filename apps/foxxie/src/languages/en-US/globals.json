@@ -1,6 +1,7 @@
 {
 	"abortOptions": ["stop", "cancel", "abort", "end", "done"],
 	"and": "{{value, and}}",
+	"and_static": "and",
 	"any": "any",
 	"case": "Case",
 	"chatInputOptionHidden": "hidden",
