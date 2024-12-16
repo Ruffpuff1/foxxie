@@ -15,6 +15,7 @@ export class UserListener extends Listener {
 		await this.container.client.invites.findUsedInvite(member);
 		if (await this.#handleStickyRoles(member)) return;
 		this.container.client.emit(FoxxieEvents.NotMutedMemberAdd, member);
+		this.container.client.emit(FoxxieEvents.GuildMemberCountChannelUpdate, member);
 	}
 
 	async #handleStickyRoles(member: GuildMember) {

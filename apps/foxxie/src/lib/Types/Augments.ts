@@ -49,6 +49,7 @@ declare module 'discord.js' {
 		[FoxxieEvents.ChatInputCommandLogging]: [interaction: ChatInputCommandInteraction, command: FoxxieCommand];
 		[FoxxieEvents.Console]: [state: ConsoleState, message: string];
 		[FoxxieEvents.GuildMemberAddMuted]: [member: GuildMember, settings: ReadonlyGuildData];
+		[FoxxieEvents.GuildMemberCountChannelUpdate]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberJoin]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberUpdateRolesManualMute]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberUpdateRolesManualUnmute]: [member: GuildMember];
