@@ -2,66 +2,68 @@
 	"additionalBranchPrefix": "{{parentDir}} -",
 	"assigneesFromCodeOwners": true,
 	"extends": [
-		"config:base"
+		"config:recommended"
 	],
 	"labels": [
 		"Meta: Dependencies"
 	],
 	"ignorePaths": [
-      "apps/fokushi/package.json",
-	  "apps/foxxie-alpha/package.json",
-	  "apps/foxxie-v2/package.json",
-	  "apps/foxxie-v3/package.json",
-	  "apps/foxxie-v5/package.json",
-	  "apps/foxxie-v6/package.json",
-	  "apps/foxxie-v7/package.json",
-	  "apps/kettu/package.json",
-	  "docker/ravy.lgbt/**",
-	  "graphql/stardrop/**",
-	  "packages/celestia/api-types",
-	  "packages/env",
-	  "packages/eslint-config",
-	  "packages/fetch",
-	  "packages/fetch-v0.0.2",
-	  "packages/fuzzysearch",
-	  "packages/i18n",
-	  "packages/lock-queue",
-	  "packages/sanitize",
-	  "packages/stardrop",
-	  "packages/types",
-	  "web/celestia",
-	  "web/foxxie-invite",
-	  "web/home"
-  ],
+		"apps/fokushi/package.json",
+		"apps/foxxie-alpha/package.json",
+		"apps/foxxie-v2/package.json",
+		"apps/foxxie-v3/package.json",
+		"apps/foxxie-v5/package.json",
+		"apps/foxxie-v6/package.json",
+		"apps/foxxie-v7/package.json",
+		"apps/kettu/package.json",
+		"docker/ravy.lgbt/**",
+		"graphql/stardrop/**",
+		"packages/celestia/api-types",
+		"packages/env",
+		"packages/eslint-config",
+		"packages/fetch",
+		"packages/fetch-v0.0.2",
+		"packages/fuzzysearch",
+		"packages/i18n",
+		"packages/lock-queue",
+		"packages/sanitize",
+		"packages/stardrop",
+		"packages/types",
+		"web/celestia",
+		"web/foxxie-invite",
+		"web/home"
+	],
 	"npm": {
 		"packageRules": [
 			{
-				"extends": "packages:apollographql",
+				"extends": [
+					"packages:apollographql"
+				],
 				"groupName": "Apollo GraphQL packages"
 			},
 			{
-				"matchPackagePatterns": [
-					"@sapphire"
-				],
-				"groupName": "Sapphire Dependencies"
+				"groupName": "Sapphire Dependencies",
+				"matchPackageNames": [
+					"/@sapphire/"
+				]
 			},
 			{
-				"matchPackagePatterns": [
-					"@influxdata"
-				],
-				"groupName": "InfluxDB Dependencies"
+				"groupName": "InfluxDB Dependencies",
+				"matchPackageNames": [
+					"/@influxdata/"
+				]
 			},
 			{
-				"matchPackagePatterns": [
-					"@ruffpuff"
-				],
-				"groupName": "Ruffpuff Dependencies"
+				"groupName": "Ruffpuff Dependencies",
+				"matchPackageNames": [
+					"/@ruffpuff/"
+				]
 			},
 			{
-				"matchPackagePatterns": [
-					"@foxxie"
-				],
-				"groupName": "Foxxie Dependencies"
+				"groupName": "Foxxie Dependencies",
+				"matchPackageNames": [
+					"/@foxxie/"
+				]
 			}
 		]
 	}
