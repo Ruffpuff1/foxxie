@@ -9,13 +9,15 @@ import { FoxxieEvents } from '#lib/types';
 import { GuildMemberRemoveBuilder } from '#utils/Discord/builders/GuildMemberRemoveBuilder';
 import { getLogger, getModeration } from '#utils/functions';
 import { TypeVariation } from '#utils/moderationConstants';
-import { type GatewayGuildMemberRemoveDispatchData, type Guild, type GuildMember } from 'discord.js';
+import { type GatewayGuildMemberRemoveDispatchData, type Guild, GuildMember } from 'discord.js';
 
 const Root = LanguageKeys.Listeners.Guilds.Members;
 
 @ApplyOptions<Listener.Options>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: FoxxieEvents.RawMemberRemove }))
 export class UserListener extends Listener {
 	public async run(guild: Guild, member: GuildMember | null, { user }: GatewayGuildMemberRemoveDispatchData) {
+		if (member instanceof GuildMember) this.container.client.emit(FoxxieEvents.GuildMemberCountChannelUpdate, member);
+
 		const settings = await readSettings(guild);
 		const targetChannelId = settings.channelsLogsMemberRemove;
 		if (isNullish(targetChannelId)) return;
