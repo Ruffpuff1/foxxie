@@ -4,6 +4,18 @@ export interface LanguageHelpDisplayOptions {
 	extendedHelp?: string;
 	possibleFormats?: [string, string][];
 	reminder?: string;
+	subcommands?: LanguageHelpDisplaySubcommandOptions[];
+	usages?: string[];
+}
+
+export interface LanguageHelpDisplaySubcommandOptions {
+	aliases?: string[];
+	examples?: (null | string)[];
+	explainedUsage?: [string, string][];
+	extendedHelp?: string | string[];
+	name: string;
+	possibleFormats?: [string, string][];
+	reminder?: string;
 	usages?: string[];
 }
 

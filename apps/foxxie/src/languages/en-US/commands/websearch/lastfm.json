@@ -1,0 +1,52 @@
+{
+    "description": "Track your music with the Last.fm API",
+    "detailedDescription": {
+        "extendedHelp": [
+            "This command is an extensive integration with the [Last.fm](https://last.fm) API that allows you to track your music stats.",
+            "Inspired by [`.fmbot`](https://github.com/fmbot-discord/fmbot/) with some modified features, you can view information for artists, tracks, albums, users and many more."
+        ],
+        "subcommands": [
+            {
+                "extendedHelp": [
+                    "Update your playcount based on your latest [Last.fm](https://last.fm) plays.",
+                    "You can also reindex parts of you cached playcount by using the following options."
+                ],
+                "name": "update",
+                "aliases": [
+                    "u"
+                ],
+                "examples": [
+                    "",
+                    "full",
+                    "plays",
+                    "artists"
+                ],
+                "explainedUsage": [
+                    [
+                        "Mode",
+                        "The update mode to use, this will determine what I index.\n- **Full**: Completely updates your cached last.fm data, basically a combination of all options below.\n- **Plays**: Update all of your indexed plays from last.fm, this will not reindex any plays imported through spotify or apple music.\n- **Artists**: Update all artists you've listened to and their playcounts."
+                    ]
+                ],
+                "reminder": "This subcommand requires you to be logged in with Last.fm.",
+                "usages": [
+                    "",
+                    "Mode"
+                ]
+            }
+        ]
+    },
+    "updateLoading": "{{LOADING}} Just a second, fetching your latest scrobbles...",
+    "updateNoListeningHistory": [
+        "{{LOADING}} The Last.fm user {{username, bold}} has no listening history on [their profile](<{{url}}>) yet.",
+        "-# • *Just created your Last.fm account? Make sure you set it to [track your music app](<https://www.last.fm/about/trackmymusic>).*",
+        "-# • *Using Spotify? You can link that [here](<https://www.last.fm/settings/applications>). This can take a few minutes to start working.*"
+    ],
+    "updateNothingNew": "{{LOADING}} Nothing new found on [your Last.fm profile](<{{url}}>) since last check {{previous, duration}}.",
+    "updateOptions": {
+        "full": ["all", "full"],
+        "plays": ["play", "plays", "scrobbles"],
+        "artists": ["artist", "artists"]
+    },
+    "updateSuccessNew": "{{SUCCESS}} Your cached playcounts have been updated based on {{count, number, bold}} new scrobble.",
+    "updateSuccessNew_other": "{{SUCCESS}} Your cached playcounts have been updated based on {{count, number, bold}} new scrobbles."
+}

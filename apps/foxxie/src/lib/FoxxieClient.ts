@@ -70,9 +70,9 @@ export default class FoxxieClient extends SapphireClient {
 	}
 
 	public override enabledProdOnlyEvent() {
-		// if (this.development) {
-		// 	return this.developmentRecoveryMode;
-		// }
+		if (this.development) {
+			return this.developmentRecoveryMode;
+		}
 
 		return true;
 	}

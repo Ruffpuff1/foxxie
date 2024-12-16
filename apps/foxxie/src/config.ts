@@ -46,7 +46,8 @@ const defaultPaginationOptions = [
 	PaginatedMessage.defaultActions[2], // previous
 	PaginatedMessage.defaultActions[5], // stop
 	PaginatedMessage.defaultActions[3], // next
-	PaginatedMessage.defaultActions[4] // last
+	PaginatedMessage.defaultActions[4], // last
+	PaginatedMessage.defaultActions[0]
 ];
 
 FoxxiePaginatedMessageEmbedFields.defaultActions = defaultPaginationOptions;

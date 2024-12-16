@@ -35,3 +35,5 @@ export const PokemonTitles = T<{
 	types: string;
 	weight: string;
 }>('commands/websearch:pokemonTitles');
+
+export * from './websearch/index.js';
