@@ -1,0 +1,18 @@
+{
+    "serverCreated": "Created by {{owner, bold}} on {{created, fulldate}} ({{created, duration}})",
+    "serverEmojis": "Static: {{static, number, bold}}\nAnimated: {{animated, number, bold}}",
+    "serverMessages": "{{messages, number}} messages sent",
+    "serverRolesAndMore": "and {{count, number}} more.",
+    "serverSecurity": "Verification level: {{filter, verificationlevel}}\nExplicit filter: {{content, explicitContentFilter}}",
+    "serverTitles": {
+        "channels": ":speech_balloon: Channel",
+        "channels_other": ":speech_balloon: Channels ({{count}})",
+        "emojis": ":sunglasses: Emoji",
+        "emojis_other": ":sunglasses: Emojis ({{count}})",
+        "members": ":busts_in_silhouette: Members",
+        "roles": ":scroll: Role",
+        "roles_other": ":scroll: Roles ({{count}})",
+        "security": ":lock: Security",
+        "stats": ":bar_chart: Statistics"
+    }
+}
