@@ -1,7 +1,7 @@
 {
-	"NONE": "None",
-	"LOW": "Low",
-	"MEDIUM": "Medium",
-	"HIGH": "(╯°□°）╯︵ ┻━┻",
-	"VERY_HIGH": "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻"
+	"none": "None",
+	"low": "Low",
+	"medium": "Medium",
+	"high": "(╯°□°）╯︵ ┻━┻",
+	"veryHigh": "┻━┻ ﾐヽ(ಠ益ಠ)ノ彡┻━┻"
 }
