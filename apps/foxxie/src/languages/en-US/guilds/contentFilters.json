@@ -1,5 +1,5 @@
 {
-	"explicitContentFilterDisabled": "Don't scan any messages",
-	"explicitContentFilterMembersWithoutRoles": "Scan messages from members without a role",
-	"explicitContentFilterAllMembers": "Scan messages by all members"
+	"disabled": "Don't scan any messages",
+	"membersWithoutRoles": "Scan messages from members without a role",
+	"allMembers": "Scan messages by all members"
 }
