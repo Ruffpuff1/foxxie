@@ -2,7 +2,7 @@
   "name": "foxxie",
   "private": true,
   "workspaces": [
-    "apps/*"
+    "apps/foxxie"
   ],
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

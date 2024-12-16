@@ -2,6 +2,7 @@ import { resolveToNull } from '@ruffpuff/utilities';
 import { isImageAttachment } from '@sapphire/discord.js-utilities';
 import { ArgType, container } from '@sapphire/framework';
 import { first } from '@sapphire/iterator-utilities/first';
+import { SubcommandMapping } from '@sapphire/plugin-subcommands';
 import { cast, isNullishOrEmpty, isNumber, isThenable } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
 import { ScheduleEntry } from '#lib/schedule';
@@ -367,4 +368,10 @@ export const getUnionArg = async <K extends keyof ArgType, T>(cb: (opt: K) => Pr
  */
 export function isUserSelf(userId: Snowflake) {
 	return userId === process.env.CLIENT_ID;
+}
+
+export function mapSubcommandAliases(name: string, messageRun: string, isDefault: boolean, ...aliases: string[]): SubcommandMapping[] {
+	const inital = { default: isDefault, messageRun, name };
+	const mapped = aliases.map((a) => ({ messageRun, name: a }) as SubcommandMapping);
+	return [inital, ...mapped];
 }

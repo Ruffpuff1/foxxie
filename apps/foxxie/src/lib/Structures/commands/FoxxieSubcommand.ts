@@ -4,7 +4,7 @@ import { cast } from '@sapphire/utilities';
 import FoxxieClient from '#lib/FoxxieClient';
 import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
 import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
-import { DetailedDescription, DetailedDescriptionArgs, PermissionLevels, TypedFT, TypedT } from '#lib/types';
+import { DetailedDescription, DetailedDescriptionArgs, GuildMessage, PermissionLevels, TypedFT, TypedT } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { seconds } from '#utils/common';
 import { ChatInputCommandInteraction, Message, Snowflake } from 'discord.js';
@@ -112,6 +112,7 @@ export namespace FoxxieSubcommand {
 	export type Interaction = ChatInputCommandInteraction;
 	export type LoaderContext = Command.LoaderContext;
 	export type Options = ExtendOptions<Subcommand.Options>;
+	export type RunArgs = [message: GuildMessage, args: Args];
 
 	export type RunContext = MessageCommand.RunContext;
 }
@@ -122,6 +123,6 @@ export type ExtendOptions<T> = {
 	detailedDescription: TypedFT<DetailedDescriptionArgs, DetailedDescription> | TypedT<LanguageHelpDisplayOptions>;
 	guarded?: boolean;
 	hidden?: boolean;
-	permissionLevel?: number;
+	permissionLevel?: PermissionLevels;
 	usage?: string;
 } & T;
