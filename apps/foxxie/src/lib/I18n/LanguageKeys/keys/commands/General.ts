@@ -129,3 +129,5 @@ export const StatsMenu = FT<
 	},
 	string
 >('commands/general:statsMenu');
+
+export * from './general/index.js';

@@ -1,7 +1,7 @@
 import { T } from '#lib/types';
 
-export const NONE = T('guilds/verificationLevels:NONE');
-export const LOW = T('guilds/verificationLevels:LOW');
-export const MEDIUM = T('guilds/verificationLevels:MEDIUM');
-export const HIGH = T('guilds/verificationLevels:HIGH');
-export const VERY_HIGH = T('guilds/verificationLevels:VERY_HIGH');
+export const None = T('guilds/verificationLevels:none');
+export const Low = T('guilds/verificationLevels:low');
+export const Medium = T('guilds/verificationLevels:medium');
+export const High = T('guilds/verificationLevels:high');
+export const VeryHigh = T('guilds/verificationLevels:veryHigh');
