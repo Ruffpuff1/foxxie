@@ -1,3 +1,5 @@
+export * as Kick from '#lib/I18n/LanguageKeys/keys/commands/moderation/Kick';
+export * as Mute from '#lib/I18n/LanguageKeys/keys/commands/moderation/Mute';
 export * as Timeout from '#lib/I18n/LanguageKeys/keys/commands/moderation/Timeout';
 export * as Untimeout from '#lib/I18n/LanguageKeys/keys/commands/moderation/Untimeout';
 export * as Utilities from '#lib/I18n/LanguageKeys/keys/commands/moderation/utilities/index';
@@ -81,10 +83,10 @@ export const ModerationDmDescriptionWithReasonWithDuration = FT<
 	{ duration: null | number; guild: string; reason: null | string; title: string },
 	string
 >('commands/moderation:moderationDmDescriptionWithReasonWithDuration');
-export const ModerationOutput = FT<{ count: number; range: number | string; reason: null | string; users: string }>(
+export const ModerationOutput = FT<{ count: number; range: number | string; reason: null | string; users: string[] }>(
 	'commands/moderation:moderationOutput'
 );
-export const ModerationOutputWithReason = FT<{ count: number; range: number | string; reason: null | string; users: string }>(
+export const ModerationOutputWithReason = FT<{ count: number; range: number | string; reason: null | string; users: string[] }>(
 	'commands/moderation:moderationOutputWithReason'
 );
 export const Permissions = FT<{ id: string; username: string }>('commands/moderation:permissions');

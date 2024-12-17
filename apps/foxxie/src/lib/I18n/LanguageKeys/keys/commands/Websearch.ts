@@ -14,26 +14,5 @@ export const PokemonMoveSelectPages = T<string[]>('commands/websearch:pokemonMov
 export const PokemonOptionMove = T('commands/websearch:pokemonOptionMove');
 export const PokemonOptionPokemon = T('commands/websearch:pokemonOptionPokemon');
 export const PokemonOptionSprite = T('commands/websearch:pokemonOptionSprite');
-export const PokemonTitles = T<{
-	abilities: string;
-	baseStats: string;
-	baseStatsTotal: string;
-	cosmetic: string;
-	dex: string;
-	eggGroups: string;
-	eggObtainable: string;
-	ev: string;
-	evolutions: string;
-	external: string;
-	gender: string;
-	height: string;
-	levelingRate: string;
-	maxHatch: string;
-	minHatch: string;
-	other: string;
-	smogon: string;
-	types: string;
-	weight: string;
-}>('commands/websearch:pokemonTitles');
 
 export * from './websearch/index.js';

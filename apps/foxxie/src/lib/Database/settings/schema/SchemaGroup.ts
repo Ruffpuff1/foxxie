@@ -1,8 +1,7 @@
-import type { TFunction } from '@sapphire/plugin-i18next';
-
 import { codeBlock, isNullish, toTitleCase } from '@sapphire/utilities';
 import { ISchemaValue, ReadonlyGuildData, SchemaKey } from '#lib/database';
 import { AliasedCollection } from '#lib/Database/settings/structures/collections/AliasedCollection';
+import { FTFunction } from '#lib/types';
 
 export type NonEmptyArray<T> = [T, ...T[]];
 
@@ -53,7 +52,7 @@ export class SchemaGroup extends AliasedCollection<string, SchemaGroup | SchemaK
 		}
 	}
 
-	public display(settings: ReadonlyGuildData, language: TFunction) {
+	public display(settings: ReadonlyGuildData, language: FTFunction) {
 		const folders: string[] = [];
 		const sections = new Map<string, string[]>();
 		let longest = 0;

@@ -11,6 +11,7 @@ import {
 import { PaginatedMessage, PaginatedMessageAction } from '@sapphire/discord.js-utilities';
 import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
+import { FTFunction } from '#lib/types';
 import { Emojis } from '#lib/util/constants';
 import {
 	APIButtonComponentWithURL,
@@ -23,7 +24,6 @@ import {
 	inlineCode,
 	italic
 } from 'discord.js';
-import { TFunction } from 'i18next';
 
 import { FavouredEntry, KeysContaining } from '../utils.js';
 
@@ -53,9 +53,9 @@ export class PokemonResponseBuilder {
 
 	private spriteToGet: PokemonSpriteTypes;
 
-	private t: TFunction;
+	private t: FTFunction;
 
-	public constructor(pokeDetails: PokeDetails, spriteToGet: PokemonSpriteTypes, t: TFunction) {
+	public constructor(pokeDetails: PokeDetails, spriteToGet: PokemonSpriteTypes, t: FTFunction) {
 		this.pokeDetails = pokeDetails;
 		this.spriteToGet = spriteToGet;
 		this.t = t;
@@ -67,7 +67,7 @@ export class PokemonResponseBuilder {
 	}
 
 	public build(): PaginatedMessage {
-		const titles = this.t(LanguageKeys.Commands.Websearch.PokemonTitles);
+		const titles = this.t(LanguageKeys.Commands.Websearch.Pokemon.Titles);
 		const pageLabels = this.t(LanguageKeys.Commands.Websearch.PokemonDexSelectPages);
 
 		const display = new PaginatedMessage({
@@ -90,7 +90,7 @@ export class PokemonResponseBuilder {
 				embed.addFields(
 					{
 						inline: true,
-						name: this.t(`${LanguageKeys.Commands.Websearch.PokemonTitles}.type`, {
+						name: this.t(LanguageKeys.Commands.Websearch.Pokemon.TitlesType, {
 							count: this.pokeDetails.types.length
 						}),
 						value: this.pokeDetails.types.map((type) => type.name).join(', ')

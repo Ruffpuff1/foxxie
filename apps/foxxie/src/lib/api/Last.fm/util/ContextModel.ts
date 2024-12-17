@@ -1,12 +1,12 @@
 import { UserDiscogs, UserLastFM } from '@prisma/client';
-import { TFunction } from '@sapphire/plugin-i18next';
+import { FTFunction } from '#lib/types';
 import { Guild, GuildTextBasedChannel, Message, MessageReference, Snowflake, StringSelectMenuBuilder, User } from 'discord.js';
 
 export interface LfmCommandContext {
 	channel: GuildTextBasedChannel;
 	guild: Guild;
 	message: Message;
-	t: TFunction;
+	t: FTFunction;
 	user: User;
 }
 
@@ -21,7 +21,7 @@ export class ContextModel {
 	public referencedMessage: MessageReference | null;
 	public selectMenu?: StringSelectMenuBuilder;
 	public slashCommand?: boolean;
-	public t: TFunction;
+	public t: FTFunction;
 
 	public constructor(context: LfmCommandContext, prefix: string, contextUser: null | UserLastFM = null) {
 		this.prefix = prefix;

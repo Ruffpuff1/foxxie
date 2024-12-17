@@ -1,5 +1,7 @@
 import type { ClientEvents } from 'discord.js';
 
+import { TFunction } from '@sapphire/plugin-i18next';
+
 import { FoxxieEvents } from './Events.js';
 
 export const enum ConsoleState {
@@ -81,12 +83,12 @@ export type LanguageString = 'en-US' | 'es-ES';
 export interface Parameter {
 	parameter: string;
 }
-
 export interface RoleLanguageKeyData {
 	init: string;
 	name: string;
 	reason: string;
 }
+
 export interface SubcommandDescription {
 	command: string;
 	description: string;
@@ -98,9 +100,9 @@ export interface SubcommandOption {
 	description: string;
 	name: string;
 }
-
 export type TypedFT<TArgs, TReturn = string> = { __args__: TArgs; __return__: TReturn } & string;
 export type TypedT<TCustom = string> = { __type__: TCustom } & string;
+
 export interface Value<T = string> {
 	value: T;
 }
@@ -116,11 +118,22 @@ interface EmojiObjectPartial {
 }
 
 type EventKey = keyof ClientEvents | keyof FoxxieEvents;
-
 export function FT<TArgs, TReturn = string>(k: string): TypedFT<TArgs, TReturn> {
 	return k as TypedFT<TArgs, TReturn>;
 }
 
 export function T<TCustom = string>(k: string): TypedT<TCustom> {
 	return k as TypedT<TCustom>;
+}
+
+export const FoxxieT = (func: TFunction) => {
+	return func as FTFunction;
+};
+
+export interface FTFunction {
+	lng: string;
+	ns?: string;
+
+	<TArgs, TReturn>(key: TypedFT<TArgs, TReturn>, args: TArgs): TReturn;
+	<TReturn>(key: TypedT<TReturn>): TReturn;
 }

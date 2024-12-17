@@ -9,8 +9,8 @@ type ValueType = null;
 
 @ApplyOptions<SetUpModerationCommand.Options<Type>>({
 	aliases: ['m'],
-	description: LanguageKeys.Commands.Moderation.CaseDescription,
-	detailedDescription: LanguageKeys.Commands.Moderation.BanDetailedDescription,
+	description: LanguageKeys.Commands.Moderation.Mute.Description,
+	detailedDescription: LanguageKeys.Commands.Moderation.Mute.DetailedDescription,
 	requiredClientPermissions: [PermissionFlagsBits.ManageRoles],
 	type: TypeVariation.Mute
 })

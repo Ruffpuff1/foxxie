@@ -61,7 +61,6 @@ export class UserCommand extends FoxxieCommand {
 				args.t(LanguageKeys.Commands.Admin.EvalConsole, {
 					footer,
 					name: hostname(),
-					output: formatted,
 					time
 				})
 			);

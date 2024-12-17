@@ -107,8 +107,6 @@ export class DiscogsService {
 
 				existingReleases.push(newRelease);
 				userDiscogsRelease.releaseId = newRelease.discogsId;
-
-				console.log(newRelease);
 			} else {
 				userDiscogsRelease.releaseId = existingRelease.discogsId;
 			}

@@ -6,7 +6,7 @@ import { captureException } from '@sentry/node';
 import { envParseBoolean, envParseString } from '@skyra/env-utilities';
 import { getSupportedUserLanguageT, LanguageKeys, translate } from '#lib/i18n';
 import { FoxxieArgs, FoxxieCommand } from '#lib/structures';
-import { EnvKeys, FoxxieEvents } from '#lib/types';
+import { EnvKeys, FoxxieEvents, FTFunction, TypedFT, TypedT } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { getCodeStyle, getLogPrefix, sendTemporaryMessage } from '#utils/functions';
 import { codeBlock, DiscordAPIError, HTTPError, Message, RESTJSONErrorCodes, Routes, Snowflake } from 'discord.js';
@@ -14,7 +14,7 @@ import { exists } from 'i18next';
 
 const Root = LanguageKeys.Listeners.Errors;
 
-export function stringifyError(t: TFunction, error: unknown): string {
+export function stringifyError(t: FTFunction, error: unknown): string {
 	switch (typeof error) {
 		case 'bigint':
 		case 'boolean':
@@ -30,12 +30,12 @@ export function stringifyError(t: TFunction, error: unknown): string {
 	}
 }
 
-function stringifyErrorObject(t: TFunction, error: null | object): string {
+function stringifyErrorObject(t: FTFunction, error: null | object): string {
 	return error instanceof Error ? stringifyErrorException(t, error) : String(error);
 }
 
-function stringifyErrorString(t: TFunction, error: string): string {
-	return exists(error) ? (t(error) as string) : error;
+function stringifyErrorString(t: FTFunction, error: string): string {
+	return exists(error) ? t(error as TypedT<string>) : error;
 }
 
 const isSuppressedError =
@@ -43,14 +43,14 @@ const isSuppressedError =
 		? (error: Error): error is SuppressedError => 'error' in error && 'suppressed' in error
 		: (error: Error): error is SuppressedError => error instanceof SuppressedError;
 
-function stringifyDiscordAPIError(t: TFunction, error: DiscordAPIError) {
+function stringifyDiscordAPIError(t: FTFunction, error: DiscordAPIError) {
 	const key = getDiscordError(Number(error.code));
 	return t(key!);
 }
 
-function stringifyErrorException(t: TFunction, error: Error): string {
+function stringifyErrorException(t: FTFunction, error: Error): string {
 	if (error.name === 'AbortError') return t(LanguageKeys.Listeners.Errors.Abort);
-	if (error instanceof UserError) return t(error.identifier, error.context as any) as string;
+	if (error instanceof UserError) return t(error.identifier as TypedFT<object, string>, error.context as any);
 	if (error instanceof ResultError) return stringifyError(t, error.value);
 	if (error instanceof DiscordAPIError) return stringifyDiscordAPIError(t, error);
 	if (error instanceof HTTPError) return stringifyHTTPError(t, error);
@@ -59,7 +59,7 @@ function stringifyErrorException(t: TFunction, error: Error): string {
 	return error.message;
 }
 
-function stringifyHTTPError(t: TFunction, error: HTTPError) {
+function stringifyHTTPError(t: FTFunction, error: HTTPError) {
 	const key = getHttpError(error.status);
 	return t(key!);
 }
@@ -83,7 +83,7 @@ export async function handleChatInputCommandError(error: unknown, payload: ChatI
 
 export async function handleMessageCommandError(error: unknown, payload: MessageCommandErrorPayload | MessageSubcommandErrorPayload) {
 	const { command, message } = payload;
-	let t: TFunction;
+	let t: FTFunction;
 	let parameters: string;
 	if ('args' in payload) {
 		t = cast<FoxxieArgs>(payload.args).t;
@@ -158,7 +158,7 @@ function flattenError(command: Command, error: unknown): null | string | UserErr
 	return null;
 }
 
-function generateUnexpectedErrorMessage(userId: Snowflake, command: MessageCommand | Subcommand, t: TFunction, error: unknown) {
+function generateUnexpectedErrorMessage(userId: Snowflake, command: MessageCommand | Subcommand, t: FTFunction, error: unknown) {
 	if (clientOwners.includes(userId)) return codeBlock('js', String(error));
 	if (!envParseBoolean(EnvKeys.SentryEnabled)) return t(LanguageKeys.Listeners.Errors.Unexpected);
 
@@ -207,7 +207,7 @@ function messageAlert(message: Message, content: string) {
 	return sendTemporaryMessage(message, { allowedMentions: { roles: [], users: [message.author.id] }, content });
 }
 
-function messageArgumentError(message: Message, t: TFunction, error: ArgumentError<unknown>) {
+function messageArgumentError(message: Message, t: FTFunction, error: ArgumentError<unknown>) {
 	const argument = error.argument.name;
 	const identifier = translate(error.identifier);
 	const parameter = error.parameter.replaceAll('`', '῾');
@@ -217,7 +217,7 @@ function messageArgumentError(message: Message, t: TFunction, error: ArgumentErr
 
 	return messageAlert(
 		message,
-		t(identifier, {
+		t(identifier as TypedFT<unknown, string>, {
 			...error,
 			...(error.context as object),
 			argument,
@@ -251,7 +251,7 @@ function messageStringError(message: Message, error: string) {
 	return messageAlert(message, error);
 }
 
-function messageUserError(message: Message, t: TFunction, error: UserError) {
+function messageUserError(message: Message, t: FTFunction, error: UserError) {
 	// `context: { silent: true }` should make UserError silent:
 	// Use cases for this are for example permissions error when running the `eval` command.
 	if (Reflect.get(Object(error.context), 'silent')) return;
@@ -260,7 +260,7 @@ function messageUserError(message: Message, t: TFunction, error: UserError) {
 	const command = Reflect.get(Object(error.context), 'command') as FoxxieCommand | undefined;
 	const commandName = command ? command.name : null;
 	const identifier = translate(error.identifier);
-	const content = t(identifier, { ...Object(error.context), context: commandName, prefix }) as string;
+	const content = t(identifier as TypedFT<unknown, string>, { ...Object(error.context), context: commandName, prefix }) as string;
 	return messageAlert(message, content);
 }
 

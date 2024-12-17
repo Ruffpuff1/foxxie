@@ -1,5 +1,4 @@
-import type { TFunction } from '@sapphire/plugin-i18next';
-import type { TypedT } from '#lib/types';
+import type { FTFunction, TypedT } from '#lib/types';
 
 import { container } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
@@ -88,7 +87,7 @@ export class SchemaKey<K extends GuildDataKey = GuildDataKey> implements ISchema
 		this.dashboardOnly = options.dashboardOnly ?? false;
 	}
 
-	public display(settings: ReadonlyGuildData, t: TFunction): string {
+	public display(settings: ReadonlyGuildData, t: FTFunction): string {
 		const { serializer } = this;
 		const context = this.getContext(settings, t);
 
@@ -103,7 +102,7 @@ export class SchemaKey<K extends GuildDataKey = GuildDataKey> implements ISchema
 		return isNullish(value) ? t(LanguageKeys.Commands.Admin.ConfSettingNotSet) : serializer.stringify(value, context);
 	}
 
-	public getContext(settings: ReadonlyGuildData, language: TFunction): Serializer.UpdateContext {
+	public getContext(settings: ReadonlyGuildData, language: FTFunction): Serializer.UpdateContext {
 		return {
 			entity: settings,
 			entry: this,
@@ -125,7 +124,7 @@ export class SchemaKey<K extends GuildDataKey = GuildDataKey> implements ISchema
 		});
 	}
 
-	public stringify(settings: ReadonlyGuildData, t: TFunction, value: ReadonlyGuildData[K]): string {
+	public stringify(settings: ReadonlyGuildData, t: FTFunction, value: ReadonlyGuildData[K]): string {
 		const { serializer } = this;
 		const context = this.getContext(settings, t);
 		return serializer.stringify(value, context);

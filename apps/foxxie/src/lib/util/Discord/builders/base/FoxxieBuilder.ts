@@ -1,4 +1,4 @@
-import { TFunction } from '@sapphire/plugin-i18next';
+import { FTFunction } from '#lib/types';
 import { ColorResolvable, EmbedAuthorOptions, EmbedBuilder, EmbedFooterOptions, MessageCreateOptions } from 'discord.js';
 
 export class FoxxieBuilder {
@@ -8,7 +8,7 @@ export class FoxxieBuilder {
 
 	protected embed: EmbedBuilder;
 
-	public constructor(public t: TFunction) {
+	public constructor(public t: FTFunction) {
 		this.embed = new EmbedBuilder();
 	}
 

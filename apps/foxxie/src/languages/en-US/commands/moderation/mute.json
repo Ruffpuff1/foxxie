@@ -1,0 +1,40 @@
+{
+    "description": "Mute a user in all text and voice channels.",
+    "detailedDescription": {
+        "extendedHelp": [
+            "Mute up to ten members of the server with an optional time and reason.",
+            "This command requires the **Manage Roles** permission, and only members with a lower role can be managed by me.",
+            "The server owner cannot be kicked.\n\n",
+            "This moderation command can be optionally timed to create a temporary mute. I will remove the member's roles temporarily and give them back after they are unmuted.",
+            "The muted role is **sticky**, if the member tries to remove it by rejoining the server it will be added back.\n\n",
+            "If there is no mute role setup in your server I will first prompt you to configure an existing role.",
+            "If you want, I can also create a new role with the correct permission overwrites set up for you."
+        ],
+        "usages": [
+            "User",
+            "User1 User2 User3...User10",
+            "User Duration",
+            "User1 User2 Duration Reason"
+        ],
+        "examples": [
+            "@Connor",
+            "@Christian being rude",
+            "@Edgar 24h"
+        ],
+        "explainedUsage": [
+            [
+                "User/User1/User2",
+                "The user(s) to kick from the server, can be a total of 10 users."
+            ],
+            [
+                "Duration",
+                "The amount of time this mute should last. For example `24h` for 24 hours. The user(s) will be automatically unmuted after this time."
+            ],
+            [
+                "Reason",
+                "The reason for the mute. This will also show in the server's audit logs."
+            ]
+        ],
+        "reminder": "If the `modules.moderation.events.mute-add` settings key is enabled I will also log when you manually add the mute role to a user."
+    }
+}

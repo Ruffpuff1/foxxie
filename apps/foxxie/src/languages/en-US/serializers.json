@@ -1,5 +1,5 @@
 {
-	"invalidCommand": "{{name}} doesn't seem to be one of my commands. If you forgot, feel free to run my `help` command.",
+	"invalidCommand": "{{param}} doesn't seem to be one of my commands. If you forgot, feel free to run my `help` command.",
 	"invalidFloat": "{{name}} must be a valid number.",
 	"invalidGuild": "{{name}} must be a valid server ID.",
 	"invalidInt": "{{name}} must be an integer.",

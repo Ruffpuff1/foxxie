@@ -1,20 +1,20 @@
 import { Args, MessageCommand, MessageCommandContext, Result, UserError } from '@sapphire/framework';
 import { ArgumentStream, Parser } from '@sapphire/lexure';
-import { TFunction } from '@sapphire/plugin-i18next';
+import { FTFunction } from '#lib/types';
 import { Message } from 'discord.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface FoxxieArgs extends Args {
 	command: MessageCommand;
-	t: TFunction;
+	t: FTFunction;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class FoxxieArgs extends Args {
-	public override t: TFunction;
+	public override t: FTFunction;
 
 	// eslint-disable-next-line max-params
-	public constructor(message: Message, command: MessageCommand, parser: ArgumentStream, context: MessageCommandContext, t: TFunction) {
+	public constructor(message: Message, command: MessageCommand, parser: ArgumentStream, context: MessageCommandContext, t: FTFunction) {
 		super(message, command, parser, context);
 		this.t = t;
 	}
@@ -60,7 +60,7 @@ export class FoxxieArgs extends Args {
 		return this.rest('string').catch(() => '');
 	}
 
-	public static from(command: MessageCommand, message: Message, parameters: string, context: MessageCommand.RunContext, t: TFunction) {
+	public static from(command: MessageCommand, message: Message, parameters: string, context: MessageCommand.RunContext, t: FTFunction) {
 		const parser = new Parser(command.strategy);
 		// eslint-disable-next-line @typescript-eslint/dot-notation
 		const args = new ArgumentStream(parser.run(command['lexer'].run(parameters)));
@@ -88,6 +88,6 @@ export namespace FoxxieArgs {
 declare module '@sapphire/framework' {
 	export interface Args {
 		color: number;
-		t: TFunction;
+		t: FTFunction;
 	}
 }

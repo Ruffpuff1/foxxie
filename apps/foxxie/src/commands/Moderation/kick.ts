@@ -12,8 +12,8 @@ type ValueType = null | Unlock;
 
 @ApplyOptions<ModerationCommand.Options<Type>>({
 	aliases: ['k'],
-	description: LanguageKeys.Commands.Moderation.CaseDescription,
-	detailedDescription: LanguageKeys.Commands.Moderation.KickDetailedDescription,
+	description: LanguageKeys.Commands.Moderation.Kick.Description,
+	detailedDescription: LanguageKeys.Commands.Moderation.Kick.DetailedDescription,
 	requiredClientPermissions: [PermissionFlagsBits.KickMembers],
 	requiredMember: true,
 	type: TypeVariation.Kick
@@ -21,7 +21,7 @@ type ValueType = null | Unlock;
 export class UserModerationCommand extends ModerationCommand<Type, ValueType> {
 	protected override async checkTargetCanBeModerated(message: GuildMessage, context: ModerationCommand.HandlerParameters<ValueType>) {
 		const member = await super.checkTargetCanBeModerated(message, context);
-		if (member && !member.kickable) throw context.args.t('commands/moderation/kick:notKickable');
+		if (member && !member.kickable) throw context.args.t(LanguageKeys.Commands.Moderation.Kick.NotKickable);
 		return member;
 	}
 

@@ -1,8 +1,8 @@
 import { MemberNote } from '@prisma/client';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { TFunction } from '@sapphire/plugin-i18next';
 import { LanguageKeys } from '#lib/i18n';
+import { FTFunction } from '#lib/types';
 import { bold } from 'discord.js';
 
 export class Note {
@@ -22,7 +22,7 @@ export class Note {
 		Object.assign(this, data);
 	}
 
-	public display(t: TFunction) {
+	public display(t: FTFunction) {
 		const name = this.author?.username || t(LanguageKeys.Globals.Unknown);
 		return [`${bold(t(LanguageKeys.Globals.NumberFormat, { value: this.id }))}.`, this.reason, `- **${name}**`].join(' ');
 	}

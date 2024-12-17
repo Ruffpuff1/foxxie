@@ -7,7 +7,7 @@ import { LanguageKeys } from '#lib/i18n';
 export class UserSerializer extends Serializer<string> {
 	public isValid(value: string, { entry, t }: Serializer.UpdateContext): Awaitable<boolean> {
 		const command = CommandMatcher.resolve(value);
-		if (!command) throw t(LanguageKeys.Serializers.InvalidCommand, { name: entry.name });
+		if (!command) throw t(LanguageKeys.Serializers.InvalidCommand, { param: value, name: entry.name });
 		return true;
 	}
 

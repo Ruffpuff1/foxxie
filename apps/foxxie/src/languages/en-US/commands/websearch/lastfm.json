@@ -35,6 +35,10 @@
             }
         ]
     },
+    "updateIndexDescription": "### {{LOADING}} Fetching your Last.fm playcounts...\nThe following playcount caches are being rebuilt: {{description}}",
+    "updateIndexStarted": "{{LOADING}} An advanced update has already been started for you! Please wait a few minutes before starting a new one.",
+    "updateIndexFrequent": "{{LOADING}} You can't do full updates too often. These are only really meant to be used when your Last.fm history has been adjusted.",
+    "updateLastScrobble": "-# *Your last scrobble was {{time, duration}}*",
     "updateLoading": "{{LOADING}} Just a second, fetching your latest scrobbles...",
     "updateNoListeningHistory": [
         "{{LOADING}} The Last.fm user {{username, bold}} has no listening history on [their profile](<{{url}}>) yet.",
@@ -48,5 +52,10 @@
         "artists": ["artist", "artists"]
     },
     "updateSuccessNew": "{{SUCCESS}} Your cached playcounts have been updated based on {{count, number, bold}} new scrobble.",
-    "updateSuccessNew_other": "{{SUCCESS}} Your cached playcounts have been updated based on {{count, number, bold}} new scrobbles."
+    "updateSuccessNew_other": "{{SUCCESS}} Your cached playcounts have been updated based on {{count, number, bold}} new scrobbles.",
+    "updateTypes": {
+        "artists": "Artists",
+        "everything": "Everything (Full Update)",
+        "plays": "Plays"
+    }
 }

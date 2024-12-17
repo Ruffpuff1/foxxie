@@ -1,7 +1,6 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
-import { TFunction } from '@sapphire/plugin-i18next';
 import { cutText, toTitleCase } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
 import { ensureMember } from '#lib/Database/Models/member';
@@ -55,7 +54,7 @@ export class UserCommand extends FoxxieSubcommand {
 		);
 	}
 
-	async #addNotes(embed: EmbedBuilder, userId: string, guildId: string, t: TFunction) {
+	async #addNotes(embed: EmbedBuilder, userId: string, guildId: string, t: FoxxieSubcommand.T) {
 		const notes = await this.container.settings.members.notes.fetchGuildMember(guildId, userId);
 		if (!notes.length) return;
 
@@ -69,7 +68,7 @@ export class UserCommand extends FoxxieSubcommand {
 		});
 	}
 
-	#addRoles(embed: EmbedBuilder, member: GuildMember, t: TFunction) {
+	#addRoles(embed: EmbedBuilder, member: GuildMember, t: FoxxieSubcommand.T) {
 		const arr = [...member.roles.cache.values()];
 		arr.sort((a, b) => b.position - a.position);
 
