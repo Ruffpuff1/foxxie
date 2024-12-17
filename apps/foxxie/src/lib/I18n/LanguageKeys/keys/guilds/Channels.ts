@@ -1,7 +1,7 @@
-import { T } from '#lib/types';
+import { FT } from '#lib/types';
 
-export const GUILD_NEWS = T('guilds/channels:GUILD_NEWS');
-export const GUILD_STAGE_VOICE = T('guilds/channels:GUILD_STAGE_VOICE');
-export const GUILD_TEXT = T('guilds/channels:GUILD_TEXT');
-export const GUILD_PUBLIC_THREAD = T('guilds/channels:GUILD_PUBLIC_THREAD');
-export const GUILD_VOICE = T('guilds/channels:GUILD_VOICE');
+export const GuildNews = FT<{ context?: 'short'; count?: number }>('guilds/channels:guildNews');
+export const GuildStage = FT<{ context?: 'short'; count?: number }>('guilds/channels:guildStage');
+export const GuildText = FT<{ context?: 'short'; count?: number }>('guilds/channels:guildText');
+export const GuildThread = FT<{ context?: 'short'; count?: number }>('guilds/channels:guildThread');
+export const GuildVoice = FT<{ context?: 'short'; count?: number }>('guilds/channels:guildVoice');

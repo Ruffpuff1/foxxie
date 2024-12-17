@@ -14,6 +14,7 @@ export const enum FoxxieEvents {
 	GuildBanRemove = 'guildBanRemove',
 	GuildMemberAdd = 'guildMemberAdd',
 	GuildMemberAddMuted = 'guildMemberAddMuted',
+	GuildMemberCountChannelUpdate = 'guildMemberCountChannelUpdate',
 	GuildMemberJoin = 'guildMemberJoin',
 	GuildMemberRemove = 'guildMemberRemove',
 	GuildMemberUpdate = 'guildMemberUpdate',

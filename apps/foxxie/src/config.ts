@@ -1,7 +1,7 @@
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { container, LogLevel } from '@sapphire/framework';
-import { I18nextFormatter, InternationalizationOptions, TFunction } from '@sapphire/plugin-i18next';
-import { cast, toTitleCase } from '@sapphire/utilities';
+import { I18nextFormatter, InternationalizationOptions } from '@sapphire/plugin-i18next';
+import { cast } from '@sapphire/utilities';
 import { envParseArray, envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { getHandler } from '#languages';
 import { readSettings } from '#lib/Database/settings/functions';
@@ -14,12 +14,9 @@ import {
 	ActivityType,
 	bold,
 	channelMention,
-	ChannelType,
 	ClientOptions,
 	codeBlock,
-	Collection,
 	GatewayIntentBits,
-	GuildChannel,
 	GuildExplicitContentFilter,
 	GuildVerificationLevel,
 	inlineCode,
@@ -33,7 +30,7 @@ import {
 	userMention,
 	WebhookClientData
 } from 'discord.js';
-import i18next, { getFixedT, InterpolationOptions } from 'i18next';
+import { getFixedT, InterpolationOptions } from 'i18next';
 import { join } from 'path';
 
 setup(join(rootFolder, '.env'));
@@ -64,51 +61,6 @@ PaginatedMessage.defaultActions = defaultPaginationOptions;
 export const clientOwners = envParseArray('CLIENT_OWNERS');
 export const webhookError = parseWebhookError();
 export const timezone = envParseString('TIMEZONE');
-
-export function channelList(value: Collection<string, GuildChannel>, t: TFunction): string {
-	const textSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.GuildText ? 1 : 0), 0);
-	const stageSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.GuildStageVoice ? 1 : 0), 0);
-	const newsSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.GuildAnnouncement ? 1 : 0), 0);
-	const voiceSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.GuildVoice ? 1 : 0), 0);
-	const pubThreadSize = value.reduce((acc, itm) => (acc += itm.type === ChannelType.PublicThread ? 1 : 0), 0);
-
-	return (
-		[
-			textSize
-				? t(LanguageKeys.Guilds.Channels.GUILD_TEXT, {
-						context: 'short',
-						count: textSize
-					})
-				: null,
-			voiceSize
-				? t(LanguageKeys.Guilds.Channels.GUILD_VOICE, {
-						context: 'short',
-						count: voiceSize
-					})
-				: null,
-			stageSize
-				? t(LanguageKeys.Guilds.Channels.GUILD_STAGE_VOICE, {
-						context: 'short',
-						count: stageSize
-					})
-				: null,
-			newsSize
-				? t(LanguageKeys.Guilds.Channels.GUILD_NEWS, {
-						context: 'short',
-						count: newsSize
-					})
-				: null,
-			pubThreadSize
-				? t(LanguageKeys.Guilds.Channels.GUILD_PUBLIC_THREAD, {
-						context: 'short',
-						count: pubThreadSize
-					})
-				: null
-		]
-			.filter((a) => Boolean(a))
-			.join(', ') || toTitleCase(t(LanguageKeys.Globals.Unknown))
-	);
-}
 
 export function parsePresenceActivity(): ActivitiesOptions[] {
 	const { CLIENT_PRESENCE_NAME } = process.env;
@@ -147,8 +99,6 @@ function parseInternationalizationDefaultVariables() {
 }
 
 function parseInternationalizationFormatters(): I18nextFormatter[] {
-	const { t } = i18next;
-
 	return [
 		{
 			format: (value, lng) => new Intl.ListFormat(lng!, { type: 'conjunction' }).format(value),
@@ -223,22 +173,22 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 
 				switch (value) {
 					case GuildVerificationLevel.High:
-						key = LanguageKeys.Guilds.VerificationLevels.HIGH;
+						key = LanguageKeys.Guilds.VerificationLevels.High;
 						break;
 					case GuildVerificationLevel.Low:
-						key = LanguageKeys.Guilds.VerificationLevels.LOW;
+						key = LanguageKeys.Guilds.VerificationLevels.Low;
 						break;
 					case GuildVerificationLevel.Medium:
-						key = LanguageKeys.Guilds.VerificationLevels.MEDIUM;
+						key = LanguageKeys.Guilds.VerificationLevels.Medium;
 						break;
 					case GuildVerificationLevel.None:
-						key = LanguageKeys.Guilds.VerificationLevels.NONE;
+						key = LanguageKeys.Guilds.VerificationLevels.None;
 						break;
 					case GuildVerificationLevel.VeryHigh:
-						key = LanguageKeys.Guilds.VerificationLevels.VERY_HIGH;
+						key = LanguageKeys.Guilds.VerificationLevels.VeryHigh;
 						break;
 					default:
-						key = LanguageKeys.Guilds.VerificationLevels.NONE;
+						key = LanguageKeys.Guilds.VerificationLevels.None;
 				}
 
 				return t(key);
@@ -274,10 +224,6 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 			name: 'fulldatetime'
 		},
 		{
-			format: (value, lng) => channelList(value, getFixedT(lng!)),
-			name: 'channellist'
-		},
-		{
 			format: (value) => formatLongDate(getDurationValue(value)),
 			name: 'dateFormat'
 		},
@@ -290,8 +236,27 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 			name: LanguageFormatters.Bold
 		},
 		{
-			format: (value, lng, options) =>
-				t(`guilds/contentFilters:explicitContentFilter${GuildExplicitContentFilter[value]}`, { lng, ...options }) as string,
+			format: (value: GuildExplicitContentFilter, lng) => {
+				const t = getFixedT(lng!);
+				let key: CustomGet<string, string>;
+
+				console.log(value);
+
+				switch (value) {
+					case GuildExplicitContentFilter.AllMembers:
+						key = LanguageKeys.Guilds.ContentFilters.AllMembers;
+						break;
+					case GuildExplicitContentFilter.MembersWithoutRoles:
+						key = LanguageKeys.Guilds.ContentFilters.MembersWithoutRoles;
+						break;
+					case GuildExplicitContentFilter.Disabled:
+						key = LanguageKeys.Guilds.ContentFilters.Disabled;
+				}
+
+				console.log(key);
+
+				return t(key);
+			},
 			name: LanguageFormatters.ExplicitContentFilter
 		},
 		{
