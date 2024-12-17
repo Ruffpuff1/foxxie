@@ -1,0 +1,71 @@
+{
+    "description": "",
+    "detailedDescription": {
+        "extendedHelp": [
+            "",
+            ""
+        ],
+        "subcommands": [
+            {
+                "extendedHelp": [
+                    "",
+                    ""
+                ],
+                "name": "",
+                "aliases": [
+                    ""
+                ],
+                "examples": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "explainedUsage": [
+                    [
+                        "",
+                        ""
+                    ]
+                ],
+                "reminder": "",
+                "usages": [
+                    "",
+                    ""
+                ]
+            }
+        ]
+    },
+    "updateIndexDescription": "",
+    "updateIndexStarted": "",
+    "updateIndexFrequent": "",
+    "updateLastScrobble": "",
+    "updateLoading": "",
+    "updateNoListeningHistory": [
+        "",
+        "",
+        ""
+    ],
+    "updateNothingNew": "",
+    "updateOptions": {
+        "full": [
+            "",
+            ""
+        ],
+        "plays": [
+            "",
+            "",
+            ""
+        ],
+        "artists": [
+            "",
+            ""
+        ]
+    },
+    "updateSuccessNew": "",
+    "updateSuccessNew_other": "",
+    "updateTypes": {
+        "artists": "",
+        "everything": "",
+        "plays": ""
+    }
+}
