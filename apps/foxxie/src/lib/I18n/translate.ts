@@ -5,7 +5,7 @@ import { SubcommandPluginIdentifiers } from '@sapphire/plugin-subcommands';
 import { Nullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
-import { CustomFunctionGet, CustomGet } from '#lib/types';
+import { CustomFunctionGet, CustomGet, FTFunction, TypedFT, TypedT } from '#lib/types';
 import { Interaction, LocaleString } from 'discord.js';
 
 export const enum SupportedLanguages {
@@ -44,11 +44,11 @@ export function getT(locale?: LocaleString | Nullish | string) {
 	return container.i18n.getT(locale ?? SupportedLanguages.EnglishUnitedStates);
 }
 
-export function resolveT(t: TResolvable): TFunction {
+export function resolveT(t: TResolvable): FTFunction {
 	return typeof t === 'function' ? t : t.t;
 }
 
-export function translate(key: Identifier): TranslatedResult {
+export function translate(key: Identifier): TypedFT<unknown, string> | TypedT<string> {
 	console.log(key);
 	switch (key) {
 		// Decorators

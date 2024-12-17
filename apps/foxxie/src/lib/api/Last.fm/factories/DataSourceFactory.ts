@@ -90,8 +90,6 @@ export class LastFmDataSourceFactory {
 	public async getTopArtists(lastFmUserName: string, timeSettings: TimeSettingsModel, count = 2, amountOfPages = 1) {
 		const importUser = await this.getImportUserForLastFmUserName(lastFmUserName);
 
-		console.log(importUser, timeSettings);
-
 		let topArtists: Response<TopArtistList>;
 		if (importUser && timeSettings.startDateTime! <= importUser.lastImportPlay!) {
 			topArtists = await this.#playDataSourceRepository.getTopArtists(importUser, timeSettings, count * amountOfPages);

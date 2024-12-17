@@ -2,14 +2,14 @@ import { PokemonEnum } from '@favware/graphql-pokemon';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { ChatInputCommand } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { fetchT, TFunction } from '@sapphire/plugin-i18next';
+import { fetchT } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
 import { compressPokemonCustomIdMetadata, fuzzyPokemonToSelectOption, PokemonSpriteTypes } from '#lib/api/Pokemon/index';
 import { SubcommandKeys } from '#lib/Container/Stores/Commands/Keys/index';
 import { IdHints } from '#lib/discord';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
-import { GuildMessage } from '#lib/types';
+import { FTFunction, GuildMessage } from '#lib/types';
 import { SelectMenuCustomIds } from '#utils/constants';
 import { sendLoadingMessage } from '#utils/functions/messages';
 import {
@@ -158,7 +158,7 @@ export class UserCommand extends FoxxieSubcommand {
 	private async sendMessagePokemonReply(
 		pokemon: string,
 		spriteToGet: PokemonSpriteTypes,
-		t: TFunction,
+		t: FTFunction,
 		userMessage: GuildMessage,
 		loadingMessage: GuildMessage
 	) {

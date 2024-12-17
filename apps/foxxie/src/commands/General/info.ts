@@ -145,7 +145,7 @@ export class UserCommand extends FoxxieSubcommand {
 		);
 	}
 
-	async #addNotes(embed: EmbedBuilder, userId: string, guildId: string, t: TFunction) {
+	async #addNotes(embed: EmbedBuilder, userId: string, guildId: string, t: FoxxieSubcommand.T) {
 		const notes = await this.container.settings.members.notes.fetchGuildMember(guildId, userId);
 		if (!notes.length) return;
 
@@ -159,7 +159,7 @@ export class UserCommand extends FoxxieSubcommand {
 		});
 	}
 
-	#addRoles(embed: EmbedBuilder, member: GuildMember, t: TFunction) {
+	#addRoles(embed: EmbedBuilder, member: GuildMember, t: FoxxieSubcommand.T) {
 		const arr = [...member.roles.cache.values()];
 		arr.sort((a, b) => b.position - a.position);
 

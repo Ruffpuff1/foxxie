@@ -1,7 +1,19 @@
 export interface LanguageHelpDisplayOptions {
 	examples?: (null | string)[];
 	explainedUsage?: [string, string][];
-	extendedHelp?: string;
+	extendedHelp?: string | string[];
+	possibleFormats?: [string, string][];
+	reminder?: string;
+	subcommands?: LanguageHelpDisplaySubcommandOptions[];
+	usages?: string[];
+}
+
+export interface LanguageHelpDisplaySubcommandOptions {
+	aliases?: string[];
+	examples?: (null | string)[];
+	explainedUsage?: [string, string][];
+	extendedHelp?: string | string[];
+	name: string;
 	possibleFormats?: [string, string][];
 	reminder?: string;
 	usages?: string[];
@@ -31,7 +43,7 @@ export class LanguageHelp {
 
 		// Extended help
 		if (extendedHelp) {
-			output.push(this.extendedHelp, extendedHelp, '');
+			output.push(this.extendedHelp, Array.isArray(extendedHelp) ? extendedHelp.join(' ') : extendedHelp, '');
 		}
 
 		// Explained usage

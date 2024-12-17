@@ -12,12 +12,12 @@ export class UserSerializer extends Serializer<number> {
 		switch (context.entry.type as SerializerType) {
 			case 'integer': {
 				if (typeof value === 'number' && Number.isInteger(value) && this.minOrMax(value, value, context)) return true;
-				throw context.t(LanguageKeys.Serializers.InvalidInt, { name: context.entry.name });
+				throw context.t(LanguageKeys.Serializers.InvalidInt, { name: context.entry.name, value });
 			}
 			case 'float':
 			case 'number': {
 				if (typeof value === 'number' && !Number.isNaN(value) && this.minOrMax(value, value, context)) return true;
-				throw context.t(LanguageKeys.Serializers.InvalidFloat, { name: context.entry.name });
+				throw context.t(LanguageKeys.Serializers.InvalidFloat, { name: context.entry.name, value });
 			}
 			default: {
 				throw new Error('Unreachable');

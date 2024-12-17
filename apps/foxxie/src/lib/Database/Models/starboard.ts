@@ -2,12 +2,12 @@ import { starboard } from '@prisma/client';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { MessageOptions } from '@sapphire/plugin-editable-commands';
-import { fetchT, TFunction } from '@sapphire/plugin-i18next';
+import { fetchT } from '@sapphire/plugin-i18next';
 import { cast, cutText, debounce, isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import { readSettings } from '#lib/Database/settings/functions';
 import { StarboardManager } from '#lib/structures';
-import { EnvKeys, GuildMessage } from '#lib/types';
+import { EnvKeys, FTFunction, GuildMessage } from '#lib/types';
 import { defaultStarboardEmojis } from '#utils/discord';
 import { getGuildStarboard } from '#utils/functions';
 import { fetchReactionUsers, floatPromise, getAttachment, getImage, isVideo, resolveClientColor } from '#utils/util';
@@ -132,7 +132,7 @@ export class Starboard {
 		return true;
 	}
 
-	public async getStarContent(t: TFunction): Promise<MessageEditOptions | MessageOptions> {
+	public async getStarContent(t: FTFunction): Promise<MessageEditOptions | MessageOptions> {
 		const color = await this.color();
 
 		const message = this.#message;
@@ -235,7 +235,7 @@ export class Starboard {
 		return member.displayColor || resolveClientColor(this.#message.guild);
 	}
 
-	private async getContent(_: TFunction) {
+	private async getContent(_: FTFunction) {
 		const url = await this.getUrl();
 		return [cutText(this.#message.content, 1800), '', url].join('\n');
 	}

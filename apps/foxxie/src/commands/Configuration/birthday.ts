@@ -3,11 +3,10 @@ import { ApplyOptions, RequiresClientPermissions, RequiresUserPermissions } from
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { Args, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { TFunction } from '@sapphire/plugin-i18next';
 import { chunk } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
-import { GuildMessage } from '#lib/types';
+import { FTFunction, GuildMessage } from '#lib/types';
 import { BirthdayData, getAge, getDateFormat, monthOfYearContainsDay, nextBirthday, yearIsLeap } from '#utils/birthday';
 import { Schedules, SubcommandKeys } from '#utils/constants';
 import { sendLoadingMessage } from '#utils/functions/messages';
@@ -75,7 +74,7 @@ export class UserCommand extends FoxxieSubcommand {
 		};
 	}
 
-	async #mapBirthday(birthday: MappedTask<Schedules.Birthday>, t: TFunction, guild: Guild) {
+	async #mapBirthday(birthday: MappedTask<Schedules.Birthday>, t: FTFunction, guild: Guild) {
 		const user = await resolveToNull(this.client.users.fetch(birthday.data.userId));
 		const member = user ? guild.members.cache.get(user.id) : null;
 
@@ -125,7 +124,7 @@ export class UserCommand extends FoxxieSubcommand {
 
 		const day = Number(result.groups!.day);
 		if (day <= 0 || !monthOfYearContainsDay(year === null ? true : yearIsLeap(year), month, day)) {
-			const monthKey = args.t(`${LanguageKeys.Arguments.BirthdayMonths}.${month - 1}`);
+			const monthKey = args.t(LanguageKeys.Arguments.BirthdayMonths)[month - 1];
 			return Args.error({
 				argument,
 				context: { day, monthKey },

@@ -13,8 +13,8 @@ type ValueType = null | Unlock;
 
 @ApplyOptions<ModerationCommand.Options<Type>>({
 	aliases: ['b'],
-	description: LanguageKeys.Commands.Moderation.BanDetailedDescription,
-	detailedDescription: LanguageKeys.Commands.Moderation.BanDetailedDescription,
+	description: LanguageKeys.Commands.Moderation.Kick.Description,
+	detailedDescription: LanguageKeys.Commands.Moderation.Kick.DetailedDescription,
 	options: TimeOptions,
 	requiredClientPermissions: [PermissionFlagsBits.BanMembers],
 	type: TypeVariation.Ban
@@ -22,7 +22,7 @@ type ValueType = null | Unlock;
 export class UserModerationCommand extends ModerationCommand<Type, ValueType> {
 	protected override async checkTargetCanBeModerated(message: GuildMessage, context: ModerationCommand.HandlerParameters<ValueType>) {
 		const member = await super.checkTargetCanBeModerated(message, context);
-		if (member && !member.bannable) throw context.args.t(LanguageKeys.Commands.Moderation.CaseNoExist);
+		if (member && !member.bannable) throw context.args.t(LanguageKeys.Commands.Moderation.Kick.NotKickable);
 		return member;
 	}
 

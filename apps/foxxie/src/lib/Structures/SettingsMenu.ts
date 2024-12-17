@@ -1,5 +1,3 @@
-import type { TFunction } from '@sapphire/plugin-i18next';
-
 import { EmbedBuilder } from '@discordjs/builders';
 import { ZeroWidthSpace } from '@ruffpuff/utilities';
 import { container, type MessageCommand } from '@sapphire/framework';
@@ -12,7 +10,7 @@ import { SchemaKey } from '#lib/Database/settings/schema/SchemaKey';
 import { isSchemaGroup, remove, reset, set } from '#lib/Database/settings/Utils';
 import { api } from '#lib/discord';
 import { getT, LanguageKeys } from '#lib/i18n';
-import { GuildMessage } from '#lib/types';
+import { FTFunction, GuildMessage } from '#lib/types';
 import { floatPromise, minutes } from '#utils/common';
 import { stringifyError } from '#utils/common/error';
 import { BrandingColors } from '#utils/constants';
@@ -43,9 +41,9 @@ export class SettingsMenu {
 	private oldValue: unknown = undefined;
 	private response: GuildMessage | null = null;
 	private schema: SchemaGroup | SchemaKey;
-	private t: TFunction;
+	private t: FTFunction;
 
-	public constructor(message: GuildMessage, language: TFunction) {
+	public constructor(message: GuildMessage, language: FTFunction) {
 		this.message = message;
 		this.t = language;
 		this.schema = getConfigurableGroups();

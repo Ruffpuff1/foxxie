@@ -133,7 +133,6 @@ export class UserBuilder {
 		if (stats.length) embed.addFields({ name: 'Stats', value: stats.join('\n') });
 
 		let discogs = false;
-		console.log(user);
 		if (user.discogs) {
 			const collection: string[] = [];
 

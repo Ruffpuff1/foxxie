@@ -1,106 +1,75 @@
-import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
+import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions, RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { cast, cutText } from '@sapphire/utilities';
+import { send } from '@sapphire/plugin-editable-commands';
 import { Starboard } from '#lib/Database/Models/starboard';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
-import { minutes } from '#utils/common';
+import { defaultPaginationOptions, defaultPaginationOptionsWithoutSelectMenu } from '#root/config';
 import { Emojis } from '#utils/constants';
-import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginatedMessageEmbedFields';
+import { RequiresStarboardEntries } from '#utils/decorators';
+import { FoxxiePaginatedMessage } from '#utils/External/FoxxiePaginatedMessage';
 import { getGuildStarboard } from '#utils/functions';
-import { sendLoadingMessage } from '#utils/functions/messages';
-import { resolveClientColor } from '#utils/util';
-import {
-	blockQuote,
-	bold,
-	channelMention,
-	EmbedBuilder,
-	escapeMarkdown,
-	inlineCode,
-	PermissionFlagsBits,
-	TextChannel,
-	userMention
-} from 'discord.js';
+import { PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<FoxxieSubcommand.Options>({
 	aliases: ['sb', 'stars'],
 	description: LanguageKeys.Commands.Configuration.Starboard.Description,
 	detailedDescription: LanguageKeys.Commands.Configuration.Starboard.DetailedDescription,
 	runIn: [CommandOptionsRunTypeEnum.GuildAny],
-	subcommands: [{ default: true, messageRun: 'list', name: 'list' }]
+	subcommands: [{ messageRun: 'list', name: 'list' }]
 })
 export class UserCommand extends FoxxieSubcommand {
 	@RequiresClientPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
+	@RequiresStarboardEntries()
 	@RequiresUserPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
 	public async list(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
-		const loading = await sendLoadingMessage(msg);
+		const channel = await args.pick('channelName').catch(() => null);
+		const starMessageId = await args.pick('number').catch(() => 1);
+
+		const loading = await send(
+			msg,
+			channel
+				? `${Emojis.Loading} Fetching star messages in ${channel.toString()}...`
+				: `${Emojis.Loading} Fetching this servers star messages...`
+		);
 		const starboard = getGuildStarboard(msg.guild);
-		const starboards = (await this.container.prisma.starboard.findMany({ orderBy: { id: 'desc' }, where: { guildId: msg.guildId } })).map(
-			(star) => new Starboard(star).setup(starboard)
+		const starboards = (await this.container.prisma.starboard.findMany({ orderBy: { id: 'asc' }, where: { guildId: msg.guildId } })).map(
+			(star) => new Starboard(star)
 		);
 
-		const template = new EmbedBuilder()
-			.setTitle(`Starred Messages in ${msg.guild.name}`)
-			.setColor(await resolveClientColor(msg))
-			.setFooter({ text: `${starboards.length} stars in ${msg.guild.name}` });
+		const channelIds = [...new Set(starboards.map((s) => s.channelId))];
+		await Promise.all(channelIds.map((channelId) => resolveToNull(this.container.client.channels.fetch(channelId))));
 
-		await new FoxxiePaginatedMessageEmbedFields()
-			.setTemplate(template)
-			.setIdle(minutes(5))
-			.setItemsPerPage(5)
-			.setItems(
-				await Promise.all(
-					starboards.map(async (star) => {
-						const lines: string[] = [];
+		const display = new FoxxiePaginatedMessage({
+			actions: starboards.length > 25 ? defaultPaginationOptionsWithoutSelectMenu : defaultPaginationOptions
+		});
 
-						const channel = cast<TextChannel>(
-							this.container.client.channels.cache.get(star.channelId) ||
-								(await resolveToNull(this.container.client.channels.fetch(star.channelId)))
-						);
-						if (!channel) return null;
-						const message = channel.messages.cache.get(star.messageId) || (await resolveToNull(channel.messages.fetch(star.messageId)));
-						if (!message) return null;
+		const filtered = starboards.filter((star) => star.enabled).filter((star) => (channel ? channel.id === star.channelId : true));
+		const foundIndex = filtered.findIndex((star) => star.id === starMessageId);
 
-						const user = this.container.client.users.cache.get(star.userId);
-						const { content, url } = message;
+		for (const star of filtered) {
+			display.addAsyncPageBuilder(async (builder) => {
+				const channel = msg.guild.channels.cache.get(star.channelId);
+				if (!channel || !channel.isSendable()) return builder.setContent('no channel');
+				const message = await resolveToNull(channel.messages.fetch(star.messageId));
+				if (!message) {
+					await star.setup(starboard).edit({ enabled: false });
+					return builder.setContent(`no message ${star.enabled} ${star.id}`);
+				}
 
-						lines.push(
-							args.t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsLocation, {
-								channel: channelMention(channel.id),
-								emoji: Emojis.Information,
-								id: channel.id
-							})
-						);
+				star.init(starboard, message as GuildMessage);
 
-						const userInGuild = msg.guild.members.cache.has(star.userId);
-						lines.push(
-							args.t(LanguageKeys.Commands.Moderation.Utilities.Case.ListDetailsUser, {
-								emoji: user ? (user.bot ? Emojis.Bot : Emojis.ShieldMember) : Emojis.ShieldMember,
-								mention: user
-									? userInGuild
-										? userMention(user.id)
-										: escapeMarkdown(user.username)
-									: toTitleCase(args.t(LanguageKeys.Globals.Unknown)),
-								userId: star.userId
-							})
-						);
+				await star.downloadStarMessage();
+				await star.downloadUserList();
 
-						lines.push(`${star.emoji} **Message:** [Here](${url}) (${message.id})`);
-						if (content) lines.push(blockQuote(cutText(content, 150)));
+				const options = await star.getStarContent(args.t);
 
-						return {
-							inline: false,
-							name: `${inlineCode(star.id.toString())} → ${bold(star.stars.toLocaleString())} Stars`,
-							value: lines.join('\n')
-						};
-					})
-				).then((r) => r.filter((c) => !!c))
-			)
-			.make()
-			.run(msg, msg.author);
+				return builder.setContent(options.content!).setEmbeds(options.embeds);
+			});
+		}
 
-		await loading.delete();
+		await display.setIndex(foundIndex === -1 ? 0 : foundIndex).run(loading, msg.author);
 	}
 }

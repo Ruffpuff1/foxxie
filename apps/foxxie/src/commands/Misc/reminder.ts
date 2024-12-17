@@ -2,7 +2,7 @@ import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { ApplicationCommandRegistry } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { applyLocalizedBuilder, TFunction } from '@sapphire/plugin-i18next';
+import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 import { chunk } from '@sapphire/utilities';
 import { SubcommandKeys } from '#lib/Container/Stores/Commands/Keys/index';
 import { IdHints } from '#lib/discord';
@@ -151,6 +151,7 @@ export class UserCommand extends FoxxieSubcommand {
 		return send(
 			msg,
 			args.t(LanguageKeys.Commands.Misc.ReminderDeleteSuccess, {
+				count: tasks.length,
 				ids: tasks.map((t) => t.id)
 			})
 		);
@@ -224,7 +225,7 @@ export class UserCommand extends FoxxieSubcommand {
 	async #buildAndShowDisplay(
 		input: ChatInputCommandInteraction | GuildMessage,
 		entity: GuildMember | User,
-		t: TFunction,
+		t: FoxxieSubcommand.T,
 		tasks: MappedTask<Schedules.Reminder>[]
 	) {
 		const user = entity instanceof User ? entity : entity.user;
@@ -256,16 +257,17 @@ export class UserCommand extends FoxxieSubcommand {
 	private async deleteAll(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message> {
 		const filtered = (await fetchTasks(Schedules.Reminder)).filter((job) => job.data.userId === msg.author.id);
 
-		const ids: string[] = [];
+		const ids: number[] = [];
 		for (const task of filtered) {
 			await this.container.schedule.remove(task.id);
-			ids.push(String(task.id));
+			ids.push(task.id);
 		}
 
 		return ids.length
 			? send(
 					msg,
 					args.t(LanguageKeys.Commands.Misc.ReminderDeleteSuccess, {
+						count: ids.length,
 						ids
 					})
 				)

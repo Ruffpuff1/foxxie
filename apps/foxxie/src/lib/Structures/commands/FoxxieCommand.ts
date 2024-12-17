@@ -4,7 +4,7 @@ import { cast } from '@sapphire/utilities';
 import FoxxieClient from '#lib/FoxxieClient';
 import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
 import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
-import { CustomFunctionGet, DetailedDescription, PermissionLevels, TypedT } from '#lib/types';
+import { PermissionLevels, TypedT } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { seconds } from '#utils/common';
 import { Awaitable, Guild, Message, Snowflake } from 'discord.js';
@@ -13,16 +13,9 @@ import first from 'lodash/first.js';
 export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCommand.Options> {
 	public allowedGuilds: string[];
 
-	declare public detailedDescription:
-		| CustomFunctionGet<
-				string,
-				{
-					CHANNEL: string;
-					prefix: string;
-				},
-				DetailedDescription
-		  >
-		| TypedT<LanguageHelpDisplayOptions>;
+	declare public description: TypedT<string>;
+
+	declare public detailedDescription: TypedT<LanguageHelpDisplayOptions>;
 
 	public readonly guarded: boolean;
 
@@ -125,16 +118,8 @@ export namespace FoxxieCommand {
 	export type LoaderContext = Command.LoaderContext;
 	export type Options = {
 		allowedGuilds?: string[];
-		detailedDescription?:
-			| CustomFunctionGet<
-					string,
-					{
-						CHANNEL: string;
-						prefix: string;
-					},
-					DetailedDescription
-			  >
-			| TypedT<LanguageHelpDisplayOptions>;
+		description?: TypedT<string>;
+		detailedDescription?: TypedT<LanguageHelpDisplayOptions>;
 		guarded?: boolean;
 		hidden?: boolean;
 		permissionLevel?: PermissionLevels;
@@ -146,15 +131,8 @@ export namespace FoxxieCommand {
 
 export type FoxxieCommandOptions = {
 	allowedGuilds?: string[];
-	detailedDescription?:
-		| CustomFunctionGet<
-				string,
-				{
-					prefix: string;
-				},
-				DetailedDescription
-		  >
-		| TypedT<LanguageHelpDisplayOptions>;
+	description?: TypedT<string>;
+	detailedDescription?: TypedT<LanguageHelpDisplayOptions>;
 	guarded?: boolean;
 	hidden?: boolean;
 	permissionLevel?: PermissionLevels;

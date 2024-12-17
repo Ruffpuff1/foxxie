@@ -1,4 +1,3 @@
-import type { TFunction } from '@sapphire/plugin-i18next';
 import type { Awaitable } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
 
@@ -7,6 +6,7 @@ import { Result } from '@sapphire/result';
 import { ReadonlyGuildData, SchemaKey } from '#lib/database';
 import { LanguageKeys, translate } from '#lib/i18n';
 import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
+import { FTFunction, TypedFT } from '#lib/types';
 
 export type AsyncSerializerResult<T> = Promise<Result<T, Error>>;
 export type SerializerResult<T> = Result<T, Error>;
@@ -64,7 +64,7 @@ export abstract class Serializer<T> extends AliasPiece {
 	protected errorFromArgument<E>(args: Serializer.Args, error: ArgumentError<E> | UserError): SerializerResult<T> {
 		const argument = error instanceof ArgumentError ? error.argument.name : 'Unknown';
 		const identifier = translate(error.identifier);
-		return this.error(args.t(identifier, { ...error, ...(error.context as object), argument }));
+		return this.error(args.t(identifier as TypedFT<unknown, string>, { ...error, ...(error.context as object), argument }));
 	}
 
 	/**
@@ -185,5 +185,5 @@ export interface SerializerUpdateContext {
 	entity: ReadonlyGuildData;
 	entry: SchemaKey;
 	guild: Guild;
-	t: TFunction;
+	t: FTFunction;
 }

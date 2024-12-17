@@ -1,10 +1,10 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { ApplicationCommandRegistry, Awaitable, CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { send } from '@sapphire/plugin-editable-commands';
 import { Stopwatch } from '@sapphire/stopwatch';
 import { getSupportedUserLanguageT, LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
+import { sendMessage } from '#utils/functions';
 import { InteractionContextType } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
@@ -34,7 +34,7 @@ export default class UserCommand extends FoxxieCommand {
 	}
 
 	public async messageRun(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
-		const msg = await send(message, { content: args.t(LanguageKeys.Commands.General.Ping), embeds: undefined });
+		const msg = await sendMessage(message, args.t(LanguageKeys.Commands.General.Ping));
 
 		const stopwatch = new Stopwatch().start();
 		await this.container.prisma.$connect();
@@ -46,7 +46,7 @@ export default class UserCommand extends FoxxieCommand {
 			wsPing: Math.round(this.container.client.ws.ping)
 		});
 
-		await send(message, content);
+		await sendMessage(message, content);
 	}
 
 	public override registerApplicationCommands(registry: ApplicationCommandRegistry): Awaitable<void> {

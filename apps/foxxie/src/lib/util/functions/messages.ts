@@ -1,7 +1,7 @@
 import { randomArray } from '@ruffpuff/utilities';
 import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
-import { send } from '@sapphire/plugin-editable-commands';
+import { MessageOptions, send } from '@sapphire/plugin-editable-commands';
 import { fetchT, resolveKey, type TOptions } from '@sapphire/plugin-i18next';
 import { cast } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
@@ -10,6 +10,7 @@ import { CustomFunctionGet, CustomGet, GuildMessage, NonGroupMessage, TypedFT, T
 import { floatPromise, minutes, resolveOnErrorCodes } from '#utils/common';
 import {
 	AutocompleteInteraction,
+	EmbedBuilder,
 	GuildTextBasedChannel,
 	type Message,
 	type MessageCreateOptions,
@@ -88,16 +89,17 @@ export function getCommand(message: Message): FoxxieCommand | null {
 	return messageCommands.get(message) ?? null;
 }
 export async function sendLoadingMessage(
-	msg: GuildMessage,
+	message: GuildMessage,
 	key: CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]> = LanguageKeys.System.MessageLoading,
 	args = {}
 ): Promise<GuildMessage | Message> {
-	const t = await fetchT(msg.guild);
+	const t = await fetchT(message.guild);
 	const translated = t(key, args);
 	const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
 
-	return send(cast<Message>(msg), { content });
+	return sendMessage(message, content);
 }
+
 export async function sendLoadingMessageInChannel(
 	channel: GuildTextBasedChannel,
 	key: CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]> = LanguageKeys.System.MessageLoading,
@@ -121,6 +123,7 @@ export async function sendLoadingMessageInChannel(
  * ```
  */
 export function sendLocalizedMessage(message: Message, key: LocalizedSimpleKey): Promise<Message>;
+
 /**
  * Send an editable localized message using an object.
  * @param message The message to reply to.
@@ -144,13 +147,25 @@ export function sendLocalizedMessage(message: Message, key: LocalizedSimpleKey):
  * ```
  */
 export function sendLocalizedMessage<TArgs extends object>(message: Message, options: LocalizedMessageOptions<TArgs>): Promise<Message>;
-
 export async function sendLocalizedMessage(message: Message, options: LocalizedMessageOptions | LocalizedSimpleKey) {
 	if (typeof options === 'string') options = { key: options };
 
 	// @ts-expect-error 2345: Complex overloads
 	const content = await resolveKey(message, options.key, options.formatOptions);
 	return send(message, { ...options, content });
+}
+
+export async function sendMessage(message: GuildMessage, options: EmbedBuilder | MessageOptions | string | string[], arrayJoiner = '\n') {
+	const resolvedOptions =
+		typeof options === 'string'
+			? { components: [], content: options, embeds: [] }
+			: Array.isArray(options)
+				? options.join(arrayJoiner)
+				: options instanceof EmbedBuilder
+					? { components: [], content: null, embeds: [options] }
+					: { components: [], content: null!, embeds: [], ...options };
+
+	return send(message, resolvedOptions);
 }
 
 /**

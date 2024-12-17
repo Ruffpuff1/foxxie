@@ -40,6 +40,14 @@ export class IndexService {
 		});
 	}
 
+	public async indexStarted(userId: string) {
+		const cachedValue = await container.redis?.get(IndexService.IndexConcurrencyCacheKey(userId));
+		if (cachedValue) return false;
+
+		void container.redis?.pinsertex(IndexService.IndexConcurrencyCacheKey(userId), minutes(3), true);
+		return true;
+	}
+
 	public async indexUser(queueItem: ScheduleEntry.IndexUserQueueItem) {
 		void container.redis?.pinsertex(IndexService.IndexConcurrencyCacheKey(queueItem.userId), minutes(3), true);
 
@@ -49,7 +57,7 @@ export class IndexService {
 			if (isNullish(user)) {
 				return null;
 			}
-			if (user.lastIndexed.getTime() < Date.now() - days(1)) {
+			if (user.lastIndexed.getTime() > Date.now() - days(1)) {
 				container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: Skipped for ${queueItem.userId} | ${user?.usernameLastFM}`);
 				return null;
 			}
