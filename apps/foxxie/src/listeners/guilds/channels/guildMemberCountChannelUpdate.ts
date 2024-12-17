@@ -34,7 +34,7 @@ export class UserListener extends Listener {
 		const t = await fetchT(guild);
 
 		const channel = await resolveToNull(guild.channels.fetch(this.#channelId));
-		if (!channel) return;
+		if (!channel || channel.guildId !== guild.id) return;
 
 		const memberCount = t(LanguageKeys.Globals.NumberFormat, { value: guild.memberCount });
 		const format = this.#format(memberCount);

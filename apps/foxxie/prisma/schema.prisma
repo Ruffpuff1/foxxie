@@ -206,6 +206,7 @@ model guilds {
   starboardEmojis                      String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(128)[]")) @map("starboard.emojis") @db.VarChar(128)
   starboardMinimum                     Int      @default(3) @map("starboard.minimum") @db.SmallInt
   starboardSelfStar                    Boolean  @default(true) @map("starboard.self-star")
+  /// [TagEntries]
   tags                                 Json     @default("[]")
   words                                Json     @default("[]")
   birthdayRole                         String?  @map("roles.birthday") @db.VarChar(19)

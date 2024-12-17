@@ -1,7 +1,7 @@
 import { FT, T } from '#lib/types';
 
 export const AbortOptions = T<string[]>('globals:abortOptions');
-export const And = FT<{ value: string[] }>('globals:and');
+export const And = FT<{ context: 'static' } | { value: string[] }>('globals:and');
 export const Any = T('globals:any');
 export const CaseT = T('globals:case');
 export const ChatInputOptionHidden = T('globals:chatInputOptionHidden');

@@ -10,7 +10,7 @@ import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Servic
 import { HighlightData } from '#lib/Database/Models/highlight';
 import { Starboard } from '#lib/Database/Models/starboard';
 import { SerializerStore } from '#lib/Database/settings/structures/SerializerStore';
-import { PermissionsNode, ReadonlyGuildData, StickyRole } from '#lib/Database/settings/types';
+import { PermissionsNode, ReadonlyGuildData, StickyRole, Tag } from '#lib/Database/settings/types';
 import { ModerationEntry } from '#lib/moderation';
 import { ScheduleManager, TaskStore } from '#lib/schedule';
 import { PrismaDatabase } from '#lib/Setup/prisma';
@@ -30,6 +30,7 @@ declare global {
 		export type HighlightEntries = HighlightData[];
 		export type PermissionNodeEntries = PermissionsNode[];
 		export type RolesPersistEntries = StickyRole[];
+		export type TagEntries = Tag[];
 	}
 }
 
@@ -62,7 +63,7 @@ declare module 'discord.js' {
 		];
 		[FoxxieEvents.LastFmUpdateUser]: [userId: string];
 		[FoxxieEvents.MemberIdleLog]: [Presence];
-		[FoxxieEvents.MessageCommandLogging]: [message: Message, command: FoxxieCommand];
+		[FoxxieEvents.MessageCommandLogging]: [message: GuildMessage, command: FoxxieCommand];
 		[FoxxieEvents.MinecraftBotMessage]: [message: GuildMessage];
 		[FoxxieEvents.ModerationEntryAdd]: [entry: Readonly<ModerationEntry>];
 		[FoxxieEvents.ModerationEntryEdit]: [old: Readonly<ModerationEntry>, entry: Readonly<ModerationEntry>];

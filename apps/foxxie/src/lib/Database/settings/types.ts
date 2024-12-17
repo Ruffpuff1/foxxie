@@ -37,3 +37,12 @@ export interface StickyRole {
 	roles: readonly Snowflake[];
 	user: Snowflake;
 }
+
+export interface Tag {
+	aliases: string[];
+	color: number;
+	content: string;
+	delete: boolean;
+	embed: boolean;
+	id: string;
+}

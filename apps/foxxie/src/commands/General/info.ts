@@ -1,13 +1,12 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
-import { TFunction } from '@sapphire/plugin-i18next';
 import { cutText, isNullish, toTitleCase } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
 import { ensureMember } from '#lib/Database/Models/member';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
-import { GuildMessage } from '#lib/types';
+import { FTFunction, GuildMessage } from '#lib/types';
 import { floatPromise } from '#utils/common';
 import { SubcommandKeys } from '#utils/constants';
 import { isGuildOwner } from '#utils/discord';
@@ -261,7 +260,7 @@ export class UserCommand extends FoxxieSubcommand {
 		return embed;
 	}
 
-	#formatGuildChannels(channels: Collection<string, Channel>, t: TFunction): string {
+	#formatGuildChannels(channels: Collection<string, Channel>, t: FTFunction): string {
 		// text voice news threads
 		let news = 0;
 		let text = 0;
@@ -304,7 +303,7 @@ export class UserCommand extends FoxxieSubcommand {
 			.join(', ');
 	}
 
-	#formatGuildEmojis(animated: Collection<string, GuildEmoji>, nonAnimated: Collection<string, GuildEmoji>, hasEmojis: boolean, t: TFunction) {
+	#formatGuildEmojis(animated: Collection<string, GuildEmoji>, nonAnimated: Collection<string, GuildEmoji>, hasEmojis: boolean, t: FTFunction) {
 		if (!hasEmojis) return toTitleCase(t(LanguageKeys.Globals.None));
 
 		if (!animated.size || !nonAnimated.size) {
@@ -329,7 +328,7 @@ export class UserCommand extends FoxxieSubcommand {
 		};
 	}
 
-	#getGuildRoles(guild: Guild, t: TFunction) {
+	#getGuildRoles(guild: Guild, t: FTFunction) {
 		const roles = [...guild.roles.cache.values()].sort((x, y) => Number(y.position > x.position) || Number(x.position === y.position) - 1);
 		roles.pop();
 

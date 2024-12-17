@@ -100,7 +100,7 @@ export default class UserCommand extends FoxxieCommand {
 					}
 				])
 				.setFooter({
-					text: `Permission Node: ${command.category?.toLowerCase()}.${command.name}${command.aliases?.length ? `\nSubcommand Aliases: ${args.t(LanguageKeys.Globals.And, { value: command.aliases })}` : ''}`
+					text: `Permission Node: ${command.category?.toLowerCase()}.${command.name}${command.aliases?.length ? `\nSubcommand Aliases: ${args.t(LanguageKeys.Globals.And, { value: [...command.aliases] })}` : ''}`
 				});
 
 			return embed;

@@ -1,27 +1,35 @@
-// import { EventArgs, FoxxieEvents } from '#lib/types';
-// import { floatPromise } from '#utils/util';
-// import { Listener } from '@sapphire/framework';
-// import { send } from '@sapphire/plugin-editable-commands';
+import { Listener } from '@sapphire/framework';
+import { readSettings, Tag } from '#lib/database';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
+import { deleteMessage, sendMessage } from '#utils/functions';
+import { resolveClientColor } from '#utils/util';
+import { ColorResolvable, EmbedBuilder, Message } from 'discord.js';
 
-// export class UserListener extends Listener<FoxxieEvents.UnknownMessageCommand> {
-// 	public async run(...[{ commandName, message }]: EventArgs<FoxxieEvents.UnknownMessageCommand>): Promise<void> {
-// 		if (!message.inGuild()) return;
-// 		const { tags } = await this.container.settings.guilds.acquire(message.guildId);
+export class UserListener extends Listener<FoxxieEvents.UnknownMessageCommand> {
+	public async run(...[{ commandName, message }]: EventArgs<FoxxieEvents.UnknownMessageCommand>): Promise<void> {
+		if (!message.inGuild()) return;
+		const { tags } = await readSettings(message.guildId);
 
-// 		const foundTag = tags.find((tag) => tag.id === commandName || tag.aliases.includes(commandName));
-// 		if (!foundTag) return;
+		const foundTag = tags.find((tag) => tag.id === commandName || tag.aliases.includes(commandName));
+		if (!foundTag) return;
 
-// 		const { content } = foundTag;
+		const { content } = foundTag;
 
-// 		if (foundTag.embed) {
-// 			const embed = foundTag.buildEmbed(message);
-// 			await send(message, { embeds: [embed], content: null });
+		if (foundTag.embed) {
+			const embed = await this.#buildEmbed(foundTag as Tag, message);
+			await sendMessage(message as GuildMessage, embed);
 
-// 			if (foundTag.delete) await floatPromise(message.delete());
-// 			return;
-// 		}
+			if (foundTag.delete) await deleteMessage(message);
+			return;
+		}
 
-// 		await send(message, { content, embeds: [] });
-// 		if (foundTag.delete) await floatPromise(message.delete());
-// 	}
-// }
+		await sendMessage(message as GuildMessage, content);
+		if (foundTag.delete) await deleteMessage(message);
+	}
+
+	async #buildEmbed(tag: Tag, message: Message) {
+		return new EmbedBuilder()
+			.setDescription(tag.content)
+			.setColor(await resolveClientColor(message, (tag.color || message.member!.displayColor) as ColorResolvable));
+	}
+}
