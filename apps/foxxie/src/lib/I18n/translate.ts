@@ -49,11 +49,12 @@ export function resolveT(t: TResolvable): FTFunction {
 }
 
 export function translate(key: Identifier): TypedFT<unknown, string> | TypedT<string> {
-	console.log(key);
 	switch (key) {
 		// Decorators
 		case DecoratorIdentifiers.RequiresClientPermissionsMissingPermissions:
 			return LanguageKeys.Preconditions.ClientPermissions;
+		case DecoratorIdentifiers.RequiresUserPermissionsMissingPermissions:
+			return LanguageKeys.Preconditions.MemberPermissions;
 		// Arguments
 		case Identifiers.ArgsMissing:
 			return LanguageKeys.Arguments.Missing;

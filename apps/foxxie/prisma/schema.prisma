@@ -228,7 +228,7 @@ model UserLastFM {
   userType         Int                  @default(0)
   dataSource       Int                  @default(1)
   usernameLastFM   String
-  sessionKeyLastFM String
+  sessionKeyLastFM String?
   lastFmPro        Boolean?
   registeredLastFM DateTime?
   totalPlaycount   Int?
@@ -237,19 +237,19 @@ model UserLastFM {
   footerOption     Int                  @default(1)
   responseMode     Int                  @default(1)
   privacyLevel     Int                  @default(1)
-  lastIndexed      DateTime
+  lastIndexed      DateTime?
   lastSmallIndexed DateTime?
-  lastUpdated DateTime
-  lastScrobbleUpdate DateTime
+  lastUpdated DateTime?
+  lastScrobbleUpdate DateTime?
   lastUsed         DateTime?
   emoteReactions   String[]
-  timeZone         String
+  timeZone         String?
   numberFormat     Int                  @default(1)
   user          User                 @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "userlastfm_user_fkey")
   albums           UserAlbum[]
   artists          UserArtist[]
   discogsReleases  UserDiscogsReleases[]
-  discogs          UserDiscogs          @relation(fields: [userid], references: [userid])
+  discogs          UserDiscogs?
   plays            UserPlay[]
   tracks           UserTrack[]
 }
@@ -266,7 +266,7 @@ model UserDiscogs {
   hideValue           Boolean?    @default(false)
   lastUpdated         DateTime?
   releasesLastUpdated DateTime?
-  user                UserLastFM?
+  user                UserLastFM? @relation(fields: [userid], references: [userid])
 }
 
 model UserArtist {
@@ -302,7 +302,7 @@ model UserTrack {
 }
 
 model UserPlay {
-  userPlayId Int        @default(autoincrement())
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId     String     @db.VarChar(19)
   trackName  String
   albumName  String?
@@ -311,8 +311,6 @@ model UserPlay {
   msPlayed   Int?
   playSource Int?       @default(0)
   user       UserLastFM @relation(fields: [userId], references: [userid])
-
-  @@id([userPlayId, userId])
 }
 
 model UserDiscogsReleases {

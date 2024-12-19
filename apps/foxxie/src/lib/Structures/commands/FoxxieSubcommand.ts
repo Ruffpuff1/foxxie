@@ -17,7 +17,6 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 	public readonly guarded: boolean;
 	public readonly hidden: boolean;
 	public readonly permissionLevel: PermissionLevels;
-	public usage: null | string = null;
 
 	public constructor(context: FoxxieSubcommand.LoaderContext, options: FoxxieSubcommand.Options) {
 		super(context, {
@@ -33,7 +32,6 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 		});
 
 		this.guarded = options.guarded ?? false;
-		this.usage = options.usage ?? null;
 		this.hidden = options.hidden ?? false;
 		this.allowedGuilds = options.allowedGuilds ?? [];
 		this.permissionLevel = options.permissionLevel ?? PermissionLevels.Everyone;
@@ -52,7 +50,7 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 	}
 
 	public addPermissionLevels(options: FoxxieSubcommand.Options) {
-		switch (options.permissionLevel) {
+		switch (options.permissionLevel!) {
 			case PermissionLevels.Administrator:
 				this.preconditions.append('Administrator');
 				break;
@@ -61,6 +59,9 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 				break;
 			case PermissionLevels.Everyone:
 				this.preconditions.append('Everyone');
+				break;
+			case PermissionLevels.GuildOwner:
+				this.preconditions.append('GuildOwner');
 				break;
 			case PermissionLevels.Moderator:
 				this.preconditions.append('Moderator');
@@ -78,9 +79,9 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 	 * This method is used for slash commands, and will throw an error if the
 	 * global command ids are empty.
 	 */
-	public getGlobalCommandId(): Snowflake {
+	public getGlobalCommandId(): null | Snowflake {
 		const ids = this.applicationCommandRegistry.globalChatInputCommandIds;
-		if (ids.size === 0) throw new Error('The global command ids are empty.');
+		if (!ids.size) return null;
 		return first([...ids.values()])!;
 	}
 
@@ -102,6 +103,10 @@ export class FoxxieSubcommand extends Subcommand<FoxxieSubcommand.Args, FoxxieSu
 		return this.fullCategory.length > 0 ? this.fullCategory[0] : null;
 	}
 
+	public get permissionNode() {
+		return `${this.category?.toLowerCase()}.${this.name}`;
+	}
+
 	protected get client(): FoxxieClient {
 		return cast<FoxxieClient>(this.container.client);
 	}
@@ -111,8 +116,8 @@ export namespace FoxxieSubcommand {
 	export type Args = FoxxieArgs;
 	export type Interaction = ChatInputCommandInteraction;
 	export type LoaderContext = Command.LoaderContext;
+	export type MessageRunArgs = [message: GuildMessage, args: Args];
 	export type Options = ExtendOptions<Subcommand.Options>;
-	export type RunArgs = [message: GuildMessage, args: Args];
 	export type RunContext = MessageCommand.RunContext;
 
 	export type T = FTFunction;
@@ -120,10 +125,9 @@ export namespace FoxxieSubcommand {
 
 export type ExtendOptions<T> = {
 	allowedGuilds?: string[];
-	description: TypedT<string>;
-	detailedDescription: TypedFT<DetailedDescriptionArgs, DetailedDescription> | TypedT<LanguageHelpDisplayOptions>;
+	description?: TypedT<string>;
+	detailedDescription?: TypedFT<DetailedDescriptionArgs, DetailedDescription> | TypedT<LanguageHelpDisplayOptions>;
 	guarded?: boolean;
 	hidden?: boolean;
 	permissionLevel?: PermissionLevels;
-	usage?: string;
 } & T;

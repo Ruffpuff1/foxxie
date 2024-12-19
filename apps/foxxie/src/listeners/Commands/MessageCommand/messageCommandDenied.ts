@@ -12,6 +12,7 @@ export class UserListener extends Listener<FoxxieEvents.MessageCommandDenied> {
 		if (Reflect.get(Object(error.context), 'silent')) return;
 
 		const identifier = translate(error.identifier);
+		console.log(error.identifier, identifier, error.context);
 		return this.alert(message, await resolveKey(message, identifier, { command, message, ...(error.context as object) }));
 	}
 

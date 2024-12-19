@@ -23,6 +23,7 @@ import {
 	italic,
 	LocaleString,
 	Partials,
+	PermissionsString,
 	PresenceUpdateStatus,
 	time,
 	TimestampStyles,
@@ -196,8 +197,8 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 			name: 'verificationlevel'
 		},
 		{
-			format: (value, lng) => getFixedT(lng!)(`guilds/permissions:${value}`),
-			name: 'permissions'
+			format: (value) => formatDuration(getDurationValue(Date.now() + value)),
+			name: 'remaining'
 		},
 		{
 			format: (value, lng) =>
@@ -234,6 +235,13 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 		{
 			format: (value) => bold(value),
 			name: LanguageFormatters.Bold
+		},
+		{
+			format: (value: PermissionsString[], lng) => {
+				const t = getFixedT(lng!);
+				return t(LanguageKeys.Globals.And, { value: value.map((v) => t(permissionStringToKey(v))).map(bold) });
+			},
+			name: LanguageFormatters.PermissionsArray
 		},
 		{
 			format: (value: GuildExplicitContentFilter, lng) => {
@@ -294,6 +302,10 @@ function parseWebhookError(): null | WebhookClientData {
 		id: process.env.WEBHOOK_ERROR_ID!,
 		token: WEBHOOK_ERROR_TOKEN
 	};
+}
+
+function permissionStringToKey(permission: PermissionsString) {
+	return LanguageKeys.Guilds.Permissions[permission];
 }
 
 export const PROJECT_ROOT = join(rootFolder, process.env.OVERRIDE_ROOT_PATH ?? 'dist');

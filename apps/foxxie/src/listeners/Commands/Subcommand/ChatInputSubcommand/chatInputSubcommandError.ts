@@ -4,7 +4,6 @@ import { handleChatInputCommandError } from '#utils/common';
 
 export class UserListener extends Listener<FoxxieEvents.ChatInputSubcommandError> {
 	public async run(...[error, payload]: EventArgs<FoxxieEvents.ChatInputSubcommandError>) {
-		console.log(error);
 		return handleChatInputCommandError(error, payload);
 	}
 }

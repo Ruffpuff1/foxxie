@@ -1,22 +1,20 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { ApplicationCommandRegistry, Awaitable, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { Stopwatch } from '@sapphire/stopwatch';
 import { getSupportedUserLanguageT, LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
+import { RegisterChatInputCommand } from '#utils/decorators';
 import { sendMessage } from '#utils/functions';
-import { InteractionContextType } from 'discord.js';
+import { InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
-@ApplyOptions<FoxxieCommand.Options>({
-	aliases: ['pong'],
-	description: LanguageKeys.Commands.General.PingDescription,
-	runIn: [CommandOptionsRunTypeEnum.Dm, CommandOptionsRunTypeEnum.GuildAny]
-})
-export default class UserCommand extends FoxxieCommand {
+@ApplyOptions<FoxxieCommand.Options>(PingCommand.Options)
+@RegisterChatInputCommand(PingCommand.ChatInputBuilder, PingCommand.IdHints)
+export default class PingCommand extends FoxxieCommand {
 	public override async chatInputRun(interaction: FoxxieCommand.ChatInputCommandInteraction): Promise<void> {
 		const t = getSupportedUserLanguageT(interaction);
 		const show = interaction.options.getBoolean('show') ?? false;
-		const msg = await interaction.reply({ content: t(LanguageKeys.Commands.General.Ping), embeds: undefined, ephemeral: !show });
+		const msg = await interaction.reply({ content: t(PingCommand.Language.Ping), embeds: undefined, ephemeral: !show });
 
 		const stopwatch = new Stopwatch().start();
 		await this.container.prisma.$connect();
@@ -24,7 +22,7 @@ export default class UserCommand extends FoxxieCommand {
 
 		const fetched = await msg.fetch();
 
-		const content = t(LanguageKeys.Commands.General.PingPong, {
+		const content = t(PingCommand.Language.Pong, {
 			dbPing: Math.round(stopwatch.duration),
 			roundTrip: fetched.createdTimestamp - interaction.createdTimestamp,
 			wsPing: Math.round(this.container.client.ws.ping)
@@ -34,13 +32,13 @@ export default class UserCommand extends FoxxieCommand {
 	}
 
 	public async messageRun(message: GuildMessage, args: FoxxieCommand.Args): Promise<void> {
-		const msg = await sendMessage(message, args.t(LanguageKeys.Commands.General.Ping));
+		const msg = await sendMessage(message, args.t(PingCommand.Language.Ping));
 
 		const stopwatch = new Stopwatch().start();
 		await this.container.prisma.$connect();
 		stopwatch.stop();
 
-		const content = args.t(LanguageKeys.Commands.General.PingPong, {
+		const content = args.t(PingCommand.Language.Pong, {
 			dbPing: Math.round(stopwatch.duration),
 			roundTrip: (msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp),
 			wsPing: Math.round(this.container.client.ws.ping)
@@ -49,9 +47,22 @@ export default class UserCommand extends FoxxieCommand {
 		await sendMessage(message, content);
 	}
 
-	public override registerApplicationCommands(registry: ApplicationCommandRegistry): Awaitable<void> {
-		registry.registerChatInputCommand((builder) => builder.setName('ping').setDescription('pong').setContexts(InteractionContextType.Guild), {
-			idHints: ['1315209780419366984']
-		});
+	public static ChatInputBuilder(builder: SlashCommandBuilder) {
+		return builder //
+			.setName('ping')
+			.setDescription('pong')
+			.setContexts(InteractionContextType.Guild);
 	}
+
+	public static IdHints = [
+		'1315209780419366984' // Nightly
+	];
+
+	public static Language = LanguageKeys.Commands.General.Ping;
+
+	public static Options: FoxxieCommand.Options = {
+		aliases: ['pong'],
+		description: PingCommand.Language.Description,
+		runIn: [CommandOptionsRunTypeEnum.Dm, CommandOptionsRunTypeEnum.GuildAny]
+	};
 }

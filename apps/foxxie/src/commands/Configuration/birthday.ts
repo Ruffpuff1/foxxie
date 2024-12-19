@@ -1,5 +1,5 @@
 import { resolveToNull } from '@ruffpuff/utilities';
-import { ApplyOptions, RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
+import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { Args, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
@@ -9,6 +9,7 @@ import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { FTFunction, GuildMessage } from '#lib/types';
 import { BirthdayData, getAge, getDateFormat, monthOfYearContainsDay, nextBirthday, yearIsLeap } from '#utils/birthday';
 import { Schedules, SubcommandKeys } from '#utils/constants';
+import { RequiresMemberPermissions } from '#utils/decorators';
 import { sendLoadingMessage } from '#utils/functions/messages';
 import { fetchTasks, MappedTask, resolveClientColor } from '#utils/util';
 import { bold, EmbedBuilder, Guild, PermissionFlagsBits, time, TimestampStyles } from 'discord.js';
@@ -25,7 +26,7 @@ import { bold, EmbedBuilder, Guild, PermissionFlagsBits, time, TimestampStyles }
 })
 export class UserCommand extends FoxxieSubcommand {
 	@RequiresClientPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
-	@RequiresUserPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
+	@RequiresMemberPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
 	public async [SubcommandKeys.List](msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
 		const loading = await sendLoadingMessage(msg);
 		let tasks = fetchTasks(Schedules.Birthday);

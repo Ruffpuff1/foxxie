@@ -1,12 +1,8 @@
 import { API } from '@discordjs/core/http-only';
-import { Piece, Store } from '@sapphire/framework';
-import { TFunction } from '@sapphire/plugin-i18next';
-import { PickByValue } from '@sapphire/utilities';
 import { ApiService } from '#lib/api/ApiService';
 import { SettingsService } from '#lib/Container/Services/SettingsService';
 import { UtilityService } from '#lib/Container/Utility/UtilityService';
 import { WorkerService } from '#lib/Container/Workers/WorkerService';
-import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
 import { HighlightData } from '#lib/Database/Models/highlight';
 import { Starboard } from '#lib/Database/Models/starboard';
 import { SerializerStore } from '#lib/Database/settings/structures/SerializerStore';
@@ -17,13 +13,13 @@ import { PrismaDatabase } from '#lib/Setup/prisma';
 import { FoxxieCommand } from '#lib/structures';
 import { InviteManager } from '#lib/Structures/managers/InviteManager';
 import { RedisManager } from '#lib/Structures/managers/RedisManager';
-import { ColorData, ConsoleState, FoxxieEvents, GuildMessage, LanguageString, TypedFT, TypedT, TypeOfEmbed } from '#lib/types';
+import { FoxxieEvents, GuildMessage, LanguageString, TypedFT, TypedT } from '#lib/types';
 import { Schedules } from '#utils/constants';
 import { SerializedEmoji } from '#utils/discord';
 import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
 import { LLRCData, LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
 import { MappedTask } from '#utils/util';
-import { Awaitable, GatewayMessageReactionRemoveDispatch, GuildChannel, GuildTextBasedChannel, Snowflake, ThreadChannel, User } from 'discord.js';
+import { GatewayMessageReactionRemoveDispatch, GuildChannel, GuildTextBasedChannel, Snowflake, ThreadChannel, User } from 'discord.js';
 
 declare global {
 	namespace PrismaJson {
@@ -46,52 +42,37 @@ declare module 'discord.js' {
 	}
 
 	interface ClientEvents {
-		[FoxxieEvents.BotMessage]: [message: GuildMessage];
-		[FoxxieEvents.ChatInputCommandLogging]: [interaction: ChatInputCommandInteraction, command: FoxxieCommand];
-		[FoxxieEvents.Console]: [state: ConsoleState, message: string];
 		[FoxxieEvents.GuildMemberAddMuted]: [member: GuildMember, settings: ReadonlyGuildData];
+		[FoxxieEvents.GuildMemberAddNotMuted]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberCountChannelUpdate]: [member: GuildMember];
-		[FoxxieEvents.GuildMemberJoin]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberUpdateRolesManualMute]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberUpdateRolesManualUnmute]: [member: GuildMember];
 		[FoxxieEvents.GuildMemberUpdateRolesModeration]: [member: GuildMember, added: Role[], removed: Role[]];
-		[FoxxieEvents.GuildMessageDelete]: [message: GuildMessage | undefined, guild: Guild, channel: GuildTextBasedChannel];
-		[FoxxieEvents.GuildMessageLog]: [
-			guild: Guild,
-			key: PickByValue<GuildChannelSettingsService, null | Snowflake>,
-			makeEmbed: (t: TFunction) => Awaitable<MessageCreateOptions | TypeOfEmbed>
-		];
-		[FoxxieEvents.LastFmUpdateUser]: [userId: string];
-		[FoxxieEvents.MemberIdleLog]: [Presence];
+		[FoxxieEvents.GuildMemberUpdateRolesNotify]: [member: GuildMember, added: Role[], removed: Role[]];
+		[FoxxieEvents.GuildMemberUpdateRolesStickyRoles]: [member: GuildMember, added: Role[], removed: Role[]];
 		[FoxxieEvents.MessageCommandLogging]: [message: GuildMessage, command: FoxxieCommand];
-		[FoxxieEvents.MinecraftBotMessage]: [message: GuildMessage];
+		[FoxxieEvents.MessageCreateBot]: [message: GuildMessage];
+		[FoxxieEvents.MessageCreateBotRealmBot]: [message: GuildMessage];
+		[FoxxieEvents.MessageCreateStats]: [guildId: Snowflake, member: GuildMember];
 		[FoxxieEvents.ModerationEntryAdd]: [entry: Readonly<ModerationEntry>];
 		[FoxxieEvents.ModerationEntryEdit]: [old: Readonly<ModerationEntry>, entry: Readonly<ModerationEntry>];
+		[FoxxieEvents.RawGuildMessageDelete]: [message: GuildMessage | undefined, guild: Guild, channel: GuildTextBasedChannel];
 		[FoxxieEvents.RawReactionAdd]: [data: LLRCData, emoji: SerializedEmoji];
 		[FoxxieEvents.RawReactionRemove]: [channel: TextChannel, data: GatewayMessageReactionRemoveDispatch['d']];
-		[FoxxieEvents.StatsMemberCount]: [guild: Guild, t: TFunction];
-		[FoxxieEvents.StatsMessage]: [guildId: Snowflake, member: GuildMember];
 		[FoxxieEvents.SystemMessage]: [message: GuildMessage];
 		[FoxxieEvents.UserMessage]: [message: GuildMessage];
-		[FoxxieEvents.VoiceChannelDeafened]: [state: VoiceState];
-		[FoxxieEvents.VoiceChannelUndeafened]: [state: VoiceState];
 	}
 }
 
 declare module '@sapphire/pieces' {
 	interface Container {
 		api?: API;
-		/**
-		 * Api manager
-		 */
 		apis: ApiService;
 		db: PrismaDatabase;
 		redis: null | RedisManager;
 		schedule: ScheduleManager;
 		settings: SettingsService;
-
 		utilities: UtilityService;
-
 		workers: WorkerService;
 	}
 
@@ -105,20 +86,15 @@ declare module '@sapphire/framework' {
 	interface ArgType {
 		boolean: boolean;
 		channelName: GuildChannel | ThreadChannel;
-		cleanString: string;
-		color: ColorData;
 		command: FoxxieCommand;
 		commandMatch: string;
 		commandName: FoxxieCommand;
 		language: LanguageString;
-		moderationLog: number;
-		piece: Piece;
 		reminder: MappedTask<Schedules.Reminder>;
 		sendableChannel: GuildTextBasedChannel;
 		snowflake: Snowflake;
 		song: string[];
 		starboard: Starboard;
-		store: Store<any>;
 		timespan: number;
 		username: User;
 	}
@@ -128,6 +104,7 @@ declare module '@sapphire/framework' {
 		AllowedGuilds: { allowedGuilds: string[] };
 		BotOwner: never;
 		Everyone: never;
+		GuildOwner: never;
 		Moderator: never;
 	}
 }

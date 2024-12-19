@@ -25,7 +25,7 @@ export class UpdateService {
 
 		if (updateQueue) {
 			if (user === null) return null;
-			if (user.lastUpdated.getTime() > Date.now() - hours(12)) {
+			if (user.lastUpdated && user.lastUpdated.getTime() > Date.now() - hours(12)) {
 				container.logger.debug(`[${blue('Last.fm')} ${white('Update')}]: Skipped for ${userId} | ${user.usernameLastFM}`);
 				return null;
 			}

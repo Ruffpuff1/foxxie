@@ -1,5 +1,5 @@
 import { resolveToNull } from '@ruffpuff/utilities';
-import { ApplyOptions, RequiresClientPermissions, RequiresUserPermissions } from '@sapphire/decorators';
+import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { Starboard } from '#lib/Database/Models/starboard';
@@ -8,7 +8,7 @@ import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
 import { defaultPaginationOptions, defaultPaginationOptionsWithoutSelectMenu } from '#root/config';
 import { Emojis } from '#utils/constants';
-import { RequiresStarboardEntries } from '#utils/decorators';
+import { RequiresMemberPermissions, RequiresStarboardEntries } from '#utils/decorators';
 import { FoxxiePaginatedMessage } from '#utils/External/FoxxiePaginatedMessage';
 import { getGuildStarboard } from '#utils/functions';
 import { PermissionFlagsBits } from 'discord.js';
@@ -22,8 +22,8 @@ import { PermissionFlagsBits } from 'discord.js';
 })
 export class UserCommand extends FoxxieSubcommand {
 	@RequiresClientPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
+	@RequiresMemberPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
 	@RequiresStarboardEntries()
-	@RequiresUserPermissions([PermissionFlagsBits.EmbedLinks, PermissionFlagsBits.AddReactions])
 	public async list(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<void> {
 		const channel = await args.pick('channelName').catch(() => null);
 		const starMessageId = await args.pick('number').catch(() => 1);

@@ -103,14 +103,6 @@ export const InfoUserTitlesNotes = FT<{ count: number }, string>('commands/gener
 export const InfoUserTitlesRoles = FT<{ count: number }, string>('commands/general:infoUserTitles.roles');
 export const InfoUserTitlesWarnings = FT<{ count: number }, string>('commands/general:infoUserTitles.warnings');
 
-export const Ping = T('commands/general:ping');
-export const PingDescription = T('commands/general:pingDescription');
-export const PingPong = FT<{
-	dbPing: number;
-	roundTrip: number;
-	wsPing: number;
-}>('commands/general:pingPong');
-
 export const StatsDescription = T('commands/general:statsDescription');
 export const StatsDetailedDescription = T<HelpDisplayData>('commands/general:statsDetailedDescription');
 export const StatsMenu = FT<

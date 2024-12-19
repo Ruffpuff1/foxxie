@@ -3,6 +3,10 @@ import { FT, T } from '#lib/types';
 
 export const Description = T('commands/websearch/lastfm:description');
 export const DetailedDescription = T<LanguageHelpDisplayOptions>('commands/websearch/lastfm:detailedDescription');
+export const FM = T('commands/websearch/lastfm:fm');
+export const Name = T('commands/websearch/lastfm:name');
+export const OptionsShow = T('commands/websearch/lastfm:optionsShow');
+export const OptionsUserFM = T('commands/websearch/lastfm:optionsUserFM');
 export const UpdateIndexStarted = T('commands/websearch/lastfm:updateIndexStarted');
 export const UpdateIndexDescription = FT<{ description: string }>('commands/websearch/lastfm:updateIndexDescription');
 export const UpdateIndexFrequent = T('commands/websearch/lastfm:updateIndexFrequent');

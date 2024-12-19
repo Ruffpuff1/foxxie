@@ -6,6 +6,17 @@ import { ArtistRepository } from '../repository/ArtistRepository.js';
 import { TopArtistNamePlaycount } from '../types/models/domain/TopArtist.js';
 
 export class ArtistsService {
+	public async getArtistPlaysForUserId(userId: string, artistName: string) {
+		const result = await container.prisma.userPlay.count({
+			where: {
+				artistName,
+				userId
+			}
+		});
+
+		return Number(result);
+	}
+
 	public async getUserAllTimeTopArtists(userId: string, useCache = false) {
 		const cacheKey = `user-${userId}-topartists-alltime`;
 		const cachedValue = useCache ? await container.redis?.get(cacheKey) : null;

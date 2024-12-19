@@ -4,7 +4,7 @@ import { cast } from '@sapphire/utilities';
 import FoxxieClient from '#lib/FoxxieClient';
 import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
 import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
-import { PermissionLevels, TypedT } from '#lib/types';
+import { PermissionLevels, TypedFT, TypedT } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { seconds } from '#utils/common';
 import { Awaitable, Guild, Message, Snowflake } from 'discord.js';
@@ -15,7 +15,7 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 
 	declare public description: TypedT<string>;
 
-	declare public detailedDescription: TypedT<LanguageHelpDisplayOptions>;
+	declare public detailedDescription: TypedFT<{ commandId?: null | string; prefix?: string }, LanguageHelpDisplayOptions>;
 
 	public readonly guarded: boolean;
 
@@ -40,7 +40,10 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 		this.hidden = options.hidden ?? false;
 		this.allowedGuilds = options.allowedGuilds ?? [];
 		this.permissionLevel = options.permissionLevel ?? PermissionLevels.Everyone;
-		this.detailedDescription = options.detailedDescription!;
+		this.detailedDescription = options.detailedDescription as unknown as TypedFT<
+			{ commandId?: null | string; prefix?: string },
+			LanguageHelpDisplayOptions
+		>;
 
 		if (options.guarded) this.guarded = true;
 	}
@@ -65,6 +68,9 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 			case PermissionLevels.Everyone:
 				this.preconditions.append('Everyone');
 				break;
+			case PermissionLevels.GuildOwner:
+				this.preconditions.append('GuildOwner');
+				break;
 			case PermissionLevels.Moderator:
 				this.preconditions.append('Moderator');
 				break;
@@ -76,8 +82,9 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 	/**
 	 * Retrieves the global command id from the application command registry.
 	 */
-	public getGlobalCommandId(): Snowflake {
+	public getGlobalCommandId(): null | Snowflake {
 		const ids = this.applicationCommandRegistry.globalChatInputCommandIds;
+		if (!ids.size) return null;
 		return [...first([...ids.values()])!][0];
 	}
 
@@ -99,6 +106,10 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 
 	public override get category(): null | string {
 		return this.fullCategory.length > 0 ? this.fullCategory[0] : null;
+	}
+
+	public get permissionNode() {
+		return `${this.category?.toLowerCase()}.${this.name}`;
 	}
 
 	protected get client(): FoxxieClient {

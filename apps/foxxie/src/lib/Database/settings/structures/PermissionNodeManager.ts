@@ -1,10 +1,12 @@
-import { UserError } from '@sapphire/framework';
+import { container, UserError } from '@sapphire/framework';
+import { isNullish } from '@sapphire/utilities';
 import { PermissionsNode, ReadonlyGuildData } from '#lib/database';
 import { matchAny } from '#lib/Database/utils/matchers/Command';
 import { LanguageKeys } from '#lib/i18n';
-import { FoxxieCommand } from '#lib/structures';
-import { resolveGuild } from '#utils/common';
-import { Collection, type GuildMember, Role, type User } from 'discord.js';
+import { FoxxieCommand, FoxxieSubcommand } from '#lib/structures';
+import { emojis } from '#utils/constants';
+import { resolveGuild } from '#utils/functions';
+import { Collection, GuildMember, Role, type User } from 'discord.js';
 
 export const enum PermissionNodeAction {
 	Allow,
@@ -54,6 +56,82 @@ export class PermissionNodeManager {
 		};
 
 		return nodes.with(nodeIndex, node);
+	}
+
+	public buildTree(node: PermissionsManagerNode, target: GuildMember | Role) {
+		const object = {};
+		const sorted = container.stores.get('commands').sort((a, b) => a.category!.localeCompare(b.category!));
+		const categories = [...new Set(sorted.map((c) => c.category))].map((c) => c!.toLowerCase());
+
+		const allowed = [...node.allow];
+		const denied = [...node.deny];
+
+		for (const category of categories) {
+			const categoryValue = this.resolveCategory(allowed, denied, category);
+			Reflect.set(object, category, categoryValue);
+			if (typeof categoryValue === 'boolean' || categoryValue === null) continue;
+
+			const commands = container.stores.get('commands').filter((c) => c.category!.toLowerCase() === category);
+			const sortedCommands = commands.sort((a, b) => a.name.localeCompare(b.name));
+
+			for (const command of sortedCommands.values()) {
+				const commandValue = this.resolveCommand(allowed, denied, category, command as FoxxieSubcommand);
+				Reflect.set(Reflect.get(object, category), command.name.toLowerCase(), commandValue);
+			}
+		}
+		console.log(object);
+
+		const out = [];
+		const name = target instanceof Role ? (target.id === target.guild.id ? 'Everyone' : target.name) : target.displayName;
+
+		out.push(`Permissions for **${name}**`, '');
+		console.log(node);
+
+		if (node.allow.has('*')) {
+			out.push(`${emojis.perms.granted} all commands (*)`);
+			return out.join('\n');
+		} else if (node.deny.has('*')) {
+			out.push(`${emojis.perms.denied} all commands (*)`);
+			return out.join('\n');
+		}
+
+		for (const category of Object.keys(object)) {
+			const value = Reflect.get(object, category);
+			if (value === null && category === 'admin') continue;
+			out.push(this.buildField(value, category));
+			if (typeof value === 'object') {
+				let i = 0;
+				if (isNullish(value)) continue;
+				const commandKeys = Object.keys(value);
+				const filteredKeys = commandKeys.filter((k) => value[k] !== null);
+				const size = filteredKeys.length;
+				for (const cmd of filteredKeys) {
+					i++;
+					const cValue = value[cmd];
+					out.push(`${i === size ? ' ' : '  '}${i === size ? '└──' : '├──'}${this.buildField(cValue, cmd)}`);
+					if (typeof cValue === 'object') {
+						let s = 0;
+						if (isNullish(cValue)) continue;
+						const subcommandKeys = Object.keys(cValue);
+						const filteredSubcommandKeys = subcommandKeys.filter((k) => cValue[k] !== null);
+						const sSize = filteredSubcommandKeys.length;
+						for (const sCmd of filteredSubcommandKeys) {
+							s++;
+							const scValue = cValue[sCmd];
+							out.push(`${s === sSize ? '   |        └──' : '   |        ├──'}${this.buildField(scValue, sCmd)}`);
+						}
+					}
+				}
+			}
+		}
+
+		return out.join('\n');
+	}
+
+	public display(target: GuildMember | Role) {
+		const node = target instanceof Role ? this.findRoleNode(target.id) : this.findUserNode(target.id);
+		console.log(node);
+		return this.buildTree(node, target);
 	}
 
 	public has(roleId: string) {
@@ -135,6 +213,44 @@ export class PermissionNodeManager {
 		return nodes.toSpliced(nodeIndex, 1);
 	}
 
+	public resolveCategory(allowed: string[], denied: string[], category: string) {
+		if (allowed.includes(`${category}.*`)) return true;
+		if (denied.includes(`${category}.*`)) return false;
+
+		if (allowed.some((a) => a.startsWith(category)) || denied.some((a) => a.startsWith(category))) return {};
+		return null;
+	}
+
+	public resolveCommand(allowed: string[], denied: string[], category: string, command: FoxxieSubcommand) {
+		const name = command.name.toLowerCase();
+		const base = `${category}.${name}`;
+
+		const subcommands = command.parsedSubcommandMappings?.map((c) => c.name.toLowerCase()) || [];
+		const hasSubcommands = Boolean(subcommands);
+
+		if (allowed.includes(`${base}.*`) || allowed.includes(base)) return true;
+		if (denied.includes(`${base}.*`) || denied.includes(base)) return false;
+
+		if (hasSubcommands) {
+			const options = subcommands.map((s) => `${base}.${s}`);
+			if (allowed.some((a) => options.includes(a) || denied.some((a) => options.includes(a)))) {
+				const opts = {};
+				for (const subcommand of subcommands) {
+					const key = `${base}.${subcommand}`;
+
+					if (allowed.includes(key)) Reflect.set(opts, subcommand, true);
+					else if (denied.includes(key)) Reflect.set(opts, subcommand, true);
+					else Reflect.set(opts, subcommand, null);
+				}
+
+				return opts;
+			}
+
+			return null;
+		}
+		return null;
+	}
+
 	public run(member: GuildMember, command: FoxxieCommand) {
 		return this.runUser(member, command) ?? this.runRole(member, command);
 	}
@@ -145,6 +261,35 @@ export class PermissionNodeManager {
 
 	#getPermissionNodes(target: GuildMember | Role | User): readonly PermissionsNode[] {
 		return target instanceof Role ? this.#cachedRawPermissionRoles : this.#cachedRawPermissionUsers;
+	}
+
+	private buildField(entry: boolean | null, key: string) {
+		if (typeof entry === 'boolean') return `${entry ? emojis.perms.granted : emojis.perms.denied} **${key}**`;
+		return `${emojis.perms.notSpecified} ${key}`;
+	}
+
+	private findRoleNode(id: string) {
+		const defaultNode: PermissionsManagerNode = {
+			allow: new Set(),
+			deny: new Set()
+		};
+
+		return this.sorted.get(id) || defaultNode;
+	}
+
+	private findUserNode(id: string) {
+		const defaultNode: PermissionsManagerNode = {
+			allow: new Set(),
+			deny: new Set()
+		};
+
+		const found = this.#cachedRawPermissionUsers.find((w) => w.id === id);
+		if (!found) return defaultNode;
+
+		return {
+			allow: new Set(found.allow),
+			deny: new Set(found.deny)
+		};
 	}
 
 	private generateSorted(settings: ReadonlyGuildData, nodes: readonly PermissionsNode[]) {
@@ -208,6 +353,30 @@ export class PermissionNodeManager {
 			sortedRoles: reversed
 		};
 	}
+
+	// private makeNodeObject(node: PermissionsNode): ReturnNode | true {
+	// 	const tree = Object.fromEntries(this.categories.map((i) => [i, cast<boolean | Record<string, boolean>>({})]));
+
+	// 	for (const perm of node.allowed) {
+	// 		const [category, command] = perm.split('.');
+
+	// 		if (!command && category === '*') {
+	// 			return true;
+	// 		}
+
+	// 		if (!this.categories.includes(category)) continue;
+
+	// 		if (command === '*') {
+	// 			tree[category] = true;
+	// 			continue;
+	// 		}
+
+	// 		if (typeof tree[category] === 'boolean') continue;
+	// 		(tree[category] as Record<string, boolean>)[command] = true;
+	// 	}
+
+	// 	return tree;
+	// }
 
 	private runRole(member: GuildMember, command: FoxxieCommand) {
 		const roles = member.roles.cache;

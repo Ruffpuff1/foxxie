@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { GuildBasedChannelTypes } from '@sapphire/discord.js-utilities';
-import { ApplicationCommandRegistry, CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { applyLocalizedBuilder, createLocalizedChoice, TFunction } from '@sapphire/plugin-i18next';
 import { cutText, isNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
 import { IdHints } from '#lib/discord';
@@ -11,6 +11,7 @@ import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { PermissionLevels } from '#lib/types';
 import { desc, floatPromise, minutes, seconds, years } from '#utils/common';
 import { Emojis } from '#utils/constants';
+import { RegisterChatInputCommand } from '#utils/decorators';
 import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginatedMessageEmbedFields';
 import { getModeration } from '#utils/functions';
 import { TypeVariation } from '#utils/moderationConstants';
@@ -18,7 +19,6 @@ import { resolveCase } from '#utils/resolvers/Case';
 import { resolveTimeSpan } from '#utils/resolvers/TimeSpan';
 import { getFullEmbedAuthor, isUserSelf, resolveClientColor } from '#utils/util';
 import {
-	Awaitable,
 	blockQuote,
 	channelMention,
 	EmbedBuilder,
@@ -56,6 +56,67 @@ const OverviewColors = [0x80f31f, 0xa5de0b, 0xc7c101, 0xe39e03, 0xf6780f, 0xfe53
 		}
 	]
 })
+@RegisterChatInputCommand(
+	(builder) =>
+		applyLocalizedBuilder(builder, Root.Name, Root.Description)
+			.setContexts(InteractionContextType.Guild)
+			.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+			.addSubcommand((subcommand) =>
+				applyLocalizedBuilder(subcommand, Root.View) //
+					.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsCase).setMinValue(1).setRequired(false))
+					.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsShow))
+			)
+			.addSubcommand((subcommand) =>
+				applyLocalizedBuilder(subcommand, Root.List) //
+					.addUserOption((option) => applyLocalizedBuilder(option, Root.OptionsUser))
+					.addUserOption((option) => applyLocalizedBuilder(option, Root.OptionsModerator))
+					.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsOverview))
+					.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsShow))
+					.addIntegerOption((option) =>
+						applyLocalizedBuilder(option, Root.OptionsType) //
+							.addChoices(
+								createLocalizedChoice(RootModeration.TypeRoleAdd, { value: TypeVariation.RoleAdd }),
+								createLocalizedChoice(RootModeration.TypeBan, { value: TypeVariation.Ban }),
+								createLocalizedChoice(RootModeration.TypeKick, { value: TypeVariation.Kick }),
+								createLocalizedChoice(RootModeration.TypeMute, { value: TypeVariation.Mute }),
+								createLocalizedChoice(RootModeration.TypeRoleRemove, { value: TypeVariation.RoleRemove }),
+								createLocalizedChoice(RootModeration.TypeRestrictedAttachment, {
+									value: TypeVariation.RestrictedAttachment
+								}),
+								createLocalizedChoice(RootModeration.TypeRestrictedEmbed, {
+									value: TypeVariation.RestrictedEmbed
+								}),
+								createLocalizedChoice(RootModeration.TypeRestrictedEmoji, {
+									value: TypeVariation.RestrictedEmoji
+								}),
+								createLocalizedChoice(RootModeration.TypeRestrictedReaction, {
+									value: TypeVariation.RestrictedReaction
+								}),
+								createLocalizedChoice(RootModeration.TypeRestrictedVoice, {
+									value: TypeVariation.RestrictedVoice
+								}),
+								createLocalizedChoice(RootModeration.TypeSetNickname, {
+									value: TypeVariation.SetNickname
+								}),
+								createLocalizedChoice(RootModeration.TypeSoftban, { value: TypeVariation.Softban }),
+								createLocalizedChoice(RootModeration.TypeVoiceKick, {
+									value: TypeVariation.VoiceDisconnect
+								}),
+								createLocalizedChoice(RootModeration.TypeVoiceMute, { value: TypeVariation.VoiceMute }),
+								createLocalizedChoice(RootModeration.TypeWarning, { value: TypeVariation.Warning })
+							)
+					)
+					.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsPendingOnly))
+			)
+			.addSubcommand((subcommand) =>
+				applyLocalizedBuilder(subcommand, Root.Edit) //
+					.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsCase).setMinValue(1).setRequired(true))
+					.addStringOption((option) => applyLocalizedBuilder(option, Root.OptionsReason).setMaxLength(200))
+					.addStringOption((option) => applyLocalizedBuilder(option, Root.OptionsDuration).setMaxLength(50))
+					.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsRefrence).setMinValue(1).setRequired(false))
+			),
+	[IdHints.Nightly.Moderation.Utilities.Case]
+)
 export class UserCommand extends FoxxieSubcommand {
 	public async chatInputRunEdit(interaction: FoxxieSubcommand.Interaction) {
 		const entry = await this.#getCase(interaction, true);
@@ -124,72 +185,6 @@ export class UserCommand extends FoxxieSubcommand {
 		const t = show ? getSupportedLanguageT(interaction) : getSupportedUserLanguageT(interaction);
 
 		return interaction.reply({ embeds: [await getEmbed(t, entry)], ephemeral: !show });
-	}
-
-	public override registerApplicationCommands(registry: ApplicationCommandRegistry): Awaitable<void> {
-		registry.registerChatInputCommand(
-			(builder) =>
-				applyLocalizedBuilder(builder, Root.Name, Root.Description)
-					.setContexts(InteractionContextType.Guild)
-					.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-					.addSubcommand((subcommand) =>
-						applyLocalizedBuilder(subcommand, Root.View) //
-							.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsCase).setMinValue(1).setRequired(false))
-							.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsShow))
-					)
-					.addSubcommand((subcommand) =>
-						applyLocalizedBuilder(subcommand, Root.List) //
-							.addUserOption((option) => applyLocalizedBuilder(option, Root.OptionsUser))
-							.addUserOption((option) => applyLocalizedBuilder(option, Root.OptionsModerator))
-							.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsOverview))
-							.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsShow))
-							.addIntegerOption((option) =>
-								applyLocalizedBuilder(option, Root.OptionsType) //
-									.addChoices(
-										createLocalizedChoice(RootModeration.TypeRoleAdd, { value: TypeVariation.RoleAdd }),
-										createLocalizedChoice(RootModeration.TypeBan, { value: TypeVariation.Ban }),
-										createLocalizedChoice(RootModeration.TypeKick, { value: TypeVariation.Kick }),
-										createLocalizedChoice(RootModeration.TypeMute, { value: TypeVariation.Mute }),
-										createLocalizedChoice(RootModeration.TypeRoleRemove, { value: TypeVariation.RoleRemove }),
-										createLocalizedChoice(RootModeration.TypeRestrictedAttachment, {
-											value: TypeVariation.RestrictedAttachment
-										}),
-										createLocalizedChoice(RootModeration.TypeRestrictedEmbed, {
-											value: TypeVariation.RestrictedEmbed
-										}),
-										createLocalizedChoice(RootModeration.TypeRestrictedEmoji, {
-											value: TypeVariation.RestrictedEmoji
-										}),
-										createLocalizedChoice(RootModeration.TypeRestrictedReaction, {
-											value: TypeVariation.RestrictedReaction
-										}),
-										createLocalizedChoice(RootModeration.TypeRestrictedVoice, {
-											value: TypeVariation.RestrictedVoice
-										}),
-										createLocalizedChoice(RootModeration.TypeSetNickname, {
-											value: TypeVariation.SetNickname
-										}),
-										createLocalizedChoice(RootModeration.TypeSoftban, { value: TypeVariation.Softban }),
-										createLocalizedChoice(RootModeration.TypeVoiceKick, {
-											value: TypeVariation.VoiceDisconnect
-										}),
-										createLocalizedChoice(RootModeration.TypeVoiceMute, { value: TypeVariation.VoiceMute }),
-										createLocalizedChoice(RootModeration.TypeWarning, { value: TypeVariation.Warning })
-									)
-							)
-							.addBooleanOption((option) => applyLocalizedBuilder(option, Root.OptionsPendingOnly))
-					)
-					.addSubcommand((subcommand) =>
-						applyLocalizedBuilder(subcommand, Root.Edit) //
-							.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsCase).setMinValue(1).setRequired(true))
-							.addStringOption((option) => applyLocalizedBuilder(option, Root.OptionsReason).setMaxLength(200))
-							.addStringOption((option) => applyLocalizedBuilder(option, Root.OptionsDuration).setMaxLength(50))
-							.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsRefrence).setMinValue(1).setRequired(false))
-					),
-			{
-				idHints: [IdHints.Nightly.Moderation.Utilities.Case]
-			}
-		);
 	}
 
 	#formatTypeVariation(type: TypeVariation, t: TFunction): string {

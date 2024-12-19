@@ -1,14 +1,14 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
-import { isNullish, toTitleCase } from '@sapphire/utilities';
+import { cast, isNullish, toTitleCase } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { LanguageHelp, LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
 import { FoxxieArgs, FoxxieCommand } from '#lib/structures';
-import { FTFunction, GuildMessage } from '#lib/types';
+import { FTFunction, GuildMessage, PermissionLevels } from '#lib/types';
 import { clientOwners, defaultPaginationOptionsWithoutSelectMenu } from '#root/config';
 import { sendLoadingMessage, sendMessage } from '#utils/functions';
 import { resolveClientColor } from '#utils/util';
-import { bold, EmbedBuilder, inlineCode, PermissionFlagsBits } from 'discord.js';
+import { bold, EmbedBuilder, inlineCode, italic, PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
 	aliases: ['h', 'commands'],
@@ -38,7 +38,8 @@ export default class UserCommand extends FoxxieCommand {
 			.setPossibleFormats(builderData.possibleFormats)
 			.setReminder(builderData.reminders);
 
-		const extendedHelpData = args.t(command.detailedDescription);
+		const commandId = command.getGlobalCommandId();
+		const extendedHelpData = args.t(command.detailedDescription, { commandId }) as LanguageHelpDisplayOptions;
 		if (extendedHelpData.subcommands?.length) return this.#buildSubcommandHelp(message, args, command, prefixUsed, extendedHelpData);
 		const extendedHelp = builder.display(command.name, this.#formatAliases(args.t, command.aliases), extendedHelpData, prefixUsed);
 
@@ -51,6 +52,7 @@ export default class UserCommand extends FoxxieCommand {
 			.setTimestamp()
 			.setFooter({ text: data.footer })
 			.setTitle(data.title)
+			.addFields({ name: ':closed_lock_with_key: | Permission Node', value: inlineCode(command.permissionNode) })
 			.setDescription(extendedHelp);
 	}
 
@@ -99,12 +101,18 @@ export default class UserCommand extends FoxxieCommand {
 						value: args.t(LanguageKeys.Globals.And, { value: extendedHelpData.subcommands!.map((s) => inlineCode(s.name)) })
 					}
 				])
-				.setFooter({
-					text: `Permission Node: ${command.category?.toLowerCase()}.${command.name}${command.aliases?.length ? `\nSubcommand Aliases: ${args.t(LanguageKeys.Globals.And, { value: [...command.aliases] })}` : ''}`
+				.addFields({ name: ':closed_lock_with_key: | Permission Node', value: inlineCode(command.permissionNode) });
+
+			if (command.aliases.length) {
+				embed.setFooter({
+					text: `Aliases: ${args.t(LanguageKeys.Globals.And, { value: [...command.aliases] })}`
 				});
+			}
 
 			return embed;
 		});
+
+		let idx = 0;
 
 		for (const subcommand of extendedHelpData.subcommands!) {
 			display.addPageEmbed((embed) => {
@@ -116,7 +124,7 @@ export default class UserCommand extends FoxxieCommand {
 						value: subcommand.usages
 							.map(
 								(usage) =>
-									`→ ${prefixUsed}${command.name} ${subcommand.name}${usage === LanguageKeys.Globals.DefaultT ? '' : ` *${usage}*`}`
+									`→ ${prefixUsed}${command.name} ${subcommand.name} ${usage === LanguageKeys.Globals.DefaultT ? '' : usage ? italic(usage) : usage}`
 							)
 							.join('\n')
 					});
@@ -138,11 +146,14 @@ export default class UserCommand extends FoxxieCommand {
 				if (subcommand.examples?.length) {
 					embed.addFields({
 						name: builderData.examples,
-						value: subcommand.examples
-							.map(
+						value: [
+							idx === 0 ? `→ ${prefixUsed}${command.name}` : null,
+							...subcommand.examples.map(
 								(example) =>
-									`→ ${prefixUsed}${command.name} ${subcommand.name}${example === LanguageKeys.Globals.DefaultT ? '' : ` *${example}*`}`
+									`→ ${prefixUsed}${command.name} ${subcommand.name} ${example === LanguageKeys.Globals.DefaultT ? '' : example ? italic(example) : example}`
 							)
+						]
+							.filter((a) => !isNullish(a))
 							.join('\n')
 					});
 				} else {
@@ -158,12 +169,20 @@ export default class UserCommand extends FoxxieCommand {
 						value: subcommand.reminder
 					});
 
-				embed.setFooter({
-					text: `Permission Node: ${command.category?.toLowerCase()}.${command.name}.${subcommand.name}${subcommand.aliases?.length ? `\nAliases: ${args.t(LanguageKeys.Globals.And, { value: subcommand.aliases })}` : ''}`
+				embed.addFields({
+					name: ':closed_lock_with_key: | Permission Node',
+					value: inlineCode(`${command.permissionNode}.${subcommand.name}`)
 				});
+				if (subcommand.aliases?.length) {
+					embed.setFooter({
+						text: `Aliases: ${args.t(LanguageKeys.Globals.And, { value: subcommand.aliases })}`
+					});
+				}
 
 				return embed;
 			});
+
+			idx++;
 		}
 
 		console.log(pageLabels);
@@ -195,7 +214,10 @@ export default class UserCommand extends FoxxieCommand {
 		const tCategories = args.t(LanguageKeys.Commands.General.HelpCategories);
 		const includeAdmin = clientOwners.includes(message.author.id);
 
-		const commands = this.container.stores.get('commands').filter((a) => (includeAdmin ? true : a.category !== 'Admin'));
+		const commands = this.container.stores
+			.get('commands')
+			.filter((a) => (includeAdmin ? true : cast<FoxxieCommand>(a).permissionLevel !== PermissionLevels.BotOwner));
+
 		const categories = [...new Set(commands.map((c) => c.category!))]
 			.sort((a, b) => a.localeCompare(b))
 			.map((c) => tCategories[c.toLowerCase() as keyof typeof tCategories]);

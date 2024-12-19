@@ -1,187 +1,278 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import makeRequest from '@aero/http';
-import { Prisma } from '@prisma/client';
+import type { Message } from 'discord.js';
+
+import { bold } from '@discordjs/builders';
+import { ZeroWidthSpace } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { send } from '@sapphire/plugin-editable-commands';
-import { Result } from '@sapphire/result';
 import { Stopwatch } from '@sapphire/stopwatch';
-import { Type } from '@sapphire/type';
-import { isThenable } from '@sapphire/utilities';
-// @ts-expect-error unused vars for eval
-import { readSettings, writeSettings } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n';
+import Type from '@sapphire/type';
+import { cast, codeBlock, isThenable } from '@sapphire/utilities';
+import { LanguageKeys } from '#lib/i18n/languageKeys';
 import { FoxxieCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';
-import { days } from '#utils/common';
-import { Urls } from '#utils/constants';
-import { codeBlock, Message } from 'discord.js';
-import { hostname } from 'node:os';
+import { createReferPromise } from '#utils/common';
+import { clean } from 'confusables';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { inspect } from 'node:util';
-
-const langOptions = ['lang', 'lng'];
-const depthOptions = ['depth', 'd'];
-const msgFlags = ['msg', 'message', 'm'];
-const sqlFlags = ['s', 'sql'];
-
-const enum OutputType {
-	Console = 'console',
-	Paste = 'paste'
-}
+import { createContext, Script } from 'node:vm';
 
 @ApplyOptions<FoxxieCommand.Options>({
 	aliases: ['ev'],
 	description: LanguageKeys.Commands.Admin.EvalDescription,
-	flags: [...msgFlags, ...sqlFlags, 'showHidden', 'sh', 's', 'silent', 'a', 'async'],
-	guarded: true,
-	options: [...depthOptions, ...langOptions, 'output'],
+	flags: ['async', 'no-timeout', 'json', 'silent', 'showHidden', 'hidden', 'sql', 'message', 'msg'],
+	options: ['timeout', 'wait', 'lang', 'language', 'depth'],
 	permissionLevel: PermissionLevels.BotOwner,
-	quotes: [],
-	usage: '[code]'
+	quotes: []
 })
 export class UserCommand extends FoxxieCommand {
-	public async messageRun(message: Message, args: FoxxieCommand.Args): Promise<void> {
+	#cachedEvalContext: null | object = null;
+	private readonly kTimeout = 60000;
+
+	public override async messageRun(message: Message, args: FoxxieCommand.Args) {
 		const code = await args.rest('string');
-		const { result, success, time, type } = args.getFlags(...sqlFlags) ? await this.sql(code) : await this.eval(message, args, code);
 
-		const formatted = codeBlock(args.getOption(...langOptions) ?? 'js', result);
+		const wait = args.getOption('timeout', 'wait');
+		const flagTime = args.getFlags('no-timeout') ? Infinity : wait === null ? this.kTimeout : Number(wait);
+		const executeSql = args.getFlags('sql');
+		const language = args.getOption('lang', 'language') ?? (executeSql || args.getFlags('json') ? 'json' : 'js');
+		const { length, result, success, time, type } = executeSql ? await this.sql(code) : await this.eval(message, args, code, flagTime);
 
-		const footer = codeBlock('ts', type.toString());
-		let output = args.t(LanguageKeys.Commands.Admin[`Eval${success ? 'Output' : 'Error'}`], {
-			output: formatted,
-			time,
-			type: footer
-		});
-
-		if (args.getFlags('s', 'silent')) return;
-		if (args.getOption('output') === OutputType.Console) {
-			// eslint-disable-next-line no-console
-			console.log(result);
-			await send(
-				message,
-				args.t(LanguageKeys.Commands.Admin.EvalConsole, {
-					footer,
-					name: hostname(),
-					time
-				})
-			);
-			return;
+		if (args.getFlags('silent')) {
+			if (!success && result && cast<Error>(result).stack) this.container.logger.fatal(cast<Error>(result).stack);
+			return null;
 		}
 
-		if (output.length > 2000 || args.getOption('output') === OutputType.Paste) {
-			const key = await this.container.apis.hastebin.post(result);
-			if (args.getFlags(...msgFlags)) {
-				output = `${Urls.Haste}/share/${key}`;
-				await send(message, output);
-				return;
-			}
-			await send(
-				message,
-				args.t(LanguageKeys.Commands.Admin.EvalHaste, {
-					footer,
-					output: `${Urls.Haste}/share/${key}`,
-					time
-				})
-			);
-			return;
+		if (args.getFlags('message', 'msg')) {
+			return send(message, result || ZeroWidthSpace);
 		}
 
-		if (args.getFlags(...msgFlags)) output = result;
-		await send(message, output);
+		const body = codeBlock(language, result || ZeroWidthSpace);
+		const header = `${bold(success ? 'Output' : 'Error')}:`;
+		const lengthHeader = length ? `.length: ${args.t(LanguageKeys.Globals.NumberFormat, { value: length })}` : '';
+		const typeHeader = `\n${bold('Type')}:${codeBlock('ts', `${type.toString()}${lengthHeader}`)}`;
+		// If the sum of the length between the header and the body exceed 2000 characters, send as file:
+		if ([...header, ...body, ...typeHeader].length > 2000) {
+			const file = { attachment: Buffer.from(result, 'utf8'), name: `output.${language}` } as const;
+			return send(message, { content: `${typeHeader}\n${header} ${time}`, files: [file] });
+		}
+
+		// Otherwise send as a single message:
+		return send(message, `${header}${body}${typeHeader}\n${time}`);
 	}
 
-	private async eval(message: Message, args: FoxxieCommand.Args, code: string) {
-		// @ts-expect-error value is never read, this is so `guild` is possible as an alias when sending the eval.
-		const { guild } = message;
-		// @ts-expect-error value is never read, this is so `client` is possible as an alias when sending the eval.
-		const { client } = this.container;
-		// @ts-expect-error value is never read, this is so `msg` is possible as an alias when sending the eval.
-		const msg = message;
-		// @ts-expect-error value is never read, this is so `d` is possible as an alias when sending the eval.
-		const d = days;
-		// @ts-expect-error value is never read, this is so `req` is possible as an alias when sending the eval.
-		const req = makeRequest;
-		// @ts-expect-error value is never read, this is so `req` is possible as an alias when sending the eval.
-		const { fromAsync } = Result;
+	private async eval(message: Message, args: FoxxieCommand.Args, code: string, timeout: number): Promise<EvalResult> {
+		if (timeout === Infinity || timeout === 0) return this.runEval(message, args, code, null, undefined);
 
-		code = code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
+		const controller = new AbortController();
+		const sleepPromise = createReferPromise<EvalResult>();
+		const timer = setTimeout(() => {
+			controller.abort();
+			sleepPromise.resolve({
+				result: 'timeout',
+				success: false,
+				time: '⏱ ...',
+				type: new Type(sleepPromise)
+			});
+		}, timeout);
+		return Promise.race([this.runEval(message, args, code, controller.signal, timeout).finally(() => clearTimeout(timer)), sleepPromise.promise]);
+	}
+
+	private async fetchContext() {
+		if (!this.#cachedEvalContext) {
+			this.#cachedEvalContext = {
+				...globalThis,
+				__dirname: fileURLToPath(new URL('.', import.meta.url)),
+				__filename: fileURLToPath(import.meta.url),
+				buffer: await import('node:buffer'),
+				client: this.container.client,
+				command: this,
+				container: this.container,
+				crypto: await import('node:crypto'),
+				discord: {
+					...(await import('discord.js')),
+					builders: await import('@discordjs/builders'),
+					collection: await import('@discordjs/collection'),
+					types: await import('discord-api-types/v10')
+				},
+				events: await import('node:events'),
+				fetch: await import('@aero/http'),
+				foxxie: {
+					api: {
+						lastfm: await import('#apis/last.fm/util/index')
+					},
+					database: {
+						...(await import('#lib/database')),
+						settings: await import('#lib/Database/settings/index')
+					},
+					i18n: await import('#lib/i18n'),
+					moderation: {
+						...(await import('#lib/moderation')),
+						actions: await import('#lib/moderation/actions'),
+						common: await import('#lib/moderation/common'),
+						managers: {
+							...(await import('#lib/moderation/managers')),
+							loggers: await import('#lib/moderation/managers/loggers')
+						}
+					},
+					structures: {
+						...(await import('#lib/structures')),
+						managers: await import('#lib/structures/managers')
+					},
+					utils: {
+						builders: await import('#utils/builders'),
+						common: await import('#utils/common'),
+						functions: await import('#utils/functions')
+					}
+				},
+				fs: await import('node:fs'),
+				http: await import('node:http'),
+				module: await import('node:module'),
+				os: await import('node:os'),
+				path: await import('node:path'),
+				process: await import('node:process'),
+				require: createRequire(import.meta.url),
+				sapphire: {
+					asyncQueue: await import('@sapphire/async-queue'),
+					framework: await import('@sapphire/framework'),
+					pieces: await import('@sapphire/pieces'),
+					snowflake: await import('@sapphire/snowflake'),
+					stopwatch: await import('@sapphire/stopwatch'),
+					utilities: {
+						...(await import('@sapphire/utilities')),
+						discord: await import('@sapphire/discord.js-utilities'),
+						time: await import('@sapphire/time-utilities')
+					}
+				},
+				stream: { web: await import('node:stream/web'), ...(await import('node:stream')) },
+				timers: { promises: await import('node:timers/promises'), ...(await import('node:timers')) },
+				url: await import('node:url'),
+				util: await import('node:util'),
+				v8: await import('node:v8'),
+				vm: await import('node:vm'),
+				worker_threads: await import('node:worker_threads')
+			};
+		}
+
+		return this.#cachedEvalContext;
+	}
+
+	private formatTime(syncTime: string, asyncTime?: string) {
+		return asyncTime ? `⏱ ${asyncTime}<${syncTime}>` : `⏱ ${syncTime}`;
+	}
+
+	private async runEval(
+		message: Message,
+		args: FoxxieCommand.Args,
+		code: string,
+		signal: AbortSignal | null,
+		timeout: number | undefined
+	): Promise<EvalResult> {
+		if (args.getFlags('async')) code = `(async () => {\n${code}\n})();`;
+
+		let script: Script;
+		try {
+			script = new Script(code, { filename: 'eval' });
+		} catch (error) {
+			return { result: (error as SyntaxError).message, success: false, time: '💥 Syntax Error', type: new Type(error) };
+		}
+
+		const context = createContext({ ...(await this.fetchContext()), args, message, msg: message, signal });
+
 		const stopwatch = new Stopwatch();
-		// eslint-disable-next-line one-var
-		let asyncTime, result, success, syncTime;
-		// eslint-disable-next-line one-var
-		let hasThen = false;
+		let success: boolean;
+		let syncTime = '';
+		let asyncTime = '';
+		let result: unknown;
+		let thenable = false;
 		let type: Type;
+		let length!: number;
 
 		try {
-			if (args.getFlags('a', 'async')) code = `(async () => {\n${code}\n})();`;
+			result = script.runInNewContext(context, { microtaskMode: 'afterEvaluate', timeout });
 
-			// eslint-disable-next-line no-eval
-			result = eval(code);
+			// If the signal aborted, it should not continue processing the result:
+			if (signal?.aborted) return { result: 'AbortError', success: false, time: '⏱ ...', type: new Type(result) };
+
 			syncTime = stopwatch.toString();
 			type = new Type(result);
 			if (isThenable(result)) {
-				hasThen = true;
+				thenable = true;
 				stopwatch.restart();
 				result = await result;
 				asyncTime = stopwatch.toString();
 			}
 			success = true;
+			if (Array.isArray(result)) length = result.length;
 		} catch (error) {
-			if (!syncTime) syncTime = stopwatch.toString();
-			type = new Type(error);
-			if (hasThen && !asyncTime) asyncTime = stopwatch.toString();
+			if (!syncTime.length) syncTime = stopwatch.toString();
+			type = new Type(result);
+			if (thenable && !asyncTime.length) asyncTime = stopwatch.toString();
 			result = error;
 			success = false;
 		}
 
-		stopwatch.stop();
-		if (typeof result !== 'string' && args.getOption('output') !== OutputType.Console) {
-			result = inspect(result, {
-				depth: Number(args.getOption(...depthOptions) ?? 0) || 0,
-				showHidden: args.getFlags('showHidden', 'sh')
-			});
-		}
+		// If the signal aborted, it should not continue processing the result:
+		if (signal?.aborted) return { result: 'AbortError', success: false, time: '⏱ ...', type: new Type(result) };
 
+		stopwatch.stop();
+		if (typeof result !== 'string') {
+			result =
+				result instanceof Error
+					? result.stack
+					: args.getFlags('json')
+						? JSON.stringify(result, null, 4)
+						: inspect(result, {
+								depth: Number(args.getOption('depth') ?? 0) || 0,
+								showHidden: args.getFlags('showHidden', 'hidden')
+							});
+		}
 		return {
-			result,
+			length,
+			result: clean(result as string),
 			success,
-			time: this.formatTime(syncTime, asyncTime),
+			time: this.formatTime(syncTime, asyncTime ?? ''),
 			type
 		};
 	}
 
-	private formatTime(syncTime: string, asyncTime?: string): string {
-		return asyncTime ? `⏱ ${asyncTime} <${syncTime}>` : `⏱ ${syncTime}`;
-	}
-
-	private async sql(code: string) {
+	private async sql(sql: string) {
 		const stopwatch = new Stopwatch();
 		let success: boolean;
 		let time: string;
 		let result: unknown;
 		let type: Type;
-
-		let str = ``;
-		str += code;
+		let length!: number;
 
 		try {
-			result = await this.container.prisma.$queryRaw(Prisma.sql([code]));
+			result = await this.container.prisma.$queryRawUnsafe(sql);
 			time = stopwatch.toString();
-			type = new Type(result);
 			success = true;
+			type = new Type(result);
+			if (Array.isArray(result)) length = result.length;
 		} catch (error) {
 			time = stopwatch.toString();
-			type = new Type(error);
 			result = error;
+			type = new Type(result);
 			success = false;
 		}
 
 		stopwatch.stop();
 
 		return {
+			length,
 			result: JSON.stringify(result, null, 2),
 			success,
 			time: this.formatTime(time),
-			type: type!
+			type
 		};
 	}
+}
+
+interface EvalResult {
+	length?: number;
+	result: string;
+	success: boolean;
+	time: string;
+	type: Type;
 }

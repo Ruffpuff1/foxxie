@@ -118,5 +118,6 @@ async function getEmbedDescription(t: TFunction, entry: ModerationManager.Entry)
 let caseCommandId: null | Snowflake = null;
 export function getCaseEditMention() {
 	caseCommandId ??= (container.stores.get('commands').get('case') as FoxxieCommand).getGlobalCommandId();
+	if (!caseCommandId) return `/case edit`;
 	return chatInputApplicationCommandMention('case', 'edit', caseCommandId);
 }

@@ -5,7 +5,7 @@ import { isNullish } from '@sapphire/utilities';
 import { GuildDataKey, ISchemaValue, ReadonlyGuildData, SchemaGroup, Serializer } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieArgs } from '#lib/Structures/commands/FoxxieArgs';
-import { resolveGuild } from '#utils/common';
+import { resolveGuild } from '#utils/functions';
 
 export type ConfigurableKeyValueOptions = { description?: TypedT<string> } & Pick<
 	SchemaKey,

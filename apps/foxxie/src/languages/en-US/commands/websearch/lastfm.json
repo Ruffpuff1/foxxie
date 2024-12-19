@@ -8,6 +8,40 @@
         "subcommands": [
             {
                 "extendedHelp": [
+                    "Shows your two most recent [Last.fm](https://last.fm) plays.",
+                    "You can also select a user who's Last.fm profile is linked with me."
+                ],
+                "name": "fm",
+                "aliases": [
+                    "currenttrack",
+                    "ct",
+                    "np",
+                    "nowplaying"
+                ],
+                "examples": [
+                    "",
+                    "foxxiebot",
+                    "reeseharlak"
+                ],
+                "explainedUsage": [
+                    [
+                        "LastFMUsername",
+                        "The Last.fm username of the user who you want me to show this will default to you if you're logged in, if not it'll default to me."
+                    ],
+                    [
+                        "DiscordUser",
+                        "The discord user for me to attempt to resolve a last.fm profile from, this can be their `username`, `@mention`, or their `userId`. If that user has not linked their last.fm profile with me it'll default to you."
+                    ]
+                ],
+                "reminder": "This subcommand also supports slash commands! Try out </lastfm fm:{{commandId}}>",
+                "usages": [
+                    "",
+                    "LastFMUsername",
+                    "DiscordUser"
+                ]
+            },
+            {
+                "extendedHelp": [
                     "Update your playcount based on your latest [Last.fm](https://last.fm) plays.",
                     "You can also reindex parts of you cached playcount by using the following options."
                 ],
@@ -35,6 +69,13 @@
             }
         ]
     },
+    "fmDescription": "Show your two most recent Last.fm plays.",
+    "fmName": "fm",
+    "name": "lastfm",
+    "optionsShowDescription": "Whether to show the response of the command.",
+    "optionsShowName": "show",
+    "optionsUserFMDescription": "The user to show the plays for, defaults to you if logged in.",
+    "optionsUserFMName": "user",
     "updateIndexDescription": "### {{LOADING}} Fetching your Last.fm playcounts...\nThe following playcount caches are being rebuilt: {{description}}",
     "updateIndexStarted": "{{LOADING}} An advanced update has already been started for you! Please wait a few minutes before starting a new one.",
     "updateIndexFrequent": "{{LOADING}} You can't do full updates too often. These are only really meant to be used when your Last.fm history has been adjusted.",

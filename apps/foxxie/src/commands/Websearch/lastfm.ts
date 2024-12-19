@@ -1,51 +1,103 @@
-import { ApplyOptions } from '@sapphire/decorators';
+import { UserLastFM } from '@prisma/client';
+import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
+import { Args, container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
+import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 import { IndexService } from '#apis/last.fm/services/IndexService';
 import { UpdateService } from '#apis/last.fm/services/UpdateService';
 import { UpdateType, UpdateTypeBitfield } from '#apis/last.fm/types/enums/UpdateType';
 import { ResponseStatus } from '#apis/last.fm/types/ResponseStatus';
+import { ContextModel } from '#apis/last.fm/util/ContextModel';
+import { PlayBuilder, UserBuilder } from '#apis/last.fm/util/index';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
-import { PermissionLevels } from '#lib/types';
+import { GuildMessage, PermissionLevels } from '#lib/types';
 import { minutes } from '#utils/common';
 import { Emojis } from '#utils/constants';
-import { RequiresLastFMUsername } from '#utils/decorators';
+import {
+	RegisterChatInputCommand,
+	RegisterChatInputSubcommandMethod,
+	RegisterMessageSubcommandMethod,
+	RequiresLastFMUsername,
+	RequiresMemberPermissions
+} from '#utils/decorators';
 import { sendLoadingMessage, sendMessage } from '#utils/functions';
+import { resolveLastFMUser, resolveYouOrFoxxie } from '#utils/resolvers';
 import { lastFmUserUrl } from '#utils/transformers';
-import { mapSubcommandAliases, resolveClientColor } from '#utils/util';
+import { resolveClientColor } from '#utils/util';
 import { blue } from 'colorette';
-import { EmbedBuilder, inlineCode, User } from 'discord.js';
+import { EmbedBuilder, inlineCode, PermissionFlagsBits, SlashCommandBuilder, User } from 'discord.js';
 import _ from 'lodash';
 
-@ApplyOptions<FoxxieSubcommand.Options>({
-	aliases: ['fm'],
-	description: LanguageKeys.Commands.Websearch.LastFm.Description,
-	detailedDescription: LanguageKeys.Commands.Websearch.LastFm.DetailedDescription,
-	permissionLevel: PermissionLevels.BotOwner,
-	subcommands: [...mapSubcommandAliases('update', 'update', false, 'u')]
+@ApplyOptions<FoxxieSubcommand.Options>(LastFMCommand.Options)
+@RegisterChatInputCommand(LastFMCommand.ChatInputBuilder, LastFMCommand.IdHints)
+@RegisterChatInputSubcommandMethod(LastFMCommand.SubcommandKeys.FM, LastFMCommand.ChatInputFM)
+@RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.Update, LastFMCommand.MessageRunUpdate, { aliases: ['u'] })
+@RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.Profile, LastFMCommand.MessageRunProfile, { aliases: ['user', 'userinfo', 'stats'] })
+@RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.FM, LastFMCommand.MessageRunFM, {
+	aliases: ['currenttrack', 'ct', 'np', 'nowplaying'],
+	default: true
 })
-export class UserCommand extends FoxxieSubcommand {
-	#indexService = new IndexService();
+export class LastFMCommand extends FoxxieSubcommand {
+	public static ChatInputBuilder(builder: SlashCommandBuilder) {
+		return applyLocalizedBuilder(builder, LastFMCommand.Language.Name, LastFMCommand.Language.Description) //
+			.addSubcommand((command) =>
+				applyLocalizedBuilder(command, LastFMCommand.Language.FM)
+					.addStringOption((option) => applyLocalizedBuilder(option, LastFMCommand.Language.OptionsUserFM))
+					.addBooleanOption((option) => applyLocalizedBuilder(option, LastFMCommand.Language.OptionsShow))
+			);
+	}
 
-	#updateService = new UpdateService();
+	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
+	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
+	public static async ChatInputFM(interaction: FoxxieSubcommand.Interaction) {
+		const hidden = (await interaction.options.getBoolean('show')) ?? true;
+		await sendLoadingMessage(interaction, hidden);
+		const contextUser = await resolveLastFMUser(interaction, interaction.options.getString('user'));
 
+		const response = await LastFMCommand.PlayBuilder.nowPlaying(new ContextModel(interaction, contextUser));
+		await interaction.editReply(response);
+	}
+
+	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
+	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
+	public static async MessageRunFM(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
+		await sendLoadingMessage(message);
+		const contextUser = await args.pick(LastFMCommand.UserArgument).catch(() => resolveYouOrFoxxie(message));
+
+		const response = await LastFMCommand.PlayBuilder.nowPlaying(new ContextModel(args, contextUser));
+		await sendMessage(message, response);
+	}
+
+	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
+	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
+	public static async MessageRunProfile(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
+		await sendLoadingMessage(message);
+		const contextUser = await args.pick(LastFMCommand.UserArgument).catch(() => resolveYouOrFoxxie(message));
+
+		const response = await LastFMCommand.UserBuilder.profile(new ContextModel(args, contextUser));
+		await sendMessage(message, response);
+	}
+
+	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
 	@RequiresLastFMUsername(LanguageKeys.Preconditions.LastFMLogin)
-	public async update(...[message, args]: FoxxieSubcommand.RunArgs) {
+	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
+	public static async MessageRunUpdate(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
 		const option = await args.repeat('string').catch(() => []);
-		const resolved = this.#updateResolveOption(option, args.t);
+		const resolved = LastFMCommand.ResolveUpdateOption(option, args.t);
 
-		const contextUser = (await this.container.prisma.userLastFM.findFirst({ where: { userid: message.author.id } }))!;
+		const contextUser = (await container.prisma.userLastFM.findFirst({ where: { userid: message.author.id } }))!;
 
 		if (!resolved || !resolved.toArray().length) {
 			await sendLoadingMessage(message, LanguageKeys.Commands.Websearch.LastFm.UpdateLoading);
 
-			const update = await this.#updateService.updateUserAndGetRecentTracks(contextUser);
+			const update = await LastFMCommand.UpdateService.updateUserAndGetRecentTracks(contextUser);
 
 			if (!update?.success || !update.content || !update.content.recentTracks.length) {
 				const embed = new EmbedBuilder();
 
 				if (!update?.success || !update.content.recentTracks) {
-					this.#errorResponse(
+					LastFMCommand.ErrorResponse(
 						embed.setColor(await resolveClientColor(message, message.member.displayColor)),
 						message.author,
 						update?.error,
@@ -76,7 +128,7 @@ export class UserCommand extends FoxxieSubcommand {
 
 				updatedDescription.push(
 					args.t(LanguageKeys.Commands.Websearch.LastFm.UpdateNothingNew, {
-						previous: previousUpdate,
+						previous: previousUpdate || new Date(),
 						url: lastFmUserUrl(contextUser.usernameLastFM)
 					})
 				);
@@ -116,22 +168,24 @@ export class UserCommand extends FoxxieSubcommand {
 			return sendMessage(message, updatedDescription);
 		}
 
-		const indexStarted = this.#indexService.indexStarted(contextUser.userid);
+		const indexStarted = LastFMCommand.IndexService.indexStarted(contextUser.userid);
 
 		if (!indexStarted) {
 			return sendMessage(message, args.t(LanguageKeys.Commands.Websearch.LastFm.UpdateIndexStarted));
 		}
 
-		if (contextUser.lastIndexed.getTime() > Date.now() - minutes(30)) {
+		if (contextUser.lastIndexed && contextUser.lastIndexed.getTime() > Date.now() - minutes(30)) {
 			return sendMessage(message, args.t(LanguageKeys.Commands.Websearch.LastFm.UpdateIndexFrequent));
 		}
 
 		await sendMessage(
 			message,
-			args.t(LanguageKeys.Commands.Websearch.LastFm.UpdateIndexDescription, { description: this.#formatIndexDescription(resolved, args.t) })
+			args.t(LanguageKeys.Commands.Websearch.LastFm.UpdateIndexDescription, {
+				description: LastFMCommand.FormatIndexDescription(resolved, args.t)
+			})
 		);
 
-		const result = await this.#indexService.modularUpdate(contextUser, resolved);
+		const result = await LastFMCommand.IndexService.modularUpdate(contextUser, resolved);
 		console.log(result);
 
 		await sendMessage(message, 'done');
@@ -139,7 +193,7 @@ export class UserCommand extends FoxxieSubcommand {
 		return null;
 	}
 
-	#errorResponse(embed: EmbedBuilder, user: User, responseStatus?: ResponseStatus, message?: string) {
+	private static ErrorResponse(embed: EmbedBuilder, user: User, responseStatus?: ResponseStatus, message?: string) {
 		embed.setTitle('Problem while contacting Last.fm');
 
 		// eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
@@ -167,11 +221,11 @@ export class UserCommand extends FoxxieSubcommand {
 				break;
 		}
 
-		this.container.logger.debug(`[${blue('Last.fm')}]: Returned error: ${message} | ${responseStatus} | ${user.username} | ${user.id}`);
+		container.logger.debug(`[${blue('Last.fm')}]: Returned error: ${message} | ${responseStatus} | ${user.username} | ${user.id}`);
 		return embed;
 	}
 
-	#formatIndexDescription(resolved: UpdateTypeBitfield, t: FoxxieSubcommand.T) {
+	private static FormatIndexDescription(resolved: UpdateTypeBitfield, t: FoxxieSubcommand.T) {
 		const description: string[] = [];
 		const types = t(LanguageKeys.Commands.Websearch.LastFm.UpdateTypes);
 
@@ -191,24 +245,58 @@ export class UserCommand extends FoxxieSubcommand {
 		return t(LanguageKeys.Globals.And, { value: description });
 	}
 
-	#updateResolveOption(options: (never | string)[], t: FoxxieSubcommand.T) {
-		if (!options.length) return null;
+	private static ResolveUpdateOption(options: (never | string)[] | string, t: FoxxieSubcommand.T) {
+		const resolvedArray = typeof options === 'string' ? [options] : options;
+
+		if (!resolvedArray.length) return null;
 		const bits = new UpdateTypeBitfield();
 		const flags = t(LanguageKeys.Commands.Websearch.LastFm.UpdateOptions);
 
-		if (options.some((o) => flags.full.includes(o.toLowerCase()))) {
+		if (resolvedArray.some((o) => flags.full.includes(o.toLowerCase()))) {
 			bits.add(UpdateType.Full);
 			return bits;
 		}
 
-		if (options.some((o) => flags.plays.includes(o.toLowerCase()))) {
+		if (resolvedArray.some((o) => flags.plays.includes(o.toLowerCase()))) {
 			bits.add(UpdateType.AllPlays);
 		}
 
-		if (options.some((o) => flags.artists.includes(o.toLowerCase()))) {
+		if (resolvedArray.some((o) => flags.artists.includes(o.toLowerCase()))) {
 			bits.add(UpdateType.Artist);
 		}
 
 		return bits;
 	}
+
+	public static IdHints = [
+		'1318918607337558097' // nightly
+	];
+
+	public static Language = LanguageKeys.Commands.Websearch.LastFm;
+
+	public static Options: FoxxieSubcommand.Options = {
+		aliases: ['fm', 'lfm'],
+		description: LastFMCommand.Language.Description,
+		detailedDescription: LastFMCommand.Language.DetailedDescription,
+		permissionLevel: PermissionLevels.BotOwner
+	};
+
+	public static SubcommandKeys = {
+		FM: 'fm',
+		Profile: 'profile',
+		Update: 'update'
+	};
+
+	protected static UserArgument = Args.make<UserLastFM>(async (parameter, context) => {
+		const resolved = await resolveLastFMUser(context.message as GuildMessage, parameter);
+		return Args.ok(resolved);
+	});
+
+	private static IndexService = new IndexService();
+
+	private static PlayBuilder = new PlayBuilder();
+
+	private static UpdateService = new UpdateService();
+
+	private static UserBuilder = new UserBuilder();
 }

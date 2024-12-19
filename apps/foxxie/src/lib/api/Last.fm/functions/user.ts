@@ -59,7 +59,7 @@ export async function updateUserLastUsed(userid: string) {
 
 	if (!isNullish(user)) {
 		try {
-			db.update({
+			await db.update({
 				data: { lastUsed: new Date() },
 				where: {
 					userid

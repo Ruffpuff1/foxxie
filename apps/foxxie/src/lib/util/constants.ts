@@ -32,7 +32,7 @@ export const enum LanguageFormatters {
 	MessageNotifications = 'messageNotifications',
 	Number = 'number',
 	NumberCompact = 'numberCompact',
-	Permissions = 'permissions'
+	PermissionsArray = 'permissionsarray'
 }
 
 export type ModerationTaskId = Omit<Schedules, 'Birthday' | 'Disboard' | 'UpdateDiscogsUsers' | 'UpdateLastFmUsers'>;
@@ -105,13 +105,20 @@ export const enum Emojis {
 	Calendar = ':calendar_spiral:',
 	Cassette = '<:Cassette:1317747854550503525>',
 	Error = '<:TickNo:894420222084280331>',
+	Female = '<:Female:950037546212147200>',
 	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
 	FemaleSignEmoji = '<:Female:950037546212147200>',
 	FoxWiggle = '<a:foxwiggle:799197027568713748>',
+	GithubIssueClosed = '<:GithubIssueClosed:950035839306596362>',
+	GithubIssueOpen = '<:GithubIssueOpen:950035888459624518>',
+	GithubPRClosed = '<:GithubPRClosed:950017073231298560>',
+	GithubPRMerged = '<:GithubPRMerged:950014664979406858>',
+	GithubPROpen = '<:GithubPROpen:950014721979985960>',
 	Hourglass = ':hourglass:',
 	Information = ':information_source:',
 	LastFm = '<:lastfm:882227627287515166>',
 	Loading = '<a:HotCoffee:905458108225183765>',
+	Male = '<:Male:950037521126023208>',
 	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
 	MaleSignEmoji = '<:Male:950037521126023208>',
 	Moderator = ':hammer:',
