@@ -2,7 +2,7 @@ import type { User } from 'discord.js';
 
 import { Args, type Awaitable, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { free, send } from '@sapphire/plugin-editable-commands';
-import { readSettings } from '#lib/Database/settings/functions';
+import { readSettings } from '#lib/database/settings/functions';
 import { LanguageKeys } from '#lib/i18n';
 import { ActionByType, getAction, GetContextType, ModerationAction, ModerationManager } from '#lib/moderation';
 import { FoxxieCommand } from '#lib/structures';

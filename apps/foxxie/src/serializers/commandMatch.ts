@@ -1,13 +1,13 @@
 import type { Awaitable } from '@sapphire/utilities';
 
-import { Serializer } from '#lib/Database/settings/structures/Serializer';
-import { CommandMatcher } from '#lib/Database/utils/matchers/index';
+import { Serializer } from '#lib/database/settings/structures/Serializer';
+import { CommandMatcher } from '#lib/database/utils/matchers/index';
 import { LanguageKeys } from '#lib/i18n';
 
 export class UserSerializer extends Serializer<string> {
 	public isValid(value: string, { entry, t }: Serializer.UpdateContext): Awaitable<boolean> {
 		const command = CommandMatcher.resolve(value);
-		if (!command) throw t(LanguageKeys.Serializers.InvalidCommand, { param: value, name: entry.name });
+		if (!command) throw t(LanguageKeys.Serializers.InvalidCommand, { name: entry.name, param: value });
 		return true;
 	}
 

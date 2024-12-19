@@ -10,8 +10,10 @@ import { CustomFunctionGet, CustomGet, GuildMessage, NonGroupMessage, TypedFT, T
 import { floatPromise, minutes, resolveOnErrorCodes } from '#utils/common';
 import {
 	AutocompleteInteraction,
+	ChatInputCommandInteraction,
 	EmbedBuilder,
 	GuildTextBasedChannel,
+	InteractionResponse,
 	type Message,
 	type MessageCreateOptions,
 	RESTJSONErrorCodes,
@@ -88,14 +90,31 @@ export async function deleteMessage(message: Message, time = 0): Promise<Message
 export function getCommand(message: Message): FoxxieCommand | null {
 	return messageCommands.get(message) ?? null;
 }
+
 export async function sendLoadingMessage(
 	message: GuildMessage,
-	key: CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]> = LanguageKeys.System.MessageLoading,
+	key?: CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]>,
+	args?: object
+): Promise<GuildMessage>;
+export async function sendLoadingMessage(
+	message: ChatInputCommandInteraction,
+	key?: boolean | CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]>,
+	args?: object
+): Promise<InteractionResponse>;
+export async function sendLoadingMessage(
+	message: ChatInputCommandInteraction | GuildMessage,
+	key?: boolean | CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]>,
 	args = {}
-): Promise<GuildMessage | Message> {
-	const t = await fetchT(message.guild);
-	const translated = t(key, args);
+) {
+	const t = await fetchT(message.guild!);
+	const translated = t(typeof key === 'boolean' ? LanguageKeys.System.MessageLoading : key || LanguageKeys.System.MessageLoading, args);
 	const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
+
+	if (message instanceof ChatInputCommandInteraction) {
+		return message.replied
+			? message.editReply({ components: [], content, embeds: [] })
+			: message.reply({ content, ephemeral: typeof key === 'boolean' ? key : true });
+	}
 
 	return sendMessage(message, content);
 }

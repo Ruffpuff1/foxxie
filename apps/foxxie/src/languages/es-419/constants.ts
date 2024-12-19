@@ -1,5 +1,5 @@
 import { TimeTypes } from '@sapphire/time-utilities';
-import { Handler } from '#lib/I18n/structures/Handler';
+import { Handler } from '#lib/i18n/structures/Handler';
 
 export class SpanishLatinAmericaHandler extends Handler {
 	public constructor() {

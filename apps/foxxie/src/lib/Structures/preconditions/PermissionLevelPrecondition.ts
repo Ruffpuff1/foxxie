@@ -26,7 +26,7 @@ export abstract class PermissionLevelPrecondition extends Precondition {
 
 	public override async chatInputRun(interaction: ChatInputCommandInteraction, command: Command, context: PermissionLevelPrecondition.Context) {
 		if (!interaction.guild || !interaction.member) {
-			return this.guildOnly ? this.error({ identifier: Identifiers.PreconditionGuildOnly }) : this.ok();
+			return this.guildOnly ? this.error({ identifier: Identifiers.PreconditionRunIn }) : this.ok();
 		}
 
 		if (clientOwners.includes(interaction.user.id)) return this.ok();
@@ -44,12 +44,14 @@ export abstract class PermissionLevelPrecondition extends Precondition {
 				});
 		}
 
-		return this.handle(interaction, cast<FoxxieCommand>(command), context);
+		return this.handle(interaction, cast<FoxxieCommand>(command), { ...context, member });
 	}
 
 	public override async messageRun(message: GuildMessage, command: Command, context: PermissionLevelPrecondition.Context) {
+		console.log(context);
+
 		if (!message.guild || !message.member) {
-			return this.guildOnly ? this.error({ identifier: Identifiers.PreconditionGuildOnly }) : this.ok();
+			return this.guildOnly ? this.error({ identifier: Identifiers.PreconditionRunIn }) : this.ok();
 		}
 
 		if (clientOwners.includes(message.author.id)) return this.ok();
@@ -66,13 +68,13 @@ export abstract class PermissionLevelPrecondition extends Precondition {
 				});
 		}
 
-		return this.handle(message, cast<FoxxieCommand>(command), context);
+		return this.handle(message, cast<FoxxieCommand>(command), { ...context, member: message.member });
 	}
 
 	protected abstract handle(
 		message: ChatInputCommandInteraction | GuildMessage,
 		command: FoxxieCommand,
-		context: PermissionLevelPrecondition.Context
+		context: PermissionLevelPrecondition.HandleContext
 	): PermissionLevelPrecondition.Result;
 
 	private async runPreconditions(member: GuildMember, command: FoxxieCommand) {
@@ -129,6 +131,7 @@ export abstract class PermissionLevelPrecondition extends Precondition {
 }
 export namespace PermissionLevelPrecondition {
 	export type Context = PreconditionContext;
+	export type HandleContext = { member: GuildMember } & PreconditionContext;
 	export interface Options extends PreconditionOptions {
 		guildOnly?: boolean;
 	}

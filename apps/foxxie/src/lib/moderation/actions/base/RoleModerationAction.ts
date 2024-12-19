@@ -3,7 +3,7 @@ import type { GuildMessage } from '#lib/types';
 import { GuildLimits, isCategoryChannel, isTextBasedChannel, isThreadChannel, isVoiceBasedChannel } from '@sapphire/discord.js-utilities';
 import { type Awaitable, container, UserError } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
-import { readSettings, writeSettings, writeSettingsTransaction } from '#lib/Database/settings/functions';
+import { readSettings, writeSettings, writeSettingsTransaction } from '#lib/database/settings/functions';
 import { getT, LanguageKeys } from '#lib/i18n';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { PermissionsBits } from '#utils/bits';

@@ -1,10 +1,10 @@
 import type { Guild, GuildResolvable } from 'discord.js';
 
+import { container } from '@sapphire/framework';
 import { LoggerManager, ModerationManager } from '#lib/moderation';
 import { StickyRoleManager } from '#lib/moderation/managers/StickyRoleManager';
 import { StarboardManager } from '#lib/structures';
-import { resolveGuild } from '#utils/common';
-import { GuildSecurity } from '#utils/Security/GuildSecurity';
+import { GuildSecurity } from '#utils/security/GuildSecurity';
 
 interface GuildUtilities {
 	readonly logger: LoggerManager;
@@ -38,6 +38,13 @@ export const getModeration = getProperty('moderation');
 export const getGuildStarboard = getProperty('starboard');
 export const getSecurity = getProperty('security');
 export const getStickyRoles = getProperty('stickyRoles');
+
+export function resolveGuild(resolvable: GuildResolvable): Guild {
+	const guild = container.client.guilds.resolve(resolvable);
+	if (guild === null) throw new TypeError(`${resolvable} resolved to null.`);
+
+	return guild;
+}
 
 function getProperty<K extends keyof GuildUtilities>(property: K) {
 	return (resolvable: GuildResolvable): GuildUtilities[K] => getGuildUtilities(resolvable)[property];

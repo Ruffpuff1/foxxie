@@ -4,18 +4,9 @@ import { TFunction } from '@sapphire/plugin-i18next';
 
 import { FoxxieEvents } from './Events.js';
 
-export const enum ConsoleState {
-	Log,
-	Debug,
-	Warn,
-	Error,
-	Fatal
-}
-
 export const enum PermissionLevels {
 	Administrator = 7,
 	BotOwner = 10,
-	Contributor = 9,
 	Everyone = 0,
 	GuildOwner = 8,
 	Moderator = 6

@@ -5,7 +5,7 @@ import { EmbedBuilder } from '@discordjs/builders';
 import { container } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { type Awaitable, isNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
-import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { LanguageKeys } from '#lib/i18n';
 import { getTitle, getTranslationKey } from '#lib/moderation/common';
 import { TypeMetadata, type TypeVariation } from '#lib/util/moderationConstants';
 import { seconds, years } from '#utils/common';

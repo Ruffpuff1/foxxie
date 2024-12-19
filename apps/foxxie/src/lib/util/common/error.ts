@@ -1,6 +1,14 @@
-import { ArgumentError, Command, container, MessageCommand, MessageCommandErrorPayload, ResultError, UserError } from '@sapphire/framework';
+import {
+	ArgumentError,
+	ChatInputCommandErrorPayload,
+	Command,
+	container,
+	MessageCommandErrorPayload,
+	ResultError,
+	UserError
+} from '@sapphire/framework';
 import { fetchT, type TFunction } from '@sapphire/plugin-i18next';
-import { ChatInputSubcommandErrorPayload, MessageSubcommandErrorPayload, Subcommand } from '@sapphire/plugin-subcommands';
+import { ChatInputSubcommandErrorPayload, MessageSubcommandErrorPayload } from '@sapphire/plugin-subcommands';
 import { cast, cutText } from '@sapphire/utilities';
 import { captureException } from '@sentry/node';
 import { envParseBoolean, envParseString } from '@skyra/env-utilities';
@@ -66,7 +74,7 @@ function stringifyHTTPError(t: FTFunction, error: HTTPError) {
 
 const ignoredDiscordCodes = [RESTJSONErrorCodes.UnknownChannel, RESTJSONErrorCodes.UnknownMessage];
 
-export async function handleChatInputCommandError(error: unknown, payload: ChatInputSubcommandErrorPayload) {
+export async function handleChatInputCommandError(error: unknown, payload: ChatInputCommandErrorPayload | ChatInputSubcommandErrorPayload) {
 	const { interaction } = payload;
 	const t = getSupportedUserLanguageT(interaction);
 	const resolved = flattenError(payload.command, error);
@@ -158,7 +166,7 @@ function flattenError(command: Command, error: unknown): null | string | UserErr
 	return null;
 }
 
-function generateUnexpectedErrorMessage(userId: Snowflake, command: MessageCommand | Subcommand, t: FTFunction, error: unknown) {
+function generateUnexpectedErrorMessage(userId: Snowflake, command: Command, t: FTFunction, error: unknown) {
 	if (clientOwners.includes(userId)) return codeBlock('js', String(error));
 	if (!envParseBoolean(EnvKeys.SentryEnabled)) return t(LanguageKeys.Listeners.Errors.Unexpected);
 
@@ -274,6 +282,6 @@ function resolveUserError(t: TFunction, error: UserError) {
 		identifier,
 		error instanceof ArgumentError
 			? { ...error, ...(error.context as object), argument: error.argument.name, parameter: cutText(error.parameter.replaceAll('`', '῾'), 50) }
-			: (error.context as any)
+			: { ...(error.context as any), prefix: envParseString(EnvKeys.ClientPrefix) }
 	) as string;
 }

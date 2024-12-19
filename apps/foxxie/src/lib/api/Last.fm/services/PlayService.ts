@@ -1,4 +1,5 @@
 import { UserPlay } from '@prisma/client';
+import { container } from '@sapphire/framework';
 import { countGroup, groupBy } from '#utils/common';
 import _ from 'lodash';
 
@@ -26,6 +27,18 @@ export class PlayService {
 		}
 
 		return plays;
+	}
+
+	public async getTrackPlayForUserId(userId: string, trackName: string, artistName: string) {
+		const result = await container.prisma.userPlay.count({
+			where: {
+				artistName,
+				trackName,
+				userId
+			}
+		});
+
+		return Number(result);
 	}
 
 	public static UserHasImported(userPlays: UserPlay[]): boolean {

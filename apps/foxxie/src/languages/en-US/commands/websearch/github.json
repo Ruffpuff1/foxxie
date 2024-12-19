@@ -1,0 +1,43 @@
+{
+    "description": "Search GitHub using the GitHub API.",
+    "name": "github",
+    "optionsNumberDescription": "The number of the PR or issue to search for.",
+    "optionsNumberName": "number",
+    "optionsOwnerDescription": "The owner of the repository.",
+    "optionsOwnerName": "owner",
+    "optionsRepositoryDescription": "The name of the repository.",
+    "optionsRepositoryName": "repository",
+    "optionsUserDescription": "The user to search for.",
+    "optionsUserName": "user",
+    "repositoryDescription": "Search for data on a specific GitHub repository.",
+    "repositoryIssueClosed": "closed",
+    "repositoryIssueMerged": "merged",
+    "repositoryIssueOpened": "opened",
+    "repositoryIssuePRNotFound": "{{ERROR}} I couldn't find an issue or PR with the number `{{number, number}}`.",
+    "repositoryIssuePRNotFoundWithSelectMenuData": "{{ERROR}} I couldn't find an issue or PR with the number `{{number, number}}`, maybe you meant one of these?",
+    "repositoryName": "repository",
+    "repositoryNotFound": "{{ERROR}} I couldn't find a repository by {{user, bold}} for {{repository, code}}.",
+    "repositorySelectMenuPages": [
+        "General",
+        "Contributor Data"
+    ],
+    "repositoryTitles": {
+        "archived": ":clock: Archived",
+        "bio": ":brain: Bio",
+        "contributors":":people_hugging: Contributors",
+        "description": ":scroll: Description",
+        "forks": ":fork_and_knife: Forks",
+        "language": ":computer: Language",
+        "license": ":page_with_curl: License",
+        "location": ":map: Location",
+        "occupation": ":globe_with_meridians: Occupation",
+        "openIssues": ":eyeglasses: Open Issues",
+        "stars": ":star: Stars",
+        "website": ":link: Website"
+    },
+    "userCreated": "Created on {{date, fulldate}} ({{date, duration}})",
+    "userDescription": "Search for a user on Github.",
+    "userName": "user",
+    "userNotFound": "{{ERROR}} I could not find a Github user with the name `{{user}}`, try searching for a different one.",
+    "userUpdated": "Updated on {{date, fulldate}} ({{date, duration}})"
+}

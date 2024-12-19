@@ -87,7 +87,12 @@ export class LastFmRepository {
 			} else {
 				recentTracksCall = await this._lastFmApi.callApi(queryParams, Call.RecentTracks);
 
-				if (recentTracksCall.success && recentTracksCall.content.recenttracks.track.length >= count - 2 && count >= 400) {
+				if (
+					recentTracksCall.success &&
+					recentTracksCall.content.recenttracks &&
+					recentTracksCall.content.recenttracks.track.length >= count - 2 &&
+					count >= 400
+				) {
 					for (let i = 1; i < amountOfPages; i++) {
 						queryParams.page = (i + 1).toString();
 						let pageResponse = await this._lastFmApi.callApi(queryParams, Call.RecentTracks);

@@ -2,7 +2,7 @@ import type { Awaitable } from '@sapphire/utilities';
 
 import { ApplyOptions } from '@sapphire/decorators';
 import { Serializer } from '#lib/database';
-import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { LanguageKeys } from '#lib/i18n';
 
 @ApplyOptions<Serializer.Options>({
 	aliases: ['integer', 'float']

@@ -16,6 +16,7 @@ export class UserListener extends Listener {
 
 		const message = channel.messages.cache.get(data.id) as GuildMessage | undefined;
 
-		this.container.client.emit(FoxxieEvents.GuildMessageDelete, message, guild, channel);
+		// fire guild message delete events
+		this.container.client.emit(FoxxieEvents.RawGuildMessageDelete, message, guild, channel);
 	}
 }

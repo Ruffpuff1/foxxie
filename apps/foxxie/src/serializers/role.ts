@@ -1,6 +1,6 @@
 import type { Awaitable } from '@sapphire/utilities';
 
-import { Serializer } from '#lib/Database/settings/structures/Serializer';
+import { Serializer } from '#lib/database/settings/structures/Serializer';
 import { LanguageKeys } from '#lib/i18n';
 
 export class UserSerializer extends Serializer<string> {

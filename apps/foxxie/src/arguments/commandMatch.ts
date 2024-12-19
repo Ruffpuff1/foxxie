@@ -1,5 +1,5 @@
 import { Argument } from '@sapphire/framework';
-import { CommandMatcher } from '#lib/Database/utils/matchers/index';
+import { CommandMatcher } from '#lib/database/utils/matchers/index';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';

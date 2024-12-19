@@ -1,0 +1,13 @@
+export * as Arguments from '#lib/i18n/LanguageKeys/keys/Arguments';
+export * as Automod from '#lib/i18n/LanguageKeys/keys/Automod';
+export * as Commands from '#lib/i18n/LanguageKeys/keys/Commands';
+export * as FuzzySearch from '#lib/i18n/LanguageKeys/keys/FuzzySearch';
+export * as Globals from '#lib/i18n/LanguageKeys/keys/Globals';
+export * as Guilds from '#lib/i18n/LanguageKeys/keys/Guilds';
+export * as Listeners from '#lib/i18n/LanguageKeys/keys/Listeners';
+export * as Moderation from '#lib/i18n/LanguageKeys/keys/Moderation';
+export * as Preconditions from '#lib/i18n/LanguageKeys/keys/Preconditions';
+export * as Serializers from '#lib/i18n/LanguageKeys/keys/Serializers';
+export * as Settings from '#lib/i18n/LanguageKeys/keys/Settings';
+export * as System from '#lib/i18n/LanguageKeys/keys/System';
+export * as Tasks from '#lib/i18n/LanguageKeys/keys/Tasks';
