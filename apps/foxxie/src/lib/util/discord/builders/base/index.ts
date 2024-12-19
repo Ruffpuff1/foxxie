@@ -1,1 +1,1 @@
-export * from '#utils/Discord/builders/base/FoxxieBuilder';
+export * from '#utils/discord/builders/base/FoxxieBuilder';

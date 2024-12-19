@@ -4,7 +4,7 @@ import { container } from '@sapphire/framework';
 import { LoggerManager, ModerationManager } from '#lib/moderation';
 import { StickyRoleManager } from '#lib/moderation/managers/StickyRoleManager';
 import { StarboardManager } from '#lib/structures';
-import { GuildSecurity } from '#utils/Security/GuildSecurity';
+import { GuildSecurity } from '#utils/security/GuildSecurity';
 
 interface GuildUtilities {
 	readonly logger: LoggerManager;

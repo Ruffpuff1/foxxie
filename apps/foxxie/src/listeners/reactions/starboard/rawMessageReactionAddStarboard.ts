@@ -6,12 +6,11 @@ import { canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { isNullishOrZero } from '@sapphire/utilities';
 import { readSettings, writeSettings } from '#lib/database';
-import { Starboard } from '#lib/Database/Models/starboard';
+import { Starboard } from '#lib/database/Models/starboard';
 import { api } from '#lib/discord';
 import { StarboardManager } from '#lib/structures';
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
-import { isStarboardEmoji, SerializedEmoji } from '#utils/discord';
-import { LLRCData } from '#utils/External/LongLivingReactionCollector';
+import { isStarboardEmoji } from '#utils/discord';
 import { getGuildStarboard } from '#utils/functions';
 import { floatPromise, snowflakeAge } from '#utils/util';
 

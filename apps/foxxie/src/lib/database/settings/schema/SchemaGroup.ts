@@ -1,6 +1,6 @@
 import { codeBlock, isNullish, toTitleCase } from '@sapphire/utilities';
 import { ISchemaValue, ReadonlyGuildData, SchemaKey } from '#lib/database';
-import { AliasedCollection } from '#lib/Database/settings/structures/collections/AliasedCollection';
+import { AliasedCollection } from '#lib/database/settings/structures/collections/AliasedCollection';
 import { FTFunction } from '#lib/types';
 
 export type NonEmptyArray<T> = [T, ...T[]];

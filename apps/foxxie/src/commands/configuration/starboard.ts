@@ -2,14 +2,14 @@ import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { Starboard } from '#lib/Database/Models/starboard';
+import { Starboard } from '#lib/database/Models/starboard';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
 import { defaultPaginationOptions, defaultPaginationOptionsWithoutSelectMenu } from '#root/config';
 import { Emojis } from '#utils/constants';
 import { RequiresMemberPermissions, RequiresStarboardEntries } from '#utils/decorators';
-import { FoxxiePaginatedMessage } from '#utils/External/FoxxiePaginatedMessage';
+import { FoxxiePaginatedMessage } from '#utils/external/FoxxiePaginatedMessage';
 import { getGuildStarboard } from '#utils/functions';
 import { PermissionFlagsBits } from 'discord.js';
 

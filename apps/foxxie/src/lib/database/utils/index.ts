@@ -1,2 +1,2 @@
-export * from '#lib/Database/utils/matchers/index';
-export * from '#lib/Database/utils/util';
+export * from '#lib/database/utils/matchers/index';
+export * from '#lib/database/utils/util';

@@ -4,7 +4,7 @@ import { RoleMentionRegex, SnowflakeRegex } from '@sapphire/discord.js-utilities
 import { Argument } from '@sapphire/framework';
 import { LanguageKeys } from '#lib/i18n';
 import { isGuildMessage } from '#utils/common/guards';
-import { FuzzySearch } from '#utils/Parsers/FuzzySearch';
+import { FuzzySearch } from '#utils/parsers/FuzzySearch';
 
 interface RoleArgumentContext extends Argument.Context<Role> {
 	filter?: (entry: Role) => boolean;

@@ -1,7 +1,7 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import { readSettings } from '#lib/database';
-import { combineMessageReactionUsers, StarboardData, truncateStarboardEmojis } from '#lib/Database/Models/starboard';
+import { combineMessageReactionUsers, StarboardData, truncateStarboardEmojis } from '#lib/database/Models/starboard';
 import { FoxxieCommand } from '#lib/structures';
 import { EnvKeys, GuildMessage } from '#lib/types';
 import { emojis } from '#utils/constants';

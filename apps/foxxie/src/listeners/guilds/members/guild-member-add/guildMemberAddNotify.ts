@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
-import { readSettings } from '#lib/Database/settings/functions';
+import { readSettings } from '#lib/database/settings/functions';
 import { getT } from '#lib/i18n';
 import { EventArgs, FoxxieEvents } from '#lib/types';
 import { UserBuilder } from '#utils/builders';

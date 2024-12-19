@@ -1,7 +1,7 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { writeSettings } from '#lib/database';
-import { acquireMember, createMember, updateMember } from '#lib/Database/Models/member';
+import { acquireMember, createMember, updateMember } from '#lib/database/Models/member';
 import { EventArgs, FoxxieEvents } from '#lib/types';
 import { minutes } from '#utils/common';
 import { GuildMember } from 'discord.js';

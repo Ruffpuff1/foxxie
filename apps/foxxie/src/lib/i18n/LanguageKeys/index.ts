@@ -1,1 +1,1 @@
-export * as LanguageKeys from '#lib/I18n/LanguageKeys/keys/All';
+export * as LanguageKeys from '#lib/i18n/LanguageKeys/keys/All';

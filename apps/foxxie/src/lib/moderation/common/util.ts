@@ -4,7 +4,7 @@ import type { FoxxieCommand } from '#lib/structures';
 
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
-import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { LanguageKeys } from '#lib/i18n';
 import { getColor, TranslationMappings, UndoTaskNameMappings } from '#lib/moderation/common/constants';
 import { TypedT } from '#lib/types';
 import { getModeration } from '#utils/functions';

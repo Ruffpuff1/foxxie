@@ -1,6 +1,6 @@
 // import { StarboardManager } from '#lib/Structures/managers/StarboardManager';
 // import { GuildMessage } from '#lib/Types';
-// import { defaultStarboardEmojis } from '#utils/Discord';
+// import { defaultStarboardEmojis } from '#utils/discord';
 // import { Colors } from '#utils/constants';
 // import { fetchReactionUsers, floatPromise, getAttachment, getImage, isVideo } from '#utils/util';
 // import { bold } from '@discordjs/builders';

@@ -7,8 +7,8 @@ import { ScheduleManager, TaskStore } from '#lib/schedule';
 import { InviteManager, RedisManager } from '#lib/structures';
 import { clientOptions, webhookError } from '#root/config';
 import { isGuildMessage } from '#utils/common';
-import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
-import { LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
+import { GuildMemberFetchQueue } from '#utils/external/GuildMemberFetchQueue';
+import { LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
 import { magentaBright } from 'colorette';
 import { Message, WebhookClient } from 'discord.js';
 

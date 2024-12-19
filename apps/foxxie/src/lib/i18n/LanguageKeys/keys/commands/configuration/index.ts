@@ -1,1 +1,1 @@
-export * as Starboard from '#lib/I18n/LanguageKeys/keys/commands/configuration/Starboard';
+export * as Starboard from '#lib/i18n/LanguageKeys/keys/commands/configuration/Starboard';

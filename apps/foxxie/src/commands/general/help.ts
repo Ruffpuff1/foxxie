@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { cast, isNullish, toTitleCase } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
-import { LanguageHelp, LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
+import { LanguageHelp, LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FoxxieArgs, FoxxieCommand } from '#lib/structures';
 import { FTFunction, GuildMessage, PermissionLevels } from '#lib/types';
 import { clientOwners, defaultPaginationOptionsWithoutSelectMenu } from '#root/config';

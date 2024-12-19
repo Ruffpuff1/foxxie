@@ -2,7 +2,7 @@ import '#lib/setup';
 import { container } from '@sapphire/framework';
 import { init } from '@sentry/node';
 import { envParseBoolean } from '@skyra/env-utilities';
-import { config } from '#lib/Database/config';
+import { config } from '#lib/database/config';
 import FoxxieClient from '#lib/FoxxieClient';
 import { EnvKeys } from '#lib/types';
 

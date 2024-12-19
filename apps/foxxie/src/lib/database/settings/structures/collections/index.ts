@@ -1,1 +1,1 @@
-export * from '#lib/Database/settings/structures/collections/AliasedCollection';
+export * from '#lib/database/settings/structures/collections/AliasedCollection';

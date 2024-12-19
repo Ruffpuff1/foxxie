@@ -7,7 +7,7 @@ import { send } from '@sapphire/plugin-editable-commands';
 import { Stopwatch } from '@sapphire/stopwatch';
 import Type from '@sapphire/type';
 import { cast, codeBlock, isThenable } from '@sapphire/utilities';
-import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { PermissionLevels } from '#lib/types';
 import { createReferPromise } from '#utils/common';
@@ -103,7 +103,7 @@ export class UserCommand extends FoxxieCommand {
 					},
 					database: {
 						...(await import('#lib/database')),
-						settings: await import('#lib/Database/settings/index')
+						settings: await import('#lib/database/settings/index')
 					},
 					i18n: await import('#lib/i18n'),
 					moderation: {

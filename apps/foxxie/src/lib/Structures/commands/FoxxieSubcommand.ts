@@ -2,7 +2,7 @@ import { Command, CommandOptionsRunTypeEnum, MessageCommand, UserError } from '@
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { cast } from '@sapphire/utilities';
 import FoxxieClient from '#lib/FoxxieClient';
-import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
+import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
 import { DetailedDescription, DetailedDescriptionArgs, FTFunction, GuildMessage, PermissionLevels, TypedFT, TypedT } from '#lib/types';
 import { clientOwners } from '#root/config';

@@ -1,1 +1,1 @@
-export * from '#lib/Database/settings/base/ISchemaValue';
+export * from '#lib/database/settings/base/ISchemaValue';

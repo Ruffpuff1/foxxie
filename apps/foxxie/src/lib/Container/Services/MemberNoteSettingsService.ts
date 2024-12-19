@@ -1,6 +1,6 @@
 import { MemberNote } from '@prisma/client';
 import { container } from '@sapphire/framework';
-import { Note } from '#lib/Database/Models/Discord/Member/Note';
+import { Note } from '#lib/database/Models/Discord/Member/Note';
 import { Collection } from 'discord.js';
 
 export class MemberNoteSettingsService {

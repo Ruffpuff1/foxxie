@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { LanguageKeys } from '#lib/i18n';
 import { SetUpModerationCommand } from '#lib/moderation/structures/SetUpModerationCommand';
 import { TypeVariation } from '#utils/moderationConstants';
 import { PermissionFlagsBits } from 'discord.js';

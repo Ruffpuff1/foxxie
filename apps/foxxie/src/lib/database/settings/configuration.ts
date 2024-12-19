@@ -1,6 +1,6 @@
 import { objectEntries } from '@sapphire/utilities';
 import { ConfigurableKeyValueOptions, type GuildDataKey, NonEmptyArray, SchemaKey } from '#lib/database';
-import { SchemaGroup } from '#lib/Database/settings/schema/SchemaGroup';
+import { SchemaGroup } from '#lib/database/settings/schema/SchemaGroup';
 import { LanguageKeys } from '#lib/i18n';
 import { years } from '#utils/common';
 import { APIApplicationCommandOptionChoice, Collection } from 'discord.js';

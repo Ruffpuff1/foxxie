@@ -1,4 +1,4 @@
-import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
+import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { T } from '#lib/types';
 
 export const Description = T('commands/moderation/kick:description');

@@ -1,2 +1,2 @@
-export * from '#utils/Discord/builders/base/index';
-export * from '#utils/Discord/builders/GuildMessageDeleteBuilder';
+export * from '#utils/discord/builders/base/index';
+export * from '#utils/discord/builders/GuildMessageDeleteBuilder';

@@ -1,6 +1,6 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
-import { readSettings } from '#lib/Database/settings/functions';
+import { readSettings } from '#lib/database/settings/functions';
 import { EventArgs, FoxxieEvents } from '#lib/types';
 import { toErrorCodeResult } from '#utils/common';
 import { getLogPrefix, getStickyRoles } from '#utils/functions';

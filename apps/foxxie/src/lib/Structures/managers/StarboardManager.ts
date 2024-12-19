@@ -1,6 +1,6 @@
 import { isNullish } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
-import { getStarboard, Starboard } from '#lib/Database/Models/starboard';
+import { getStarboard, Starboard } from '#lib/database/Models/starboard';
 import { GuildMessage } from '#lib/types';
 import { Client, Collection, Guild, TextChannel } from 'discord.js';
 

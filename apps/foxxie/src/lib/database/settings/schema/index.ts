@@ -1,2 +1,2 @@
-export * from '#lib/Database/settings/schema/SchemaGroup';
-export * from '#lib/Database/settings/schema/SchemaKey';
+export * from '#lib/database/settings/schema/SchemaGroup';
+export * from '#lib/database/settings/schema/SchemaKey';

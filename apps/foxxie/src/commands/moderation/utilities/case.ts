@@ -12,7 +12,7 @@ import { PermissionLevels } from '#lib/types';
 import { desc, floatPromise, minutes, seconds, years } from '#utils/common';
 import { Emojis } from '#utils/constants';
 import { RegisterChatInputCommand } from '#utils/decorators';
-import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginatedMessageEmbedFields';
+import { FoxxiePaginatedMessageEmbedFields } from '#utils/external/FoxxiePaginatedMessageEmbedFields';
 import { getModeration } from '#utils/functions';
 import { TypeVariation } from '#utils/moderationConstants';
 import { resolveCase } from '#utils/resolvers/Case';

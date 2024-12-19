@@ -7,7 +7,7 @@ import { GuildDataKey, ReadonlyGuildData, readSettings } from '#lib/database';
 import { getT } from '#lib/i18n';
 import { LoggerManager } from '#lib/moderation';
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
-import { GuildMessageDeleteBuilder } from '#utils/Discord/builders/GuildMessageDeleteBuilder';
+import { GuildMessageDeleteBuilder } from '#utils/discord/builders/GuildMessageDeleteBuilder';
 import { getLogger } from '#utils/functions';
 import { floatPromise } from '#utils/util';
 import { GuildTextBasedChannel } from 'discord.js';

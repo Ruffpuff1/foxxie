@@ -1,1 +1,1 @@
-export * as CommandMatcher from '#lib/Database/utils/matchers/Command';
+export * as CommandMatcher from '#lib/database/utils/matchers/Command';

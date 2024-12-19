@@ -1,5 +1,5 @@
 import { ApplyOptions } from '@sapphire/decorators';
-import { readSettings } from '#lib/Database/settings/functions';
+import { readSettings } from '#lib/database/settings/functions';
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationCommand } from '#lib/moderation/structures/ModerationCommand';
 import { GuildMessage } from '#lib/types';

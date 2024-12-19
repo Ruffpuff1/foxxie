@@ -1,7 +1,7 @@
 import type { Guild, Snowflake } from 'discord.js';
 
 import { isNullish } from '@sapphire/utilities';
-import { readSettings } from '#lib/Database/settings/functions';
+import { readSettings } from '#lib/database/settings/functions';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { PartialResponseValue, ResponseType, Task } from '#lib/schedule';
 import { getModeration } from '#utils/functions';

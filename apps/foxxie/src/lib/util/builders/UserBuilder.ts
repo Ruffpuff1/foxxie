@@ -2,7 +2,7 @@ import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { cutText, toTitleCase } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
-import { ensureMember } from '#lib/Database/Models/member';
+import { ensureMember } from '#lib/database/Models/member';
 import { LanguageKeys } from '#lib/i18n';
 import { FTFunction } from '#lib/types';
 import { toStarboardStatsEmoji } from '#utils/common';

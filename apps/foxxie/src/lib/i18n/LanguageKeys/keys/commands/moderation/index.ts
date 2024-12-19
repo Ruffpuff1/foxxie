@@ -1,8 +1,8 @@
-export * as Kick from '#lib/I18n/LanguageKeys/keys/commands/moderation/Kick';
-export * as Mute from '#lib/I18n/LanguageKeys/keys/commands/moderation/Mute';
-export * as Timeout from '#lib/I18n/LanguageKeys/keys/commands/moderation/Timeout';
-export * as Untimeout from '#lib/I18n/LanguageKeys/keys/commands/moderation/Untimeout';
-export * as Utilities from '#lib/I18n/LanguageKeys/keys/commands/moderation/utilities/index';
+export * as Kick from '#lib/i18n/LanguageKeys/keys/commands/moderation/Kick';
+export * as Mute from '#lib/i18n/LanguageKeys/keys/commands/moderation/Mute';
+export * as Timeout from '#lib/i18n/LanguageKeys/keys/commands/moderation/Timeout';
+export * as Untimeout from '#lib/i18n/LanguageKeys/keys/commands/moderation/Untimeout';
+export * as Utilities from '#lib/i18n/LanguageKeys/keys/commands/moderation/utilities/index';
 
 import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/types';
 

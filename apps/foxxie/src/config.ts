@@ -4,11 +4,11 @@ import { I18nextFormatter, InternationalizationOptions } from '@sapphire/plugin-
 import { cast } from '@sapphire/utilities';
 import { envParseArray, envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { getHandler } from '#languages';
-import { readSettings } from '#lib/Database/settings/functions';
+import { readSettings } from '#lib/database/settings/functions';
 import { LanguageKeys, SupportedLanguages } from '#lib/i18n';
 import { CustomGet, EnvKeys } from '#lib/types';
 import { Emojis, emojis, LanguageFormatters, rootFolder, Urls } from '#utils/constants';
-import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginatedMessageEmbedFields';
+import { FoxxiePaginatedMessageEmbedFields } from '#utils/external/FoxxiePaginatedMessageEmbedFields';
 import {
 	ActivitiesOptions,
 	ActivityType,

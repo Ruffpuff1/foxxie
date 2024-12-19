@@ -1,2 +1,2 @@
-export * from '#lib/Database/settings/context/functions';
-export * from '#lib/Database/settings/context/SettingsContext';
+export * from '#lib/database/settings/context/functions';
+export * from '#lib/database/settings/context/SettingsContext';

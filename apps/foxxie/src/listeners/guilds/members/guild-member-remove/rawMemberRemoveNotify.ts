@@ -1,7 +1,7 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
-import { readSettings } from '#lib/Database/settings/functions';
+import { readSettings } from '#lib/database/settings/functions';
 import { getT } from '#lib/i18n';
 import { FoxxieEvents } from '#lib/types';
 import { UserBuilder } from '#utils/builders';

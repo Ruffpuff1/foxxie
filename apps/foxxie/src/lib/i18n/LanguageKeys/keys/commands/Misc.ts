@@ -1,4 +1,4 @@
-import { LanguageHelpDisplayOptions } from '#lib/I18n/LanguageHelp';
+import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FT, T } from '#lib/types';
 
 export const ReminderCreateSuccess = FT<{ id: number }>('commands/misc:reminderCreateSuccess');

@@ -1,4 +1,4 @@
-// import { PermissionNode } from '#lib/Database';
+// import { PermissionNode } from '#lib/database';
 // import { FoxxieCommand } from '#lib/Structures';
 // import { emojis } from '#utils/constants';
 // import { cast } from '@ruffpuff/utilities';

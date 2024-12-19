@@ -1,5 +1,5 @@
 import { container } from '@sapphire/framework';
-import { Highlight, HighlightData } from '#lib/Database/Models/highlight';
+import { Highlight, HighlightData } from '#lib/database/Models/highlight';
 import { Collection, Guild } from 'discord.js';
 
 import { writeSettings } from '../index.js';

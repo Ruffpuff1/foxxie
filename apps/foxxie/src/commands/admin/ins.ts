@@ -1,4 +1,4 @@
-import { StarboardData } from '#lib/Database/Models/starboard';
+import { StarboardData } from '#lib/database/Models/starboard';
 import { FoxxieCommand } from '#lib/structures';
 import { Collection, Message, SnowflakeUtil } from 'discord.js';
 

@@ -5,7 +5,7 @@ import type { GuildMessage } from '#lib/types';
 import { send } from '@sapphire/plugin-editable-commands';
 import { readSettings, writeSettings } from '#lib/database';
 import { getT } from '#lib/i18n';
-import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { LanguageKeys } from '#lib/i18n';
 import { ModerationCommand } from '#lib/moderation/structures/ModerationCommand';
 import { isAdmin } from '#utils/discord';
 import { promptConfirmation, promptForMessage } from '#utils/functions';

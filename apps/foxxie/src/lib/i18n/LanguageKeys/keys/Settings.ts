@@ -1,4 +1,4 @@
-export * as Gateway from '#lib/I18n/LanguageKeys/keys/settings/Gateway';
+export * as Gateway from '#lib/i18n/LanguageKeys/keys/settings/Gateway';
 
 import { T } from '#lib/types';
 

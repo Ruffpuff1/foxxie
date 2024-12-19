@@ -4,7 +4,7 @@ import { Cron } from '@sapphire/time-utilities';
 import { isNullishOrEmpty } from '@sapphire/utilities';
 import { ModerationManager } from '#lib/moderation';
 import { FoxxieEvents } from '#lib/types';
-import { JSONEmbed } from '#root/commands/Misc/reminder';
+import { JSONEmbed } from '#root/commands/misc/reminder';
 import { BirthdayData } from '#utils/birthday';
 import { SchemaKeys, TypeVariation } from '#utils/moderationConstants';
 

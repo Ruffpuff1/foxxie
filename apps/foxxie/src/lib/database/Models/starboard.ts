@@ -5,7 +5,7 @@ import { MessageOptions } from '@sapphire/plugin-editable-commands';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { cast, cutText, debounce, isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
-import { readSettings } from '#lib/Database/settings/functions';
+import { readSettings } from '#lib/database/settings/functions';
 import { StarboardManager } from '#lib/structures';
 import { EnvKeys, FTFunction, GuildMessage } from '#lib/types';
 import { defaultStarboardEmojis } from '#utils/discord';

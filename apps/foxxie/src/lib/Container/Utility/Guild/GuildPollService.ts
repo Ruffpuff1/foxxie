@@ -1,4 +1,4 @@
-import { PollEntity } from '#lib/Database/entities/PollEntity';
+import { PollEntity } from '#lib/database/entities/PollEntity';
 import { Collection, Guild } from 'discord.js';
 
 export class GuildPollService extends Collection<number, PollEntity> {

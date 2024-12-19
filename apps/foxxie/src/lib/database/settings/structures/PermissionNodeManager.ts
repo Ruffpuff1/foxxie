@@ -1,7 +1,7 @@
 import { container, UserError } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
 import { PermissionsNode, ReadonlyGuildData } from '#lib/database';
-import { matchAny } from '#lib/Database/utils/matchers/Command';
+import { matchAny } from '#lib/database/utils/matchers/Command';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand, FoxxieSubcommand } from '#lib/structures';
 import { emojis } from '#utils/constants';
