@@ -9,15 +9,15 @@ import { readSettings, writeSettings } from '#lib/database';
 import { Starboard } from '#lib/Database/Models/starboard';
 import { api } from '#lib/discord';
 import { StarboardManager } from '#lib/structures';
-import { GuildMessage } from '#lib/types';
+import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
 import { isStarboardEmoji, SerializedEmoji } from '#utils/discord';
 import { LLRCData } from '#utils/External/LongLivingReactionCollector';
 import { getGuildStarboard } from '#utils/functions';
 import { floatPromise, snowflakeAge } from '#utils/util';
 
-@ApplyOptions<ListenerOptions>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: 'rawReactionAdd' }))
+@ApplyOptions<ListenerOptions>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: FoxxieEvents.RawReactionAdd }))
 export class UserListener extends Listener {
-	public async run(data: LLRCData, emojiId: SerializedEmoji) {
+	public async run(...[data, emojiId]: EventArgs<FoxxieEvents.RawReactionAdd>) {
 		const channel = cast<TextChannel>(data.channel);
 		if (isNsfwChannel(channel)) return;
 
