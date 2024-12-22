@@ -3,12 +3,16 @@ import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
 import { Args, container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
+import { isNullish } from '@sapphire/utilities';
+import { PlayBuilder, UserBuilder } from '#apis/last.fm/builders/index';
+import { LastFmDataSourceFactory } from '#apis/last.fm/factories/DataSourceFactory';
 import { IndexService } from '#apis/last.fm/services/IndexService';
 import { UpdateService } from '#apis/last.fm/services/UpdateService';
+import { TimePeriod } from '#apis/last.fm/types/enums/TimePeriod';
 import { UpdateType, UpdateTypeBitfield } from '#apis/last.fm/types/enums/UpdateType';
 import { ResponseStatus } from '#apis/last.fm/types/ResponseStatus';
+import { playCountBreakPoints } from '#apis/last.fm/util/constants';
 import { ContextModel } from '#apis/last.fm/util/ContextModel';
-import { PlayBuilder, UserBuilder } from '#apis/last.fm/util/index';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage, PermissionLevels } from '#lib/types';
@@ -34,6 +38,7 @@ import _ from 'lodash';
 @RegisterChatInputSubcommandMethod(LastFMCommand.SubcommandKeys.FM, LastFMCommand.ChatInputFM)
 @RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.Update, LastFMCommand.MessageRunUpdate, { aliases: ['u'] })
 @RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.Profile, LastFMCommand.MessageRunProfile, { aliases: ['user', 'userinfo', 'stats'] })
+@RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.Pace, LastFMCommand.MessageRunPace, { aliases: ['pc'] })
 @RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.FM, LastFMCommand.MessageRunFM, {
 	aliases: ['currenttrack', 'ct', 'np', 'nowplaying'],
 	default: true
@@ -55,8 +60,47 @@ export class LastFMCommand extends FoxxieSubcommand {
 		await sendLoadingMessage(interaction, hidden);
 		const contextUser = await resolveLastFMUser(interaction, interaction.options.getString('user'));
 
-		const response = await LastFMCommand.PlayBuilder.nowPlaying(new ContextModel(interaction, contextUser));
+		const response = await PlayBuilder.NowPlaying(new ContextModel(interaction, contextUser));
 		await interaction.editReply(response);
+	}
+
+	public static GetGoalAmount(option: null | string, currentPlaycount: number) {
+		let goalAmount = 100;
+		let ownGoalSet = false;
+
+		if (!isNullish(option)) {
+			const lower = option.toLowerCase();
+
+			if (lower.endsWith('k')) {
+				let parsed = parseInt(lower.replace('k', ''), 10);
+				if (!isNaN(parsed)) {
+					parsed *= 1000;
+					if (parsed > currentPlaycount) {
+						goalAmount = parsed;
+						ownGoalSet = true;
+					}
+				}
+			} else {
+				const parsed = parseInt(lower, 10);
+				if (!isNaN(parsed) && parsed > currentPlaycount) {
+					goalAmount = parsed;
+					ownGoalSet = true;
+				}
+			}
+		}
+
+		if (!ownGoalSet) {
+			for (const breakPoint of playCountBreakPoints) {
+				if (currentPlaycount < breakPoint) {
+					goalAmount = breakPoint;
+					break;
+				}
+			}
+		}
+
+		if (goalAmount > 10000000) goalAmount = 10000000;
+
+		return goalAmount;
 	}
 
 	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
@@ -65,7 +109,28 @@ export class LastFMCommand extends FoxxieSubcommand {
 		await sendLoadingMessage(message);
 		const contextUser = await args.pick(LastFMCommand.UserArgument).catch(() => resolveYouOrFoxxie(message));
 
-		const response = await LastFMCommand.PlayBuilder.nowPlaying(new ContextModel(args, contextUser));
+		const response = await PlayBuilder.NowPlaying(new ContextModel(args, contextUser));
+		await sendMessage(message, response);
+	}
+
+	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
+	@RequiresLastFMUsername(LanguageKeys.Preconditions.LastFMLogin)
+	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
+	public static async MessageRunPace(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
+		await sendLoadingMessage(message);
+
+		const contextUser = await resolveYouOrFoxxie(message);
+		const userInfo = await LastFMCommand.DataSourceFactory.getLfmUserInfo(contextUser.usernameLastFM);
+		const goalAmount = LastFMCommand.GetGoalAmount(await args.pick('string').catch(() => null), userInfo!.playcount);
+
+		const response = await PlayBuilder.Pace(
+			new ContextModel(args, contextUser),
+			{ timePeriod: TimePeriod.AllTime },
+			goalAmount,
+			userInfo!.playcount,
+			userInfo!.registered.getTime()
+		);
+
 		await sendMessage(message, response);
 	}
 
@@ -283,6 +348,7 @@ export class LastFMCommand extends FoxxieSubcommand {
 
 	public static SubcommandKeys = {
 		FM: 'fm',
+		Pace: 'pace',
 		Profile: 'profile',
 		Update: 'update'
 	};
@@ -292,9 +358,9 @@ export class LastFMCommand extends FoxxieSubcommand {
 		return Args.ok(resolved);
 	});
 
-	private static IndexService = new IndexService();
+	private static DataSourceFactory = new LastFmDataSourceFactory();
 
-	private static PlayBuilder = new PlayBuilder();
+	private static IndexService = new IndexService();
 
 	private static UpdateService = new UpdateService();
 

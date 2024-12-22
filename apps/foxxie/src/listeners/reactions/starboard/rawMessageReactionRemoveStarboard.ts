@@ -9,8 +9,7 @@ import { readSettings, writeSettings } from '#lib/database';
 import { Starboard } from '#lib/database/Models/starboard';
 import { StarboardManager } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
-import { getEmojiString, isStarboardEmoji } from '#utils/discord';
-import { getGuildStarboard } from '#utils/functions';
+import { getEmojiString, getGuildStarboard, isStarboardEmoji } from '#utils/functions';
 import { snowflakeAge } from '#utils/util';
 
 @ApplyOptions<ListenerOptions>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: 'rawReactionRemove' }))

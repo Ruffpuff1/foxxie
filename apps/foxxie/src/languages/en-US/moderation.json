@@ -18,7 +18,7 @@
 	"actionSharedRoleSetupNoMessage": "{{ERROR}} You didn't send a role! Aborting the command.",
 	"actionSharedRoleSetupSuccess": "{{SUCCESS}} Successfully set up the role: {{role}}",
 	"ban": "Banned User",
-	"fillReason": "*Please use {{command}} {{count}} to set the reason.*",
+	"fillReason": "*Please use `{{command}} {{count}}` to set the reason.*",
 	"kick": "Kicked Member",
 	"lock": "Channel Locked",
 	"mute": "Muted Member",

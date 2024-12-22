@@ -5,7 +5,11 @@ import { FoxxieEvents } from '#lib/types';
 import { getStickyRoles } from '#utils/functions';
 import { GatewayDispatchEvents, type GatewayGuildMemberRemoveDispatch, GuildMember } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({ emitter: 'ws', event: GatewayDispatchEvents.GuildMemberRemove })
+@ApplyOptions<Listener.Options>(({ container }) => ({
+	emitter: 'ws',
+	enabled: container.client.enabledProdOnlyEvent(),
+	event: GatewayDispatchEvents.GuildMemberRemove
+}))
 export class UserListener extends Listener {
 	public run(data: GatewayGuildMemberRemoveDispatch['d']) {
 		const guild = this.container.client.guilds.cache.get(data.guild_id);

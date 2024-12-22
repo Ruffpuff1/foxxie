@@ -35,7 +35,9 @@ export class UserListener extends Listener {
 			);
 		}
 
-		await getLogger(member.guild).send({
+		const timestamp = Date.now();
+
+		const success = await getLogger(member.guild).send({
 			channelId: settings.channelsLogsMemberRolesUpdate,
 			key: 'channelsLogsMemberRolesUpdate',
 			makeMessage: () =>
@@ -44,7 +46,9 @@ export class UserListener extends Listener {
 					.setAuthor(getFullEmbedAuthor(member))
 					.setDescription(description.join('\n'))
 					.setFooter({ text: `Roles Updated` })
-					.setTimestamp()
+					.setTimestamp(timestamp)
 		});
+
+		console.log(success);
 	}
 }

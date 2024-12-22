@@ -23,8 +23,16 @@ export function createReferPromise<T>(): ReferredPromise<T> {
 	return { promise, reject: reject!, resolve: resolve! };
 }
 
+/**
+ * Attaches a logging catch method to a promise, "floating it".
+ * @param promise The promise to float.
+ */
 export function floatPromise(promise: Awaitable<unknown>) {
-	if (isThenable(promise)) promise.catch((error: Error) => container.logger.fatal(error));
+	if (isThenable(promise))
+		promise.catch((error: Error) => {
+			container.logger.debug(error);
+		});
+	return promise;
 }
 
 export async function resolveOnErrorCodes<T>(promise: Promise<T>, ...codes: readonly RESTJSONErrorCodes[]) {

@@ -208,7 +208,7 @@ export class SettingsMenu {
 		if (this.errorMessage) description.push(this.errorMessage);
 
 		const [folders, keys] = partition(
-			filter(entry.values(), (value) => !value.dashboardOnly),
+			filter(entry.values(), (value) => !value.dashboardOnly && value.type !== 'notAllowed'),
 			(value) => isSchemaGroup(value)
 		);
 

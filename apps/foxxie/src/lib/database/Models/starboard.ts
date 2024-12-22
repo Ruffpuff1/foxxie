@@ -8,12 +8,14 @@ import { envParseString } from '@skyra/env-utilities';
 import { readSettings } from '#lib/database/settings/functions';
 import { StarboardManager } from '#lib/structures';
 import { EnvKeys, FTFunction, GuildMessage } from '#lib/types';
-import { defaultStarboardEmojis } from '#utils/discord';
-import { getGuildStarboard } from '#utils/functions';
-import { fetchReactionUsers, floatPromise, getAttachment, getImage, isVideo, resolveClientColor } from '#utils/util';
+import { floatPromise } from '#utils/common';
+import { defaultStarboardEmojis, getGuildStarboard } from '#utils/functions';
+import { fetchReactionUsers, getAttachment, getImage, isVideo, resolveClientColor } from '#utils/util';
 import { bold, Client, DiscordAPIError, EmbedBuilder, HTTPError, Message, MessageEditOptions, RESTJSONErrorCodes, TextChannel } from 'discord.js';
 
 export type StarboardData = starboard;
+
+const CONTENTMAP = new Map<string, string>();
 
 export class Starboard {
 	public channelId: string = null!;
@@ -147,7 +149,7 @@ export class Starboard {
 				name: message.member?.displayName || message.author.username
 			})
 			.setColor(color)
-			.setImage(getImage(message)!)
+			.setImage(attachment?.proxyURL ?? (attachment?.url || null))
 			.setDescription(await this.getContent(t))
 			.setTimestamp(message.createdTimestamp)
 			.setFooter({ text: `Star #${this.id?.toLocaleString() || -1}` });
@@ -237,7 +239,8 @@ export class Starboard {
 
 	private async getContent(_: FTFunction) {
 		const url = await this.getUrl();
-		return [cutText(this.#message.content, 1800), '', url].join('\n');
+		const gotContent = CONTENTMAP.get(this.#message.id);
+		return [cutText(gotContent || this.#message.content, 1800), '', url].join('\n');
 	}
 
 	private getUrl() {
@@ -256,7 +259,7 @@ export class Starboard {
 	private async remove() {
 		await container.prisma.starboard.delete({
 			where: {
-				messageId_guildId: { guildId: this.guildId, messageId: this.messageId }
+				messageId_guildId_starMessageId: { guildId: this.guildId, messageId: this.messageId, starMessageId: this.starMessageId! }
 			}
 		});
 	}
@@ -270,7 +273,7 @@ export class Starboard {
 				id: this.id,
 				messageId: this.messageId,
 				starChannelId: this.starChannelId,
-				starMessageId: this.starMessageId,
+				starMessageId: this.starMessageId!,
 				stars: this.stars,
 				userId: this.userId
 			}
@@ -286,14 +289,15 @@ export class Starboard {
 				id: this.id,
 				messageId: this.messageId,
 				starChannelId: this.starChannelId,
-				starMessageId: this.starMessageId,
+				starMessageId: this.starMessageId!,
 				stars: this.stars,
 				userId: this.userId
 			},
 			where: {
-				messageId_guildId: {
+				messageId_guildId_starMessageId: {
 					guildId: this.guildId,
-					messageId: this.messageId
+					messageId: this.messageId,
+					starMessageId: this.starMessageId!
 				}
 			}
 		});
@@ -309,7 +313,6 @@ export class Starboard {
 				if (this.#starMessage.author.id !== envParseString(EnvKeys.ClientId)) return;
 				// await this.#starMessage.delete();
 				// await this.remove();
-				console.log('try delete');
 				return;
 			} catch (error) {
 				if (!(error instanceof DiscordAPIError) || !(error instanceof HTTPError)) return;
@@ -365,8 +368,8 @@ export class Starboard {
 				this.#manager.syncMessageMap.delete(this);
 				// if the message was created react on it
 				if (this.#starMessage) await floatPromise(this.#starMessage.react('%E2%AD%90'));
-				// save to db
-				await this.save();
+				// save to db if starboard sent successfully
+				if (this.#starMessage) await this.save();
 			});
 
 		this.#manager.syncMessageMap.set(this, promise);

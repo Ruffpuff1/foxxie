@@ -3,7 +3,7 @@ import { Result } from '@sapphire/result';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand, PermissionLevelPrecondition } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
-import { isAdmin } from '#utils/discord';
+import { isAdmin } from '#utils/functions';
 import { ChatInputCommandInteraction } from 'discord.js';
 
 export class UserPrecondition extends PermissionLevelPrecondition {

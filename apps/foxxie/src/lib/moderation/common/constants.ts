@@ -90,8 +90,8 @@ export function getColor(entry: ModerationManager.Entry): number {
 
 const Metadata = new Map<TypeCodes, Colors>([
 	[TypeCodes.Ban, Colors.Red],
-	[TypeCodes.Kick, Colors.Orange],
-	[TypeCodes.Lock, Colors.Red],
+	[TypeCodes.Kick, Colors.Yellow],
+	[TypeCodes.Lock, Colors.Orange],
 	[TypeCodes.Mute, Colors.Orange],
 	[TypeCodes.Prune, Colors.Yellow],
 	[TypeCodes.RestrictedAttachment, Colors.Orange],
@@ -114,7 +114,7 @@ const Metadata = new Map<TypeCodes, Colors>([
 	[TypeCodes.TemporaryRoleRemove, Colors.Red],
 	[TypeCodes.TemporarySetNickname, Colors.Yellow],
 	[TypeCodes.TemporaryTimeout, Colors.Orange],
-	[TypeCodes.TemporaryVoiceMute, Colors.Orange],
+	[TypeCodes.TemporaryVoiceMute, Colors.Yellow],
 	[TypeCodes.TemporaryWarning, Colors.Yellow],
 	[TypeCodes.Timeout, Colors.Orange],
 	[TypeCodes.UndoBan, Colors.Green],
@@ -131,7 +131,7 @@ const Metadata = new Map<TypeCodes, Colors>([
 	[TypeCodes.UndoVoiceMute, Colors.Green],
 	[TypeCodes.UndoWarning, Colors.Green],
 	[TypeCodes.Unlock, Colors.Green],
-	[TypeCodes.VoiceKick, Colors.Orange],
-	[TypeCodes.VoiceMute, Colors.Orange],
+	[TypeCodes.VoiceKick, Colors.Yellow],
+	[TypeCodes.VoiceMute, Colors.Yellow],
 	[TypeCodes.Warning, Colors.Yellow]
 ]) as ReadonlyMap<TypeCodes, Colors>;

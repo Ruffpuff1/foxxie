@@ -15,9 +15,9 @@ import { InviteManager } from '#lib/Structures/managers/InviteManager';
 import { RedisManager } from '#lib/Structures/managers/RedisManager';
 import { FoxxieEvents, GuildMessage, LanguageString, TypedFT, TypedT } from '#lib/types';
 import { Schedules } from '#utils/constants';
-import { SerializedEmoji } from '#utils/discord';
 import { GuildMemberFetchQueue } from '#utils/external/GuildMemberFetchQueue';
 import { LLRCData, LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
+import { SerializedEmoji } from '#utils/functions';
 import { MappedTask } from '#utils/util';
 import { GatewayMessageReactionRemoveDispatch, GuildChannel, GuildTextBasedChannel, Snowflake, ThreadChannel, User } from 'discord.js';
 

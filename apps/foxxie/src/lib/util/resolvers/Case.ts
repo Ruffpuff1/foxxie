@@ -1,11 +1,11 @@
 import { err, ok, Resolvers, Result, UserError } from '@sapphire/framework';
-import { TFunction } from '@sapphire/plugin-i18next';
 import { LanguageKeys, translate } from '#lib/i18n';
 import { ModerationManager } from '#lib/moderation';
+import { FTFunction } from '#lib/types';
 import { getModeration } from '#utils/functions';
 import { Guild } from 'discord.js';
 
-export async function resolveCase(parameter: string, t: TFunction, guild: Guild): Promise<Result<ModerationManager.Entry, UserError>> {
+export async function resolveCase(parameter: string, t: FTFunction, guild: Guild): Promise<Result<ModerationManager.Entry, UserError>> {
 	const result = await resolveCaseId(parameter, t, guild);
 	return result.match({
 		err: (error) => err(error),
@@ -16,7 +16,7 @@ export async function resolveCase(parameter: string, t: TFunction, guild: Guild)
 	});
 }
 
-export async function resolveCaseId(parameter: string, t: TFunction, guild: Guild): Promise<Result<number, UserError>> {
+export async function resolveCaseId(parameter: string, t: FTFunction, guild: Guild): Promise<Result<number, UserError>> {
 	const maximum = await getModeration(guild).getCurrentId();
 	if (maximum === 0) return err(new UserError({ identifier: LanguageKeys.Arguments.CaseNoEntries }));
 

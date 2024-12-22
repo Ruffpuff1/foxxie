@@ -1,3 +1,4 @@
+export * from '#utils/resolvers/Birthday';
 export * from '#utils/resolvers/Case';
 export * from '#utils/resolvers/LastFMUser';
 export * from '#utils/resolvers/Member';

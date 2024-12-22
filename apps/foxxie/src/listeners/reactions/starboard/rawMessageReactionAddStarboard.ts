@@ -10,9 +10,9 @@ import { Starboard } from '#lib/database/Models/starboard';
 import { api } from '#lib/discord';
 import { StarboardManager } from '#lib/structures';
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
-import { isStarboardEmoji } from '#utils/discord';
-import { getGuildStarboard } from '#utils/functions';
-import { floatPromise, snowflakeAge } from '#utils/util';
+import { floatPromise } from '#utils/common';
+import { getGuildStarboard, isStarboardEmoji } from '#utils/functions';
+import { snowflakeAge } from '#utils/util';
 
 @ApplyOptions<ListenerOptions>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: FoxxieEvents.RawReactionAdd }))
 export class UserListener extends Listener {

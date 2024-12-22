@@ -7,10 +7,11 @@
 		"audio": ":violin: Audio",
 		"configuration": ":wrench: Configuration",
 		"games": ":video_game: Games",
-		"general": ":nut_and_bolt: General",
+		"general": ":books: General",
 		"misc": ":books: Misc",
 		"moderation": ":shield: Moderation",
 		"social": ":medal: Social",
+		"utility": ":nut_and_bolt: Utility",
 		"websearch": ":mag: Websearch"
 	},
 	"helpData": {
@@ -23,41 +24,5 @@
 		"examples": "• Examples",
 		"usage": "• Usage"
 	},
-	"helpUsage": "(Command)",
-	"infoServerChannels": "{{channels, channellist}}",
-	"infoServerCreated": "Created by **{{owner}}** on {{created, fulldate}} ({{created, duration}})",
-	"infoServerDescription": "I'll show information about yours or any other server I'm in.",
-	"infoServerEmojis": "Static: **{{static}}**\nAnimated: **{{animated}}**",
-	"infoServerMessages": "{{messages, number}} messages sent.",
-	"infoServerMembers": "{{size, number}} (cached: {{cache, number}})",
-	"infoServerRolesAndMore": "{{count}} more.",
-	"infoServerSecurity": "Verification level: {{filter, verificationlevel}}\nExplicit filter: {{content, contentfilter}}",
-	"infoServerTitles": {
-		"channels": "• Channel",
-		"channels_other": "• Channels ({{count}})",
-		"emojis": "• Emoji",
-		"emojis_other": "• Emojis ({{count}})",
-		"members": "• Members",
-		"roles": "• Role",
-		"roles_other": "• Roles ({{count}})",
-		"security": "• Security",
-		"stats": "• Statistics"
-	},
-
-	"infoUserDiscordJoin": "Joined Discord on {{created, fulldate}} ({{created, duration}})",
-	"infoUserGuildCreate": "Created {{name}} on {{joined, fulldate}} ({{joined, duration}})",
-	"infoUserGuildJoin": "Joined {{name}} on {{joined, fulldate}} ({{joined, duration}})",
-	"infoUserMessages": "{{messages, number}} messages sent.",
-	"infoUserMessagesWithPercent": "{{messages, number}} messages sent, {{percent}}% of all server messages.",
-	"infoUserTitles": {
-		"about": ":pencil: Statistics",
-		"notes": ":label: Note",
-		"notes_other": ":label: Notes",
-		"roles": ":scroll: Role",
-		"roles_other": ":scroll: Roles ({{count, number}})",
-		"warnings": ":lock: Warning",
-		"warnings_other": ":lock: Warnings ({{count, number}})"
-	},
-	"statsDescription": "Provides some details about me and my stats.",
-	"statsMenu": "**My current statistics!**\n• {{memoryPercent}}% of RAM ({{memoryUsed}} / {{totalmemory}} MB) and\n• {{cpuUsage}}% of CPU ({{cpuCount}}c @ {{cpuSpeed}}GHz).\n**I've been running**\n• As of {{uptime, duration}} on {{process}} (shard {{shard}} / {{shardTotal}})\n• Using {{deps, and}}."
+	"helpUsage": "(Command)"
 }

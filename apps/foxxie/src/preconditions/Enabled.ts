@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { ChatInputCommand, Identifiers, MessageCommand, Precondition, PreconditionContext } from '@sapphire/framework';
 import { readSettings } from '#lib/database/settings/functions';
 import { LanguageKeys } from '#lib/i18n';
-import { isModerator } from '#utils/discord';
+import { isModerator } from '#utils/functions';
 import { ChatInputCommandInteraction, GuildMember, Message } from 'discord.js';
 
 @ApplyOptions<Precondition.Options>({

@@ -5,7 +5,10 @@ import { LanguageKeys } from '#lib/i18n';
 import { years } from '#utils/common';
 import { APIApplicationCommandOptionChoice, Collection } from 'discord.js';
 
-export type SchemaDataKey = Exclude<GuildDataKey, 'id' | 'messageCount' | 'starboardEmojis' | 'tags' | 'words'>;
+export type SchemaDataKey = Exclude<
+	GuildDataKey,
+	'disabledCommandsChannels' | 'highlights' | 'id' | 'messageCount' | 'reactionRoles' | 'rolesPersist' | 'starboardEmojis' | 'tags' | 'words'
+>;
 
 const configurableKeys = new Collection<SchemaDataKey, SchemaKey>();
 const configurableGroups = new SchemaGroup('::ROOT::');
@@ -158,7 +161,6 @@ export function getConfiguration() {
 			name: 'disabled-channels',
 			type: 'guildTextChannel'
 		},
-
 		disabledCommands: {
 			array: true,
 			description: LanguageKeys.Settings.DisabledCommands,
@@ -167,18 +169,12 @@ export function getConfiguration() {
 			type: 'commandMatch'
 		},
 
-		disabledCommandsChannels: {
-			array: true,
-			dashboardOnly: true,
-			name: 'disabled-commands-channels',
-			type: 'notAllowed'
-		},
-
 		disableNaturalPrefix: {
 			default: false,
 			name: 'disable-natural-prefix',
 			type: 'boolean'
 		},
+
 		eventsBanAdd: {
 			description: LanguageKeys.Settings.EventsBanAdd,
 			name: 'modules.moderation.events.ban-add',
@@ -204,11 +200,7 @@ export function getConfiguration() {
 			name: 'modules.moderation.events.mute-remove',
 			type: 'boolean'
 		},
-		highlights: {
-			dashboardOnly: true,
-			name: 'highlights',
-			type: 'notAllowed'
-		},
+
 		language: {
 			default: 'en-US',
 			description: LanguageKeys.Settings.Language,
@@ -284,12 +276,7 @@ export function getConfiguration() {
 			minimum: 1,
 			type: 'string'
 		},
-		reactionRoles: {
-			array: true,
-			dashboardOnly: true,
-			name: 'modules.automation.reaction-roles',
-			type: 'notAllowed'
-		},
+
 		rolesAdmin: {
 			array: true,
 			name: 'modules.moderation.roles.admin',
@@ -317,12 +304,7 @@ export function getConfiguration() {
 			name: 'modules.moderation.roles.muted',
 			type: 'role'
 		},
-		rolesPersist: {
-			array: true,
-			dashboardOnly: true,
-			name: 'modules.automation.persist-roles',
-			type: 'notAllowed'
-		},
+
 		rolesPersistEnabled: {
 			description: LanguageKeys.Settings.RolesPersistEnabled,
 			name: 'modules.automation.persist-roles-enabled',
@@ -843,6 +825,30 @@ export function getConfiguration() {
 		starboardSelfStar: {
 			name: 'modules.starboard.self-star',
 			type: 'boolean'
+		},
+		suggestionsAutoThread: {
+			default: true,
+			name: 'modules.suggestions.auto-thread',
+			type: 'boolean'
+		},
+		suggestionsButtons: {
+			default: false,
+			name: 'modules.suggestions.buttons',
+			type: 'boolean'
+		},
+		suggestionsChannel: {
+			name: 'modules.suggestions.channel',
+			type: 'sendableChannel'
+		},
+		suggestionsEmbed: {
+			default: true,
+			name: 'modules.suggestions.embed',
+			type: 'boolean'
+		},
+		suggestionsUpdateHistory: {
+			default: true,
+			name: 'modules.suggestions.update-history',
+			type: 'boolean'
 		}
 	});
 
@@ -873,7 +879,9 @@ function makeKey(property: SchemaDataKey, options: ConfigurableKeyOptions) {
 }
 
 function makeKeys(record: Record<SchemaDataKey, ConfigurableKeyOptions>): Record<SchemaDataKey, SchemaKey> {
-	const entries = objectEntries(record).map(([key, value]) => [key, makeKey(key, value)] as const);
+	const entries = objectEntries(record)
+		.filter(([, value]) => !value.dashboardOnly)
+		.map(([key, value]) => [key, makeKey(key, value)] as const);
 	return Object.fromEntries(entries) as Record<SchemaDataKey, SchemaKey>;
 }
 

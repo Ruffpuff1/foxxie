@@ -1,6 +1,4 @@
-import type { Collection, Guild, GuildChannel } from 'discord.js';
-
-import { FT, type HelpDisplayData, T } from '#lib/types';
+import { FT, T } from '#lib/types';
 
 export const AboutDescription = T('commands/general:aboutDescription');
 export const AboutSummary = FT<{
@@ -69,57 +67,5 @@ export const InfoRoleTitles = T<{
 	properties: string;
 }>('commands/general:infoRoleTitles');
 export const InfoRoleUnicodeEmoji = FT<{ emoji: string }, string>('commands/general:infoRoleUnicodeEmoji');
-export const InfoServerChannels = FT<{ channels: Collection<string, GuildChannel> }, string>('commands/general:infoServerChannels');
-export const InfoServerCreated = FT<{ created: Date; owner: string }, string>('commands/general:infoServerCreated');
-export const InfoServerEmojis = FT<{ animated: number; static: number }, string>('commands/general:infoServerEmojis');
-export const InfoServerMessages = FT<{ messages: number }, string>('commands/general:infoServerMessages');
-export const InfoServerMembers = FT<{ cache: number; size: number }, string>('commands/general:infoServerMembers');
-export const InfoServerRolesAndMore = FT<{ count: number }, string>('commands/general:infoServerRolesAndMore');
-export const InfoServerSecurity = FT<
-	{
-		content: Guild['explicitContentFilter'];
-		filter: Guild['verificationLevel'];
-	},
-	string
->('commands/general:infoServerSecurity');
-export const InfoServerTitles = T<{
-	members: string;
-	security: string;
-	stats: string;
-}>('commands/general:infoServerTitles');
-export const InfoServerTitlesChannels = FT<{ count: number }, string>('commands/general:infoServerTitles.channels');
-export const InfoServerTitlesEmojis = FT<{ count: number }, string>('commands/general:infoServerTitles.emojis');
-export const InfoServerTitlesRoles = FT<{ count: number }, string>('commands/general:infoServerTitles.roles');
-export const InfoUserDiscordJoin = FT<{ created: Date }, string>('commands/general:infoUserDiscordJoin');
-export const InfoUserGuildCreate = FT<{ joined: Date; name: string }, string>('commands/general:infoUserGuildCreate');
-export const InfoUserGuildJoin = FT<{ joined: Date; name: string }, string>('commands/general:infoUserGuildJoin');
-export const InfoUserMessages = FT<{ messages: number }, string>('commands/general:infoUserMessages');
-export const InfoUserMessagesWithPercent = FT<{ messages: number; percent: string }>('commands/general:infoUserMessagesWithPercent');
-export const InfoUserSelectMenu = T<[string, string]>('commands/general:infoUserSelectMenu');
-export const InfoUserTitles = T<{
-	about: string;
-}>('commands/general:infoUserTitles');
-export const InfoUserTitlesNotes = FT<{ count: number }, string>('commands/general:infoUserTitles.notes');
-export const InfoUserTitlesRoles = FT<{ count: number }, string>('commands/general:infoUserTitles.roles');
-export const InfoUserTitlesWarnings = FT<{ count: number }, string>('commands/general:infoUserTitles.warnings');
-
-export const StatsDescription = T('commands/general:statsDescription');
-export const StatsDetailedDescription = T<HelpDisplayData>('commands/general:statsDetailedDescription');
-export const StatsMenu = FT<
-	{
-		cpuCount: string;
-		cpuSpeed: string;
-		cpuUsage: string;
-		deps: string[];
-		memoryPercent: string;
-		memoryUsed: string;
-		process: string;
-		shard: number;
-		shardTotal: number;
-		totalmemory: string;
-		uptime: number;
-	},
-	string
->('commands/general:statsMenu');
 
 export * from './general/index.js';

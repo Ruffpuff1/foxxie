@@ -1,7 +1,7 @@
+import { sanitize } from '@foxxiebot/sanitize';
 import { cast } from '@sapphire/utilities';
 import { Highlight } from '#lib/database';
 import { seconds } from '#utils/common';
-import { remove } from 'confusables';
 import { isMainThread, parentPort } from 'node:worker_threads';
 
 import {
@@ -116,7 +116,7 @@ function handleMessage(message: IncomingPayload): OutgoingPayload {
 }
 
 function runWordFilter(message: RunWordFilterPayload): OutgoingWordFilterPayload {
-	const result = filter(remove(message.content), message.regex);
+	const result = filter(sanitize(message.content), message.regex);
 	if (result === null) return { id: message.id, type: OutputType.FilterNoContent };
 
 	return {

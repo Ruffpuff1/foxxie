@@ -3,7 +3,7 @@ import { Listener } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
 import { readSettings } from '#lib/database/settings/functions';
 import { EventArgs, FoxxieEvents } from '#lib/types';
-import { floatPromise } from '#utils/util';
+import { floatPromise } from '#utils/common';
 import { GuildMember, PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<Listener.Options>(({ container }) => ({

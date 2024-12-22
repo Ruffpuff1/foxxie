@@ -1,9 +1,11 @@
+import makeRequest from '@aero/http';
 import { resolveToNull } from '@ruffpuff/utilities';
 import { isImageAttachment } from '@sapphire/discord.js-utilities';
 import { ArgType, container } from '@sapphire/framework';
 import { first } from '@sapphire/iterator-utilities/first';
 import { SubcommandMapping } from '@sapphire/plugin-subcommands';
-import { cast, isNullishOrEmpty, isNumber, isThenable } from '@sapphire/utilities';
+import { cast, isNullishOrEmpty, isNumber } from '@sapphire/utilities';
+import { envParseString } from '@skyra/env-utilities';
 import { readSettings } from '#lib/database';
 import { ScheduleEntry } from '#lib/schedule';
 import { DetailedDescription, GuildMessage } from '#lib/types';
@@ -82,18 +84,6 @@ export function fetchTasks<T extends ScheduleEntry.TaskId = ScheduleEntry.TaskId
 	}));
 }
 
-/**
- * Attaches a logging catch method to a promise, "floating it".
- * @param promise The promise to float.
- */
-export function floatPromise(promise: Promise<unknown>) {
-	if (isThenable(promise))
-		promise.catch((error: Error) => {
-			container.logger.debug(error);
-		});
-	return promise;
-}
-
 export function getContent(message: Message): null | string {
 	if (message.content) return message.content;
 	for (const embed of message.embeds) {
@@ -153,23 +143,6 @@ export function* getImages(message: Message): IterableIterator<string> {
 
 		yield sticker.url;
 	}
-}
-
-export function getServerDetails() {
-	const totalmemory = ((totalmem() / 1024 / 1024 / 1024) * 1024).toFixed(0);
-	const memoryUsed = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
-	return {
-		cpuCount: cpus().length,
-		cpuSpeed: (cpus()[0].speed / 1000).toFixed(1),
-		cpuUsage: (loadavg()[0] * 10).toFixed(1),
-		memoryPercent: ((parseInt(memoryUsed, 10) / parseInt(totalmemory, 10)) * 100).toFixed(1),
-		memoryUsed,
-		process: hostname(),
-		totalmemory,
-		totalShards: container.client.options.shardCount || 1,
-		uptime: Date.now() - container.client.uptime!,
-		version: process.env.CLIENT_VERSION!
-	};
 }
 
 export function getTag(user: APIUser | User) {
@@ -240,13 +213,14 @@ export const IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp)/i;
 /**
  * Returns a conditional embed field.
  */
-export function conditionalField(condition: boolean, name: string, text: string, inline: boolean = false) {
-	return ifNotNull(condition, { inline, name, value: text });
+export function conditionalField(condition: boolean, name: string, text: string | undefined, inline: boolean = false) {
+	return ifNotNull(condition, { inline, name, value: text! });
 }
 
 export function getAttachment(message: Message): ImageAttachment | null {
 	if (message.attachments.size) {
-		const attachment = message.attachments.find((att) => IMAGE_EXTENSION.test(att.url) || VIDEO_EXTENSION.test(att.url));
+		const attachment = message.attachments.find((att) => IMAGE_EXTENSION.test(att.name ?? att.url) || VIDEO_EXTENSION.test(att.name ?? att.url));
+
 		if (attachment) {
 			return {
 				height: attachment.height!,
@@ -360,6 +334,30 @@ export const getUnionArg = async <K extends keyof ArgType, T>(cb: (opt: K) => Pr
 
 	throw lastError;
 };
+
+export async function fetchCommit() {
+	return makeRequest('https://api.github.com/repos/Ruffpuff1/foxxie/commits/main') //
+		.json()
+		.then((data: any) => data.sha.substring(0, 7))
+		.catch(() => null);
+}
+
+export function getServerDetails() {
+	const totalmemory = ((totalmem() / 1024 / 1024 / 1024) * 1024).toFixed(0);
+	const memoryUsed = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
+	return {
+		cpuCount: cpus().length,
+		cpuSpeed: (cpus()[0].speed / 1000).toFixed(1),
+		cpuUsage: (loadavg()[0] * 10).toFixed(1),
+		memoryPercent: ((parseInt(memoryUsed, 10) / parseInt(totalmemory, 10)) * 100).toFixed(1),
+		memoryUsed,
+		process: hostname(),
+		totalmemory,
+		totalShards: container.client.options.shardCount || 1,
+		uptime: new Date(Date.now() - container.client.uptime!),
+		version: envParseString('CLIENT_VERSION')
+	} as const;
+}
 
 /**
  * Checks if the provided user ID is the same as the client's ID.

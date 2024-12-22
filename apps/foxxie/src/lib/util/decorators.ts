@@ -1,20 +1,24 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { createClassDecorator, createFunctionPrecondition, createMethodDecorator, createProxy, DecoratorIdentifiers } from '@sapphire/decorators';
 import { isDMChannel, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
-import { Command, RegisterBehavior, UserError } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum, RegisterBehavior, UserError } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
-import { SubcommandMappingArray, SubcommandMappingMethod } from '@sapphire/plugin-subcommands';
+import { SubcommandMapping, SubcommandMappingArray, SubcommandMappingMethod } from '@sapphire/plugin-subcommands';
 import { Ctor, isNullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
+import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FoxxieSubcommand } from '#lib/structures';
-import { GuildMessage } from '#lib/types';
+import { GuildMessage, TypedT } from '#lib/types';
 import {
+	ChatInputApplicationCommandData,
 	ChatInputCommandInteraction,
+	InteractionContextType,
 	PermissionFlagsBits,
 	PermissionResolvable,
 	PermissionsBitField,
 	SlashCommandBuilder,
 	SlashCommandOptionsOnlyBuilder,
+	SlashCommandSubcommandBuilder,
 	SlashCommandSubcommandsOnlyBuilder
 } from 'discord.js';
 
@@ -48,42 +52,177 @@ export const RequiresLastFMUsername = (
 	);
 };
 
-const SubcommandMapping = new Map<string, SubcommandMappingArray>();
+const MappedSubcommands = new Map<string, SubcommandMappingArray>();
+const SubcommandBuilderData = new Map<string, SlashCommandSubcommandBuilder[]>();
 
-export const MessageSubcommand = (methodName: string, isDefault = false, aliases: string[] = []) => {
-	console.log('regis meth', aliases);
+export const ChatInputSubcommand = (methodName: string, builder: (builder: SlashCommandSubcommandBuilder) => SlashCommandSubcommandBuilder) => {
 	return createMethodDecorator((target, __, descriptor) => {
-		const messageRun = descriptor.value;
+		const chatInputRun = descriptor.value;
 		const name = Reflect.get(target, 'name') || target.constructor.name;
 		if (!name) return;
 
-		console.log(name);
+		const previousBuilders = SubcommandBuilderData.get(name);
+		if (previousBuilders) {
+			const newNode = [...previousBuilders, builder(new SlashCommandSubcommandBuilder())];
+			SubcommandBuilderData.set(name, newNode);
+		} else {
+			SubcommandBuilderData.set(name, [builder(new SlashCommandSubcommandBuilder())]);
+		}
 
-		const previous = SubcommandMapping.get(name);
-		const options = { default: isDefault, name: methodName };
+		const previous = MappedSubcommands.get(name);
+		const options = { name: methodName };
 
 		if (previous) {
 			const entry = previous.findIndex((s) => s.name === name);
 			const returned = entry === -1 ? [options] : previous.splice(entry, 1);
 
-			const newEntry = [...previous, { ...returned[0], default: isDefault, messageRun }] as SubcommandMappingArray;
-			SubcommandMapping.set(name, newEntry);
+			const newEntry = [...previous, { ...returned[0], chatInputRun }] as SubcommandMappingArray;
+			MappedSubcommands.set(name, newEntry);
 		} else {
-			SubcommandMapping.set(name, [{ default: isDefault, messageRun, name: methodName }] as SubcommandMappingArray);
+			MappedSubcommands.set(name, [{ chatInputRun, name: methodName }] as SubcommandMappingArray);
+		}
+
+		if (!chatInputRun) throw 'no method';
+		if (typeof chatInputRun !== 'function') throw 'not a method';
+
+		descriptor.value = async function value(this: any, ...args: any[]) {
+			return chatInputRun!.call(this, ...args);
+		} as unknown as undefined;
+	});
+};
+
+export const MessageSubcommand = (methodName: string, isDefault = false, aliases: string[] = []) => {
+	return createMethodDecorator((target, __, descriptor) => {
+		const messageRun = descriptor.value;
+		const name = Reflect.get(target, 'name') || target.constructor.name;
+		if (!name) return;
+
+		const previous = MappedSubcommands.get(name);
+		const options = { default: isDefault, name: methodName };
+
+		if (previous) {
+			const entry = previous.findIndex((s) => s.name === methodName);
+			const returned = entry === -1 ? [options] : previous.splice(entry, 1);
+
+			const mappedAliases: SubcommandMappingArray = [];
+			if (aliases.length) for (const alias of aliases) mappedAliases.push({ messageRun, name: alias } as SubcommandMapping);
+
+			const newEntry = [...previous, ...mappedAliases, { ...returned[0], default: isDefault, messageRun }] as SubcommandMappingArray;
+			MappedSubcommands.set(name, newEntry);
+		} else {
+			const mappedAliases: SubcommandMappingArray = [];
+			if (aliases.length) for (const alias of aliases) mappedAliases.push({ messageRun, name: alias } as SubcommandMapping);
+			MappedSubcommands.set(name, [...mappedAliases, { default: isDefault, messageRun, name: methodName }] as SubcommandMappingArray);
 		}
 	});
 };
 
-export const RegisterSubcommand = (options: FoxxieSubcommand.Options = {}) => {
-	console.log('regis cmd');
+const guildOnlyMap = new Map<string, boolean>();
+
+export const RegisterCommand = (
+	options: ((builder: FoxxieSubcommandBuilder) => FoxxieSubcommandBuilder) | FoxxieSubcommand.Options,
+	builder?:
+		| ((
+				builder: SlashCommandBuilder
+		  ) =>
+				| Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>
+				| SlashCommandBuilder
+				| SlashCommandOptionsOnlyBuilder
+				| SlashCommandSubcommandsOnlyBuilder)
+		| SlashCommandBuilder,
+	idHints: string[] = []
+) => {
 	return createClassDecorator((command: Ctor) => {
 		return createProxy(command, {
 			construct: (ctor, [context, base = {}]) => {
-				const subcommands = SubcommandMapping.get(ctor.name) || [];
+				if (builder) {
+					const guildOnly = guildOnlyMap.get(ctor.name);
+
+					const builderData = (typeof builder === 'function' ? builder(new SlashCommandBuilder()) : builder).toJSON();
+					const combined = {
+						...builderData
+					};
+
+					if (guildOnly) combined.contexts = [...(combined.contexts || []), InteractionContextType.Guild];
+
+					const registry = container.applicationCommandRegistries.acquire(base.name);
+
+					registry.registerChatInputCommand(combined as ChatInputApplicationCommandData, {
+						behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
+						idHints
+					});
+				}
+
+				const resolvedOptions = typeof options === 'function' ? options(new FoxxieSubcommandBuilder()).toJSON() : options;
+
 				return new ctor(context, {
 					...base,
-					...options,
-					subcommands: [...(base.subcommands || []), ...(options.subcommands || []), ...subcommands]
+					...resolvedOptions
+				});
+			}
+		});
+	});
+};
+
+export const RegisterSubcommand = (
+	options: ((builder: FoxxieSubcommandBuilder) => FoxxieSubcommandBuilder) | FoxxieSubcommand.Options,
+	builder?:
+		| ((
+				builder: SlashCommandBuilder
+		  ) =>
+				| Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>
+				| SlashCommandBuilder
+				| SlashCommandOptionsOnlyBuilder
+				| SlashCommandSubcommandsOnlyBuilder)
+		| SlashCommandBuilder,
+	idHints: string[] = []
+) => {
+	return createClassDecorator((command: Ctor) => {
+		return createProxy(command, {
+			construct: (ctor, [context, base = {}]) => {
+				const subcommands = MappedSubcommands.get(ctor.name) || [];
+
+				if (builder) {
+					const subcommandData = SubcommandBuilderData.get(ctor.name);
+					const guildOnly = guildOnlyMap.get(ctor.name);
+
+					const builderData = (typeof builder === 'function' ? builder(new SlashCommandBuilder()) : builder).toJSON();
+					const combined = {
+						...builderData,
+						options: [...(builderData.options || []), ...(subcommandData || []).map((s) => s.toJSON())]
+					};
+
+					if (guildOnly) combined.contexts = [...(combined.contexts || []), InteractionContextType.Guild];
+
+					const registry = container.applicationCommandRegistries.acquire(base.name);
+
+					registry.registerChatInputCommand(combined as ChatInputApplicationCommandData, {
+						behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
+						idHints
+					});
+				}
+
+				const resolvedOptions = typeof options === 'function' ? options(new FoxxieSubcommandBuilder()).toJSON() : options;
+
+				return new ctor(context, {
+					...base,
+					...resolvedOptions,
+					subcommands: [...(base.subcommands || []), ...(resolvedOptions.subcommands || []), ...subcommands]
+				});
+			}
+		});
+	});
+};
+
+export const GuildOnlyCommand = () => {
+	return createClassDecorator((command: Ctor) => {
+		return createProxy(command, {
+			construct: (ctor, [context, base = {}]) => {
+				guildOnlyMap.set(ctor.name, true);
+
+				return new ctor(context, {
+					...base,
+					runIn: [CommandOptionsRunTypeEnum.GuildAny]
 				});
 			}
 		});
@@ -188,6 +327,53 @@ export const RequiresStarboardEntries = (
 		}
 	);
 };
+
+export class FoxxieSubcommandBuilder {
+	public aliases: string[] = [];
+
+	public description: TypedT<string> | undefined;
+
+	public detailedDescription: TypedT<LanguageHelpDisplayOptions> | undefined;
+
+	public flags: boolean | string[] | undefined;
+
+	public requiredClientPermissions: PermissionResolvable | undefined;
+
+	public setAliases(...aliases: string[]) {
+		this.aliases = aliases;
+		return this;
+	}
+
+	public setDescription(description: TypedT<string>) {
+		this.description = description;
+		return this;
+	}
+
+	public setDetailedDescription(detailedDescription: TypedT<LanguageHelpDisplayOptions>) {
+		this.detailedDescription = detailedDescription;
+		return this;
+	}
+
+	public setFlags(flags: boolean | string[]) {
+		this.flags = flags;
+		return this;
+	}
+
+	public setRequiredClientPermissions(permissions: PermissionResolvable) {
+		this.requiredClientPermissions = permissions;
+		return this;
+	}
+
+	public toJSON(): FoxxieSubcommand.Options {
+		return {
+			aliases: this.aliases,
+			description: this.description,
+			detailedDescription: this.detailedDescription,
+			flags: this.flags,
+			requiredClientPermissions: this.requiredClientPermissions
+		};
+	}
+}
 
 export function RegisterChatInputCommand(
 	builder:

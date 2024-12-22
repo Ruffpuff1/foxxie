@@ -14,6 +14,7 @@ import {
 	EmbedBuilder,
 	GuildTextBasedChannel,
 	InteractionResponse,
+	italic,
 	type Message,
 	type MessageCreateOptions,
 	RESTJSONErrorCodes,
@@ -108,12 +109,12 @@ export async function sendLoadingMessage(
 ) {
 	const t = await fetchT(message.guild!);
 	const translated = t(typeof key === 'boolean' ? LanguageKeys.System.MessageLoading : key || LanguageKeys.System.MessageLoading, args);
-	const content = cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated);
+	const content = italic(cast<string>(Array.isArray(translated) ? randomArray(cast<any>(translated)) : translated));
 
 	if (message instanceof ChatInputCommandInteraction) {
 		return message.replied
 			? message.editReply({ components: [], content, embeds: [] })
-			: message.reply({ content, ephemeral: typeof key === 'boolean' ? key : true });
+			: message.reply({ content, ephemeral: typeof key === 'boolean' ? !key : true });
 	}
 
 	return sendMessage(message, content);

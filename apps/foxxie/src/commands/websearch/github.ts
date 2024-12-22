@@ -120,8 +120,6 @@ export class GithubCommand extends FoxxieSubcommand {
 
 		if (result.isErr() || !result.unwrap()) return interaction.editReply('not found');
 
-		console.log(result.unwrap());
-
 		const embed = GithubCommand.BuildUserEmbed(t, result.unwrap()!, 0);
 
 		return interaction.editReply({ embeds: [embed] });
@@ -129,11 +127,10 @@ export class GithubCommand extends FoxxieSubcommand {
 
 	private static BuildRepoEmbed(t: FTFunction, repo: Github.Repo, color: number | undefined) {
 		const [none, yes, no] = [t(LanguageKeys.Globals.None), t(LanguageKeys.Globals.Yes), t(LanguageKeys.Globals.No)];
-		console.log(yes, no);
 		const titles = t(LanguageKeys.Commands.Websearch.Github.RepositoryTitles);
 
 		const template = new EmbedBuilder()
-			.setColor(color || Colors.BlurpleOld)
+			.setColor(color || Colors.White)
 			.setAuthor({ iconURL: repo.owner.avatar_url, name: `${repo.owner.login}/${repo.name}`, url: repo.html_url })
 			.setThumbnail(repo.owner.avatar_url);
 
@@ -197,7 +194,7 @@ export class GithubCommand extends FoxxieSubcommand {
 		const titles = t(LanguageKeys.Commands.Websearch.Github.RepositoryTitles);
 
 		const embed = new EmbedBuilder()
-			.setColor(color || Colors.BlurpleOld)
+			.setColor(color || Colors.White)
 			.setAuthor({
 				iconURL: user.avatar_url as string,
 				name: user.name ? `${user.name} [${user.login}]` : (user.login as string),

@@ -40,18 +40,31 @@ model moderation {
   @@id([caseId, guildId])
 }
 
+model Suggestion {
+  id Int
+  guild guilds @relation(fields: [guildId], references: [id])
+  guildId String
+  authorId String
+  messageId String
+  createdAt DateTime @default(now())
+  repliedAt DateTime?
+  archivedAt DateTime?
+
+  @@id([id, guildId])
+}
+
 model starboard {
   enabled       Boolean @default(true)
   userId        String? @map("userid") @db.VarChar(19)
   messageId     String  @map("messageid") @db.VarChar(19)
   channelId     String? @map("channelid") @db.VarChar(19)
   guildId       String  @map("guildid") @db.VarChar(19)
-  starMessageId String? @map("starmessageid") @db.VarChar
+  starMessageId String @map("starmessageid") @db.VarChar
   stars         Int     @default(0) @db.SmallInt
   starChannelId String? @map("starchannelid") @db.VarChar
   id            Int?
 
-  @@id([messageId, guildId])
+  @@id([messageId, guildId, starMessageId])
 }
 
 model guilds {
@@ -202,6 +215,12 @@ model guilds {
   selfmodReactionsThresholdMaximum     Int      @default(10) @map("selfmod.reactions.threshold-maximum") @db.SmallInt
   selfmodReactionsThresholdDuration    Int      @default(60000) @map("selfmod.reactions.threshold-duration")
   selfmodIgnoredChannels               String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("selfmod.ignored-channels") @db.VarChar(19)
+  suggestions Suggestion[]
+  suggestionsAutoThread Boolean @default(true)
+  suggestionsButtons Boolean @default(false)
+  suggestionsChannel String?
+  suggestionsEmbed Boolean @default(true)
+  suggestionsUpdateHistory Boolean @default(true)
   starboardChannelId                   String?  @map("starboard.channel_id") @db.VarChar(19)
   starboardEmojis                      String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(128)[]")) @map("starboard.emojis") @db.VarChar(128)
   starboardMinimum                     Int      @default(3) @map("starboard.minimum") @db.SmallInt

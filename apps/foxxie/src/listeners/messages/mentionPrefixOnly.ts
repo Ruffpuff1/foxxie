@@ -7,7 +7,7 @@ import { envParseString } from '@skyra/env-utilities';
 import { readSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { EnvKeys, EventArgs, FoxxieEvents } from '#lib/types';
-import { isAdmin } from '#utils/discord';
+import { isAdmin } from '#utils/functions';
 import { LocaleString, Message, userMention } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({

@@ -1,6 +1,13 @@
 import type { DMMessage, GuildMessage } from '#lib/types';
 import type { Message } from 'discord.js';
 
+import { isNullish, Nullish } from '@sapphire/utilities';
+
+export function ensure<T>(value: Nullish | T) {
+	if (isNullish(value)) throw new TypeError('Expected value to be defined');
+	return value;
+}
+
 /**
  * Checks whether or not a message was sent in a guild.
  * @param message The message to check.

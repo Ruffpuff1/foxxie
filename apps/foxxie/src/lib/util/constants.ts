@@ -1,43 +1,45 @@
 export const rootFolder = process.cwd();
 
 export const enum BrandingColors {
-	Primary = 0xed7c7d,
-	Secondary = 0x4583c7
+	Primary = 0xf16a6a,
+	Ruff = 0x857788,
+	Secondary = 0xbfcaf3
 }
 
 export const enum Colors {
-	Black = 0x737f8d,
-	Blurple = 0x5865f2,
-	BlurpleOld = 0x7289db,
-	Disboard = 0x25b8b8,
-	Green = 0x5dba7d,
-	LemonYellow = 0xf1ab1d,
-	Orange = 0xf79454,
-	PokemonBird = 0x969696,
-	Red = 0xff5b5b,
-	Restricted = 1579292,
-	TheCornerStoreStarboard = 0xfff59f,
-	Yellow = 0xffdb5c
+	Blue = 0x3f51b5,
+	Green = 0x8ac34a,
+	Orange = 0xff9900,
+	Red = 0xf16a6a,
+	Restricted = 0x18191c,
+	White = 0xeeeeee,
+	Yellow = 0xffc109
 }
 
 export const enum LanguageFormatters {
+	And = 'and',
 	Bold = 'bold',
-	DateTime = 'dateTime',
+	ChannelMention = 'channelMention',
+	Code = 'code',
+	CodeAnd = 'codeand',
+	CodeBlock = 'codeblock',
+	DateTime = 'datetime',
 	Duration = 'duration',
 	DurationString = 'durationString',
 	ExplicitContentFilter = 'explicitContentFilter',
+	FullDate = 'fulldate',
 	HumanDateTime = 'humanDateTime',
 	HumanLevels = 'humanLevels',
 	Italic = 'italic',
 	MessageNotifications = 'messageNotifications',
 	Number = 'number',
-	NumberCompact = 'numberCompact',
-	PermissionsArray = 'permissionsarray'
+	NumberCompact = 'numbercompact',
+	PermissionsArray = 'permissionsarray',
+	Remaining = 'remaining',
+	Time = 'time',
+	UserMention = 'userMention',
+	VerificationLevel = 'verificationlevel'
 }
-
-export type ModerationTaskId = Omit<Schedules, 'Birthday' | 'Disboard' | 'UpdateDiscogsUsers' | 'UpdateLastFmUsers'>;
-
-export const ModerationTasks = [Schedules.EndTempBan, Schedules.EndTempMute, Schedules.EndTempNick, Schedules.EndTempNick];
 
 export const enum Schedules {
 	Birthday = 'birthday',
@@ -48,6 +50,7 @@ export const enum Schedules {
 	EndTempRestrictEmbed = 'moderationEndRestrictionEmbed',
 	EndTempTimeout = 'moderationEndTimeout',
 	IndexUser = 'indexUser',
+	LastFMUpdateArtistsForUser = 'lastFmUpdateArtistsForUser',
 	Reminder = 'reminder',
 	RemoveBirthdayRole = 'removeBirthdayRole',
 	UpdateDiscogsUsers = 'updateDiscogsUsers',
@@ -55,13 +58,12 @@ export const enum Schedules {
 }
 
 export const enum Urls {
-	Celestia = 'https://celestia.reese.gay',
-	Disboard = 'https://disboard.org/',
 	Haste = 'https://hastebin.com',
-	Repo = 'https://github.com/Ruffpuff1/foxxie',
-	Support = 'https://rsehrk.com/tcs',
-	TheCornerStore = 'https://rsehrk.com/tcs'
+	Support = 'https://tcs.rshk.me',
+	TheCornerStore = 'https://tcs.rshk.me'
 }
+
+export type ModerationTaskId = Omit<Schedules, 'Birthday' | 'Disboard' | 'UpdateDiscogsUsers' | 'UpdateLastFmUsers'>;
 
 export const emojis = {
 	boosts: ['<a:boost1:904581076377292820>', '<a:boost2:904581123445776464>', '<a:boost3:904581171202097152>'],

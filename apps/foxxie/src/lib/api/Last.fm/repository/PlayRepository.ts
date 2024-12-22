@@ -10,7 +10,7 @@ import { DataSource } from '../types/enums/DataSource.js';
 import { PlaySource } from '../types/enums/PlaySource.js';
 import { RecentTrack } from '../types/models/domain/RecentTrack.js';
 
-interface PlayUpdate {
+export interface PlayUpdate {
 	addedPlays: UserPlay[];
 	removedPlays: UserPlay[];
 }

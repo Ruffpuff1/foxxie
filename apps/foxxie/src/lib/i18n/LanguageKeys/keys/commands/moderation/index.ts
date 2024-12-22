@@ -5,6 +5,7 @@ export * as Untimeout from '#lib/i18n/LanguageKeys/keys/commands/moderation/Unti
 export * as Utilities from '#lib/i18n/LanguageKeys/keys/commands/moderation/utilities/index';
 
 import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/types';
+import { PermissionsString } from 'discord.js';
 
 export const BanDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:banDetailedDescription');
 export const BanSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:banSuccess');
@@ -55,7 +56,9 @@ export const ActionSetupTooManyRoles = T('moderationActions:setupTooManyRoles');
 export const ActionSharedRoleSetupExisting = T('moderationActions:sharedRoleSetupExisting');
 export const ActionSharedRoleSetupExistingName = T('moderationActions:sharedRoleSetupExistingName');
 export const ActionSharedRoleSetupNew = T('moderationActions:sharedRoleSetupNew');
-export const ActionSharedRoleSetupAsk = FT<{ channels: number; permissions: string; role: string }>('moderationActions:sharedRoleSetupAsk');
+export const ActionSharedRoleSetupAsk = FT<{ channels: number; permissions: PermissionsString[]; role: string }>(
+	'moderationActions:sharedRoleSetupAsk'
+);
 export const ActionSharedRoleSetupNoMessage = T('moderationActions:sharedRoleSetupNoMessage');
 export const ActionRequiredMember = T('moderationActions:requiredMember');
 export const ActionCannotManageRoles = T('moderationActions:actionCannotManageRoles');

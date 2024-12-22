@@ -1,10 +1,9 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
-import { TFunction } from '@sapphire/plugin-i18next';
 import { isNullish, Nullish } from '@sapphire/utilities';
 import { writeSettings } from '#lib/database';
 import { getT } from '#lib/i18n';
-import { EventArgs, FoxxieEvents } from '#lib/types';
+import { EventArgs, FoxxieEvents, FTFunction } from '#lib/types';
 import { UserBuilder } from '#utils/builders';
 import { toErrorCodeResult } from '#utils/common';
 import { getLogger, getLogPrefix } from '#utils/functions';
@@ -46,7 +45,7 @@ export class UserListener extends Listener {
 		this.container.logger.error(`${getLogPrefix(this)} Failed to add the muted role to a member.`);
 	}
 
-	async #handleMutedMemberNotify(t: TFunction, member: GuildMember, targetChannelId: Nullish | Snowflake) {
+	async #handleMutedMemberNotify(t: FTFunction, member: GuildMember, targetChannelId: Nullish | Snowflake) {
 		await getLogger(member.guild).send({
 			channelId: targetChannelId,
 			key: 'channelsLogsMemberAdd',

@@ -132,6 +132,7 @@ export class UserCommand extends FoxxieCommand {
 				path: await import('node:path'),
 				process: await import('node:process'),
 				require: createRequire(import.meta.url),
+				sanitize: await import('@foxxiebot/sanitize'),
 				sapphire: {
 					asyncQueue: await import('@sapphire/async-queue'),
 					framework: await import('@sapphire/framework'),

@@ -160,6 +160,11 @@ export function getDefaultGuildSettings() {
 		starboardIgnoredChannels: [],
 		starboardMinimum: 3,
 		starboardSelfStar: true,
+		suggestionsAutoThread: true,
+		suggestionsButtons: false,
+		suggestionsChannel: null,
+		suggestionsEmbed: true,
+		suggestionsUpdateHistory: true,
 		tags: [],
 		words: []
 	} as const satisfies DefaultGuildData);

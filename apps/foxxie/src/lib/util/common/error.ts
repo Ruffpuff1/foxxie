@@ -7,7 +7,7 @@ import {
 	ResultError,
 	UserError
 } from '@sapphire/framework';
-import { fetchT, type TFunction } from '@sapphire/plugin-i18next';
+import { fetchT } from '@sapphire/plugin-i18next';
 import { ChatInputSubcommandErrorPayload, MessageSubcommandErrorPayload } from '@sapphire/plugin-subcommands';
 import { cast, cutText } from '@sapphire/utilities';
 import { captureException } from '@sentry/node';
@@ -101,7 +101,7 @@ export async function handleMessageCommandError(error: unknown, payload: Message
 		parameters = message.content.slice(payload.context.commandPrefix.length + payload.context.commandName.length).trim();
 	}
 
-	console.log(parameters, error);
+	console.log(parameters);
 
 	if (!(error instanceof Error)) return messageStringError(message, String(error));
 	if (error instanceof ArgumentError) return messageArgumentError(message, t, error);
@@ -133,7 +133,7 @@ export async function handleMessageCommandError(error: unknown, payload: Message
 	return undefined;
 }
 
-export function resolveError(t: TFunction, error: string | UserError) {
+export function resolveError(t: FTFunction, error: string | UserError) {
 	return typeof error === 'string' ? resolveStringError(t, error) : resolveUserError(t, error);
 }
 
@@ -272,14 +272,14 @@ function messageUserError(message: Message, t: FTFunction, error: UserError) {
 	return messageAlert(message, content);
 }
 
-function resolveStringError(t: TFunction, error: string) {
-	return exists(error) ? t(error) : error;
+function resolveStringError(t: FTFunction, error: string) {
+	return exists(error) ? t(error as TypedT) : error;
 }
 
-function resolveUserError(t: TFunction, error: UserError) {
+function resolveUserError(t: FTFunction, error: UserError) {
 	const identifier = translate(error.identifier);
 	return t(
-		identifier,
+		identifier as TypedFT<unknown>,
 		error instanceof ArgumentError
 			? { ...error, ...(error.context as object), argument: error.argument.name, parameter: cutText(error.parameter.replaceAll('`', '῾'), 50) }
 			: { ...(error.context as any), prefix: envParseString(EnvKeys.ClientPrefix) }

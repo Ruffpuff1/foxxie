@@ -47,6 +47,7 @@
     "@foxxie/i18n-codes": "0.0.0",
     "@foxxie/lock-queue": "0.1.2",
     "@foxxie/sanitize": "^0.0.0",
+    "@foxxiebot/sanitize": "^0.0.0",
     "@lionralfs/discogs-client": "^4.1.2",
     "@prisma/client": "^5.22.0",
     "@ruffpuff/utilities": "^4.0.0",
@@ -77,6 +78,7 @@
     "dotenv-cra": "^3.0.3",
     "ioredis": "^5.4.1",
     "lexure": "^0.17.0",
+    "limax": "^4.1.0",
     "lodash": "^4.17.21",
     "mongodb": "^6.11.0",
     "prism": "^4.1.2",
@@ -137,6 +139,7 @@
     "#lib/types": "./dist/lib/Types/index.js",
     "#lib/i18n/languageKeys": "./dist/lib/i18n/LanguageKeys/index.js",
     "#lib/i18n": "./dist/lib/i18n/index.js",
+    "#modules/suggestions": "./dist/lib/modules/suggestions/index.js",
     "#lib/*": "./dist/lib/*.js",
     "#languages": "./dist/languages/index.js",
     "#root/*": "./dist/*.js"

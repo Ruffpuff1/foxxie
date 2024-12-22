@@ -66,6 +66,7 @@ export default class FoxxieClient extends SapphireClient {
 	}
 
 	public override emit(event: string, ...args: any[]) {
+		// console.log(event);
 		return super.emit(event, ...args);
 	}
 

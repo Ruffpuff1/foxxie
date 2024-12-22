@@ -72,7 +72,7 @@ export class PokemonService {
 
 	private uri = envParseString(EnvKeys.PokemonUrl);
 
-	private userAgent = `Favware Dragonite/1.0.0 (apollo-client) ${os.platform()}/${os.release()}`;
+	private userAgent = `Ruffstuff API Handler ${os.platform()}/${os.release()}`;
 
 	public async fuzzilySearchPokemon(pokemon: string, take = 20, includeSpecialPokemon = true) {
 		const result = await Result.fromAsync(async () => {

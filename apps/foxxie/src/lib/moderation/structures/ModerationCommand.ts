@@ -8,7 +8,7 @@ import { ActionByType, getAction, GetContextType, ModerationAction, ModerationMa
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage, PermissionLevels, TypedT } from '#lib/types';
 import { asc, floatPromise, seconds } from '#utils/common';
-import { isGuildOwner } from '#utils/discord';
+import { isGuildOwner } from '#utils/functions';
 import { deleteMessage } from '#utils/functions/messages';
 import { TypeVariation } from '#utils/moderationConstants';
 import { getImage, getTag, isUserSelf } from '#utils/util';

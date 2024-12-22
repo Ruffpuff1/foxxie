@@ -15,7 +15,7 @@
 	"confMenuRenderBack": "Press ◀ to go back",
 	"confMenuInvalidKey": "Invalid Key, please try again with any of the following options.",
 	"confMenuInvalidAction": "Invalid Action, please try again with any of the following options.",
-	"confMenuSaved": "Successfully saved all changes.",
+	"confMenuSaved": "{{SUCCESS}} Successfully saved all changes.",
 	"confNochange": "The value for **{{key}}** was already that value.",
 	"confServerDescription": "Define per-server settings.",
 	"confServerExtended": {

@@ -6,14 +6,16 @@ import { LanguageHelp, LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp
 import { FoxxieArgs, FoxxieCommand } from '#lib/structures';
 import { FTFunction, GuildMessage, PermissionLevels } from '#lib/types';
 import { clientOwners, defaultPaginationOptionsWithoutSelectMenu } from '#root/config';
+import { Urls } from '#utils/constants';
 import { sendLoadingMessage, sendMessage } from '#utils/functions';
-import { resolveClientColor } from '#utils/util';
-import { bold, EmbedBuilder, inlineCode, italic, PermissionFlagsBits } from 'discord.js';
+import { conditionalField, resolveClientColor } from '#utils/util';
+import { bold, EmbedBuilder, hyperlink, inlineCode, italic, PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<FoxxieCommand.Options>({
 	aliases: ['h', 'commands'],
 	description: LanguageKeys.Commands.General.HelpDescription,
 	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks],
+	requiredUserPermissions: [PermissionFlagsBits.EmbedLinks],
 	usage: LanguageKeys.Commands.General.HelpUsage
 })
 export default class UserCommand extends FoxxieCommand {
@@ -42,18 +44,45 @@ export default class UserCommand extends FoxxieCommand {
 		const extendedHelpData = args.t(command.detailedDescription, { commandId }) as LanguageHelpDisplayOptions;
 		if (extendedHelpData.subcommands?.length) return this.#buildSubcommandHelp(message, args, command, prefixUsed, extendedHelpData);
 		const extendedHelp = builder.display(command.name, this.#formatAliases(args.t, command.aliases), extendedHelpData, prefixUsed);
+		console.log(extendedHelp);
 
 		const data = args.t(LanguageKeys.Commands.General.HelpData, {
 			footerName: command.name,
 			titleDescription: args.t(command.description)
 		});
-		return new EmbedBuilder()
+
+		const embed = new EmbedBuilder()
 			.setColor(await resolveClientColor(message))
 			.setTimestamp()
-			.setFooter({ text: data.footer })
-			.setTitle(data.title)
-			.addFields({ name: ':closed_lock_with_key: | Permission Node', value: inlineCode(command.permissionNode) })
-			.setDescription(extendedHelp);
+			.setFooter({ text: `${data.footer}\nAliases: ${args.t(LanguageKeys.Globals.And, { value: [...command.aliases] })}` })
+			.setTitle(data.title);
+
+		embed.addFields(
+			[
+				conditionalField(
+					Boolean(extendedHelpData.usages?.length),
+					builderData.usages,
+					extendedHelpData.usages
+						?.map(
+							(usage) =>
+								`→ ${prefixUsed}${command.name} ${command.name} ${usage === LanguageKeys.Globals.DefaultT ? '' : usage ? italic(usage) : usage}`
+						)
+						.join('\n')
+				),
+				conditionalField(
+					Boolean(extendedHelpData.extendedHelp),
+					builderData.extendedHelp,
+					Array.isArray(extendedHelpData.extendedHelp) ? extendedHelpData.extendedHelp?.join(' ') : extendedHelpData.extendedHelp
+				),
+				conditionalField(
+					Boolean(extendedHelpData.explainedUsage?.length),
+					builderData.explainedUsage,
+					extendedHelpData.explainedUsage?.map(([arg, desc]) => `→ **${arg}**: ${desc}`).join('\n')
+				)
+			].filter((field) => !isNullish(field))
+		);
+
+		return embed.addFields({ name: ':closed_lock_with_key: | Permission Node', value: inlineCode(command.permissionNode) });
 	}
 
 	async #buildSubcommandHelp(
@@ -73,7 +102,7 @@ export default class UserCommand extends FoxxieCommand {
 		const builderData = args.t(LanguageKeys.System.HelpTitles);
 		const pageLabels = [
 			`${prefixUsed}${command.name.toLowerCase()}`,
-			...extendedHelpData.subcommands!.map((s) => `${prefixUsed}${command.name.toLowerCase()} ${s.name.toLowerCase()}`)
+			...extendedHelpData.subcommands!.map((s) => `${prefixUsed}${command.name.toLowerCase()} ${s.name?.toLowerCase()}`)
 		]; // TODO add ability for 25+
 
 		const subcommandArg = await args.pick('string').catch(() => null);
@@ -204,11 +233,11 @@ export default class UserCommand extends FoxxieCommand {
 
 	async #fullHelp(message: GuildMessage, args: FoxxieCommand.Args) {
 		const embed = new EmbedBuilder() //
-			.setAuthor({
+			.setFooter({
 				iconURL: message.client.user.displayAvatarURL(),
-				name: args.t(LanguageKeys.Commands.General.HelpMenu, { name: this.container.client.user?.username })
+				text: args.t(LanguageKeys.Commands.General.HelpMenu, { name: this.container.client.user?.username })
 			})
-			.setThumbnail(message.client.user.displayAvatarURL())
+			.setDescription([hyperlink('Support', Urls.Support), hyperlink('Terms', 'https://foxxie.rshk.me/terms')].join(' | '))
 			.setColor(await resolveClientColor(message));
 
 		const tCategories = args.t(LanguageKeys.Commands.General.HelpCategories);
@@ -222,14 +251,10 @@ export default class UserCommand extends FoxxieCommand {
 			.sort((a, b) => a.localeCompare(b))
 			.map((c) => tCategories[c.toLowerCase() as keyof typeof tCategories]);
 
-		embed.setDescription(
-			`Here's all of my commands, right now I have ${commands.size}. Need more info on a certain command? Just do ${inlineCode(`${args.commandContext.commandPrefix}help (command)`)}.`
-		);
-
 		for (const category of categories) {
 			const categoryCommands = commands //
 				.sort((a, b) => a.name.localeCompare(b.name))
-				.filter((c) => category.includes(c.category!))
+				.filter((c) => category.includes(toTitleCase(c.category!)))
 				.map((c) => `\`${c.name}\``);
 
 			embed.addFields([

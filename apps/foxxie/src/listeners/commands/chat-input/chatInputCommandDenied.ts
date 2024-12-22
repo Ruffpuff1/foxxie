@@ -2,7 +2,7 @@ import { Listener } from '@sapphire/framework';
 import { resolveKey } from '@sapphire/plugin-i18next';
 import { translate } from '#lib/i18n';
 import { EventArgs, FoxxieEvents } from '#lib/types';
-import { floatPromise } from '#utils/util';
+import { floatPromise } from '#utils/common';
 import { ChatInputCommandInteraction } from 'discord.js';
 
 export class UserListener extends Listener<FoxxieEvents.ChatInputCommandDenied> {

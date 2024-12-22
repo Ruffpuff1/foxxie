@@ -13,7 +13,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage, PermissionLevels } from '#lib/types';
 import { clientOwners } from '#root/config';
-import { isGuildOwner } from '#utils/discord';
+import { isGuildOwner } from '#utils/functions';
 import { ChatInputCommandInteraction, GuildMember } from 'discord.js';
 
 export abstract class PermissionLevelPrecondition extends Precondition {
@@ -48,8 +48,6 @@ export abstract class PermissionLevelPrecondition extends Precondition {
 	}
 
 	public override async messageRun(message: GuildMessage, command: Command, context: PermissionLevelPrecondition.Context) {
-		console.log(context);
-
 		if (!message.guild || !message.member) {
 			return this.guildOnly ? this.error({ identifier: Identifiers.PreconditionRunIn }) : this.ok();
 		}

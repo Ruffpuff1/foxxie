@@ -7,8 +7,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { FTFunction } from '#lib/types';
 import { toStarboardStatsEmoji } from '#utils/common';
 import { Colors } from '#utils/constants';
-import { isGuildOwner } from '#utils/discord';
-import { getModeration } from '#utils/functions';
+import { getModeration, isGuildOwner } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { discordInviteLink, userLink } from '#utils/transformers';
 import { getFullEmbedAuthor, resolveClientColor } from '#utils/util';
@@ -128,7 +127,7 @@ export class UserBuilder {
 		const authorString = `${user.tag} (${user.id})`;
 		const member = await resolveToNull(guild.members.fetch(user.id));
 		const color = user.accentColor || (await resolveClientColor(guild, member?.displayColor));
-		const titles = t(LanguageKeys.Commands.General.InfoUserTitles);
+		const titles = t(LanguageKeys.Commands.General.Info.UserTitles);
 		const fields: APIEmbedField[] = [];
 		let starCount = 0;
 
@@ -140,20 +139,25 @@ export class UserBuilder {
 			})
 			.setThumbnail(member ? member.displayAvatarURL() : user.displayAvatarURL());
 
-		const about: (null | string)[] = [t(LanguageKeys.Commands.General.InfoUserDiscordJoin, { created: user.createdAt })];
+		const about: (null | string)[] = [t(LanguageKeys.Commands.General.Info.UserDiscordJoin, { created: user.createdAt })];
 
 		if (member) {
 			const percentage = (memberSettings.messageCount / guildSettings.messageCount) * 100;
 			const displayPercent = percentage >= 0.01 ? percentage.toFixed(2) : null;
 
 			about.push(
-				t(LanguageKeys.Commands.General[`InfoUser${isGuildOwner(member) ? 'GuildCreate' : 'GuildJoin'}`], {
-					joined: isGuildOwner(member) ? member.guild.createdAt : member.joinedAt,
+				t(LanguageKeys.Commands.General.Info.UserGuildJoin, {
+					context: isGuildOwner(member) ? 'create' : undefined,
+					joined: isGuildOwner(member) ? member.guild.createdAt : member.joinedAt!,
 					name: member.guild.name
 				}),
 				displayPercent
-					? t(LanguageKeys.Commands.General.InfoUserMessagesWithPercent, { messages: memberSettings.messageCount, percent: displayPercent })
-					: t(LanguageKeys.Commands.General.InfoUserMessages, { messages: memberSettings.messageCount })
+					? t(LanguageKeys.Commands.General.Info.UserMessages, {
+							context: 'percent',
+							messages: memberSettings.messageCount,
+							percent: displayPercent
+						})
+					: t(LanguageKeys.Commands.General.Info.UserMessages, { messages: memberSettings.messageCount })
 			);
 
 			starCount = await container.prisma.starboard
@@ -192,7 +196,7 @@ export class UserBuilder {
 				}, '');
 
 			fields.push({
-				name: t(LanguageKeys.Commands.General.InfoUserTitlesRoles, {
+				name: t(LanguageKeys.Commands.General.Info.UserTitlesRoles, {
 					count: roles.length - 1
 				}),
 				value: roleString.length ? roleString : toTitleCase(t(LanguageKeys.Globals.None))
@@ -235,7 +239,7 @@ export class UserBuilder {
 					await Promise.all(notes.map((note) => note.fetchAuthor()));
 
 					fields.push({
-						name: t(LanguageKeys.Commands.General.InfoUserTitlesNotes, {
+						name: t(LanguageKeys.Commands.General.Info.UserTitlesNotes, {
 							count: notes.length
 						}),
 						value: notes.map((note) => note.display(t)).join('\n')

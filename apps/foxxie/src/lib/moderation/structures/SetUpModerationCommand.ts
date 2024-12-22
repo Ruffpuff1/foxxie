@@ -7,8 +7,7 @@ import { readSettings, writeSettings } from '#lib/database';
 import { getT } from '#lib/i18n';
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationCommand } from '#lib/moderation/structures/ModerationCommand';
-import { isAdmin } from '#utils/discord';
-import { promptConfirmation, promptForMessage } from '#utils/functions';
+import { isAdmin, promptConfirmation, promptForMessage } from '#utils/functions';
 import { PermissionFlagsBits, type Role } from 'discord.js';
 
 export abstract class SetUpModerationCommand<Type extends RoleTypeVariation, ValueType> extends ModerationCommand<Type, ValueType> {

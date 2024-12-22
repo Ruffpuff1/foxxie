@@ -5,4 +5,5 @@ export * as General from '#lib/i18n/LanguageKeys/keys/commands/General';
 export * as Misc from '#lib/i18n/LanguageKeys/keys/commands/Misc';
 export * as Moderation from '#lib/i18n/LanguageKeys/keys/commands/moderation/index';
 export * as Tools from '#lib/i18n/LanguageKeys/keys/commands/Tools';
+export * as Utility from '#lib/i18n/LanguageKeys/keys/commands/utility/index';
 export * as Websearch from '#lib/i18n/LanguageKeys/keys/commands/Websearch';

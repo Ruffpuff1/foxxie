@@ -103,15 +103,15 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 	return [
 		{
 			format: (value, lng) => new Intl.ListFormat(lng!, { type: 'conjunction' }).format(value),
-			name: 'and'
+			name: LanguageFormatters.And
 		},
 		{
 			format: (value, lng) => new Intl.ListFormat(lng!, { type: 'conjunction' }).format(value.map((item: string) => inlineCode(item))),
-			name: 'codeand'
+			name: LanguageFormatters.CodeAnd
 		},
 		{
 			format: (value) => inlineCode(value),
-			name: 'code'
+			name: LanguageFormatters.Code
 		},
 		{
 			format: (value, lng) => new Intl.ListFormat(lng!, { type: 'disjunction' }).format(value),
@@ -127,11 +127,11 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 		},
 		{
 			format: (value) => time(getDurationValue(value), TimestampStyles.LongDate),
-			name: 'fulldate'
+			name: LanguageFormatters.FullDate
 		},
 		{
 			format: (value) => codeBlock('', value),
-			name: 'codeblock'
+			name: LanguageFormatters.CodeBlock
 		},
 		{
 			format: (value, lng) =>
@@ -140,15 +140,15 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 					timeStyle: 'medium',
 					timeZone: timezone
 				}).format(typeof value === 'string' ? new Date(value) : value),
-			name: 'datetime'
+			name: LanguageFormatters.DateTime
 		},
 		{
 			format: (value: User) => (container.client.users.cache.has(value.id) ? userMention(value.id) : value.username),
-			name: 'userMention'
+			name: LanguageFormatters.UserMention
 		},
 		{
 			format: (value: string) => channelMention(value),
-			name: 'channelMention'
+			name: LanguageFormatters.ChannelMention
 		},
 		{
 			format: (value, lng) =>
@@ -156,7 +156,7 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 					timeStyle: 'short',
 					timeZone: timezone
 				}).format(typeof value === 'string' ? new Date(value) : value),
-			name: 'time'
+			name: LanguageFormatters.Time
 		},
 		{
 			format: (value, lng) =>
@@ -165,7 +165,7 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 					maximumFractionDigits: 2,
 					notation: 'compact'
 				}).format(value),
-			name: 'numbercompact'
+			name: LanguageFormatters.NumberCompact
 		},
 		{
 			format: (value: GuildVerificationLevel, lng) => {
@@ -194,11 +194,11 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 
 				return t(key);
 			},
-			name: 'verificationlevel'
+			name: LanguageFormatters.VerificationLevel
 		},
 		{
 			format: (value) => formatDuration(getDurationValue(Date.now() + value)),
-			name: 'remaining'
+			name: LanguageFormatters.Remaining
 		},
 		{
 			format: (value, lng) =>

@@ -1,6 +1,5 @@
 import { DecoratorIdentifiers } from '@sapphire/decorators';
 import { container, Identifiers } from '@sapphire/framework';
-import { TFunction } from '@sapphire/plugin-i18next';
 import { SubcommandPluginIdentifiers } from '@sapphire/plugin-subcommands';
 import { Nullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
@@ -16,13 +15,13 @@ export type Identifier = DecoratorIdentifiers | Identifiers | string | Subcomman
 
 export type TranslatedResult = CustomFunctionGet<string, Record<any, any>, string> | CustomGet<string, string>;
 
-export type TResolvable = FoxxieArgs | TFunction;
+export type TResolvable = FoxxieArgs | FTFunction;
 
 export function getSupportedLanguageName(interaction: Interaction): LocaleString {
 	if (interaction.guildLocale && container.i18n.languages.has(interaction.guildLocale)) return interaction.guildLocale;
 	return SupportedLanguages.EnglishUnitedStates;
 }
-export function getSupportedLanguageT(interaction: Interaction): TFunction {
+export function getSupportedLanguageT(interaction: Interaction): FTFunction {
 	return getT(getSupportedLanguageName(interaction));
 }
 
@@ -31,7 +30,7 @@ export function getSupportedUserLanguageName(interaction: Interaction): LocaleSt
 	return getSupportedLanguageName(interaction);
 }
 
-export function getSupportedUserLanguageT(interaction: Interaction): TFunction {
+export function getSupportedUserLanguageT(interaction: Interaction): FTFunction {
 	return getT(getSupportedUserLanguageName(interaction));
 }
 
@@ -41,7 +40,7 @@ export function getSupportedUserLanguageT(interaction: Interaction): TFunction {
  * @returns The translation function for the specified locale.
  */
 export function getT(locale?: LocaleString | Nullish | string) {
-	return container.i18n.getT(locale ?? SupportedLanguages.EnglishUnitedStates);
+	return container.i18n.getT(locale ?? SupportedLanguages.EnglishUnitedStates) as FTFunction;
 }
 
 export function resolveT(t: TResolvable): FTFunction {
@@ -77,7 +76,9 @@ export function translate(key: Identifier): TypedFT<unknown, string> | TypedT<st
 			return LanguageKeys.Preconditions.MissingChatInputHandler;
 		case Identifiers.PreconditionNSFW:
 			return LanguageKeys.Preconditions.Nsfw;
-		// Subcommandsd
+		case Identifiers.PreconditionUserPermissions:
+			return LanguageKeys.Preconditions.MemberPermissions;
+		// Subcommands
 		case SubcommandPluginIdentifiers.MessageSubcommandNoMatch:
 			return LanguageKeys.Preconditions.MessageSubcommandNoMatch;
 		default:

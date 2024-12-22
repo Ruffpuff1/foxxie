@@ -1,20 +1,26 @@
-import { ApplyOptions } from '@sapphire/decorators';
 import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
+import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 import { Stopwatch } from '@sapphire/stopwatch';
 import { getSupportedUserLanguageT, LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
-import { RegisterChatInputCommand } from '#utils/decorators';
+import { RegisterCommand } from '#utils/decorators';
 import { sendMessage } from '#utils/functions';
-import { InteractionContextType, SlashCommandBuilder } from 'discord.js';
 
-@ApplyOptions<FoxxieCommand.Options>(PingCommand.Options)
-@RegisterChatInputCommand(PingCommand.ChatInputBuilder, PingCommand.IdHints)
+@RegisterCommand(
+	{
+		aliases: ['pong'],
+		description: PingCommand.Language.Description,
+		runIn: [CommandOptionsRunTypeEnum.Dm, CommandOptionsRunTypeEnum.GuildAny]
+	},
+	(builder) => applyLocalizedBuilder(builder, PingCommand.Language.Name, PingCommand.Language.Description),
+	PingCommand.IdHints
+)
 export default class PingCommand extends FoxxieCommand {
 	public override async chatInputRun(interaction: FoxxieCommand.ChatInputCommandInteraction): Promise<void> {
 		const t = getSupportedUserLanguageT(interaction);
 		const show = interaction.options.getBoolean('show') ?? false;
-		const msg = await interaction.reply({ content: t(PingCommand.Language.Ping), embeds: undefined, ephemeral: !show });
+		const msg = await interaction.reply({ content: t(PingCommand.Language.Ping), embeds: [], ephemeral: !show });
 
 		const stopwatch = new Stopwatch().start();
 		await this.container.prisma.$connect();
@@ -47,22 +53,10 @@ export default class PingCommand extends FoxxieCommand {
 		await sendMessage(message, content);
 	}
 
-	public static ChatInputBuilder(builder: SlashCommandBuilder) {
-		return builder //
-			.setName('ping')
-			.setDescription('pong')
-			.setContexts(InteractionContextType.Guild);
-	}
-
 	public static IdHints = [
+		'1315313808859861116', // Prod
 		'1315209780419366984' // Nightly
 	];
 
 	public static Language = LanguageKeys.Commands.General.Ping;
-
-	public static Options: FoxxieCommand.Options = {
-		aliases: ['pong'],
-		description: PingCommand.Language.Description,
-		runIn: [CommandOptionsRunTypeEnum.Dm, CommandOptionsRunTypeEnum.GuildAny]
-	};
 }

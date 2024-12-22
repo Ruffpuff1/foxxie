@@ -86,6 +86,16 @@ export function decompressCustomIdMetadata<T>(
 	});
 }
 
+export function getSpriteTypePokemon(backSprite: boolean, shinySprite: boolean) {
+	if (backSprite) {
+		if (shinySprite) return 'shinyBackSprite';
+		return 'backSprite';
+	}
+
+	if (shinySprite) return 'shinySprite';
+	return 'sprite';
+}
+
 export const compressPokemonCustomIdMetadata = compressCustomIdMetadata<PokemonSelectMenuData>;
 
 export const decompressPokemonCustomIdMetadata = decompressCustomIdMetadata<PokemonSelectMenuData>;

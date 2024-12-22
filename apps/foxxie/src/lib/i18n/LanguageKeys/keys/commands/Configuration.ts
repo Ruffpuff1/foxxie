@@ -1,7 +1,8 @@
+import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/types';
 
 export const BirthdayDescription = T('commands/configuration:birthdayDescription');
-export const BirthdayDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/configuration:birthdayDetailedDescription');
+export const BirthdayDetailedDescription = T<LanguageHelpDisplayOptions>('commands/configuration:birthdayDetailedDescription');
 export const BirthdaySetSuccess = FT<{ birthday: Date }>('commands/configuration:birthdaySetSuccess');
 export const ConfDescription = T('commands/configuration:confDescription');
 export const ConfGet = FT<{ key: string; value: string }>('commands/configuration:confGet');

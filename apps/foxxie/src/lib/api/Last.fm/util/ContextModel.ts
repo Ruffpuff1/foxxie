@@ -17,7 +17,7 @@ export class ContextModel {
 	public contextUser: ({ discogs?: null | UserDiscogs } & UserLastFM) | null;
 	public discordChannel: GuildTextBasedChannel;
 	public discordGuild?: Guild;
-	public discordUser?: User;
+	public discordUser: User;
 	public interaction: ChatInputCommandInteraction | null = null;
 	public interactionId?: Snowflake;
 	public message: Message | null;

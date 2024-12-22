@@ -28,6 +28,7 @@ export const enum FoxxieEvents {
 	MessageCreateStats = 'messageCreateStats',
 	MessageDelete = 'messageDelete',
 	MessageSubcommandError = 'messageSubcommandError',
+	MessageSubcommandNoMatch = 'messageSubcommandNoMatch',
 	ModerationEntryAdd = 'moderationEntryAdd',
 	ModerationEntryEdit = 'moderationEntryEdit',
 	PresenceUpdate = 'presenceUpdate',

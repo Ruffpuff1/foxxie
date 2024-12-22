@@ -1,6 +1,6 @@
 import { DeepReadonly, PickByValue } from '@sapphire/utilities';
 import { GuildData } from '#lib/database';
-import { SerializedEmoji } from '#utils/discord';
+import { SerializedEmoji } from '#utils/functions';
 import { Snowflake } from 'discord.js';
 
 export enum FoxxieLocale {
