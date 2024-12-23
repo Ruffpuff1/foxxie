@@ -1,0 +1,10 @@
+{
+    "console": "**Output**:\nWas sent to the console on **{{name}}**...\n\n**Type**:{{footer}}\n{{time}}",
+    "description": "Allows you evaluate JavaScript code straight from Discord.",
+    "detailedDescription": {
+        "extendedHelp": ""
+    },
+    "error": "**Error**:{{output}}\n**Type**:{{type}}\n{{time}}",
+    "haste": "**Output**:\nWas too long... sent the result to paste: <{{output}}>\n\n**Type**:{{footer}}\n{{time}}",
+    "output": "**Output**:{{output}}\n**Type**:{{type}}\n{{time}}"
+}

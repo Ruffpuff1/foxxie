@@ -1,20 +1,20 @@
 {
-	"pollCancelled": "",
+	"pollCancelled": "{{SUCCESS}} Creation of the poll has been cancelled.",
 	"pollDetailedDescription": {
-		"description": "",
-		"usage": "",
+		"description": "Create customizable polls in your server.",
+		"usage": "{{prefix}}poll [create]",
 		"subcommands": [
 			{
-				"command": "",
-				"description": "",
+				"command": "create",
+				"description": "Create a new poll and send it in your selected channel",
 				"examples": [
-					"",
-					""
+					"{{prefix}}poll create \"Poll title?\" option1, option2, option3",
+					"{{prefix}}poll create \"Poll title?\" #{{CHANNEL}} option1, option2, option3"
 				]
 			}
 		]
 	},
-	"pollPrompt": "",
-	"pollPromptWithChannel": "",
-	"pollSuccess": ""
+	"pollPrompt": "{{LOADING}} Do you want to create a poll with title **{{title}}**, and options {{options, and}}?",
+	"pollPromptWithChannel": "{{LOADING}} Do you want to create a poll in {{channel}} with title **{{title}}**, and options {{options, and}}?",
+	"pollSuccess": "{{SUCCESS}} Successfully created poll in {{channel}}."
 }

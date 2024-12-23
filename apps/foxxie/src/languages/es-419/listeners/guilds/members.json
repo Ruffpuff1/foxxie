@@ -1,5 +1,14 @@
 {
 	"add": "Miembro unido",
+	"addCreated": "**Created**: {{time, fulldate}} ({{time, duration}})",
+	"addInvite": "**Invite**: {{invite}}",
+	"addMuted": "Muted Member joined",
 	"addPosition": "**Posición**: {{position, ordinal}}",
-	"remove": "Miembro dejado"
+	"remove": "Miembro dejado",
+	"removeBanned": "Member Banned",
+	"removeJoined": "**Joined At**: {{time, fulldate}} ({{time, duration}})",
+	"removeJoinedUnknown": "**Joined At**: Unknown",
+	"removeKicked": "Member Kicked",
+	"removeMessages": "**Messages Sent**: {{value}}",
+	"removeSoftBanned": "Member Softbanned"
 }

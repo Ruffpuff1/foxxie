@@ -11,6 +11,7 @@
 	"argsChannel": "**Ubicación**: {{channel.name, code}} ({{channel.id}})",
 	"argsCreated": "**Creado**: {{date, fulldate}} ({{date, duration}})",
 	"argsDuration": "**Expira**: {{duration, duration}}",
+	"argsDurationPast": "**Expired**: {{duration, duration}}",
 	"argsInvites": "**Invitación**: {{invites, and}}",
 	"argsInvites_other": "**Invitaciones**: {{invites, and}}",
 	"argsJoinedAt": "**Se unió a**: {{date, fulldate}} ({{date, duration}})",
@@ -21,6 +22,7 @@
 	"argsModerator": "**Moderador**: {{mod.username, code}} ({{mod.id}})",
 	"argsPosition": "**Posición**: {{position, ordinal}}",
 	"argsReason": "**Razón**: {{reason}}",
+	"argsRefrence": "**Case Reference**: [#{{id, number}}]({{url}}) ({{type}})",
 	"argsTimeTaken": "**Tiempo**: {{time, remaining}}",
 	"argsUser": "**Usuario**: {{user.username, code}} ({{user.id}})",
 	"attachment": "Adjunto"

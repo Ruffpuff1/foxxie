@@ -1,28 +1,28 @@
 {
-	"description": "",
+	"description": "Timeout a user",
 	"detailedDescription": {
 		"usages": [
-			"",
-			""
+			"Duration User",
+			"Duration User Reason"
 		],
 		"explainedUsage": [
 			[
-				"",
-				""
+				"Duration",
+				"The duration of the timeout. For example `24h` for 24 hours."
 			],
 			[
-				"",
-				""
+				"User",
+				"The user to time out."
 			],
 			[
-				"",
-				""
+				"Reason",
+				"The reason for the timeout. This will also show in the server's audit logs."
 			]
 		],
 		"examples": [
-			"",
-			""
+			"30s @Justin",
+			"2h @Ashlee Arguing"
 		]
 	},
-	"notModeratable": ""
+	"notModeratable": "I couldn't timeout this user because they're not moderatable."
 }
