@@ -66,6 +66,28 @@
                     "",
                     "Mode"
                 ]
+            },
+            {
+                "extendedHelp": [
+                    "Update your playcount based on your latest [Last.fm](https://last.fm) plays.",
+                    "You can also reindex parts of you cached playcount by using the following options."
+                ],
+                "name": "profile",
+                "aliases": [
+                    "user",
+                    "userinfo",
+                    "stats"
+                ]
+            },
+            {
+                "extendedHelp": [
+                    "Update your playcount based on your latest [Last.fm](https://last.fm) plays.",
+                    "You can also reindex parts of you cached playcount by using the following options."
+                ],
+                "name": "pace",
+                "aliases": [
+                    "pc"
+                ]
             }
         ]
     },

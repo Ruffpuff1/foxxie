@@ -263,8 +263,6 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 						key = LanguageKeys.Guilds.ContentFilters.Disabled;
 				}
 
-				console.log(key);
-
 				return t(key);
 			},
 			name: LanguageFormatters.ExplicitContentFilter
