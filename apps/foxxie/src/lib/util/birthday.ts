@@ -1,14 +1,39 @@
+import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
+import { LanguageKeys } from '#lib/i18n';
+import { FTFunction, GuildMessage } from '#lib/types';
 import { hours } from '#utils/common';
-import { GuildMember, GuildResolvable } from 'discord.js';
+import { bold, Guild, GuildMember, GuildResolvable, time, TimestampStyles } from 'discord.js';
 
 import { Schedules } from './constants.js';
-import { fetchTasks } from './util.js';
+import { fetchTasks, MappedTask } from './util.js';
 
 export interface BirthdayData {
 	day: number;
 	month: number;
 	year: null | number;
+}
+
+export function constructBirthdayData(date: BirthdayData, msg: GuildMessage) {
+	return {
+		day: date.day,
+		guildId: msg.guild.id,
+		month: date.month,
+		userId: msg.author.id,
+		year: date.year
+	};
+}
+
+export async function mapBirthday(birthday: MappedTask<Schedules.Birthday>, t: FTFunction, guild: Guild) {
+	const user = await resolveToNull(container.client.users.fetch(birthday.data.userId));
+	const member = user ? guild.members.cache.get(user.id) : null;
+
+	const age = getAge({ day: birthday.data.day, month: birthday.data.month, year: birthday.data.year }, { now: birthday.time.getTime() });
+
+	return [
+		`${bold(member?.displayName || user?.username || t(LanguageKeys.Globals.Unknown))}${age ? ` (${age})` : ''}`,
+		`-# ${time(birthday.time, TimestampStyles.LongDate)}`
+	].join('\n');
 }
 
 export const dateFormats = new Map([

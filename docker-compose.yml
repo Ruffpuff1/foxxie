@@ -10,12 +10,26 @@ services:
     env_file:
       - ./apps/foxxie/.env.foxxie
     depends_on:
+      - lavalink
       - redis
     ports:
       - '8282:8282'
       - '7282:7282'
     restart: always
     tty: true
+
+  lavalink:
+    container_name: lavalink
+    volumes:
+       - type: bind
+         source: ${PWD}/.application.yml
+         target: /opt/Lavalink/application.yml
+    depends_on:
+      - redis
+    image: fredboat/lavalink:3.7.13-alpine
+    ports:
+      - '2333:2333'
+    restart: unless-stopped
 
   redis:
     command: 'redis-server --bind redis --port 8287 --requirepass redis'

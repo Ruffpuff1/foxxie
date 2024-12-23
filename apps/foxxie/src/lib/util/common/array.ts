@@ -1,3 +1,8 @@
+export function addRange<T>(array: T[], ...items: T[]) {
+	array.push(...items);
+	return array;
+}
+
 export function countArray<T>(array: T[], filter: (obj: T) => boolean) {
 	let success = 0;
 	for (const entry of array) {
@@ -40,4 +45,20 @@ export function groupBy<T, K extends keyof any>(list: T[], getKey: (item: T) => 
 		// eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter
 		{} as Record<K, T[]>
 	);
+}
+
+export function last<T>(array: T[]): T {
+	return array[array.length - 1];
+}
+
+export function maxBy<T, K extends number>(arr: T[], fn: (item: T) => K) {
+	return Math.max(...arr.map((v) => (typeof fn === 'function' ? fn(v) : v[fn])));
+}
+
+export function stringify<T>(array: T[], joiner = '\n') {
+	return array.join(joiner);
+}
+
+export function take<T>(array: T[], amount?: number) {
+	return array.slice(0, amount);
 }

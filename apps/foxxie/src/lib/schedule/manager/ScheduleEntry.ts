@@ -2,10 +2,12 @@ import { schedule } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';
 import { isNullishOrEmpty } from '@sapphire/utilities';
+import { PlayUpdate } from '#apis/last.fm/repository/PlayRepository';
 import { ModerationManager } from '#lib/moderation';
 import { FoxxieEvents } from '#lib/types';
-import { JSONEmbed } from '#root/commands/Misc/reminder';
+import { JSONEmbed } from '#root/commands/util/reminder';
 import { BirthdayData } from '#utils/birthday';
+import { Schedules } from '#utils/constants';
 import { SchemaKeys, TypeVariation } from '#utils/moderationConstants';
 
 export const enum ResponseType {
@@ -163,6 +165,7 @@ export namespace ScheduleEntry {
 	}
 
 	export interface TaskData {
+		[Schedules.LastFMUpdateArtistsForUser]: { playUpdate: PlayUpdate; userId: string };
 		birthday: BirthdayTaskData;
 		indexUser: IndexUserQueueItem;
 		moderationEndAddRole: SharedModerationTaskData<TypeVariation.RoleAdd>;

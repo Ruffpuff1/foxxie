@@ -4,8 +4,8 @@ import { canSendMessages } from '@sapphire/discord.js-utilities';
 import { cast } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
+import { floatPromise } from '#utils/common';
 import { Schedules } from '#utils/constants';
-import { floatPromise } from '#utils/util';
 import { DiscordAPIError, EmbedBuilder, GuildTextBasedChannel, RESTJSONErrorCodes, userMention } from 'discord.js';
 
 @ApplyOptions<Task.Options>(({ container }) => ({
@@ -29,7 +29,7 @@ export class UserTask extends Task<Schedules.Reminder> {
 		if (data.json) {
 			embeds.push(new EmbedBuilder(data.json));
 		} else {
-			content = t(LanguageKeys.Tasks[dm ? 'ReminderToDM' : 'ReminderToChannelWithUser'], {
+			content = t(dm ? LanguageKeys.Tasks.ReminderToDM : LanguageKeys.Tasks.ReminderToChannelWithUser, {
 				text: data.text,
 				time: data.timeago,
 				user: userMention(data.userId)

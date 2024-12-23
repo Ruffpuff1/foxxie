@@ -14,35 +14,29 @@ declare module '@skyra/env-utilities' {
 		[EnvKeys.SentryEnabled]: BooleanString;
 		[EnvKeys.SpotifyClientId]: string;
 		[EnvKeys.SpotifyClientSecret]: string;
+		[EnvKeys.Timezone]: string;
+		AUDIO_ENABLED: BooleanString;
 		CLIENT_NAME: string;
 		CLIENT_OWNERS: ArrayString;
 		CLIENT_PRESENCE_NAME: string;
 		CLIENT_REGEX_PREFIX: string;
-
-		CLIENT_VERSION: string;
 		COPYRIGHT_YEAR: string;
-
 		DISCORD_TOKEN: string;
+		LAVALINK_PASSWORD: string;
+		LAVALINK_URL: string;
 		MONGO_HOST: string;
 		MONGO_PASSWORD: string;
 		MONGO_URL: string;
-
 		MONGO_USER: string;
 		PERSPECTIVE_TOKEN: string;
-		PROD_HOST: string;
 		REDIS_ENABLED: BooleanString;
-
 		REDIS_HOST: string;
 		REDIS_PASSWORD: string;
-
 		REDIS_PORT: IntegerString;
 		SENTRY_TOKEN: string;
 		THE_CORNER_STORE_URL: string;
-
-		TIMEZONE: string;
 		VERSION_NUM: string;
 		VERSION_SIG: string;
-
 		WEBHOOK_ERROR_ID: string;
 		WEBHOOK_ERROR_TOKEN: string;
 	}
@@ -61,5 +55,6 @@ export const enum EnvKeys {
 	PokemonUrl = 'POKEMON_URL',
 	SentryEnabled = 'SENTRY_ENABLED',
 	SpotifyClientId = 'SPOTIFY_CLIENT_ID',
-	SpotifyClientSecret = 'SPOTIFY_CLIENT_SECRET'
+	SpotifyClientSecret = 'SPOTIFY_CLIENT_SECRET',
+	Timezone = 'TIMEZONE'
 }

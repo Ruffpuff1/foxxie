@@ -1,5 +1,5 @@
 import { UserPlay } from '@prisma/client';
-import { countArray, days, first } from '#utils/common';
+import { countArray, days, first, take } from '#utils/common';
 import _ from 'lodash';
 
 import { PlaySource } from '../types/enums/PlaySource.js';
@@ -76,7 +76,7 @@ export class PlayDataSourceRepository {
 
 		return new Response<TopArtistList>({
 			content: {
-				topArtists: _.take(
+				topArtists: take(
 					topArtists
 						.map(
 							([, entries]) =>

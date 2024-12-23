@@ -6,11 +6,10 @@ import { canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { isNullishOrZero } from '@sapphire/utilities';
 import { readSettings, writeSettings } from '#lib/database';
-import { Starboard } from '#lib/Database/Models/starboard';
+import { Starboard } from '#lib/database/Models/starboard';
 import { StarboardManager } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
-import { getEmojiString, isStarboardEmoji } from '#utils/discord';
-import { getGuildStarboard } from '#utils/functions';
+import { getEmojiString, getGuildStarboard, isStarboardEmoji } from '#utils/functions';
 import { snowflakeAge } from '#utils/util';
 
 @ApplyOptions<ListenerOptions>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: 'rawReactionRemove' }))

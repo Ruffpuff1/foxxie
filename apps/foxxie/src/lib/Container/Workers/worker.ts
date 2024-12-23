@@ -1,7 +1,6 @@
+import { sanitize } from '@foxxiebot/sanitize';
 import { cast } from '@sapphire/utilities';
-import { Highlight } from '#lib/database';
 import { seconds } from '#utils/common';
-import { remove } from 'confusables';
 import { isMainThread, parentPort } from 'node:worker_threads';
 
 import {
@@ -30,6 +29,12 @@ setInterval(() => {
 parentPort.on('message', (message: IncomingPayload) => {
 	post(handleMessage(message));
 });
+
+export interface Highlight<T extends HighlightTypeEnum> {
+	type: T;
+	userId: string;
+	word: T extends HighlightTypeEnum.Regex ? RegExp : string;
+}
 
 function filter(str: string, regex: RegExp) {
 	const matches = str.match(regex);
@@ -116,7 +121,7 @@ function handleMessage(message: IncomingPayload): OutgoingPayload {
 }
 
 function runWordFilter(message: RunWordFilterPayload): OutgoingWordFilterPayload {
-	const result = filter(remove(message.content), message.regex);
+	const result = filter(sanitize(message.content), message.regex);
 	if (result === null) return { id: message.id, type: OutputType.FilterNoContent };
 
 	return {

@@ -15,6 +15,8 @@ export interface EmojiObject extends EmojiObjectPartial {
 	animated?: boolean;
 }
 
+export const defaultStarboardEmojis = ['⭐', '🌟', '✨', '💫'];
+
 export type SerializedEmoji = { __TYPE__: 'SerializedEmoji' } & string;
 
 interface EmojiObjectPartial {
@@ -45,6 +47,12 @@ export function getEncodedTwemoji(emoji: string): EncodedTwemoji {
  */
 export function getTwemojiUrl<E extends EncodedTwemoji>(emoji: E) {
 	return `https://cdn.jsdelivr.net/gh/twitter/twemoji/assets/72x72/${emoji}.png` as const;
+}
+
+export function isStarboardEmoji(emojis: readonly string[], reacted: string): boolean {
+	const combinedEmojis = [...emojis, ...defaultStarboardEmojis];
+	if (combinedEmojis.includes(reacted.startsWith('%') ? decodeURIComponent(reacted) : reacted)) return true;
+	return false;
 }
 
 const customEmojiRegExp = /^[as]\d{17,19}$/;

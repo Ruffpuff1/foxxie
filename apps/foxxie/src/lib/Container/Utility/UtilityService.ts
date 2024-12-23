@@ -2,12 +2,9 @@ import { container } from '@sapphire/framework';
 import { Channel, ChannelResolvable, Guild, GuildResolvable } from 'discord.js';
 
 import { ChannelUtilityService } from './ChannelUtilityService.js';
-import { FormattersService } from './Formatters/FormattersService.js';
 import { GuildUtilityService } from './Guild/GuildUtilityService.js';
 
 export class UtilityService {
-	public format = new FormattersService();
-
 	#channelUtilityCache = new WeakMap<Channel, ChannelUtilityService>();
 
 	#guildUtilityCache = new WeakMap<Guild, GuildUtilityService>();

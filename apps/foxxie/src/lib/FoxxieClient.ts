@@ -7,8 +7,8 @@ import { ScheduleManager, TaskStore } from '#lib/schedule';
 import { InviteManager, RedisManager } from '#lib/structures';
 import { clientOptions, webhookError } from '#root/config';
 import { isGuildMessage } from '#utils/common';
-import { GuildMemberFetchQueue } from '#utils/External/GuildMemberFetchQueue';
-import { LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
+import { GuildMemberFetchQueue } from '#utils/external/GuildMemberFetchQueue';
+import { LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
 import { magentaBright } from 'colorette';
 import { Message, WebhookClient } from 'discord.js';
 
@@ -17,8 +17,12 @@ import { LastFmDataSourceFactory } from './api/Last.fm/factories/DataSourceFacto
 import { SettingsService } from './Container/Services/SettingsService.js';
 import { UtilityService } from './Container/Utility/UtilityService.js';
 import { WorkerService } from './Container/Workers/WorkerService.js';
+import { FoxxieQueue } from './modules/audio/index.js';
 
 export default class FoxxieClient extends SapphireClient {
+	@Enumerable(false)
+	public override audio: FoxxieQueue | null = null;
+
 	public override developmentRecoveryMode = false;
 
 	@Enumerable(false)
@@ -57,6 +61,14 @@ export default class FoxxieClient extends SapphireClient {
 					port: envParseInteger('REDIS_PORT')
 				})
 			: null;
+
+		this.audio = envParseBoolean('AUDIO_ENABLED', false)
+			? new FoxxieQueue(clientOptions.audio, (guildID, packet) => {
+					const guild = this.guilds.cache.get(guildID);
+					if (guild) guild.shard.send(packet);
+					return undefined;
+				})
+			: null;
 	}
 
 	public override destroy(): Promise<void> {
@@ -66,6 +78,7 @@ export default class FoxxieClient extends SapphireClient {
 	}
 
 	public override emit(event: string, ...args: any[]) {
+		// console.log(event);
 		return super.emit(event, ...args);
 	}
 
@@ -82,7 +95,7 @@ export default class FoxxieClient extends SapphireClient {
 	 * @param message The message that gives context.
 	 */
 	public fetchLanguage = async (message: InternationalizationContext) => {
-		return message.guild ? (await readSettings(message.guild)).language : 'en-US';
+		return message.guild ? readSettings(message.guild, 'language') : 'en-US';
 	};
 
 	/**
@@ -93,11 +106,11 @@ export default class FoxxieClient extends SapphireClient {
 		if (isGuildMessage(message)) {
 			if (this.development) {
 				if (this.developmentRecoveryMode) {
-					return (await readSettings(message.guild)).prefix;
+					return readSettings(message.guild, 'prefix');
 				}
 				return [process.env.CLIENT_PREFIX] as readonly string[];
 			}
-			return (await readSettings(message.guild)).prefix;
+			return readSettings(message.guild, 'prefix');
 		}
 		return [process.env.CLIENT_PREFIX, ''] as readonly string[];
 	};

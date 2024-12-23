@@ -40,18 +40,31 @@ model moderation {
   @@id([caseId, guildId])
 }
 
+model Suggestion {
+  id Int
+  guild guilds @relation(fields: [guildId], references: [id])
+  guildId String
+  authorId String
+  messageId String
+  createdAt DateTime @default(now())
+  repliedAt DateTime?
+  archivedAt DateTime?
+
+  @@id([id, guildId])
+}
+
 model starboard {
   enabled       Boolean @default(true)
   userId        String? @map("userid") @db.VarChar(19)
   messageId     String  @map("messageid") @db.VarChar(19)
   channelId     String? @map("channelid") @db.VarChar(19)
   guildId       String  @map("guildid") @db.VarChar(19)
-  starMessageId String? @map("starmessageid") @db.VarChar
+  starMessageId String @map("starmessageid") @db.VarChar
   stars         Int     @default(0) @db.SmallInt
   starChannelId String? @map("starchannelid") @db.VarChar
   id            Int?
 
-  @@id([messageId, guildId])
+  @@id([messageId, guildId, starMessageId])
 }
 
 model guilds {
@@ -202,6 +215,12 @@ model guilds {
   selfmodReactionsThresholdMaximum     Int      @default(10) @map("selfmod.reactions.threshold-maximum") @db.SmallInt
   selfmodReactionsThresholdDuration    Int      @default(60000) @map("selfmod.reactions.threshold-duration")
   selfmodIgnoredChannels               String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("selfmod.ignored-channels") @db.VarChar(19)
+  suggestions Suggestion[]
+  suggestionsAutoThread Boolean @default(true)
+  suggestionsButtons Boolean @default(false)
+  suggestionsChannel String?
+  suggestionsEmbed Boolean @default(true)
+  suggestionsUpdateHistory Boolean @default(true)
   starboardChannelId                   String?  @map("starboard.channel_id") @db.VarChar(19)
   starboardEmojis                      String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(128)[]")) @map("starboard.emojis") @db.VarChar(128)
   starboardMinimum                     Int      @default(3) @map("starboard.minimum") @db.SmallInt
@@ -228,7 +247,7 @@ model UserLastFM {
   userType         Int                  @default(0)
   dataSource       Int                  @default(1)
   usernameLastFM   String
-  sessionKeyLastFM String
+  sessionKeyLastFM String?
   lastFmPro        Boolean?
   registeredLastFM DateTime?
   totalPlaycount   Int?
@@ -237,19 +256,20 @@ model UserLastFM {
   footerOption     Int                  @default(1)
   responseMode     Int                  @default(1)
   privacyLevel     Int                  @default(1)
-  lastIndexed      DateTime
+  lastIndexed      DateTime?
   lastSmallIndexed DateTime?
-  lastUpdated DateTime
-  lastScrobbleUpdate DateTime
+  lastUpdated DateTime?
+  lastScrobbleUpdate DateTime?
   lastUsed         DateTime?
   emoteReactions   String[]
-  timeZone         String
+  timeZone         String?
+  scrobbleByMusicBot Boolean @default(true)
   numberFormat     Int                  @default(1)
   user          User                 @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "userlastfm_user_fkey")
   albums           UserAlbum[]
   artists          UserArtist[]
   discogsReleases  UserDiscogsReleases[]
-  discogs          UserDiscogs          @relation(fields: [userid], references: [userid])
+  discogs          UserDiscogs?
   plays            UserPlay[]
   tracks           UserTrack[]
 }
@@ -266,7 +286,7 @@ model UserDiscogs {
   hideValue           Boolean?    @default(false)
   lastUpdated         DateTime?
   releasesLastUpdated DateTime?
-  user                UserLastFM?
+  user                UserLastFM? @relation(fields: [userid], references: [userid])
 }
 
 model UserArtist {
@@ -302,7 +322,7 @@ model UserTrack {
 }
 
 model UserPlay {
-  userPlayId Int        @default(autoincrement())
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId     String     @db.VarChar(19)
   trackName  String
   albumName  String?
@@ -311,8 +331,6 @@ model UserPlay {
   msPlayed   Int?
   playSource Int?       @default(0)
   user       UserLastFM @relation(fields: [userId], references: [userid])
-
-  @@id([userPlayId, userId])
 }
 
 model UserDiscogsReleases {

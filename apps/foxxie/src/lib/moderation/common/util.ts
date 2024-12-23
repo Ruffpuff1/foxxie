@@ -1,16 +1,18 @@
 import type { TFunction } from '@sapphire/plugin-i18next';
 import type { ModerationManager } from '#lib/moderation/managers/ModerationManager';
-import type { FoxxieCommand } from '#lib/structures';
 
 import { resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
-import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { LanguageKeys } from '#lib/i18n';
 import { getColor, TranslationMappings, UndoTaskNameMappings } from '#lib/moderation/common/constants';
 import { TypedT } from '#lib/types';
 import { getModeration } from '#utils/functions';
 import { TypeVariation } from '#utils/moderationConstants';
 import { messageLink } from '#utils/transformers';
-import { chatInputApplicationCommandMention, EmbedBuilder, type Snowflake } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
+
+export function getCaseEditMention() {
+	return `.case edit`;
+}
 
 export async function getEmbed(t: TFunction, entry: ModerationManager.Entry): Promise<EmbedBuilder> {
 	const moderator = await entry.fetchModerator();
@@ -113,10 +115,4 @@ async function getEmbedDescription(t: TFunction, entry: ModerationManager.Entry)
 		: null;
 
 	return [userLine, channelLine, actionLine, durationLine, reasonLine, refrenceLine].filter((a) => Boolean(a)).join('\n');
-}
-
-let caseCommandId: null | Snowflake = null;
-export function getCaseEditMention() {
-	caseCommandId ??= (container.stores.get('commands').get('case') as FoxxieCommand).getGlobalCommandId();
-	return chatInputApplicationCommandMention('case', 'edit', caseCommandId);
 }

@@ -3,7 +3,7 @@ import type { GuildMessage } from '#lib/types';
 import { GuildLimits, isCategoryChannel, isTextBasedChannel, isThreadChannel, isVoiceBasedChannel } from '@sapphire/discord.js-utilities';
 import { type Awaitable, container, UserError } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
-import { readSettings, writeSettings, writeSettingsTransaction } from '#lib/Database/settings/functions';
+import { readSettings, writeSettings, writeSettingsTransaction } from '#lib/database/settings/functions';
 import { getT, LanguageKeys } from '#lib/i18n';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
 import { PermissionsBits } from '#utils/bits';
@@ -16,7 +16,6 @@ import {
 	Guild,
 	GuildMember,
 	HTTPError,
-	inlineCode,
 	type NonThreadGuildBasedChannel,
 	PermissionFlagsBits,
 	type PermissionOverwriteOptions,
@@ -79,8 +78,7 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 	}
 
 	public override async isActive(guild: Guild, userId: Snowflake) {
-		const settings = await readSettings(guild);
-		const roleId = settings[this.roleKey];
+		const roleId = await readSettings(guild, this.roleKey);
 		if (isNullish(roleId)) return false;
 
 		const member = await resolveOnErrorCodes(guild.members.fetch(userId), RESTJSONErrorCodes.UnknownMember);
@@ -114,8 +112,12 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 			(acc, channel) => (!isThreadChannel(channel) && channel.manageable ? acc + 1 : acc),
 			0
 		);
-		const permissions = this.roleOverridesMerged.array.map((key) => inlineCode(t(`permissions:${key}`)));
-		const content = t(Root.ActionSharedRoleSetupAsk, { channels: manageableChannelCount, permissions, role: role.name });
+
+		const content = t(Root.ActionSharedRoleSetupAsk, {
+			channels: manageableChannelCount,
+			permissions: this.roleOverridesMerged.array,
+			role: role.name
+		});
 		if (await promptConfirmation(message, content)) {
 			await this.updateChannelsOverrides(guild, role);
 		}

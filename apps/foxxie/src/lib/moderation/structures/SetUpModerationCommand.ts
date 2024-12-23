@@ -5,10 +5,9 @@ import type { GuildMessage } from '#lib/types';
 import { send } from '@sapphire/plugin-editable-commands';
 import { readSettings, writeSettings } from '#lib/database';
 import { getT } from '#lib/i18n';
-import { LanguageKeys } from '#lib/i18n/languageKeys';
+import { LanguageKeys } from '#lib/i18n';
 import { ModerationCommand } from '#lib/moderation/structures/ModerationCommand';
-import { isAdmin } from '#utils/discord';
-import { promptConfirmation, promptForMessage } from '#utils/functions';
+import { isAdmin, promptConfirmation, promptForMessage } from '#utils/functions';
 import { PermissionFlagsBits, type Role } from 'discord.js';
 
 export abstract class SetUpModerationCommand<Type extends RoleTypeVariation, ValueType> extends ModerationCommand<Type, ValueType> {
@@ -51,7 +50,7 @@ export abstract class SetUpModerationCommand<Type extends RoleTypeVariation, Val
 
 		// If there
 		if (!(await isAdmin(message.member))) {
-			this.error('commands/moderation:restrictLowLevel');
+			this.error(LanguageKeys.Moderation.RestrictLowLevel);
 		}
 
 		const t = getT(settings.language);

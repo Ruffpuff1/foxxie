@@ -4,7 +4,7 @@ import { Listener } from '@sapphire/framework';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { LanguageKeys } from '#lib/i18n';
 import { EventArgs, FoxxieEvents } from '#lib/types';
-import { floatPromise } from '#utils/util';
+import { floatPromise } from '#utils/common';
 import { blue } from 'colorette';
 
 @ApplyOptions<Listener.Options>(({ container }) => ({

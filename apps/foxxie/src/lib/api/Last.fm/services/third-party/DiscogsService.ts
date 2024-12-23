@@ -6,7 +6,7 @@ import { DiscogsApi } from '#apis/last.fm/api/DiscogsApi';
 import { months } from '#utils/common';
 import { blue } from 'colorette';
 
-export type DiscogsLastFMUser = { discogs: UserDiscogs; discogsReleases: UserDiscogsReleases[] } & UserLastFM;
+export type DiscogsLastFMUser = { discogs: null | UserDiscogs; discogsReleases: UserDiscogsReleases[] } & UserLastFM;
 
 export class DiscogsService {
 	#discogsApi = new DiscogsApi();

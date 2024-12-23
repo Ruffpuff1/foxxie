@@ -4,11 +4,12 @@ import { I18nextFormatter, InternationalizationOptions } from '@sapphire/plugin-
 import { cast } from '@sapphire/utilities';
 import { envParseArray, envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { getHandler } from '#languages';
-import { readSettings } from '#lib/Database/settings/functions';
+import { SettingsKeys } from '#lib/database';
+import { readSettings } from '#lib/database/settings/functions';
 import { LanguageKeys, SupportedLanguages } from '#lib/i18n';
 import { CustomGet, EnvKeys } from '#lib/types';
-import { Emojis, emojis, LanguageFormatters, rootFolder, Urls } from '#utils/constants';
-import { FoxxiePaginatedMessageEmbedFields } from '#utils/External/FoxxiePaginatedMessageEmbedFields';
+import { BotIds, Emojis, emojis, LanguageFormatters, rootFolder, Urls } from '#utils/constants';
+import { FoxxiePaginatedMessageEmbedFields } from '#utils/external/FoxxiePaginatedMessageEmbedFields';
 import {
 	ActivitiesOptions,
 	ActivityType,
@@ -23,6 +24,7 @@ import {
 	italic,
 	LocaleString,
 	Partials,
+	PermissionsString,
 	PresenceUpdateStatus,
 	time,
 	TimestampStyles,
@@ -60,7 +62,7 @@ PaginatedMessage.defaultActions = defaultPaginationOptions;
 
 export const clientOwners = envParseArray('CLIENT_OWNERS');
 export const webhookError = parseWebhookError();
-export const timezone = envParseString('TIMEZONE');
+export const timezone = envParseString(EnvKeys.Timezone);
 
 export function parsePresenceActivity(): ActivitiesOptions[] {
 	const { CLIENT_PRESENCE_NAME } = process.env;
@@ -91,6 +93,7 @@ function parseInternationalizationDefaultVariables() {
 		CLIENT_ID: process.env.CLIENT_ID!,
 		ERROR: Emojis.Error,
 		LOADING: Emojis.Loading,
+		MUSIC: Emojis.Music,
 		SUCCESS: Emojis.Success,
 		SUPPORT: Urls.Support,
 		TCS: Urls.TheCornerStore,
@@ -102,15 +105,15 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 	return [
 		{
 			format: (value, lng) => new Intl.ListFormat(lng!, { type: 'conjunction' }).format(value),
-			name: 'and'
+			name: LanguageFormatters.And
 		},
 		{
 			format: (value, lng) => new Intl.ListFormat(lng!, { type: 'conjunction' }).format(value.map((item: string) => inlineCode(item))),
-			name: 'codeand'
+			name: LanguageFormatters.CodeAnd
 		},
 		{
 			format: (value) => inlineCode(value),
-			name: 'code'
+			name: LanguageFormatters.Code
 		},
 		{
 			format: (value, lng) => new Intl.ListFormat(lng!, { type: 'disjunction' }).format(value),
@@ -126,11 +129,11 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 		},
 		{
 			format: (value) => time(getDurationValue(value), TimestampStyles.LongDate),
-			name: 'fulldate'
+			name: LanguageFormatters.FullDate
 		},
 		{
 			format: (value) => codeBlock('', value),
-			name: 'codeblock'
+			name: LanguageFormatters.CodeBlock
 		},
 		{
 			format: (value, lng) =>
@@ -139,15 +142,15 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 					timeStyle: 'medium',
 					timeZone: timezone
 				}).format(typeof value === 'string' ? new Date(value) : value),
-			name: 'datetime'
+			name: LanguageFormatters.DateTime
 		},
 		{
 			format: (value: User) => (container.client.users.cache.has(value.id) ? userMention(value.id) : value.username),
-			name: 'userMention'
+			name: LanguageFormatters.UserMention
 		},
 		{
 			format: (value: string) => channelMention(value),
-			name: 'channelMention'
+			name: LanguageFormatters.ChannelMention
 		},
 		{
 			format: (value, lng) =>
@@ -155,7 +158,7 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 					timeStyle: 'short',
 					timeZone: timezone
 				}).format(typeof value === 'string' ? new Date(value) : value),
-			name: 'time'
+			name: LanguageFormatters.Time
 		},
 		{
 			format: (value, lng) =>
@@ -164,7 +167,7 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 					maximumFractionDigits: 2,
 					notation: 'compact'
 				}).format(value),
-			name: 'numbercompact'
+			name: LanguageFormatters.NumberCompact
 		},
 		{
 			format: (value: GuildVerificationLevel, lng) => {
@@ -193,11 +196,11 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 
 				return t(key);
 			},
-			name: 'verificationlevel'
+			name: LanguageFormatters.VerificationLevel
 		},
 		{
-			format: (value, lng) => getFixedT(lng!)(`guilds/permissions:${value}`),
-			name: 'permissions'
+			format: (value) => formatDuration(getDurationValue(Date.now() + value)),
+			name: LanguageFormatters.Remaining
 		},
 		{
 			format: (value, lng) =>
@@ -236,6 +239,13 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 			name: LanguageFormatters.Bold
 		},
 		{
+			format: (value: PermissionsString[], lng) => {
+				const t = getFixedT(lng!);
+				return t(LanguageKeys.Globals.And, { value: value.map((v) => t(permissionStringToKey(v))).map(bold) });
+			},
+			name: LanguageFormatters.PermissionsArray
+		},
+		{
 			format: (value: GuildExplicitContentFilter, lng) => {
 				const t = getFixedT(lng!);
 				let key: CustomGet<string, string>;
@@ -252,8 +262,6 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 					case GuildExplicitContentFilter.Disabled:
 						key = LanguageKeys.Guilds.ContentFilters.Disabled;
 				}
-
-				console.log(key);
 
 				return t(key);
 			},
@@ -296,6 +304,10 @@ function parseWebhookError(): null | WebhookClientData {
 	};
 }
 
+function permissionStringToKey(permission: PermissionsString) {
+	return LanguageKeys.Guilds.Permissions[permission];
+}
+
 export const PROJECT_ROOT = join(rootFolder, process.env.OVERRIDE_ROOT_PATH ?? 'dist');
 export const LANGUAGE_ROOT = join(PROJECT_ROOT, 'languages');
 
@@ -306,7 +318,7 @@ function parseI18nOptions(): InternationalizationOptions {
 		defaultNS: 'globals',
 		fetchLanguage: async ({ guild }) => {
 			if (!guild) return SupportedLanguages.EnglishUnitedStates;
-			return (await readSettings(guild)).language;
+			return readSettings(guild, SettingsKeys.Language);
 		},
 		formatters: parseInternationalizationFormatters(),
 		i18next: (_: string[], languages: string[]) => ({
@@ -332,6 +344,21 @@ function parseI18nOptions(): InternationalizationOptions {
 
 export const clientOptions: ClientOptions = {
 	allowedMentions: { parse: ['users'] },
+	audio: {
+		hosts: {
+			rest: `http://${envParseString('LAVALINK_URL')}`,
+			ws: {
+				options: {
+					resumeKey: 'FOXXIE_RESUME_KEY',
+					resumeTimeout: 120
+				},
+				url: `ws://${envParseString('LAVALINK_URL')}`
+			}
+		},
+		password: envParseString('LAVALINK_PASSWORD'),
+		shardCount: 0,
+		userID: envParseString(EnvKeys.ClientId)
+	},
 	caseInsensitiveCommands: true,
 	caseInsensitivePrefixes: true,
 	defaultPrefix: envParseString(EnvKeys.ClientPrefix),
@@ -355,7 +382,7 @@ export const clientOptions: ClientOptions = {
 	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 	presence: {
 		activities: parsePresenceActivity(),
-		status: process.env.NODE_ENV === 'development' ? PresenceUpdateStatus.Invisible : PresenceUpdateStatus.Idle
+		status: envParseString(EnvKeys.ClientId) === BotIds.Foxxie ? PresenceUpdateStatus.Idle : PresenceUpdateStatus.Invisible
 	},
 	regexPrefix: parseRegexPrefix(),
 	shards: 'auto'

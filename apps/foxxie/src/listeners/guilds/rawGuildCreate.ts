@@ -1,9 +1,9 @@
+import { resolveToNull } from '@ruffpuff/utilities';
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, ListenerOptions } from '@sapphire/framework';
 import { sleep } from '@sapphire/utilities';
-import { seconds } from '#utils/common';
+import { floatPromise, seconds } from '#utils/common';
 import { getModeration } from '#utils/functions';
-import { floatPromise } from '#utils/util';
 import { Collection, GatewayDispatchEvents, GatewayGuildCreateDispatch } from 'discord.js';
 
 @ApplyOptions<ListenerOptions>({ emitter: 'ws', event: GatewayDispatchEvents.GuildCreate })
@@ -30,7 +30,8 @@ export class UserListener extends Listener {
 			return this.#fetchInvites(guildId);
 		}
 
-		const invites = await cached.invites.fetch();
+		const invites = await resolveToNull(cached.invites.fetch());
+		if (!invites) return;
 		this.container.client.invites.usesCache.set(guildId, new Collection(invites.map((invite) => [invite.code, invite.uses])));
 	}
 }

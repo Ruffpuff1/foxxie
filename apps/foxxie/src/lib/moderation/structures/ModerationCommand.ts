@@ -2,13 +2,13 @@ import type { User } from 'discord.js';
 
 import { Args, type Awaitable, CommandOptionsRunTypeEnum } from '@sapphire/framework';
 import { free, send } from '@sapphire/plugin-editable-commands';
-import { readSettings } from '#lib/Database/settings/functions';
+import { readSettings } from '#lib/database/settings/functions';
 import { LanguageKeys } from '#lib/i18n';
 import { ActionByType, getAction, GetContextType, ModerationAction, ModerationManager } from '#lib/moderation';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage, PermissionLevels, TypedT } from '#lib/types';
 import { asc, floatPromise, seconds } from '#utils/common';
-import { isGuildOwner } from '#utils/discord';
+import { isGuildOwner } from '#utils/functions';
 import { deleteMessage } from '#utils/functions/messages';
 import { TypeVariation } from '#utils/moderationConstants';
 import { getImage, getTag, isUserSelf } from '#utils/util';

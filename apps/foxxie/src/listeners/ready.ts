@@ -1,17 +1,18 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { Listener, Store } from '@sapphire/framework';
-import { envIsDefined } from '@skyra/env-utilities';
+import { envIsDefined, envParseBoolean } from '@skyra/env-utilities';
 import { resetSpotifyToken } from '#lib/api/Spotify/util';
 import { EnvKeys, FoxxieEvents } from '#lib/types';
+import { seconds } from '#utils/common';
 import { createBanner } from '#utils/startBanner';
-import { blue, gray, green, red, yellow } from 'colorette';
+import { blue, blueBright, gray, green, red, yellow } from 'colorette';
 
 @ApplyOptions<Listener.Options>({ once: true })
 export class UserListener extends Listener<FoxxieEvents.Ready> {
 	private readonly style = this.isDev ? yellow : blue;
 
 	public async run() {
-		const [spotify] = await Promise.all([this.#initSpotify()]);
+		const [spotify] = await Promise.all([this.#initSpotify(), this.#startLavalink()]);
 
 		this.printBanner(spotify);
 		this.printStoreDebugInformation();
@@ -23,6 +24,15 @@ export class UserListener extends Listener<FoxxieEvents.Ready> {
 		return success;
 	}
 
+	#startLavalink() {
+		if (this.container.client.audio)
+			setTimeout(async () => {
+				await this.container.client.audio!.connect();
+				await this.container.client.audio!.queues.start();
+				this.container.logger.info(`[${blueBright('Lavalink')}]: Successfully initialized.`);
+			}, seconds(30));
+	}
+
 	private printBanner(spotify: boolean) {
 		const success = green('+');
 		const failed = red('-');
@@ -32,19 +42,19 @@ export class UserListener extends Listener<FoxxieEvents.Ready> {
 			String(
 				createBanner({
 					extra: [
-						String.raw`${`v${process.env.VERSION_NUM}${this.isDev ? '-dev' : ''}${process.env.VERSION_SIG ? ` ${process.env.VERSION_SIG}` : ''}${process.env.COPYRIGHT_YEAR ? ` © ${process.env.COPYRIGHT_YEAR}` : ''}`.padStart(
+						String.raw`${pad}${pad}${`v${process.env.VERSION_NUM}${this.isDev ? '-dev' : ''}${process.env.VERSION_SIG ? ` ${process.env.VERSION_SIG}` : ''}${process.env.COPYRIGHT_YEAR ? ` © ${process.env.COPYRIGHT_YEAR}` : ''}`.padStart(
 							38,
 							' '
 						)}`,
 						String.raw`${pad}[${success}] Gateway`,
-						String.raw`${pad}[${success}] Moderation`,
+						String.raw`${pad}[${envParseBoolean('AUDIO_ENABLED', false) ? success : failed}] Audio${pad}[${success}] Moderation`,
 						String.raw`${pad}[${this.container.redis ? success : failed}] Redis`,
 						String.raw`${pad}[${spotify ? success : failed}] Spotify`,
 						String.raw`${pad}[${this.store.has('rawMessageReactionAddStarboard') ? success : failed}] Starboard`,
 						String.raw`${this.isDev ? `${pad}</> DEVELOPMENT MODE` : ''}`
 					],
 					logo: [
-						String.raw`      {   }`,
+						String.raw`         `,
 						String.raw`       }_{ __{`,
 						String.raw`    .-{   }   }-.`,
 						String.raw`   (   }     {   )`,

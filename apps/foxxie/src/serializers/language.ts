@@ -1,6 +1,6 @@
 import type { Awaitable } from '@sapphire/utilities';
 
-import { Serializer } from '#lib/Database/settings/structures/Serializer';
+import { Serializer } from '#lib/database/settings/structures/Serializer';
 
 export class UserSerializer extends Serializer<string> {
 	public isValid(value: string): Awaitable<boolean> {

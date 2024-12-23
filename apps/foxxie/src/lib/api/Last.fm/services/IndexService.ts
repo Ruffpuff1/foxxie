@@ -57,7 +57,7 @@ export class IndexService {
 			if (isNullish(user)) {
 				return null;
 			}
-			if (user.lastIndexed.getTime() > Date.now() - days(1)) {
+			if (user.lastIndexed && user.lastIndexed.getTime() > Date.now() - days(1)) {
 				container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: Skipped for ${queueItem.userId} | ${user?.usernameLastFM}`);
 				return null;
 			}
@@ -164,7 +164,7 @@ export class IndexService {
 	}
 
 	private async getTopArtistsForUser(user: UserLastFM) {
-		container.logger.warn(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Getting top artists`);
+		container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Getting top artists`);
 
 		const indexLimit = 200;
 

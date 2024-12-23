@@ -3,8 +3,8 @@ import { canReadMessages, isGuildBasedChannel } from '@sapphire/discord.js-utili
 import { Listener } from '@sapphire/framework';
 import { cast } from '@sapphire/utilities';
 import { FoxxieEvents } from '#lib/types';
-import { getEmojiString } from '#utils/discord';
-import { LLRCData } from '#utils/External/LongLivingReactionCollector';
+import { LLRCData } from '#utils/external/LongLivingReactionCollector';
+import { getEmojiString } from '#utils/functions';
 import { GatewayDispatchEvents, type GatewayMessageReactionAddDispatch, GuildTextBasedChannelTypes, type TextChannel } from 'discord.js';
 
 @ApplyOptions<Listener.Options>({ emitter: 'ws', event: GatewayDispatchEvents.MessageReactionAdd })

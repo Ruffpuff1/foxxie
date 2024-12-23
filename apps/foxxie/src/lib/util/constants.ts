@@ -1,43 +1,45 @@
 export const rootFolder = process.cwd();
 
 export const enum BrandingColors {
-	Primary = 0xed7c7d,
-	Secondary = 0x4583c7
+	Primary = 0xf16a6a,
+	Ruff = 0x857788,
+	Secondary = 0xbfcaf3
 }
 
 export const enum Colors {
-	Black = 0x737f8d,
-	Blurple = 0x5865f2,
-	BlurpleOld = 0x7289db,
-	Disboard = 0x25b8b8,
-	Green = 0x5dba7d,
-	LemonYellow = 0xf1ab1d,
-	Orange = 0xf79454,
-	PokemonBird = 0x969696,
-	Red = 0xff5b5b,
-	Restricted = 1579292,
-	TheCornerStoreStarboard = 0xfff59f,
-	Yellow = 0xffdb5c
+	Blue = 0x3f51b5,
+	Green = 0x8ac34a,
+	Orange = 0xff9900,
+	Red = 0xf16a6a,
+	Restricted = 0x18191c,
+	White = 0xeeeeee,
+	Yellow = 0xffc109
 }
 
 export const enum LanguageFormatters {
+	And = 'and',
 	Bold = 'bold',
-	DateTime = 'dateTime',
+	ChannelMention = 'channelMention',
+	Code = 'code',
+	CodeAnd = 'codeand',
+	CodeBlock = 'codeblock',
+	DateTime = 'datetime',
 	Duration = 'duration',
 	DurationString = 'durationString',
 	ExplicitContentFilter = 'explicitContentFilter',
+	FullDate = 'fulldate',
 	HumanDateTime = 'humanDateTime',
 	HumanLevels = 'humanLevels',
 	Italic = 'italic',
 	MessageNotifications = 'messageNotifications',
 	Number = 'number',
-	NumberCompact = 'numberCompact',
-	Permissions = 'permissions'
+	NumberCompact = 'numbercompact',
+	PermissionsArray = 'permissionsarray',
+	Remaining = 'remaining',
+	Time = 'time',
+	UserMention = 'userMention',
+	VerificationLevel = 'verificationlevel'
 }
-
-export type ModerationTaskId = Omit<Schedules, 'Birthday' | 'Disboard' | 'UpdateDiscogsUsers' | 'UpdateLastFmUsers'>;
-
-export const ModerationTasks = [Schedules.EndTempBan, Schedules.EndTempMute, Schedules.EndTempNick, Schedules.EndTempNick];
 
 export const enum Schedules {
 	Birthday = 'birthday',
@@ -48,6 +50,7 @@ export const enum Schedules {
 	EndTempRestrictEmbed = 'moderationEndRestrictionEmbed',
 	EndTempTimeout = 'moderationEndTimeout',
 	IndexUser = 'indexUser',
+	LastFMUpdateArtistsForUser = 'lastFmUpdateArtistsForUser',
 	Reminder = 'reminder',
 	RemoveBirthdayRole = 'removeBirthdayRole',
 	UpdateDiscogsUsers = 'updateDiscogsUsers',
@@ -55,13 +58,12 @@ export const enum Schedules {
 }
 
 export const enum Urls {
-	Celestia = 'https://celestia.reese.gay',
-	Disboard = 'https://disboard.org/',
 	Haste = 'https://hastebin.com',
-	Repo = 'https://github.com/Ruffpuff1/foxxie',
-	Support = 'https://rsehrk.com/tcs',
-	TheCornerStore = 'https://rsehrk.com/tcs'
+	Support = 'https://tcs.rshk.me',
+	TheCornerStore = 'https://tcs.rshk.me'
 }
+
+export type ModerationTaskId = Omit<Schedules, 'Birthday' | 'Disboard' | 'UpdateDiscogsUsers' | 'UpdateLastFmUsers'>;
 
 export const emojis = {
 	boosts: ['<a:boost1:904581076377292820>', '<a:boost2:904581123445776464>', '<a:boost3:904581171202097152>'],
@@ -105,17 +107,25 @@ export const enum Emojis {
 	Calendar = ':calendar_spiral:',
 	Cassette = '<:Cassette:1317747854550503525>',
 	Error = '<:TickNo:894420222084280331>',
+	Female = '<:Female:950037546212147200>',
 	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
 	FemaleSignEmoji = '<:Female:950037546212147200>',
 	FoxWiggle = '<a:foxwiggle:799197027568713748>',
+	GithubIssueClosed = '<:GithubIssueClosed:950035839306596362>',
+	GithubIssueOpen = '<:GithubIssueOpen:950035888459624518>',
+	GithubPRClosed = '<:GithubPRClosed:950017073231298560>',
+	GithubPRMerged = '<:GithubPRMerged:950014664979406858>',
+	GithubPROpen = '<:GithubPROpen:950014721979985960>',
 	Hourglass = ':hourglass:',
 	Information = ':information_source:',
 	LastFm = '<:lastfm:882227627287515166>',
 	Loading = '<a:HotCoffee:905458108225183765>',
+	Male = '<:Male:950037521126023208>',
 	/** This is the default Twemoji, uploaded as a custom emoji because iOS and Android do not render the emoji properly */
 	MaleSignEmoji = '<:Male:950037521126023208>',
 	Moderator = ':hammer:',
 	Music = '🎶 🎻',
+	Notes = '🎶',
 	QuarantinedIcon = ':speech_balloon:',
 	RuffThink = '<:RuffThink:910209205636579421>',
 	/** The logo of https://serebii.net */
@@ -145,6 +155,9 @@ export const allowedInviteIds = [
 ];
 
 export const enum BotIds {
+	Foxxie = '825130284382289920',
+	FoxxieAlpha = '812546582531801118',
+	FoxxieNightly = '840755658793418782',
 	RealmBot = '840681796914905100'
 }
 

@@ -107,8 +107,6 @@ export async function getPlaylistTracks(content: string, offset = 0, previous: S
 		return getPlaylistTracks(content, previous.length, previous);
 	}
 
-	console.log(previous[0]);
-
 	const mapped = previous
 		.map((song) => {
 			const { track } = song;

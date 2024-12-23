@@ -68,7 +68,7 @@ export class PokemonResponseBuilder {
 
 	public build(): PaginatedMessage {
 		const titles = this.t(LanguageKeys.Commands.Websearch.Pokemon.Titles);
-		const pageLabels = this.t(LanguageKeys.Commands.Websearch.PokemonDexSelectPages);
+		const pageLabels = this.t(LanguageKeys.Commands.Websearch.Pokemon.DexSelectPages);
 
 		const display = new PaginatedMessage({
 			template: {
@@ -187,7 +187,7 @@ export class PokemonResponseBuilder {
 							name: titles.smogon,
 							value:
 								this.pokeDetails.smogonTier === 'Undiscovered'
-									? this.t(LanguageKeys.Commands.Websearch.PokemonDexSmogonUnknown)
+									? this.t(LanguageKeys.Commands.Websearch.Pokemon.DexSmogonUnknown)
 									: this.pokeDetails.smogonTier
 						},
 						{

@@ -16,6 +16,7 @@
 		"@typescript-eslint/no-base-to-string": 0,
 		"@typescript-eslint/no-duplicate-enum-values": 0,
 		"@typescript-eslint/no-throw-literal": "off",
+		"@typescript-eslint/unbound-method": "off",
 		"no-catch-shadow": 0,
 		"no-implicit-coercion": "warn",
 		"sort-keys": "off",
@@ -84,10 +85,6 @@
 						"static-set-method"
 					],
 					[
-						"static-property",
-						"static-accessor-property"
-					],
-					[
 						"protected-static-method",
 						"protected-static-function-property",
 						"async-protected-static-method",
@@ -96,10 +93,6 @@
 					[
 						"protected-static-get-method",
 						"protected-static-set-method"
-					],
-					[
-						"protected-static-property",
-						"protected-static-accessor-property"
 					],
 					[
 						"private-static-method",
@@ -112,12 +105,31 @@
 						"private-static-set-method"
 					],
 					[
+						"static-property",
+						"static-accessor-property"
+					],
+					[
+						"protected-static-property",
+						"protected-static-accessor-property"
+					],
+					[
 						"private-static-property",
 						"private-static-accessor-property"
 					],
 					"static-block",
 					"unknown"
 				]
+			}
+		],
+		"perfectionist/sort-variable-declarations": [
+			"error",
+			{
+				"type": "alphabetical",
+				"order": "asc",
+				"ignoreCase": true,
+				"specialCharacters": "keep",
+				"partitionByNewLine": false,
+				"partitionByComment": false
 			}
 		],
 		"@typescript-eslint/require-await": 0

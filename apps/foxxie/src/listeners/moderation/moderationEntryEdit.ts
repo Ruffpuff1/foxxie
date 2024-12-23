@@ -34,7 +34,13 @@ export class UserListener extends Listener {
 	}
 
 	#embedsAreSame(embed: EmbedBuilder, previous: Embed) {
-		return embed.data.description === previous.description && embed.data.color === previous.color;
+		return (
+			embed.data.description === previous.description &&
+			embed.data.color === previous.color &&
+			embed.data.author?.name === previous.author?.name &&
+			embed.data.author?.icon_url === previous.author?.iconURL &&
+			embed.data.color === previous.color
+		);
 	}
 
 	async #fetchModerationLogMessage(entry: ModerationManager.Entry, channel: GuildBasedChannel) {

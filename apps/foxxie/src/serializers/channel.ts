@@ -3,7 +3,7 @@ import type { Channel } from 'discord.js';
 import { ApplyOptions } from '@sapphire/decorators';
 import { isCategoryChannel, isGuildBasedChannelByGuildKey, isNewsChannel, isTextChannel, isVoiceChannel } from '@sapphire/discord.js-utilities';
 import { type Awaitable, isNullish } from '@sapphire/utilities';
-import { Serializer } from '#lib/Database/settings/structures/Serializer';
+import { Serializer } from '#lib/database/settings/structures/Serializer';
 
 @ApplyOptions<Serializer.Options>({
 	aliases: ['guildTextChannel', 'guildVoiceChannel', 'guildCategoryChannel', 'sendableChannel'] satisfies SerializerType[]

@@ -1,7 +1,7 @@
 import { Listener } from '@sapphire/framework';
 import { envParseString } from '@skyra/env-utilities';
 import { EventArgs, FoxxieEvents } from '#lib/types';
-import { floatPromise } from '#utils/util';
+import { floatPromise } from '#utils/common';
 import { ActivityType, PresenceStatusData, PresenceUpdateStatus } from 'discord.js';
 
 export class UserListener extends Listener {

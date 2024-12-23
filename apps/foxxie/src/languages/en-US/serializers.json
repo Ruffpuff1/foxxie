@@ -1,7 +1,6 @@
 {
 	"invalidCommand": "{{param}} doesn't seem to be one of my commands. If you forgot, feel free to run my `help` command.",
 	"invalidFloat": "{{name}} must be a valid number.",
-	"invalidGuild": "{{name}} must be a valid server ID.",
 	"invalidInt": "{{name}} must be an integer.",
 	"invalidRole": "{{name}} must be a mention or id of a role in this server.",
 	"minMaxBothExclusive": "{{name}} must be between {{min}} and {{max}} exclusively.",
@@ -12,7 +11,5 @@
 	"minMaxMaxInclusive": "{{name}} must be less than {{max}} inclusively",
 	"minMaxMinExclusive": "{{name}} must be greater than {{min}} exclusively.",
 	"minMaxMinInclusive": "{{name}} must be greater than {{min}} inclusively.",
-	"permissionNodeDuplicatedCommand": "You have set `{{command}}` twice, either allow it, or deny it.",
-	"unknownChannel": "Unknown channel",
-	"unknownRole": "Unknown role"
+	"permissionNodeDuplicatedCommand": "You have set `{{command}}` twice, either allow it, or deny it."
 }

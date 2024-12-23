@@ -1,7 +1,7 @@
 import type { Message, Snowflake } from 'discord.js';
 
 import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
-import { Starboard, StarboardData } from '#lib/Database/Models/starboard';
+import { Starboard, StarboardData } from '#lib/database/Models/starboard';
 import { LanguageKeys } from '#lib/i18n';
 
 export class UserArgument extends Argument<Starboard> {

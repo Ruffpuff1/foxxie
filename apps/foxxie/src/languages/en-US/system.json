@@ -1,13 +1,4 @@
 {
-	"helpTitles": {
-		"aliases": "🖇️ | **Aliases**",
-		"usages": "📝 | **Command Usage**",
-		"extendedHelp": "🔍 | **Extended Help**",
-		"explainedUsage": ":gear: | **Explained usage**",
-		"possibleFormats": "🔢 | **Possible formats**",
-		"examples": "🔗 | **Examples**",
-		"reminders": "⏰ | **Reminder**"
-	},
 	"messageLoading": [
 		"{{LOADING}} I'll handle that order, just one second.",
 		"{{LOADING}} Coming right up! This might take few seconds.",

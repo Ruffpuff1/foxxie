@@ -1,7 +1,9 @@
 import { UserArtist, UserLastFM, UserPlay } from '@prisma/client';
 import { container } from '@sapphire/framework';
 import { isNullish, isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
+import { toPrismaDate } from '#lib/database';
 import { days, groupBy, hours, minutes, seconds } from '#utils/common';
+import { Schedules } from '#utils/constants';
 import { blue, white } from 'colorette';
 import _ from 'lodash';
 
@@ -25,7 +27,7 @@ export class UpdateService {
 
 		if (updateQueue) {
 			if (user === null) return null;
-			if (user.lastUpdated.getTime() > Date.now() - hours(12)) {
+			if (user.lastUpdated && user.lastUpdated.getTime() > Date.now() - hours(12)) {
 				container.logger.debug(`[${blue('Last.fm')} ${white('Update')}]: Skipped for ${userId} | ${user.usernameLastFM}`);
 				return null;
 			}
@@ -34,9 +36,6 @@ export class UpdateService {
 		} else {
 			container.logger.debug(`[${blue('Last.fm')} ${white('Update')}]: Started on ${userId} | ${user?.usernameLastFM} - User initiated`);
 		}
-
-		const sessionKey = '';
-		console.log(sessionKey);
 
 		const dateFromFilter = user?.lastScrobbleUpdate ? user.lastScrobbleUpdate.getTime() - hours(3) : Date.now() - days(14);
 		let timeFrom: null | number = dateFromFilter / 1000;
@@ -117,11 +116,21 @@ export class UpdateService {
 				totalPlaycountCorrect ? recentTracks.content.totalAmount : null
 			);
 
-			const userArtists = await UpdateService.GetUserArtists(userId);
+			await container.schedule.add(Schedules.LastFMUpdateArtistsForUser, Date.now() + seconds(20), {
+				data: {
+					playUpdate,
+					userId
+				}
+			});
 
-			await this.updateArtistsForUser(user!, playUpdate.addedPlays, userArtists);
+			const lastNewScrobble = _.maxBy(playUpdate.addedPlays, (o) => o.timePlayed);
+			if (!isNullish(lastNewScrobble?.timePlayed)) {
+				await UpdateService.SetUserLastScrobbleTime(user!, lastNewScrobble.timePlayed);
+			}
 
-			// add
+			await UpdateService.SetUserUpdateTime(user!, new Date());
+
+			void container.redis?.del(`user-${user?.userid}-topartists-alltime`);
 		} catch (e) {
 			container.logger.error(
 				`[${blue('Last.fm')} ${white('Update')}]: Error in update process for user ${userId} | ${user?.usernameLastFM}`,
@@ -132,8 +141,8 @@ export class UpdateService {
 		return recentTracks;
 	}
 
-	public async updateUserAndGetRecentTracks(user: UserLastFM, bypassIndexPending = false) {
-		console.log(bypassIndexPending);
+	public async updateUserAndGetRecentTracks(user: UserLastFM, _ = false) {
+		// console.log(bypassIndexPending);
 		return this.updateUser({ userId: user.userid });
 	}
 
@@ -195,7 +204,18 @@ export class UpdateService {
 		return correctPlaycount;
 	}
 
-	private async updateArtistsForUser(user: UserLastFM, newScrobbles: UserPlay[], userArtists: Map<string, UserArtist>) {
+	public static async GetUserArtists(userId: string): Promise<Map<string, UserArtist>> {
+		const sql =
+			`SELECT DISTINCT ON (LOWER("UserArtist"."name")) "userId", "name", "playCount", "userArtistId" ` +
+			`FROM "UserArtist" WHERE "userId" = '${userId}' ` +
+			`ORDER BY LOWER("name"), "playCount" DESC`;
+
+		const result = await container.db.sql<UserArtist[]>(sql);
+
+		return new Map(result.map((d) => [d.name.toLowerCase(), d]));
+	}
+
+	public static async UpdateArtistsForUser(user: UserLastFM, newScrobbles: UserPlay[], userArtists: Map<string, UserArtist>) {
 		for (let [artistName, artist] of Object.entries(groupBy(newScrobbles, (g) => g.artistName.toLowerCase()))) {
 			artistName = artistName.replace(`'`, ``).replace(`"`, ``).replace('`', ``);
 			const existingUserArtist = userArtists.get(artistName.toLowerCase());
@@ -227,19 +247,13 @@ export class UpdateService {
 		return timeToCache;
 	}
 
-	private static async GetUserArtists(userId: string): Promise<Map<string, UserArtist>> {
-		const sql =
-			`SELECT DISTINCT ON (LOWER("UserArtist"."name")) "userId", "name", "playCount", "userArtistId" ` +
-			`FROM "UserArtist" WHERE "userId" = '${userId}' ` +
-			`ORDER BY LOWER("name"), "playCount" DESC`;
-
-		const result = await container.db.sql<UserArtist[]>(sql);
-
-		return new Map(result.map((d) => [d.name.toLowerCase(), d]));
+	private static async SetUserLastScrobbleTime(user: UserLastFM, lastScrobble: Date) {
+		user.lastScrobbleUpdate = lastScrobble;
+		await container.db.sql(`UPDATE "UserLastFM" SET "lastScrobbleUpdate" = '${toPrismaDate(lastScrobble)}' WHERE "userid" = '${user.userid}'`);
 	}
 
 	private static async SetUserUpdateTime(user: UserLastFM, updateTime: Date = new Date()) {
 		user.lastUpdated = updateTime;
-		return container.prisma.userLastFM.update({ data: { lastUpdated: updateTime }, where: { userid: user.userid } });
+		await container.db.sql(`UPDATE "UserLastFM" SET "lastUpdated" = '${toPrismaDate(updateTime)}' WHERE "userid" = '${user.userid}'`);
 	}
 }

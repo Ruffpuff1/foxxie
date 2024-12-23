@@ -3,14 +3,10 @@ import { envParseString } from '@skyra/env-utilities';
 import { EnvKeys } from '#lib/types';
 import { Guild, GuildAuditLogsEntry, GuildAuditLogsResolvable, GuildResolvable } from 'discord.js';
 
-import { GuildPollService } from './GuildPollService.js';
-
 /**
  * Utility service for a Discord guild.
  */
 export class GuildUtilityService {
-	public polls: GuildPollService;
-
 	private guild: Guild;
 
 	/**
@@ -20,8 +16,6 @@ export class GuildUtilityService {
 	public constructor(resolvable: GuildResolvable) {
 		const guild = container.client.guilds.resolve(resolvable);
 		this.guild = guild!;
-
-		this.polls = new GuildPollService(this.guild);
 	}
 
 	/**

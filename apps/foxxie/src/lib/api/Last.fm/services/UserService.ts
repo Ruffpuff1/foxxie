@@ -5,7 +5,7 @@ import { LastFmDataSourceFactory } from '../factories/DataSourceFactory.js';
 import { PlayService } from './PlayService.js';
 
 export interface LfmUserWithDiscogs extends UserLastFM {
-	discogs: UserDiscogs;
+	discogs: null | UserDiscogs;
 }
 
 export class UserService {

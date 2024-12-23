@@ -2,7 +2,7 @@ import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/framework';
 import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import { RedisKeyLastFmRecentTracks } from '#lib/types';
-import { seconds } from '#utils/common';
+import { first, seconds } from '#utils/common';
 import { blue } from 'colorette';
 
 import { LastfmApi } from '../api/LastfmApi.js';
@@ -19,6 +19,21 @@ export class LastFmRepository {
 
 	public constructor() {
 		this._lastFmApi = new LastfmApi();
+	}
+
+	public async getAuthSession(token: string) {
+		const queryParams = {
+			token
+		};
+
+		const authSessionCall = await this._lastFmApi.callApi(queryParams, Call.GetAuthSession, true);
+
+		return authSessionCall;
+	}
+
+	public async getAuthToken() {
+		const tokenCall = await this._lastFmApi.callApi({}, Call.GetToken);
+		return tokenCall;
 	}
 
 	public async getLfmUserInfo(lastFmUserName: string): Promise<DataSourceUser | null> {
@@ -87,7 +102,12 @@ export class LastFmRepository {
 			} else {
 				recentTracksCall = await this._lastFmApi.callApi(queryParams, Call.RecentTracks);
 
-				if (recentTracksCall.success && recentTracksCall.content.recenttracks.track.length >= count - 2 && count >= 400) {
+				if (
+					recentTracksCall.success &&
+					recentTracksCall.content.recenttracks &&
+					recentTracksCall.content.recenttracks.track.length >= count - 2 &&
+					count >= 400
+				) {
 					for (let i = 1; i < amountOfPages; i++) {
 						queryParams.page = (i + 1).toString();
 						let pageResponse = await this._lastFmApi.callApi(queryParams, Call.RecentTracks);
@@ -131,6 +151,88 @@ export class LastFmRepository {
 			container.logger.error(`[${blue('LastFmRepository')}] Error in getRecentTracksAsync for ${lastFmUserName}`, e);
 			throw e;
 		}
+	}
+
+	public async getTrackInfo(trackName: string, artistName: string, username: null | string = null) {
+		const queryParams = {
+			artist: artistName,
+			autocorrect: '0',
+			extended: '1',
+			track: trackName
+		} as Record<string, string>;
+
+		if (username) {
+			queryParams.username = username;
+		}
+
+		const trackCall = await this._lastFmApi.callApi(queryParams, Call.TrackInfo);
+		console.log(trackCall);
+
+		return trackCall;
+	}
+
+	public async scrobble(sessionKey: string, artistName: string, trackName: string, albumName: null | string = null, timeStamp: Date | null = null) {
+		timeStamp ??= new Date();
+
+		const queryParams = {
+			artist: artistName,
+			sk: sessionKey,
+			timestamp: seconds.fromMilliseconds(timeStamp.getTime()).toString(),
+			track: trackName
+		} as Record<string, string>;
+
+		if (!isNullishOrEmpty(albumName)) {
+			queryParams.album = albumName;
+		}
+
+		const scrobbleCall = await this._lastFmApi.callApi(queryParams, Call.TrackScrobble, true);
+		return scrobbleCall;
+	}
+
+	public async searchTrack(trackName: string, artistName: null | string = null) {
+		const queryParams = {
+			track: trackName
+		} as Record<string, string>;
+
+		if (!isNullishOrEmpty(artistName)) {
+			queryParams.artist = artistName;
+		}
+
+		const trackSearchCall = await this._lastFmApi.callApi(queryParams, Call.TrackSearch);
+
+		if (!trackSearchCall.success) {
+			return new Response({
+				content: null,
+				error: trackSearchCall.error,
+				message: 'Last.fm returned an error',
+				success: false
+			});
+		}
+
+		if (isNullish(trackSearchCall.content) || isNullishOrEmpty(trackSearchCall.content.results.trackmatches.track.length)) {
+			return new Response({
+				content: null,
+				success: true
+			});
+		}
+
+		const track = first(trackSearchCall.content.results.trackmatches.track);
+
+		if (!track) {
+			return new Response({
+				content: null,
+				success: true
+			});
+		}
+
+		return new Response({
+			content: {
+				albumArtist: track.artist,
+				artistName: track.artist,
+				trackName: track.name
+			},
+			success: true
+		});
 	}
 
 	private static LastfmTrackToRecentTrack(recentTrackLfm: RecentTrackLfm): RecentTrack {

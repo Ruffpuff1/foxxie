@@ -3,18 +3,18 @@ import { ZeroWidthSpace } from '@ruffpuff/utilities';
 import { container, type MessageCommand } from '@sapphire/framework';
 import { filter } from '@sapphire/iterator-utilities/filter';
 import { partition } from '@sapphire/iterator-utilities/partition';
-import { getConfigurableGroups } from '#lib/Database/settings/configuration';
-import { readSettings, writeSettingsTransaction } from '#lib/Database/settings/functions';
-import { SchemaGroup } from '#lib/Database/settings/schema/SchemaGroup';
-import { SchemaKey } from '#lib/Database/settings/schema/SchemaKey';
-import { isSchemaGroup, remove, reset, set } from '#lib/Database/settings/Utils';
+import { getConfigurableGroups } from '#lib/database/settings/configuration';
+import { readSettings, writeSettingsTransaction } from '#lib/database/settings/functions';
+import { SchemaGroup } from '#lib/database/settings/schema/SchemaGroup';
+import { SchemaKey } from '#lib/database/settings/schema/SchemaKey';
+import { isSchemaGroup, remove, reset, set } from '#lib/database/settings/Utils';
 import { api } from '#lib/discord';
 import { getT, LanguageKeys } from '#lib/i18n';
 import { FTFunction, GuildMessage } from '#lib/types';
 import { floatPromise, minutes } from '#utils/common';
 import { stringifyError } from '#utils/common/error';
 import { BrandingColors } from '#utils/constants';
-import { LLRCData, LongLivingReactionCollector } from '#utils/External/LongLivingReactionCollector';
+import { LLRCData, LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
 import { deleteMessage, sendLoadingMessage } from '#utils/functions/messages';
 import { getFullEmbedAuthor } from '#utils/util';
 import { DiscordAPIError, Events, MessageCollector, RESTJSONErrorCodes } from 'discord.js';
@@ -130,7 +130,7 @@ export class SettingsMenu {
 				this.schema = schema as SchemaGroup | SchemaKey;
 				this.oldValue = undefined;
 			} else {
-				this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfMenuInvalidKey);
+				this.errorMessage = this.t(LanguageKeys.Commands.Configuration.Conf.MenuInvalidKey);
 			}
 		} else {
 			const conf = container.stores.get('commands').get('conf') as MessageCommand;
@@ -150,7 +150,7 @@ export class SettingsMenu {
 					await this.tryUndo();
 					break;
 				default:
-					this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfMenuInvalidAction);
+					this.errorMessage = this.t(LanguageKeys.Commands.Configuration.Conf.MenuInvalidAction);
 			}
 		}
 
@@ -195,7 +195,7 @@ export class SettingsMenu {
 
 		// If there is a parent, show the back option:
 		if (parent) {
-			this.embed.setFooter({ text: this.t(LanguageKeys.Commands.Admin.ConfMenuRenderBack) });
+			this.embed.setFooter({ text: this.t(LanguageKeys.Commands.Configuration.Conf.MenuRenderBack) });
 		}
 
 		return this.embed;
@@ -204,19 +204,19 @@ export class SettingsMenu {
 	private renderGroup(entry: SchemaGroup) {
 		const { t } = this;
 
-		const description = [t(LanguageKeys.Commands.Admin.ConfMenuRenderAtFolder, { path: entry.name })];
+		const description = [t(LanguageKeys.Commands.Configuration.Conf.MenuRenderAtFolder, { path: entry.name })];
 		if (this.errorMessage) description.push(this.errorMessage);
 
 		const [folders, keys] = partition(
-			filter(entry.values(), (value) => !value.dashboardOnly),
+			filter(entry.values(), (value) => !value.dashboardOnly && value.type !== 'notAllowed'),
 			(value) => isSchemaGroup(value)
 		);
 
 		if (!folders.length && !keys.length) {
-			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderNokeys));
+			description.push(t(LanguageKeys.Commands.Configuration.Conf.MenuRenderNoKeys));
 		} else {
 			description.push(
-				t(LanguageKeys.Commands.Admin.ConfMenuRenderSelect),
+				t(LanguageKeys.Commands.Configuration.Conf.MenuRenderSelect),
 				'',
 				...folders.map(({ key }) => `📁 ${key}`),
 				...keys.map(({ key }) => `⚙️ ${key}`)
@@ -232,29 +232,29 @@ export class SettingsMenu {
 		this.t = getT(settings.language);
 		const { t } = this;
 
-		const description = [t(LanguageKeys.Commands.Admin.ConfMenuRenderAtPiece, { path: this.schema.name })];
+		const description = [t(LanguageKeys.Commands.Configuration.Conf.MenuRenderAtPiece, { path: this.schema.name })];
 		if (this.errorMessage) description.push('', this.errorMessage, '');
-		description.push(t(entry.description), '', t(LanguageKeys.Commands.Admin.ConfMenuRenderUpdate));
+		description.push(t(entry.description), '', t(LanguageKeys.Commands.Configuration.Conf.MenuRenderUpdate));
 
 		const value = settings[entry.property];
 
 		// If the key is an array and has elements, show the remove option:
 		if (entry.array && (value as unknown[]).length) {
-			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderRemove));
+			description.push(t(LanguageKeys.Commands.Configuration.Conf.MenuRenderRemove));
 		}
 
 		// If the value is different from the default value, show the reset option:
 		if (value !== entry.default) {
-			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderReset));
+			description.push(t(LanguageKeys.Commands.Configuration.Conf.MenuRenderReset));
 		}
 
 		// If there is undo data, show the undo option:
 		if (this.updatedValue) {
-			description.push(t(LanguageKeys.Commands.Admin.ConfMenuRenderUndo));
+			description.push(t(LanguageKeys.Commands.Configuration.Conf.MenuRenderUndo));
 		}
 
 		const serialized = entry.display(settings, this.t);
-		description.push('', t(LanguageKeys.Commands.Admin.ConfMenuRenderCvalue, { value: serialized }));
+		description.push('', t(LanguageKeys.Commands.Configuration.Conf.MenuRenderCurrentValue, { value: serialized }));
 
 		return description;
 	}
@@ -265,7 +265,7 @@ export class SettingsMenu {
 				floatPromise(this.response.reactions.removeAll());
 			}
 
-			const content = this.t(LanguageKeys.Commands.Admin.ConfMenuSaved);
+			const content = this.t(LanguageKeys.Commands.Configuration.Conf.MenuSaved);
 			floatPromise(this.response.edit({ content, embeds: [] }));
 		}
 
@@ -277,7 +277,7 @@ export class SettingsMenu {
 			await this.tryUpdate(UpdateType.Replace, null, this.oldValue);
 		} else {
 			const key = this.schema as SchemaKey;
-			this.errorMessage = this.t(LanguageKeys.Commands.Admin.ConfNochange, { key: key.name });
+			this.errorMessage = this.t(LanguageKeys.Commands.Configuration.Conf.MenuNoChange, { key: key.name });
 		}
 	}
 

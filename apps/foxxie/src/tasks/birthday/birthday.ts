@@ -5,7 +5,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
 import { getAge, nextBirthday } from '#utils/birthday';
 import { Schedules } from '#utils/constants';
-import { fetchChannel } from '#utils/discord';
+import { fetchChannel } from '#utils/functions';
 import { Guild, GuildMember } from 'discord.js';
 import { getFixedT, TFunction } from 'i18next';
 

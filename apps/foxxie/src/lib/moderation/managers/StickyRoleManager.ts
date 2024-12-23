@@ -2,7 +2,7 @@ import type { Guild } from 'discord.js';
 
 import { isNullish } from '@sapphire/utilities';
 import { readSettings, type StickyRole } from '#lib/database';
-import { writeSettingsTransaction } from '#lib/Database/settings/functions';
+import { writeSettingsTransaction } from '#lib/database/settings/functions';
 
 export interface StickyRoleManagerExtraContext {
 	author: string;
