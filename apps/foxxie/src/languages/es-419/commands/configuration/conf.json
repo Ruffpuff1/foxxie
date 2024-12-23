@@ -1,0 +1,45 @@
+{
+	"dashboardOnlyKey": "{{key, code}} can only be configured through the web dashboard (<https://foxxie.rshk.me/dash>)",
+	"description": "Configure per-server settings.",
+	"detailedDescription": {
+		"usages": [
+			"set NameOfKey Value for Key",
+			"show",
+			"show NameOfKey",
+			"remove NameOfKey Value for Key",
+			"reset NameOfKey",
+			"menu"
+		],
+		"extendedHelp": "Allows you to configure Foxxie from Discord, as a quick alternative to the [web dashboard](https://foxxie.rshk.me/dash).",
+		"examples": [
+			"set language en-GB",
+			"set channels.moderation-logs #moderation-logs",
+			"show",
+			"show channels",
+			"remove roles.moderator Moderator",
+			"reset roles.moderator",
+			"menu"
+		],
+		"reminder": "There are keys and groups, keys that are within a group are named by `GroupName.KeyName`."
+	},
+	"get": "The value for the key {{key, bold}} is: {{value, code}}",
+	"getNoExist": "The key {{key, bold}} does not seem to exist.",
+	"menuInvalidAction": "Invalid Action, please try again with any of the following options.",
+	"menuInvalidKey": "Invalid Key, please try again with any of the following options.",
+	"menuRenderAtFolder": "Currently at: 📁 {{path}}",
+	"menuRenderAtPiece": "Currently at: ⚙️ {{path}}",
+	"menuRenderNoKeys": "There are no configurable keys for this folder",
+	"menuRenderSelect": "Please type in any of the following entries' names",
+	"menuRenderUpdate": "• Update Value → `set <value>`",
+	"menuRenderRemove": "• Remove Value → `remove <value>`",
+	"menuRenderReset": "• Reset Value → `reset`",
+	"menuRenderUndo": "• Undo Update → `undo`",
+	"menuRenderCurrentValue": "Current Value: **``{{value}}``**",
+	"menuRenderBack": "Press ◀ to go back",
+	"menuSaved": "{{SUCCESS}} Successfully saved all changes.",
+	"menuNoChange": "The value for {{key, bold}} was already that value.",
+	"reset": "The key {{key, bold}} has been reset to: {{value, code}}",
+	"server": "**Server Setting {{key}}**\n{{list}}",
+	"settingNotSet": "Not Set",
+	"updated": "Successfully updated the key {{key, bold}}: {{response}}"
+}
