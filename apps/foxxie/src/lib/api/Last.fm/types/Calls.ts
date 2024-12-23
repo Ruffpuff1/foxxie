@@ -1,4 +1,5 @@
 import { RecentTrackLfm } from './models/RecentTrackLfm.js';
+import { TrackSearchResponseLfm } from './models/Track.js';
 import { UserResponseLfm } from './models/User.js';
 
 export const enum Call {
@@ -15,6 +16,7 @@ export const enum Call {
 	TrackInfo = 'track.getInfo',
 	TrackLove = 'track.love',
 	TrackScrobble = 'track.scrobble',
+	TrackSearch = 'track.search',
 	TrackUnLove = 'track.unlove',
 	TrackUpdateNowPlaying = 'track.updateNowPlaying',
 	UserInfo = 'user.getInfo'
@@ -357,7 +359,9 @@ export type LastFmApiReturnType<M extends Call> = M extends Call.TrackInfo
 				? GetArtistInfoResult | GetArtistInfoResultNoExistResult | GetArtistInfoResultWithUser
 				: M extends Call.GetWeeklyArtistChart
 					? GetUserWeeklyArtistChartResult
-					: never;
+					: M extends Call.TrackSearch
+						? TrackSearchResponseLfm
+						: never;
 
 export interface LastFmImage {
 	'#text': string;

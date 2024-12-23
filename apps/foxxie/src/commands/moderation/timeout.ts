@@ -15,7 +15,7 @@ import { PermissionFlagsBits } from 'discord.js';
 export class UserModerationCommand extends ModerationCommand<TypeVariation.Timeout, null> {
 	protected override async checkTargetCanBeModerated(message: GuildMessage, context: ModerationCommand.HandlerParameters<null>) {
 		const member = await super.checkTargetCanBeModerated(message, context);
-		if (member && !member.moderatable) throw context.args.t(LanguageKeys.Commands.Moderation.GuildBansEmpty);
+		if (member && !member.moderatable) throw context.args.t(LanguageKeys.Commands.Moderation.Timeout.NotModeratable);
 		return member;
 	}
 }

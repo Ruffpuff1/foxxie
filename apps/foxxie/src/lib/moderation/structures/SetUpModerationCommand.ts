@@ -50,7 +50,7 @@ export abstract class SetUpModerationCommand<Type extends RoleTypeVariation, Val
 
 		// If there
 		if (!(await isAdmin(message.member))) {
-			this.error('commands/moderation:restrictLowLevel');
+			this.error(LanguageKeys.Moderation.RestrictLowLevel);
 		}
 
 		const t = getT(settings.language);

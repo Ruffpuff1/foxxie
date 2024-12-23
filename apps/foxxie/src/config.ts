@@ -4,10 +4,11 @@ import { I18nextFormatter, InternationalizationOptions } from '@sapphire/plugin-
 import { cast } from '@sapphire/utilities';
 import { envParseArray, envParseInteger, envParseString, setup } from '@skyra/env-utilities';
 import { getHandler } from '#languages';
+import { SettingsKeys } from '#lib/database';
 import { readSettings } from '#lib/database/settings/functions';
 import { LanguageKeys, SupportedLanguages } from '#lib/i18n';
 import { CustomGet, EnvKeys } from '#lib/types';
-import { Emojis, emojis, LanguageFormatters, rootFolder, Urls } from '#utils/constants';
+import { BotIds, Emojis, emojis, LanguageFormatters, rootFolder, Urls } from '#utils/constants';
 import { FoxxiePaginatedMessageEmbedFields } from '#utils/external/FoxxiePaginatedMessageEmbedFields';
 import {
 	ActivitiesOptions,
@@ -61,7 +62,7 @@ PaginatedMessage.defaultActions = defaultPaginationOptions;
 
 export const clientOwners = envParseArray('CLIENT_OWNERS');
 export const webhookError = parseWebhookError();
-export const timezone = envParseString('TIMEZONE');
+export const timezone = envParseString(EnvKeys.Timezone);
 
 export function parsePresenceActivity(): ActivitiesOptions[] {
 	const { CLIENT_PRESENCE_NAME } = process.env;
@@ -92,6 +93,7 @@ function parseInternationalizationDefaultVariables() {
 		CLIENT_ID: process.env.CLIENT_ID!,
 		ERROR: Emojis.Error,
 		LOADING: Emojis.Loading,
+		MUSIC: Emojis.Music,
 		SUCCESS: Emojis.Success,
 		SUPPORT: Urls.Support,
 		TCS: Urls.TheCornerStore,
@@ -318,7 +320,7 @@ function parseI18nOptions(): InternationalizationOptions {
 		defaultNS: 'globals',
 		fetchLanguage: async ({ guild }) => {
 			if (!guild) return SupportedLanguages.EnglishUnitedStates;
-			return (await readSettings(guild)).language;
+			return readSettings(guild, SettingsKeys.Language);
 		},
 		formatters: parseInternationalizationFormatters(),
 		i18next: (_: string[], languages: string[]) => ({
@@ -344,6 +346,21 @@ function parseI18nOptions(): InternationalizationOptions {
 
 export const clientOptions: ClientOptions = {
 	allowedMentions: { parse: ['users'] },
+	audio: {
+		hosts: {
+			rest: `http://${envParseString('LAVALINK_URL')}`,
+			ws: {
+				options: {
+					resumeKey: 'FOXXIE_RESUME_KEY',
+					resumeTimeout: 120
+				},
+				url: `ws://${envParseString('LAVALINK_URL')}`
+			}
+		},
+		password: envParseString('LAVALINK_PASSWORD'),
+		shardCount: 0,
+		userID: envParseString(EnvKeys.ClientId)
+	},
 	caseInsensitiveCommands: true,
 	caseInsensitivePrefixes: true,
 	defaultPrefix: envParseString(EnvKeys.ClientPrefix),
@@ -367,7 +384,7 @@ export const clientOptions: ClientOptions = {
 	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 	presence: {
 		activities: parsePresenceActivity(),
-		status: process.env.NODE_ENV === 'development' ? PresenceUpdateStatus.Invisible : PresenceUpdateStatus.Idle
+		status: envParseString(EnvKeys.ClientId) === BotIds.Foxxie ? PresenceUpdateStatus.Idle : PresenceUpdateStatus.Invisible
 	},
 	regexPrefix: parseRegexPrefix(),
 	shards: 'auto'

@@ -8,7 +8,8 @@ import { Ctor, isNullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FoxxieSubcommand } from '#lib/structures';
-import { GuildMessage, TypedT } from '#lib/types';
+import { GuildMessage, PermissionLevels, TypedT } from '#lib/types';
+import { getAudio, sendLocalizedMessage } from '#utils/functions';
 import {
 	ChatInputApplicationCommandData,
 	ChatInputCommandInteraction,
@@ -50,6 +51,69 @@ export const RequiresLastFMUsername = (
 			throw new UserError({ identifier: thrownError, ...userErrorOptions });
 		}
 	);
+};
+
+export const RequiresStarboardEntries = (
+	thrownError: string = 'preconditions:starboardNoEntries',
+	userErrorOptions?: Omit<UserError.Options, 'identifier'>
+): MethodDecorator => {
+	return createFunctionPrecondition(
+		async (message: GuildMessage) => {
+			const entity = await container.prisma.starboard.findFirst({ where: { guildId: message.guild.id } });
+			if (!entity) return false;
+			return true;
+		},
+		() => {
+			throw new UserError({ identifier: thrownError, ...userErrorOptions });
+		}
+	);
+};
+
+export const RequiresUserInVoiceChannel = (): MethodDecorator => {
+	return createFunctionPrecondition(
+		(message: GuildMessage) => message.member.voice.channelId !== null,
+		(message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.MusicUserVoiceChannel)
+	);
+};
+
+export function RequireQueueNotEmpty(): MethodDecorator {
+	return createFunctionPrecondition(
+		(message: GuildMessage) => getAudio(message.guild).canStart(),
+		(message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.MusicQueueNotEmpty)
+	);
+}
+
+export const RequiresMemberPermissions = (...permissionsResolveable: PermissionResolvable[]): MethodDecorator => {
+	const resolved = new PermissionsBitField(permissionsResolveable);
+	const resolvedIncludesServerPermissions = Boolean(resolved.bitfield & DMAvailableUserPermissions.bitfield);
+	return createFunctionPrecondition(async (context: ChatInputCommandInteraction | GuildMessage) => {
+		const { channel } = context;
+
+		if (resolvedIncludesServerPermissions && isDMChannel(channel)) {
+			throw new UserError({
+				identifier: DecoratorIdentifiers.RequiresUserPermissionsGuildOnly,
+				message: 'Sorry, but that command can only be used in a server because you do not have sufficient permissions in DMs'
+			});
+		}
+
+		const member = await resolveToNull(context.guild!.members.fetch(context.member!.user.id));
+
+		if (isGuildBasedChannel(channel) && !isNullish(member)) {
+			const missingPermissions = channel.permissionsFor(member).missing(resolved);
+			if (missingPermissions.length) {
+				throw new UserError({
+					context: {
+						count: missingPermissions.length,
+						missing: missingPermissions
+					},
+					identifier: DecoratorIdentifiers.RequiresUserPermissionsMissingPermissions /* RequiresUserPermissionsMissingPermissions */,
+					message: `Sorry, but you are not allowed to do that. You are missing the permissions: ${missingPermissions}`
+				});
+			}
+		}
+
+		return true;
+	});
 };
 
 const MappedSubcommands = new Map<string, SubcommandMappingArray>();
@@ -229,105 +293,6 @@ export const GuildOnlyCommand = () => {
 	});
 };
 
-export const RequiresMemberPermissions = (...permissionsResolveable: PermissionResolvable[]): MethodDecorator => {
-	const resolved = new PermissionsBitField(permissionsResolveable);
-	const resolvedIncludesServerPermissions = Boolean(resolved.bitfield & DMAvailableUserPermissions.bitfield);
-	return createFunctionPrecondition(async (context: ChatInputCommandInteraction | GuildMessage) => {
-		const { channel } = context;
-
-		if (resolvedIncludesServerPermissions && isDMChannel(channel)) {
-			throw new UserError({
-				identifier: DecoratorIdentifiers.RequiresUserPermissionsGuildOnly,
-				message: 'Sorry, but that command can only be used in a server because you do not have sufficient permissions in DMs'
-			});
-		}
-
-		const member = await resolveToNull(context.guild!.members.fetch(context.member!.user.id));
-
-		if (isGuildBasedChannel(channel) && !isNullish(member)) {
-			const missingPermissions = channel.permissionsFor(member).missing(resolved);
-			if (missingPermissions.length) {
-				throw new UserError({
-					context: {
-						count: missingPermissions.length,
-						missing: missingPermissions
-					},
-					identifier: DecoratorIdentifiers.RequiresUserPermissionsMissingPermissions /* RequiresUserPermissionsMissingPermissions */,
-					message: `Sorry, but you are not allowed to do that. You are missing the permissions: ${missingPermissions}`
-				});
-			}
-		}
-
-		return true;
-	});
-};
-
-export function RegisterChatInputSubcommandMethod(
-	name: string,
-	chatInputRun: SubcommandMappingMethod['chatInputRun'],
-	options: Omit<SubcommandMappingMethod, 'chatInputRun'> = { name }
-) {
-	return createClassDecorator((command: Ctor) => {
-		return createProxy(command, {
-			construct: (ctor, [context, base = {}]) => {
-				const subcommands = (base.subcommands || []) as SubcommandMappingArray;
-
-				const entry = subcommands.findIndex((s) => s.name === name);
-				const returned = entry === -1 ? [options] : subcommands.splice(entry, 1);
-
-				return new ctor(context, {
-					...base,
-					subcommands: [...subcommands, { ...returned[0], chatInputRun }]
-				} as FoxxieSubcommand.Options);
-			}
-		});
-	});
-}
-
-export function RegisterMessageSubcommandMethod(
-	name: string,
-	messageRun: SubcommandMappingMethod['messageRun'],
-	options: { aliases?: string[] } & Partial<Omit<SubcommandMappingMethod, 'messageRun'>> = {}
-) {
-	const resolvedOptions = { default: options.default, name };
-	const aliases = options.aliases || [];
-
-	return createClassDecorator((command: Ctor) => {
-		return createProxy(command, {
-			construct: (ctor, [context, base = {}]) => {
-				const subcommands = (base.subcommands || []) as SubcommandMappingArray;
-
-				const entry = subcommands.findIndex((s) => s.name === name);
-				const returned = entry === -1 ? [resolvedOptions] : subcommands.splice(entry, 1);
-
-				const mappedAliases: SubcommandMappingArray = [];
-				if (aliases.length) for (const alias of aliases) mappedAliases.push({ messageRun, name: alias });
-
-				return new ctor(context, {
-					...base,
-					subcommands: [...subcommands, ...mappedAliases, { ...returned[0], default: resolvedOptions.default, messageRun }]
-				} as FoxxieSubcommand.Options);
-			}
-		});
-	});
-}
-
-export const RequiresStarboardEntries = (
-	thrownError: string = 'preconditions:starboardNoEntries',
-	userErrorOptions?: Omit<UserError.Options, 'identifier'>
-): MethodDecorator => {
-	return createFunctionPrecondition(
-		async (message: GuildMessage) => {
-			const entity = await container.prisma.starboard.findFirst({ where: { guildId: message.guild.id } });
-			if (!entity) return false;
-			return true;
-		},
-		() => {
-			throw new UserError({ identifier: thrownError, ...userErrorOptions });
-		}
-	);
-};
-
 export class FoxxieSubcommandBuilder {
 	public aliases: string[] = [];
 
@@ -336,6 +301,8 @@ export class FoxxieSubcommandBuilder {
 	public detailedDescription: TypedT<LanguageHelpDisplayOptions> | undefined;
 
 	public flags: boolean | string[] | undefined;
+
+	public permissionLevel: PermissionLevels | undefined;
 
 	public requiredClientPermissions: PermissionResolvable | undefined;
 
@@ -359,6 +326,11 @@ export class FoxxieSubcommandBuilder {
 		return this;
 	}
 
+	public setPermissionLevel(permissionLevel: PermissionLevels) {
+		this.permissionLevel = permissionLevel;
+		return this;
+	}
+
 	public setRequiredClientPermissions(permissions: PermissionResolvable) {
 		this.requiredClientPermissions = permissions;
 		return this;
@@ -370,6 +342,7 @@ export class FoxxieSubcommandBuilder {
 			description: this.description,
 			detailedDescription: this.detailedDescription,
 			flags: this.flags,
+			permissionLevel: this.permissionLevel,
 			requiredClientPermissions: this.requiredClientPermissions
 		};
 	}
@@ -409,6 +382,28 @@ export function RegisterChatInputCommand(
 	});
 }
 
+export function RegisterChatInputSubcommandMethod(
+	name: string,
+	chatInputRun: SubcommandMappingMethod['chatInputRun'],
+	options: Omit<SubcommandMappingMethod, 'chatInputRun'> = { name }
+) {
+	return createClassDecorator((command: Ctor) => {
+		return createProxy(command, {
+			construct: (ctor, [context, base = {}]) => {
+				const subcommands = (base.subcommands || []) as SubcommandMappingArray;
+
+				const entry = subcommands.findIndex((s) => s.name === name);
+				const returned = entry === -1 ? [options] : subcommands.splice(entry, 1);
+
+				return new ctor(context, {
+					...base,
+					subcommands: [...subcommands, { ...returned[0], chatInputRun }]
+				} as FoxxieSubcommand.Options);
+			}
+		});
+	});
+}
+
 export function RegisterFoxxieCommand() {
 	return createClassDecorator((command: Ctor) => {
 		return createProxy(command, {
@@ -416,6 +411,34 @@ export function RegisterFoxxieCommand() {
 				return new ctor(context, {
 					...base
 				});
+			}
+		});
+	});
+}
+
+export function RegisterMessageSubcommandMethod(
+	name: string,
+	messageRun: SubcommandMappingMethod['messageRun'],
+	options: { aliases?: string[] } & Partial<Omit<SubcommandMappingMethod, 'messageRun'>> = {}
+) {
+	const resolvedOptions = { default: options.default, name };
+	const aliases = options.aliases || [];
+
+	return createClassDecorator((command: Ctor) => {
+		return createProxy(command, {
+			construct: (ctor, [context, base = {}]) => {
+				const subcommands = (base.subcommands || []) as SubcommandMappingArray;
+
+				const entry = subcommands.findIndex((s) => s.name === name);
+				const returned = entry === -1 ? [resolvedOptions] : subcommands.splice(entry, 1);
+
+				const mappedAliases: SubcommandMappingArray = [];
+				if (aliases.length) for (const alias of aliases) mappedAliases.push({ messageRun, name: alias });
+
+				return new ctor(context, {
+					...base,
+					subcommands: [...subcommands, ...mappedAliases, { ...returned[0], default: resolvedOptions.default, messageRun }]
+				} as FoxxieSubcommand.Options);
 			}
 		});
 	});

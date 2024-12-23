@@ -29,7 +29,7 @@ export class UserTask extends Task<Schedules.Reminder> {
 		if (data.json) {
 			embeds.push(new EmbedBuilder(data.json));
 		} else {
-			content = t(LanguageKeys.Tasks[dm ? 'ReminderToDM' : 'ReminderToChannelWithUser'], {
+			content = t(dm ? LanguageKeys.Tasks.ReminderToDM : LanguageKeys.Tasks.ReminderToChannelWithUser, {
 				text: data.text,
 				time: data.timeago,
 				user: userMention(data.userId)

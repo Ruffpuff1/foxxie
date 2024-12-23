@@ -1,6 +1,6 @@
 import type { Snowflake } from 'discord.js';
 
-import { Highlight } from '#lib/database';
+import { Highlight } from './worker.js';
 
 export const enum HighlightTypeEnum {
 	Word,
@@ -57,7 +57,7 @@ export interface OutgoingWordFilterPayload extends IdPayload {
 export interface RunHighlightPayload<T extends HighlightTypeEnum> extends IdPayload {
 	authorId: Snowflake;
 	content: string;
-	highlights: Highlight[];
+	highlights: Highlight<HighlightTypeEnum>[];
 	highlightType: T;
 	type: IncomingType.RunHighlightPayload;
 }

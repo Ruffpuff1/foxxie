@@ -3,6 +3,7 @@ export * from '#lib/database/settings/configuration';
 export * from '#lib/database/settings/constants';
 export * from '#lib/database/settings/context/index';
 export * from '#lib/database/settings/functions';
+export * as SettingsKeys from '#lib/database/settings/keys/index';
 export * from '#lib/database/settings/schema/index';
 export * from '#lib/database/settings/structures/index';
 export * from '#lib/database/settings/types';

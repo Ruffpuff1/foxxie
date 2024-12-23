@@ -1,8 +1,7 @@
 import { UserLastFM } from '@prisma/client';
-import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
+import { RequiresClientPermissions } from '@sapphire/decorators';
 import { Args, container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { applyLocalizedBuilder } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
 import { PlayBuilder, UserBuilder } from '#apis/last.fm/builders/index';
 import { LastFmDataSourceFactory } from '#apis/last.fm/factories/DataSourceFactory';
@@ -18,52 +17,24 @@ import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage, PermissionLevels } from '#lib/types';
 import { minutes } from '#utils/common';
 import { Emojis } from '#utils/constants';
-import {
-	RegisterChatInputCommand,
-	RegisterChatInputSubcommandMethod,
-	RegisterMessageSubcommandMethod,
-	RequiresLastFMUsername,
-	RequiresMemberPermissions
-} from '#utils/decorators';
+import { GuildOnlyCommand, MessageSubcommand, RegisterSubcommand, RequiresLastFMUsername, RequiresMemberPermissions } from '#utils/decorators';
 import { sendLoadingMessage, sendMessage } from '#utils/functions';
 import { resolveLastFMUser, resolveYouOrFoxxie } from '#utils/resolvers';
 import { lastFmUserUrl } from '#utils/transformers';
 import { resolveClientColor } from '#utils/util';
 import { blue } from 'colorette';
-import { EmbedBuilder, inlineCode, PermissionFlagsBits, SlashCommandBuilder, User } from 'discord.js';
+import { EmbedBuilder, inlineCode, PermissionFlagsBits, User } from 'discord.js';
 import _ from 'lodash';
 
-@ApplyOptions<FoxxieSubcommand.Options>(LastFMCommand.Options)
-@RegisterChatInputCommand(LastFMCommand.ChatInputBuilder, LastFMCommand.IdHints)
-@RegisterChatInputSubcommandMethod(LastFMCommand.SubcommandKeys.FM, LastFMCommand.ChatInputFM)
-@RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.Update, LastFMCommand.MessageRunUpdate, { aliases: ['u'] })
-@RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.Profile, LastFMCommand.MessageRunProfile, { aliases: ['user', 'userinfo', 'stats'] })
-@RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.Pace, LastFMCommand.MessageRunPace, { aliases: ['pc'] })
-@RegisterMessageSubcommandMethod(LastFMCommand.SubcommandKeys.FM, LastFMCommand.MessageRunFM, {
-	aliases: ['currenttrack', 'ct', 'np', 'nowplaying'],
-	default: true
-})
+@GuildOnlyCommand()
+@RegisterSubcommand((command) =>
+	command
+		.setAliases('fm', 'lfm')
+		.setDescription(LastFMCommand.Language.Description)
+		.setDetailedDescription(LastFMCommand.Language.DetailedDescription)
+		.setPermissionLevel(PermissionLevels.BotOwner)
+)
 export class LastFMCommand extends FoxxieSubcommand {
-	public static ChatInputBuilder(builder: SlashCommandBuilder) {
-		return applyLocalizedBuilder(builder, LastFMCommand.Language.Name, LastFMCommand.Language.Description) //
-			.addSubcommand((command) =>
-				applyLocalizedBuilder(command, LastFMCommand.Language.FM)
-					.addStringOption((option) => applyLocalizedBuilder(option, LastFMCommand.Language.OptionsUserFM))
-					.addBooleanOption((option) => applyLocalizedBuilder(option, LastFMCommand.Language.OptionsShow))
-			);
-	}
-
-	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
-	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
-	public static async ChatInputFM(interaction: FoxxieSubcommand.Interaction) {
-		const hidden = (await interaction.options.getBoolean('show')) ?? true;
-		await sendLoadingMessage(interaction, hidden);
-		const contextUser = await resolveLastFMUser(interaction, interaction.options.getString('user'));
-
-		const response = await PlayBuilder.NowPlaying(new ContextModel(interaction, contextUser));
-		await interaction.editReply(response);
-	}
-
 	public static GetGoalAmount(option: null | string, currentPlaycount: number) {
 		let goalAmount = 100;
 		let ownGoalSet = false;
@@ -103,6 +74,7 @@ export class LastFMCommand extends FoxxieSubcommand {
 		return goalAmount;
 	}
 
+	@MessageSubcommand(LastFMCommand.SubcommandKeys.FM, true, ['currenttrack', 'ct', 'np', 'nowplaying'])
 	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
 	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
 	public static async MessageRunFM(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
@@ -113,6 +85,7 @@ export class LastFMCommand extends FoxxieSubcommand {
 		await sendMessage(message, response);
 	}
 
+	@MessageSubcommand(LastFMCommand.SubcommandKeys.Pace, false, ['pc'])
 	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
 	@RequiresLastFMUsername(LanguageKeys.Preconditions.LastFMLogin)
 	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
@@ -134,6 +107,7 @@ export class LastFMCommand extends FoxxieSubcommand {
 		await sendMessage(message, response);
 	}
 
+	@MessageSubcommand(LastFMCommand.SubcommandKeys.Profile, false, ['user', 'userinfo', 'stats'])
 	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
 	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
 	public static async MessageRunProfile(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
@@ -144,6 +118,7 @@ export class LastFMCommand extends FoxxieSubcommand {
 		await sendMessage(message, response);
 	}
 
+	@MessageSubcommand(LastFMCommand.SubcommandKeys.Update, false, ['u'])
 	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
 	@RequiresLastFMUsername(LanguageKeys.Preconditions.LastFMLogin)
 	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
@@ -333,18 +308,7 @@ export class LastFMCommand extends FoxxieSubcommand {
 		return bits;
 	}
 
-	public static IdHints = [
-		'1318918607337558097' // nightly
-	];
-
 	public static Language = LanguageKeys.Commands.Websearch.LastFm;
-
-	public static Options: FoxxieSubcommand.Options = {
-		aliases: ['fm', 'lfm'],
-		description: LastFMCommand.Language.Description,
-		detailedDescription: LastFMCommand.Language.DetailedDescription,
-		permissionLevel: PermissionLevels.BotOwner
-	};
 
 	public static SubcommandKeys = {
 		FM: 'fm',

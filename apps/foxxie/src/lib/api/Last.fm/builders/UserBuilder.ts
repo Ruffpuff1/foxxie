@@ -5,9 +5,7 @@ import { ArtistsService, PlayService, UserService } from '#apis/last.fm/services
 import { DiscogsService } from '#apis/last.fm/services/third-party/DiscogsService';
 import { DataSource } from '#apis/last.fm/types/enums/DataSource';
 import { LastFmDataSourceFactory } from '#lib/api/Last.fm/factories/DataSourceFactory';
-import { NumberExtensions } from '#lib/Container/Utility/Extensions/NumberExtensions';
-import { StringFormattersService } from '#lib/Container/Utility/Formatters/StringExtensions';
-import { days, first, seconds } from '#utils/common';
+import { days, first, getDiscogsFormatEmote, seconds, toDayOfTheWeek } from '#utils/common';
 import { Emojis } from '#utils/constants';
 import { lastFmUserUrl } from '#utils/transformers';
 import { resolveClientColor } from '#utils/util';
@@ -127,7 +125,7 @@ export class UserBuilder {
 
 		const topDay = _.maxBy(_.toArray(_.groupBy(allPlays, (g) => g.timePlayed.getDay())), (o) => o.length);
 		if (topDay) {
-			stats.push(`Most active day of the week is ${bold(NumberExtensions.ToDayOfTheWeek(first(topDay).timePlayed.getDay()))}`);
+			stats.push(`Most active day of the week is ${bold(toDayOfTheWeek(first(topDay).timePlayed.getDay()))}`);
 		}
 
 		if (stats.length) embed.addFields({ name: 'Stats', value: stats.join('\n') });
@@ -142,9 +140,7 @@ export class UserBuilder {
 				const collectionTypes = _.groupBy(discogsCollection, (g) => g.release.format);
 
 				for (const [type, entries] of Object.entries(collectionTypes).sort((a, b) => b[1].length - a[1].length)) {
-					collection.push(
-						`${new StringFormattersService().getDiscogsFormatEmote(type)} ${bold(type)} - ${italic(entries.length.toLocaleString())} items`
-					);
+					collection.push(`${getDiscogsFormatEmote(type)} ${bold(type)} - ${italic(entries.length.toLocaleString())} items`);
 				}
 
 				discogs = true;

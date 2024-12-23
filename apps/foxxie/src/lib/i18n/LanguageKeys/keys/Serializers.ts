@@ -1,8 +1,7 @@
-import { FT, T } from '#lib/types';
+import { FT } from '#lib/types';
 
 export const InvalidCommand = FT<{ name: string; param: string }>('serializers:invalidCommand');
 export const InvalidFloat = FT<{ name: string; value: number }>('serializers:invalidFloat');
-export const InvalidGuild = FT<{ name: string }>('serializers:invalidGuild');
 export const InvalidInt = FT<{ name: string; value: number }>('serializers:invalidInt');
 export const InvalidRole = FT<{ name: string }>('serializers:invalidRole');
 export const MinMaxBothExclusive = FT<{
@@ -22,5 +21,3 @@ export const MinMaxMaxInclusive = FT<{ max: number; name: string }>('serializers
 export const MinMaxMinExclusive = FT<{ min: number; name: string }>('serializers:minMaxMinExclusive');
 export const MinMaxMinInclusive = FT<{ min: number; name: string }>('serializers:minMaxMinInclusive');
 export const PermissionNodeDuplicatedCommand = FT<{ command: string }, string>('serializers:permissionNodeDuplicatedCommand');
-export const UnknownChannel = T('serializers:unknownChannel');
-export const UnknownRole = T('serializers:unknownRole');

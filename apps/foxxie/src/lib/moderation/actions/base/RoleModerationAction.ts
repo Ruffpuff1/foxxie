@@ -78,8 +78,7 @@ export abstract class RoleModerationAction<ContextType = never, Type extends Typ
 	}
 
 	public override async isActive(guild: Guild, userId: Snowflake) {
-		const settings = await readSettings(guild);
-		const roleId = settings[this.roleKey];
+		const roleId = await readSettings(guild, this.roleKey);
 		if (isNullish(roleId)) return false;
 
 		const member = await resolveOnErrorCodes(guild.members.fetch(userId), RESTJSONErrorCodes.UnknownMember);

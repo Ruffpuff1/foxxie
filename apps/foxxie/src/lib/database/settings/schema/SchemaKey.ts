@@ -99,7 +99,7 @@ export class SchemaKey<K extends GuildDataKey = GuildDataKey> implements ISchema
 		}
 
 		const value = settings[this.property];
-		return isNullish(value) ? t(LanguageKeys.Commands.Admin.ConfSettingNotSet) : serializer.stringify(value, context);
+		return isNullish(value) ? t(LanguageKeys.Commands.Configuration.Conf.SettingNotSet) : serializer.stringify(value, context);
 	}
 
 	public getContext(settings: ReadonlyGuildData, language: FTFunction): Serializer.UpdateContext {

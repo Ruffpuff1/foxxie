@@ -58,7 +58,7 @@ export abstract class FoxxieCommand extends Command<FoxxieCommand.Args, FoxxieCo
 	}
 
 	public addPermissionLevels(options: FoxxieCommand.Options) {
-		switch (options.permissionLevel) {
+		switch (options.permissionLevel!) {
 			case PermissionLevels.Administrator:
 				this.preconditions.append('Administrator');
 				break;

@@ -23,6 +23,14 @@ export class LastFmDataSourceFactory {
 		this.#playDataSourceRepository = new PlayDataSourceRepository();
 	}
 
+	public async getAuthSession(token: string) {
+		return this.#lastfmRepository.getAuthSession(token);
+	}
+
+	public async getAuthToken() {
+		return this.#lastfmRepository.getAuthToken();
+	}
+
 	public async getImportUserForLastFmUserName(lastFmUserName: string) {
 		if (!lastFmUserName) return null;
 
@@ -103,6 +111,18 @@ export class LastFmDataSourceFactory {
 		});
 	}
 
+	public async getTrackInfo(trackName: string, artistName: string, username: null | string = null) {
+		const track = await this.#lastfmRepository.getTrackInfo(trackName, artistName, username);
+
+		// const importUser = await this.getImportUserForLastFmUserName(username!);
+
+		// if (importUser && track.success && track.content) {
+		// 	track.content.userPlaycount = await this.#playDataSourceRepository.getTra
+		// }
+
+		return track;
+	}
+
 	public async getUser(usernameLastFM: string): Promise<null | UserLastFM> {
 		const lastFmCacheKey = userLastFmCacheKey(usernameLastFM);
 
@@ -123,5 +143,13 @@ export class LastFmDataSourceFactory {
 		}
 
 		return user;
+	}
+
+	public async scrobble(sessionKey: string, artistName: string, trackName: string, albumName: null | string = null, timeStamp: Date | null = null) {
+		return this.#lastfmRepository.scrobble(sessionKey, artistName, trackName, albumName, timeStamp);
+	}
+
+	public async searchTrack(trackName: string, artistName: null | string = null) {
+		return this.#lastfmRepository.searchTrack(trackName, artistName);
 	}
 }

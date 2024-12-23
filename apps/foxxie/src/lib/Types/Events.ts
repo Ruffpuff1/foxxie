@@ -16,6 +16,10 @@ export const enum FoxxieEvents {
 	GuildMemberUpdateRolesModeration = 'guildMemberUpdateRolesModeration',
 	GuildMemberUpdateRolesNotify = 'guildMemberUpdateRolesNotify',
 	GuildMemberUpdateRolesStickyRoles = 'guildMemberUpdateRolesStickyRoles',
+	/**
+	 * Listener that attempts to scrobble the currently playing song for a logged in Last.Fm member.
+	 */
+	LastFMScrobbleAudioTrackForMember = 'lastFMScrobbleAudioTrackForMember',
 	ListenerError = 'listenerError',
 	MentionPrefixOnly = 'mentionPrefixOnly',
 	MessageCommandDenied = 'messageCommandDenied',
@@ -31,6 +35,14 @@ export const enum FoxxieEvents {
 	MessageSubcommandNoMatch = 'messageSubcommandNoMatch',
 	ModerationEntryAdd = 'moderationEntryAdd',
 	ModerationEntryEdit = 'moderationEntryEdit',
+	MusicAddNotify = 'musicAddNotify',
+	MusicFinish = 'musicFinish',
+	MusicFinishNotify = 'musicFinishNotify',
+	MusicSongPauseNotify = 'musicSongPauseNotify',
+	MusicSongPlayNotify = 'musicSongPlayNotify',
+	MusicSongReplayNotify = 'musicSongReplayNotify',
+	MusicSongResumeNotify = 'musicSongResumeNotify',
+	MusicSongSetReplayNotify = 'musicSongSetReplayNotify',
 	PresenceUpdate = 'presenceUpdate',
 	RawGuildMessageDelete = 'rawGuildMessageDelete',
 	RawMemberRemove = 'rawMemberRemove',
@@ -47,5 +59,6 @@ export const enum FoxxieEvents {
 	TaskError = 'taskError',
 	UnknownMessageCommand = 'unknownMessageCommand',
 	UnknownMessageCommandName = 'unknownMessageCommandName',
-	UserMessage = 'userMessage'
+	UserMessage = 'userMessage',
+	VoiceStateUpdate = 'voiceStateUpdate'
 }

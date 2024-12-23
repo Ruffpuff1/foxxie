@@ -181,14 +181,14 @@ export class PermissionNodeManager {
 
 		const nodeIndex = nodes.findIndex((n) => n.id === target.id);
 		if (nodeIndex === -1) {
-			throw new UserError({ identifier: LanguageKeys.Commands.Configuration.PermissionNodesNodeNotExists });
+			throw new UserError({ identifier: 'commands/configuration/permission:nodeNotExists' });
 		}
 
 		const property = this.getName(action);
 		const previous = nodes[nodeIndex];
 		const commandIndex = previous[property].indexOf(command);
 		if (commandIndex === -1) {
-			throw new UserError({ identifier: LanguageKeys.Commands.Configuration.PermissionNodesCommandNotExists });
+			throw new UserError({ identifier: 'commands/configuration/permission:commandNotExists' });
 		}
 
 		const node: PermissionsNode = {
@@ -207,7 +207,7 @@ export class PermissionNodeManager {
 
 		const nodeIndex = nodes.findIndex((n) => n.id === target.id);
 		if (nodeIndex === -1) {
-			throw new UserError({ context: { target }, identifier: LanguageKeys.Commands.Configuration.PermissionNodesNodeNotExists });
+			throw new UserError({ context: { target }, identifier: 'commands/configuration/permission:nodeNotExists' });
 		}
 
 		return nodes.toSpliced(nodeIndex, 1);

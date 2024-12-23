@@ -1,9 +1,8 @@
-export * as Admin from '#lib/i18n/LanguageKeys/keys/commands/Admin';
-export * as Configuration from '#lib/i18n/LanguageKeys/keys/commands/Configuration';
-export * as Fun from '#lib/i18n/LanguageKeys/keys/commands/Fun';
-export * as General from '#lib/i18n/LanguageKeys/keys/commands/General';
+export * as Admin from '#lib/i18n/LanguageKeys/keys/commands/admin/index';
+export * as Audio from '#lib/i18n/LanguageKeys/keys/commands/audio/index';
+export * as Configuration from '#lib/i18n/LanguageKeys/keys/commands/configuration/index';
+export * as General from '#lib/i18n/LanguageKeys/keys/commands/general/index';
 export * as Misc from '#lib/i18n/LanguageKeys/keys/commands/Misc';
 export * as Moderation from '#lib/i18n/LanguageKeys/keys/commands/moderation/index';
-export * as Tools from '#lib/i18n/LanguageKeys/keys/commands/Tools';
-export * as Utility from '#lib/i18n/LanguageKeys/keys/commands/utility/index';
-export * as Websearch from '#lib/i18n/LanguageKeys/keys/commands/Websearch';
+export * as Util from '#lib/i18n/LanguageKeys/keys/commands/util/index';
+export * as Websearch from '#lib/i18n/LanguageKeys/keys/commands/websearch/index';

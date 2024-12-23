@@ -1,4 +1,6 @@
 import { API } from '@discordjs/core/http-only';
+import { NodeOptions, TrackInfo } from '@foxxiebot/audio';
+import { GuildBasedChannelTypes } from '@sapphire/discord.js-utilities';
 import { ApiService } from '#lib/api/ApiService';
 import { SettingsService } from '#lib/Container/Services/SettingsService';
 import { UtilityService } from '#lib/Container/Utility/UtilityService';
@@ -8,12 +10,14 @@ import { Starboard } from '#lib/database/Models/starboard';
 import { SerializerStore } from '#lib/database/settings/structures/SerializerStore';
 import { PermissionsNode, ReadonlyGuildData, StickyRole, Tag } from '#lib/database/settings/types';
 import { ModerationEntry } from '#lib/moderation';
+import { FoxxieQueue } from '#lib/modules/audio/Queues/FoxxieQueue';
 import { ScheduleManager, TaskStore } from '#lib/schedule';
 import { PrismaDatabase } from '#lib/Setup/prisma';
 import { FoxxieCommand } from '#lib/structures';
 import { InviteManager } from '#lib/Structures/managers/InviteManager';
 import { RedisManager } from '#lib/Structures/managers/RedisManager';
 import { FoxxieEvents, GuildMessage, LanguageString, TypedFT, TypedT } from '#lib/types';
+import { NP, Queue, Song } from '#modules/audio';
 import { Schedules } from '#utils/constants';
 import { GuildMemberFetchQueue } from '#utils/external/GuildMemberFetchQueue';
 import { LLRCData, LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
@@ -32,6 +36,7 @@ declare global {
 
 declare module 'discord.js' {
 	interface Client {
+		audio: FoxxieQueue | null;
 		development: boolean;
 		developmentRecoveryMode: boolean;
 		enabledProdOnlyEvent(): boolean;
@@ -50,17 +55,30 @@ declare module 'discord.js' {
 		[FoxxieEvents.GuildMemberUpdateRolesModeration]: [member: GuildMember, added: Role[], removed: Role[]];
 		[FoxxieEvents.GuildMemberUpdateRolesNotify]: [member: GuildMember, added: Role[], removed: Role[]];
 		[FoxxieEvents.GuildMemberUpdateRolesStickyRoles]: [member: GuildMember, added: Role[], removed: Role[]];
+		[FoxxieEvents.LastFMScrobbleAudioTrackForMember]: [member: GuildMember, trackInfo: TrackInfo];
 		[FoxxieEvents.MessageCommandLogging]: [message: GuildMessage, command: FoxxieCommand];
 		[FoxxieEvents.MessageCreateBot]: [message: GuildMessage];
 		[FoxxieEvents.MessageCreateBotRealmBot]: [message: GuildMessage];
 		[FoxxieEvents.MessageCreateStats]: [guildId: Snowflake, member: GuildMember];
 		[FoxxieEvents.ModerationEntryAdd]: [entry: Readonly<ModerationEntry>];
 		[FoxxieEvents.ModerationEntryEdit]: [old: Readonly<ModerationEntry>, entry: Readonly<ModerationEntry>];
+		[FoxxieEvents.MusicAddNotify]: [message: GuildMessage, tracks: Song[]];
+		[FoxxieEvents.MusicFinish]: [queue: Queue];
+		[FoxxieEvents.MusicFinishNotify]: [channel: GuildBasedChannelTypes];
+		[FoxxieEvents.MusicSongPauseNotify]: [message: GuildMessage];
+		[FoxxieEvents.MusicSongPlayNotify]: [queue: Queue, NP];
+		[FoxxieEvents.MusicSongReplayNotify]: [queue: Queue, NP];
+		[FoxxieEvents.MusicSongResumeNotify]: [message: GuildMessage];
+		[FoxxieEvents.MusicSongSetReplayNotify]: [message: GuildMessage, mode: boolean];
 		[FoxxieEvents.RawGuildMessageDelete]: [message: GuildMessage | undefined, guild: Guild, channel: GuildTextBasedChannel];
 		[FoxxieEvents.RawReactionAdd]: [data: LLRCData, emoji: SerializedEmoji];
 		[FoxxieEvents.RawReactionRemove]: [channel: TextChannel, data: GatewayMessageReactionRemoveDispatch['d']];
 		[FoxxieEvents.SystemMessage]: [message: GuildMessage];
 		[FoxxieEvents.UserMessage]: [message: GuildMessage];
+	}
+
+	interface ClientOptions {
+		audio: NodeOptions;
 	}
 }
 

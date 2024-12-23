@@ -12,13 +12,19 @@ export async function resolveLastFMUser(context: ChatInputCommandInteraction | G
 
 	const result = await resolveUsername(parameter, context.guild!);
 	if (result.isOk()) {
-		const resolvedByDiscordUser = await container.prisma.userLastFM.findFirst({ where: { userid: result.unwrap().id } });
+		const resolvedByDiscordUser = await container.prisma.userLastFM.findFirst({
+			include: { discogs: true, discogsReleases: true },
+			where: { userid: result.unwrap().id }
+		});
 		if (resolvedByDiscordUser) return resolvedByDiscordUser;
 	}
 
 	const stringResult = resolveString(parameter);
 	if (stringResult.isOk()) {
-		const resolvedByString = await container.prisma.userLastFM.findFirst({ where: { usernameLastFM: stringResult.unwrap().toLowerCase() } });
+		const resolvedByString = await container.prisma.userLastFM.findFirst({
+			include: { discogs: true, discogsReleases: true },
+			where: { usernameLastFM: stringResult.unwrap().toLowerCase() }
+		});
 		if (resolvedByString) return resolvedByString;
 	}
 
@@ -30,6 +36,7 @@ export async function resolveYouOrFoxxie(context: ChatInputCommandInteraction | 
 	if (!userid) return resolveFoxxie();
 
 	const resolvedByDiscordUser = await container.prisma.userLastFM.findFirst({
+		include: { discogs: true, discogsReleases: true },
 		where: { userid }
 	});
 	if (resolvedByDiscordUser) return resolvedByDiscordUser;

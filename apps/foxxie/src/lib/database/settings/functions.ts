@@ -30,6 +30,13 @@ const transformers = {
 	selfmodReactionsHardActionDuration: maybeParseNumber
 } satisfies Record<PickByValue<ReadonlyGuildData, bigint | null>, typeof maybeParseNumber>;
 
+export interface SettingsCollectionCallback<T extends G, R> {
+	(entity: T): Promise<R> | R;
+}
+
+type G = ReadonlyGuildData;
+type K = keyof G;
+
 export class Transaction {
 	#changes = Object.create(null) as Partial<ReadonlyGuildData>;
 	#hasChanges = false;
@@ -111,10 +118,25 @@ export function deleteSettingsCached(guild: GuildResolvable) {
 	deleteSettingsContext(id);
 }
 
-export function readSettings(guild: GuildResolvable): Awaitable<ReadonlyGuildData> {
+export async function readSettings<T extends K>(guild: GuildResolvable, key: T): Promise<G[T]>;
+export async function readSettings<K1 extends K, K2 extends K>(guild: GuildResolvable, key: [K1, K2]): Promise<[G[K1], G[K2]]>;
+export async function readSettings<R>(guild: GuildResolvable, cb: SettingsCollectionCallback<G, R>): Promise<R>;
+export async function readSettings(guild: GuildResolvable): Promise<G>;
+export async function readSettings(guild: GuildResolvable, key?: any): Promise<G | unknown | unknown[]> {
 	const id = resolveGuildId(guild);
 
-	return cache.get(id) ?? processFetch(id);
+	const settings = cache.get(id) ?? (await processFetch(id));
+	if (!key) return settings;
+
+	if (Array.isArray(key)) {
+		return key.map((k: K) => settings[k]);
+	}
+
+	if (typeof key === 'function') {
+		return key(settings);
+	}
+
+	return key ? settings[key as K] : settings;
 }
 
 export function readSettingsCached(guild: GuildResolvable): null | ReadonlyGuildData {

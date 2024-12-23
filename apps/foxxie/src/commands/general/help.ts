@@ -2,9 +2,9 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { cast, isNullish, toTitleCase } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
-import { LanguageHelp, LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
+import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FoxxieArgs, FoxxieCommand } from '#lib/structures';
-import { FTFunction, GuildMessage, PermissionLevels } from '#lib/types';
+import { GuildMessage, PermissionLevels } from '#lib/types';
 import { clientOwners, defaultPaginationOptionsWithoutSelectMenu } from '#root/config';
 import { Urls } from '#utils/constants';
 import { sendLoadingMessage, sendMessage } from '#utils/functions';
@@ -13,40 +13,28 @@ import { bold, EmbedBuilder, hyperlink, inlineCode, italic, PermissionFlagsBits 
 
 @ApplyOptions<FoxxieCommand.Options>({
 	aliases: ['h', 'commands'],
-	description: LanguageKeys.Commands.General.HelpDescription,
+	description: LanguageKeys.Commands.General.Help.Description,
 	requiredClientPermissions: [PermissionFlagsBits.EmbedLinks],
-	requiredUserPermissions: [PermissionFlagsBits.EmbedLinks],
-	usage: LanguageKeys.Commands.General.HelpUsage
+	requiredUserPermissions: [PermissionFlagsBits.EmbedLinks]
 })
 export default class UserCommand extends FoxxieCommand {
 	public async messageRun(message: GuildMessage, args: FoxxieCommand.Args, ctx: FoxxieCommand.Context) {
 		const command = await args.pick('command').catch(() => null);
-		if (command) {
-			return this.#commandHelp(command, message, args, ctx.commandPrefix);
-		}
-
+		if (command) return this.#commandHelp(command, message, args, ctx.commandPrefix);
 		return this.#fullHelp(message, args);
 	}
 
 	async #buildCommandHelp(message: GuildMessage, args: FoxxieCommand.Args, command: FoxxieCommand, prefixUsed: string) {
-		const builderData = args.t(LanguageKeys.System.HelpTitles);
-
-		const builder = new LanguageHelp()
-			.setUsages(builderData.usages)
-			.setAliases(builderData.aliases)
-			.setExtendedHelp(builderData.extendedHelp)
-			.setExplainedUsage(builderData.explainedUsage)
-			.setExamples(builderData.examples)
-			.setPossibleFormats(builderData.possibleFormats)
-			.setReminder(builderData.reminders);
+		const builderData = args.t(LanguageKeys.Commands.General.Help.Titles);
 
 		const commandId = command.getGlobalCommandId();
 		const extendedHelpData = args.t(command.detailedDescription, { commandId }) as LanguageHelpDisplayOptions;
 		if (extendedHelpData.subcommands?.length) return this.#buildSubcommandHelp(message, args, command, prefixUsed, extendedHelpData);
-		const extendedHelp = builder.display(command.name, this.#formatAliases(args.t, command.aliases), extendedHelpData, prefixUsed);
-		console.log(extendedHelp);
+		const aliases = [...command.aliases];
 
-		const data = args.t(LanguageKeys.Commands.General.HelpData, {
+		const data = args.t(LanguageKeys.Commands.General.Help.Data, {
+			aliases: aliases.length ? aliases : undefined,
+			context: aliases.length ? 'alias' : undefined,
 			footerName: command.name,
 			titleDescription: args.t(command.description)
 		});
@@ -54,7 +42,7 @@ export default class UserCommand extends FoxxieCommand {
 		const embed = new EmbedBuilder()
 			.setColor(await resolveClientColor(message))
 			.setTimestamp()
-			.setFooter({ text: `${data.footer}\nAliases: ${args.t(LanguageKeys.Globals.And, { value: [...command.aliases] })}` })
+			.setFooter({ text: data.footer })
 			.setTitle(data.title);
 
 		embed.addFields(
@@ -82,7 +70,7 @@ export default class UserCommand extends FoxxieCommand {
 			].filter((field) => !isNullish(field))
 		);
 
-		return embed.addFields({ name: ':closed_lock_with_key: | Permission Node', value: inlineCode(command.permissionNode) });
+		return embed.addFields({ name: builderData.permissionNode, value: inlineCode(command.permissionNode) });
 	}
 
 	async #buildSubcommandHelp(
@@ -99,7 +87,7 @@ export default class UserCommand extends FoxxieCommand {
 			template: { content: null!, embeds: [template] }
 		});
 
-		const builderData = args.t(LanguageKeys.System.HelpTitles);
+		const builderData = args.t(LanguageKeys.Commands.General.Help.Titles);
 		const pageLabels = [
 			`${prefixUsed}${command.name.toLowerCase()}`,
 			...extendedHelpData.subcommands!.map((s) => `${prefixUsed}${command.name.toLowerCase()} ${s.name?.toLowerCase()}`)
@@ -111,8 +99,6 @@ export default class UserCommand extends FoxxieCommand {
 					(s) => s.name === subcommandArg.toLowerCase() || s.aliases?.includes(subcommandArg.toLowerCase())
 				)
 			: null;
-
-		console.log(subcommandArg, foundIndex);
 
 		display.addPageEmbed((embed) => {
 			embed.setTitle(args.t(command.description));
@@ -126,15 +112,15 @@ export default class UserCommand extends FoxxieCommand {
 			embed
 				.addFields([
 					{
-						name: ':books: | Subcommands',
+						name: builderData.subcommands,
 						value: args.t(LanguageKeys.Globals.And, { value: extendedHelpData.subcommands!.map((s) => inlineCode(s.name)) })
 					}
 				])
-				.addFields({ name: ':closed_lock_with_key: | Permission Node', value: inlineCode(command.permissionNode) });
+				.addFields({ name: builderData.permissionNode, value: inlineCode(command.permissionNode) });
 
 			if (command.aliases.length) {
 				embed.setFooter({
-					text: `Aliases: ${args.t(LanguageKeys.Globals.And, { value: [...command.aliases] })}`
+					text: args.t(LanguageKeys.Commands.General.Help.Aliases, { aliases: [...command.aliases] })
 				});
 			}
 
@@ -143,78 +129,85 @@ export default class UserCommand extends FoxxieCommand {
 
 		let idx = 0;
 
-		for (const subcommand of extendedHelpData.subcommands!) {
-			display.addPageEmbed((embed) => {
-				embed.setTitle(`${args.t(command.description)}: ${toTitleCase(subcommand.name)}`);
+		if (extendedHelpData.subcommands?.length) {
+			for (const subcommand of extendedHelpData.subcommands) {
+				display.addPageEmbed((embed) => {
+					embed.setTitle(`${args.t(command.description)}: ${toTitleCase(subcommand.name)}`);
 
-				if (subcommand.usages?.length) {
-					embed.addFields({
-						name: builderData.usages,
-						value: subcommand.usages
-							.map(
-								(usage) =>
-									`→ ${prefixUsed}${command.name} ${subcommand.name} ${usage === LanguageKeys.Globals.DefaultT ? '' : usage ? italic(usage) : usage}`
-							)
-							.join('\n')
-					});
-				}
+					if (subcommand.usages?.length) {
+						embed.addFields({
+							name: builderData.usages,
+							value: subcommand.usages
+								.map(
+									(usage) =>
+										`→ ${prefixUsed}${command.name} ${subcommand.name} ${usage === LanguageKeys.Globals.DefaultT ? '' : usage ? italic(usage) : usage}`
+								)
+								.join('\n')
+						});
+					} else {
+						embed.addFields({
+							name: builderData.usages,
+							value: `→ ${prefixUsed}${command.name} ${subcommand.name}`
+						});
+					}
 
-				if (subcommand.extendedHelp)
+					if (subcommand.extendedHelp)
+						embed.addFields({
+							name: builderData.extendedHelp,
+							value: Array.isArray(subcommand.extendedHelp) ? subcommand.extendedHelp.join(' ') : subcommand.extendedHelp
+						});
+
+					if (subcommand.explainedUsage) {
+						embed.addFields({
+							name: builderData.explainedUsage,
+							value: subcommand.explainedUsage.map(([arg, desc]) => `→ **${arg}**: ${desc}`).join('\n')
+						});
+					}
+
+					if (subcommand.examples?.length) {
+						embed.addFields({
+							name: builderData.examples,
+							value: [
+								idx === 0 ? `→ ${prefixUsed}${command.name}` : null,
+								...subcommand.examples.map(
+									(example) =>
+										`→ ${prefixUsed}${command.name} ${subcommand.name} ${example === LanguageKeys.Globals.DefaultT ? '' : example ? italic(example) : example}`
+								)
+							]
+								.filter((a) => !isNullish(a))
+								.join('\n')
+						});
+					} else {
+						embed.addFields({
+							name: builderData.examples,
+							value: `→ ${prefixUsed}${command.name} ${subcommand.name}`
+						});
+					}
+
+					if (subcommand.reminder) {
+						embed.addFields({
+							name: builderData.reminders,
+							value: subcommand.reminder
+						});
+					}
+
 					embed.addFields({
-						name: builderData.extendedHelp,
-						value: Array.isArray(subcommand.extendedHelp) ? subcommand.extendedHelp.join(' ') : subcommand.extendedHelp
+						name: builderData.permissionNode,
+						value: inlineCode(`${command.permissionNode}.${subcommand.name}`)
 					});
 
-				if (subcommand.explainedUsage) {
-					embed.addFields({
-						name: builderData.explainedUsage,
-						value: subcommand.explainedUsage.map(([arg, desc]) => `→ **${arg}**: ${desc}`).join('\n')
-					});
-				}
+					if (subcommand.aliases?.length) {
+						embed.setFooter({
+							text: args.t(LanguageKeys.Commands.General.Help.Aliases, { aliases: subcommand.aliases })
+						});
+					}
 
-				if (subcommand.examples?.length) {
-					embed.addFields({
-						name: builderData.examples,
-						value: [
-							idx === 0 ? `→ ${prefixUsed}${command.name}` : null,
-							...subcommand.examples.map(
-								(example) =>
-									`→ ${prefixUsed}${command.name} ${subcommand.name} ${example === LanguageKeys.Globals.DefaultT ? '' : example ? italic(example) : example}`
-							)
-						]
-							.filter((a) => !isNullish(a))
-							.join('\n')
-					});
-				} else {
-					embed.addFields({
-						name: builderData.examples,
-						value: `→ ${prefixUsed}${command.name} ${subcommand.name}`
-					});
-				}
-
-				if (subcommand.reminder)
-					embed.addFields({
-						name: builderData.reminders,
-						value: subcommand.reminder
-					});
-
-				embed.addFields({
-					name: ':closed_lock_with_key: | Permission Node',
-					value: inlineCode(`${command.permissionNode}.${subcommand.name}`)
+					return embed;
 				});
-				if (subcommand.aliases?.length) {
-					embed.setFooter({
-						text: `Aliases: ${args.t(LanguageKeys.Globals.And, { value: subcommand.aliases })}`
-					});
-				}
 
-				return embed;
-			});
-
-			idx++;
+				idx++;
+			}
 		}
-
-		console.log(pageLabels);
 
 		if (extendedHelpData.subcommands!.length <= 24) display.setSelectMenuOptions((pageIndex) => ({ label: pageLabels[pageIndex - 1] }));
 		return display.setIndex(isNullish(foundIndex) ? 0 : foundIndex + 1);
@@ -226,21 +219,18 @@ export default class UserCommand extends FoxxieCommand {
 		return embed instanceof PaginatedMessage ? embed.run(loading, message.author) : sendMessage(message, embed);
 	}
 
-	#formatAliases(t: FTFunction, aliases: readonly string[]): null | string {
-		if (aliases.length === 0) return null;
-		return t(LanguageKeys.Globals.And, { value: aliases.map((alias) => `\`${alias}\``) });
-	}
-
 	async #fullHelp(message: GuildMessage, args: FoxxieCommand.Args) {
+		const titles = args.t(LanguageKeys.Commands.General.Help.Titles);
+
 		const embed = new EmbedBuilder() //
 			.setFooter({
 				iconURL: message.client.user.displayAvatarURL(),
-				text: args.t(LanguageKeys.Commands.General.HelpMenu, { name: this.container.client.user?.username })
+				text: args.t(LanguageKeys.Commands.General.Help.Menu, { name: this.container.client.user?.username })
 			})
-			.setDescription([hyperlink('Support', Urls.Support), hyperlink('Terms', 'https://foxxie.rshk.me/terms')].join(' | '))
+			.setDescription([hyperlink(titles.support, Urls.Support), hyperlink(titles.terms, 'https://foxxie.rshk.me/terms')].join(' | '))
 			.setColor(await resolveClientColor(message));
 
-		const tCategories = args.t(LanguageKeys.Commands.General.HelpCategories);
+		const tCategories = args.t(LanguageKeys.Commands.General.Help.Categories);
 		const includeAdmin = clientOwners.includes(message.author.id);
 
 		const commands = this.container.stores
@@ -249,7 +239,8 @@ export default class UserCommand extends FoxxieCommand {
 
 		const categories = [...new Set(commands.map((c) => c.category!))]
 			.sort((a, b) => a.localeCompare(b))
-			.map((c) => tCategories[c.toLowerCase() as keyof typeof tCategories]);
+			.map((c) => tCategories[c.toLowerCase() as keyof typeof tCategories])
+			.filter((a) => !isNullish(a));
 
 		for (const category of categories) {
 			const categoryCommands = commands //

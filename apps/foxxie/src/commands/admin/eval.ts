@@ -19,9 +19,10 @@ import { createContext, Script } from 'node:vm';
 
 @ApplyOptions<FoxxieCommand.Options>({
 	aliases: ['ev'],
-	description: LanguageKeys.Commands.Admin.EvalDescription,
+	description: LanguageKeys.Commands.Admin.Eval.Description,
+	detailedDescription: LanguageKeys.Commands.Admin.Eval.DetailedDescription,
 	flags: ['async', 'no-timeout', 'json', 'silent', 'showHidden', 'hidden', 'sql', 'message', 'msg'],
-	options: ['timeout', 'wait', 'lang', 'language', 'depth'],
+	options: ['timeout', 'wait', 'lang', 'language', 'depth', 'd'],
 	permissionLevel: PermissionLevels.BotOwner,
 	quotes: []
 })
@@ -224,7 +225,7 @@ export class UserCommand extends FoxxieCommand {
 					: args.getFlags('json')
 						? JSON.stringify(result, null, 4)
 						: inspect(result, {
-								depth: Number(args.getOption('depth') ?? 0) || 0,
+								depth: Number(args.getOption('depth', 'd') ?? 0) || 0,
 								showHidden: args.getFlags('showHidden', 'hidden')
 							});
 		}

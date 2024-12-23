@@ -172,7 +172,7 @@ export async function sendLocalizedMessage(message: Message, options: LocalizedM
 
 	// @ts-expect-error 2345: Complex overloads
 	const content = await resolveKey(message, options.key, options.formatOptions);
-	return send(message, { ...options, content });
+	return sendMessage(message as GuildMessage, { ...options, content });
 }
 
 export async function sendMessage(message: GuildMessage, options: EmbedBuilder | MessageOptions | string | string[], arrayJoiner = '\n') {

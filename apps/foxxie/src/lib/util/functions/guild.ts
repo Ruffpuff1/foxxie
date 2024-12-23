@@ -19,6 +19,10 @@ interface GuildUtilities {
 
 export const cache = new WeakMap<Guild, GuildUtilities>();
 
+export function getAudio(resolvable: GuildResolvable) {
+	return container.client.audio!.queues.get(container.client.guilds.resolveId(resolvable)!)!;
+}
+
 export function getGuildUtilities(resolvable: GuildResolvable): GuildUtilities {
 	const guild = resolveGuild(resolvable);
 	const previous = cache.get(guild);

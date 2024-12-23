@@ -40,7 +40,7 @@ export async function createSuggestion(message: GuildMessage, user: MessageData[
 	const t = getT(settings.language);
 
 	if (isNullish(settings.suggestionsChannel)) {
-		const content = t(LanguageKeys.Commands.Utility.Suggestion.NewNotConfigured);
+		const content = t(LanguageKeys.Commands.Util.Suggestion.NewNotConfigured);
 		return sendMessage(message, content);
 	}
 
@@ -66,7 +66,7 @@ export async function createSuggestion(message: GuildMessage, user: MessageData[
 		if (postResult.isErr()) {
 			return sendMessage(
 				message,
-				t(LanguageKeys.Commands.Utility.Suggestion.NewFailedToSend, {
+				t(LanguageKeys.Commands.Util.Suggestion.NewFailedToSend, {
 					channel: channelMention(settings.suggestionsChannel)
 				})
 			);
@@ -90,8 +90,8 @@ export async function createSuggestion(message: GuildMessage, user: MessageData[
 		result.inspect((value) => value.memberAddResult.inspectErr((error) => errors.push(t(error)))).inspectErr((error) => errors.push(t(error)));
 	}
 
-	const header = t(LanguageKeys.Commands.Utility.Suggestion.NewSuccess, {
-		id: hyperlink(id.toLocaleString(), messageLink(message.guild.id, settings.suggestionsChannel, suggestionMessage.id))
+	const header = t(LanguageKeys.Commands.Util.Suggestion.NewSuccess, {
+		id: hyperlink(`#${id.toLocaleString()}`, messageLink(message.guild.id, settings.suggestionsChannel, suggestionMessage.id))
 	});
 	const details = errors.length === 0 ? '' : `\n\n- ${errors.join('\n- ')}`;
 
@@ -126,11 +126,11 @@ export async function useThread(
 		api().channels.createThread(options.suggestionMessage!.channel_id, { name, type: ChannelType.PublicThread }, options.suggestionMessage!.id)
 	);
 
-	if (threadCreationResult.isErr()) return Result.err(LanguageKeys.Commands.Utility.Suggestion.ThreadChannelCreationFailure);
+	if (threadCreationResult.isErr()) return Result.err(LanguageKeys.Commands.Util.Suggestion.ThreadChannelCreationFailure);
 
 	const thread = threadCreationResult.unwrap() as APIThreadChannel;
 	const result = await Result.fromAsync(api().threads.addMember(thread.id, message.author.id));
-	const memberAddResult = result.mapErr(() => LanguageKeys.Commands.Utility.Suggestion.ThreadMemberAddFailure);
+	const memberAddResult = result.mapErr(() => LanguageKeys.Commands.Util.Suggestion.ThreadMemberAddFailure);
 
 	return Result.ok({ memberAddResult, thread });
 }
@@ -212,7 +212,7 @@ function makeComponents(settings: ReadonlyGuildData, data: MessageData) {
 		components: [
 			{
 				custom_id: makeCustomId(Id.Suggestions, 'archive', id),
-				label: t(LanguageKeys.Commands.Utility.Suggestion.ComponentsArchive),
+				label: t(LanguageKeys.Commands.Util.Suggestion.ComponentsArchive),
 				style: ButtonStyle.Danger,
 				type: ComponentType.Button
 			}
@@ -222,7 +222,7 @@ function makeComponents(settings: ReadonlyGuildData, data: MessageData) {
 	if (!settings.suggestionsAutoThread) {
 		manageRow.components.unshift({
 			custom_id: makeCustomId(Id.Suggestions, 'thread', id),
-			label: t(LanguageKeys.Commands.Utility.Suggestion.ComponentsCreateThread),
+			label: t(LanguageKeys.Commands.Util.Suggestion.ComponentsCreateThread),
 			style: ButtonStyle.Primary,
 			type: ComponentType.Button
 		});
@@ -235,9 +235,9 @@ function makeComponents(settings: ReadonlyGuildData, data: MessageData) {
 			{
 				custom_id: makeCustomId(Id.Suggestions, 'resolve', id),
 				options: [
-					{ label: t(LanguageKeys.Commands.Utility.Suggestion.ComponentsAccept), value: Status.Accept },
-					{ label: t(LanguageKeys.Commands.Utility.Suggestion.ComponentsConsider), value: Status.Consider },
-					{ label: t(LanguageKeys.Commands.Utility.Suggestion.ComponentsDeny), value: Status.Deny }
+					{ label: t(LanguageKeys.Commands.Util.Suggestion.ComponentsAccept), value: Status.Accept },
+					{ label: t(LanguageKeys.Commands.Util.Suggestion.ComponentsConsider), value: Status.Consider },
+					{ label: t(LanguageKeys.Commands.Util.Suggestion.ComponentsDeny), value: Status.Deny }
 				],
 				type: ComponentType.StringSelect
 			}
@@ -249,12 +249,12 @@ function makeComponents(settings: ReadonlyGuildData, data: MessageData) {
 }
 
 function makeContentMessage(data: MessageData, t: FTFunction) {
-	const content = t(LanguageKeys.Commands.Utility.Suggestion.NewMessageContent, data);
+	const content = t(LanguageKeys.Commands.Util.Suggestion.NewMessageContent, data);
 	return { content };
 }
 
 function makeEmbedMessage(data: MessageData, t: FTFunction): RESTPostAPIChannelMessageJSONBody {
-	const name = t(LanguageKeys.Commands.Utility.Suggestion.NewMessageEmbedTitle, data);
+	const name = t(LanguageKeys.Commands.Util.Suggestion.NewMessageEmbedTitle, data);
 	const embed = new EmbedBuilder().setColor(Colors.White).setAuthor({ iconURL: data.user.avatar, name }).setDescription(data.message);
 
 	return { embeds: [embed.toJSON()] };

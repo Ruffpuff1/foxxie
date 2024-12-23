@@ -1,18 +1,22 @@
+# docker-compose to run the entire foxxie environment at the same time.
+# usually only used for absolute hosting.
+# for testing each service refer to their own Dockerfile or docker-compose.yml.
 services:
 
-  redis:
-    command: 'redis-server --port 8287 --requirepass redis'
-    container_name: redis
-    image: 'redis:alpine'
+  foxxie:
+    build:
+      context: ./apps/foxxie
+    container_name: foxxie
+    env_file:
+      - ./apps/foxxie/.env.foxxie
+    depends_on:
+      - lavalink
+      - redis
     ports:
-      - '8287:8287'
+      - '8282:8282'
+      - '7282:7282'
     restart: always
-    volumes:
-      - redis_data:/data
-    logging:
-      options:
-        max-size: '20m'
-        max-file: '3'
+    tty: true
 
   lavalink:
     container_name: lavalink
@@ -23,19 +27,15 @@ services:
       - '2333:2333'
     restart: always
 
-  foxxie:
-    build: ./
-    container_name: foxxie
-    env_file:
-      - .env.foxxie
+  redis:
+    command: 'redis-server --bind redis --port 8287 --requirepass redis'
+    container_name: redis
+    image: 'redis:alpine'
     ports:
-      - '8282:8282'
+      - '8287:8287'
+    volumes:
+      - redis_data:/data
     restart: always
-    tty: true
-    logging:
-      options:
-        max-size: '1g'
-        max-file: '3'
 
 volumes:
   redis_data:

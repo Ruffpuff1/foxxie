@@ -10,6 +10,8 @@
 	"memberPermissions_other": "{{ERROR}} It seems you're missing the {{missing, permissionsarray}} permissions, which are required to run this command.",
 	"messageSubcommandNoMatch": "{{ERROR}} Please specify a subcommand, run the **help** command to learn more!",
 	"missingChatInputHandler": "{{ERROR}} Uhhh this should never happen, a precondition this command requires is missing a slash command handler.",
+	"musicQueueNotEmpty": "{{ERROR}} Before running this command make sure there's some songs in the queue.",
+	"musicUserVoiceChannel": "{{ERROR}} You must be in a voice channel to run this command!",
 	"moderator": "{{ERROR}} You must be a **moderator** of this server to run the {{command.name, code}} command.",
 	"nsfw": "{{ERROR}} Ahem, due to it's potential risqué nature, the command {{command.name, code}} can only be used in **nsfw** type channels.",
 	"permNodes": "{{ERROR}} This command requires the {{node, bold}} permission node, of which you have been denied."

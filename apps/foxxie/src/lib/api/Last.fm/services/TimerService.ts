@@ -1,6 +1,6 @@
 import { container } from '@sapphire/framework';
 import { ScheduleEntry } from '#lib/schedule';
-import { days, seconds } from '#utils/common';
+import { days, seconds, take } from '#utils/common';
 import { Schedules } from '#utils/constants';
 import { blue, white } from 'colorette';
 import _ from 'lodash';
@@ -15,7 +15,7 @@ export class TimerService {
 
 		const timeToIndex = Date.now() - days(120);
 
-		const usersToIndex = _.take(await this.#indexService.getOutdatedUsers(new Date(timeToIndex)), 2000);
+		const usersToIndex = take(await this.#indexService.getOutdatedUsers(new Date(timeToIndex)), 2000);
 
 		container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: Found ${usersToIndex.length} outdated users, adding them to index queue.`);
 

@@ -84,7 +84,6 @@
 						"static-get-method",
 						"static-set-method"
 					],
-				
 					[
 						"protected-static-method",
 						"protected-static-function-property",
@@ -95,7 +94,6 @@
 						"protected-static-get-method",
 						"protected-static-set-method"
 					],
-					
 					[
 						"private-static-method",
 						"private-static-function-property",
@@ -121,6 +119,17 @@
 					"static-block",
 					"unknown"
 				]
+			}
+		],
+		"perfectionist/sort-variable-declarations": [
+			"error",
+			{
+				"type": "alphabetical",
+				"order": "asc",
+				"ignoreCase": true,
+				"specialCharacters": "keep",
+				"partitionByNewLine": false,
+				"partitionByComment": false
 			}
 		],
 		"@typescript-eslint/require-await": 0

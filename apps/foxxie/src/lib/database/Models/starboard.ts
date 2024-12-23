@@ -5,6 +5,7 @@ import { MessageOptions } from '@sapphire/plugin-editable-commands';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { cast, cutText, debounce, isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
+import { SettingsKeys } from '#lib/database';
 import { readSettings } from '#lib/database/settings/functions';
 import { StarboardManager } from '#lib/structures';
 import { EnvKeys, FTFunction, GuildMessage } from '#lib/types';
@@ -304,7 +305,10 @@ export class Starboard {
 	}
 
 	private async updateStarMessage(): Promise<void> {
-		const { starboardChannelId, starboardMinimum } = await readSettings(this.#message.guild);
+		const [channelId, minimum] = await readSettings(this.#message.guild, [
+			SettingsKeys.Modules.Starboard.ChannelId,
+			SettingsKeys.Modules.Starboard.Minimum
+		]);
 		const t = await fetchT(this.#message);
 
 		// If number of stars is 0 try to delete the starmessage and db entry.
@@ -323,7 +327,7 @@ export class Starboard {
 		}
 
 		// if number of reactions is less than the minimum or there is no channelId return;
-		if (this.stars < starboardMinimum || isNullish(starboardChannelId)) return;
+		if (this.stars < minimum || isNullish(channelId)) return;
 
 		// if existing starmessage try to update
 		if (this.#starMessage) {
@@ -344,7 +348,7 @@ export class Starboard {
 		if (this.#message.author.bot) return;
 
 		// fetch the starboard channel;
-		const channel = cast<TextChannel | undefined>(this.#message.guild.channels.cache.get(starboardChannelId));
+		const channel = cast<TextChannel | undefined>(this.#message.guild.channels.cache.get(channelId));
 		if (!channel) return;
 
 		this.id = await this.#fetchNextId();

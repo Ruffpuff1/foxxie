@@ -1,6 +1,6 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { envParseString } from '@skyra/env-utilities';
-import { readSettings } from '#lib/database';
+import { readSettings, SettingsKeys } from '#lib/database';
 import { combineMessageReactionUsers, StarboardData, truncateStarboardEmojis } from '#lib/database/Models/starboard';
 import { FoxxieCommand } from '#lib/structures';
 import { EnvKeys, GuildMessage } from '#lib/types';
@@ -36,13 +36,16 @@ export class UserCommand extends FoxxieCommand {
 		let users: Set<string>;
 
 		try {
-			const { starboardEmojis, starboardSelfStar } = await readSettings(msg.guild!);
+			const [emojis, selfStar] = await readSettings(msg.guild!, [
+				SettingsKeys.Modules.Starboard.Emojis,
+				SettingsKeys.Modules.Starboard.SelfStar
+			]);
 
-			const fetchedUsers = await combineMessageReactionUsers(truncateStarboardEmojis(starboardEmojis), starredMessage as GuildMessage);
+			const fetchedUsers = await combineMessageReactionUsers(truncateStarboardEmojis(emojis), starredMessage as GuildMessage);
 			users = new Set(fetchedUsers.filter((user) => user !== envParseString(EnvKeys.ClientId)));
 
 			// Remove the author's star if self star is disabled:
-			if (!starboardSelfStar) users.delete(starredMessage.author.id);
+			if (!selfStar) users.delete(starredMessage.author.id);
 		} catch (error) {
 			if (error instanceof DiscordAPIError) {
 				if (error.code === RESTJSONErrorCodes.MissingAccess) return;

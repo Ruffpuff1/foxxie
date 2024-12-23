@@ -1,6 +1,6 @@
 {
   "name": "@foxxiebot/sanitize",
-  "version": "0.0.0",
+  "version": "0.0.0-dev",
   "description": "Sanitize and clean character strings.",
   "author": "Ruffpuff1",
   "scripts": {

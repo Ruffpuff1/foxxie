@@ -1,6 +1,5 @@
 import { sanitize } from '@foxxiebot/sanitize';
 import { cast } from '@sapphire/utilities';
-import { Highlight } from '#lib/database';
 import { seconds } from '#utils/common';
 import { isMainThread, parentPort } from 'node:worker_threads';
 
@@ -30,6 +29,12 @@ setInterval(() => {
 parentPort.on('message', (message: IncomingPayload) => {
 	post(handleMessage(message));
 });
+
+export interface Highlight<T extends HighlightTypeEnum> {
+	type: T;
+	userId: string;
+	word: T extends HighlightTypeEnum.Regex ? RegExp : string;
+}
 
 function filter(str: string, regex: RegExp) {
 	const matches = str.match(regex);

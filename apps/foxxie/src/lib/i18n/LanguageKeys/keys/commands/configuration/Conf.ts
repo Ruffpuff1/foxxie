@@ -1,0 +1,26 @@
+import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
+import { FT, T } from '#lib/types';
+
+export const DashboardOnlyKey = FT<{ key: string }, string>('commands/configuration/conf:dashboardOnlyKey');
+export const Description = T('commands/configuration/conf:description');
+export const DetailedDescription = T<LanguageHelpDisplayOptions>('commands/configuration/conf:detailedDescription');
+export const Get = FT<{ key: string; value: string }, string>('commands/configuration/conf:get');
+export const GetNoExist = FT<{ key: string }, string>('commands/configuration/conf:getNoExist');
+export const MenuInvalidAction = T('commands/configuration/conf:menuInvalidAction');
+export const MenuInvalidKey = T('commands/configuration/conf:menuInvalidKey');
+export const MenuRenderAtFolder = FT<{ path: string }, string>('commands/configuration/conf:menuRenderAtFolder');
+export const MenuRenderAtPiece = FT<{ path: string }, string>('commands/configuration/conf:menuRenderAtPiece');
+export const MenuRenderBack = T('commands/configuration/conf:menuRenderBack');
+export const MenuRenderCurrentValue = FT<{ value: string }, string>('commands/configuration/conf:menuRenderCurrentValue');
+export const MenuRenderNoKeys = T('commands/configuration/conf:menuRenderNoKeys');
+export const MenuRenderRemove = T('commands/configuration/conf:menuRenderRemove');
+export const MenuRenderReset = T('commands/configuration/conf:menuRenderReset');
+export const MenuRenderSelect = T('commands/configuration/conf:menuRenderSelect');
+export const MenuRenderUndo = T('commands/configuration/conf:menuRenderUndo');
+export const MenuRenderUpdate = T('commands/configuration/conf:menuRenderUpdate');
+export const MenuSaved = T('commands/configuration/conf:menuSaved');
+export const MenuNoChange = FT<{ key: string }, string>('commands/configuration/conf:menuNoChange');
+export const Reset = FT<{ key: string; value: string }, string>('commands/configuration/conf:reset');
+export const Server = FT<{ key: string; list: string }, string>('commands/configuration/conf:server');
+export const SettingNotSet = T('commands/configuration/conf:settingNotSet');
+export const Updated = FT<{ key: string; response: string }, string>('commands/configuration/conf:updated');

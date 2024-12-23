@@ -125,6 +125,7 @@ export const enum Emojis {
 	MaleSignEmoji = '<:Male:950037521126023208>',
 	Moderator = ':hammer:',
 	Music = '🎶 🎻',
+	Notes = '🎶',
 	QuarantinedIcon = ':speech_balloon:',
 	RuffThink = '<:RuffThink:910209205636579421>',
 	/** The logo of https://serebii.net */
@@ -154,6 +155,9 @@ export const allowedInviteIds = [
 ];
 
 export const enum BotIds {
+	Foxxie = '825130284382289920',
+	FoxxieAlpha = '812546582531801118',
+	FoxxieNightly = '840755658793418782',
 	RealmBot = '840681796914905100'
 }
 

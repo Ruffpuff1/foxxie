@@ -1,5 +1,6 @@
 import { container, err, ok, Result } from '@sapphire/framework';
 import { isThenable } from '@sapphire/utilities';
+import { Emojis } from '#utils/constants';
 import { Awaitable, DiscordAPIError, RESTJSONErrorCodes } from 'discord.js';
 
 export interface ReferredPromise<T> {
@@ -33,6 +34,52 @@ export function floatPromise(promise: Awaitable<unknown>) {
 			container.logger.debug(error);
 		});
 	return promise;
+}
+
+export function getDiscogsFormatEmote(format: string): null | string {
+	switch (format) {
+		case 'Box Set':
+			return ':package:';
+		case 'Cassette':
+			return Emojis.Cassette;
+		case 'CD':
+			return ':cd:';
+		case 'Vinyl':
+			return Emojis.Vinyl;
+	}
+
+	return null;
+}
+
+export function keyIntToPitchString(key: number) {
+	switch (key) {
+		case 0:
+			return 'C';
+		case 1:
+			return 'C#';
+		case 10:
+			return 'A#';
+		case 11:
+			return 'B';
+		case 2:
+			return 'D';
+		case 3:
+			return 'D#';
+		case 4:
+			return 'E';
+		case 5:
+			return 'F';
+		case 6:
+			return 'F#';
+		case 7:
+			return 'G';
+		case 8:
+			return 'G#';
+		case 9:
+			return 'A';
+		default:
+			return null;
+	}
 }
 
 export async function resolveOnErrorCodes<T>(promise: Promise<T>, ...codes: readonly RESTJSONErrorCodes[]) {

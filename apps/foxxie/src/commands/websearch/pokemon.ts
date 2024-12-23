@@ -13,7 +13,11 @@ import { sendLoadingMessage } from '#utils/functions/messages';
 import { ActionRowBuilder, APISelectMenuOption, Message, PermissionFlagsBits, StringSelectMenuBuilder } from 'discord.js';
 
 @RegisterSubcommand((command) =>
-	command.setAliases('pkm', 'pk', 'mon').setDescription(LanguageKeys.Commands.Websearch.PokemonDescription).setFlags(['shiny', 'back'])
+	command
+		.setAliases('pkm', 'pk', 'mon')
+		.setDescription(LanguageKeys.Commands.Websearch.Pokemon.Description)
+		.setDetailedDescription(LanguageKeys.Commands.Websearch.Pokemon.DetailedDescription)
+		.setFlags(['shiny', 'back'])
 )
 export class PokemonCommand extends FoxxieSubcommand {
 	@MessageSubcommand(PokemonCommand.SubcommandKeys.Pokemon, true, ['dex'])
@@ -45,13 +49,13 @@ export class PokemonCommand extends FoxxieSubcommand {
 				.setComponents(
 					new StringSelectMenuBuilder() //
 						.setCustomId(customIdStringified)
-						.setPlaceholder(t(LanguageKeys.Commands.Websearch.PokemonDexSelect))
+						.setPlaceholder(t(LanguageKeys.Commands.Websearch.Pokemon.DexSelect))
 						.setOptions(options)
 				);
 
 			return send(message, {
 				components: [messageActionRow],
-				content: t(LanguageKeys.Commands.Websearch.PokemonDexNone, { pokemon }),
+				content: t(LanguageKeys.Commands.Websearch.Pokemon.DexNone, { pokemon }),
 				embeds: []
 			});
 		}

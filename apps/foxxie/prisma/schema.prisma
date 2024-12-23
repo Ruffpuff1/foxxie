@@ -263,6 +263,7 @@ model UserLastFM {
   lastUsed         DateTime?
   emoteReactions   String[]
   timeZone         String?
+  scrobbleByMusicBot Boolean @default(true)
   numberFormat     Int                  @default(1)
   user          User                 @relation(fields: [userid], references: [userid], onDelete: Cascade, map: "userlastfm_user_fkey")
   albums           UserAlbum[]

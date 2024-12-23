@@ -4,40 +4,8 @@ export * as Timeout from '#lib/i18n/LanguageKeys/keys/commands/moderation/Timeou
 export * as Untimeout from '#lib/i18n/LanguageKeys/keys/commands/moderation/Untimeout';
 export * as Utilities from '#lib/i18n/LanguageKeys/keys/commands/moderation/utilities/index';
 
-import { DetailedDescription, DetailedDescriptionArgs, FT, T } from '#lib/types';
+import { FT, T } from '#lib/types';
 import { PermissionsString } from 'discord.js';
-
-export const BanDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:banDetailedDescription');
-export const BanSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:banSuccess');
-
-export const CaseDescription = T('commands/moderation:caseDescription');
-export const CaseNoExist = FT<{ caseId: number }>('commands/moderation:caseNoExist');
-export const CaseUsage = T('commands/moderation:caseUsage');
-
-export const GuildBansEmpty = T('commands/moderation:guildBansEmpty');
-export const GuildBansNotFound = T('commands/moderation:guildBansNotFound');
-
-export const KickDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:kickDetailedDescription');
-export const KickSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:kickSuccess');
-
-export const MuteDetailedDescription = FT<DetailedDescriptionArgs, DetailedDescription>('commands/moderation:muteDetailedDescription');
-export const MuteSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:muteSuccess');
-
-export const ReasonDescription = T('commands/moderation:reasonDescription');
-export const ReasonSuccess = FT<{ reason: string }>('commands/moderation:reasonSuccess');
-export const ReasonUsage = T('commands/moderation:reasonUsage');
-
-export const RestrictEmbedDescription = T('commands/moderation:restrictEmbedDescription');
-export const RestrictEmbedSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:restrictEmbedSuccess');
-
-export const UnbanDescription = T('commands/moderation:unbanDescription');
-export const UnbanSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:unbanSuccess');
-
-export const UnmuteDescription = T('commands/moderation:unmuteDescription');
-export const UnmuteSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:unmuteSuccess');
-
-export const UnRestrictEmbedDescription = T('commands/moderation:unRestrictEmbedDescription');
-export const UnRestrictEmbedSuccess = FT<{ count: number; range: number | string; users: string[] }>('commands/moderation:unRestrictEmbedSuccess');
 
 export const ActionApplyReason = FT<{ action: string; reason: string }>('moderationActions:applyReason');
 export const ActionApplyNoReason = FT<{ action: string }>('moderationActions:applyNoReason');
@@ -92,6 +60,4 @@ export const ModerationOutput = FT<{ count: number; range: number | string; reas
 export const ModerationOutputWithReason = FT<{ count: number; range: number | string; reason: null | string; users: string[] }>(
 	'commands/moderation:moderationOutputWithReason'
 );
-export const Permissions = FT<{ id: string; username: string }>('commands/moderation:permissions');
-export const PermissionsAll = T('commands/moderation:permissionsAll');
 export const Success = T('commands/moderation:success');

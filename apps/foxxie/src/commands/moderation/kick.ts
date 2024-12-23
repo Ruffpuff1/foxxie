@@ -30,7 +30,7 @@ export class UserModerationCommand extends ModerationCommand<Type, ValueType> {
 	}
 
 	protected override async preHandle(message: GuildMessage) {
-		const settings = await readSettings(message.guild);
-		return settings.eventsKick ? { unlock: getModeration(message.guild).createLock() } : null;
+		const eventsKick = await readSettings(message.guild, 'eventsKick');
+		return eventsKick ? { unlock: getModeration(message.guild).createLock() } : null;
 	}
 }

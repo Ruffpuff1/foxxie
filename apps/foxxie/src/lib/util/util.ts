@@ -6,9 +6,8 @@ import { first } from '@sapphire/iterator-utilities/first';
 import { SubcommandMapping } from '@sapphire/plugin-subcommands';
 import { cast, isNullishOrEmpty, isNumber } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
-import { readSettings } from '#lib/database';
 import { ScheduleEntry } from '#lib/schedule';
-import { DetailedDescription, GuildMessage } from '#lib/types';
+import { DetailedDescription } from '#lib/types';
 import {
 	APIEmbedField,
 	APIUser,
@@ -152,13 +151,6 @@ export function getTag(user: APIUser | User) {
 export function idToTimestamp(id: number | string): null | number {
 	if (isNumber(id)) return null;
 	return Number(SnowflakeUtil.deconstruct(cast<string>(id)).timestamp);
-}
-
-export async function resolveKey(message: ChatInputCommandInteraction | GuildMessage, key: string, ...variables: any[]): Promise<string> {
-	const guild = await readSettings(message instanceof Message ? message.guild.id : message.guildId!);
-	const result = container.i18n.getT(guild.language)(key, { ...variables });
-
-	return result;
 }
 
 export function setMultipleEmbedImages(embed: EmbedBuilder, urls: string[]) {
@@ -355,7 +347,7 @@ export function getServerDetails() {
 		totalmemory,
 		totalShards: container.client.options.shardCount || 1,
 		uptime: new Date(Date.now() - container.client.uptime!),
-		version: envParseString('CLIENT_VERSION')
+		version: envParseString('VERSION_NUM')
 	} as const;
 }
 

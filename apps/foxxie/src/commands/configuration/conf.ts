@@ -21,8 +21,8 @@ import { ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
 
 @ApplyOptions<FoxxieSubcommand.Options>({
 	aliases: ['settings', 'config', 'configs', 'configuration'],
-	description: LanguageKeys.Commands.Admin.ConfDescription,
-	detailedDescription: LanguageKeys.Commands.Configuration.BirthdayDetailedDescription,
+	description: LanguageKeys.Commands.Configuration.Conf.Description,
+	detailedDescription: LanguageKeys.Commands.Configuration.Conf.DetailedDescription,
 	guarded: true,
 	permissionLevel: PermissionLevels.Administrator,
 	runIn: [CommandOptionsRunTypeEnum.GuildAny],
@@ -50,7 +50,7 @@ export class UserCommand extends FoxxieSubcommand {
 		const response = schemaKey.display(trx.settings, args.t);
 		return send(message, {
 			allowedMentions: { roles: [], users: [] },
-			content: args.t(LanguageKeys.Commands.Admin.ConfUpdated, { key, response: this.#getTextResponse(response) })
+			content: args.t(LanguageKeys.Commands.Configuration.Conf.Updated, { key, response: this.#getTextResponse(response) })
 		});
 	}
 
@@ -63,7 +63,7 @@ export class UserCommand extends FoxxieSubcommand {
 		const response = schemaKey.display(trx.settings, args.t);
 		return send(message, {
 			allowedMentions: { roles: [], users: [] },
-			content: args.t(LanguageKeys.Commands.Admin.ConfReset, { key, value: response })
+			content: args.t(LanguageKeys.Commands.Configuration.Conf.Reset, { key, value: response })
 		});
 	}
 
@@ -76,7 +76,7 @@ export class UserCommand extends FoxxieSubcommand {
 		const response = schemaKey.display(trx.settings, args.t);
 		return send(message, {
 			allowedMentions: { roles: [], users: [] },
-			content: args.t(LanguageKeys.Commands.Admin.ConfUpdated, { key, response: this.#getTextResponse(response) })
+			content: args.t(LanguageKeys.Commands.Configuration.Conf.Updated, { key, response: this.#getTextResponse(response) })
 		});
 	}
 
@@ -88,7 +88,7 @@ export class UserCommand extends FoxxieSubcommand {
 		const output = schemaValue.display(settings, args.t);
 
 		if (isSchemaKey(schemaValue)) {
-			const content = args.t(LanguageKeys.Commands.Admin.ConfGet, { key: schemaValue.name, value: output });
+			const content = args.t(LanguageKeys.Commands.Configuration.Conf.Get, { key: schemaValue.name, value: output });
 			return send(message, { allowedMentions: { roles: [], users: [] }, content });
 		}
 
@@ -96,7 +96,7 @@ export class UserCommand extends FoxxieSubcommand {
 
 		return send(message, {
 			allowedMentions: { roles: [], users: [] },
-			content: args.t(LanguageKeys.Commands.Admin.Conf, { key: title, list: output })
+			content: args.t(LanguageKeys.Commands.Configuration.Conf.Server, { key: title, list: output })
 		});
 	}
 
@@ -105,7 +105,7 @@ export class UserCommand extends FoxxieSubcommand {
 
 		const value = getConfigurableGroups().getPathString(key.toLowerCase());
 		if (isNullish(value) || value.dashboardOnly) {
-			this.error(LanguageKeys.Commands.Admin.ConfGetNoExt, { key });
+			this.error(LanguageKeys.Commands.Configuration.Conf.GetNoExist, { key });
 		}
 
 		if (isSchemaKey(value)) {
@@ -134,7 +134,7 @@ export class UserCommand extends FoxxieSubcommand {
 
 	#resolveSchemaValue(key: string) {
 		const schemaValue = getConfigurableGroups().getPathString(key.toLowerCase());
-		if (schemaValue === null) this.error(LanguageKeys.Commands.Admin.ConfGetNoExt, { key });
+		if (schemaValue === null) this.error(LanguageKeys.Commands.Configuration.Conf.GetNoExist, { key });
 		return schemaValue;
 	}
 }

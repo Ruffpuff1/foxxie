@@ -1,7 +1,9 @@
 import { userMention } from '@discordjs/builders';
+import { resolveToNull } from '@ruffpuff/utilities';
 import { BitField } from '@sapphire/bitfield';
+import { container } from '@sapphire/framework';
 import { Emojis } from '#utils/constants';
-import { GuildMember, Message, type Snowflake, User, UserFlags } from 'discord.js';
+import { GuildMember, GuildResolvable, Message, type Snowflake, User, UserFlags } from 'discord.js';
 
 const ExtendedUserFlagBits = new BitField({
 	Collaborator: getExtendedBits(UserFlags.Collaborator),
@@ -28,6 +30,20 @@ export function getUserMentionWithFlagsString(bitfield: number, userId: Snowflak
 	const flags = getModerationFlagsString(bitfield);
 	const mention = userMention(userId);
 	return flags ? `${mention} ${flags}` : mention;
+}
+
+export async function resolveUserDisplayName(userId: Snowflake, guild?: GuildResolvable): Promise<string> {
+	const user = await resolveToNull(container.client.users.fetch(userId));
+	if (!user) return 'Unknown';
+
+	if (!guild) return user.username;
+	const resolved = container.client.guilds.resolve(guild);
+	if (!resolved) return user.username;
+
+	const member = await resolveToNull(resolved.members.fetch(userId));
+	if (member) return member.displayName;
+
+	return user.username;
 }
 
 function getExtendedBits(bitfield: number) {

@@ -35,7 +35,7 @@ export class UserModerationCommand extends ModerationCommand<Type, ValueType> {
 	}
 
 	protected override async preHandle(message: GuildMessage) {
-		const settings = await readSettings(message.guild);
-		return settings.eventsBanAdd ? { unlock: getModeration(message.guild).createLock() } : null;
+		const eventsBanAdd = await readSettings(message.guild, 'eventsBanAdd');
+		return eventsBanAdd ? { unlock: getModeration(message.guild).createLock() } : null;
 	}
 }
