@@ -7,10 +7,10 @@ import { LanguageKeys } from '#lib/i18n';
 import { FTFunction } from '#lib/types';
 import { toStarboardStatsEmoji } from '#utils/common';
 import { Colors } from '#utils/constants';
-import { getModeration, isGuildOwner } from '#utils/functions';
+import { getModeration, isGuildOwner, resolveClientColor } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { discordInviteLink, userLink } from '#utils/transformers';
-import { getFullEmbedAuthor, resolveClientColor } from '#utils/util';
+import { getFullEmbedAuthor } from '#utils/util';
 import { APIEmbedField, bold, EmbedBuilder, Guild, GuildMember, hyperlink, inlineCode, User } from 'discord.js';
 
 interface IsModerationAction {

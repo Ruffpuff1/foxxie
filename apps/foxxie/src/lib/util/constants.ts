@@ -53,13 +53,16 @@ export const enum Schedules {
 	LastFMUpdateArtistsForUser = 'lastFmUpdateArtistsForUser',
 	Reminder = 'reminder',
 	RemoveBirthdayRole = 'removeBirthdayRole',
+	ResetSpotifyToken = 'resetSpotifyToken',
 	UpdateDiscogsUsers = 'updateDiscogsUsers',
 	UpdateLastFmUsers = 'updateLastFmUsers'
 }
 
 export const enum Urls {
+	Github = 'https://github.com/Ruffpuff1/foxxie',
 	Haste = 'https://hastebin.com',
 	Support = 'https://tcs.rshk.me',
+	Terms = 'https://foxxie.rshk.me/terms',
 	TheCornerStore = 'https://tcs.rshk.me'
 }
 

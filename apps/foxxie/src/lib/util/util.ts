@@ -1,5 +1,4 @@
 import makeRequest from '@aero/http';
-import { resolveToNull } from '@ruffpuff/utilities';
 import { isImageAttachment } from '@sapphire/discord.js-utilities';
 import { ArgType, container } from '@sapphire/framework';
 import { first } from '@sapphire/iterator-utilities/first';
@@ -9,15 +8,11 @@ import { envParseString } from '@skyra/env-utilities';
 import { ScheduleEntry } from '#lib/schedule';
 import { DetailedDescription } from '#lib/types';
 import {
-	APIEmbedField,
 	APIUser,
-	ChatInputCommandInteraction,
-	ColorResolvable,
 	EmbedAuthorData,
 	EmbedBuilder,
 	GuildChannel,
 	GuildMember,
-	GuildResolvable,
 	ImageURLOptions,
 	makeURLSearchParams,
 	Message,
@@ -32,8 +27,6 @@ import {
 	UserResolvable
 } from 'discord.js';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
-
-import { BrandingColors } from './constants.js';
 
 export interface ImageAttachment {
 	height: number;
@@ -70,17 +63,26 @@ export async function fetchReactionUsers(channelId: string, messageId: string, r
 	return users;
 }
 
-export function fetchTasks<T extends ScheduleEntry.TaskId = ScheduleEntry.TaskId>(type: T): MappedTask<T>[] {
+export function fetchTasks<T extends ScheduleEntry.TaskId = ScheduleEntry.TaskId>(type: T, cb?: (task: MappedTask<T>) => boolean): MappedTask<T>[] {
 	const cache = container.schedule.queue;
-
 	const filtered = cache.filter((a) => Boolean(a)).filter((a) => a.taskId === type);
 
-	return filtered.map((job) => ({
+	const mapped = filtered.map((job) => ({
 		data: job.data as ScheduleEntry.TaskData[T],
 		id: job.id,
 		name: job.taskId as T,
 		time: new Date(job.time)
 	}));
+
+	return cb ? mapped.filter((task) => cb(task)) : mapped;
+}
+
+export function findTask<T extends ScheduleEntry.TaskId = ScheduleEntry.TaskId>(
+	type: T,
+	cb: (task: MappedTask<T>) => boolean
+): MappedTask<T> | undefined {
+	const tasks = fetchTasks(type);
+	return tasks.find((task) => cb(task));
 }
 
 export function getContent(message: Message): null | string {
@@ -202,13 +204,6 @@ export const VIDEO_EXTENSION = /\.(mp4|mov)/i;
 
 export const IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp)/i;
 
-/**
- * Returns a conditional embed field.
- */
-export function conditionalField(condition: boolean, name: string, text: string | undefined, inline: boolean = false) {
-	return ifNotNull(condition, { inline, name, value: text! });
-}
-
 export function getAttachment(message: Message): ImageAttachment | null {
 	if (message.attachments.size) {
 		const attachment = message.attachments.find((att) => IMAGE_EXTENSION.test(att.name ?? att.url) || VIDEO_EXTENSION.test(att.name ?? att.url));
@@ -260,58 +255,6 @@ export function isVideo(attachment: ImageAttachment | null) {
 export function parseDescription(description: string | string[] | undefined) {
 	if (!description) return null;
 	return Array.isArray(description) ? description.join('\n') : description;
-}
-
-export function removeEmptyFields(fields: (APIEmbedField | null | undefined)[]): APIEmbedField[] {
-	return fields.filter((field) => Boolean(field)) as APIEmbedField[];
-}
-
-export async function resolveClientColor(
-	resolveable: ChatInputCommandInteraction | GuildResolvable | Message | null,
-	color?: ColorResolvable | number
-): Promise<ColorResolvable> {
-	if (color) return color;
-	if (!resolveable) return BrandingColors.Primary;
-
-	if (resolveable instanceof Message) {
-		if (resolveable.inGuild()) {
-			const { member } = resolveable;
-			if (member) {
-				const memberColor = member.roles.highest.color;
-				if (memberColor) return memberColor;
-			} else {
-				const { maybeMe } = container.utilities.guild(resolveable.guild);
-				if (!maybeMe) return BrandingColors.Primary;
-
-				return maybeMe.displayColor;
-			}
-		} else {
-			return BrandingColors.Primary;
-		}
-	} else if (resolveable instanceof ChatInputCommandInteraction) {
-		if (resolveable.inGuild()) {
-			const fetchedMember = await resolveToNull(resolveable.guild!.members.fetch(resolveable.user.id!));
-			if (fetchedMember) {
-				const memberColor = fetchedMember.roles.highest.color;
-				if (memberColor) return memberColor;
-			} else {
-				const { maybeMe } = container.utilities.guild(resolveable.guild!);
-				if (!maybeMe) return color || BrandingColors.Primary;
-
-				return maybeMe.displayColor;
-			}
-		}
-	}
-	const { maybeMe } = container.utilities.guild(
-		resolveable instanceof Message || resolveable instanceof ChatInputCommandInteraction ? resolveable.guild! : resolveable
-	);
-	if (!maybeMe) return color || BrandingColors.Primary;
-
-	return maybeMe.displayColor;
-}
-
-export function resolveEmbedField(name: string, text: string, inline: boolean = false): APIEmbedField {
-	return { inline, name, value: text };
 }
 
 export const getUnionArg = async <K extends keyof ArgType, T>(cb: (opt: K) => Promise<T>, ...opts: K[]) => {

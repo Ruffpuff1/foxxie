@@ -3,7 +3,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { readSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
-import { getAge, nextBirthday } from '#utils/birthday';
+import { getAge, nextBirthday } from '#modules/birthday';
 import { Schedules } from '#utils/constants';
 import { fetchChannel } from '#utils/functions';
 import { Guild, GuildMember } from 'discord.js';
@@ -22,7 +22,7 @@ const enum BirthdayMessageMatches {
 	enabled: container.client.enabledProdOnlyEvent(),
 	name: Schedules.Birthday
 }))
-export class UserTask extends Task {
+export class BirthdayTask extends Task {
 	private matchRegex = /{member(\.(age|nick|username|tag|guild))?}/g;
 
 	public async run(data: ScheduleEntry.TaskData[Schedules.Birthday]): Promise<null | PartialResponseValue> {

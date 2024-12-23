@@ -7,8 +7,9 @@ import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
 import { minutes, years } from '#utils/common';
 import { Schedules } from '#utils/constants';
+import { resolveClientColor } from '#utils/functions';
 import { sendLoadingMessage } from '#utils/functions/messages';
-import { fetchTasks, MappedTask, resolveClientColor } from '#utils/util';
+import { fetchTasks, MappedTask } from '#utils/util';
 import {
 	ChatInputCommandInteraction,
 	EmbedBuilder,
