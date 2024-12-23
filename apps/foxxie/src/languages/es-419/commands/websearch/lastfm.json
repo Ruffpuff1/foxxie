@@ -1,8 +1,8 @@
 {
-    "description": "Track your music with the Last.fm API",
+    "description": "Registra tu música con la API de Last.fm",
     "detailedDescription": {
         "extendedHelp": [
-            "This command is an extensive integration with the [Last.fm](https://last.fm) API that allows you to track your music stats.",
+            "Este comando es una amplia integración con la API [Last.fm](https://last.fm) que te permite rastrear tus estadísticas de música.",
             "Inspired by [`.fmbot`](https://github.com/fmbot-discord/fmbot/) with some modified features, you can view information for artists, tracks, albums, users and many more."
         ],
         "subcommands": [
