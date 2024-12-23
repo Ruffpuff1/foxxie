@@ -1,0 +1,32 @@
+{
+    "description": "Manage the birthdays of the members of your server",
+    "detailedDescription": {
+        "extendedHelp": "Configure my birthday settings for you in this server.",
+        "subcommands": [
+            {
+                "name": "list",
+                "extendedHelp": [
+                    "Lists the birthdays set in this server"
+                ],
+                "examples": [
+                    ""
+                ]
+            },
+            {
+                "name": "set",
+                "extendedHelp": [
+                    "Allows you to set your birthday in this server with an optional year."
+                ],
+                "examples": [
+                    "08/29/2005",
+                    "12/11"
+                ]
+            }
+        ]
+    },
+    "listFooter": "{{count}} birthday in {{guild}}",
+    "listFooter_other": "{{count}} birthdays in {{guild}}",
+    "listNone": "{{ERROR}} Nobody in this server has set their birthday! Run `{{prefix}}birthday set` to set yours.",
+    "listTitle": "Upcoming birthdays in {{guild}}",
+    "setSuccess": "{{SUCCESS}} Done! I'll wish you a happy birthday on {{birthday, fulldate, bold}}."
+}
