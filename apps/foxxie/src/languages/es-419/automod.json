@@ -1,1 +1,6 @@
-{}
+{
+	"invitesAlert": "{{ERROR}} Don't send those invites here {{author}}!",
+	"invitesReason": "`[Anti Invites]` Server invite link.",
+	"wordAlert": "{{ERROR}} That word is not allowed here {{author}}!",
+	"wordReason": "`[Anti Words]` Prohibited word sent."
+}
