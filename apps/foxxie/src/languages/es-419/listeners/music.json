@@ -1,4 +1,4 @@
 {
-    "songPlayNotify": "{{MUSIC}} Playing {{title, bold}} as requested by {{requester, bold}}.",
-    "songResumeNotify": "{{SUCCESS}} Resumed playing {{title, bold}} {{MUSIC}}"
+    "songPlayNotify": "{{MUSIC}} Jugando {{title, bold}} según lo solicitado por {{requester, bold}}.",
+    "songResumeNotify": "{{SUCCESS}} Reanudó jugando {{title, bold}} {{MUSIC}}"
 }
