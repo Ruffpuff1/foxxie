@@ -1,13 +1,4 @@
 {
-	"helpTitles": {
-		"aliases": "",
-		"usages": "",
-		"extendedHelp": "",
-		"explainedUsage": "",
-		"possibleFormats": "",
-		"examples": "",
-		"reminders": ""
-	},
 	"messageLoading": [
 		"{{LOADING}} Yo me encargare de eso, un momento por favor.",
 		"{{LOADING}} ¡Por supuesto! Esto tomara unos segundos.",
@@ -16,6 +7,6 @@
 		"{{LOADING}} ¡Oye cocinero! ¡Tenemos una nueva orden!"
 	],
 	"prefixReminder": "¡Hola! Mi prefijo para este servidor es: {{prefixes, codeand}}",
-	"prefixReminder_admin": "",
+	"prefixReminder_admin": "-# *If you wanna change it use my {{prefix}}conf command*",
 	"prefixReminder_other": "¡Qué tal! Mis prefijos para este servidor son: {{prefixes, codeand}}"
 }
