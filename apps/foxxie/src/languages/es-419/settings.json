@@ -1,1 +1,18 @@
-{}
+{
+	"autoroles": "Roles which I'll give normal users upon joining your server. (Not Bots)",
+	"botroles": "Roles which I'll give bot users upon joining your server.",
+	"disabledChannels": "Channels users will not be able to use commmands in. For example if you set up general, users will not be able to use commands in general chat. Moderators bypass this setting to be able to use moderation commands when they need to.",
+	"disabledCommands": "Commands of mine that won't be allowed in your server, core commands can not be disabled. Moderators will bypass this setting.",
+	"eventsBanAdd": "Whether or not I should log bans made through the Discord UI as well as my own commands.",
+	"eventsBanRemove": "Whether or not I should log unbans made through the Discord UI as well as my own commands.",
+	"eventsKick": "Whether or not I should log kicks made through the Discord UI as well as my own commands.",
+	"eventsMuteAdd": "Whether or not I should log when the mute role is manually added to a user using the Discord UI.",
+	"eventsMuteRemove": "Whether or not I should log when the mute role is manually removed from a user using the Discord UI.",
+	"language": "The language I'll respond with in your server, currently I support:\n\n- `en-US`: English, United States\n- `es-419`: Spanish, Latin America",
+	"messagesModerationAutoDelete": "Whether or not my moderation commands should be automatically deleted.",
+	"moderationDm": "Whether or not I should send a DM to the target of a moderation command.",
+	"prefix": "The prefix I respond to in your server. I'll also respond if you `@ping` me.",
+	"rolesEmbedRestrict": "The role that is used for the restrictEmbed moderation command. It will prevent users from embeding links such as gifs.",
+	"rolesMuted": "The muted role, if configured I'll give users this role when they are muted. Otherwise I'll help you create a new one.",
+	"rolesPersistEnabled": "Whether or not members should keep there roles if they leave and join back."
+}
