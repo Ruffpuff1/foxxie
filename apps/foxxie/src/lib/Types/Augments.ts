@@ -58,6 +58,7 @@ declare module 'discord.js' {
 		[FoxxieEvents.LastFMScrobbleAudioTrackForMember]: [member: GuildMember, trackInfo: TrackInfo];
 		[FoxxieEvents.MessageCommandLogging]: [message: GuildMessage, command: FoxxieCommand];
 		[FoxxieEvents.MessageCreateBot]: [message: GuildMessage];
+		[FoxxieEvents.MessageCreateBotDisboard]: [message: GuildMessage];
 		[FoxxieEvents.MessageCreateBotRealmBot]: [message: GuildMessage];
 		[FoxxieEvents.MessageCreateStats]: [guildId: Snowflake, member: GuildMember];
 		[FoxxieEvents.ModerationEntryAdd]: [entry: Readonly<ModerationEntry>];

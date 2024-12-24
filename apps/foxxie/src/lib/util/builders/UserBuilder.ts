@@ -1,17 +1,33 @@
 import { resolveToNull } from '@ruffpuff/utilities';
+import { MessageBuilder } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { cutText, toTitleCase } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
 import { ensureMember } from '#lib/database/Models/member';
-import { LanguageKeys } from '#lib/i18n';
-import { FTFunction } from '#lib/types';
+import { getT, LanguageKeys } from '#lib/i18n';
+import { FTFunction, GuildMessage } from '#lib/types';
 import { toStarboardStatsEmoji } from '#utils/common';
-import { Colors } from '#utils/constants';
+import { Colors, CustomIds } from '#utils/constants';
 import { getModeration, isGuildOwner, resolveClientColor } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { discordInviteLink, userLink } from '#utils/transformers';
-import { getFullEmbedAuthor } from '#utils/util';
-import { APIEmbedField, bold, EmbedBuilder, Guild, GuildMember, hyperlink, inlineCode, User } from 'discord.js';
+import { getFullEmbedAuthor, joinCustomId } from '#utils/util';
+import {
+	ActionRowBuilder,
+	APIEmbedField,
+	bold,
+	ButtonBuilder,
+	ButtonInteraction,
+	ButtonStyle,
+	EmbedBuilder,
+	Guild,
+	GuildMember,
+	hyperlink,
+	ImageURLOptions,
+	inlineCode,
+	Message,
+	User
+} from 'discord.js';
 
 interface IsModerationAction {
 	readonly banned: boolean;
@@ -115,21 +131,60 @@ export class UserBuilder {
 		return embed.setDescription([joinedLine, messagesLine].join('\n'));
 	}
 
+	public static async UserAvatar(
+		message: ButtonInteraction | GuildMessage,
+		discordUser: User,
+		entity: GuildMember | User,
+		size: ImageURLOptions['size'] = 1024
+	): Promise<MessageBuilder> {
+		const response = new MessageBuilder();
+
+		const sizeContext = { size };
+
+		const headerAvatar = entity instanceof GuildMember ? entity.user.displayAvatarURL(sizeContext) : entity.displayAvatarURL(sizeContext);
+		const imageAvatar = entity.displayAvatarURL(sizeContext);
+
+		const member = await resolveToNull(message.guild!.members.fetch(discordUser.id));
+		const embed = new EmbedBuilder()
+			.setColor(await resolveClientColor(message.guild, Reflect.get(entity, 'displayColor') || member?.displayColor))
+			.setAuthor(getFullEmbedAuthor(entity, headerAvatar))
+			.setImage(imageAvatar);
+
+		const components = new ActionRowBuilder<ButtonBuilder>().addComponents(
+			new ButtonBuilder()
+				.setLabel('User Info')
+				.setCustomId(joinCustomId(CustomIds.InfoUserReset, discordUser.id, entity.id))
+				.setStyle(ButtonStyle.Secondary)
+				.setEmoji('👤')
+		);
+
+		return response.setEmbeds([embed]).setContent(null!).setComponents([components]);
+	}
+
 	public static async UserInfo(
 		user: User,
-		guild: Guild,
-		t: FTFunction,
-		show: UserShow = { banner: false, notes: true, warnings: false }
-	): Promise<EmbedBuilder> {
+		message: ButtonInteraction | GuildMessage,
+		show: UserShow = { banner: false, notes: false, warnings: false }
+	): Promise<MessageBuilder> {
+		const response = new MessageBuilder();
+		const guild = message.guild!;
+		const discordUser = message instanceof Message ? message.author : message.user;
+
 		const guildSettings = await readSettings(guild);
 		const memberSettings = await ensureMember(user.id, guild.id);
 
+		const t = getT(guildSettings.language);
+
 		const authorString = `${user.tag} (${user.id})`;
 		const member = await resolveToNull(guild.members.fetch(user.id));
-		const color = user.accentColor || (await resolveClientColor(guild, member?.displayColor));
+		const color = await resolveClientColor(guild, member?.displayColor);
 		const titles = t(LanguageKeys.Commands.General.Info.UserTitles);
 		const fields: APIEmbedField[] = [];
 		let starCount = 0;
+
+		let showNotesButton = false;
+		let showBannerButton = false;
+		let showWarningsButton = false;
 
 		const embed = new EmbedBuilder() //
 			.setColor(color)
@@ -202,56 +257,112 @@ export class UserBuilder {
 				value: roleString.length ? roleString : toTitleCase(t(LanguageKeys.Globals.None))
 			});
 
-			if (show.warnings) {
-				const moderation = getModeration(guild);
-				const entries = [...(await moderation.fetch({ userId: user.id })).values()];
-				const warnings = entries.filter(
-					(entry) =>
-						entry.type === TypeVariation.Warning &&
-						entry.metadata === TypeMetadata.None &&
-						entry.guild.id === guild.id &&
-						!entry.isArchived()
-				);
+			const moderation = getModeration(guild);
+			const entries = [...(await moderation.fetch({ userId: user.id })).values()];
+			const warnings = entries.filter(
+				(entry) =>
+					entry.type === TypeVariation.Warning && entry.metadata === TypeMetadata.None && entry.guild.id === guild.id && !entry.isArchived()
+			);
 
-				const list: string[] = [];
+			if (warnings.length) {
+				if (show.warnings) {
+					const list: string[] = [];
 
-				for (const warning of warnings.sort((a, b) => a.id - b.id)) {
-					const moderator = await warning.fetchModerator();
-					const moderatorMember = guild.members.cache.get(moderator.id) || null;
+					for (const warning of warnings.sort((a, b) => a.id - b.id)) {
+						const moderator = await warning.fetchModerator();
+						const moderatorMember = guild.members.cache.get(moderator.id) || null;
 
-					list.push(
-						`${bold(t(LanguageKeys.Globals.NumberFormat, { value: warning.id }))}. ${warning.reason?.length || 0 > 50 ? cutText(warning.reason || 'none', 50) : warning.reason} - ${bold(moderatorMember?.displayName || moderator.username)}`
-					);
-				}
+						list.push(
+							`${bold(t(LanguageKeys.Globals.NumberFormat, { value: warning.id }))}. ${warning.reason?.length || 0 > 50 ? cutText(warning.reason || 'none', 50) : warning.reason} - ${bold(moderatorMember?.displayName || moderator.username)}`
+						);
+					}
 
-				if (list.length) {
-					fields.push({
-						name: ':lock: Warnings',
-						value: list.join('\n')
-					});
+					if (list.length) {
+						fields.push({
+							name: t(LanguageKeys.Commands.General.Info.UserTitlesWarnings, { count: list.length }),
+							value: list.join('\n')
+						});
+					}
+				} else {
+					showWarningsButton = true;
 				}
 			}
 
-			if (show.notes) {
-				const notes = await container.settings.members.notes.fetchGuildMember(guild.id, user.id);
+			const notes = await container.settings.members.notes.fetchGuildMember(guild.id, user.id);
 
-				if (notes.length) {
+			if (notes.length) {
+				if (show.notes) {
 					await Promise.all(notes.map((note) => note.fetchAuthor()));
 
 					fields.push({
 						name: t(LanguageKeys.Commands.General.Info.UserTitlesNotes, {
 							count: notes.length
 						}),
-						value: notes.map((note) => note.display(t)).join('\n')
+						value: notes.map((note, index) => note.display(t, index)).join('\n')
 					});
+				} else {
+					showNotesButton = true;
 				}
 			}
 		}
 
-		if (user.banner && show.banner) {
-			embed.setImage(user.bannerURL({ size: 2048 }) || null);
+		if (user.banner) {
+			if (show.banner) {
+				embed.setImage(user.bannerURL({ size: 2048 }) || null);
+			} else {
+				showBannerButton = true;
+			}
 		}
 
-		return embed.addFields(fields);
+		embed.addFields(fields);
+
+		const components = new ActionRowBuilder<ButtonBuilder>();
+		const buttonLabels = t(LanguageKeys.Commands.General.Info.UserButtonLabels);
+
+		if (show.banner || show.notes || show.warnings) {
+			components.addComponents(
+				new ButtonBuilder()
+					.setCustomId(joinCustomId(CustomIds.InfoUserReset, discordUser.id, user.id))
+					.setStyle(ButtonStyle.Primary)
+					.setEmoji('⬅️')
+			);
+		}
+
+		if (showBannerButton)
+			components.addComponents(
+				new ButtonBuilder()
+					.setLabel(buttonLabels.banner)
+					.setCustomId(joinCustomId(CustomIds.InfoUserBanner, discordUser.id, user.id, show.notes, show.warnings))
+					.setStyle(ButtonStyle.Secondary)
+					.setEmoji('📷')
+			);
+
+		if (showNotesButton)
+			components.addComponents(
+				new ButtonBuilder()
+					.setLabel(buttonLabels.notes)
+					.setCustomId(joinCustomId(CustomIds.InfoUserNotes, discordUser.id, user.id, show.banner, show.warnings))
+					.setStyle(ButtonStyle.Secondary)
+					.setEmoji('🏷️')
+			);
+
+		if (showWarningsButton)
+			components.addComponents(
+				new ButtonBuilder()
+					.setLabel(buttonLabels.warnings)
+					.setCustomId(joinCustomId(CustomIds.InfoUserWarnings, discordUser.id, user.id, show.banner, show.notes))
+					.setStyle(ButtonStyle.Secondary)
+					.setEmoji('🔒')
+			);
+
+		components.addComponents(
+			new ButtonBuilder()
+				.setLabel(buttonLabels.avatar)
+				.setCustomId(joinCustomId(CustomIds.InfoUserAvatar, discordUser.id, user.id))
+				.setStyle(ButtonStyle.Secondary)
+				.setEmoji('🖼️')
+		);
+
+		return response.setContent(null!).setEmbeds([embed]).setComponents([components]);
 	}
 }

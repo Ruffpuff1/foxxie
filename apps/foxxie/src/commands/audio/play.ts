@@ -57,10 +57,7 @@ export class UserCommand extends AudioCommand {
 	async #addSongs(msg: GuildMessage, args: AudioCommand.Args): Promise<GuildMessage> {
 		const loading = await sendLoadingMessage(msg);
 
-		const songs = await args.rest('song').catch((e) => {
-			console.log(e);
-			return [];
-		});
+		const songs = await args.rest('song').catch(() => []);
 		if (!songs.length) this.error(LanguageKeys.Commands.Audio.Play.NoSongs);
 
 		const tracks = songs.map((track) => ({ author: msg.author.id, track }));

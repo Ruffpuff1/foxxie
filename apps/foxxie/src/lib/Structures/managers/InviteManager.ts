@@ -64,9 +64,7 @@ export class InviteManager extends Collection<string, InviteCode> {
 		if (!cachedInvites) return null;
 
 		const usedInvite = fetchedInvites.find((invite) => {
-			console.log(invite.uses);
 			const cached = cachedInvites.get(invite.code);
-			console.log(cached);
 			if (!cached || !invite.uses) return false;
 
 			return invite.uses > cached;

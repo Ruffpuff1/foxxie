@@ -108,6 +108,9 @@ model guilds {
   channelsIgnoreReactionAdd            String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("channels.ignore.reaction-add") @db.VarChar(19)
   disabledChannels                     String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("disabled-channels") @db.VarChar(19)
   disabledCommandsChannels             Json     @default("[]") @map("disabled-commands-channels")
+  disboardChannel String? @db.VarChar(19)
+  disboardMessage String?
+  disboardEmbed String?
   eventsBanAdd                         Boolean  @default(true) @map("events.ban-add")
   eventsBanRemove                      Boolean  @default(true) @map("events.ban-remove")
   eventsKick                           Boolean  @default(true) @map("events.kick")

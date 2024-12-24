@@ -37,12 +37,13 @@ export class MenuBuilder {
 
 		if (isNullishOrEmpty(extendedHelpData.subcommands)) {
 			const aliases = [...command.aliases];
-			const data = args.t(LanguageKeys.Commands.General.Help.Data, {
-				aliases: aliases.length ? aliases : undefined,
-				context: aliases.length ? 'alias' : undefined,
-				footerName: command.name,
-				titleDescription: args.t(command.description)
-			});
+			const data = aliases.length
+				? args.t(LanguageKeys.Commands.General.Help.DataAlias, {
+						aliases,
+						footerName: command.name,
+						titleDescription: args.t(command.description)
+					})
+				: args.t(LanguageKeys.Commands.General.Help.Data, { footerName: command.name, titleDescription: args.t(command.description) });
 
 			embed
 				.setFooter(resolveFooter(data.footer))

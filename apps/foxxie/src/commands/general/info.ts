@@ -35,7 +35,7 @@ export class InfoCommand extends FoxxieSubcommand {
 		await floatPromise(user.fetch());
 		await sendLoadingMessage(message);
 
-		const display = await UserBuilder.UserInfo(user, message.guild, args.t, {
+		const display = await UserBuilder.UserInfo(user, message, {
 			banner: args.getFlags(...InfoCommand.Flags.Banner),
 			notes: args.getFlags(...InfoCommand.Flags.Note),
 			warnings: args.getFlags(...InfoCommand.Flags.Warning)

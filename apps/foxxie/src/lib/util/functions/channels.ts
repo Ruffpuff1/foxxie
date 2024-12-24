@@ -13,7 +13,7 @@ export async function fetchChannel<T = GuildTextBasedChannel>(resolvable: GuildR
 	if (!channelId) return null;
 
 	const channel = await resolveToNull(guild.channels.fetch(channelId));
-	if (!channel) {
+	if (!channel || !channel.isSendable()) {
 		await writeSettings(guild.id, { [key]: null });
 		return null;
 	}

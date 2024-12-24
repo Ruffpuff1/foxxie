@@ -1,4 +1,5 @@
-import { ApplyOptions, RequiresClientPermissions } from '@sapphire/decorators';
+import { resolveToNull } from '@ruffpuff/utilities';
+import { ApplyOptions } from '@sapphire/decorators';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { send } from '@sapphire/plugin-editable-commands';
 import { chunk } from '@sapphire/utilities';
@@ -7,20 +8,10 @@ import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
 import { minutes, years } from '#utils/common';
 import { Schedules } from '#utils/constants';
-import { resolveClientColor } from '#utils/functions';
+import { resolveUserDisplayName } from '#utils/functions';
 import { sendLoadingMessage } from '#utils/functions/messages';
 import { fetchTasks, MappedTask } from '#utils/util';
-import {
-	ChatInputCommandInteraction,
-	EmbedBuilder,
-	escapeMarkdown,
-	GuildMember,
-	Message,
-	PermissionFlagsBits,
-	time,
-	TimestampStyles,
-	User
-} from 'discord.js';
+import { bold, EmbedBuilder, escapeMarkdown, GuildMember, hyperlink, inlineCode, Message, time, TimestampStyles, User } from 'discord.js';
 
 const flags = ['c', 'channel'];
 export type JSONEmbed = ReturnType<EmbedBuilder['toJSON']>;
@@ -72,6 +63,7 @@ export class UserCommand extends FoxxieSubcommand {
 			data: {
 				channelId: channel?.id || null,
 				createdChannelId: msg.channel.id,
+				createdMessageId: msg.id,
 				json,
 				repeat,
 				text: json ? args.getOption('content') : content,
@@ -102,13 +94,14 @@ export class UserCommand extends FoxxieSubcommand {
 		);
 	}
 
-	@RequiresClientPermissions([PermissionFlagsBits.AddReactions, PermissionFlagsBits.EmbedLinks])
 	public async messageRunList(msg: GuildMessage, args: FoxxieSubcommand.Args) {
 		const loading = await sendLoadingMessage(msg);
 
-		const tasks = await fetchTasks(Schedules.Reminder).filter((job) => job.data.userId === msg.author.id);
+		const tasks = await fetchTasks(Schedules.Reminder)
+			.filter((job) => job.data.userId === msg.author.id)
+			.sort((a, b) => a.time.getTime() - b.time.getTime());
+
 		if (!tasks.length) {
-			await loading.delete();
 			this.error(LanguageKeys.Commands.Misc.ReminderNone);
 		}
 
@@ -181,36 +174,33 @@ export class UserCommand extends FoxxieSubcommand {
 		return send(msg, content);
 	}
 
-	async #buildAndShowDisplay(
-		input: ChatInputCommandInteraction | GuildMessage,
-		entity: GuildMember | User,
-		t: FoxxieSubcommand.T,
-		tasks: MappedTask<Schedules.Reminder>[]
-	) {
+	async #buildAndShowDisplay(input: GuildMessage, entity: GuildMember | User, t: FoxxieSubcommand.T, tasks: MappedTask<Schedules.Reminder>[]) {
 		const user = entity instanceof User ? entity : entity.user;
 
-		const template = new EmbedBuilder() //
-			.setColor(await resolveClientColor(input))
-			.setAuthor({
-				iconURL: user.displayAvatarURL(),
-				name: t(LanguageKeys.Commands.Misc.ReminderList, {
-					author: user.username
-				})
-			});
+		const title = t(LanguageKeys.Commands.Misc.ReminderList, {
+			author: await resolveUserDisplayName(user.id, input.guild)
+		});
 
-		const display = new PaginatedMessage({ template }); // .setPromptMessage(t(LanguageKeys.System.ReactionHandlerPrompt));
-		const pages = chunk(
-			tasks.map((task) => this.#mapTask(task)),
-			5
-		);
+		const display = new PaginatedMessage(); // .setPromptMessage(t(LanguageKeys.System.ReactionHandlerPrompt));
+		const pages = chunk(await Promise.all(tasks.map(async (task) => this.#mapTask(task))), 5);
 
-		for (const page of pages) display.addPageEmbed((embed) => embed.setDescription(page.join('\n')));
+		for (const page of pages) display.addPageBuilder((builder) => builder.setContent([title, '', page.join('\n')].join('\n')));
 		return display.run(input);
 	}
 
-	#mapTask(task: MappedTask<Schedules.Reminder>) {
+	async #mapTask(task: MappedTask<Schedules.Reminder>) {
 		const text = escapeMarkdown(task.data.text!).replace(/\n/g, ' ');
-		return `\`[${task.id}]\` - ${text.length > 30 ? `${text.substring(0, 27).trim()}...` : text} - **${time(new Date(task.time), TimestampStyles.LongDateTime)}**`;
+
+		let id = null;
+		const channel = await resolveToNull(this.container.client.channels.fetch(task.data.createdChannelId));
+		if (channel && channel.isSendable()) {
+			const message = await resolveToNull(channel.messages.fetch(task.data.createdMessageId));
+			if (message && message.url) {
+				id = hyperlink(inlineCode(`[${task.id.toLocaleString()}]`), message.url);
+			}
+		}
+
+		return `${id ?? inlineCode(`[${task.id.toLocaleString()}]`)} - ${text.length > 35 ? `${text.substring(0, 27).trim()}...` : text} - ${bold(`(${task.data.channelId ? '' : ':mailbox_with_mail: '}${time(task.time, TimestampStyles.RelativeTime)})`)}`;
 	}
 
 	private async deleteAll(msg: GuildMessage, args: FoxxieSubcommand.Args): Promise<Message> {

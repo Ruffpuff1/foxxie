@@ -140,6 +140,7 @@ export namespace ScheduleEntry {
 	export interface ReminderTaskData {
 		channelId: null | string;
 		createdChannelId: string;
+		createdMessageId: string;
 		json: JSONEmbed | null;
 		repeat: null | number;
 		text: null | string;
@@ -165,6 +166,7 @@ export namespace ScheduleEntry {
 	}
 
 	export interface TaskData {
+		[Schedules.Disboard]: { guildId: string };
 		[Schedules.LastFMUpdateArtistsForUser]: { playUpdate: PlayUpdate; userId: string };
 		birthday: BirthdayTaskData;
 		indexUser: IndexUserQueueItem;

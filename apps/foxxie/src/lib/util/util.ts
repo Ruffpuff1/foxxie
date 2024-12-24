@@ -303,6 +303,10 @@ export function isUserSelf(userId: Snowflake) {
 	return userId === process.env.CLIENT_ID;
 }
 
+export function joinCustomId(...args: unknown[]) {
+	return args.map((a) => `${a}`).join('-');
+}
+
 export function mapSubcommandAliases(name: string, messageRun: string, isDefault: boolean, ...aliases: string[]): SubcommandMapping[] {
 	const inital = { default: isDefault, messageRun, name };
 	const mapped = aliases.map((a) => ({ messageRun, name: a }) as SubcommandMapping);

@@ -8,6 +8,7 @@ import { Ctor, isNullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FoxxieSubcommand } from '#lib/structures';
+import { FoxxieButtonInteractionHandler } from '#lib/Structures/commands/interactions/FoxxieButtonInteractionHandler';
 import { GuildMessage, PermissionLevels, TypedT } from '#lib/types';
 import { getAudio, sendLocalizedMessage } from '#utils/functions';
 import {
@@ -166,6 +167,20 @@ export const MessageSubcommand = (methodName: string, isDefault = false, aliases
 };
 
 const guildOnlyMap = new Map<string, boolean>();
+
+export const RegisterButtonHandler = (handler: FoxxieButtonInteractionHandler.Handler) => {
+	return createClassDecorator((buttonHandler: Ctor) => {
+		return createProxy(buttonHandler, {
+			construct: (ctor, [context, base = {}]) => {
+				return new ctor(context, {
+					...base,
+					handler,
+					key: handler.name.toLowerCase()
+				});
+			}
+		});
+	});
+};
 
 export const RegisterCommand = (
 	options: ((builder: FoxxieSubcommandBuilder) => FoxxieSubcommandBuilder) | FoxxieSubcommand.Options,

@@ -158,10 +158,19 @@ export const allowedInviteIds = [
 ];
 
 export const enum BotIds {
+	Disboard = '302050872383242240',
 	Foxxie = '825130284382289920',
 	FoxxieAlpha = '812546582531801118',
 	FoxxieNightly = '840755658793418782',
 	RealmBot = '840681796914905100'
+}
+
+export const enum CustomIds {
+	InfoUserAvatar = 'infouseravatar',
+	InfoUserBanner = 'infouserbanner',
+	InfoUserNotes = 'infousernotes',
+	InfoUserReset = 'infouserreset',
+	InfoUserWarnings = 'infouserwarnings'
 }
 
 export const enum SelectMenuCustomIds {

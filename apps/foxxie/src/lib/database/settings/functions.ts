@@ -120,6 +120,10 @@ export function deleteSettingsCached(guild: GuildResolvable) {
 
 export async function readSettings<T extends K>(guild: GuildResolvable, key: T): Promise<G[T]>;
 export async function readSettings<K1 extends K, K2 extends K>(guild: GuildResolvable, key: [K1, K2]): Promise<[G[K1], G[K2]]>;
+export async function readSettings<K1 extends K, K2 extends K, K3 extends K>(
+	guild: GuildResolvable,
+	key: [K1, K2, K3]
+): Promise<[G[K1], G[K2], G[K3]]>;
 export async function readSettings<R>(guild: GuildResolvable, cb: SettingsCollectionCallback<G, R>): Promise<R>;
 export async function readSettings(guild: GuildResolvable): Promise<G>;
 export async function readSettings(guild: GuildResolvable, key?: any): Promise<G | unknown | unknown[]> {

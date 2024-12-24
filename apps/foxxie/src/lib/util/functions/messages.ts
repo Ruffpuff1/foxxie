@@ -17,6 +17,7 @@ import {
 	italic,
 	type Message,
 	type MessageCreateOptions,
+	MessageEditOptions,
 	RESTJSONErrorCodes,
 	type UserResolvable
 } from 'discord.js';
@@ -83,6 +84,19 @@ export async function deleteMessage(message: Message, time = 0): Promise<Message
 	return deleteMessageImmediately(message);
 }
 
+export async function editMessage(message: GuildMessage, options: EmbedBuilder | MessageEditOptions | string | string[], arrayJoiner = '\n') {
+	const resolvedOptions =
+		typeof options === 'string'
+			? { components: [], content: options, embeds: [] }
+			: Array.isArray(options)
+				? options.join(arrayJoiner)
+				: options instanceof EmbedBuilder
+					? { components: [], content: null, embeds: [options] }
+					: { components: [], content: null!, embeds: [], ...options };
+
+	return floatPromise(message.edit(resolvedOptions));
+}
+
 /**
  * Gets the tracked command from a message.
  * @param message The message to get the command from.
@@ -91,7 +105,6 @@ export async function deleteMessage(message: Message, time = 0): Promise<Message
 export function getCommand(message: Message): FoxxieCommand | null {
 	return messageCommands.get(message) ?? null;
 }
-
 export async function sendLoadingMessage(
 	message: GuildMessage,
 	key?: CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]>,
@@ -102,6 +115,7 @@ export async function sendLoadingMessage(
 	key?: boolean | CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]>,
 	args?: object
 ): Promise<InteractionResponse>;
+
 export async function sendLoadingMessage(
 	message: ChatInputCommandInteraction | GuildMessage,
 	key?: boolean | CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]>,
@@ -143,7 +157,6 @@ export async function sendLoadingMessageInChannel(
  * ```
  */
 export function sendLocalizedMessage(message: Message, key: LocalizedSimpleKey): Promise<Message>;
-
 /**
  * Send an editable localized message using an object.
  * @param message The message to reply to.
@@ -167,6 +180,7 @@ export function sendLocalizedMessage(message: Message, key: LocalizedSimpleKey):
  * ```
  */
 export function sendLocalizedMessage<TArgs extends object>(message: Message, options: LocalizedMessageOptions<TArgs>): Promise<Message>;
+
 export async function sendLocalizedMessage(message: Message, options: LocalizedMessageOptions | LocalizedSimpleKey) {
 	if (typeof options === 'string') options = { key: options };
 
