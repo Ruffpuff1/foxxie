@@ -4,7 +4,7 @@ import { cast } from '@sapphire/utilities';
 import FoxxieClient from '#lib/FoxxieClient';
 import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FoxxieArgs, FoxxieCommandUtilities } from '#lib/structures';
-import { PermissionLevels, TypedFT, TypedT } from '#lib/types';
+import { GuildMessage, PermissionLevels, TypedFT, TypedT } from '#lib/types';
 import { clientOwners } from '#root/config';
 import { seconds } from '#utils/common';
 import { Awaitable, Guild, Message, Snowflake } from 'discord.js';
@@ -125,8 +125,8 @@ export namespace FoxxieCommand {
 	export type ChatInputCommandInteraction = { guild: Guild; guildId: string } & Command.ChatInputCommandInteraction;
 	export type ChatInputContext = ChatInputCommandContext;
 	export type Context = MessageCommandContext;
-
 	export type LoaderContext = Command.LoaderContext;
+	export type MessageRunArgs = [message: GuildMessage, args: Args, context: MessageCommandContext];
 	export type Options = {
 		allowedGuilds?: string[];
 		description?: TypedT<string>;

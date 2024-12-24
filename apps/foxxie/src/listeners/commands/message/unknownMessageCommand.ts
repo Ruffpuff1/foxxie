@@ -1,8 +1,7 @@
 import { Listener } from '@sapphire/framework';
 import { readSettings, Tag } from '#lib/database';
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
-import { deleteMessage, sendMessage } from '#utils/functions';
-import { resolveClientColor } from '#utils/util';
+import { deleteMessage, resolveClientColor, sendMessage } from '#utils/functions';
 import { ColorResolvable, EmbedBuilder, Message } from 'discord.js';
 
 export class UserListener extends Listener<FoxxieEvents.UnknownMessageCommand> {

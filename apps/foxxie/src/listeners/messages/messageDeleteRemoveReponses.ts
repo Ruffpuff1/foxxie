@@ -11,8 +11,6 @@ import { Message } from 'discord.js';
 export class UserListener extends Listener {
 	public async run(message: Message): Promise<void> {
 		const response = get(message);
-		console.log(response);
-
 		if (response === null) return;
 
 		if (await this.#shouldBeIgnored(message)) return;

@@ -12,10 +12,10 @@ export const Categories = T<{
 	util: string;
 	websearch: string;
 }>('commands/general/help:categories');
-export const Data = FT<
-	{ aliases: string[]; context: 'alias'; footerName: string; titleDescription: string } | { footerName: string; titleDescription: string },
-	{ footer: string; title: string }
->('commands/general/help:data');
+export const Data = FT<{ footerName: string; titleDescription: string }, { footer: string; title: string }>('commands/general/help:data');
+export const DataAlias = FT<{ aliases: string[]; footerName: string; titleDescription: string }, { footer: string; title: string }>(
+	'commands/general/help:dataAlias'
+);
 export const Description = T('commands/general/help:description');
 export const Menu = FT<{ name: string }>('commands/general/help:menu');
 export const Titles = T<{

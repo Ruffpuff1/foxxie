@@ -1,7 +1,8 @@
 import { Result } from '@sapphire/result';
 import { LanguageKeys } from '#lib/i18n';
 import { FTFunction } from '#lib/types';
-import { getDateFormat, monthOfYearContainsDay, yearIsLeap } from '#utils/birthday';
+
+import { getDateFormat, monthOfYearContainsDay, yearIsLeap } from './util.js';
 
 export function resolveBirthday(parameter: string, t: FTFunction) {
 	const format = t(LanguageKeys.Globals.DateFormat);

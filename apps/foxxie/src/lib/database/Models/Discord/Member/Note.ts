@@ -22,9 +22,9 @@ export class Note {
 		Object.assign(this, data);
 	}
 
-	public display(t: FTFunction) {
+	public display(t: FTFunction, index: number) {
 		const name = this.author?.username || t(LanguageKeys.Globals.Unknown);
-		return [`${bold(t(LanguageKeys.Globals.NumberFormat, { value: this.id }))}.`, this.reason, `- **${name}**`].join(' ');
+		return [`${bold(t(LanguageKeys.Globals.NumberFormat, { value: index + 1 }))}.`, this.reason, `- **${name}**`].join(' ');
 	}
 
 	public fetchAuthor() {

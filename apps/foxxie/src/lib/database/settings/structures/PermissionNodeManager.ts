@@ -79,13 +79,11 @@ export class PermissionNodeManager {
 				Reflect.set(Reflect.get(object, category), command.name.toLowerCase(), commandValue);
 			}
 		}
-		console.log(object);
 
 		const out = [];
 		const name = target instanceof Role ? (target.id === target.guild.id ? 'Everyone' : target.name) : target.displayName;
 
 		out.push(`Permissions for **${name}**`, '');
-		console.log(node);
 
 		if (node.allow.has('*')) {
 			out.push(`${emojis.perms.granted} all commands (*)`);

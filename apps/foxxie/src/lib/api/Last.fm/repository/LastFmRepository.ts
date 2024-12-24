@@ -166,8 +166,6 @@ export class LastFmRepository {
 		}
 
 		const trackCall = await this._lastFmApi.callApi(queryParams, Call.TrackInfo);
-		console.log(trackCall);
-
 		return trackCall;
 	}
 

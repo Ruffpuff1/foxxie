@@ -27,7 +27,6 @@ export class UserListener extends Listener {
 				getLogger(guild).prune.setFromAuditLogs(data.target_id!, { userId: data.user_id! });
 				break;
 			case AuditLogEvent.MessageDelete:
-				console.log(data);
 				getLogger(guild).delete.setFromAuditLogs(data.target_id!, { reason: data.reason, userId: data.user_id! });
 				break;
 			default:

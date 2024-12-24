@@ -1,13 +1,14 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { createClassDecorator, createFunctionPrecondition, createMethodDecorator, createProxy, DecoratorIdentifiers } from '@sapphire/decorators';
 import { isDMChannel, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
-import { Command, CommandOptionsRunTypeEnum, RegisterBehavior, UserError } from '@sapphire/framework';
+import { Command, CommandOptionsRunTypeEnum, CommandRunInUnion, CommandSpecificRunIn, RegisterBehavior, UserError } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { SubcommandMapping, SubcommandMappingArray, SubcommandMappingMethod } from '@sapphire/plugin-subcommands';
 import { Ctor, isNullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FoxxieSubcommand } from '#lib/structures';
+import { FoxxieButtonInteractionHandler } from '#lib/Structures/commands/interactions/FoxxieButtonInteractionHandler';
 import { GuildMessage, PermissionLevels, TypedT } from '#lib/types';
 import { getAudio, sendLocalizedMessage } from '#utils/functions';
 import {
@@ -46,22 +47,6 @@ export const RequiresLastFMUsername = (
 			const entity = await container.prisma.userLastFM.findFirst({ where: { userid: message.member?.user.id } });
 			if (entity?.usernameLastFM) return true;
 			return false;
-		},
-		() => {
-			throw new UserError({ identifier: thrownError, ...userErrorOptions });
-		}
-	);
-};
-
-export const RequiresStarboardEntries = (
-	thrownError: string = 'preconditions:starboardNoEntries',
-	userErrorOptions?: Omit<UserError.Options, 'identifier'>
-): MethodDecorator => {
-	return createFunctionPrecondition(
-		async (message: GuildMessage) => {
-			const entity = await container.prisma.starboard.findFirst({ where: { guildId: message.guild.id } });
-			if (!entity) return false;
-			return true;
 		},
 		() => {
 			throw new UserError({ identifier: thrownError, ...userErrorOptions });
@@ -183,6 +168,20 @@ export const MessageSubcommand = (methodName: string, isDefault = false, aliases
 
 const guildOnlyMap = new Map<string, boolean>();
 
+export const RegisterButtonHandler = (handler: FoxxieButtonInteractionHandler.Handler) => {
+	return createClassDecorator((buttonHandler: Ctor) => {
+		return createProxy(buttonHandler, {
+			construct: (ctor, [context, base = {}]) => {
+				return new ctor(context, {
+					...base,
+					handler,
+					key: handler.name.toLowerCase()
+				});
+			}
+		});
+	});
+};
+
 export const RegisterCommand = (
 	options: ((builder: FoxxieSubcommandBuilder) => FoxxieSubcommandBuilder) | FoxxieSubcommand.Options,
 	builder?:
@@ -294,17 +293,21 @@ export const GuildOnlyCommand = () => {
 };
 
 export class FoxxieSubcommandBuilder {
-	public aliases: string[] = [];
+	private aliases: string[] = [];
 
-	public description: TypedT<string> | undefined;
+	private description: TypedT<string> | undefined;
 
-	public detailedDescription: TypedT<LanguageHelpDisplayOptions> | undefined;
+	private detailedDescription: TypedT<LanguageHelpDisplayOptions> | undefined;
 
-	public flags: boolean | string[] | undefined;
+	private flags: boolean | string[] | undefined;
 
-	public permissionLevel: PermissionLevels | undefined;
+	private permissionLevel: PermissionLevels | undefined;
 
-	public requiredClientPermissions: PermissionResolvable | undefined;
+	private requiredClientPermissions: PermissionResolvable | undefined;
+
+	private requiredUserPermission: PermissionResolvable | undefined;
+
+	private runIn: CommandRunInUnion | CommandSpecificRunIn | undefined;
 
 	public setAliases(...aliases: string[]) {
 		this.aliases = aliases;
@@ -336,6 +339,16 @@ export class FoxxieSubcommandBuilder {
 		return this;
 	}
 
+	public setRequiredUserPermissions(permissions: PermissionResolvable) {
+		this.requiredUserPermission = permissions;
+		return this;
+	}
+
+	public setRunIn(runIn: CommandRunInUnion | CommandSpecificRunIn) {
+		this.runIn = runIn;
+		return this;
+	}
+
 	public toJSON(): FoxxieSubcommand.Options {
 		return {
 			aliases: this.aliases,
@@ -343,7 +356,9 @@ export class FoxxieSubcommandBuilder {
 			detailedDescription: this.detailedDescription,
 			flags: this.flags,
 			permissionLevel: this.permissionLevel,
-			requiredClientPermissions: this.requiredClientPermissions
+			requiredClientPermissions: this.requiredClientPermissions,
+			requiredUserPermissions: this.requiredUserPermission,
+			runIn: this.runIn
 		};
 	}
 }

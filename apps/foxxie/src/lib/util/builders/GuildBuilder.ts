@@ -3,8 +3,7 @@ import { isNullish } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { FTFunction } from '#lib/types';
-import { formatGuildChannels, formatGuildEmojis, getEmojiData, getGuildEmbedAuthor, getGuildRoles } from '#utils/functions';
-import { resolveClientColor } from '#utils/util';
+import { formatGuildChannels, formatGuildEmojis, getEmojiData, getGuildEmbedAuthor, getGuildRoles, resolveClientColor } from '#utils/functions';
 import { APIInteractionGuildMember, EmbedBuilder, Guild, GuildMember, PermissionFlagsBits } from 'discord.js';
 
 export class GuildBuilder {

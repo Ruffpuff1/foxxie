@@ -13,7 +13,7 @@ import { PermissionFlagsBits } from 'discord.js';
 		.setAliases('i', 'notes', 'warnings')
 		.setDescription(InfoCommand.Language.Description)
 		.setDetailedDescription(LanguageKeys.Commands.General.Stats.DetailedDescription)
-		.setFlags([...InfoCommand.Flags.Warning, ...InfoCommand.Flags.Note, ...InfoCommand.Flags.Banner])
+		.setFlags(InfoCommand.AllFlags)
 		.setRequiredClientPermissions(PermissionFlagsBits.EmbedLinks)
 )
 export class InfoCommand extends FoxxieSubcommand {
@@ -35,7 +35,7 @@ export class InfoCommand extends FoxxieSubcommand {
 		await floatPromise(user.fetch());
 		await sendLoadingMessage(message);
 
-		const display = await UserBuilder.UserInfo(user, message.guild, args.t, {
+		const display = await UserBuilder.UserInfo(user, message, {
 			banner: args.getFlags(...InfoCommand.Flags.Banner),
 			notes: args.getFlags(...InfoCommand.Flags.Note),
 			warnings: args.getFlags(...InfoCommand.Flags.Warning)
@@ -44,15 +44,19 @@ export class InfoCommand extends FoxxieSubcommand {
 		await sendMessage(message, display);
 	}
 
-	public static Flags = {
+	private static get AllFlags() {
+		return [...InfoCommand.Flags.Warning, ...InfoCommand.Flags.Note, ...InfoCommand.Flags.Banner];
+	}
+
+	private static Flags = {
 		Banner: ['b', 'banner'],
 		Note: ['n', 'note', 'notes'],
 		Warning: ['w', 'warn', 'warnings', 'warning']
 	};
 
-	public static Language = LanguageKeys.Commands.General.Info;
+	private static Language = LanguageKeys.Commands.General.Info;
 
-	public static SubcommandKeys = {
+	private static SubcommandKeys = {
 		Guild: 'guild',
 		User: 'user'
 	};

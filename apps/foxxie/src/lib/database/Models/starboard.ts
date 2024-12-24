@@ -10,8 +10,8 @@ import { readSettings } from '#lib/database/settings/functions';
 import { StarboardManager } from '#lib/structures';
 import { EnvKeys, FTFunction, GuildMessage } from '#lib/types';
 import { floatPromise } from '#utils/common';
-import { defaultStarboardEmojis, getGuildStarboard } from '#utils/functions';
-import { fetchReactionUsers, getAttachment, getImage, isVideo, resolveClientColor } from '#utils/util';
+import { defaultStarboardEmojis, getGuildStarboard, resolveClientColor } from '#utils/functions';
+import { fetchReactionUsers, getAttachment, getImage, isVideo } from '#utils/util';
 import { bold, Client, DiscordAPIError, EmbedBuilder, HTTPError, Message, MessageEditOptions, RESTJSONErrorCodes, TextChannel } from 'discord.js';
 
 export type StarboardData = starboard;

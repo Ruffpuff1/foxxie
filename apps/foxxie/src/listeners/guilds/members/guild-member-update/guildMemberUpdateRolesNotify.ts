@@ -42,7 +42,7 @@ export class UserListener extends Listener {
 			key: 'channelsLogsMemberRolesUpdate',
 			makeMessage: () =>
 				new EmbedBuilder()
-					.setColor(Colors.Yellow)
+					.setColor(Colors.Blue)
 					.setAuthor(getFullEmbedAuthor(member))
 					.setDescription(description.join('\n'))
 					.setFooter({ text: `Roles Updated` })

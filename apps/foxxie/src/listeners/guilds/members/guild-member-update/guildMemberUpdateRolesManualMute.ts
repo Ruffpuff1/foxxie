@@ -13,14 +13,12 @@ export class UserListener extends ManualModerationListener<FoxxieEvents.GuildMem
 		const logger = getLogger(member);
 
 		const actionByFoxxie = logger.mute.isSet(member.id);
-		console.log(actionByFoxxie, 'by fox');
 		if (actionByFoxxie) return;
 
 		const controller = new AbortController();
 		const contextPromise = logger.mute.wait(member.id, controller.signal);
 
 		const context = await contextPromise;
-		console.log(context, 'ctx');
 		if (!context) return;
 
 		await ModerationActions.mute.applyManual(member.guild, this.getOptions(context, member), await this.fetchDMContext(member, context!.userId));

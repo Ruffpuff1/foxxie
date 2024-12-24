@@ -8,7 +8,7 @@ import { Task } from '#lib/schedule';
 
 export class TaskStore extends Store<Task> {
 	/**
-	 * Constructs our TaskStore for use in Skyra
+	 * Constructs our TaskStore for use in Foxxie
 	 * @param client The client that instantiates this store
 	 */
 	public constructor() {

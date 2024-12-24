@@ -250,8 +250,6 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 				const t = getFixedT(lng!);
 				let key: CustomGet<string, string>;
 
-				console.log(value);
-
 				switch (value) {
 					case GuildExplicitContentFilter.AllMembers:
 						key = LanguageKeys.Guilds.ContentFilters.AllMembers;

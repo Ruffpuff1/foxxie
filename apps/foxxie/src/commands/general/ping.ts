@@ -8,11 +8,11 @@ import { RegisterCommand } from '#utils/decorators';
 import { sendMessage } from '#utils/functions';
 
 @RegisterCommand(
-	{
-		aliases: ['pong'],
-		description: PingCommand.Language.Description,
-		runIn: [CommandOptionsRunTypeEnum.Dm, CommandOptionsRunTypeEnum.GuildAny]
-	},
+	(command) =>
+		command
+			.setAliases('pong')
+			.setDescription(PingCommand.Language.Description)
+			.setRunIn([CommandOptionsRunTypeEnum.Dm, CommandOptionsRunTypeEnum.GuildAny]),
 	(builder) => applyLocalizedBuilder(builder, PingCommand.Language.Name, PingCommand.Language.Description),
 	PingCommand.IdHints
 )
@@ -53,10 +53,10 @@ export default class PingCommand extends FoxxieCommand {
 		await sendMessage(message, content);
 	}
 
-	public static IdHints = [
+	private static IdHints = [
 		'1315313808859861116', // Prod
 		'1315209780419366984' // Nightly
 	];
 
-	public static Language = LanguageKeys.Commands.General.Ping;
+	private static Language = LanguageKeys.Commands.General.Ping;
 }

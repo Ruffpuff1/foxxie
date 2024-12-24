@@ -28,6 +28,7 @@ export const enum FoxxieEvents {
 	MessageCommandLogging = 'messageCommandLogging',
 	MessageCreate = 'messageCreate',
 	MessageCreateBot = 'messageCreateBot',
+	MessageCreateBotDisboard = 'messageCreateBotDisboard',
 	MessageCreateBotRealmBot = 'messageCreateBotRealmBot',
 	MessageCreateStats = 'messageCreateStats',
 	MessageDelete = 'messageDelete',
