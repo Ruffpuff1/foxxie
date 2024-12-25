@@ -1,7 +1,6 @@
-import { err, ok, Result } from '@sapphire/result';
+import { Result } from '@sapphire/result';
 import { Duration } from '@sapphire/time-utilities';
 import { LanguageKeys } from '#lib/i18n';
-import { Parameter, TypedFT } from '#lib/types';
 import { seconds } from '#utils/common';
 
 export interface TimeSpanOptions {
@@ -9,22 +8,22 @@ export interface TimeSpanOptions {
 	minimum?: number;
 }
 
-export function resolveTimeSpan(parameter: string, options?: TimeSpanOptions): Result<number, TypedFT<Parameter>> {
+export function resolveTimeSpan(parameter: string, options?: TimeSpanOptions) {
 	const duration = parse(parameter);
 
 	if (!Number.isSafeInteger(duration)) {
-		return err(LanguageKeys.Arguments.TimespanTooLarge);
+		return Result.err(LanguageKeys.Arguments.TimespanTooLarge);
 	}
 
 	if (typeof options?.minimum === 'number' && duration < options.minimum) {
-		return err(LanguageKeys.Arguments.TimespanTooSmall);
+		return Result.err(LanguageKeys.Arguments.TimespanTooSmall);
 	}
 
 	if (typeof options?.maximum === 'number' && duration > options.maximum) {
-		return err(LanguageKeys.Arguments.TimespanTooLarge);
+		return Result.err(LanguageKeys.Arguments.TimespanTooLarge);
 	}
 
-	return ok(duration);
+	return Result.ok(duration);
 }
 
 function parse(parameter: string) {

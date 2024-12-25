@@ -22,7 +22,7 @@ const enum BirthdayMessageMatches {
 	enabled: container.client.enabledProdOnlyEvent(),
 	name: Schedules.Birthday
 }))
-export class BirthdayTask extends Task {
+export class UserTask extends Task {
 	private matchRegex = /{member(\.(age|nick|username|tag|guild))?}/g;
 
 	public async run(data: ScheduleEntry.TaskData[Schedules.Birthday]): Promise<null | PartialResponseValue> {

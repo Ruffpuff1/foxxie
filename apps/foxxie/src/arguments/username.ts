@@ -1,11 +1,10 @@
 import type { User } from 'discord.js';
 
-import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
+import { FoxxieArgument } from '#lib/structures';
 import { resolveUsername } from '#utils/resolvers';
 
-export class UserArgument extends Argument<User> {
-	public async run(parameter: string, context: ArgumentContext<User>): Promise<ArgumentResult<User>> {
-		const resolved = await resolveUsername(parameter, context.message.guild!);
-		return resolved.isErr() ? this.error({ context, identifier: resolved.unwrapErr(), parameter }) : this.ok(resolved.unwrap());
+export class UserArgument extends FoxxieArgument<User> {
+	public async handle(...[parameter, context]: FoxxieArgument.HandleArgs<User>) {
+		return resolveUsername(parameter, context.message.guild!);
 	}
 }

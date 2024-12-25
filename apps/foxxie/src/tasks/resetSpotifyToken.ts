@@ -7,7 +7,7 @@ import { Schedules } from '#utils/constants';
 	enabled: container.client.enabledProdOnlyEvent(),
 	name: Schedules.ResetSpotifyToken
 }))
-export class ResetSpotifyTokenTask extends Task {
+export class UserTask extends Task {
 	public async run() {
 		await resetSpotifyToken();
 		return null;

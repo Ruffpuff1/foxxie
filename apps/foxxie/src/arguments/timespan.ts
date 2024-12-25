@@ -1,9 +1,8 @@
-import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
+import { FoxxieArgument } from '#lib/structures';
 import { resolveTimeSpan } from '#utils/resolvers';
 
-export class UserArgument extends Argument<number> {
-	public run(parameter: string, context: ArgumentContext): ArgumentResult<number> {
-		const resolved = resolveTimeSpan(parameter, context);
-		return resolved.isErr() ? this.error({ context, identifier: resolved.unwrapErr(), parameter }) : this.ok(resolved.unwrap());
+export class UserArgument extends FoxxieArgument<number> {
+	public override async handle(...[parameter, context]: FoxxieArgument.HandleArgs<number>) {
+		return resolveTimeSpan(parameter, context);
 	}
 }

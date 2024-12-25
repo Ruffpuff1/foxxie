@@ -1,9 +1,8 @@
 import type { TextChannel } from 'discord.js';
 
 import { cast } from '@ruffpuff/utilities';
-import { ApplyOptions } from '@sapphire/decorators';
 import { canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
-import { Listener, ListenerOptions } from '@sapphire/framework';
+import { Listener } from '@sapphire/framework';
 import { isNullishOrZero } from '@sapphire/utilities';
 import { readSettings, writeSettings } from '#lib/database';
 import { Starboard } from '#lib/database/Models/starboard';
@@ -11,10 +10,11 @@ import { api } from '#lib/discord';
 import { StarboardManager } from '#lib/structures';
 import { EventArgs, FoxxieEvents, GuildMessage } from '#lib/types';
 import { floatPromise } from '#utils/common';
+import { RegisterListener } from '#utils/decorators';
 import { getGuildStarboard, isStarboardEmoji } from '#utils/functions';
 import { snowflakeAge } from '#utils/util';
 
-@ApplyOptions<ListenerOptions>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: FoxxieEvents.RawReactionAdd }))
+@RegisterListener((listener) => listener.setEvent(FoxxieEvents.RawReactionAdd).setProdOnly())
 export class UserListener extends Listener {
 	public async run(...[data, emojiId]: EventArgs<FoxxieEvents.RawReactionAdd>) {
 		const channel = cast<TextChannel>(data.channel);

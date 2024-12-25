@@ -5,7 +5,7 @@ import { ButtonParser } from '#utils/parsers/ButtonParser';
 import { User } from 'discord.js';
 
 @RegisterButtonHandler(ButtonParser.InfoUserReset)
-export class InfoUserAvatarButtonInteractionHandler extends FoxxieButtonInteractionHandler {
+export class UserInteractionHandler extends FoxxieButtonInteractionHandler {
 	public override async run(...[interaction, result]: FoxxieButtonInteractionHandler.RunArgs<User>) {
 		const response = await UserBuilder.UserInfo(result, interaction);
 		return interaction.update(response);

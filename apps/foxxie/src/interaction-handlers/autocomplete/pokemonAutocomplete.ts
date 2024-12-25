@@ -6,7 +6,7 @@ import { AutocompleteInteraction } from 'discord.js';
 @ApplyOptions<InteractionHandler.Options>({
 	interactionHandlerType: InteractionHandlerTypes.Autocomplete
 })
-export class AutocompleteHandler extends InteractionHandler {
+export class UserInteractionHandler extends InteractionHandler {
 	public override async parse(interaction: AutocompleteInteraction) {
 		if (
 			interaction.commandName !== 'pokemon' &&

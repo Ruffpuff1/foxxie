@@ -1,7 +1,15 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { createClassDecorator, createFunctionPrecondition, createMethodDecorator, createProxy, DecoratorIdentifiers } from '@sapphire/decorators';
 import { isDMChannel, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
-import { Command, CommandOptionsRunTypeEnum, CommandRunInUnion, CommandSpecificRunIn, RegisterBehavior, UserError } from '@sapphire/framework';
+import {
+	Command,
+	CommandOptionsRunTypeEnum,
+	CommandRunInUnion,
+	CommandSpecificRunIn,
+	Listener,
+	RegisterBehavior,
+	UserError
+} from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { SubcommandMapping, SubcommandMappingArray, SubcommandMappingMethod } from '@sapphire/plugin-subcommands';
 import { Ctor, isNullish } from '@sapphire/utilities';
@@ -9,7 +17,7 @@ import { LanguageKeys } from '#lib/i18n';
 import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
 import { FoxxieSubcommand } from '#lib/structures';
 import { FoxxieButtonInteractionHandler } from '#lib/Structures/commands/interactions/FoxxieButtonInteractionHandler';
-import { GuildMessage, PermissionLevels, TypedT } from '#lib/types';
+import { FoxxieEvents, GuildMessage, PermissionLevels, TypedT } from '#lib/types';
 import { getAudio, sendLocalizedMessage } from '#utils/functions';
 import {
 	ChatInputApplicationCommandData,
@@ -182,6 +190,20 @@ export const RegisterButtonHandler = (handler: FoxxieButtonInteractionHandler.Ha
 	});
 };
 
+export const RegisterListener = (listener: ((builder: FoxxieListenerBuilder) => FoxxieListenerBuilder) | Listener.Options) => {
+	return createClassDecorator((buttonHandler: Ctor) => {
+		return createProxy(buttonHandler, {
+			construct: (ctor, [context, base = {}]) => {
+				const resolvedOptions = typeof listener === 'function' ? listener(new FoxxieListenerBuilder()).toJSON() : listener;
+				return new ctor(context, {
+					...base,
+					...resolvedOptions
+				});
+			}
+		});
+	});
+};
+
 export const RegisterCommand = (
 	options: ((builder: FoxxieSubcommandBuilder) => FoxxieSubcommandBuilder) | FoxxieSubcommand.Options,
 	builder?:
@@ -291,6 +313,43 @@ export const GuildOnlyCommand = () => {
 		});
 	});
 };
+
+export class FoxxieListenerBuilder {
+	private enabled: boolean | undefined;
+
+	private event: FoxxieEvents | undefined;
+
+	private name: FoxxieEvents | undefined;
+
+	public setEnabled(enabled: boolean) {
+		this.enabled = enabled;
+		return this;
+	}
+
+	public setEvent(event: FoxxieEvents) {
+		this.event = event;
+		return this;
+	}
+
+	public setName(name: FoxxieEvents) {
+		this.name = name;
+		return this;
+	}
+
+	public setProdOnly() {
+		const enabled = container.client.enabledProdOnlyEvent();
+		this.setEnabled(enabled);
+		return this;
+	}
+
+	public toJSON(): Listener.Options {
+		return {
+			enabled: this.enabled,
+			event: this.event,
+			name: this.name
+		};
+	}
+}
 
 export class FoxxieSubcommandBuilder {
 	private aliases: string[] = [];

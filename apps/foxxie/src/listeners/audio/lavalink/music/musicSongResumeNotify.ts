@@ -4,7 +4,7 @@ import { AudioListener } from '#lib/structures';
 import { EventArgs, FoxxieEvents } from '#lib/types';
 import { getAudio } from '#utils/functions';
 
-export class MusicSongResumeNotifyListener extends AudioListener<FoxxieEvents.MusicSongResumeNotify> {
+export class UserListener extends AudioListener<FoxxieEvents.MusicSongResumeNotify> {
 	public async run(...[message]: EventArgs<FoxxieEvents.MusicSongResumeNotify>) {
 		const audio = getAudio(message.guild);
 		const current = await audio.getCurrentSong();

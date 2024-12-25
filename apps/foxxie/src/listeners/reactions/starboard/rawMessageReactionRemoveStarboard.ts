@@ -1,18 +1,18 @@
 import type { GatewayMessageReactionRemoveDispatch, TextChannel } from 'discord.js';
 
 import { cast } from '@ruffpuff/utilities';
-import { ApplyOptions } from '@sapphire/decorators';
 import { canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
-import { Listener, ListenerOptions } from '@sapphire/framework';
+import { Listener } from '@sapphire/framework';
 import { isNullishOrZero } from '@sapphire/utilities';
 import { readSettings, writeSettings } from '#lib/database';
 import { Starboard } from '#lib/database/Models/starboard';
 import { StarboardManager } from '#lib/structures';
-import { GuildMessage } from '#lib/types';
+import { FoxxieEvents, GuildMessage } from '#lib/types';
+import { RegisterListener } from '#utils/decorators';
 import { getEmojiString, getGuildStarboard, isStarboardEmoji } from '#utils/functions';
 import { snowflakeAge } from '#utils/util';
 
-@ApplyOptions<ListenerOptions>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: 'rawReactionRemove' }))
+@RegisterListener((listener) => listener.setEvent(FoxxieEvents.RawReactionRemove).setProdOnly())
 export class UserListener extends Listener {
 	public async run(channel: TextChannel, data: GatewayMessageReactionRemoveDispatch['d']) {
 		if (isNsfwChannel(channel)) return;

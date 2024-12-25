@@ -12,7 +12,7 @@ import { type Guild, PermissionFlagsBits } from 'discord.js';
 	enabled: container.client.enabledProdOnlyEvent(),
 	name: Schedules.EndTempBan
 }))
-export class UserModerationTask extends ModerationTask {
+export class UserTask extends ModerationTask {
 	protected async handle(guild: Guild, data: ModerationData) {
 		const me = guild.members.me ?? (await guild.members.fetch(this.container.client.id!));
 		if (!me.permissions.has(PermissionFlagsBits.BanMembers)) return null;

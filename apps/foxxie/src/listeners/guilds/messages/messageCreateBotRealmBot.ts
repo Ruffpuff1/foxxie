@@ -7,7 +7,7 @@ const CHANNELID = '1305722872458772591';
 
 @ApplyOptions({
 	enabled: container.client.enabledProdOnlyEvent(),
-	name: 'MessageCreateBotRealmBot'
+	name: FoxxieEvents.MessageCreateBotRealmBot
 })
 export class UserListener extends Listener<FoxxieEvents.MessageCreateBotRealmBot> {
 	public async run(...[message]: EventArgs<FoxxieEvents.MessageCreateBotRealmBot>): Promise<void> {

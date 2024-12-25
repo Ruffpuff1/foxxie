@@ -9,7 +9,7 @@ import { fetchChannel } from '#utils/functions';
 	enabled: container.client.enabledProdOnlyEvent(),
 	name: Schedules.Disboard
 }))
-export class DisboardTask extends Task {
+export class UserTask extends Task {
 	public async run(data: ScheduleEntry.TaskData[Schedules.Disboard]): Promise<null | PartialResponseValue> {
 		const guild = this.container.client.guilds.cache.get(data.guildId);
 		if (!guild) return null;
@@ -25,7 +25,7 @@ export class DisboardTask extends Task {
 
 		const base = 'bump the server';
 
-		await floatPromise(channel.send({ content: message || base }));
+		await floatPromise(channel.send({ allowedMentions: { parse: ['roles', 'users'] }, content: message || base }));
 		return { type: ResponseType.Finished };
 	}
 }

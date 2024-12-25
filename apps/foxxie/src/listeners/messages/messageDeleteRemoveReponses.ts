@@ -1,13 +1,13 @@
-import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { get } from '@sapphire/plugin-editable-commands';
 import { hasAtLeastOneKeyInMap } from '@sapphire/utilities';
 import { CommandMatcher, readSettings } from '#lib/database';
 import { FoxxieEvents, GuildMessage } from '#lib/types';
+import { RegisterListener } from '#utils/decorators';
 import { deleteMessage, getCommand } from '#utils/functions';
 import { Message } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({ event: FoxxieEvents.MessageDelete })
+@RegisterListener((listener) => listener.setEvent(FoxxieEvents.MessageDelete))
 export class UserListener extends Listener {
 	public async run(message: Message): Promise<void> {
 		const response = get(message);

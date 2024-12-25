@@ -5,7 +5,7 @@ import { AudioListener } from '#lib/structures';
 import { EventArgs, FoxxieEvents } from '#lib/types';
 import { deleteMessage, resolveUserDisplayName } from '#utils/functions';
 
-export class MusicSongPlayNotifyListener extends AudioListener<FoxxieEvents.MusicSongPlayNotify> {
+export class UserListener extends AudioListener<FoxxieEvents.MusicSongPlayNotify> {
 	public async run(...[queue, track]: EventArgs<FoxxieEvents.MusicSongPlayNotify>) {
 		const channel = await queue.getTextChannel();
 		if (isNullish(channel)) return;

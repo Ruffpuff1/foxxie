@@ -12,7 +12,7 @@ import { type Guild } from 'discord.js';
 	enabled: container.client.enabledProdOnlyEvent(),
 	name: Schedules.EndTempTimeout
 }))
-export class UserModerationTask extends ModerationTask {
+export class UserTask extends ModerationTask {
 	protected async handle(guild: Guild, data: ModerationData) {
 		const t = await fetchT(guild);
 		const reason = t(LanguageKeys.Moderation.Untimeout, this.getReasonContext(data.duration));
