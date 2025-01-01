@@ -100,7 +100,7 @@ export class UserCommand extends FoxxieCommand {
 				fetch: await import('@aero/http'),
 				foxxie: {
 					api: {
-						lastfm: await import('#apis/last.fm/util/index')
+						lastfm: await import('#apis/last.fm/index')
 					},
 					database: {
 						...(await import('#lib/database')),
@@ -116,14 +116,25 @@ export class UserCommand extends FoxxieCommand {
 							loggers: await import('#lib/moderation/managers/loggers')
 						}
 					},
+					modules: {
+						audio: await import('#modules/audio'),
+						birthday: await import('#modules/birthday'),
+						starboard: await import('#modules/starboard'),
+						suggestions: await import('#modules/suggestions')
+					},
 					structures: {
 						...(await import('#lib/structures')),
 						managers: await import('#lib/structures/managers')
 					},
 					utils: {
+						bits: await import('#utils/bits'),
 						builders: await import('#utils/builders'),
 						common: await import('#utils/common'),
-						functions: await import('#utils/functions')
+						constants: await import('#utils/constants'),
+						external: await import('#utils/external/index'),
+						functions: await import('#utils/functions'),
+						parsers: await import('#utils/parsers/index'),
+						resolvers: await import('#utils/resolvers')
 					}
 				},
 				fs: await import('node:fs'),

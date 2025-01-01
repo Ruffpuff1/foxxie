@@ -1,5 +1,6 @@
 import { Enumerable } from '@sapphire/decorators';
 import { container, SapphireClient } from '@sapphire/framework';
+import { getRootData } from '@sapphire/pieces';
 import { InternationalizationContext } from '@sapphire/plugin-i18next';
 import { envParseBoolean, envParseInteger } from '@skyra/env-utilities';
 import { readSettings, SerializerStore } from '#lib/database';
@@ -11,6 +12,7 @@ import { GuildMemberFetchQueue } from '#utils/external/GuildMemberFetchQueue';
 import { LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
 import { magentaBright } from 'colorette';
 import { Message, WebhookClient } from 'discord.js';
+import { join } from 'node:path';
 
 import { ApiService } from './api/ApiService.js';
 import { LastFmDataSourceFactory } from './api/Last.fm/factories/DataSourceFactory.js';
@@ -53,6 +55,9 @@ export default class FoxxieClient extends SapphireClient {
 		container.stores.register(new SerializerStore());
 		container.stores.register(new TaskStore());
 
+		container.stores.registerPath(join(getRootData().root, 'lib', 'modules', 'starboard'));
+		container.stores.registerPath(join(getRootData().root, 'lib', 'modules', 'suggestions'));
+
 		container.redis = envParseBoolean('REDIS_ENABLED')
 			? new RedisManager({
 					host: process.env.REDIS_HOST,
@@ -62,13 +67,16 @@ export default class FoxxieClient extends SapphireClient {
 				})
 			: null;
 
-		this.audio = envParseBoolean('AUDIO_ENABLED', false)
-			? new FoxxieQueue(clientOptions.audio, (guildID, packet) => {
-					const guild = this.guilds.cache.get(guildID);
-					if (guild) guild.shard.send(packet);
-					return undefined;
-				})
-			: null;
+		if (envParseBoolean('AUDIO_ENABLED', false)) {
+			this.audio = new FoxxieQueue(clientOptions.audio, (guildID, packet) => {
+				const guild = this.guilds.cache.get(guildID);
+				if (guild) guild.shard.send(packet);
+				return undefined;
+			});
+			container.stores.registerPath(join(getRootData().root, 'lib', 'modules', 'audio'));
+		} else {
+			this.audio = null;
+		}
 	}
 
 	public override destroy(): Promise<void> {

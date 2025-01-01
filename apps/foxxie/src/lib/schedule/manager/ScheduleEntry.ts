@@ -5,8 +5,8 @@ import { isNullishOrEmpty } from '@sapphire/utilities';
 import { PlayUpdate } from '#apis/last.fm/repository/PlayRepository';
 import { ModerationManager } from '#lib/moderation';
 import { FoxxieEvents } from '#lib/types';
+import { BirthdayData } from '#modules/birthday';
 import { JSONEmbed } from '#root/commands/util/reminder';
-import { BirthdayData } from '#utils/birthday';
 import { Schedules } from '#utils/constants';
 import { SchemaKeys, TypeVariation } from '#utils/moderationConstants';
 
@@ -140,6 +140,7 @@ export namespace ScheduleEntry {
 	export interface ReminderTaskData {
 		channelId: null | string;
 		createdChannelId: string;
+		createdMessageId: string;
 		json: JSONEmbed | null;
 		repeat: null | number;
 		text: null | string;
@@ -165,6 +166,8 @@ export namespace ScheduleEntry {
 	}
 
 	export interface TaskData {
+		[Schedules.CheckStatusPage]: null;
+		[Schedules.Disboard]: { guildId: string };
 		[Schedules.LastFMUpdateArtistsForUser]: { playUpdate: PlayUpdate; userId: string };
 		birthday: BirthdayTaskData;
 		indexUser: IndexUserQueueItem;

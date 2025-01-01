@@ -6,6 +6,7 @@
 		"{{LOADING}} I'll get that right up for you, want some ice too?",
 		"{{LOADING}} Hey chef! We got a new order!"
 	],
+	"paginatedMessageWrongUserInteractionReply": "{{ERROR}} The buttons on this message are only meant for {{user}}.",
 	"prefixReminder": "Heyo! My prefix for this server is: {{prefixes, codeand}}",
 	"prefixReminder_admin": "-# *If you wanna change it use my {{prefix}}conf command*",
 	"prefixReminder_other": "Hey there! My prefixes for this server are: {{prefixes, codeand}}"

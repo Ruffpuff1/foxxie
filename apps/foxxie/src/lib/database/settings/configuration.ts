@@ -168,11 +168,25 @@ export function getConfiguration() {
 			name: 'disabled-commands',
 			type: 'commandMatch'
 		},
-
 		disableNaturalPrefix: {
 			default: false,
 			name: 'disable-natural-prefix',
 			type: 'boolean'
+		},
+		disboardChannel: {
+			name: 'modules.automation.disboard.channel',
+			type: 'sendableChannel'
+		},
+		disboardEmbed: {
+			name: 'modules.automation.disboard.embed',
+			type: 'string'
+		},
+
+		disboardMessage: {
+			maximum: 1500,
+			minimum: 1,
+			name: 'modules.automation.disboard.message',
+			type: 'string'
 		},
 
 		eventsBanAdd: {

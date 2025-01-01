@@ -42,7 +42,9 @@ export const enum LanguageFormatters {
 }
 
 export const enum Schedules {
+	AddUsersToIndexQueue = 'addUsersToIndexQueue',
 	Birthday = 'birthday',
+	CheckStatusPage = 'checkStatusPage',
 	Disboard = 'disboard',
 	EndTempBan = 'moderationEndBan',
 	EndTempMute = 'moderationEndMute',
@@ -51,15 +53,20 @@ export const enum Schedules {
 	EndTempTimeout = 'moderationEndTimeout',
 	IndexUser = 'indexUser',
 	LastFMUpdateArtistsForUser = 'lastFmUpdateArtistsForUser',
+	LastFMUpdateDiscogsUsers = 'lastFmUpdateDiscogsUsers',
 	Reminder = 'reminder',
 	RemoveBirthdayRole = 'removeBirthdayRole',
+	ResetSpotifyToken = 'resetSpotifyToken',
 	UpdateDiscogsUsers = 'updateDiscogsUsers',
 	UpdateLastFmUsers = 'updateLastFmUsers'
 }
 
 export const enum Urls {
+	Github = 'https://github.com/Ruffpuff1/foxxie',
 	Haste = 'https://hastebin.com',
+	StatusPage = 'https://discordstatus.com',
 	Support = 'https://tcs.rshk.me',
+	Terms = 'https://foxxie.rshk.me/terms',
 	TheCornerStore = 'https://tcs.rshk.me'
 }
 
@@ -155,10 +162,19 @@ export const allowedInviteIds = [
 ];
 
 export const enum BotIds {
+	Disboard = '302050872383242240',
 	Foxxie = '825130284382289920',
 	FoxxieAlpha = '812546582531801118',
 	FoxxieNightly = '840755658793418782',
 	RealmBot = '840681796914905100'
+}
+
+export const enum CustomIds {
+	InfoUserAvatar = 'infouseravatar',
+	InfoUserBanner = 'infouserbanner',
+	InfoUserNotes = 'infousernotes',
+	InfoUserReset = 'infouserreset',
+	InfoUserWarnings = 'infouserwarnings'
 }
 
 export const enum SelectMenuCustomIds {

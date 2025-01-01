@@ -1,4 +1,3 @@
-import { ApplyOptions } from '@sapphire/decorators';
 import { Listener } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
 import { fetchT, TFunction } from '@sapphire/plugin-i18next';
@@ -7,12 +6,11 @@ import { envParseString } from '@skyra/env-utilities';
 import { readSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { EnvKeys, EventArgs, FoxxieEvents } from '#lib/types';
+import { RegisterListener } from '#utils/decorators';
 import { isAdmin } from '#utils/functions';
 import { LocaleString, Message, userMention } from 'discord.js';
 
-@ApplyOptions<Listener.Options>({
-	event: FoxxieEvents.MentionPrefixOnly
-})
+@RegisterListener((listener) => listener.setEvent(FoxxieEvents.MentionPrefixOnly))
 export class UserListener extends Listener<FoxxieEvents.MentionPrefixOnly> {
 	public async run(...[message]: EventArgs<FoxxieEvents.MentionPrefixOnly>) {
 		return message.inGuild() ? this.runGuildContext(message) : this.runDMContext(message);

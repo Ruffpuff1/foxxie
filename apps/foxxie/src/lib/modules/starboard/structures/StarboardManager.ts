@@ -1,17 +1,17 @@
 import { isNullish } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
-import { getStarboard, Starboard } from '#lib/database/Models/starboard';
 import { GuildMessage } from '#lib/types';
+import { getStarboard, StarboardEntry } from '#modules/starboard';
 import { Client, Collection, Guild, TextChannel } from 'discord.js';
 
-export class StarboardManager extends Collection<string, Starboard> {
+export class StarboardManager extends Collection<string, StarboardEntry> {
 	public client: Client;
 
 	public guild: Guild;
 
-	public syncMap = new Map<string, Promise<null | Starboard>>();
+	public syncMap = new Map<string, Promise<null | StarboardEntry>>();
 
-	public syncMessageMap = new WeakMap<Starboard, Promise<void>>();
+	public syncMessageMap = new WeakMap<StarboardEntry, Promise<void>>();
 
 	public constructor(guild: Guild) {
 		super();
@@ -19,7 +19,7 @@ export class StarboardManager extends Collection<string, Starboard> {
 		this.guild = guild;
 	}
 
-	public async fetch(channel: TextChannel, messageID: string): Promise<null | Starboard> {
+	public async fetch(channel: TextChannel, messageID: string): Promise<null | StarboardEntry> {
 		// If a key already exists, return it:
 		const entry = super.get(messageID);
 		if (entry) return entry;
@@ -44,7 +44,7 @@ export class StarboardManager extends Collection<string, Starboard> {
 		return (this.guild.channels.cache.get(starboardChannelId) ?? null) as null | TextChannel;
 	}
 
-	public override set(key: string, value: Starboard) {
+	public override set(key: string, value: StarboardEntry) {
 		if (this.size >= 25) {
 			const entry = this.reduce((acc, sMes) => (acc.lastUpdated > sMes.lastUpdated ? sMes : acc), this.first()!);
 			this.delete(entry.messageId);
@@ -52,7 +52,7 @@ export class StarboardManager extends Collection<string, Starboard> {
 		return super.set(key, value);
 	}
 
-	async #fetchEntry(channel: TextChannel, messageid: string): Promise<null | Starboard> {
+	async #fetchEntry(channel: TextChannel, messageid: string): Promise<null | StarboardEntry> {
 		const message = (await channel.messages.fetch(messageid).catch(() => null)) as GuildMessage | null;
 		if (!message) return null;
 
@@ -62,7 +62,7 @@ export class StarboardManager extends Collection<string, Starboard> {
 			if (!previous.messageId) return null;
 		}
 
-		const star = previous ?? new Starboard().init(this, message);
+		const star = previous ?? new StarboardEntry().init(this, message);
 		this.set(messageid, star);
 
 		await star.downloadUserList();

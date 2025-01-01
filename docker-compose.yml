@@ -12,6 +12,9 @@ services:
     depends_on:
       - lavalink
       - redis
+      - postgres
+    networks:
+      - foxxie
     ports:
       - '8282:8282'
       - '7282:7282'
@@ -27,14 +30,37 @@ services:
     depends_on:
       - redis
     image: fredboat/lavalink:3.7.13-alpine
+    networks:
+      - foxxie
     ports:
       - '2333:2333'
     restart: unless-stopped
+
+  postgres:
+    container_name: postgres
+    image: 'postgres:15-alpine'
+    networks:
+      - foxxie
+    ports:
+      - '5432:5432'
+    restart: always
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+    environment:
+      - POSTGRES_USER=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=foxxie
+    logging:
+      options:
+        max-size: '20m'
+        max-file: '3'
 
   redis:
     command: 'redis-server --bind redis --port 8287 --requirepass redis'
     container_name: redis
     image: 'redis:alpine'
+    networks:
+      - foxxie
     ports:
       - '8287:8287'
     volumes:
@@ -43,3 +69,7 @@ services:
 
 volumes:
   redis_data:
+  postgres:
+
+networks:
+  foxxie:

@@ -7,8 +7,8 @@ import { DataSource } from '#apis/last.fm/types/enums/DataSource';
 import { LastFmDataSourceFactory } from '#lib/api/Last.fm/factories/DataSourceFactory';
 import { days, first, getDiscogsFormatEmote, seconds, toDayOfTheWeek } from '#utils/common';
 import { Emojis } from '#utils/constants';
+import { resolveClientColor } from '#utils/functions';
 import { lastFmUserUrl } from '#utils/transformers';
-import { resolveClientColor } from '#utils/util';
 import { ActionRowBuilder, bold, ButtonBuilder, EmbedBuilder, hyperlink, italic, time, TimestampStyles } from 'discord.js';
 import _ from 'lodash';
 
@@ -154,7 +154,7 @@ export class UserBuilder {
 		const components = new ActionRowBuilder<ButtonBuilder>().addComponents(
 			new ButtonBuilder()
 				.setLabel('History')
-				.setCustomId(`history-${user.userid}-${context.contextUser?.userid}`)
+				.setCustomId(`lastfmprofilehistory-${user.userid}-${context.contextUser?.userid}`)
 				.setStyle(ButtonStyle.Secondary)
 				.setEmoji('📖')
 		);

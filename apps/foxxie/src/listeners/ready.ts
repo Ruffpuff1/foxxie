@@ -4,6 +4,7 @@ import { envIsDefined, envParseBoolean } from '@skyra/env-utilities';
 import { resetSpotifyToken } from '#lib/api/Spotify/util';
 import { EnvKeys, FoxxieEvents } from '#lib/types';
 import { seconds } from '#utils/common';
+import { Schedules } from '#utils/constants';
 import { createBanner } from '#utils/startBanner';
 import { blue, blueBright, gray, green, red, yellow } from 'colorette';
 
@@ -37,6 +38,18 @@ export class UserListener extends Listener<FoxxieEvents.Ready> {
 		const success = green('+');
 		const failed = red('-');
 		const pad = ' '.repeat(5);
+		const sevenPad = ' '.repeat(7);
+		const tenPad = ' '.repeat(10);
+
+		const modules = {
+			audio: `[${envParseBoolean('AUDIO_ENABLED', false) ? success : failed}] Audio${tenPad}`,
+			birthday: `[${this.container.stores.get('tasks').has(Schedules.Birthday) ? success : failed}] Birthday${sevenPad}`,
+			moderation: `[${success}] Moderation${pad}`,
+			redis: `[${this.container.redis ? success : failed}] Redis`,
+			spotify: `[${spotify ? success : failed}] Spotify`,
+			starboard: `[${this.store.has('rawMessageReactionAddStarboard') ? success : failed}] Starboard`,
+			statusPage: `[${this.container.stores.get('tasks').has(Schedules.CheckStatusPage) ? success : failed}] Status Page`
+		};
 
 		console.log(
 			String(
@@ -47,10 +60,10 @@ export class UserListener extends Listener<FoxxieEvents.Ready> {
 							' '
 						)}`,
 						String.raw`${pad}[${success}] Gateway`,
-						String.raw`${pad}[${envParseBoolean('AUDIO_ENABLED', false) ? success : failed}] Audio${pad}[${success}] Moderation`,
-						String.raw`${pad}[${this.container.redis ? success : failed}] Redis`,
-						String.raw`${pad}[${spotify ? success : failed}] Spotify`,
-						String.raw`${pad}[${this.store.has('rawMessageReactionAddStarboard') ? success : failed}] Starboard`,
+						String.raw`${pad}${modules.audio}${modules.spotify}`,
+						String.raw`${pad}${modules.birthday}${modules.starboard}`,
+						String.raw`${pad}${modules.moderation}${modules.statusPage}`,
+						String.raw`${pad}${modules.redis}`,
 						String.raw`${this.isDev ? `${pad}</> DEVELOPMENT MODE` : ''}`
 					],
 					logo: [

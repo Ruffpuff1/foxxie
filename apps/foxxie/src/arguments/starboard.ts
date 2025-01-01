@@ -1,11 +1,11 @@
 import type { Message, Snowflake } from 'discord.js';
 
 import { Argument, ArgumentContext, ArgumentResult } from '@sapphire/framework';
-import { Starboard, StarboardData } from '#lib/database/Models/starboard';
 import { LanguageKeys } from '#lib/i18n';
+import { StarboardData, StarboardEntry } from '#modules/starboard';
 
-export class UserArgument extends Argument<Starboard> {
-	public async run(parameter: string, context: ArgumentContext<Starboard>): Promise<ArgumentResult<Starboard>> {
+export class UserArgument extends Argument<StarboardEntry> {
+	public async run(parameter: string, context: ArgumentContext<StarboardEntry>): Promise<ArgumentResult<StarboardEntry>> {
 		const guildStarboards = await this.container.prisma.starboard.findMany({
 			orderBy: { id: 'desc' },
 			where: { guildId: context.message.guildId! }
@@ -13,7 +13,7 @@ export class UserArgument extends Argument<Starboard> {
 
 		if (!parameter) {
 			const latest = this.#fallbackToLatest(guildStarboards);
-			if (latest) return this.ok(new Starboard(latest));
+			if (latest) return this.ok(new StarboardEntry(latest));
 
 			return this.error({ context, identifier: LanguageKeys.Arguments.StarboardEmpty, parameter });
 		}
@@ -21,17 +21,17 @@ export class UserArgument extends Argument<Starboard> {
 		const resolveNumber = await this.number.run(parameter, { ...context, argument: this.number });
 		if (resolveNumber.isOk()) {
 			const resolvedNumberResult = this.#resolveNumberFromMessage(resolveNumber.unwrap(), guildStarboards);
-			if (resolvedNumberResult) return this.ok(new Starboard(resolvedNumberResult));
+			if (resolvedNumberResult) return this.ok(new StarboardEntry(resolvedNumberResult));
 		}
 
 		const resolveSnowflake = await this.snowflake.run(parameter, { ...context, argument: this.snowflake });
 		if (resolveSnowflake.isOk()) {
 			const resolvedSnowflakeResult = this.#resolveStarboardFromSnowflake(resolveSnowflake.unwrap(), guildStarboards);
-			if (resolvedSnowflakeResult) return this.ok(new Starboard(resolvedSnowflakeResult));
+			if (resolvedSnowflakeResult) return this.ok(new StarboardEntry(resolvedSnowflakeResult));
 		}
 
 		const latest = this.#fallbackToLatest(guildStarboards);
-		if (latest) return this.ok(new Starboard(latest));
+		if (latest) return this.ok(new StarboardEntry(latest));
 
 		return this.error({ context, identifier: LanguageKeys.Arguments.StarboardEmpty, parameter });
 	}

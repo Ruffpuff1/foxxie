@@ -11,7 +11,7 @@ import { StringSelectMenuInteraction } from 'discord.js';
 @ApplyOptions<InteractionHandler.Options>({
 	interactionHandlerType: InteractionHandlerTypes.SelectMenu
 })
-export class SelectMenuHandler extends InteractionHandler {
+export class UserInteractionHandler extends InteractionHandler {
 	public override async parse(interaction: StringSelectMenuInteraction) {
 		if (!interaction.customId.startsWith(SelectMenuCustomIds.Pokemon)) return this.none();
 		await interaction.deferUpdate({ fetchReply: true });

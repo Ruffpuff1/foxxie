@@ -9,8 +9,8 @@ import { UpdateService } from '#apis/last.fm/services/UpdateService';
 import { RecentTrack, RecentTrackList } from '#apis/last.fm/types/models/domain/RecentTrack';
 import { LastFmDataSourceFactory } from '#lib/api/Last.fm/factories/DataSourceFactory';
 import { days } from '#utils/common';
+import { resolveClientColor } from '#utils/functions';
 import { lastFmUserUrl } from '#utils/transformers';
-import { resolveClientColor } from '#utils/util';
 import { bold, EmbedBuilder, hyperlink, italic, time, TimestampStyles, userMention } from 'discord.js';
 import _ from 'lodash';
 

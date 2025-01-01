@@ -250,8 +250,6 @@ function parseInternationalizationFormatters(): I18nextFormatter[] {
 				const t = getFixedT(lng!);
 				let key: CustomGet<string, string>;
 
-				console.log(value);
-
 				switch (value) {
 					case GuildExplicitContentFilter.AllMembers:
 						key = LanguageKeys.Guilds.ContentFilters.AllMembers;
@@ -344,6 +342,12 @@ function parseI18nOptions(): InternationalizationOptions {
 
 export const clientOptions: ClientOptions = {
 	allowedMentions: { parse: ['users'] },
+	api: {
+		listenOptions: {
+			port: 8282
+		},
+		origin: 'http://127.0.0.1:3000'
+	},
 	audio: {
 		hosts: {
 			rest: `http://${envParseString('LAVALINK_URL')}`,

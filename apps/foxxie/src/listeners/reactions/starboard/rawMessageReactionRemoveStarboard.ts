@@ -1,18 +1,17 @@
 import type { GatewayMessageReactionRemoveDispatch, TextChannel } from 'discord.js';
 
 import { cast } from '@ruffpuff/utilities';
-import { ApplyOptions } from '@sapphire/decorators';
 import { canSendMessages, isNsfwChannel } from '@sapphire/discord.js-utilities';
-import { Listener, ListenerOptions } from '@sapphire/framework';
+import { Listener } from '@sapphire/framework';
 import { isNullishOrZero } from '@sapphire/utilities';
 import { readSettings, writeSettings } from '#lib/database';
-import { Starboard } from '#lib/database/Models/starboard';
-import { StarboardManager } from '#lib/structures';
-import { GuildMessage } from '#lib/types';
+import { FoxxieEvents, GuildMessage } from '#lib/types';
+import { StarboardEntry, StarboardManager } from '#modules/starboard';
+import { RegisterListener } from '#utils/decorators';
 import { getEmojiString, getGuildStarboard, isStarboardEmoji } from '#utils/functions';
 import { snowflakeAge } from '#utils/util';
 
-@ApplyOptions<ListenerOptions>(({ container }) => ({ enabled: container.client.enabledProdOnlyEvent(), event: 'rawReactionRemove' }))
+@RegisterListener((listener) => listener.setEvent(FoxxieEvents.RawReactionRemove).setProdOnly())
 export class UserListener extends Listener {
 	public async run(channel: TextChannel, data: GatewayMessageReactionRemoveDispatch['d']) {
 		if (isNsfwChannel(channel)) return;
@@ -51,7 +50,7 @@ export class UserListener extends Listener {
 				: null;
 		}
 
-		const previousStarboardEntry = previousEntity ? new Starboard(previousEntity).init(starboard, previousEntityMessage!) : null;
+		const previousStarboardEntry = previousEntity ? new StarboardEntry(previousEntity).init(starboard, previousEntityMessage!) : null;
 
 		const sMessage = previousStarboardEntry
 			? await this.fetchPrevious(previousStarboardEntry, starboard, previousEntityChannel)
@@ -60,7 +59,7 @@ export class UserListener extends Listener {
 		if (sMessage) await sMessage.decrement(data.user_id);
 	}
 
-	private async fetchPrevious(previousEntity: Starboard, starboard: StarboardManager, prevChannel: null | TextChannel) {
+	private async fetchPrevious(previousEntity: StarboardEntry, starboard: StarboardManager, prevChannel: null | TextChannel) {
 		if (prevChannel && previousEntity) return starboard.fetch(cast<TextChannel>(prevChannel), previousEntity?.messageId);
 		return null;
 	}

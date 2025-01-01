@@ -6,7 +6,6 @@ import { SettingsService } from '#lib/Container/Services/SettingsService';
 import { UtilityService } from '#lib/Container/Utility/UtilityService';
 import { WorkerService } from '#lib/Container/Workers/WorkerService';
 import { HighlightData } from '#lib/database/Models/highlight';
-import { Starboard } from '#lib/database/Models/starboard';
 import { SerializerStore } from '#lib/database/settings/structures/SerializerStore';
 import { PermissionsNode, ReadonlyGuildData, StickyRole, Tag } from '#lib/database/settings/types';
 import { ModerationEntry } from '#lib/moderation';
@@ -18,6 +17,7 @@ import { InviteManager } from '#lib/Structures/managers/InviteManager';
 import { RedisManager } from '#lib/Structures/managers/RedisManager';
 import { FoxxieEvents, GuildMessage, LanguageString, TypedFT, TypedT } from '#lib/types';
 import { NP, Queue, Song } from '#modules/audio';
+import { StarboardEntry } from '#modules/starboard';
 import { Schedules } from '#utils/constants';
 import { GuildMemberFetchQueue } from '#utils/external/GuildMemberFetchQueue';
 import { LLRCData, LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
@@ -58,6 +58,7 @@ declare module 'discord.js' {
 		[FoxxieEvents.LastFMScrobbleAudioTrackForMember]: [member: GuildMember, trackInfo: TrackInfo];
 		[FoxxieEvents.MessageCommandLogging]: [message: GuildMessage, command: FoxxieCommand];
 		[FoxxieEvents.MessageCreateBot]: [message: GuildMessage];
+		[FoxxieEvents.MessageCreateBotDisboard]: [message: GuildMessage];
 		[FoxxieEvents.MessageCreateBotRealmBot]: [message: GuildMessage];
 		[FoxxieEvents.MessageCreateStats]: [guildId: Snowflake, member: GuildMember];
 		[FoxxieEvents.ModerationEntryAdd]: [entry: Readonly<ModerationEntry>];
@@ -112,7 +113,7 @@ declare module '@sapphire/framework' {
 		sendableChannel: GuildTextBasedChannel;
 		snowflake: Snowflake;
 		song: string[];
-		starboard: Starboard;
+		starboard: StarboardEntry;
 		timespan: number;
 		username: User;
 	}

@@ -1,7 +1,7 @@
 import { Listener } from '@sapphire/framework';
 import { TFunction } from '@sapphire/plugin-i18next';
 import { LanguageKeys } from '#lib/i18n';
-import { resolveClientColor } from '#utils/util';
+import { resolveClientColor } from '#utils/functions';
 import { APIEmbed, APIEmbedField, ClientEvents, EmbedBuilder, GuildMember } from 'discord.js';
 
 const enum Matches {

@@ -1,4 +1,5 @@
 export * from '#utils/functions/channels';
+export * from '#utils/functions/embeds';
 export * from '#utils/functions/emojis';
 export * from '#utils/functions/guild';
 export * from '#utils/functions/members';

@@ -3,7 +3,7 @@ import { Listener } from '@sapphire/framework';
 import { LastFmDataSourceFactory } from '#apis/last.fm/factories/DataSourceFactory';
 import { EventArgs, FoxxieEvents } from '#lib/types';
 
-export class LastFMScrobbleAudioTrackForMemberListener extends Listener<FoxxieEvents.LastFMScrobbleAudioTrackForMember> {
+export class UserListener extends Listener<FoxxieEvents.LastFMScrobbleAudioTrackForMember> {
 	#dataSourceFactory = new LastFmDataSourceFactory();
 
 	public async run(...[member, track]: EventArgs<FoxxieEvents.LastFMScrobbleAudioTrackForMember>) {

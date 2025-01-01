@@ -1,6 +1,8 @@
 import { container } from '@sapphire/framework';
 import { Cron } from '@sapphire/time-utilities';
-import { ResponseType, ResponseValue, ScheduleEntry } from '#lib/schedule';
+import { isNullish } from '@sapphire/utilities';
+import { ResponseType, ResponseValue, ScheduleEntry, Task } from '#lib/schedule';
+import { green } from 'colorette';
 
 export interface ScheduleManagerAddOptions<Type extends ScheduleEntry.TaskId> {
 	/**
@@ -43,6 +45,19 @@ export class ScheduleManager {
 
 	public destroy() {
 		this._clearInterval();
+	}
+
+	public async ensureCron(task: Task) {
+		if (isNullish(task.options.cron)) return;
+
+		const foundEntry = this.queue.find((entry) => entry.taskId === task.name);
+		if (isNullish(foundEntry)) {
+			container.logger.warn(`[${green('Schedule')}]: No cron task found for ${task.name} (${task.options.cron})`);
+			await this.add(task.name as ScheduleEntry.TaskId, task.options.cron, { data: {} as any });
+			container.logger.info(`[${green('Schedule')}]: Added cron task for ${task.name} (${task.options.cron})`);
+		} else {
+			container.logger.debug(`[${green('Schedule')}]: Successfully found cron task for ${task.name} (${task.options.cron})`);
+		}
 	}
 
 	public async execute() {

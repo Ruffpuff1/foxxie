@@ -1,5 +1,5 @@
 import { randomArray } from '@ruffpuff/utilities';
-import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
+import { canReact, canRemoveAllReactions, MessageBuilder } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { MessageOptions, send } from '@sapphire/plugin-editable-commands';
 import { fetchT, resolveKey, type TOptions } from '@sapphire/plugin-i18next';
@@ -10,6 +10,7 @@ import { CustomFunctionGet, CustomGet, GuildMessage, NonGroupMessage, TypedFT, T
 import { floatPromise, minutes, resolveOnErrorCodes } from '#utils/common';
 import {
 	AutocompleteInteraction,
+	Awaitable,
 	ChatInputCommandInteraction,
 	EmbedBuilder,
 	GuildTextBasedChannel,
@@ -17,6 +18,7 @@ import {
 	italic,
 	type Message,
 	type MessageCreateOptions,
+	MessageEditOptions,
 	RESTJSONErrorCodes,
 	type UserResolvable
 } from 'discord.js';
@@ -83,6 +85,19 @@ export async function deleteMessage(message: Message, time = 0): Promise<Message
 	return deleteMessageImmediately(message);
 }
 
+export async function editMessage(message: GuildMessage, options: EmbedBuilder | MessageEditOptions | string | string[], arrayJoiner = '\n') {
+	const resolvedOptions =
+		typeof options === 'string'
+			? { components: [], content: options, embeds: [] }
+			: Array.isArray(options)
+				? options.join(arrayJoiner)
+				: options instanceof EmbedBuilder
+					? { components: [], content: null, embeds: [options] }
+					: { components: [], content: null!, embeds: [], ...options };
+
+	return floatPromise(message.edit(resolvedOptions));
+}
+
 /**
  * Gets the tracked command from a message.
  * @param message The message to get the command from.
@@ -91,7 +106,6 @@ export async function deleteMessage(message: Message, time = 0): Promise<Message
 export function getCommand(message: Message): FoxxieCommand | null {
 	return messageCommands.get(message) ?? null;
 }
-
 export async function sendLoadingMessage(
 	message: GuildMessage,
 	key?: CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]>,
@@ -102,6 +116,7 @@ export async function sendLoadingMessage(
 	key?: boolean | CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]>,
 	args?: object
 ): Promise<InteractionResponse>;
+
 export async function sendLoadingMessage(
 	message: ChatInputCommandInteraction | GuildMessage,
 	key?: boolean | CustomFunctionGet<any, string, string[]> | CustomGet<string, string[]>,
@@ -143,7 +158,6 @@ export async function sendLoadingMessageInChannel(
  * ```
  */
 export function sendLocalizedMessage(message: Message, key: LocalizedSimpleKey): Promise<Message>;
-
 /**
  * Send an editable localized message using an object.
  * @param message The message to reply to.
@@ -167,6 +181,7 @@ export function sendLocalizedMessage(message: Message, key: LocalizedSimpleKey):
  * ```
  */
 export function sendLocalizedMessage<TArgs extends object>(message: Message, options: LocalizedMessageOptions<TArgs>): Promise<Message>;
+
 export async function sendLocalizedMessage(message: Message, options: LocalizedMessageOptions | LocalizedSimpleKey) {
 	if (typeof options === 'string') options = { key: options };
 
@@ -233,6 +248,15 @@ async function promptConfirmationReaction(message: NonGroupMessage, response: No
 }
 
 const promptConfirmationMessageRegExp = /^y|yes?|yeah?$/i;
+export async function buildAndSendResponse(
+	message: GuildMessage,
+	display: (loading: GuildMessage) => Awaitable<EmbedBuilder | MessageBuilder | string>
+) {
+	const loading = await sendLoadingMessage(message);
+	const response = await display(loading);
+	return sendMessage(message, response);
+}
+
 /**
  * Sends a boolean confirmation prompt asking the `target` for either of two choices.
  * @param message The message to ask for a confirmation from.

@@ -1,10 +1,10 @@
 import { resolveToNull } from '@ruffpuff/utilities';
-import { ApplyOptions } from '@sapphire/decorators';
 import { readSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
-import { getAge, nextBirthday } from '#utils/birthday';
+import { getAge, nextBirthday } from '#modules/birthday';
 import { Schedules } from '#utils/constants';
+import { ProductionOnly, RegisterTask } from '#utils/decorators';
 import { fetchChannel } from '#utils/functions';
 import { Guild, GuildMember } from 'discord.js';
 import { getFixedT, TFunction } from 'i18next';
@@ -18,10 +18,8 @@ const enum BirthdayMessageMatches {
 	Username = '{member.username}'
 }
 
-@ApplyOptions<Task.Options>(({ container }) => ({
-	enabled: container.client.enabledProdOnlyEvent(),
-	name: Schedules.Birthday
-}))
+@ProductionOnly()
+@RegisterTask(Schedules.Birthday)
 export class UserTask extends Task {
 	private matchRegex = /{member(\.(age|nick|username|tag|guild))?}/g;
 

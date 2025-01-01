@@ -1,11 +1,11 @@
-import { ApplyOptions } from '@sapphire/decorators';
 import { DiscogsService } from '#apis/last.fm/services/third-party/DiscogsService';
 import { Task } from '#lib/schedule';
+import { Schedules } from '#utils/constants';
+import { ProductionOnly, RegisterCron, RegisterTask } from '#utils/decorators';
 
-@ApplyOptions<Task.Options>(({ container }) => ({
-	enabled: container.client.enabledProdOnlyEvent(),
-	name: 'lastFmUpdateDiscogsUsers'
-}))
+@ProductionOnly()
+@RegisterCron('0 12 * * *')
+@RegisterTask(Schedules.LastFMUpdateDiscogsUsers)
 export class UserTask extends Task {
 	#discogsService = new DiscogsService();
 

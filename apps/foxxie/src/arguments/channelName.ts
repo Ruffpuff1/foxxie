@@ -1,7 +1,7 @@
 import { ChannelMentionRegex, SnowflakeRegex } from '@sapphire/discord.js-utilities';
 import { Argument, Identifiers } from '@sapphire/framework';
 import { isGuildMessage } from '#utils/common';
-import { FuzzySearch } from '#utils/parsers/FuzzySearch';
+import { FuzzySearch } from '#utils/external/FuzzySearch';
 import { validateChannelAccess } from '#utils/util';
 import { Guild, GuildChannel, ThreadChannel, User } from 'discord.js';
 
