@@ -166,6 +166,7 @@ export namespace ScheduleEntry {
 	}
 
 	export interface TaskData {
+		[Schedules.CheckStatusPage]: null;
 		[Schedules.Disboard]: { guildId: string };
 		[Schedules.LastFMUpdateArtistsForUser]: { playUpdate: PlayUpdate; userId: string };
 		birthday: BirthdayTaskData;

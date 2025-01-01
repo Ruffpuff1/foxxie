@@ -1,29 +1,98 @@
-import { toTitleCase } from '@ruffpuff/utilities';
+import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
 import { PaginatedMessage } from '@sapphire/discord.js-utilities';
 import { container, version as sapphireVersion } from '@sapphire/framework';
 import { cast, isNullish, isNullishOrEmpty } from '@sapphire/utilities';
+import { readSettings } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
-import { GuildMessage, PermissionLevels } from '#lib/types';
+import { FTFunction, GuildMessage, PermissionLevels } from '#lib/types';
+import { InfoCommand } from '#root/commands/general/info';
 import { clientOwners, defaultPaginationOptionsWithoutSelectMenu } from '#root/config';
 import { Urls } from '#utils/constants';
 import {
 	conditionalField,
 	conditionalFooter,
+	formatGuildChannels,
+	formatGuildEmojis,
+	getEmojiData,
+	getGuildEmbedAuthor,
+	getGuildRoles,
 	orField,
 	removeEmptyFields,
 	resolveClientColor,
 	resolveDescription,
 	resolveField,
 	resolveFooter,
+	resolveUserDisplayName,
 	sendLoadingMessage,
 	sendMessage
 } from '#utils/functions';
-import { fetchCommit, getServerDetails } from '#utils/util';
-import { bold, EmbedBuilder, hyperlink, inlineCode, italic, Message } from 'discord.js';
+import { resolveGuildChannel, resolveMessage, resolveSnowflake, resolveSnowflakeEntity, resolveUsername } from '#utils/resolvers';
+import { fetchCommit, getContent, getServerDetails } from '#utils/util';
+import {
+	APIInteractionGuildMember,
+	bold,
+	EmbedBuilder,
+	Guild,
+	GuildChannel,
+	GuildMember,
+	hyperlink,
+	inlineCode,
+	italic,
+	Message,
+	PermissionFlagsBits,
+	Snowflake,
+	time,
+	TimestampStyles,
+	User
+} from 'discord.js';
 import { version as discordVersion } from 'discord.js';
 
-export class MenuBuilder {
+import { UserBuilder } from './UserBuilder.js';
+
+export class ResponseBuilder {
+	public static async Help(args: FoxxieCommand.Args): Promise<EmbedBuilder> {
+		const titles = args.t(LanguageKeys.Commands.General.Help.Titles);
+
+		const embed = new EmbedBuilder()
+			.setColor(await resolveClientColor(args.message, args.message.member?.displayColor))
+			.setDescription(resolveDescription([hyperlink(titles.support, Urls.Support), hyperlink(titles.terms, Urls.Terms)], ' | '))
+			.setFooter(
+				resolveFooter(
+					args.t(LanguageKeys.Commands.General.Help.Menu, { name: container.client.user?.username }),
+					args.message.client.user.displayAvatarURL()
+				)
+			);
+
+		const categories = args.t(LanguageKeys.Commands.General.Help.Categories);
+		const includeAdmin = clientOwners.includes(args.message.author.id);
+
+		const commands = container.stores
+			.get('commands')
+			.filter((command) => (includeAdmin ? true : cast<FoxxieCommand>(command).permissionLevel !== PermissionLevels.BotOwner));
+
+		const sortedCategories = [...new Set(commands.map((command) => command.category!))]
+			.sort((a, b) => a.localeCompare(b))
+			.map((category) => categories[category.toLowerCase() as keyof typeof categories])
+			.filter((category) => !isNullish(category));
+
+		for (const category of sortedCategories) {
+			const categoryCommands = commands
+				.sort((a, b) => a.name.localeCompare(b.name))
+				.filter((command) => category.includes(toTitleCase(command.category!)))
+				.map((command) => inlineCode(command.name));
+
+			embed.addFields(
+				resolveField(
+					bold(`${category} (${args.t(LanguageKeys.Globals.NumberFormat, { value: categoryCommands.length })})`),
+					categoryCommands.join(', ')
+				)
+			);
+		}
+
+		return embed;
+	}
+
 	public static async HelpCommand(command: FoxxieCommand, args: FoxxieCommand.Args): Promise<Message | PaginatedMessage> {
 		const message = cast<GuildMessage>(args.message);
 		const loading = await sendLoadingMessage(message);
@@ -178,46 +247,166 @@ export class MenuBuilder {
 		return display.setIndex(foundSubcommand === -1 ? 0 : foundSubcommand + 1).run(loading, message.author);
 	}
 
-	public static async HelpMenu(args: FoxxieCommand.Args): Promise<EmbedBuilder> {
-		const titles = args.t(LanguageKeys.Commands.General.Help.Titles);
+	public static async Info(args: FoxxieCommand.Args) {
+		const first = args.finished ? null : await args.pick('string');
+		const message = args.message as GuildMessage;
 
-		const embed = new EmbedBuilder()
-			.setColor(await resolveClientColor(args.message, args.message.member?.displayColor))
-			.setDescription(resolveDescription([hyperlink(titles.support, Urls.Support), hyperlink(titles.terms, Urls.Terms)], ' | '))
-			.setFooter(
-				resolveFooter(
-					args.t(LanguageKeys.Commands.General.Help.Menu, { name: container.client.user?.username }),
-					args.message.client.user.displayAvatarURL()
-				)
-			);
-
-		const categories = args.t(LanguageKeys.Commands.General.Help.Categories);
-		const includeAdmin = clientOwners.includes(args.message.author.id);
-
-		const commands = container.stores
-			.get('commands')
-			.filter((command) => (includeAdmin ? true : cast<FoxxieCommand>(command).permissionLevel !== PermissionLevels.BotOwner));
-
-		const sortedCategories = [...new Set(commands.map((command) => command.category!))]
-			.sort((a, b) => a.localeCompare(b))
-			.map((category) => categories[category.toLowerCase() as keyof typeof categories])
-			.filter((category) => !isNullish(category));
-
-		for (const category of sortedCategories) {
-			const categoryCommands = commands
-				.sort((a, b) => a.name.localeCompare(b.name))
-				.filter((command) => category.includes(toTitleCase(command.category!)))
-				.map((command) => inlineCode(command.name));
-
-			embed.addFields(
-				resolveField(
-					bold(`${category} (${args.t(LanguageKeys.Globals.NumberFormat, { value: categoryCommands.length })})`),
-					categoryCommands.join(', ')
-				)
-			);
+		if (isNullish(first)) {
+			const user = message.author;
+			return UserBuilder.UserInfo(user, message, {
+				banner: args.getFlags(...InfoCommand.Flags.Banner),
+				notes: args.getFlags(...InfoCommand.Flags.Note),
+				warnings: args.getFlags(...InfoCommand.Flags.Warning)
+			});
 		}
 
+		if (args.getFlags(...InfoCommand.Flags.Snowflake)) {
+			const resolvedSnowflake = resolveSnowflake(first);
+			if (resolvedSnowflake.isOk()) {
+				return ResponseBuilder.InfoSnowflake(resolvedSnowflake.unwrap(), args);
+			}
+		}
+
+		const user = await resolveUsername(first, message.guild);
+		if (user.isOk()) {
+			return UserBuilder.UserInfo(user.unwrap(), message, {
+				banner: args.getFlags(...InfoCommand.Flags.Banner),
+				notes: args.getFlags(...InfoCommand.Flags.Note),
+				warnings: args.getFlags(...InfoCommand.Flags.Warning)
+			});
+		}
+
+		if (first === message.guildId) {
+			await sendLoadingMessage(message);
+			return ResponseBuilder.InfoGuild(message.guild, args.t, message.member);
+		}
+
+		const channel = await resolveGuildChannel(first);
+		if (channel.isOk()) console.log(channel);
+
+		const foundMessage = await resolveMessage(first);
+		if (foundMessage.isOk()) {
+			return ResponseBuilder.InfoMessage(foundMessage.unwrap());
+		}
+
+		return UserBuilder.UserInfo(message.author, message, {
+			banner: args.getFlags(...InfoCommand.Flags.Banner),
+			notes: args.getFlags(...InfoCommand.Flags.Note),
+			warnings: args.getFlags(...InfoCommand.Flags.Warning)
+		});
+	}
+
+	public static async InfoGuild(guild: Guild, t: FTFunction, member: APIInteractionGuildMember | GuildMember) {
+		const messageCount = await readSettings(guild, 'messageCount');
+		const owner = await resolveToNull(guild.members.fetch(guild.ownerId));
+		const color = await resolveClientColor(guild);
+		const resolvedMember = await guild.members.fetch(member.user.id);
+
+		const channels = guild.channels.cache
+			.filter((channel) => channel.isSendable() || channel.isVoiceBased())
+			.filter((channel) => channel.permissionsFor(resolvedMember).has(PermissionFlagsBits.ViewChannel));
+
+		const [animated, nonAnimated, hasEmojis] = getEmojiData(guild);
+		const serverTitles = t(LanguageKeys.Commands.General.Info.GuildTitles);
+
+		const embed = new EmbedBuilder() //
+			.setColor(color)
+			.setThumbnail(guild.iconURL())
+			.setAuthor(getGuildEmbedAuthor(guild))
+			.setDescription(
+				[
+					t(LanguageKeys.Commands.General.Info.GuildCreated, {
+						created: guild.createdAt,
+						owner: owner?.displayName
+					}),
+					guild.description ? `*${guild.description}*` : null
+				]
+					.filter((a) => !isNullish(a))
+					.join('\n')
+			);
+
+		return embed.addFields(
+			{
+				name: t(LanguageKeys.Commands.General.Info.GuildTitlesRoles, { count: guild.roles.cache.size }),
+				value: getGuildRoles(guild, t)
+			},
+			{
+				inline: true,
+				name: serverTitles.members,
+				value: t(LanguageKeys.Globals.NumberFormat, { value: guild.memberCount })
+			},
+			{
+				inline: true,
+				name: t(LanguageKeys.Commands.General.Info.GuildTitlesChannels, { count: channels.size }),
+				value: formatGuildChannels(channels, t)
+			},
+			{
+				inline: true,
+				name: t(LanguageKeys.Commands.General.Info.GuildTitlesEmojis, { count: guild.emojis.cache.size }),
+				value: formatGuildEmojis(animated, nonAnimated, hasEmojis, t)
+			},
+			{
+				inline: true,
+				name: serverTitles.stats,
+				value: t(LanguageKeys.Commands.General.Info.GuildMessages, { messages: messageCount })
+			},
+			{
+				name: serverTitles.security,
+				value: t(LanguageKeys.Commands.General.Info.GuildSecurity, {
+					content: guild.explicitContentFilter,
+					filter: guild.verificationLevel
+				})
+			}
+		);
+	}
+
+	public static async InfoMessage(message: GuildMessage) {
+		const embed = new EmbedBuilder()
+			.setAuthor({
+				iconURL: message.member?.displayAvatarURL() || message.author.displayAvatarURL(),
+				name: `By ${await resolveUserDisplayName(message.author.id, message.guild)} (${message.id})`,
+				url: message.url
+			})
+
+			.setColor(await resolveClientColor(message, message.member.displayColor));
+
+		const description = [
+			`Sent on ${time(message.createdAt, TimestampStyles.LongDateTime)} (${time(message.createdAt, TimestampStyles.RelativeTime)})`
+		];
+
+		if (message.editedAt)
+			description.push(
+				`Edited on ${time(message.editedAt, TimestampStyles.LongDateTime)} (${time(message.editedAt, TimestampStyles.RelativeTime)})`
+			);
+
+		embed.setDescription(description.join('\n'));
+
+		const content = getContent(message);
+		if (message.embeds.length) embed.addFields(resolveField('Embeds', message.embeds.length.toLocaleString()));
+		if (content) embed.addFields(resolveField('Content', content));
+
 		return embed;
+	}
+
+	public static async InfoSnowflake(resolved: Snowflake, args: FoxxieCommand.Args): Promise<EmbedBuilder> {
+		const entity = await resolveSnowflakeEntity(resolved, args.message.member!);
+		const value = entity.unwrap();
+
+		let type = args.t(LanguageKeys.Globals.Unknown);
+		if (value instanceof User) {
+			type = 'user';
+		} else if (value instanceof Guild) {
+			type = 'guild';
+		} else if (value instanceof GuildChannel) {
+			type = 'channel';
+		} else if (value instanceof Message) {
+			type = 'message';
+		}
+
+		return new EmbedBuilder()
+			.setColor(await resolveClientColor(args.message))
+			.setAuthor({ name: `Snowflake (${resolved})` })
+			.addFields(resolveField('Type', type));
 	}
 
 	public static async Stats(args: FoxxieCommand.Args): Promise<EmbedBuilder> {
@@ -237,7 +426,7 @@ export class MenuBuilder {
 			cpuCount,
 			cpuSpeed,
 			cpuUsage,
-			deps: MenuBuilder.Dependencies,
+			deps: ResponseBuilder.Dependencies,
 			memoryPercent,
 			memoryUsed,
 			messages: totalMessageCount,

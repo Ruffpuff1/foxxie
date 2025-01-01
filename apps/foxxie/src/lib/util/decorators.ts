@@ -15,6 +15,7 @@ import { SubcommandMapping, SubcommandMappingArray, SubcommandMappingMethod } fr
 import { Ctor, isNullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
+import { TaskBuilder } from '#lib/schedule';
 import { FoxxieSubcommand } from '#lib/structures';
 import { FoxxieButtonInteractionHandler } from '#lib/Structures/commands/interactions/FoxxieButtonInteractionHandler';
 import { FoxxieEvents, GuildMessage, PermissionLevels, TypedT } from '#lib/types';
@@ -31,6 +32,8 @@ import {
 	SlashCommandSubcommandBuilder,
 	SlashCommandSubcommandsOnlyBuilder
 } from 'discord.js';
+
+import { Schedules } from './constants.js';
 
 const DMAvailableUserPermissions = new PermissionsBitField(
 	~new PermissionsBitField([
@@ -195,6 +198,46 @@ export const RegisterListener = (listener: ((builder: FoxxieListenerBuilder) => 
 		return createProxy(buttonHandler, {
 			construct: (ctor, [context, base = {}]) => {
 				const resolvedOptions = typeof listener === 'function' ? listener(new FoxxieListenerBuilder()).toJSON() : listener;
+				return new ctor(context, {
+					...base,
+					...resolvedOptions
+				});
+			}
+		});
+	});
+};
+
+export const RegisterCron = (cron: string) => {
+	return createClassDecorator((task: Ctor) => {
+		return createProxy(task, {
+			construct: (ctor, [context, base = {}]) => {
+				return new ctor(context, {
+					...base,
+					cron
+				});
+			}
+		});
+	});
+};
+
+export const ProductionOnly = (enable?: boolean) => {
+	return createClassDecorator((piece: Ctor) => {
+		return createProxy(piece, {
+			construct: (ctor, [context, base = {}]) => {
+				return new ctor(context, {
+					...base,
+					enabled: enable === false ? base.enabled : container.client.enabledProdOnlyEvent()
+				});
+			}
+		});
+	});
+};
+
+export const RegisterTask = (task: ((builder: TaskBuilder) => TaskBuilder) | Schedules) => {
+	return createClassDecorator((buttonHandler: Ctor) => {
+		return createProxy(buttonHandler, {
+			construct: (ctor, [context, base = {}]) => {
+				const resolvedOptions = typeof task === 'function' ? task(new TaskBuilder()).toJSON() : { name: task };
 				return new ctor(context, {
 					...base,
 					...resolvedOptions

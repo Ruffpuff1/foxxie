@@ -2,11 +2,10 @@ import { resolveToNull } from '@ruffpuff/utilities';
 import { RequiresClientPermissions } from '@sapphire/decorators';
 import { container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { Starboard } from '#lib/database/Models/starboard';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
-import { RequiresStarboardEntries } from '#modules/starboard';
+import { RequiresStarboardEntries, StarboardEntry } from '#modules/starboard';
 import { defaultPaginationOptions, defaultPaginationOptionsWithoutSelectMenu } from '#root/config';
 import { Emojis } from '#utils/constants';
 import { GuildOnlyCommand, MessageSubcommand, RegisterSubcommand, RequiresMemberPermissions } from '#utils/decorators';
@@ -38,7 +37,7 @@ export class UserCommand extends FoxxieSubcommand {
 		);
 		const starboard = getGuildStarboard(msg.guild);
 		const starboards = (await container.prisma.starboard.findMany({ orderBy: { id: 'asc' }, where: { guildId: msg.guildId } })).map(
-			(star) => new Starboard(star)
+			(star) => new StarboardEntry(star)
 		);
 
 		const channelIds = [...new Set(starboards.map((s) => s.channelId))];

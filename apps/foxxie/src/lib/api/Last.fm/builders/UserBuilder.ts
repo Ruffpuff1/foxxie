@@ -154,7 +154,7 @@ export class UserBuilder {
 		const components = new ActionRowBuilder<ButtonBuilder>().addComponents(
 			new ButtonBuilder()
 				.setLabel('History')
-				.setCustomId(`history-${user.userid}-${context.contextUser?.userid}`)
+				.setCustomId(`lastfmprofilehistory-${user.userid}-${context.contextUser?.userid}`)
 				.setStyle(ButtonStyle.Secondary)
 				.setEmoji('📖')
 		);

@@ -6,7 +6,7 @@ import { readSettings } from '#lib/database';
 import { ensureMember } from '#lib/database/Models/member';
 import { getT, LanguageKeys } from '#lib/i18n';
 import { FTFunction, GuildMessage } from '#lib/types';
-import { toStarboardStatsEmoji } from '#utils/common';
+import { floatPromise, toStarboardStatsEmoji } from '#utils/common';
 import { Colors, CustomIds } from '#utils/constants';
 import { getModeration, isGuildOwner, resolveClientColor } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
@@ -166,6 +166,8 @@ export class UserBuilder {
 		message: ButtonInteraction | GuildMessage,
 		show: UserShow = { banner: false, notes: false, warnings: false }
 	): Promise<MessageBuilder> {
+		await floatPromise(user.fetch());
+
 		const response = new MessageBuilder();
 		const guild = message.guild!;
 		const discordUser = message instanceof Message ? message.author : message.user;

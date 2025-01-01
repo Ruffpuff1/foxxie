@@ -5,7 +5,7 @@ import { ButtonParser, ParsedInfoUserNotes } from '#utils/parsers/ButtonParser';
 
 @RegisterButtonHandler(ButtonParser.InfoUserNotes)
 export class UserInteractionHandler extends FoxxieButtonInteractionHandler {
-	public override async run(...[interaction, result]: FoxxieButtonInteractionHandler.RunArgs<ParsedInfoUserNotes>) {
+	public override async handle(...[interaction, result]: FoxxieButtonInteractionHandler.RunArgs<ParsedInfoUserNotes>) {
 		const response = await UserBuilder.UserInfo(result.member.user, interaction, {
 			banner: result.showBanner,
 			notes: true,

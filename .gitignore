@@ -119,3 +119,9 @@ build/**
 
 .nx/cache
 .nx/workspace-data
+
+Icon
+.localized
+.SynologyWorkingDirectory/
+code.png
+Icon

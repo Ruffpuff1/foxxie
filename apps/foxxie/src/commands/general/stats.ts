@@ -1,7 +1,7 @@
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { GuildMessage } from '#lib/types';
-import { MenuBuilder } from '#utils/builders';
+import { ResponseBuilder } from '#utils/builders';
 import { GuildOnlyCommand, RegisterCommand } from '#utils/decorators';
 import { sendLoadingMessage, sendMessage } from '#utils/functions';
 import { PermissionFlagsBits } from 'discord.js';
@@ -18,7 +18,7 @@ import { PermissionFlagsBits } from 'discord.js';
 export class StatsCommand extends FoxxieCommand {
 	public async messageRun(message: GuildMessage, args: FoxxieCommand.Args) {
 		await sendLoadingMessage(message);
-		const embed = await MenuBuilder.Stats(args);
+		const embed = await ResponseBuilder.Stats(args);
 		await sendMessage(message, embed);
 	}
 

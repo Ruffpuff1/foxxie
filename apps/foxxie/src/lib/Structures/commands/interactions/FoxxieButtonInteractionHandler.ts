@@ -1,6 +1,7 @@
 import { InteractionHandler, InteractionHandlerTypes } from '@sapphire/framework';
 import { isNullish } from '@sapphire/utilities';
-import { ButtonInteraction } from 'discord.js';
+import { getSupportedUserLanguageT, LanguageKeys } from '#lib/i18n';
+import { ButtonInteraction, userMention } from 'discord.js';
 
 export abstract class FoxxieButtonInteractionHandler extends InteractionHandler {
 	private handler: FoxxieButtonInteractionHandler.Handler;
@@ -15,6 +16,8 @@ export abstract class FoxxieButtonInteractionHandler extends InteractionHandler 
 		this.key = options.key;
 	}
 
+	public abstract handle(interaction: ButtonInteraction, parsedData?: unknown): unknown;
+
 	public override async parse(interaction: ButtonInteraction) {
 		const splitId = interaction.customId.split('-');
 		const [key, userId] = splitId.splice(0, 2);
@@ -24,14 +27,26 @@ export abstract class FoxxieButtonInteractionHandler extends InteractionHandler 
 		}
 
 		if (userId !== interaction.user.id) {
-			return this.none();
+			return this.some(null);
 		}
 
 		const result = await this.handler(interaction, splitId);
 		return isNullish(result) ? this.none() : this.some(result);
 	}
 
-	public abstract override run(interaction: ButtonInteraction, parsedData?: unknown): unknown;
+	public async run(interaction: ButtonInteraction, parsedData?: unknown) {
+		if (parsedData === null) return this.handleWrongUser(interaction);
+		return this.handle(interaction, parsedData);
+	}
+
+	private handleWrongUser(interaction: ButtonInteraction) {
+		const t = getSupportedUserLanguageT(interaction);
+		const content = t(LanguageKeys.System.PaginatedMessageWrongUserInteractionReply, {
+			user: userMention(interaction.customId.split('-')[1])
+		});
+
+		return interaction.reply({ content, ephemeral: true });
+	}
 }
 
 export namespace FoxxieButtonInteractionHandler {

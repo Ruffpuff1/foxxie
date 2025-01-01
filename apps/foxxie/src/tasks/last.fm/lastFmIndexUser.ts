@@ -1,12 +1,10 @@
-import { ApplyOptions } from '@sapphire/decorators';
 import { IndexService } from '#apis/last.fm/services/IndexService';
 import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
 import { Schedules } from '#utils/constants';
+import { ProductionOnly, RegisterTask } from '#utils/decorators';
 
-@ApplyOptions<Task.Options>(({ container }) => ({
-	enabled: container.client.enabledProdOnlyEvent(),
-	name: Schedules.IndexUser
-}))
+@ProductionOnly()
+@RegisterTask(Schedules.IndexUser)
 export class UserTask extends Task {
 	#indexService = new IndexService();
 

@@ -1,5 +1,5 @@
 import { randomArray } from '@ruffpuff/utilities';
-import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
+import { canReact, canRemoveAllReactions, MessageBuilder } from '@sapphire/discord.js-utilities';
 import { container } from '@sapphire/framework';
 import { MessageOptions, send } from '@sapphire/plugin-editable-commands';
 import { fetchT, resolveKey, type TOptions } from '@sapphire/plugin-i18next';
@@ -10,6 +10,7 @@ import { CustomFunctionGet, CustomGet, GuildMessage, NonGroupMessage, TypedFT, T
 import { floatPromise, minutes, resolveOnErrorCodes } from '#utils/common';
 import {
 	AutocompleteInteraction,
+	Awaitable,
 	ChatInputCommandInteraction,
 	EmbedBuilder,
 	GuildTextBasedChannel,
@@ -247,6 +248,15 @@ async function promptConfirmationReaction(message: NonGroupMessage, response: No
 }
 
 const promptConfirmationMessageRegExp = /^y|yes?|yeah?$/i;
+export async function buildAndSendResponse(
+	message: GuildMessage,
+	display: (loading: GuildMessage) => Awaitable<EmbedBuilder | MessageBuilder | string>
+) {
+	const loading = await sendLoadingMessage(message);
+	const response = await display(loading);
+	return sendMessage(message, response);
+}
+
 /**
  * Sends a boolean confirmation prompt asking the `target` for either of two choices.
  * @param message The message to ask for a confirmation from.

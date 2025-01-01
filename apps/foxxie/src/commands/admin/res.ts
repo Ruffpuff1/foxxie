@@ -1,9 +1,9 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import { readSettings, SettingsKeys } from '#lib/database';
-import { combineMessageReactionUsers, StarboardData, truncateStarboardEmojis } from '#lib/database/Models/starboard';
 import { FoxxieCommand } from '#lib/structures';
 import { EnvKeys, GuildMessage } from '#lib/types';
+import { combineMessageReactionUsers, StarboardData, truncateStarboardEmojis } from '#modules/starboard';
 import { emojis } from '#utils/constants';
 import { DiscordAPIError, Message, RESTJSONErrorCodes, TextChannel } from 'discord.js';
 

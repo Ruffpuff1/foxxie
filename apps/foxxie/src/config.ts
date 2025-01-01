@@ -342,6 +342,12 @@ function parseI18nOptions(): InternationalizationOptions {
 
 export const clientOptions: ClientOptions = {
 	allowedMentions: { parse: ['users'] },
+	api: {
+		listenOptions: {
+			port: 8282
+		},
+		origin: 'http://127.0.0.1:3000'
+	},
 	audio: {
 		hosts: {
 			rest: `http://${envParseString('LAVALINK_URL')}`,

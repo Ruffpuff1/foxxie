@@ -5,7 +5,7 @@ import { ButtonParser, ParsedInfoUserAvatar } from '#utils/parsers/ButtonParser'
 
 @RegisterButtonHandler(ButtonParser.InfoUserAvatar)
 export class UserInteractionHandler extends FoxxieButtonInteractionHandler {
-	public override async run(...[interaction, result]: FoxxieButtonInteractionHandler.RunArgs<ParsedInfoUserAvatar>) {
+	public override async handle(...[interaction, result]: FoxxieButtonInteractionHandler.RunArgs<ParsedInfoUserAvatar>) {
 		const response = await UserBuilder.UserAvatar(interaction, interaction.user, result.entity);
 		return interaction.update(response);
 	}

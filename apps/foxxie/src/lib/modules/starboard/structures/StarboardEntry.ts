@@ -7,18 +7,19 @@ import { cast, cutText, debounce, isNullish } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
 import { SettingsKeys } from '#lib/database';
 import { readSettings } from '#lib/database/settings/functions';
-import { StarboardManager } from '#lib/structures';
 import { EnvKeys, FTFunction, GuildMessage } from '#lib/types';
 import { floatPromise } from '#utils/common';
 import { defaultStarboardEmojis, getGuildStarboard, resolveClientColor } from '#utils/functions';
 import { fetchReactionUsers, getAttachment, getImage, isVideo } from '#utils/util';
 import { bold, Client, DiscordAPIError, EmbedBuilder, HTTPError, Message, MessageEditOptions, RESTJSONErrorCodes, TextChannel } from 'discord.js';
 
+import { StarboardManager } from './StarboardManager.js';
+
 export type StarboardData = starboard;
 
 const CONTENTMAP = new Map<string, string>();
 
-export class Starboard {
+export class StarboardEntry {
 	public channelId: string = null!;
 	public enabled = true;
 	public guildId: string = null!;
@@ -28,7 +29,7 @@ export class Starboard {
 
 	public starChannelId: null | string = null;
 
-	public starMessageId: null | string = null;
+	public starMessageId!: string;
 
 	public stars = 0;
 
@@ -105,7 +106,7 @@ export class Starboard {
 		this.stars = this.#users.size;
 	}
 
-	public async edit(options: Partial<Starboard>): Promise<this> {
+	public async edit(options: Partial<StarboardEntry>): Promise<this> {
 		this.lastUpdated = Date.now();
 
 		// If a message was in progress to be sent, await it first
@@ -114,17 +115,14 @@ export class Starboard {
 
 		if (Reflect.has(options, 'enabled')) {
 			this.enabled = options.enabled!;
+			if (this.starMessageId) await this.update();
 		}
 		if (Reflect.has(options, 'stars') && this.enabled) {
 			this.stars = options.stars!;
 			await this.#updateStarMessage();
-		}
-		if (options.starMessageId === null) {
-			this.starMessageId = null;
-			this.#starMessage = null;
+			await this.update();
 		}
 
-		await this.update();
 		return this;
 	}
 
@@ -290,7 +288,7 @@ export class Starboard {
 				id: this.id,
 				messageId: this.messageId,
 				starChannelId: this.starChannelId,
-				starMessageId: this.starMessageId!,
+				starMessageId: this.starMessageId,
 				stars: this.stars,
 				userId: this.userId
 			},
@@ -298,7 +296,7 @@ export class Starboard {
 				messageId_guildId_starMessageId: {
 					guildId: this.guildId,
 					messageId: this.messageId,
-					starMessageId: this.starMessageId!
+					starMessageId: this.starMessageId
 				}
 			}
 		});
@@ -322,7 +320,7 @@ export class Starboard {
 				if (!(error instanceof DiscordAPIError) || !(error instanceof HTTPError)) return;
 
 				if (error.code === RESTJSONErrorCodes.MissingAccess) return;
-				if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.edit({ enabled: false, starMessageId: null });
+				if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.edit({ enabled: false });
 			}
 		}
 
@@ -338,7 +336,7 @@ export class Starboard {
 				if (!(error instanceof DiscordAPIError) || !(error instanceof HTTPError)) return;
 
 				if (error.code === RESTJSONErrorCodes.MissingAccess) return;
-				if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.edit({ enabled: false, starMessageId: null });
+				if (error.code === RESTJSONErrorCodes.UnknownMessage) await this.edit({ enabled: false });
 			}
 
 			return;
@@ -420,7 +418,7 @@ export async function getStarboard(guildId: string, messageId: string) {
 	const message = channel.messages.cache.get(messageId) || (await resolveToNull(channel.messages.fetch(messageId)));
 	if (!message || !message.inGuild()) return null;
 
-	return previous ? new Starboard(previous).init(getGuildStarboard(guildId), cast<GuildMessage>(message)) : null;
+	return previous ? new StarboardEntry(previous).init(getGuildStarboard(guildId), cast<GuildMessage>(message)) : null;
 }
 
 export function truncateStarboardEmojis(settings: readonly string[], fallback: string[] = defaultStarboardEmojis) {

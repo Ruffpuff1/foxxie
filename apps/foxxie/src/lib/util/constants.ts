@@ -42,7 +42,9 @@ export const enum LanguageFormatters {
 }
 
 export const enum Schedules {
+	AddUsersToIndexQueue = 'addUsersToIndexQueue',
 	Birthday = 'birthday',
+	CheckStatusPage = 'checkStatusPage',
 	Disboard = 'disboard',
 	EndTempBan = 'moderationEndBan',
 	EndTempMute = 'moderationEndMute',
@@ -51,6 +53,7 @@ export const enum Schedules {
 	EndTempTimeout = 'moderationEndTimeout',
 	IndexUser = 'indexUser',
 	LastFMUpdateArtistsForUser = 'lastFmUpdateArtistsForUser',
+	LastFMUpdateDiscogsUsers = 'lastFmUpdateDiscogsUsers',
 	Reminder = 'reminder',
 	RemoveBirthdayRole = 'removeBirthdayRole',
 	ResetSpotifyToken = 'resetSpotifyToken',
@@ -61,6 +64,7 @@ export const enum Schedules {
 export const enum Urls {
 	Github = 'https://github.com/Ruffpuff1/foxxie',
 	Haste = 'https://hastebin.com',
+	StatusPage = 'https://discordstatus.com',
 	Support = 'https://tcs.rshk.me',
 	Terms = 'https://foxxie.rshk.me/terms',
 	TheCornerStore = 'https://tcs.rshk.me'

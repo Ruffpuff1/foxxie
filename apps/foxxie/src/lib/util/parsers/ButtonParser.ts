@@ -108,4 +108,9 @@ export class ButtonParser {
 
 		return { member, showBanner, showNotes };
 	}
+
+	public static async LastFMProfileHistory(...[interaction, [targetId]]: FoxxieButtonInteractionHandler.HandleArgs) {
+		console.log(interaction);
+		return targetId;
+	}
 }

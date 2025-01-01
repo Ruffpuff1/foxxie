@@ -1,12 +1,11 @@
-import { ApplyOptions } from '@sapphire/decorators';
 import { resetSpotifyToken } from '#lib/api/Spotify/util';
 import { Task } from '#lib/schedule';
 import { Schedules } from '#utils/constants';
+import { ProductionOnly, RegisterCron, RegisterTask } from '#utils/decorators';
 
-@ApplyOptions<Task.Options>(({ container }) => ({
-	enabled: container.client.enabledProdOnlyEvent(),
-	name: Schedules.ResetSpotifyToken
-}))
+@ProductionOnly()
+@RegisterCron('0 * * * *')
+@RegisterTask(Schedules.ResetSpotifyToken)
 export class UserTask extends Task {
 	public async run() {
 		await resetSpotifyToken();
