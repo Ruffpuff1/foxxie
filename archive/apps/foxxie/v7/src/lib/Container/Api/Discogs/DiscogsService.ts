@@ -7,7 +7,7 @@ import { EnvKeys } from '#lib/Types';
 import { EnvParse } from '@foxxie/env';
 import { DiscogsClient, DiscogsOAuth } from '@lionralfs/discogs-client/commonjs';
 import { resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { sleep } from '@sapphire/utilities';
 import { blue } from 'colorette';
 import { User, bold, hyperlink } from 'discord.js';

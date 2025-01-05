@@ -1,6 +1,6 @@
 import type { FTFunction, TypedT } from '#lib/types';
 
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish } from '@sapphire/utilities';
 import { GuildDataKey, ISchemaValue, ReadonlyGuildData, SchemaGroup, Serializer } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';

@@ -1,6 +1,6 @@
 import { FoxxieCommand } from '#lib/Structures';
 import { GuildMessage } from '#lib/Types';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { SubcommandMappingArray } from '@sapphire/plugin-subcommands';
 
 export class SubCommandsService {

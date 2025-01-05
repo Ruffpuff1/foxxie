@@ -1,5 +1,5 @@
 import { UserEntity } from '#lib/Database/entities/UserEntity';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { DurationFormatter } from '@sapphire/time-utilities';
 import { UserPlay } from '../Structures/Entities/UserPlay';
 

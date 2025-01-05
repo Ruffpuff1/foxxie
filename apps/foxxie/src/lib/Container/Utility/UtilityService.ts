@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Channel, ChannelResolvable, Guild, GuildResolvable } from 'discord.js';
 
 import { ChannelUtilityService } from './ChannelUtilityService.js';

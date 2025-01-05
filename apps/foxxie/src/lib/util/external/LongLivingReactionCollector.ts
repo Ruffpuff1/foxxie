@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { noop } from '@sapphire/utilities';
 import { minutes } from '#utils/common';
 import { Guild, GuildTextBasedChannelTypes, User } from 'discord.js';

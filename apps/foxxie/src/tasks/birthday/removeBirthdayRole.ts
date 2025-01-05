@@ -1,11 +1,12 @@
 import { resolveToNull } from '@ruffpuff/utilities';
-import { PartialResponseValue, ResponseType, ScheduleEntry, Task } from '#lib/schedule';
+import { PartialResponseValue, ResponseType, ScheduleEntry } from '#root/Core/structures/schedule/index';
+import { Task } from '#root/Core/structures/Task';
 import { seconds } from '#utils/common';
 import { Schedules } from '#utils/constants';
-import { ProductionOnly, RegisterTask } from '#utils/decorators';
+import { ProductionOnlyPiece, RegisterTask } from '#utils/decorators';
 import { PermissionFlagsBits } from 'discord.js';
 
-@ProductionOnly()
+@ProductionOnlyPiece()
 @RegisterTask(Schedules.RemoveBirthdayRole)
 export class UserTask extends Task {
 	public async run(data: ScheduleEntry.TaskData[Schedules.RemoveBirthdayRole]): Promise<null | PartialResponseValue> {

@@ -3,10 +3,13 @@ import { container, SapphireClient } from '@sapphire/framework';
 import { getRootData } from '@sapphire/pieces';
 import { InternationalizationContext } from '@sapphire/plugin-i18next';
 import { envParseBoolean, envParseInteger } from '@skyra/env-utilities';
+import { Audio, FoxxieQueue } from '#Foxxie/Audio';
+import { EventStore, TaskStore, TextCommandStore } from '#Foxxie/Core';
+import { Logger } from '#Foxxie/Logger';
 import { readSettings, SerializerStore } from '#lib/database';
-import { ScheduleManager, TaskStore } from '#lib/schedule';
 import { InviteManager, RedisManager } from '#lib/structures';
 import { clientOptions, webhookError } from '#root/config';
+import { ScheduleManager } from '#root/Core/structures/schedule/index';
 import { isGuildMessage } from '#utils/common';
 import { GuildMemberFetchQueue } from '#utils/external/GuildMemberFetchQueue';
 import { LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
@@ -15,11 +18,10 @@ import { Message, WebhookClient } from 'discord.js';
 import { join } from 'node:path';
 
 import { ApiService } from './api/ApiService.js';
-import { LastFmDataSourceFactory } from './api/Last.fm/factories/DataSourceFactory.js';
+import { DataSourceFactory } from './api/Last.fm/factories/DataSourceFactory.js';
 import { SettingsService } from './Container/Services/SettingsService.js';
 import { UtilityService } from './Container/Utility/UtilityService.js';
 import { WorkerService } from './Container/Workers/WorkerService.js';
-import { FoxxieQueue } from './modules/audio/index.js';
 
 export default class FoxxieClient extends SapphireClient {
 	@Enumerable(false)
@@ -33,7 +35,7 @@ export default class FoxxieClient extends SapphireClient {
 	@Enumerable(false)
 	public override invites = new InviteManager();
 
-	public lfm = new LastFmDataSourceFactory();
+	public lfm = new DataSourceFactory();
 
 	@Enumerable(false)
 	public override llrCollectors = new Set<LongLivingReactionCollector>();
@@ -54,6 +56,8 @@ export default class FoxxieClient extends SapphireClient {
 
 		container.stores.register(new SerializerStore());
 		container.stores.register(new TaskStore());
+		container.stores.register(new TextCommandStore());
+		container.stores.register(new EventStore());
 
 		container.stores.registerPath(join(getRootData().root, 'lib', 'modules', 'starboard'));
 		container.stores.registerPath(join(getRootData().root, 'lib', 'modules', 'suggestions'));
@@ -67,16 +71,8 @@ export default class FoxxieClient extends SapphireClient {
 				})
 			: null;
 
-		if (envParseBoolean('AUDIO_ENABLED', false)) {
-			this.audio = new FoxxieQueue(clientOptions.audio, (guildID, packet) => {
-				const guild = this.guilds.cache.get(guildID);
-				if (guild) guild.shard.send(packet);
-				return undefined;
-			});
-			container.stores.registerPath(join(getRootData().root, 'lib', 'modules', 'audio'));
-		} else {
-			this.audio = null;
-		}
+		Audio.Load(clientOptions);
+		Logger.Load();
 	}
 
 	public override destroy(): Promise<void> {

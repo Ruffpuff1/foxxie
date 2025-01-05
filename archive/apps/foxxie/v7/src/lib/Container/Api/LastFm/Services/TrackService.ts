@@ -1,5 +1,5 @@
 import { Response } from '#utils/Response';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { User, bold, inlineCode } from 'discord.js';
 import { TrackRepository } from '../Repositories/TrackRepository';
 import { Track } from '../Structures/Entities/Track';

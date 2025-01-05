@@ -4,7 +4,7 @@
  */
 import type { ScheduleManager } from '#lib/structures';
 import { Events } from '#lib/types/Events';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Cron } from '@sapphire/time-utilities';
 import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
 
@@ -103,7 +103,9 @@ export class ScheduleEntity extends BaseEntity {
 
         if (response !== null) return { ...response, entry: this };
 
-        return this.recurring ? { entry: this, type: ResponseType.Update, value: this.recurring.next() } : { entry: this, type: ResponseType.Finished };
+        return this.recurring
+            ? { entry: this, type: ResponseType.Update, value: this.recurring.next() }
+            : { entry: this, type: ResponseType.Finished };
     }
 
     public resume() {

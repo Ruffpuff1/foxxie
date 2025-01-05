@@ -1,6 +1,6 @@
 import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { Timespan } from '#utils/Timespan';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { UserPlay } from '../Structures/Entities/UserPlay';
 import { TopTimeListened } from '../Structures/TopTimeListened';
 

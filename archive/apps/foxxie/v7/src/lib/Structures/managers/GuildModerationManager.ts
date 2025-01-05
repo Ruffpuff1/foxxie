@@ -1,7 +1,7 @@
 import { ModerationEntity } from '#Database/entities/ModerationEntity';
 import type FoxxieClient from '#lib/FoxxieClient';
 import { cast } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Collection, Guild } from 'discord.js';
 import { ModerationActions } from '../moderation';
 

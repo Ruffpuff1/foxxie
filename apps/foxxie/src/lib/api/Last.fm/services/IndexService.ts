@@ -1,12 +1,12 @@
 import { UserArtist, UserLastFM, UserPlay } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish } from '@sapphire/utilities';
-import { ScheduleEntry } from '#lib/schedule';
+import { ScheduleEntry } from '#root/Core/structures/schedule/index';
 import { days, minutes, years } from '#utils/common';
 import { blue, white } from 'colorette';
 import _ from 'lodash';
 
-import { LastFmDataSourceFactory } from '../factories/DataSourceFactory.js';
+import { DataSourceFactory } from '../factories/DataSourceFactory.js';
 import { ArtistRepository } from '../repository/ArtistRepository.js';
 import { PlayRepository } from '../repository/PlayRepository.js';
 import { UserRepository } from '../repository/UserRepository.js';
@@ -16,9 +16,15 @@ import { UpdateType, UpdateTypeBitfield } from '../types/enums/UpdateType.js';
 import { IndexedUserStats } from '../types/models/domain/IndexedUserStats.js';
 
 export class IndexService {
-	#dataSourceFactory = new LastFmDataSourceFactory();
+	public async indexStarted(userId: string) {
+		const cachedValue = await container.redis?.get(IndexService.IndexConcurrencyCacheKey(userId));
+		if (cachedValue) return false;
 
-	public async getOutdatedUsers(timeLastIndexed: Date): Promise<UserLastFM[]> {
+		void container.redis?.pinsertex(IndexService.IndexConcurrencyCacheKey(userId), minutes(3), true);
+		return true;
+	}
+
+	public static async GetOutdatedUsers(timeLastIndexed: Date): Promise<UserLastFM[]> {
 		const recentlyUsed = Date.now() - days(15);
 
 		return container.prisma.userLastFM.findMany({
@@ -40,15 +46,11 @@ export class IndexService {
 		});
 	}
 
-	public async indexStarted(userId: string) {
-		const cachedValue = await container.redis?.get(IndexService.IndexConcurrencyCacheKey(userId));
-		if (cachedValue) return false;
-
-		void container.redis?.pinsertex(IndexService.IndexConcurrencyCacheKey(userId), minutes(3), true);
-		return true;
+	public static IndexConcurrencyCacheKey(userId: string) {
+		return `index-started-${userId}`;
 	}
 
-	public async indexUser(queueItem: ScheduleEntry.IndexUserQueueItem) {
+	public static async IndexUser(queueItem: ScheduleEntry.IndexUserQueueItem) {
 		void container.redis?.pinsertex(IndexService.IndexConcurrencyCacheKey(queueItem.userId), minutes(3), true);
 
 		const user = await container.prisma.userLastFM.findFirst({ where: { userid: queueItem.userId } });
@@ -64,19 +66,19 @@ export class IndexService {
 		}
 
 		try {
-			return this.modularUpdate(user!, new UpdateTypeBitfield(UpdateType.Full));
+			return IndexService.ModularUpdate(user!, new UpdateTypeBitfield(UpdateType.Full));
 		} catch (e) {
 			container.logger.error(`[${blue('Last.fm')} ${white('Index')}]: Error Occured! User ${queueItem.userId} / ${user?.usernameLastFM}`, e);
 			throw e;
 		}
 	}
 
-	public async modularUpdate(user: UserLastFM, updateType: UpdateTypeBitfield) {
+	public static async ModularUpdate(user: UserLastFM, updateType: UpdateTypeBitfield) {
 		container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Starting`);
 
 		const stats: IndexedUserStats = { failedUpdates: new UpdateTypeBitfield() };
 
-		const userInfo = await this.#dataSourceFactory.getLfmUserInfo(user.usernameLastFM);
+		const userInfo = await DataSourceFactory.GetLfmUserInfo(user.usernameLastFM);
 		if (isNullish(userInfo?.registered)) {
 			container.logger.warn(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Fetching UserInfo failed`);
 
@@ -89,7 +91,7 @@ export class IndexService {
 		await UserRepository.SetUserPlayStats(user, userInfo);
 
 		if (updateType.has(UpdateType.AllPlays) || updateType.has(UpdateType.Full)) {
-			const plays = await this.getPlaysForUserFromLastFm(user);
+			const plays = await IndexService.GetPlaysForUserFromLastFm(user);
 
 			if (userInfo.playcount >= 1000 && plays.length < 200) {
 				container.logger.warn(
@@ -106,7 +108,7 @@ export class IndexService {
 		}
 
 		if (updateType.has(UpdateType.Artist) || updateType.has(UpdateType.Full)) {
-			const artists = await this.getTopArtistsForUser(user);
+			const artists = await IndexService.GetTopArtistsForUser(user);
 
 			if (userInfo.artistcount >= 1000 && artists.length < 200) {
 				container.logger.warn(
@@ -135,12 +137,13 @@ export class IndexService {
 		return stats;
 	}
 
-	private async getPlaysForUserFromLastFm(user: UserLastFM): Promise<UserPlay[]> {
+	private static async GetPlaysForUserFromLastFm(user: UserLastFM): Promise<UserPlay[]> {
 		container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Getting plays`);
 
 		const pages = IndexService.UserHasHigherIndexLimit(user) ? 750 : 25;
 
-		const recentPlays = await this.#dataSourceFactory.getRecentTracks(user.usernameLastFM, 1000, false, null, null, pages);
+		const recentPlays = await DataSourceFactory.GetRecentTracks(user.usernameLastFM, 1000, false, null, null, pages);
+		console.log(recentPlays);
 
 		if (!recentPlays.success || isNullish(recentPlays.content.recentTracks) || !recentPlays.content.recentTracks.length) {
 			return [] as UserPlay[];
@@ -163,12 +166,12 @@ export class IndexService {
 			);
 	}
 
-	private async getTopArtistsForUser(user: UserLastFM) {
+	private static async GetTopArtistsForUser(user: UserLastFM) {
 		container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Getting top artists`);
 
 		const indexLimit = 200;
 
-		const topArtists = await this.#dataSourceFactory.getTopArtists(
+		const topArtists = await DataSourceFactory.GetTopArtists(
 			user.usernameLastFM,
 			{ apiParameter: 'overall', playDays: 99999, startDateTime: user.registeredLastFM!, timePeriod: TimePeriod.AllTime },
 			1000,
@@ -187,10 +190,6 @@ export class IndexService {
 					userId: user.userid
 				}) as UserArtist
 		);
-	}
-
-	public static IndexConcurrencyCacheKey(userId: string) {
-		return `index-started-${userId}`;
 	}
 
 	private static UserHasHigherIndexLimit(user: UserLastFM) {

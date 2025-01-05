@@ -1,5 +1,5 @@
 import { acquireSettings, GuildSettings, PersistRole } from '#lib/Database';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish } from '@sapphire/utilities';
 import type { Guild } from 'discord.js';
 

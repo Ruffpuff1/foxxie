@@ -1,6 +1,6 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { isGuildBasedChannel } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { cast } from '@sapphire/utilities';
 import { GuildSettingsOfType, readSettings, writeSettings } from '#lib/database';
 import {

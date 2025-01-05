@@ -6,7 +6,7 @@ import { fetchReactionUsers, floatPromise, getAttachment, getImage, isVideo } fr
 import { bold } from '@discordjs/builders';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { MessageOptions } from '@sapphire/plugin-editable-commands';
 import { cutText, debounce, isNullish } from '@sapphire/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';

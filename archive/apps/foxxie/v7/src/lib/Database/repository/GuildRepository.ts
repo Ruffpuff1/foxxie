@@ -1,6 +1,6 @@
 import { LockQueue } from '@foxxie/lock-queue';
 import { cast } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Collection } from 'discord.js';
 import { FindOneOptions } from 'typeorm';
 import { GuildEntity } from '../entities';

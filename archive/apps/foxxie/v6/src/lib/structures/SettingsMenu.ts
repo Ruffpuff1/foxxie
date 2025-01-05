@@ -1,11 +1,20 @@
-import { configurableGroups, isSchemaGroup, acquireSettings, remove, SchemaGroup, SchemaKey, set, writeSettings } from '#lib/database';
+import {
+    configurableGroups,
+    isSchemaGroup,
+    acquireSettings,
+    remove,
+    SchemaGroup,
+    SchemaKey,
+    set,
+    writeSettings
+} from '#lib/database';
 import { api } from '#external/Api';
 import { LanguageKeys } from '#lib/i18n';
 import { GuildMessage, Events } from '#lib/types';
 import { floatPromise } from '#utils/util';
 import { deleteMessage, sendLoadingMessage } from '#utils/Discord';
 import { LLRCData, LongLivingReactionCollector } from '#external/LongLivingReactionCollector';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { deepClone, minutes, ZeroWidthSpace } from '@ruffpuff/utilities';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import { DiscordAPIError, MessageCollector, MessageEmbed } from 'discord.js';
@@ -59,7 +68,9 @@ export class SettingsMenu {
     public async init(context: FoxxieCommand.Context): Promise<void> {
         this.response = (await sendLoadingMessage(this.message)) as GuildMessage;
         await this.response.react(EMOJIS.STOP);
-        this.llrc = new LongLivingReactionCollector().setListener(this.onReaction.bind(this)).setEndListener(this.stop.bind(this));
+        this.llrc = new LongLivingReactionCollector()
+            .setListener(this.onReaction.bind(this))
+            .setEndListener(this.stop.bind(this));
         this.llrc.setTime(TIMEOUT);
         this.messageCollector = this.response.channel.createMessageCollector({
             filter: msg => msg.author!.id === this.message.author.id
@@ -110,7 +121,8 @@ export class SettingsMenu {
             });
             this.t = language;
             description.push(t(this.schema.description), '', t(LanguageKeys.Commands.Configuration.ConfMenuRenderUpdate));
-            if (this.schema.array && (value as unknown[]).length) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderRemove));
+            if (this.schema.array && (value as unknown[]).length)
+                description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderRemove));
             if (this.updatedValue) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderReset));
             if (this.updatedValue) description.push(t(LanguageKeys.Commands.Configuration.ConfMenuRenderUndo));
             description.push(

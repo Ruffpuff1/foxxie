@@ -3,7 +3,7 @@ import { NumberExtensions } from '#lib/Container/Utility/Extensions/NumberExtens
 import { LanguageKeys } from '#lib/I18n';
 import { resolveClientColor, resolveEmbedField } from '#utils/util';
 import { days, resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { EmbedBuilder, TimestampStyles, bold, hyperlink, inlineCode, time } from 'discord.js';
 import { ArtistsService } from '../Services/ArtistsService';
 import { PlayService } from '../Services/PlayService';

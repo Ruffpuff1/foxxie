@@ -1,9 +1,9 @@
 import { StatusPageService } from '#apis/statuspage';
-import { Task } from '#lib/schedule';
+import { Task } from '#root/Core/structures/Task';
 import { Schedules } from '#utils/constants';
-import { ProductionOnly, RegisterCron, RegisterTask } from '#utils/decorators';
+import { ProductionOnlyPiece, RegisterCron, RegisterTask } from '#utils/decorators';
 
-@ProductionOnly()
+@ProductionOnlyPiece()
 @RegisterCron('*/5 * * *')
 @RegisterTask(Schedules.CheckStatusPage)
 export class UserTask extends Task {

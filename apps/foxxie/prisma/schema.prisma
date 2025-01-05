@@ -419,3 +419,37 @@ model Member {
 
   @@id([userId, guildId])
 }
+
+model SpotifyPlaylist {
+  id String @id
+  name String
+  userId String?
+  description String
+  imageURL String
+  ownerId String
+  ownerName String
+  public Boolean
+  url String
+ tracks SpotifyPlaylistTrack[]
+}
+
+model SpotifyPlaylistTrack {
+  id String
+  playlistId String
+  addedAt DateTime
+  addedBy String
+  albumId String
+  albumImageURL String
+  albumName String
+  artistId String
+  artistName String
+  duration Int @default(0)
+  explicit Boolean @default(false)
+  isLocal Boolean @default(false)
+  name String
+  type String
+
+  @@id([id, playlistId])
+  
+  playlist SpotifyPlaylist @relation(fields: [playlistId], references: [id])
+}

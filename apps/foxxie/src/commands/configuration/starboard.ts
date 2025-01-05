@@ -1,6 +1,6 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { RequiresClientPermissions } from '@sapphire/decorators';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { send } from '@sapphire/plugin-editable-commands';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';

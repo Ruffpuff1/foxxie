@@ -1,6 +1,6 @@
 import { ModerationActions } from '../moderation';
 import { Collection, Guild } from 'discord.js';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { ModerationEntity } from '#database/entities/ModerationEntity';
 import type FoxxieClient from '#lib/FoxxieClient';
 
@@ -39,7 +39,9 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
     public async fetch(id: number): Promise<ModerationEntity | null>;
     public async fetch(id: string | number[]): Promise<Collection<number, ModerationEntity>>;
     public async fetch(id?: null): Promise<this>;
-    public async fetch(id?: number | number[] | null | string): Promise<ModerationEntity | null | Collection<number, ModerationEntity> | this> {
+    public async fetch(
+        id?: number | number[] | null | string
+    ): Promise<ModerationEntity | null | Collection<number, ModerationEntity> | this> {
         if (!id) {
             const entries = await container.db.moderations.find({
                 where: {
@@ -97,7 +99,10 @@ export class GuildModerationManager extends Collection<number, ModerationEntity>
         return this._cache(data, 'insert');
     }
 
-    private _cache(entries: ModerationEntity | ModerationEntity[], type?: string): Collection<number, ModerationEntity> | ModerationEntity | null {
+    private _cache(
+        entries: ModerationEntity | ModerationEntity[],
+        type?: string
+    ): Collection<number, ModerationEntity> | ModerationEntity | null {
         if (!entries) return null;
 
         const parsedEntries = Array.isArray(entries) ? entries : [entries];

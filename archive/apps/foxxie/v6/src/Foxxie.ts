@@ -4,7 +4,7 @@ import FoxxieClient from '#lib/FoxxieClient';
 import '#lib/setup';
 import { helpUsagePostProcessor } from '#utils/constants';
 import { EnvParse } from '@foxxie/env';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { init } from '@sentry/node';
 import i18next from 'i18next';
 

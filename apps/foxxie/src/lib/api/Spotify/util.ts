@@ -1,7 +1,8 @@
 import makeRequest from '@aero/http';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Result } from '@sapphire/result';
-import { isNullish } from '@sapphire/utilities';
+import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
+import { first } from '#utils/common';
 import { green } from 'colorette';
 
 /**
@@ -55,12 +56,12 @@ export function extractSongDetails(content: string) {
 }
 
 export async function extractSongsFromPlaylist(content: string): Promise<string[]> {
-	const data = await getPlaylistTracks(content);
+	const data = await getPlaylistTracksMapped(content);
 	if (data === null || !data.length) return [];
 	return data;
 }
 
-export async function getPlaylist(content: string): Promise<null | SpotifyApi.PlaylistTrackResponse> {
+export async function getPlaylist(content: string): Promise<null | SpotifyApi.PlaylistObjectFull> {
 	const details = extractPlaylistDetails(content);
 	if (!details.match || !details.id) return null;
 
@@ -74,14 +75,40 @@ export async function getPlaylist(content: string): Promise<null | SpotifyApi.Pl
 		.path('playlists')
 		.path(details.id)
 		.header('Authorization', `Bearer ${process.env.SPOTIFY_TOKEN}`)
-		.json<SpotifyApi.PlaylistTrackResponse>();
+		.json<SpotifyApi.PlaylistObjectFull>();
 
 	if (!data) return null;
 
 	return data;
 }
 
-export async function getPlaylistTracks(content: string, offset = 0, previous: SpotifyApi.PlaylistTrackObject[] = []): Promise<null | string[]> {
+export async function getPlaylistAndTracks(content: string | URL) {
+	const resolved = content instanceof URL ? content.href : content;
+
+	const [data, tracks] = await Promise.all([getPlaylist(resolved), getPlaylistTracks(resolved)]);
+	if (isNullish(data) || isNullishOrEmpty(tracks)) return null;
+
+	return {
+		collaborative: data.collaborative,
+		description: data.description,
+		id: data.id,
+		imageURL: first(data.images).url,
+		name: data.name,
+		owner: {
+			id: data.owner.id,
+			name: data.owner.display_name
+		},
+		public: data.public,
+		tracks,
+		url: data.href
+	} as const;
+}
+
+export async function getPlaylistTracks(
+	content: string,
+	offset = 0,
+	previous: SpotifyApi.PlaylistTrackObject[] = []
+): Promise<null | SpotifyApi.PlaylistTrackObject[]> {
 	const details = extractPlaylistDetails(content);
 	if (!details.match || !details.id) return null;
 
@@ -107,19 +134,20 @@ export async function getPlaylistTracks(content: string, offset = 0, previous: S
 		return getPlaylistTracks(content, previous.length, previous);
 	}
 
-	const mapped = previous
+	return previous;
+}
+
+export async function getPlaylistTracksMapped(content: string) {
+	const data = await getPlaylistTracks(content);
+	if (isNullish(data)) return null;
+
+	return data
 		.map((song) => {
 			const { track } = song;
 			if (!track) return null;
 			return `${track.name} - ${track.artists[0].name}`;
 		})
 		.filter((track) => !isNullish(track));
-
-	// if (redis) {
-	// 	await redis.pinsertex(`spotify:playlists:${details.id}`, days(14), mapped.join('+,+'));
-	// }
-
-	return mapped;
 }
 
 export async function getSongData(content: string): Promise<null | string> {

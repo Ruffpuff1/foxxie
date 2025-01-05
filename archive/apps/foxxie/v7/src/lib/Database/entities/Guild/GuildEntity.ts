@@ -2,7 +2,7 @@ import type { HighlightTypeEnum } from '#lib/Container/Workers/types';
 import { LanguageKeys } from '#lib/I18n';
 import { create } from '#utils/regexCreator';
 import { arrayStrictEquals, cast, minutes, years } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { APIEmbed, LocaleString, Snowflake } from 'discord-api-types/v10';
 import type { Guild as DiscordGuild, UserResolvable } from 'discord.js';
 import {

@@ -2,7 +2,7 @@ import { LanguageKeys } from '#lib/i18n';
 import type { GuildMessage } from '#lib/types';
 import type { CustomFunctionGet, CustomGet, TOptionsBase } from '@foxxie/i18n';
 import { minutes, randomArray } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { Message, MessageOptions, UserResolvable } from 'discord.js';
 import { send } from '@sapphire/plugin-editable-commands';
 import { setTimeout as sleep } from 'node:timers/promises';
@@ -79,7 +79,9 @@ export async function messagePrompt(message: Message, options: AskYesNoOptions |
     if (typeof options === 'string') options = { content: options };
 
     const response = await send(message, options);
-    return canReact(response.channel) ? askYesOrNo(message, response, options) : askConfirmationMessage(message, response, options);
+    return canReact(response.channel)
+        ? askYesOrNo(message, response, options)
+        : askConfirmationMessage(message, response, options);
 }
 
 export async function askYesOrNo(message: Message, response: Message, options: AskYesNoOptions): Promise<boolean | null> {
@@ -107,7 +109,11 @@ export async function askYesOrNo(message: Message, response: Message, options: A
  * @param timer The timer in which the message should be deleted, using {@link deleteMessage}.
  * @returns The response message.
  */
-export async function sendTemporaryMessage(message: Message, options: string | MessageOptions, timer = minutes(1)): Promise<Message> {
+export async function sendTemporaryMessage(
+    message: Message,
+    options: string | MessageOptions,
+    timer = minutes(1)
+): Promise<Message> {
     if (typeof options === 'string') options = { content: options };
 
     const response = (await send(message, options)) as Message;

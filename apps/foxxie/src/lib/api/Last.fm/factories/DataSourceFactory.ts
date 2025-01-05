@@ -1,5 +1,5 @@
 import { UserLastFM, UserPlay } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { cast, isNullish } from '@sapphire/utilities';
 import { firstOrNull, seconds } from '#utils/common';
 
@@ -13,14 +13,11 @@ import { TopArtistList } from '../types/models/domain/TopArtist.js';
 import { parseLastFmUserResponse } from '../util/cacheParsers.js';
 import { Response } from '../util/Response.js';
 
-export class LastFmDataSourceFactory {
+export class DataSourceFactory {
 	#lastfmRepository: LastFmRepository;
-
-	#playDataSourceRepository: PlayDataSourceRepository;
 
 	public constructor() {
 		this.#lastfmRepository = new LastFmRepository();
-		this.#playDataSourceRepository = new PlayDataSourceRepository();
 	}
 
 	public async getAuthSession(token: string) {
@@ -31,10 +28,30 @@ export class LastFmDataSourceFactory {
 		return this.#lastfmRepository.getAuthToken();
 	}
 
-	public async getImportUserForLastFmUserName(lastFmUserName: string) {
+	public async getTrackInfo(trackName: string, artistName: string, username: null | string = null) {
+		const track = await this.#lastfmRepository.getTrackInfo(trackName, artistName, username);
+
+		// const importUser = await this.getImportUserForLastFmUserName(username!);
+
+		// if (importUser && track.success && track.content) {
+		// 	track.content.userPlaycount = await this.#playDataSourceRepository.getTra
+		// }
+
+		return track;
+	}
+
+	public async scrobble(sessionKey: string, artistName: string, trackName: string, albumName: null | string = null, timeStamp: Date | null = null) {
+		return this.#lastfmRepository.scrobble(sessionKey, artistName, trackName, albumName, timeStamp);
+	}
+
+	public async searchTrack(trackName: string, artistName: null | string = null) {
+		return this.#lastfmRepository.searchTrack(trackName, artistName);
+	}
+
+	public static async GetImportUserForLastFmUserName(lastFmUserName: string) {
 		if (!lastFmUserName) return null;
 
-		const user = await this.getUser(lastFmUserName);
+		const user = await DataSourceFactory.GetUser(lastFmUserName);
 
 		if (user !== null && user.dataSource !== DataSource.LastFm) {
 			const lastImportPlay = await container.prisma.$queryRaw<
@@ -54,18 +71,18 @@ export class LastFmDataSourceFactory {
 		return null;
 	}
 
-	public async getLfmUserInfo(lastFmUserName: string) {
-		const user = await this.#lastfmRepository.getLfmUserInfo(lastFmUserName);
-		const importUser = await this.getImportUserForLastFmUserName(lastFmUserName);
+	public static async GetLfmUserInfo(lastFmUserName: string) {
+		const user = await LastFmRepository.GetLfmUserInfo(lastFmUserName);
+		const importUser = await DataSourceFactory.GetImportUserForLastFmUserName(lastFmUserName);
 
 		if (importUser !== null && user !== null) {
-			return this.#playDataSourceRepository.getLfmUserInfo(importUser, user);
+			return PlayDataSourceRepository.GetLfmUserInfo(importUser, user);
 		}
 
 		return user;
 	}
 
-	public async getRecentTracks(
+	public static async GetRecentTracks(
 		lastFmUserName: string,
 		count = 2,
 		useCache = false,
@@ -73,19 +90,12 @@ export class LastFmDataSourceFactory {
 		fromUnixTimestamp: null | number = null,
 		amountOfPages = 1
 	) {
-		const recentTracks = await this.#lastfmRepository.getRecentTracks(
-			lastFmUserName,
-			count,
-			useCache,
-			sessionKey,
-			fromUnixTimestamp,
-			amountOfPages
-		);
+		const recentTracks = await LastFmRepository.GetRecentTracks(lastFmUserName, count, useCache, sessionKey, fromUnixTimestamp, amountOfPages);
 
-		const importUser = await this.getImportUserForLastFmUserName(lastFmUserName);
+		const importUser = await DataSourceFactory.GetImportUserForLastFmUserName(lastFmUserName);
 
 		if (importUser !== null && recentTracks.success && recentTracks.content !== null) {
-			const total = await this.#playDataSourceRepository.getScrobbleCountFromDate(importUser, fromUnixTimestamp);
+			const total = await PlayDataSourceRepository.GetScrobbleCountFromDate(importUser, fromUnixTimestamp);
 
 			if (!isNullish(total)) {
 				recentTracks.content.totalAmount = total;
@@ -95,12 +105,12 @@ export class LastFmDataSourceFactory {
 		return recentTracks;
 	}
 
-	public async getTopArtists(lastFmUserName: string, timeSettings: TimeSettingsModel, count = 2, amountOfPages = 1) {
-		const importUser = await this.getImportUserForLastFmUserName(lastFmUserName);
+	public static async GetTopArtists(lastFmUserName: string, timeSettings: TimeSettingsModel, count = 2, amountOfPages = 1) {
+		const importUser = await DataSourceFactory.GetImportUserForLastFmUserName(lastFmUserName);
 
 		let topArtists: Response<TopArtistList>;
 		if (importUser && timeSettings.startDateTime! <= importUser.lastImportPlay!) {
-			topArtists = await this.#playDataSourceRepository.getTopArtists(importUser, timeSettings, count * amountOfPages);
+			topArtists = await PlayDataSourceRepository.GetTopArtists(importUser, timeSettings, count * amountOfPages);
 
 			return topArtists;
 		}
@@ -111,19 +121,7 @@ export class LastFmDataSourceFactory {
 		});
 	}
 
-	public async getTrackInfo(trackName: string, artistName: string, username: null | string = null) {
-		const track = await this.#lastfmRepository.getTrackInfo(trackName, artistName, username);
-
-		// const importUser = await this.getImportUserForLastFmUserName(username!);
-
-		// if (importUser && track.success && track.content) {
-		// 	track.content.userPlaycount = await this.#playDataSourceRepository.getTra
-		// }
-
-		return track;
-	}
-
-	public async getUser(usernameLastFM: string): Promise<null | UserLastFM> {
+	public static async GetUser(usernameLastFM: string): Promise<null | UserLastFM> {
 		const lastFmCacheKey = userLastFmCacheKey(usernameLastFM);
 
 		const cachedValue = parseLastFmUserResponse(await container.redis?.get(lastFmCacheKey));
@@ -143,13 +141,5 @@ export class LastFmDataSourceFactory {
 		}
 
 		return user;
-	}
-
-	public async scrobble(sessionKey: string, artistName: string, trackName: string, albumName: null | string = null, timeStamp: Date | null = null) {
-		return this.#lastfmRepository.scrobble(sessionKey, artistName, trackName, albumName, timeStamp);
-	}
-
-	public async searchTrack(trackName: string, artistName: null | string = null) {
-		return this.#lastfmRepository.searchTrack(trackName, artistName);
 	}
 }

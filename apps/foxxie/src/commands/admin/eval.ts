@@ -102,6 +102,7 @@ export class UserCommand extends FoxxieCommand {
 					api: {
 						lastfm: await import('#apis/last.fm/index')
 					},
+					audio: await import('#Foxxie/Audio'),
 					database: {
 						...(await import('#lib/database')),
 						settings: await import('#lib/database/settings/index')
@@ -117,7 +118,6 @@ export class UserCommand extends FoxxieCommand {
 						}
 					},
 					modules: {
-						audio: await import('#modules/audio'),
 						birthday: await import('#modules/birthday'),
 						starboard: await import('#modules/starboard'),
 						suggestions: await import('#modules/suggestions')

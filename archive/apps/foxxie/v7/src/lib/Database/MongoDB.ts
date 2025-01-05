@@ -1,6 +1,6 @@
 import { TaskStore } from '#lib/Container/Stores/Tasks/TaskStore';
 import { BrandingColors } from '#utils/constants';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { Message } from 'discord.js';
 import type { DataSource, Repository } from 'typeorm';
 import { GuildEntity, ModerationEntity, ScheduleEntity, StarEntity } from './entities';

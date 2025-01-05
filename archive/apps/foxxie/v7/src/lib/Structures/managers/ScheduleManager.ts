@@ -5,7 +5,7 @@
 import { ResponseType, ResponseValue, ScheduleEntity } from '#Database/entities/ScheduleEntity';
 import type { ScheduleData } from '#lib/Types';
 import type { Schedules } from '#utils/constants';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Cron } from '@sapphire/time-utilities';
 
 export class ScheduleManager {

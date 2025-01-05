@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { sendMessages } from '#utils/functions/permissions';
 import { Channel } from 'discord.js';
 

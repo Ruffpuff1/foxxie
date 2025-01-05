@@ -117,6 +117,10 @@
     "typescript": "5.5.4"
   },
   "imports": {
+    "#Foxxie/Audio": "./dist/Audio/index.js",
+    "#Foxxie/Core": "./dist/Core/index.js",
+    "#Foxxie/Last.FM": "./dist/Last.FM/index.js",
+    "#Foxxie/Logger": "./dist/Logger/index.js",
     "#utils/builders": "./dist/lib/util/builders/index.js",
     "#utils/common": "./dist/lib/util/common/index.js",
     "#utils/discord": "./dist/lib/util/discord/index.js",

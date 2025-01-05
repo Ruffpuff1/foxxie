@@ -1,5 +1,5 @@
 import { MemberNote } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Note } from '#lib/database/Models/Discord/Member/Note';
 import { Collection } from 'discord.js';
 

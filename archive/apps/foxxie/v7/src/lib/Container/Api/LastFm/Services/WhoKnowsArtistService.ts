@@ -1,6 +1,6 @@
 import { UserEntity } from '#lib/Database/entities/UserEntity';
 import { resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Guild } from 'discord.js';
 import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { WhoKnowsObjectWithUser } from '../Structures/WhoKnowsObjectWithUser';

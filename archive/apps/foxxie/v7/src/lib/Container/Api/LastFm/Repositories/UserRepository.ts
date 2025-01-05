@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { blue } from 'colorette';
 import _ from 'lodash';
 import { UserPlay } from '../Structures/Entities/UserPlay';

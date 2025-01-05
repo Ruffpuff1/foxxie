@@ -1,7 +1,7 @@
 import type { GuildEntity } from '#lib/database';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { PickByValue } from '@sapphire/utilities';
 import type { GuildResolvable, GuildTextBasedChannel, Snowflake } from 'discord.js';
 import { sendMessages } from './permissions';
@@ -12,7 +12,10 @@ export function isSendableChannel(channel: GuildTextBasedChannelTypes): boolean 
     return channel.permissionsFor(channel.guild.me!).has(sendMessages);
 }
 
-export async function fetchChannel<T = GuildTextBasedChannel>(resolvable: GuildResolvable, key: PickByValue<GuildEntity, Snowflake | null>) {
+export async function fetchChannel<T = GuildTextBasedChannel>(
+    resolvable: GuildResolvable,
+    key: PickByValue<GuildEntity, Snowflake | null>
+) {
     const guild = container.client.guilds.resolve(resolvable)!;
 
     const channelId = await container.db.guilds.acquire(guild.id, key);

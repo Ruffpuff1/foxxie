@@ -1,13 +1,13 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { MessageBuilder } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { cutText, isNullishOrZero } from '@sapphire/utilities';
 import { ArtistsService } from '#apis/last.fm/services/ArtistsService';
 import { IndexService } from '#apis/last.fm/services/IndexService';
 import { PlayService } from '#apis/last.fm/services/PlayService';
 import { UpdateService } from '#apis/last.fm/services/UpdateService';
 import { RecentTrack, RecentTrackList } from '#apis/last.fm/types/models/domain/RecentTrack';
-import { LastFmDataSourceFactory } from '#lib/api/Last.fm/factories/DataSourceFactory';
+import { DataSourceFactory } from '#lib/api/Last.fm/factories/DataSourceFactory';
 import { days } from '#utils/common';
 import { resolveClientColor } from '#utils/functions';
 import { lastFmUserUrl } from '#utils/transformers';
@@ -34,15 +34,15 @@ export class PlayBuilder {
 
 		if (differentUser) {
 			userTitle = `${user.usernameLastFM}, requested by ${context.discordUser!.username}`;
-			recentTracks = await PlayBuilder.DataSourceFactory.getRecentTracks(user.usernameLastFM, 2, true);
+			recentTracks = await DataSourceFactory.GetRecentTracks(user.usernameLastFM, 2, true);
 		} else if (user.lastIndexed) {
 			userTitle = user.usernameLastFM;
 			const recents = await PlayBuilder.UpdateService.updateUserAndGetRecentTracks(user);
 			if (recents) recentTracks = recents;
 		} else {
 			userTitle = user.usernameLastFM;
-			void PlayBuilder.IndexService.indexUser({ indexQueue: false, userId: user.userid });
-			recentTracks = await PlayBuilder.DataSourceFactory.getRecentTracks(user.usernameLastFM, 2, true);
+			void IndexService.IndexUser({ indexQueue: false, userId: user.userid });
+			recentTracks = await DataSourceFactory.GetRecentTracks(user.usernameLastFM, 2, true);
 		}
 
 		if (!recentTracks) throw 'no recents';
@@ -80,7 +80,7 @@ export class PlayBuilder {
 		if (!differentUser) {
 			const [playCount, artistCount] = await Promise.all([
 				PlayBuilder.PlayService.getTrackPlayForUserId(user.userid, currentTrack.trackName, currentTrack.artistName),
-				PlayBuilder.ArtistService.getArtistPlaysForUserId(user.userid, currentTrack.artistName)
+				ArtistsService.GetArtistPlaysForUserId(user.userid, currentTrack.artistName)
 			]);
 
 			if (artistCount) footer.push(`${artistCount} artist scrobbles`);
@@ -163,12 +163,6 @@ export class PlayBuilder {
 			track.albumName ? ` | ${italic(cutText(track.albumName, 320))}\n` : '\n'
 		}`;
 	}
-
-	private static ArtistService = new ArtistsService();
-
-	private static DataSourceFactory = new LastFmDataSourceFactory();
-
-	private static IndexService = new IndexService();
 
 	private static PlayService = new PlayService();
 

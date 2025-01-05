@@ -1,7 +1,7 @@
 import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { UserEntity } from '#lib/Database/entities/UserEntity';
 import { years } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { blue } from 'colorette';
 import { PlaySource } from '../Enums/PlaySource';
 import { UpdateTypeBitField, UpdateTypeBits } from '../Enums/UpdateType';

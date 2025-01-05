@@ -1,6 +1,6 @@
 import { GuildChannelSettingsService } from '#lib/Database/entities/Guild/Services/GuildChannelSettingsService';
 import { cast, resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { PickByValue } from '@sapphire/utilities';
 import { type GuildResolvable, type GuildTextBasedChannel, type Snowflake } from 'discord.js';
 

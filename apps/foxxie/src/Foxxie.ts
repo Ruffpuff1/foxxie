@@ -1,5 +1,5 @@
 import '#lib/setup';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { init } from '@sentry/node';
 import { envParseBoolean } from '@skyra/env-utilities';
 import FoxxieClient from '#lib/FoxxieClient';

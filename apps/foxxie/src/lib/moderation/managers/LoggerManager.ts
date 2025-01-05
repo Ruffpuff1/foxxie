@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { type Awaitable, isFunction, isNullish, isNullishOrEmpty, type Nullish } from '@sapphire/utilities';
 import { type GuildSettingsOfType, writeSettings } from '#lib/database';
 import {

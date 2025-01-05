@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Highlight, HighlightData } from '#lib/database/Models/highlight';
 import { Collection, Guild } from 'discord.js';
 

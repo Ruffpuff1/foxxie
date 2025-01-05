@@ -1,5 +1,5 @@
 import { UserArtist } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { blue, white } from 'colorette';
 
 export class ArtistRepository {

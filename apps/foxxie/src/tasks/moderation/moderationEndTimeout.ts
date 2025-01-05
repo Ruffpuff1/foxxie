@@ -2,7 +2,7 @@ import { ApplyOptions } from '@sapphire/decorators';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { LanguageKeys } from '#lib/i18n';
 import { ModerationData, ModerationTask } from '#lib/moderation/structures/ModerationTask';
-import { Task } from '#lib/schedule';
+import { Task } from '#root/Core/structures/Task';
 import { Schedules } from '#utils/constants';
 import { getModeration } from '#utils/functions';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';

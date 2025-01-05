@@ -1,6 +1,6 @@
 import { MemberNote } from '@prisma/client';
 import { resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { LanguageKeys } from '#lib/i18n';
 import { FTFunction } from '#lib/types';
 import { bold } from 'discord.js';

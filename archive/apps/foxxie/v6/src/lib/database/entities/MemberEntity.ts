@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { GuildMember } from 'discord.js';
 import { BaseEntity, Column, Entity, PrimaryColumn, ObjectIdColumn } from 'typeorm';
 import type { Note } from './Note';

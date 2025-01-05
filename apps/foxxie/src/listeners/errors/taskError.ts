@@ -1,7 +1,8 @@
 import { ApplyOptions } from '@sapphire/decorators';
 import { IPieceError, Listener, ListenerOptions, UserError } from '@sapphire/framework';
-import { ScheduleEntry, Task } from '#lib/schedule';
 import { FoxxieEvents } from '#lib/types';
+import { ScheduleEntry } from '#root/Core/structures/schedule/index';
+import { Task } from '#root/Core/structures/Task';
 
 @ApplyOptions<ListenerOptions>({
 	event: FoxxieEvents.TaskError

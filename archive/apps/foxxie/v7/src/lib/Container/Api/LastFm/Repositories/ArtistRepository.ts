@@ -1,5 +1,5 @@
 import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { blue } from 'colorette';
 import { UserArtist } from '../Structures/UserArtist';
 

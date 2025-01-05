@@ -23,9 +23,9 @@ import {
 	resolveDescription,
 	resolveField,
 	resolveFooter,
-	resolveUserDisplayName,
 	sendLoadingMessage,
-	sendMessage
+	sendMessage,
+	UserUtil
 } from '#utils/functions';
 import { resolveGuildChannel, resolveMessage, resolveSnowflake, resolveSnowflakeEntity, resolveUsername } from '#utils/resolvers';
 import { fetchCommit, getContent, getServerDetails } from '#utils/util';
@@ -68,7 +68,7 @@ export class ResponseBuilder {
 		const includeAdmin = clientOwners.includes(args.message.author.id);
 
 		const commands = container.stores
-			.get('commands')
+			.get('textcommands')
 			.filter((command) => (includeAdmin ? true : cast<FoxxieCommand>(command).permissionLevel !== PermissionLevels.BotOwner));
 
 		const sortedCategories = [...new Set(commands.map((command) => command.category!))]
@@ -364,7 +364,7 @@ export class ResponseBuilder {
 		const embed = new EmbedBuilder()
 			.setAuthor({
 				iconURL: message.member?.displayAvatarURL() || message.author.displayAvatarURL(),
-				name: `By ${await resolveUserDisplayName(message.author.id, message.guild)} (${message.id})`,
+				name: `By ${await UserUtil.ResolveDisplayName(message.author.id, message.guild)} (${message.id})`,
 				url: message.url
 			})
 
@@ -416,16 +416,13 @@ export class ResponseBuilder {
 		const head = hash ? ` [${hash}]` : '';
 
 		const shard = (guild ? guild.shardId : 0) + 1;
-		const { cpuCount, cpuSpeed, cpuUsage, memoryPercent, memoryUsed, process: pross, totalmemory, totalShards, uptime } = getServerDetails();
+		const { memoryPercent, memoryUsed, process: pross, totalmemory, totalShards, uptime } = getServerDetails();
 
 		const [guilds, totalMessageCount] = await container.prisma.guilds
 			.findMany()
 			.then((guilds) => [guilds, guilds.reduce((acc, r) => (acc += r.messageCount), 0)] as const);
 
 		const description = args.t(LanguageKeys.Commands.General.Stats.Menu, {
-			cpuCount,
-			cpuSpeed,
-			cpuUsage,
 			deps: ResponseBuilder.Dependencies,
 			memoryPercent,
 			memoryUsed,

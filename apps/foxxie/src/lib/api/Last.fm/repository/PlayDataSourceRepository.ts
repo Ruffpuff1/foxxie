@@ -12,7 +12,7 @@ import { Response } from '../util/Response.js';
 import { PlayRepository } from './PlayRepository.js';
 
 export class PlayDataSourceRepository {
-	public async getAllTopArtists(user: ImportUser, timePeriod: TimePeriod, playDays: number, count = 2) {
+	public static async GetAllTopArtists(user: ImportUser, timePeriod: TimePeriod, playDays: number, count = 2) {
 		let plays: UserPlay[] = [];
 
 		if (timePeriod === TimePeriod.AllTime) {
@@ -24,8 +24,9 @@ export class PlayDataSourceRepository {
 		return PlayDataSourceRepository.PlaysToTopArtists(plays, count);
 	}
 
-	public async getLfmUserInfo(user: ImportUser, dataSourceUser: DataSourceUser) {
+	public static async GetLfmUserInfo(user: ImportUser, dataSourceUser: DataSourceUser) {
 		const plays = await PlayRepository.getUserPlays(user.userId, user.dataSource);
+		console.log(plays);
 
 		dataSourceUser.playcount = plays.length;
 		dataSourceUser.artistcount = new Set(plays.map((g) => g.artistName.toLowerCase())).size;
@@ -41,20 +42,20 @@ export class PlayDataSourceRepository {
 		return dataSourceUser;
 	}
 
-	public async getScrobbleCountFromDate(user: ImportUser, from: null | number = null) {
+	public static async GetScrobbleCountFromDate(user: ImportUser, from: null | number = null) {
 		const fromTimeStamp = from ? new Date(from) : new Date(2000, 0, 1);
 
 		return PlayRepository.GetUserPlayCount(user.userId, user.dataSource, fromTimeStamp);
 	}
 
-	public async getTopArtists(user: ImportUser, timeSettings: TimeSettingsModel, count = 2) {
+	public static async GetTopArtists(user: ImportUser, timeSettings: TimeSettingsModel, count = 2) {
 		if (
 			!timeSettings.useCustomTimePeriod ||
 			!timeSettings.startDateTime ||
 			!timeSettings.endDateTime ||
 			timeSettings.timePeriod === TimePeriod.AllTime
 		) {
-			return this.getAllTopArtists(user, timeSettings.timePeriod!, timeSettings.playDays!, count);
+			return PlayDataSourceRepository.GetAllTopArtists(user, timeSettings.timePeriod!, timeSettings.playDays!, count);
 		}
 		throw 'unreachable';
 	}

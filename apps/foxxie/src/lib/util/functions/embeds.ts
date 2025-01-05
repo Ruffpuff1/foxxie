@@ -1,5 +1,5 @@
 import { resolveToNull, ZeroWidthSpace } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish, Nullish } from '@sapphire/utilities';
 import { BrandingColors } from '#utils/constants';
 import { ifNotNull } from '#utils/util';

@@ -1,6 +1,8 @@
 import { API } from '@discordjs/core/http-only';
-import { NodeOptions, TrackInfo } from '@foxxiebot/audio';
+import { IncomingEventPayload, IncomingEventTrackEndPayload, NodeOptions, TrackInfo } from '@foxxiebot/audio';
 import { GuildBasedChannelTypes } from '@sapphire/discord.js-utilities';
+import { FoxxieQueue, NP, Queue, Song } from '#Foxxie/Audio';
+import { TaskStore } from '#Foxxie/Core';
 import { ApiService } from '#lib/api/ApiService';
 import { SettingsService } from '#lib/Container/Services/SettingsService';
 import { UtilityService } from '#lib/Container/Utility/UtilityService';
@@ -9,21 +11,30 @@ import { HighlightData } from '#lib/database/Models/highlight';
 import { SerializerStore } from '#lib/database/settings/structures/SerializerStore';
 import { PermissionsNode, ReadonlyGuildData, StickyRole, Tag } from '#lib/database/settings/types';
 import { ModerationEntry } from '#lib/moderation';
-import { FoxxieQueue } from '#lib/modules/audio/Queues/FoxxieQueue';
-import { ScheduleManager, TaskStore } from '#lib/schedule';
 import { PrismaDatabase } from '#lib/Setup/prisma';
 import { FoxxieCommand } from '#lib/structures';
 import { InviteManager } from '#lib/Structures/managers/InviteManager';
 import { RedisManager } from '#lib/Structures/managers/RedisManager';
 import { FoxxieEvents, GuildMessage, LanguageString, TypedFT, TypedT } from '#lib/types';
-import { NP, Queue, Song } from '#modules/audio';
 import { StarboardEntry } from '#modules/starboard';
+import { EventStore } from '#root/Core/structures/EventStore';
+import { ScheduleManager } from '#root/Core/structures/schedule/index';
+import { TextCommandStore } from '#root/Core/structures/TextCommandStore';
 import { Schedules } from '#utils/constants';
 import { GuildMemberFetchQueue } from '#utils/external/GuildMemberFetchQueue';
 import { LLRCData, LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
 import { SerializedEmoji } from '#utils/functions';
 import { MappedTask } from '#utils/util';
-import { GatewayMessageReactionRemoveDispatch, GuildChannel, GuildTextBasedChannel, Snowflake, ThreadChannel, User } from 'discord.js';
+import {
+	GatewayGuildAuditLogEntryCreateDispatchData,
+	GatewayMessageDeleteDispatchData,
+	GatewayMessageReactionRemoveDispatch,
+	GuildChannel,
+	GuildTextBasedChannel,
+	Snowflake,
+	ThreadChannel,
+	User
+} from 'discord.js';
 
 declare global {
 	namespace PrismaJson {
@@ -71,9 +82,13 @@ declare module 'discord.js' {
 		[FoxxieEvents.MusicSongReplayNotify]: [queue: Queue, NP];
 		[FoxxieEvents.MusicSongResumeNotify]: [message: GuildMessage];
 		[FoxxieEvents.MusicSongSetReplayNotify]: [message: GuildMessage, mode: boolean];
+		[FoxxieEvents.RawGuildAuditLogEntryCreateLoggerTrack]: [data: GatewayGuildAuditLogEntryCreateDispatchData];
 		[FoxxieEvents.RawGuildMessageDelete]: [message: GuildMessage | undefined, guild: Guild, channel: GuildTextBasedChannel];
+		[FoxxieEvents.RawLavalinkEvent]: [IncomingEventPayload];
+		[FoxxieEvents.RawMessageDelete]: [data: GatewayMessageDeleteDispatchData];
 		[FoxxieEvents.RawReactionAdd]: [data: LLRCData, emoji: SerializedEmoji];
 		[FoxxieEvents.RawReactionRemove]: [channel: TextChannel, data: GatewayMessageReactionRemoveDispatch['d']];
+		[FoxxieEvents.RawTrackEndEvent]: [Payload: IncomingEventTrackEndPayload];
 		[FoxxieEvents.SystemMessage]: [message: GuildMessage];
 		[FoxxieEvents.UserMessage]: [message: GuildMessage];
 	}
@@ -96,8 +111,10 @@ declare module '@sapphire/pieces' {
 	}
 
 	interface StoreRegistryEntries {
+		events: EventStore;
 		serializers: SerializerStore;
 		tasks: TaskStore;
+		textcommands: TextCommandStore;
 	}
 }
 

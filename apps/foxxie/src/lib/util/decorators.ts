@@ -1,25 +1,17 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { createClassDecorator, createFunctionPrecondition, createMethodDecorator, createProxy, DecoratorIdentifiers } from '@sapphire/decorators';
 import { isDMChannel, isGuildBasedChannel } from '@sapphire/discord.js-utilities';
-import {
-	Command,
-	CommandOptionsRunTypeEnum,
-	CommandRunInUnion,
-	CommandSpecificRunIn,
-	Listener,
-	RegisterBehavior,
-	UserError
-} from '@sapphire/framework';
+import { CommandOptionsRunTypeEnum, Listener, RegisterBehavior, Command as SapphireCommand, UserError } from '@sapphire/framework';
 import { container } from '@sapphire/pieces';
 import { SubcommandMapping, SubcommandMappingArray, SubcommandMappingMethod } from '@sapphire/plugin-subcommands';
 import { Ctor, isNullish } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
-import { LanguageHelpDisplayOptions } from '#lib/i18n/LanguageHelp';
-import { TaskBuilder } from '#lib/schedule';
 import { FoxxieSubcommand } from '#lib/structures';
 import { FoxxieButtonInteractionHandler } from '#lib/Structures/commands/interactions/FoxxieButtonInteractionHandler';
-import { FoxxieEvents, GuildMessage, PermissionLevels, TypedT } from '#lib/types';
-import { getAudio, sendLocalizedMessage } from '#utils/functions';
+import { GuildMessage } from '#lib/types';
+import { EventBuilder } from '#root/Core/structures/EventBuilder';
+import { TaskBuilder } from '#root/Core/structures/TaskBuilder';
+import { TextCommandBuilder } from '#root/Core/structures/TextCommandBuilder';
 import {
 	ChatInputApplicationCommandData,
 	ChatInputCommandInteraction,
@@ -64,20 +56,6 @@ export const RequiresLastFMUsername = (
 		}
 	);
 };
-
-export const RequiresUserInVoiceChannel = (): MethodDecorator => {
-	return createFunctionPrecondition(
-		(message: GuildMessage) => message.member.voice.channelId !== null,
-		(message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.MusicUserVoiceChannel)
-	);
-};
-
-export function RequireQueueNotEmpty(): MethodDecorator {
-	return createFunctionPrecondition(
-		(message: GuildMessage) => getAudio(message.guild).canStart(),
-		(message: GuildMessage) => sendLocalizedMessage(message, LanguageKeys.Preconditions.MusicQueueNotEmpty)
-	);
-}
 
 export const RequiresMemberPermissions = (...permissionsResolveable: PermissionResolvable[]): MethodDecorator => {
 	const resolved = new PermissionsBitField(permissionsResolveable);
@@ -151,6 +129,38 @@ export const ChatInputSubcommand = (methodName: string, builder: (builder: Slash
 	});
 };
 
+export const ProductionOnly = (on: boolean = true) => {
+	return createMethodDecorator((_, __, descriptor) => {
+		const run = descriptor.value;
+
+		if (!run) throw 'no method';
+		if (typeof run !== 'function') throw 'not a method';
+
+		descriptor.value = async function value(this: any, ...args: any[]) {
+			const enabled = container.client.enabledProdOnlyEvent();
+
+			if (!enabled && on) return;
+			return run!.call(this, ...args);
+		} as unknown as undefined;
+	});
+};
+
+export const TypingEnabled = () => {
+	return createMethodDecorator((_, __, descriptor) => {
+		const run = descriptor.value;
+
+		if (!run) throw 'no method';
+		if (typeof run !== 'function') throw 'not a method';
+
+		descriptor.value = async function value(this: any, ...args: any[]) {
+			const enabled = container.client.options.typing ?? false;
+
+			if (!enabled) return;
+			return run!.call(this, ...args);
+		} as unknown as undefined;
+	});
+};
+
 export const MessageSubcommand = (methodName: string, isDefault = false, aliases: string[] = []) => {
 	return createMethodDecorator((target, __, descriptor) => {
 		const messageRun = descriptor.value;
@@ -193,11 +203,11 @@ export const RegisterButtonHandler = (handler: FoxxieButtonInteractionHandler.Ha
 	});
 };
 
-export const RegisterListener = (listener: ((builder: FoxxieListenerBuilder) => FoxxieListenerBuilder) | Listener.Options) => {
+export const RegisterListener = (listener: ((builder: EventBuilder) => EventBuilder) | Listener.Options) => {
 	return createClassDecorator((buttonHandler: Ctor) => {
 		return createProxy(buttonHandler, {
 			construct: (ctor, [context, base = {}]) => {
-				const resolvedOptions = typeof listener === 'function' ? listener(new FoxxieListenerBuilder()).toJSON() : listener;
+				const resolvedOptions = typeof listener === 'function' ? listener(new EventBuilder()).toJSON() : listener;
 				return new ctor(context, {
 					...base,
 					...resolvedOptions
@@ -220,7 +230,7 @@ export const RegisterCron = (cron: string) => {
 	});
 };
 
-export const ProductionOnly = (enable?: boolean) => {
+export const ProductionOnlyPiece = (enable?: boolean) => {
 	return createClassDecorator((piece: Ctor) => {
 		return createProxy(piece, {
 			construct: (ctor, [context, base = {}]) => {
@@ -248,7 +258,7 @@ export const RegisterTask = (task: ((builder: TaskBuilder) => TaskBuilder) | Sch
 };
 
 export const RegisterCommand = (
-	options: ((builder: FoxxieSubcommandBuilder) => FoxxieSubcommandBuilder) | FoxxieSubcommand.Options,
+	options: ((builder: TextCommandBuilder) => TextCommandBuilder) | FoxxieSubcommand.Options,
 	builder?:
 		| ((
 				builder: SlashCommandBuilder
@@ -281,7 +291,7 @@ export const RegisterCommand = (
 					});
 				}
 
-				const resolvedOptions = typeof options === 'function' ? options(new FoxxieSubcommandBuilder()).toJSON() : options;
+				const resolvedOptions = typeof options === 'function' ? options(new TextCommandBuilder()).toJSON() : options;
 
 				return new ctor(context, {
 					...base,
@@ -293,7 +303,7 @@ export const RegisterCommand = (
 };
 
 export const RegisterSubcommand = (
-	options: ((builder: FoxxieSubcommandBuilder) => FoxxieSubcommandBuilder) | FoxxieSubcommand.Options,
+	options: ((builder: TextCommandBuilder) => TextCommandBuilder) | FoxxieSubcommand.Options,
 	builder?:
 		| ((
 				builder: SlashCommandBuilder
@@ -330,7 +340,7 @@ export const RegisterSubcommand = (
 					});
 				}
 
-				const resolvedOptions = typeof options === 'function' ? options(new FoxxieSubcommandBuilder()).toJSON() : options;
+				const resolvedOptions = typeof options === 'function' ? options(new TextCommandBuilder()).toJSON() : options;
 
 				return new ctor(context, {
 					...base,
@@ -357,114 +367,6 @@ export const GuildOnlyCommand = () => {
 	});
 };
 
-export class FoxxieListenerBuilder {
-	private enabled: boolean | undefined;
-
-	private event: FoxxieEvents | undefined;
-
-	private name: FoxxieEvents | undefined;
-
-	public setEnabled(enabled: boolean) {
-		this.enabled = enabled;
-		return this;
-	}
-
-	public setEvent(event: FoxxieEvents) {
-		this.event = event;
-		return this;
-	}
-
-	public setName(name: FoxxieEvents) {
-		this.name = name;
-		return this;
-	}
-
-	public setProdOnly() {
-		const enabled = container.client.enabledProdOnlyEvent();
-		this.setEnabled(enabled);
-		return this;
-	}
-
-	public toJSON(): Listener.Options {
-		return {
-			enabled: this.enabled,
-			event: this.event,
-			name: this.name
-		};
-	}
-}
-
-export class FoxxieSubcommandBuilder {
-	private aliases: string[] = [];
-
-	private description: TypedT<string> | undefined;
-
-	private detailedDescription: TypedT<LanguageHelpDisplayOptions> | undefined;
-
-	private flags: boolean | string[] | undefined;
-
-	private permissionLevel: PermissionLevels | undefined;
-
-	private requiredClientPermissions: PermissionResolvable | undefined;
-
-	private requiredUserPermission: PermissionResolvable | undefined;
-
-	private runIn: CommandRunInUnion | CommandSpecificRunIn | undefined;
-
-	public setAliases(...aliases: string[]) {
-		this.aliases = aliases;
-		return this;
-	}
-
-	public setDescription(description: TypedT<string>) {
-		this.description = description;
-		return this;
-	}
-
-	public setDetailedDescription(detailedDescription: TypedT<LanguageHelpDisplayOptions>) {
-		this.detailedDescription = detailedDescription;
-		return this;
-	}
-
-	public setFlags(flags: boolean | string[]) {
-		this.flags = flags;
-		return this;
-	}
-
-	public setPermissionLevel(permissionLevel: PermissionLevels) {
-		this.permissionLevel = permissionLevel;
-		return this;
-	}
-
-	public setRequiredClientPermissions(permissions: PermissionResolvable) {
-		this.requiredClientPermissions = permissions;
-		return this;
-	}
-
-	public setRequiredUserPermissions(permissions: PermissionResolvable) {
-		this.requiredUserPermission = permissions;
-		return this;
-	}
-
-	public setRunIn(runIn: CommandRunInUnion | CommandSpecificRunIn) {
-		this.runIn = runIn;
-		return this;
-	}
-
-	public toJSON(): FoxxieSubcommand.Options {
-		return {
-			aliases: this.aliases,
-			description: this.description,
-			detailedDescription: this.detailedDescription,
-			flags: this.flags,
-			permissionLevel: this.permissionLevel,
-			requiredClientPermissions: this.requiredClientPermissions,
-			requiredUserPermissions: this.requiredUserPermission,
-			runIn: this.runIn
-		};
-	}
-}
-
 export function RegisterChatInputCommand(
 	builder:
 		| ((
@@ -476,7 +378,7 @@ export function RegisterChatInputCommand(
 				| SlashCommandSubcommandsOnlyBuilder)
 		| SlashCommandBuilder,
 	idHints: string[],
-	options: Command.Options = {}
+	options: SapphireCommand.Options = {}
 ) {
 	return createClassDecorator((command: Ctor) => {
 		return createProxy(command, {

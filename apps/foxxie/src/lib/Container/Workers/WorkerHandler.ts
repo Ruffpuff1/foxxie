@@ -1,5 +1,5 @@
 import { AsyncQueue } from '@sapphire/async-queue';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { cyan, green, red, yellow } from 'colorette';
 import { once } from 'node:events';
 import { SHARE_ENV, Worker } from 'node:worker_threads';

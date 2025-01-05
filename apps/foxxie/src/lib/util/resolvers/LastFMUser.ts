@@ -1,5 +1,7 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
+import { UserService } from '#apis/last.fm/index';
 import { GuildMessage } from '#lib/types';
+import { BotIds } from '#utils/constants';
 import { ChatInputCommandInteraction } from 'discord.js';
 
 import { resolveString } from './String.js';
@@ -39,11 +41,15 @@ export async function resolveYouOrFoxxie(context: ChatInputCommandInteraction | 
 		include: { discogs: true, discogsReleases: true },
 		where: { userid }
 	});
-	if (resolvedByDiscordUser) return resolvedByDiscordUser;
+	if (resolvedByDiscordUser) {
+		void UserService.UpdateUserLastUsed(resolvedByDiscordUser.userid);
+		return resolvedByDiscordUser;
+	}
 
 	return resolveFoxxie();
 }
 
 function resolveFoxxie() {
+	void UserService.UpdateUserLastUsed(BotIds.Foxxie);
 	return container.prisma.userLastFM.findFirst({ where: { usernameLastFM: 'foxxiebot' } }).then((user) => user!);
 }

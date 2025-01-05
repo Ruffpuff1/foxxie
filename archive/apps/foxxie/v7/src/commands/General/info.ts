@@ -2,7 +2,7 @@ import { SubCommandCommand } from '#lib/Container/Utility/SubCommands/SubCommand
 import { LanguageKeys } from '#lib/I18n';
 import { FoxxieCommand } from '#lib/Structures';
 import { ApplyOptions } from '@sapphire/decorators';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 
 @ApplyOptions<FoxxieCommand.Options>({
     aliases: ['i', 'user'],

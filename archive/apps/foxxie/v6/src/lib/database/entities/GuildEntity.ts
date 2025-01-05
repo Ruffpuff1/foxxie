@@ -3,7 +3,7 @@ import type { HighlightTypeEnum } from '#lib/structures/workers/types';
 import { create } from '#utils/regexCreator';
 import { getT } from '@foxxie/i18n';
 import { arrayStrictEquals, minutes, years } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import type { APIEmbed, LocaleString, Snowflake } from 'discord-api-types/v9';
 import type { Guild, UserResolvable } from 'discord.js';
 import type { TFunction } from 'i18next';

@@ -1,7 +1,7 @@
 import { LanguageKeys } from '#lib/I18n';
 import type { FoxxieArgs } from '#lib/Structures';
 import { cast, toTitleCase } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { NonNullObject, isNullish } from '@sapphire/utilities';
 import type { GuildEntity } from '../entities/Guild/GuildEntity';
 import type { Serializer, SerializerUpdateContext } from '../structures/Serializer';

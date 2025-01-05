@@ -1,6 +1,6 @@
 import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { days } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { PlaySource } from '../Enums/PlaySource';
 import { PlayRepository } from '../Repositories/PlayRepository';
 import { UserPlay } from '../Structures/Entities/UserPlay';

@@ -2,7 +2,7 @@ import { GuildSettings, PermissionNode } from '#lib/Database';
 import { FoxxieCommand } from '#lib/Structures';
 import { emojis } from '#utils/constants';
 import { cast } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Guild, GuildMember, Role } from 'discord.js';
 
 export class GuildPermissionService {

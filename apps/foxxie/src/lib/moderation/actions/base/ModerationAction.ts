@@ -2,7 +2,7 @@ import type { ModerationManager } from '#lib/moderation/managers/ModerationManag
 import type { TypedT } from '#lib/types';
 
 import { EmbedBuilder } from '@discordjs/builders';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { type Awaitable, isNullish, isNullishOrEmpty, isNullishOrZero } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';

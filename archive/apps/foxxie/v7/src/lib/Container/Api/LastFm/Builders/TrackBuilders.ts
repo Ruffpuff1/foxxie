@@ -5,7 +5,7 @@ import { MessageOptions } from '#utils/Discord/Models/MessageOptions';
 import { Timespan } from '#utils/Timespan';
 import { resolveClientColor, resolveEmbedField } from '#utils/util';
 import { chunk } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { EmbedBuilder, TimestampStyles, bold, time } from 'discord.js';
 import { ContextModel } from '../Structures/Models/ContextModel';
 

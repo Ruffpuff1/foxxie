@@ -1,7 +1,7 @@
 import type { Guild } from 'discord.js';
 import { GuildSettings, PartialResponseValue, ResponseType, Task } from '#lib/database';
 import { LockQueue } from '@foxxie/lock-queue';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { seconds } from '@ruffpuff/utilities';
 
 export abstract class ModerationTask<T = unknown> extends Task {

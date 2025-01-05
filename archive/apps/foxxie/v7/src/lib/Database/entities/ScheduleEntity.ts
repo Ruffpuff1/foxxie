@@ -5,7 +5,7 @@
 import type { ScheduleManager } from '#lib/Structures';
 import { FoxxieEvents } from '#lib/Types/Events';
 import { cast } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Cron } from '@sapphire/time-utilities';
 import { AfterLoad, BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
 

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 
 const prisma = new PrismaClient().$extends({
 	model: {

@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { AutocompleteInteraction } from 'discord.js';
 
 export class AutoCompleteCommandsService {

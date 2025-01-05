@@ -2,7 +2,7 @@
  * @license Apache License 2.0
  * @copyright 2019 Skyra Project
  */
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Time } from '@sapphire/time-utilities';
 
 /**

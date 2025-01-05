@@ -1,4 +1,4 @@
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish, toTitleCase } from '@sapphire/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { LoggerManager, ModerationManager } from '#lib/moderation';

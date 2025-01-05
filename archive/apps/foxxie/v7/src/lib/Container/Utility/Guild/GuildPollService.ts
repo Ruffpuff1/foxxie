@@ -1,11 +1,32 @@
 import { PollEntity } from '#lib/Database/entities/PollEntity';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Collection, Guild } from 'discord.js';
 
 export class GuildPollService extends Collection<number, PollEntity> {
     public guild: Guild;
 
-    public alphabet = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷', '🇸', '🇹'];
+    public alphabet = [
+        '🇦',
+        '🇧',
+        '🇨',
+        '🇩',
+        '🇪',
+        '🇫',
+        '🇬',
+        '🇭',
+        '🇮',
+        '🇯',
+        '🇰',
+        '🇱',
+        '🇲',
+        '🇳',
+        '🇴',
+        '🇵',
+        '🇶',
+        '🇷',
+        '🇸',
+        '🇹'
+    ];
 
     public numbers = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 

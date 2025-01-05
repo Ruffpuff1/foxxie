@@ -3,7 +3,7 @@ import { AsyncQueue } from '@sapphire/async-queue';
 import { Worker } from 'node:worker_threads';
 import { join } from 'node:path';
 import { cyan } from 'colorette';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { once } from 'node:events';
 import { WorkerResponse } from './WorkerResponse';
 import type { IncomingPayload, OutgoingPayload } from './types';

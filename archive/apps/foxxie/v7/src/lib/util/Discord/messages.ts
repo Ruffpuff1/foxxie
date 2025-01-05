@@ -3,7 +3,7 @@ import type { CustomFunctionGet, CustomGet, GuildMessage } from '#lib/Types';
 import { floatPromise } from '#utils/util';
 import { cast, minutes, randomArray } from '@ruffpuff/utilities';
 import { canReact, canRemoveAllReactions } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { send } from '@sapphire/plugin-editable-commands';
 import type { Message, TextChannel, UserResolvable } from 'discord.js';
 import { MessageCreateOptions, MessageType } from 'discord.js';

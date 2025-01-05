@@ -3,7 +3,7 @@ import { StarEntity } from '#lib/Database/entities/StarEntity';
 import type { GuildMessage } from '#lib/Types';
 import { cast } from '@ruffpuff/utilities';
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish } from '@sapphire/utilities';
 import { Collection, Guild, TextChannel } from 'discord.js';
 

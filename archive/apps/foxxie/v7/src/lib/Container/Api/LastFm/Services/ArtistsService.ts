@@ -2,7 +2,7 @@ import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { LastFmArtistEntity } from '#lib/Database/entities/LastFmArtistEntity';
 import { Response } from '#utils/Response';
 import { days, hours, minutes, seconds } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { User } from 'discord.js';
 import { DataSourceFactory } from '../Factories/DataSourceFactory';
 import { ArtistRepository } from '../Repositories/ArtistRepository';

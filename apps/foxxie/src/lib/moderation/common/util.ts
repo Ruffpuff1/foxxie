@@ -4,7 +4,7 @@ import type { ModerationManager } from '#lib/moderation/managers/ModerationManag
 import { resolveToNull } from '@ruffpuff/utilities';
 import { LanguageKeys } from '#lib/i18n';
 import { getColor, TranslationMappings, UndoTaskNameMappings } from '#lib/moderation/common/constants';
-import { TypedT } from '#lib/types';
+import { FTFunction, TypedT } from '#lib/types';
 import { getModeration } from '#utils/functions';
 import { TypeVariation } from '#utils/moderationConstants';
 import { messageLink } from '#utils/transformers';
@@ -14,7 +14,7 @@ export function getCaseEditMention() {
 	return `.case edit`;
 }
 
-export async function getEmbed(t: TFunction, entry: ModerationManager.Entry): Promise<EmbedBuilder> {
+export async function getEmbed(t: FTFunction, entry: ModerationManager.Entry): Promise<EmbedBuilder> {
 	const moderator = await entry.fetchModerator();
 	const caseT = t(LanguageKeys.Globals.CaseT);
 	const modMember = await resolveToNull(entry.guild.members.fetch(moderator));
@@ -25,7 +25,7 @@ export async function getEmbed(t: TFunction, entry: ModerationManager.Entry): Pr
 			iconURL: modMember?.displayAvatarURL() || moderator.displayAvatarURL(),
 			name: `${modMember?.displayName || moderator.username} (${moderator.id})`
 		})
-		.setDescription(await getEmbedDescription(t, entry))
+		.setDescription(await getEmbedDescription(t as TFunction, entry))
 		.setFooter({
 			text: `${caseT} #${t(LanguageKeys.Globals.NumberFormat, {
 				value: entry.id

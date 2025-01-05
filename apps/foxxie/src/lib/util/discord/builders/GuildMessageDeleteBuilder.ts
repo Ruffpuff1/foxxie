@@ -1,3 +1,4 @@
+import { container } from '@sapphire/pieces';
 import { cutText, isNullish, isNullishOrEmpty } from '@sapphire/utilities';
 import { GuildMessage } from '#lib/types';
 import { getContent, getFullEmbedAuthor, getImages, setMultipleEmbedImages } from '#utils/util';
@@ -18,7 +19,7 @@ export class GuildMessageDeleteBuilder extends FoxxieBuilder {
 		this.setColor(Colors.Red).setTimestamp();
 
 		if (isNullish(this.message)) {
-			this.setFooter({ text: `Unknown Message Deleted` });
+			this.setFooter({ text: `Unknown Message Deleted` }).setAuthor(getFullEmbedAuthor(container.client.user!));
 			return { embeds: [this.embed] };
 		}
 

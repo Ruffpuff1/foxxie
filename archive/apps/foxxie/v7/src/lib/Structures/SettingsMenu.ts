@@ -5,7 +5,7 @@ import { FoxxieEvents, GuildMessage } from '#lib/Types';
 import { deleteMessage, sendLoadingMessage } from '#utils/Discord';
 import { floatPromise } from '#utils/util';
 import { ZeroWidthSpace, cast, deepClone, minutes } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { ArgumentStream } from '@sapphire/lexure';
 import { RESTJSONErrorCodes } from 'discord-api-types/v10';
 import { DiscordAPIError, EmbedBuilder, ImageFormat, MessageCollector, Routes } from 'discord.js';

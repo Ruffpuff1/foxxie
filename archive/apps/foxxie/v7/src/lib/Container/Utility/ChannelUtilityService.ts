@@ -1,5 +1,5 @@
 import { sendMessages } from '#utils/Discord/permissions';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Channel } from 'discord.js';
 
 export class ChannelUtilityService {

@@ -1,6 +1,6 @@
 import { UserDiscogs, UserDiscogsReleases, UserLastFM } from '@prisma/client';
 import { seconds } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish, sleep } from '@sapphire/utilities';
 import { DiscogsApi } from '#apis/last.fm/api/DiscogsApi';
 import { months } from '#utils/common';
@@ -9,9 +9,7 @@ import { blue } from 'colorette';
 export type DiscogsLastFMUser = { discogs: null | UserDiscogs; discogsReleases: UserDiscogsReleases[] } & UserLastFM;
 
 export class DiscogsService {
-	#discogsApi = new DiscogsApi();
-
-	public async getOutdatedDiscogsUsers() {
+	public static async GetOutdatedDiscogsUsers() {
 		const updateCutoff = Date.now() - months(1);
 		return container.prisma.userLastFM.findMany({
 			include: {
@@ -29,7 +27,7 @@ export class DiscogsService {
 		});
 	}
 
-	public async getUserCollection(userId: string) {
+	public static async GetUserCollection(userId: string) {
 		return container.prisma.userDiscogsReleases.findMany({
 			include: {
 				release: {
@@ -44,9 +42,9 @@ export class DiscogsService {
 		});
 	}
 
-	public async storeUserReleases(user: DiscogsLastFMUser) {
+	public static async StoreUserReleases(user: DiscogsLastFMUser) {
 		const pages = 50;
-		const releases = await this.#discogsApi.getUserReleases(user.userid, pages);
+		const releases = await DiscogsApi.GetUserReleases(user.userid, pages);
 
 		if (!releases?.releases || !releases.releases.length) {
 			user.discogsReleases = [];
@@ -119,17 +117,17 @@ export class DiscogsService {
 		return user.discogs;
 	}
 
-	public async updateDiscogsUsers(usersToUpdate: DiscogsLastFMUser[]) {
+	public static async UpdateDiscogsUsers(usersToUpdate: DiscogsLastFMUser[]) {
 		for (const user of usersToUpdate) {
 			container.logger.debug(`[${blue('Discogs')}]: Automatically updating ${user.userid} | ${user.usernameLastFM}`);
-			await this.updateUserDiscogs(user);
+			await DiscogsService.UpdateUserDiscogs(user);
 
 			await sleep(seconds(5000));
 		}
 	}
 
-	public async updateUserDiscogs(user: DiscogsLastFMUser) {
-		user.discogs = await this.storeUserReleases(user);
+	public static async UpdateUserDiscogs(user: DiscogsLastFMUser) {
+		user.discogs = await DiscogsService.StoreUserReleases(user);
 		// user.discogs = await this.updateCollectionValue(user.userid);
 	}
 }

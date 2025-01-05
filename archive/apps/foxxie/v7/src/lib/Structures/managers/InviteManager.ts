@@ -1,5 +1,5 @@
 import { cast, resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Collection, RESTGetAPIInviteResult, Routes } from 'discord.js';
 
 export class InviteManager extends Collection<string, InviteCode> {

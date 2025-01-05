@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { GuildEntity, ClientEntity, MemberEntity, StarEntity, ModerationEntity, ScheduleEntity } from './entities';
 import { MongoDB } from './MongoDB';
 

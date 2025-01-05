@@ -7,7 +7,7 @@ import { BrandingColors, emojis } from '#utils/constants';
 import { floatPromise, resolveClientColor, resolveEmbedField } from '#utils/util';
 import { EnvParse } from '@foxxie/env';
 import { resolveToNull, toTitleCase } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { ChannelType, EmbedAuthorData, EmbedBuilder, Guild, GuildMember, Role } from 'discord.js';
 import { TFunction } from 'i18next';
 

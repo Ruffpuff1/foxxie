@@ -1,6 +1,6 @@
 import { PokemonEnum } from '@favware/graphql-pokemon';
 import { RequiresClientPermissions } from '@sapphire/decorators';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { send } from '@sapphire/plugin-editable-commands';
 import { isNullish } from '@sapphire/utilities';
 import { compressPokemonCustomIdMetadata, fuzzyPokemonToSelectOption, getSpriteTypePokemon, PokemonSpriteTypes } from '#lib/api/Pokemon/index';

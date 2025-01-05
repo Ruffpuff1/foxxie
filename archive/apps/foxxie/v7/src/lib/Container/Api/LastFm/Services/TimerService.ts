@@ -1,5 +1,5 @@
 import { hours } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { blue } from 'colorette';
 
 export class TimerService {

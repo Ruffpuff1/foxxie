@@ -379,7 +379,7 @@ export const clientOptions: ClientOptions = {
 		GatewayIntentBits.GuildPresences
 	],
 	loadDefaultErrorListeners: false,
-	loadMessageCommandListeners: true,
+	loadMessageCommandListeners: false,
 	logger: {
 		level: cast<LogLevel>(envParseInteger(EnvKeys.LogLevel))
 	},

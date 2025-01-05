@@ -1,7 +1,7 @@
 import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { Response } from '#utils/Response';
 import { cast, chunk, seconds } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import _ from 'lodash';
 import {
     GetArtistInfoResult,

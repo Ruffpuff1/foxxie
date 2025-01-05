@@ -1,7 +1,7 @@
 import { rootFolder } from '#utils/constants';
 import { cast } from '@ruffpuff/utilities';
 import { AsyncQueue } from '@sapphire/async-queue';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { cyan } from 'colorette';
 import { once } from 'node:events';
 import { join } from 'node:path';

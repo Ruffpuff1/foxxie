@@ -1,6 +1,6 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { MessageBuilder } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { cutText, toTitleCase } from '@sapphire/utilities';
 import { readSettings } from '#lib/database';
 import { ensureMember } from '#lib/database/Models/member';

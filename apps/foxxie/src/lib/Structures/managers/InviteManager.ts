@@ -1,5 +1,5 @@
 import { resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { cast } from '@sapphire/utilities';
 import { Collection, GuildMember, RESTGetAPIInviteResult, Routes, Snowflake } from 'discord.js';
 

@@ -2,7 +2,7 @@ import { List } from '#lib/Container/Utility/Extensions/ArrayExtensions';
 import { LastFmArtistEntity } from '#lib/Database/entities/LastFmArtistEntity';
 import { fetch } from '@foxxie/fetch';
 import { cast, hours, months } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { ArtistRepository } from '../Repositories/ArtistRepository';
 import { TrackRepository } from '../Repositories/TrackRepository';
 import { ArtistInfo } from '../Structures/ArtistInfo';

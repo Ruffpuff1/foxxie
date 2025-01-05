@@ -12,7 +12,7 @@ import {
 } from '#utils/moderation';
 import { messageLink } from '#utils/transformers';
 import { cast, resolveToNull, Time, toTitleCase } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { EmbedBuilder, Guild, GuildChannel, User } from 'discord.js';
 import { BaseEntity, Column, Entity, ObjectIdColumn, PrimaryColumn } from 'typeorm';
 import { GuildSettings } from '..';

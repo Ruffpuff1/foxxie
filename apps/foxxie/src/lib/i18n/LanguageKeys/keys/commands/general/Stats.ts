@@ -5,9 +5,6 @@ export const Description = T('commands/general/stats:description');
 export const DetailedDescription = T<LanguageHelpDisplayOptions>('commands/general:stats/detailedDescription');
 export const Menu = FT<
 	{
-		cpuCount: number;
-		cpuSpeed: string;
-		cpuUsage: string;
 		deps: string[];
 		memoryPercent: string;
 		memoryUsed: string;

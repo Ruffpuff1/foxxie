@@ -2,24 +2,21 @@ import { UserLastFM } from '@prisma/client';
 import { RequiresClientPermissions } from '@sapphire/decorators';
 import { Args, container } from '@sapphire/framework';
 import { send } from '@sapphire/plugin-editable-commands';
-import { isNullish } from '@sapphire/utilities';
-import { PlayBuilder, UserBuilder } from '#apis/last.fm/builders/index';
-import { LastFmDataSourceFactory } from '#apis/last.fm/factories/DataSourceFactory';
+import { UserService } from '#apis/last.fm/index';
 import { IndexService } from '#apis/last.fm/services/IndexService';
 import { UpdateService } from '#apis/last.fm/services/UpdateService';
-import { TimePeriod } from '#apis/last.fm/types/enums/TimePeriod';
 import { UpdateType, UpdateTypeBitfield } from '#apis/last.fm/types/enums/UpdateType';
 import { ResponseStatus } from '#apis/last.fm/types/ResponseStatus';
-import { playCountBreakPoints } from '#apis/last.fm/util/constants';
-import { ContextModel } from '#apis/last.fm/util/ContextModel';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage, PermissionLevels } from '#lib/types';
+import { PlayCommands } from '#root/Last.FM/message-commands/PlayCommands';
+import { UserCommands } from '#root/Last.FM/message-commands/UserCommands';
 import { minutes } from '#utils/common';
 import { Emojis } from '#utils/constants';
 import { GuildOnlyCommand, MessageSubcommand, RegisterSubcommand, RequiresLastFMUsername, RequiresMemberPermissions } from '#utils/decorators';
 import { resolveClientColor, sendLoadingMessage, sendMessage } from '#utils/functions';
-import { resolveLastFMUser, resolveYouOrFoxxie } from '#utils/resolvers';
+import { resolveLastFMUser } from '#utils/resolvers';
 import { lastFmUserUrl } from '#utils/transformers';
 import { blue } from 'colorette';
 import { EmbedBuilder, inlineCode, PermissionFlagsBits, User } from 'discord.js';
@@ -34,87 +31,19 @@ import _ from 'lodash';
 		.setPermissionLevel(PermissionLevels.BotOwner)
 )
 export class LastFMCommand extends FoxxieSubcommand {
-	public static GetGoalAmount(option: null | string, currentPlaycount: number) {
-		let goalAmount = 100;
-		let ownGoalSet = false;
-
-		if (!isNullish(option)) {
-			const lower = option.toLowerCase();
-
-			if (lower.endsWith('k')) {
-				let parsed = parseInt(lower.replace('k', ''), 10);
-				if (!isNaN(parsed)) {
-					parsed *= 1000;
-					if (parsed > currentPlaycount) {
-						goalAmount = parsed;
-						ownGoalSet = true;
-					}
-				}
-			} else {
-				const parsed = parseInt(lower, 10);
-				if (!isNaN(parsed) && parsed > currentPlaycount) {
-					goalAmount = parsed;
-					ownGoalSet = true;
-				}
-			}
-		}
-
-		if (!ownGoalSet) {
-			for (const breakPoint of playCountBreakPoints) {
-				if (currentPlaycount < breakPoint) {
-					goalAmount = breakPoint;
-					break;
-				}
-			}
-		}
-
-		if (goalAmount > 10000000) goalAmount = 10000000;
-
-		return goalAmount;
-	}
-
 	@MessageSubcommand(LastFMCommand.SubcommandKeys.FM, true, ['currenttrack', 'ct', 'np', 'nowplaying'])
-	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
-	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
-	public static async MessageRunFM(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
-		await sendLoadingMessage(message);
-		const contextUser = await args.pick(LastFMCommand.UserArgument).catch(() => resolveYouOrFoxxie(message));
-
-		const response = await PlayBuilder.NowPlaying(new ContextModel(args, contextUser));
-		await sendMessage(message, response);
+	public static async MessageRunFM(...[message, args, context]: FoxxieSubcommand.MessageRunArgs) {
+		return PlayCommands.NowPlaying(message, args, context);
 	}
 
 	@MessageSubcommand(LastFMCommand.SubcommandKeys.Pace, false, ['pc'])
-	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
-	@RequiresLastFMUsername(LanguageKeys.Preconditions.LastFMLogin)
-	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
-	public static async MessageRunPace(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
-		await sendLoadingMessage(message);
-
-		const contextUser = await resolveYouOrFoxxie(message);
-		const userInfo = await LastFMCommand.DataSourceFactory.getLfmUserInfo(contextUser.usernameLastFM);
-		const goalAmount = LastFMCommand.GetGoalAmount(await args.pick('string').catch(() => null), userInfo!.playcount);
-
-		const response = await PlayBuilder.Pace(
-			new ContextModel(args, contextUser),
-			{ timePeriod: TimePeriod.AllTime },
-			goalAmount,
-			userInfo!.playcount,
-			userInfo!.registered.getTime()
-		);
-
-		await sendMessage(message, response);
+	public static async MessageRunPace(...[message, args, context]: FoxxieSubcommand.MessageRunArgs) {
+		PlayCommands.Pace(message, args, context);
 	}
 
 	@MessageSubcommand(LastFMCommand.SubcommandKeys.Profile, false, ['user', 'userinfo', 'stats'])
-	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
-	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
-	public static async MessageRunProfile(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
-		await sendLoadingMessage(message);
-		const contextUser = await args.pick(LastFMCommand.UserArgument).catch(() => resolveYouOrFoxxie(message));
-
-		const response = await LastFMCommand.UserBuilder.profile(new ContextModel(args, contextUser));
-		await sendMessage(message, response);
+	public static async MessageRunProfile(...[message, args, context]: FoxxieSubcommand.MessageRunArgs) {
+		return UserCommands.Profile(message, args, context);
 	}
 
 	@MessageSubcommand(LastFMCommand.SubcommandKeys.Update, false, ['u'])
@@ -224,7 +153,7 @@ export class LastFMCommand extends FoxxieSubcommand {
 			})
 		);
 
-		const result = await LastFMCommand.IndexService.modularUpdate(contextUser, resolved);
+		const result = await IndexService.ModularUpdate(contextUser, resolved);
 		console.log(result);
 
 		await sendMessage(message, 'done');
@@ -316,16 +245,13 @@ export class LastFMCommand extends FoxxieSubcommand {
 		Update: 'update'
 	};
 
-	protected static UserArgument = Args.make<UserLastFM>(async (parameter, context) => {
+	public static UserArgument = Args.make<UserLastFM>(async (parameter, context) => {
 		const resolved = await resolveLastFMUser(context.message as GuildMessage, parameter);
+		void UserService.UpdateUserLastUsed(resolved.userid);
 		return Args.ok(resolved);
 	});
-
-	private static DataSourceFactory = new LastFmDataSourceFactory();
 
 	private static IndexService = new IndexService();
 
 	private static UpdateService = new UpdateService();
-
-	private static UserBuilder = new UserBuilder();
 }

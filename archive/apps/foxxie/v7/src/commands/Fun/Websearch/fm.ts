@@ -4,7 +4,7 @@ import { FoxxieCommand } from '#lib/Structures';
 import { RegisterChatInputCommand } from '#utils/Decorators/RegisterChatInputCommand';
 import { NameAndDescriptionToLocalizedSubCommands } from '#utils/chatInputDecorators';
 import { ApplyOptions } from '@sapphire/decorators';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { PermissionsBitField } from 'discord.js';
 
@@ -44,5 +44,5 @@ import { PermissionsBitField } from 'discord.js';
     container.utilities.chatInputCommands.getRegisterOptions(ChatInputCommand.LastFm)
 )
 export class UserCommand extends FoxxieCommand {
-    public autocompleteRun = container.utilities.autoCompleteCommands.get(AutoCompleteCommand.LastFm)
+    public autocompleteRun = container.utilities.autoCompleteCommands.get(AutoCompleteCommand.LastFm);
 }

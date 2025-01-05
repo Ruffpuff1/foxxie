@@ -1,5 +1,5 @@
 import { Member } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Collection } from 'discord.js';
 
 const cache = new Collection<string, Member>();

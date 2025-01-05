@@ -1,7 +1,7 @@
 import { acquireSettings } from '#lib/database';
 import { GuildMessage } from '#lib/types';
 import { isThenable } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { cpus, hostname, loadavg, totalmem } from 'node:os';
 
 /**

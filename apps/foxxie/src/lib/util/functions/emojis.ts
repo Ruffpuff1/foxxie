@@ -1,6 +1,6 @@
 import { formatEmoji } from '@discordjs/builders';
 import { FormattedCustomEmojiWithGroups, TwemojiRegex } from '@sapphire/discord-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish } from '@sapphire/utilities';
 
 // Based on the identifiers at https://cdn.jsdelivr.net/gh/twitter/twemoji/assets/72x72/

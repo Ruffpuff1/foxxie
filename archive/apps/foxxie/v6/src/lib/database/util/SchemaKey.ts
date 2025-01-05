@@ -3,7 +3,7 @@ import type { ISchemaValue, SchemaGroup } from './SchemaGroup';
 import type { Serializer, SerializerUpdateContext } from '../structures/Serializer';
 import type { FoxxieArgs } from '#lib/structures';
 import type { CustomGet } from '@foxxie/i18n';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish, NonNullObject } from '@sapphire/utilities';
 import type { TFunction } from 'i18next';
 import { LanguageKeys } from '#lib/i18n';
@@ -134,5 +134,15 @@ export class SchemaKey<K extends keyof GuildEntity = keyof GuildEntity> implemen
 
 export type ConfigurableKeyValueOptions = Pick<
     SchemaKey,
-    'description' | 'maximum' | 'minimum' | 'inclusive' | 'name' | 'property' | 'target' | 'type' | 'array' | 'default' | 'dashboardOnly'
+    | 'description'
+    | 'maximum'
+    | 'minimum'
+    | 'inclusive'
+    | 'name'
+    | 'property'
+    | 'target'
+    | 'type'
+    | 'array'
+    | 'default'
+    | 'dashboardOnly'
 >;

@@ -1,5 +1,5 @@
 import { UserArtist, UserLastFM, UserPlay } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish, isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { toPrismaDate } from '#lib/database';
 import { days, groupBy, hours, minutes, seconds } from '#utils/common';
@@ -7,7 +7,7 @@ import { Schedules } from '#utils/constants';
 import { blue, white } from 'colorette';
 import _ from 'lodash';
 
-import { LastFmDataSourceFactory } from '../factories/DataSourceFactory.js';
+import { DataSourceFactory } from '../factories/DataSourceFactory.js';
 import { PlayRepository } from '../repository/PlayRepository.js';
 import { RecentTrack, RecentTrackList } from '../types/models/domain/RecentTrack.js';
 
@@ -18,8 +18,6 @@ interface UpdateUserQueueItem {
 }
 
 export class UpdateService {
-	#dataSourceFactory = new LastFmDataSourceFactory();
-
 	public async updateUser({ getAccurateTotalPlaycount = true, updateQueue = false, userId }: UpdateUserQueueItem) {
 		// TODO Artist aliases
 
@@ -53,7 +51,7 @@ export class UpdateService {
 			totalPlaycountCorrect = true;
 		}
 
-		const recentTracks = await this.#dataSourceFactory.getRecentTracks(user!.usernameLastFM, count, true, null, timeFrom, pages);
+		const recentTracks = await DataSourceFactory.GetRecentTracks(user!.usernameLastFM, count, true, null, timeFrom, pages);
 
 		if (!recentTracks.success) {
 			container.logger.debug(
@@ -179,7 +177,7 @@ export class UpdateService {
 	private async setOrUpdateUserPlaycount(user: UserLastFM, playcountToAdd: number, correctPlaycount: null | number = null) {
 		if (!correctPlaycount) {
 			if (user.totalPlaycount) {
-				const recentTracks = await this.#dataSourceFactory.getRecentTracks(user.usernameLastFM, 1, false);
+				const recentTracks = await DataSourceFactory.GetRecentTracks(user.usernameLastFM, 1, false);
 
 				if (!isNullish(recentTracks?.content?.totalAmount)) {
 					const sql = `UPDATE "UserLastFM" SET "totalPlaycount" = ${recentTracks.content.totalAmount} WHERE "userid" = '${user.userid}';`;

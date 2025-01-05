@@ -1,6 +1,6 @@
 import { starboard } from '@prisma/client';
 import { resolveToNull } from '@ruffpuff/utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { MessageOptions } from '@sapphire/plugin-editable-commands';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { cast, cutText, debounce, isNullish } from '@sapphire/utilities';

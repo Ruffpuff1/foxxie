@@ -5,7 +5,7 @@ import { fetchT } from '@sapphire/plugin-i18next';
 import { cast, isNullish } from '@sapphire/utilities';
 import { getEmbed, getUndoTaskName } from '#lib/moderation';
 import { ModerationManager } from '#lib/moderation/managers';
-import { ScheduleEntry } from '#lib/schedule';
+import { ScheduleEntry } from '#root/Core/structures/schedule/index';
 import { getModeration } from '#utils/functions';
 import { SchemaKeys } from '#utils/moderationConstants';
 import { Embed, EmbedBuilder, GuildBasedChannel } from 'discord.js';

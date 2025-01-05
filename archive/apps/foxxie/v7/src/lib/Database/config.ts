@@ -2,7 +2,7 @@ import { Track } from '#Api/LastFm/Structures/Entities/Track';
 import { UserTrack } from '#Api/LastFm/Structures/Entities/UserTrack';
 import { UserArtist } from '#Api/LastFm/Structures/UserArtist';
 import { UserPlay } from '#Api/LastFm/Structures/Entities/UserPlay';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { join } from 'path';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';

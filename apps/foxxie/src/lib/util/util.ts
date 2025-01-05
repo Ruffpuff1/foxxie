@@ -5,8 +5,8 @@ import { first } from '@sapphire/iterator-utilities/first';
 import { SubcommandMapping } from '@sapphire/plugin-subcommands';
 import { cast, isNullishOrEmpty, isNumber } from '@sapphire/utilities';
 import { envParseString } from '@skyra/env-utilities';
-import { ScheduleEntry } from '#lib/schedule';
 import { DetailedDescription } from '#lib/types';
+import { ScheduleEntry } from '#root/Core/structures/schedule/index';
 import {
 	APIUser,
 	EmbedAuthorData,
@@ -26,7 +26,7 @@ import {
 	User,
 	UserResolvable
 } from 'discord.js';
-import { cpus, hostname, loadavg, totalmem } from 'node:os';
+import { hostname, totalmem } from 'node:os';
 
 export interface ImageAttachment {
 	height: number;
@@ -281,9 +281,6 @@ export function getServerDetails() {
 	const totalmemory = ((totalmem() / 1024 / 1024 / 1024) * 1024).toFixed(0);
 	const memoryUsed = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
 	return {
-		cpuCount: cpus().length,
-		cpuSpeed: (cpus()[0].speed / 1000).toFixed(1),
-		cpuUsage: (loadavg()[0] * 10).toFixed(1),
 		memoryPercent: ((parseInt(memoryUsed, 10) / parseInt(totalmemory, 10)) * 100).toFixed(1),
 		memoryUsed,
 		process: hostname(),

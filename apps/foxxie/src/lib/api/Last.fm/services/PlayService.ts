@@ -1,18 +1,30 @@
 import { UserPlay } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { countGroup, groupBy } from '#utils/common';
 import _ from 'lodash';
 
-import { LastFmDataSourceFactory } from '../factories/DataSourceFactory.js';
+import { DataSourceFactory } from '../factories/DataSourceFactory.js';
 import { PlayRepository } from '../repository/PlayRepository.js';
 import { UserRepository } from '../repository/UserRepository.js';
 import { DataSource } from '../types/enums/DataSource.js';
 import { PlaySource } from '../types/enums/PlaySource.js';
 
 export class PlayService {
-	public dataSourceFactory = new LastFmDataSourceFactory();
+	public dataSourceFactory = new DataSourceFactory();
 
-	public async getAllUserPlays(userId: string, finalizeImport = true) {
+	public async getTrackPlayForUserId(userId: string, trackName: string, artistName: string) {
+		const result = await container.prisma.userPlay.count({
+			where: {
+				artistName,
+				trackName,
+				userId
+			}
+		});
+
+		return Number(result);
+	}
+
+	public static async GetAllUserPlays(userId: string, finalizeImport = true) {
 		let plays: UserPlay[];
 
 		if (finalizeImport) {
@@ -27,18 +39,6 @@ export class PlayService {
 		}
 
 		return plays;
-	}
-
-	public async getTrackPlayForUserId(userId: string, trackName: string, artistName: string) {
-		const result = await container.prisma.userPlay.count({
-			where: {
-				artistName,
-				trackName,
-				userId
-			}
-		});
-
-		return Number(result);
 	}
 
 	public static UserHasImported(userPlays: UserPlay[]): boolean {

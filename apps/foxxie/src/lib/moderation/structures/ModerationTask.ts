@@ -3,7 +3,8 @@ import type { Guild, Snowflake } from 'discord.js';
 import { isNullish } from '@sapphire/utilities';
 import { readSettings } from '#lib/database/settings/functions';
 import { ModerationAction } from '#lib/moderation/actions/base/ModerationAction';
-import { PartialResponseValue, ResponseType, Task } from '#lib/schedule';
+import { PartialResponseValue, ResponseType } from '#root/Core/structures/schedule/index';
+import { Task } from '#root/Core/structures/Task';
 import { getModeration } from '#utils/functions';
 import { SchemaKeys } from '#utils/moderationConstants';
 

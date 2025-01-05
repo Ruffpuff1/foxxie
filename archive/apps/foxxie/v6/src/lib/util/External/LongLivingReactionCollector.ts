@@ -1,5 +1,5 @@
 import type { GuildTextBasedChannelTypes } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { noop, minutes } from '@ruffpuff/utilities';
 import type { Guild, User } from 'discord.js';
 

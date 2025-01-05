@@ -1,5 +1,5 @@
 import { GuildEntity, SettingsCollectionCallback } from '#lib/Database';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { Guild } from 'discord.js';
 
 type K = keyof V;

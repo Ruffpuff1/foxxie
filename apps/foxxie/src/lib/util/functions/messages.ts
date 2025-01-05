@@ -1,6 +1,6 @@
 import { randomArray } from '@ruffpuff/utilities';
 import { canReact, canRemoveAllReactions, MessageBuilder } from '@sapphire/discord.js-utilities';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { MessageOptions, send } from '@sapphire/plugin-editable-commands';
 import { fetchT, resolveKey, type TOptions } from '@sapphire/plugin-i18next';
 import { cast } from '@sapphire/utilities';

@@ -1,4 +1,4 @@
-import { ChatInputCommand, Command, CommandOptionsRunTypeEnum, MessageCommand, UserError } from '@sapphire/framework';
+import { ChatInputCommand, Command, CommandOptionsRunTypeEnum, MessageCommand, MessageCommandContext, UserError } from '@sapphire/framework';
 import { Subcommand } from '@sapphire/plugin-subcommands';
 import { cast } from '@sapphire/utilities';
 import FoxxieClient from '#lib/FoxxieClient';
@@ -117,7 +117,7 @@ export namespace FoxxieSubcommand {
 	export type ChatInputRunArgs = [interaction: ChatInputCommand.Interaction, context: ChatInputCommand.RunContext];
 	export type Interaction = ChatInputCommandInteraction;
 	export type LoaderContext = Command.LoaderContext;
-	export type MessageRunArgs = [message: GuildMessage, args: Args];
+	export type MessageRunArgs = [message: GuildMessage, args: Args, context: MessageCommandContext];
 	export type Options = ExtendOptions<Subcommand.Options>;
 	export type RunContext = MessageCommand.RunContext;
 

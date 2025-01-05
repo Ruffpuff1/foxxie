@@ -8,7 +8,7 @@ import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage } from '#lib/types';
 import { minutes, years } from '#utils/common';
 import { Schedules } from '#utils/constants';
-import { resolveUserDisplayName } from '#utils/functions';
+import { UserUtil } from '#utils/functions';
 import { sendLoadingMessage } from '#utils/functions/messages';
 import { fetchTasks, MappedTask } from '#utils/util';
 import { bold, EmbedBuilder, escapeMarkdown, GuildMember, hyperlink, inlineCode, Message, time, TimestampStyles, User } from 'discord.js';
@@ -178,7 +178,7 @@ export class UserCommand extends FoxxieSubcommand {
 		const user = entity instanceof User ? entity : entity.user;
 
 		const title = t(LanguageKeys.Commands.Misc.ReminderList, {
-			author: await resolveUserDisplayName(user.id, input.guild)
+			author: await UserUtil.ResolveDisplayName(user.id, input.guild)
 		});
 
 		const display = new PaginatedMessage(); // .setPromptMessage(t(LanguageKeys.System.ReactionHandlerPrompt));

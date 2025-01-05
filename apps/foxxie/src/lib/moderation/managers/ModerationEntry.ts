@@ -2,7 +2,7 @@ import { container, UserError } from '@sapphire/framework';
 import { isNullishOrZero } from '@sapphire/utilities';
 import { ModerationData } from '#lib/database';
 import { LanguageKeys } from '#lib/i18n';
-import { ScheduleEntry } from '#lib/schedule';
+import { ScheduleEntry } from '#root/Core/structures/schedule/index';
 import { minutes } from '#utils/common';
 import { TypeMetadata, TypeVariation } from '#utils/moderationConstants';
 import { Guild, Snowflake, User } from 'discord.js';

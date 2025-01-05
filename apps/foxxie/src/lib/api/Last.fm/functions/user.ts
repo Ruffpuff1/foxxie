@@ -1,5 +1,5 @@
 import { UserLastFM } from '@prisma/client';
-import { container } from '@sapphire/framework';
+import { container } from '@sapphire/pieces';
 import { isNullish, isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { seconds } from '#utils/common';
 import { User } from 'discord.js';
