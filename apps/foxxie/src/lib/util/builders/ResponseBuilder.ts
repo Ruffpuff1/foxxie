@@ -72,14 +72,16 @@ export class ResponseBuilder {
 			.filter((command) => (includeAdmin ? true : cast<FoxxieCommand>(command).permissionLevel !== PermissionLevels.BotOwner));
 
 		const sortedCategories = [...new Set(commands.map((command) => command.category!))]
+			.filter((category) => !isNullish(category))
 			.sort((a, b) => a.localeCompare(b))
-			.map((category) => categories[category.toLowerCase() as keyof typeof categories])
-			.filter((category) => !isNullish(category));
+			.map((category) => categories[category.toLowerCase() as keyof typeof categories]);
 
 		for (const category of sortedCategories) {
+			if (isNullish(category)) continue;
+
 			const categoryCommands = commands
 				.sort((a, b) => a.name.localeCompare(b.name))
-				.filter((command) => category.includes(toTitleCase(command.category!)))
+				.filter((command) => !isNullish(command.category) && category.includes(toTitleCase(command.category)))
 				.map((command) => inlineCode(command.name));
 
 			embed.addFields(

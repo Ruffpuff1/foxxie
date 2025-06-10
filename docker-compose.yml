@@ -10,7 +10,7 @@ services:
     env_file:
       - ./apps/foxxie/.env.foxxie
     depends_on:
-      - lavalink
+      # - lavalink
       - redis
       - postgres
     networks:
@@ -21,20 +21,20 @@ services:
     restart: always
     tty: true
 
-  lavalink:
-    container_name: lavalink
-    volumes:
-       - type: bind
-         source: ${PWD}/.application.yml
-         target: /opt/Lavalink/application.yml
-    depends_on:
-      - redis
-    image: fredboat/lavalink:3.7.13-alpine
-    networks:
-      - foxxie
-    ports:
-      - '2333:2333'
-    restart: unless-stopped
+  # lavalink:
+  #   container_name: lavalink
+  #   volumes:
+  #      - type: bind
+  #        source: ${PWD}/.application.yml
+  #        target: /opt/Lavalink/application.yml
+  #   depends_on:
+  #     - redis
+  #   image: fredboat/lavalink:3.7.13-alpine
+  #   networks:
+  #     - foxxie
+  #   ports:
+  #     - '2333:2333'
+  #   restart: unless-stopped
 
   postgres:
     container_name: postgres

@@ -17,6 +17,7 @@ import { AudioUtil } from '../utils/util.js';
 export class AudioCommands {
 	@Command((command) =>
 		command
+			.setCategory('audio')
 			.setAliases('connect')
 			.setDescription(LanguageKeys.Commands.Audio.Join.Description)
 			.setDetailedDescription(LanguageKeys.Commands.Audio.Join.DetailedDescription)
@@ -46,6 +47,7 @@ export class AudioCommands {
 	@Command((command) =>
 		command
 			.setAliases('pl')
+			.setCategory('audio')
 			.setOptions(['playlist', 'list'])
 			.setDescription(LanguageKeys.Commands.Audio.Play.Description)
 			.setDetailedDescription(LanguageKeys.Commands.Audio.Play.DetailedDescription)
@@ -94,7 +96,7 @@ export class AudioCommands {
 		if (loading) await deleteMessage(loading);
 	}
 
-	@Command({ enabled: true })
+	@Command({ enabled: true, fullCategory: ['audio'] })
 	public static async Playlist(...[message, args]: TextCommand.MessageRunArgs) {
 		const url = await args.pick('url');
 		await sendLoadingMessage(message);
@@ -158,6 +160,7 @@ export class AudioCommands {
 	@Command((command) =>
 		command
 			.setAliases('s')
+			.setCategory('audio')
 			.setDescription(LanguageKeys.Commands.Audio.Shuffle.Description)
 			.setDetailedDescription(LanguageKeys.Commands.Audio.Shuffle.DetailedDescription)
 	)

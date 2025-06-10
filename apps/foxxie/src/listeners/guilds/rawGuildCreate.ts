@@ -14,24 +14,32 @@ export class UserListener extends Listener {
 	}
 
 	async #fetchCases(guildId: string) {
-		const moderation = getModeration(guildId);
-		const entries = [...(await moderation.fetch()).values()];
+		try {
+			const moderation = getModeration(guildId);
+			const entries = [...(await moderation.fetch()).values()];
 
-		const entriesUserIds = [...new Set(entries.map((e) => e.userId))];
-		await Promise.all(
-			entriesUserIds.map((id) => (this.container.client.users.cache.has(id) ? id : floatPromise(this.container.client.users.fetch(id))))
-		);
+			const entriesUserIds = [...new Set(entries.map((e) => e.userId))];
+			await Promise.all(
+				entriesUserIds.map((id) => (this.container.client.users.cache.has(id) ? id : floatPromise(this.container.client.users.fetch(id))))
+			);
+		} catch (err) {
+			this.container.logger.error(`Error Fetching Moderation Cases for: ${guildId}`, err);
+		}
 	}
 
 	async #fetchInvites(guildId: string): Promise<void> {
-		const cached = this.container.client.guilds.cache.get(guildId);
-		if (!cached) {
-			await sleep(seconds(3));
-			return this.#fetchInvites(guildId);
-		}
+		try {
+			const cached = this.container.client.guilds.cache.get(guildId);
+			if (!cached) {
+				await sleep(seconds(3));
+				return this.#fetchInvites(guildId);
+			}
 
-		const invites = await resolveToNull(cached.invites.fetch());
-		if (!invites) return;
-		this.container.client.invites.usesCache.set(guildId, new Collection(invites.map((invite) => [invite.code, invite.uses])));
+			const invites = await resolveToNull(cached.invites.fetch());
+			if (!invites) return;
+			this.container.client.invites.usesCache.set(guildId, new Collection(invites.map((invite) => [invite.code, invite.uses])));
+		} catch (err) {
+			this.container.logger.error(`Error Fetching Invites for: ${guildId}`, err);
+		}
 	}
 }

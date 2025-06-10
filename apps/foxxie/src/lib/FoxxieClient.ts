@@ -3,7 +3,7 @@ import { container, SapphireClient } from '@sapphire/framework';
 import { getRootData } from '@sapphire/pieces';
 import { InternationalizationContext } from '@sapphire/plugin-i18next';
 import { envParseBoolean, envParseInteger } from '@skyra/env-utilities';
-import { Audio, FoxxieQueue } from '#Foxxie/Audio';
+import { FoxxieQueue } from '#Foxxie/Audio';
 import { EventStore, TaskStore, TextCommandStore } from '#Foxxie/Core';
 import { Logger } from '#Foxxie/Logger';
 import { readSettings, SerializerStore } from '#lib/database';
@@ -71,7 +71,8 @@ export default class FoxxieClient extends SapphireClient {
 				})
 			: null;
 
-		Audio.Load(clientOptions);
+		/* Don't Load Audio Mod rn */
+		// Audio.Load(clientOptions);
 		Logger.Load();
 	}
 

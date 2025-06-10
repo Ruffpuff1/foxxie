@@ -10,7 +10,7 @@ services:
     env_file:
       - ./apps/foxxie/.env.foxxie
     depends_on:
-      - lavalink
+      # - lavalink
       - redis
     ports:
       - '8282:8282'
@@ -18,14 +18,14 @@ services:
     restart: always
     tty: true
 
-  lavalink:
-    container_name: lavalink
-    depends_on:
-      - redis
-    image: 'skyrabot/lavalink:latest'
-    ports:
-      - '2333:2333'
-    restart: always
+  # lavalink:
+  #   container_name: lavalink
+  #   depends_on:
+  #     - redis
+  #   image: 'skyrabot/lavalink:latest'
+  #   ports:
+  #     - '2333:2333'
+  #   restart: always
 
   redis:
     command: 'redis-server --bind redis --port 8287 --requirepass redis'
