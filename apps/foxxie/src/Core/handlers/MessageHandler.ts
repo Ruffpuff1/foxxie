@@ -48,10 +48,6 @@ export class MessageHandler {
 			return MessageHandler.System(message as GuildMessage);
 		}
 
-		if (message.webhookId) {
-			return;
-		}
-
 		if (message.author.bot) {
 			await MessageHandler.Bot(message as GuildMessage);
 		} else {
