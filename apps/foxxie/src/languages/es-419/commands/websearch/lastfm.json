@@ -99,8 +99,8 @@
     "optionsUserFMDescription": "The user to show the plays for, defaults to you if logged in.",
     "optionsUserFMName": "user",
     "updateIndexDescription": "### {{LOADING}} Fetching your Last.fm playcounts...\nThe following playcount caches are being rebuilt: {{description}}",
-    "updateIndexStarted": "{{LOADING}} An advanced update has already been started for you! Please wait a few minutes before starting a new one.",
-    "updateIndexFrequent": "{{LOADING}} You can't do full updates too often. These are only really meant to be used when your Last.fm history has been adjusted.",
+    "updateIndexStarted": "{{ERROR}} An advanced update has already been started for you! Please wait a few minutes before starting a new one.",
+    "updateIndexFrequent": "{{ERROR}} You can't do full updates too often. These are only really meant to be used when your Last.fm history has been adjusted.",
     "updateLastScrobble": "-# *Your last scrobble was {{time, duration}}*",
     "updateLoading": "{{LOADING}} Just a second, fetching your latest scrobbles...",
     "updateNoListeningHistory": [
