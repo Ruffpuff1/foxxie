@@ -20,7 +20,7 @@ export async function createMember(userId: string, guildId: string, data: Partia
 }
 
 export async function ensureMember(userId: string, guildId: string): Promise<Member> {
-	return (await acquireMember(userId, guildId)) ?? { guildId, messageCount: 0, userId };
+	return (await acquireMember(userId, guildId)) ?? { guildId, level: 0, messageCount: 0, points: 0, userId };
 }
 
 export async function updateMember(userId: string, guildId: string, data: Partial<Member> = {}) {

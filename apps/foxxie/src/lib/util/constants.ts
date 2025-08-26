@@ -1,4 +1,7 @@
+import { join } from 'path';
+
 export const rootFolder = process.cwd();
+export const assetsFolder = join(rootFolder, 'assets');
 
 export const enum BrandingColors {
 	Primary = 0xf16a6a,

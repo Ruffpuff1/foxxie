@@ -9,7 +9,7 @@ import { UtilityService } from '#lib/Container/Utility/UtilityService';
 import { WorkerService } from '#lib/Container/Workers/WorkerService';
 import { HighlightData } from '#lib/database/Models/highlight';
 import { SerializerStore } from '#lib/database/settings/structures/SerializerStore';
-import { PermissionsNode, ReadonlyGuildData, StickyRole, Tag } from '#lib/database/settings/types';
+import { LevelingRole, PermissionsNode, ReadonlyGuildData, StickyRole, Tag } from '#lib/database/settings/types';
 import { ModerationEntry } from '#lib/moderation';
 import { PrismaDatabase } from '#lib/Setup/prisma';
 import { FoxxieCommand } from '#lib/structures';
@@ -39,6 +39,7 @@ import {
 declare global {
 	namespace PrismaJson {
 		export type HighlightEntries = HighlightData[];
+		export type LevelingRolesEntries = LevelingRole[];
 		export type PermissionNodeEntries = PermissionsNode[];
 		export type RolesPersistEntries = StickyRole[];
 		export type TagEntries = Tag[];

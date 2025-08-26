@@ -29,7 +29,8 @@ export class InfoCommand extends FoxxieSubcommand {
 	@RequiresClientPermissions(PermissionFlagsBits.EmbedLinks)
 	@RequiresMemberPermissions(PermissionFlagsBits.EmbedLinks)
 	public static async MessageRunSnowflake(...[message, args]: FoxxieSubcommand.MessageRunArgs) {
-		return buildAndSendResponse(message, () => ResponseBuilder.Info(args));
+		const parameter = await args.pick('string').catch(() => null);
+		return buildAndSendResponse(message, () => ResponseBuilder.Info(parameter, args));
 	}
 
 	@MessageCommand(InfoCommand.SubcommandKeys.User, false, ['u'])

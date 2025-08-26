@@ -5,6 +5,7 @@ export * from '#utils/resolvers/Guild';
 export * from '#utils/resolvers/LastFMUser';
 export * from '#utils/resolvers/Member';
 export * from '#utils/resolvers/Message';
+export * from '#utils/resolvers/Role';
 export * from '#utils/resolvers/Snowflake';
 export * from '#utils/resolvers/String';
 export * from '#utils/resolvers/TimeSpan';

@@ -2,13 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator json {
-  provider = "prisma-json-types-generator"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+generator json {
+  provider = "prisma-json-types-generator"
 }
 
 model schedule {
@@ -116,6 +116,9 @@ model guilds {
   eventsKick                           Boolean  @default(true) @map("events.kick")
   eventsMuteAdd                        Boolean  @default(true) @map("events.mute-add")
   eventsMuteRemove                     Boolean  @default(true) @map("events.mute-remove")
+  levelingMessagesEnabled Boolean @default(true) @map("leveling.messages.enabled")
+  /// [LevelingRolesEntries]
+  levelingRoles Json    @default("[]") @map("leveling.roles")
   messageCount                         Int      @default(0) @map("message-count")
   messagesIgnoreChannels               String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(19)[]")) @map("messages.ignore-channels") @db.VarChar(19)
   messagesModerationDm                 Boolean  @default(false) @map("messages.moderation-dm")
@@ -415,6 +418,8 @@ model Member {
   userId       String      @db.VarChar(19)
   guildId      String      @db.VarChar(19)
   messageCount Int         @default(0)
+  level        Int         @default(0)
+  points       Int         @default(0)
   notes        MemberNote?
 
   @@id([userId, guildId])

@@ -54,6 +54,8 @@ export function getDefaultGuildSettings() {
 		eventsMuteRemove: true,
 		highlights: [],
 		language: SupportedLanguages.EnglishUnitedStates,
+		levelingMessagesEnabled: true,
+		levelingRoles: [],
 		messageCount: 0,
 		messagesAutoDeleteIgnoredAll: false,
 		messagesAutoDeleteIgnoredChannels: [],

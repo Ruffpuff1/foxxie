@@ -20,6 +20,7 @@ export const enum FoxxieEvents {
 	 * Listener that attempts to scrobble the currently playing song for a logged in Last.Fm member.
 	 */
 	LastFMScrobbleAudioTrackForMember = 'lastFMScrobbleAudioTrackForMember',
+	LevelingMessage = 'levelingMessage',
 	ListenerError = 'listenerError',
 	MentionPrefixOnly = 'mentionPrefixOnly',
 	MessageCommandDenied = 'messageCommandDenied',

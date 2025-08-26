@@ -10,9 +10,11 @@ import { readSettings, SerializerStore } from '#lib/database';
 import { InviteManager, RedisManager } from '#lib/structures';
 import { clientOptions, webhookError } from '#root/config';
 import { ScheduleManager } from '#root/Core/structures/schedule/index';
+import { Social } from '#root/Social/index';
 import { isGuildMessage } from '#utils/common';
 import { GuildMemberFetchQueue } from '#utils/external/GuildMemberFetchQueue';
 import { LongLivingReactionCollector } from '#utils/external/LongLivingReactionCollector';
+import { Leaderboard } from '#utils/Leaderboard';
 import { magentaBright } from 'colorette';
 import { Message, WebhookClient } from 'discord.js';
 import { join } from 'node:path';
@@ -34,6 +36,9 @@ export default class FoxxieClient extends SapphireClient {
 
 	@Enumerable(false)
 	public override invites = new InviteManager();
+
+	@Enumerable(false)
+	public leaderboard = Leaderboard;
 
 	public lfm = new DataSourceFactory();
 
@@ -73,6 +78,7 @@ export default class FoxxieClient extends SapphireClient {
 
 		/* Don't Load Audio Mod rn */
 		// Audio.Load(clientOptions);
+		Social.Load();
 		Logger.Load();
 	}
 

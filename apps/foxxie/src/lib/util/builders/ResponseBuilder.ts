@@ -27,7 +27,7 @@ import {
 	sendMessage,
 	UserUtil
 } from '#utils/functions';
-import { resolveGuildChannel, resolveMessage, resolveSnowflake, resolveSnowflakeEntity, resolveUsername } from '#utils/resolvers';
+import { resolveGuildChannel, resolveGuildRole, resolveMessage, resolveSnowflake, resolveSnowflakeEntity, resolveUsername } from '#utils/resolvers';
 import { fetchCommit, getContent, getServerDetails } from '#utils/util';
 import {
 	APIInteractionGuildMember,
@@ -48,6 +48,7 @@ import {
 } from 'discord.js';
 import { version as discordVersion } from 'discord.js';
 
+import { RoleBuilder } from './RoleBuilder.js';
 import { UserBuilder } from './UserBuilder.js';
 
 export class ResponseBuilder {
@@ -249,8 +250,7 @@ export class ResponseBuilder {
 		return display.setIndex(foundSubcommand === -1 ? 0 : foundSubcommand + 1).run(loading, message.author);
 	}
 
-	public static async Info(args: FoxxieCommand.Args) {
-		const first = args.finished ? null : await args.pick('string');
+	public static async Info(first: null | string, args: FoxxieCommand.Args) {
 		const message = args.message as GuildMessage;
 
 		if (isNullish(first)) {
@@ -281,6 +281,11 @@ export class ResponseBuilder {
 		if (first === message.guildId) {
 			await sendLoadingMessage(message);
 			return ResponseBuilder.InfoGuild(message.guild, args.t, message.member);
+		}
+
+		const role = await resolveGuildRole(first, message.guild);
+		if (role.isOk()) {
+			return RoleBuilder.RoleInfo(role.unwrap(), message);
 		}
 
 		const channel = await resolveGuildChannel(first);

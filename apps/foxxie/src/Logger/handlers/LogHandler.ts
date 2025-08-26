@@ -167,6 +167,15 @@ export class LogHandler {
 			case AuditLogEvent.RoleUpdate: {
 				return console.log('Not implemented yet: AuditLogEvent.RoleUpdate case', data);
 			}
+			case AuditLogEvent.SoundboardSoundCreate: {
+				return console.log('Not implemented yet: AuditLogEvent.SoundboardSoundCreate case', data);
+			}
+			case AuditLogEvent.SoundboardSoundDelete: {
+				return console.log('Not implemented yet: AuditLogEvent.SoundboardSoundDelete case', data);
+			}
+			case AuditLogEvent.SoundboardSoundUpdate: {
+				return console.log('Not implemented yet: AuditLogEvent.SoundboardSoundUpdate case', data);
+			}
 			case AuditLogEvent.StageInstanceCreate: {
 				return console.log('Not implemented yet: AuditLogEvent.StageInstanceCreate case', data);
 			}

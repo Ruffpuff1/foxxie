@@ -7,7 +7,16 @@ import { APIApplicationCommandOptionChoice, Collection } from 'discord.js';
 
 export type SchemaDataKey = Exclude<
 	GuildDataKey,
-	'disabledCommandsChannels' | 'highlights' | 'id' | 'messageCount' | 'reactionRoles' | 'rolesPersist' | 'starboardEmojis' | 'tags' | 'words'
+	| 'disabledCommandsChannels'
+	| 'highlights'
+	| 'id'
+	| 'levelingRoles'
+	| 'messageCount'
+	| 'reactionRoles'
+	| 'rolesPersist'
+	| 'starboardEmojis'
+	| 'tags'
+	| 'words'
 >;
 
 const configurableKeys = new Collection<SchemaDataKey, SchemaKey>();
@@ -181,7 +190,6 @@ export function getConfiguration() {
 			name: 'modules.automation.disboard.embed',
 			type: 'string'
 		},
-
 		disboardMessage: {
 			maximum: 1500,
 			minimum: 1,
@@ -194,6 +202,7 @@ export function getConfiguration() {
 			name: 'modules.moderation.events.ban-add',
 			type: 'boolean'
 		},
+
 		eventsBanRemove: {
 			description: LanguageKeys.Settings.EventsBanRemove,
 			name: 'modules.moderation.events.ban-remove',
@@ -214,11 +223,16 @@ export function getConfiguration() {
 			name: 'modules.moderation.events.mute-remove',
 			type: 'boolean'
 		},
-
 		language: {
 			default: 'en-US',
 			description: LanguageKeys.Settings.Language,
 			type: 'language'
+		},
+
+		levelingMessagesEnabled: {
+			array: false,
+			name: 'modules.leveling.messages.enabled',
+			type: 'boolean'
 		},
 		messagesAutoDeleteIgnoredAll: {
 			default: false,

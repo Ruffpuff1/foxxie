@@ -200,6 +200,13 @@ export function validateChannelAccess(channel: GuildChannel | ThreadChannel, use
 	return (channel.guild !== null && channel.permissionsFor(user)?.has(PermissionFlagsBits.ViewChannel)) || false;
 }
 
+export function xpNeeded(level: number) {
+	// eslint-disable-next-line no-mixed-operators
+	const f = (x: number) =>
+		100 + Math.min(Math.max(0, 2 * (10 * ((x - 5) / 10 - Math.floor(1 / 2 + (x - 5) / 10)) ** 2 + 10 * Math.floor(x / 10) + x - 2.5)), 2000);
+	return Math.ceil(f(level));
+}
+
 export const VIDEO_EXTENSION = /\.(mp4|mov)/i;
 
 export const IMAGE_EXTENSION = /\.(bmp|jpe?g|png|gif|webp)/i;

@@ -50,7 +50,7 @@
     "@foxxiebot/audio": "^0.0.2",
     "@foxxiebot/sanitize": "0.0.0-dev",
     "@lionralfs/discogs-client": "^4.1.2",
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "6.11.0",
     "@ruffpuff/utilities": "^4.0.0",
     "@sapphire/async-queue": "^1.5.5",
     "@sapphire/bitfield": "^1.2.4",
@@ -75,6 +75,7 @@
     "@sentry/node": "^8.47.0",
     "@skyra/env-utilities": "^1.3.0",
     "binarytf": "^2.1.3",
+    "canvas-constructor": "^7.0.2",
     "colorette": "^2.0.20",
     "confusables": "^1.1.1",
     "discord.js": "^14.17.2",
@@ -86,6 +87,7 @@
     "mongodb": "^6.12.0",
     "prism": "^4.1.2",
     "prisma-json-types-generator": "^3.2.2",
+    "skia-canvas": "^2.0.2",
     "typeorm": "^0.3.20",
     "undici": "5.25.3"
   },
@@ -111,7 +113,7 @@
     "eslint-plugin-perfectionist": "^4.6.0",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.4.2",
-    "prisma": "6.1.0",
+    "prisma": "6.11.0",
     "ts-prune": "^0.10.3",
     "tsc-watch": "6.3.0",
     "typescript": "5.5.4"

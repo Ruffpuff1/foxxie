@@ -170,7 +170,7 @@ export class MessageHandler {
 	}
 
 	private static DeleteRemoveResponsesCanBeCustomized(message: Message): message is GuildMessage {
-		return message.guild !== null;
+		return !isNullish(message.guild);
 	}
 
 	private static async DeleteRemoveResponsesShouldBeIgnored(message: Message): Promise<boolean> {
@@ -364,7 +364,7 @@ export class MessageHandler {
 
 	@ProductionOnly()
 	private static Stats(...[guildId, member]: EventArgs<FoxxieEvents.MessageCreateStats>) {
-		// if the member hasn't been in the server for five mintutes disregard the messages.
+		// if the member hasn't been in the server for five minutes disregard the messages.
 		if (Date.now() - member.joinedTimestamp! < minutes(5)) return;
 
 		return Promise.all([MessageHandler.StatsGuild(guildId), MessageHandler.StatsMember(member, guildId)]);
@@ -390,7 +390,7 @@ export class MessageHandler {
 
 	@TypingEnabled()
 	private static async Typing(message: Message, command: MessageCommand, payload: MessageCommandRunPayload) {
-		if (!command.typing || isStageChannel(message.channel)) {
+		if (!command.typing || !message.channel || isStageChannel(message.channel)) {
 			return;
 		}
 
@@ -424,7 +424,10 @@ export class MessageHandler {
 		return MessageHandler.PreParse(message as GuildMessage);
 	}
 
-	private static User(...[message]: EventArgs<FoxxieEvents.UserMessage>) {
+	private static async User(...[message]: EventArgs<FoxxieEvents.UserMessage>) {
+		// handle leveling
+		container.client.emit(FoxxieEvents.LevelingMessage, message);
+		// parse for commands
 		return MessageHandler.PreParse(message);
 	}
 

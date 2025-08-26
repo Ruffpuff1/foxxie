@@ -16,6 +16,11 @@ export type { guilds as GuildData, moderation as ModerationData } from '@prisma/
 export type GuildDataValue = GuildData[GuildDataKey];
 
 export type GuildSettingsOfType<T> = PickByValue<GuildData, T>;
+export interface LevelingRole {
+	id: Snowflake;
+	level: number;
+}
+
 export interface PermissionsNode {
 	allow: readonly Snowflake[];
 	deny: readonly Snowflake[];
