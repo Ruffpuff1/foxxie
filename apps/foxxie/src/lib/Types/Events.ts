@@ -16,6 +16,7 @@ export const enum FoxxieEvents {
 	GuildMemberUpdateRolesModeration = 'guildMemberUpdateRolesModeration',
 	GuildMemberUpdateRolesNotify = 'guildMemberUpdateRolesNotify',
 	GuildMemberUpdateRolesStickyRoles = 'guildMemberUpdateRolesStickyRoles',
+	GuildRoleUpdate = 'roleUpdate',
 	/**
 	 * Listener that attempts to scrobble the currently playing song for a logged in Last.Fm member.
 	 */

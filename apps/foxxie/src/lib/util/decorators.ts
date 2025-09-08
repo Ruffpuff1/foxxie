@@ -257,51 +257,6 @@ export const RegisterTask = (task: ((builder: TaskBuilder) => TaskBuilder) | Sch
 	});
 };
 
-export const RegisterCommand = (
-	options: ((builder: TextCommandBuilder) => TextCommandBuilder) | FoxxieSubcommand.Options,
-	builder?:
-		| ((
-				builder: SlashCommandBuilder
-		  ) =>
-				| Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>
-				| SlashCommandBuilder
-				| SlashCommandOptionsOnlyBuilder
-				| SlashCommandSubcommandsOnlyBuilder)
-		| SlashCommandBuilder,
-	idHints: string[] = []
-) => {
-	return createClassDecorator((command: Ctor) => {
-		return createProxy(command, {
-			construct: (ctor, [context, base = {}]) => {
-				if (builder) {
-					const guildOnly = guildOnlyMap.get(ctor.name);
-
-					const builderData = (typeof builder === 'function' ? builder(new SlashCommandBuilder()) : builder).toJSON();
-					const combined = {
-						...builderData
-					};
-
-					if (guildOnly) combined.contexts = [...(combined.contexts || []), InteractionContextType.Guild];
-
-					const registry = container.applicationCommandRegistries.acquire(base.name);
-
-					registry.registerChatInputCommand(combined as ChatInputApplicationCommandData, {
-						behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-						idHints
-					});
-				}
-
-				const resolvedOptions = typeof options === 'function' ? options(new TextCommandBuilder()).toJSON() : options;
-
-				return new ctor(context, {
-					...base,
-					...resolvedOptions
-				});
-			}
-		});
-	});
-};
-
 export const RegisterSubcommand = (
 	options: ((builder: TextCommandBuilder) => TextCommandBuilder) | FoxxieSubcommand.Options,
 	builder?:
@@ -384,7 +339,7 @@ export function RegisterChatInputCommand(
 		return createProxy(command, {
 			construct: (ctor, [context, base = {}]) => {
 				const registry = container.applicationCommandRegistries.acquire(base.name);
-
+				console.log(base);
 				registry.registerChatInputCommand(builder, {
 					behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
 					idHints

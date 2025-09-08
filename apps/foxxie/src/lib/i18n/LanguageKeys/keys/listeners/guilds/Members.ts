@@ -1,10 +1,12 @@
 import { FT, T } from '#lib/types';
+import { User } from 'discord.js';
 
 export const Add = T('listeners/guilds/members:add');
 export const AddCreated = FT<{ time: number }>('listeners/guilds/members:addCreated');
 export const AddInvite = FT<{ invite: string }>('listeners/guilds/members:addInvite');
 export const AddMuted = T('listeners/guilds/members:addMuted');
 export const AddPosition = FT<{ position: number }>('listeners/guilds/members:addPosition');
+export const Moderator = FT<{ user: User }>('listeners/guilds/members:moderator');
 export const Remove = T('listeners/guilds/members:remove');
 export const RemoveBanned = T('listeners/guilds/members:removeBanned');
 export const RemoveJoined = FT<{ time: number }>('listeners/guilds/members:removeJoined');

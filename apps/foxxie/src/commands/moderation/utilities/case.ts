@@ -111,6 +111,7 @@ const OverviewColors = [0x80f31f, 0xa5de0b, 0xc7c101, 0xe39e03, 0xf6780f, 0xfe53
 				applyLocalizedBuilder(subcommand, Root.Edit) //
 					.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsCase).setMinValue(1).setRequired(true))
 					.addStringOption((option) => applyLocalizedBuilder(option, Root.OptionsReason).setMaxLength(200))
+					.addUserOption((option) => option.setName('moderator').setDescription('The moderator for the case').setRequired(false))
 					.addStringOption((option) => applyLocalizedBuilder(option, Root.OptionsDuration).setMaxLength(50))
 					.addIntegerOption((option) => applyLocalizedBuilder(option, Root.OptionsRefrence).setMinValue(1).setRequired(false))
 			),

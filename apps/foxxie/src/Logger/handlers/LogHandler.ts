@@ -165,7 +165,7 @@ export class LogHandler {
 				return console.log('Not implemented yet: AuditLogEvent.RoleDelete case', data);
 			}
 			case AuditLogEvent.RoleUpdate: {
-				return console.log('Not implemented yet: AuditLogEvent.RoleUpdate case', data);
+				return getLogger(guild).roleUpdate.setFromAuditLogs(data.target_id!, { reason: data.reason, userId: data.user_id! });
 			}
 			case AuditLogEvent.SoundboardSoundCreate: {
 				return console.log('Not implemented yet: AuditLogEvent.SoundboardSoundCreate case', data);

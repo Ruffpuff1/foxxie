@@ -10,6 +10,7 @@ RUN yarn install
 COPY scripts/ scripts/
 COPY src/ src/
 COPY prisma/ prisma/
+COPY assets/ assets/
 
 RUN yarn run prisma generate \ && yarn run build
 

@@ -124,6 +124,7 @@ export namespace FoxxieCommand {
 
 	export type ChatInputCommandInteraction = { guild: Guild; guildId: string } & Command.ChatInputCommandInteraction;
 	export type ChatInputContext = ChatInputCommandContext;
+	export type ChatInputRunArgs = [interaction: ChatInputCommandInteraction, context: ChatInputCommandContext];
 	export type Context = MessageCommandContext;
 	export type LoaderContext = Command.LoaderContext;
 	export type MessageRunArgs = [message: GuildMessage, args: Args, context: MessageCommandContext];

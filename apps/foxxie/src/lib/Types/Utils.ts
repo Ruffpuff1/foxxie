@@ -74,12 +74,12 @@ export type LanguageString = 'en-US' | 'es-ES';
 export interface Parameter {
 	parameter: string;
 }
+
 export interface RoleLanguageKeyData {
 	init: string;
 	name: string;
 	reason: string;
 }
-
 export interface SubcommandDescription {
 	command: string;
 	description: string;
@@ -91,11 +91,16 @@ export interface SubcommandOption {
 	description: string;
 	name: string;
 }
+
 export type TypedFT<TArgs, TReturn = string> = { __args__: TArgs; __return__: TReturn } & string;
 export type TypedT<TCustom = string> = { __type__: TCustom } & string;
-
 export interface Value<T = string> {
 	value: T;
+}
+
+export interface Values<T = string> {
+	count: number;
+	values: readonly T[];
 }
 
 export interface Values<T = string> {

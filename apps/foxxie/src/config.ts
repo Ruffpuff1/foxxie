@@ -344,7 +344,7 @@ export const clientOptions: ClientOptions = {
 	allowedMentions: { parse: ['users'] },
 	api: {
 		listenOptions: {
-			port: 8282
+			port: 8283
 		},
 		origin: 'http://127.0.0.1:3000'
 	},

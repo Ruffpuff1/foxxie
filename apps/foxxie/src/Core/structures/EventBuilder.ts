@@ -1,6 +1,6 @@
 import { container } from '@sapphire/pieces';
 import { FoxxieEvents } from '#lib/types';
-import { Client, GatewayDispatchEvents } from 'discord.js';
+import { Client, Events, GatewayDispatchEvents } from 'discord.js';
 import EventEmitter from 'node:events';
 
 import { Event } from './Event.js';
@@ -12,7 +12,7 @@ export class EventBuilder {
 
 	private event: FoxxieEvents | GatewayDispatchEvents | string | undefined;
 
-	private name: FoxxieEvents | undefined;
+	private name: Events | FoxxieEvents | undefined;
 
 	public setEmitter(emitter: EventEmitter | keyof Client<boolean>) {
 		this.emitter = emitter;
@@ -29,7 +29,7 @@ export class EventBuilder {
 		return this;
 	}
 
-	public setName(name: FoxxieEvents) {
+	public setName(name: Events | FoxxieEvents) {
 		this.name = name;
 		return this;
 	}

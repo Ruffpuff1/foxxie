@@ -5,6 +5,7 @@ import {
 	DeleteLoggerTypeManager,
 	MuteLoggerTypeManager,
 	PruneLoggerTypeManager,
+	RoleUpdateLoggerTypeManager,
 	TimeoutLoggerTypeManager,
 	UnmuteLoggerTypeManager
 } from '#lib/moderation';
@@ -53,6 +54,7 @@ export class LoggerManager {
 	public readonly guild: Guild;
 	public readonly mute = new MuteLoggerTypeManager(this);
 	public readonly prune = new PruneLoggerTypeManager(this);
+	public readonly roleUpdate = new RoleUpdateLoggerTypeManager(this);
 	public readonly timeout = new TimeoutLoggerTypeManager(this);
 	public readonly unmute = new UnmuteLoggerTypeManager(this);
 

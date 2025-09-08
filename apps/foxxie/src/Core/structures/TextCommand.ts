@@ -1,11 +1,11 @@
-import { MessageCommand, MessageCommandContext, PreconditionContainerArray } from '@sapphire/framework';
+import { ChatInputCommand, MessageCommand, MessageCommandContext, PreconditionContainerArray } from '@sapphire/framework';
 import { IUnorderedStrategy, Lexer } from '@sapphire/lexure';
 import { AliasPiece } from '@sapphire/pieces';
 import { fetchT } from '@sapphire/plugin-i18next';
 import { isNullish } from '@sapphire/utilities';
 import { FoxxieArgs } from '#lib/structures';
 import { GuildMessage, PermissionLevels } from '#lib/types';
-import { Awaitable, ChannelType, Message } from 'discord.js';
+import { Awaitable, ChannelType, ChatInputCommandInteraction, Message } from 'discord.js';
 
 import {
 	CommandJSON,
@@ -17,7 +17,7 @@ import {
 	TextCommandOptions
 } from '../types/TextCommand.js';
 import { FlagUnorderedStrategy } from '../utils/strategies/FlagUnorderedStrategy.js';
-import { decoratedCommandOptions, decoratedRunMethods } from './TextCommandDecorators.js';
+import { decoratedChatInputRunMethods, decoratedCommandOptions, decoratedRunMethods } from './TextCommandDecorators.js';
 
 const ChannelTypes = Object.values(ChannelType).filter((type) => typeof type === 'number') as readonly ChannelType[];
 const GuildChannelTypes = ChannelTypes.filter((type) => type !== ChannelType.DM && type !== ChannelType.GroupDM) as readonly ChannelType[];
@@ -149,7 +149,17 @@ export class TextCommand<PreParseReturn = FoxxieArgs, Options extends TextComman
 
 		const foundMessageRun = decoratedRunMethods.get(this.name);
 		if (foundMessageRun) this.messageRun = foundMessageRun;
+
+		const foundChatInputRun = decoratedChatInputRunMethods.get(this.name);
+		if (foundChatInputRun) this.chatInputRun = foundChatInputRun;
 	}
+
+	/**
+	 * Executes the application command's logic.
+	 * @param interaction The interaction that triggered the command.
+	 * @param context The chat input command run context.
+	 */
+	public chatInputRun?(interaction: ChatInputCommandInteraction, context: ChatInputCommand.RunContext): Awaitable<unknown>;
 
 	/**
 	 * The message pre-parse method. This method can be overridden by plugins to define their own argument parser.

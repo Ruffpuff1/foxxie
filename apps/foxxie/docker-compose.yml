@@ -5,10 +5,10 @@ services:
 
   foxxie:
     build:
-      context: ./apps/foxxie
+      context: .
     container_name: foxxie
     env_file:
-      - ./apps/foxxie/.env.foxxie
+      - .env.foxxie
     depends_on:
       # - lavalink
       - redis

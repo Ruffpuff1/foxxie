@@ -50,3 +50,4 @@ export const UseExternalSounds = T('guilds/permissions:useExternalSounds');
 export const SendVoiceMessages = T('guilds/permissions:sendVoiceMessages');
 export const SendPolls = T('guilds/permissions:sendPolls');
 export const UseExternalApps = T('guilds/permissions:useExternalApps');
+export const PinMessages = T('guilds/permissions:pinMessages');

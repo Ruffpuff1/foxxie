@@ -309,7 +309,7 @@ export namespace ModerationEntry {
 	export type ExtraData<Type extends TypeVariation = TypeVariation> = ExtraDataTypes[Type];
 
 	export type UpdateData<Type extends TypeVariation = TypeVariation> = Partial<
-		Omit<Data<Type>, 'channelId' | 'extraData' | 'guild' | 'id' | 'moderator' | 'type' | 'user'>
+		Omit<Data<Type>, 'channelId' | 'extraData' | 'guild' | 'id' | 'type' | 'user'>
 	>;
 }
 

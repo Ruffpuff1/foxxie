@@ -1,3 +1,4 @@
+export * from './chat-input-commands/index.js';
 export * from './handlers/index.js';
 export * from './message-commands/index.js';
 export * from './structures/index.js';

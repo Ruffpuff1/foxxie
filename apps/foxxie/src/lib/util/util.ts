@@ -155,6 +155,10 @@ export function idToTimestamp(id: number | string): null | number {
 	return Number(SnowflakeUtil.deconstruct(cast<string>(id)).timestamp);
 }
 
+export function notNull<T>(array: (null | T)[]): T[] {
+	return array.filter((item) => item !== null) as T[];
+}
+
 export function setMultipleEmbedImages(embed: EmbedBuilder, urls: string[]) {
 	const embeds = [embed];
 	let count = 0;
