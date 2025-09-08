@@ -4,6 +4,7 @@
 	"addInvite": "**Invite**: {{invite}}",
 	"addMuted": "Muted Member joined",
 	"addPosition": "**Posición**: {{position, ordinal}}",
+	"moderator": "**Moderator**: {{user.username, code}} ({{user.id}})",
 	"remove": "Miembro dejado",
 	"removeBanned": "Member Banned",
 	"removeJoined": "**Joined At**: {{time, fulldate}} ({{time, duration}})",
