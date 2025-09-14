@@ -1930,6 +1930,11 @@
     "@sapphire/stopwatch" "^1.5.3"
     "@sapphire/utilities" "^3.18.0"
 
+"@sapphire/iana-mime-types@*":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/iana-mime-types/-/iana-mime-types-1.7.0.tgz#1a203f544cc5e16fde9ac4f30fcf514e282c3b51"
+  integrity sha512-cCBSBAvFQHyYldBJWKs8Kdcw6rkhZMWfhh7CvqE9lHYCof5Hkz38o1JtrX+mbdqDjDBKw97Z752F95EGWec0qA==
+
 "@sapphire/iterator-utilities@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@sapphire/iterator-utilities/-/iterator-utilities-2.0.1.tgz#0a60e93f9e4e55d5f74f43bac7d85e14d14918a9"
@@ -1956,16 +1961,17 @@
     "@sapphire/utilities" "^3.16.2"
     tslib "^2.6.3"
 
-"@sapphire/plugin-api@^7.0.3":
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/@sapphire/plugin-api/-/plugin-api-7.0.3.tgz#3e5bd2ae77ceb589e8b566c390c67dbee42b06a1"
-  integrity sha512-1BgQ2ewR9f4Gq060K8hcy/kSvrUTw8Txnp4bviBA+G/CHdBrFCDkZA00JnxZAb8Q9OWfWjzjKaF7J7Nzz7z0rA==
+"@sapphire/plugin-api@^8.3.1":
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-api/-/plugin-api-8.3.1.tgz#fcd6626ca827db9ff8b9cceb77160dced11e047b"
+  integrity sha512-hDOT/o6UZYhHePFQ9yVNtXqwuW81sxObxEp47w0plqTgRPaAP0mqygG5+DRIaY36WRrSD8YGeLJWxA40rifLmQ==
   dependencies:
-    "@types/ws" "^8.5.13"
+    "@sapphire/iana-mime-types" "*"
+    "@types/ws" "^8.18.1"
     "@vladfrangu/async_event_emitter" "2.4.6"
     cookie-es "^1.2.2"
-    tldts "^6.1.58"
-    undici "^6.20.1"
+    tldts "^7.0.9"
+    undici "^7.11.0"
 
 "@sapphire/plugin-editable-commands@^4.0.3":
   version "4.0.3"
@@ -2478,10 +2484,10 @@
   dependencies:
     "@types/webidl-conversions" "*"
 
-"@types/ws@^8.5.10", "@types/ws@^8.5.12", "@types/ws@^8.5.13", "@types/ws@^8.5.3":
-  version "8.5.13"
-  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.5.13.tgz#6414c280875e2691d0d1e080b05addbf5cb91e20"
-  integrity sha512-osM/gWBTPKgHV8XkTunnegTRIsvF6owmf5w+JtAfOw472dptdm0dlGv4xCt6GwQRcC2XVOvvRE/0bAoQcL2QkA==
+"@types/ws@^8.18.1", "@types/ws@^8.5.10", "@types/ws@^8.5.12", "@types/ws@^8.5.3":
+  version "8.18.1"
+  resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.18.1.tgz#48464e4bf2ddfd17db13d845467f6070ffea4aa9"
+  integrity sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==
   dependencies:
     "@types/node" "*"
 
@@ -4867,15 +4873,7 @@ for-each@^0.3.3:
   dependencies:
     is-callable "^1.1.3"
 
-foreground-child@^3.1.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/foreground-child/-/foreground-child-3.3.0.tgz#0ac8644c06e431439f8561db8ecf29a7b5519c77"
-  integrity sha512-Ld2g8rrAyMYFXBhEqMz8ZAHBi4J4uS1i/CxGMDnjyFWddMXLVcDp051DZfu+t7+ab7Wv6SMqpWmyFIj5UbfFvg==
-  dependencies:
-    cross-spawn "^7.0.0"
-    signal-exit "^4.0.1"
-
-foreground-child@^3.3.1:
+foreground-child@^3.1.0, foreground-child@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/foreground-child/-/foreground-child-3.3.1.tgz#32e8e9ed1b68a3497befb9ac2b6adf92a638576f"
   integrity sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==
@@ -8023,20 +8021,15 @@ semver@7.3.7:
   dependencies:
     lru-cache "^6.0.0"
 
-semver@7.x, semver@^7.1.1, semver@^7.3.2, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.5.2, semver@^7.5.3, semver@^7.6.0:
-  version "7.6.3"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
-  integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
+semver@7.x, semver@^7.1.1, semver@^7.3.2, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.5.2, semver@^7.5.3, semver@^7.6.0, semver@^7.7.2:
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
+  integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
 
 semver@^6.0.0, semver@^6.3.0, semver@^6.3.1:
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
-
-semver@^7.7.2:
-  version "7.7.2"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
-  integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
 
 set-blocking@^2.0.0:
   version "2.0.0"
@@ -8631,17 +8624,17 @@ tinyglobby@^0.2.9:
     fdir "^6.4.2"
     picomatch "^4.0.2"
 
-tldts-core@^6.1.70:
-  version "6.1.70"
-  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.70.tgz#a954e93237ece2e1705b438600793c86a25f8c00"
-  integrity sha512-RNnIXDB1FD4T9cpQRErEqw6ZpjLlGdMOitdV+0xtbsnwr4YFka1zpc7D4KD+aAn8oSG5JyFrdasZTE04qDE9Yg==
+tldts-core@^7.0.14:
+  version "7.0.14"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-7.0.14.tgz#eb49edf8a39a37a2372ffc22f82d6ac725ace6cd"
+  integrity sha512-viZGNK6+NdluOJWwTO9olaugx0bkKhscIdriQQ+lNNhwitIKvb+SvhbYgnCz6j9p7dX3cJntt4agQAKMXLjJ5g==
 
-tldts@^6.1.58:
-  version "6.1.70"
-  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.70.tgz#b571e5645ab9dc6f289453115d52602b8a384cfe"
-  integrity sha512-/W1YVgYVJd9ZDjey5NXadNh0mJXkiUMUue9Zebd0vpdo1sU+H4zFFTaJ1RKD4N6KFoHfcXy6l+Vu7bh+bdWCzA==
+tldts@^7.0.9:
+  version "7.0.14"
+  resolved "https://registry.yarnpkg.com/tldts/-/tldts-7.0.14.tgz#5dc352e087c12978b7d1d36d8a346496e04dca72"
+  integrity sha512-lMNHE4aSI3LlkMUMicTmAG3tkkitjOQGDTFboPJwAg2kJXKP1ryWEyqujktg5qhrFZOkk5YFzgkxg3jErE+i5w==
   dependencies:
-    tldts-core "^6.1.70"
+    tldts-core "^7.0.14"
 
 tmp@^0.0.33:
   version "0.0.33"
@@ -9067,10 +9060,10 @@ undici@^5.28.2:
   dependencies:
     "@fastify/busboy" "^2.0.0"
 
-undici@^6.20.1:
-  version "6.21.0"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-6.21.0.tgz#4b3d3afaef984e07b48e7620c34ed8a285ed4cd4"
-  integrity sha512-BUgJXc752Kou3oOIuU1i+yZZypyZRqNPW0vqoMPl8VaoalSfeR0D8/t4iAS3yirs79SSMTxTag+ZC86uswv+Cw==
+undici@^7.11.0:
+  version "7.16.0"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-7.16.0.tgz#cb2a1e957726d458b536e3f076bf51f066901c1a"
+  integrity sha512-QEg3HPMll0o3t2ourKwOeUAZ159Kn9mx5pnzHRQO8+Wixmh88YdZRiIwat0iNzNNXn0yoEtXJqFpyW7eM8BV7g==
 
 unidecode@^0.1.8:
   version "0.1.8"
