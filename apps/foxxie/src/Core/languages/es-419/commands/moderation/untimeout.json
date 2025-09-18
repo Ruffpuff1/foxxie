@@ -1,0 +1,23 @@
+{
+	"description": "Remove a timeout from a user",
+	"detailedDescription": {
+		"usages": [
+			"User",
+			"User Reason"
+		],
+		"explainedUsage": [
+			[
+			"User",
+			"The user to remove the timeout from."
+			],
+			[
+			"Reason",
+			"The reason why your're removing the timeout. This will also show in the server's audit logs."
+			]
+		],
+		"examples": [
+			"@Sami",
+			"@Grey Ur good"
+		]
+	}
+}
