@@ -1,0 +1,25 @@
+{
+	"boostMessageDefault": "**{user.name}** just boosted the server, we now have {boost.count} boost!",
+	"boostMessageDefault_other": "**{user.name}** just boosted the server, we now have {boost.count} boosts!",
+	"highlightAttachment": "Message has an attachment. Click **[here]({{url}})** to see it.",
+	"highlightJumpTo": "Click here to jump to the message.",
+	"highlightContentWord": "Your highlight **{{word}}** was sent by **{{author}}** in {{channel}}.",
+	"highlightEmbed": "Message has an embed. Click **[here]({{url}})** to see the message.",
+	"highlightSize": "The message's content was too large. Click **[here]({{url}})** to view it.",
+	"goodbyeDefault": "**{user.username}** left the server :(",
+	"pointsMessages": [
+        "Congrats **{{nick}}**! You just reached level **{{level}}**.",
+        "At long last! **{{nick}}** just reached level **{{level}}**.",
+        "Talking quite a bit **{{nick}}**, you already reached level **{{level}}**.",
+        "Hey **{{nick}}**, just thought I'd let you know you got to level **{{level}}**.",
+        "Doing delightful **{{nick}}**, you just got to level **{{level}}**."
+	],
+	"pointsRoleMessages": [
+        "Finally **{{nick}}**! You just reached level **{{level}}**. Want a reward? Here's {{role}}.",
+        "Sup **{{nick}}**, You just reached level **{{level}}** and earned {{role}}!",
+        "At long last **{{nick}}**, you reached level **{{level}}** here's the role {{role}}.",
+        "Woah **{{nick}}**! Congrats on level **{{level}}**, you got a new role! Here's {{role}}!",
+        "More roles are always better, heres {{role}} for reaching level **{{level}}**"
+	],
+	"welcomeDefault": "{user.mention} just joined the server! Welcome!"
+}
