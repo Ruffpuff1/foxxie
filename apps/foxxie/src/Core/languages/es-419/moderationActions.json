@@ -1,0 +1,6 @@
+{
+    "applyNoReason": "[Action] Applied {{action}}",
+    "applyReason": "[Action] Applied {{action}} | Reason: {{reason}}",
+    "revokeNoReason": "[Action] Revoked {{action}}",
+    "revokeReason": "[Action] Revoked {{action}} | Reason: {{reason}}"
+}
