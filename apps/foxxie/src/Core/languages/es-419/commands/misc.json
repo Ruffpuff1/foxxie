@@ -1,0 +1,52 @@
+{
+	"reminderCreateSuccess": "{{SUCCESS}} Created a task with the Id `[{{id}}]`.",
+	"reminderDefault": "For some secret reason :eyes:",
+	"reminderDeleteNone": "{{ERROR}} I couldn't find any reminders to delete.'",
+	"reminderDeleteSuccess": "{{SUCCESS}} Successfully deleted reminder {{ids, codeand}}.",
+	"reminderDeleteSuccess_other": "{{SUCCESS}} Successfully deleted reminders {{ids, codeand}}.",
+	"reminderDescription": "Schedule and manage reminders.",
+	"reminderDetailedDescription": {
+		"extendedHelp": "Schedule and manage your personal reminders using my task system. By default I'll attempt to send the reminder to your DMs but I'll attempt to fallback to the channel you created the reminder in if your DMs are closed.",
+		"usages": [
+			"Time Reason",
+			"create Time Reason",
+			"show TaskId",
+			"edit Time Reason",
+			"delete TaskId",
+			"list"
+		],
+		"examples": [
+			"3h make food",
+			"create 2h1d post a QOTD",
+			"show 23",
+			"edit 45 make pizza",
+			"edit 39 3d study",
+			"delete 67",
+			"list"
+		],
+		"explainedUsage": [
+			[
+				"Create/Show/Edit/Delete/List",
+				"\n- **Create (default)**: Create a new reminder to send in your DMs.\n- **Show**: Display the full text of a reminder given it's ID.\n- **Edit**: Edit the text and the duration of a reminder given it's ID.\n- **Delete**: Delete a reminder given it's ID.\n- **List**: List your active reminders."
+			],
+			[
+				"Time",
+				"The amount of time you want the reminder to send to you in. Can be formatted as `1d` for one day or `3d4h` for three days four hours etc."
+			],
+			[
+				"Reason",
+				"The reason for the reminder to be sent to you. Can be left blank if you want."
+			],
+			[
+				"TaskId",
+				"The `number` of the reminder task you want to show/edit/delete."
+			]
+		],
+		"reminder": "This command also supports slash commands! Try out `/reminder create`."
+	},
+	"reminderDMWarn": "\n\n**Please note that your DMs are closed right now, unless opened I will send the reminder in the channel you created it.**",
+	"reminderEditSuccess": "{{SUCCESS}} Edited the task from {{old, code}} to:\n> {{new}}",
+	"reminderList": "Reminders for {{author, bold}}:",
+	"reminderNone": "{{ERROR}} You don't currently have any active reminders.",
+	"reminderShow": "On **{{date, fulldatetime}}** im going to remind you:\n> *{{text}}*"
+}
