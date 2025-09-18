@@ -1,0 +1,40 @@
+{
+    "description": "View information on many discord entities.",
+    "guildCreated": "Created by {{owner, bold}} on {{created, fulldate}} ({{created, duration}})",
+    "guildEmojis": "Static: {{static, number, bold}}\nAnimated: {{animated, number, bold}}",
+    "guildMessages": "{{messages, number}} messages sent",
+    "guildName": "guild",
+    "guildRolesAndMore": "and {{count, number}} more.",
+    "guildSecurity": "Verification level: {{filter, verificationlevel}}\nExplicit filter: {{content, explicitContentFilter}}",
+    "guildTitles": {
+        "channels": ":speech_balloon: Channel",
+        "channels_other": ":speech_balloon: Channels ({{count}})",
+        "emojis": ":sunglasses: Emoji",
+        "emojis_other": ":sunglasses: Emojis ({{count}})",
+        "members": ":busts_in_silhouette: Members",
+        "roles": ":scroll: Role",
+        "roles_other": ":scroll: Roles ({{count}})",
+        "security": ":lock: Security",
+        "stats": ":bar_chart: Statistics"
+    },
+    "userButtonLabels": {
+        "avatar": "Avatar",
+        "banner": "Banner",
+        "notes": "Notes",
+        "warnings": "Warnings"
+    },
+    "userDiscordJoin": "Joined Discord on {{created, fulldate}} ({{created, duration}})",
+    "userGuildJoin_create": "Created {{name}} on {{joined, fulldate}} ({{joined, duration}})",
+    "userGuildJoin": "Joined {{name}} on {{joined, fulldate}} ({{joined, duration}})",
+    "userMessages": "{{messages, number}} messages sent.",
+    "userMessages_percent": "{{messages, number}} messages sent, {{percent}}% of all server messages.",
+    "userTitles": {
+        "about": ":pencil: Statistics",
+        "notes": ":label: Note",
+        "notes_other": ":label: Notes",
+        "roles": ":scroll: Role",
+        "roles_other": ":scroll: Roles ({{count, number}})",
+        "warnings": ":lock: Warning",
+        "warnings_other": ":lock: Warnings ({{count, number}})"
+    }
+}
