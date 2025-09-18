@@ -1,0 +1,16 @@
+{
+	"abort": "{{ERROR}} I couldn't reach Discord in time to run this command, go ahead and try again.",
+	"genericUnknownChannel": "{{ERROR}} I'm sorry, I tried to perform an action for a channel unknown to Discord and failed, this error has been reported to the developers.",
+	"genericUnknownGuild": "{{ERROR}} I'm sorry, I tried to perform an action for a server unknown to Discord and failed, this error has been reported to the developers.",
+	"genericUnknownMember": "{{ERROR}} I'm sorry, I tried to perform an action for a member unknown to Discord and failed, this error has been reported to the developers.",
+	"genericUnknownMessage": "{{ERROR}} I'm sorry, I tried to perform an action for a message unknown to Discord and failed, this error has been reported to the developers.",
+	"genericUnknownRole": "{{ERROR}} I'm sorry, I tried to perform an action for a role unknown to Discord and failed, this error has been reported to the developers.",
+	"genericMissingAccess": "{{ERROR}} I'm sorry, I didn't have the necessary permissions to perform this action, this error has been reported to my developer.",
+	"genericDiscordInternalServerError": "{{ERROR}} Oops, Discord broke itself, please try again later.",
+	"genericDiscordGateway": "{{ERROR}} Oops, the network is struggling to communicate with Discord, please try again later.",
+	"genericDiscordUnavailable": "{{ERROR}} Oops, Discord is currently unavailable, please try again later.",
+	"tooManyRoles": "{{ERROR}} I could not create a new role because this server already has 250 roles!",
+	"unexpected": "{{ERROR}} Whoops, I ran into an unexpected error, please report the steps you've taken to my developers.",
+	"unexpectedWithCode": "$t(listeners/errors:unexpected) You may also send them `{{report}}` so they can look up what triggered the error.",
+	"userNotInGuild": "This user is not in this server."
+}
