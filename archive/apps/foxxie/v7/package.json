@@ -68,7 +68,7 @@
     "saslprep": "^1.0.3",
     "skia-canvas": "^1.0.1",
     "typeorm": "^0.3.17",
-    "undici": "^5.25.3"
+    "undici": "^5.29.0"
   },
   "devDependencies": {
     "@foxxie/eslint-config": "^0.0.2",
