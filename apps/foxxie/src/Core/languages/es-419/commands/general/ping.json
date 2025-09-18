@@ -1,0 +1,6 @@
+{
+    "description": "Ejecuta una prueba de conexión a mi base de datos y Discord.",
+    "name": "ping",
+    "ping": "¿Ping?",
+    "pong": ":ping_pong: Pong! Took {{roundTrip}}ms (Discord Latency: {{wsPing}}ms. Database Connection: {{dbPing}}ms)"
+}
