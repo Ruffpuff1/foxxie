@@ -2,6 +2,7 @@ import { UserArtist, UserLastFM, UserPlay } from '@prisma/client';
 import { container } from '@sapphire/pieces';
 import { isNullish, isNullOrUndefinedOrEmpty } from '@sapphire/utilities';
 import { toPrismaDate } from '#lib/database';
+import { PrismaDatabase } from '#lib/Setup/prisma';
 import { days, groupBy, hours, minutes, seconds } from '#utils/common';
 import { Schedules } from '#utils/constants';
 import { blue, white } from 'colorette';
@@ -181,7 +182,7 @@ export class UpdateService {
 
 				if (!isNullish(recentTracks?.content?.totalAmount)) {
 					const sql = `UPDATE "UserLastFM" SET "totalPlaycount" = ${recentTracks.content.totalAmount} WHERE "userid" = '${user.userid}';`;
-					await container.db.sql(sql);
+					await PrismaDatabase.sql(sql);
 
 					user.totalPlaycount = recentTracks.content.totalAmount;
 				}
@@ -191,13 +192,13 @@ export class UpdateService {
 
 			const updatedPlaycount = user.totalPlaycount! + playcountToAdd;
 			const updatePlaycount = `UPDATE "UserLastFM" SET "totalPlaycount" = ${updatedPlaycount} WHERE "userid" = '${user.userid}';`;
-			await container.db.sql(updatePlaycount);
+			await PrismaDatabase.sql(updatePlaycount);
 
 			return updatedPlaycount;
 		}
 
 		const updateCorrectPlaycount = `UPDATE "UserLastFM" SET "totalPlaycount" = ${correctPlaycount} WHERE "userid" = '${user.userid}';`;
-		await container.db.sql(updateCorrectPlaycount);
+		await PrismaDatabase.sql(updateCorrectPlaycount);
 
 		return correctPlaycount;
 	}
@@ -208,7 +209,7 @@ export class UpdateService {
 			`FROM "UserArtist" WHERE "userId" = '${userId}' ` +
 			`ORDER BY LOWER("name"), "playCount" DESC`;
 
-		const result = await container.db.sql<UserArtist[]>(sql);
+		const result = await PrismaDatabase.sql<UserArtist[]>(sql);
 
 		return new Map(result.map((d) => [d.name.toLowerCase(), d]));
 	}
@@ -223,12 +224,12 @@ export class UpdateService {
 					` UPDATE "UserArtist" SET "playCount" = ${existingUserArtist.playCount + artist.length} ` +
 					`WHERE "userArtistId" = ${existingUserArtist.userArtistId};`;
 
-				await container.db.sql(updateExistingArtist);
+				await PrismaDatabase.sql(updateExistingArtist);
 
 				container.logger.debug(`[${blue('Last.fm')} ${white('Update')}]: Updated artist ${artistName} for ${user?.usernameLastFM}`);
 			} else {
 				const addUserArtist = `INSERT INTO "UserArtist"("userId", "name", "playCount")VALUES('${user.userid}', '${artistName}', ${artist.length}); `;
-				await container.db.sql(addUserArtist);
+				await PrismaDatabase.sql(addUserArtist);
 
 				container.logger.debug(`[${blue('Last.fm')} ${white('Update')}]: Added artist ${artistName} for ${user?.usernameLastFM}`);
 			}
@@ -247,11 +248,11 @@ export class UpdateService {
 
 	private static async SetUserLastScrobbleTime(user: UserLastFM, lastScrobble: Date) {
 		user.lastScrobbleUpdate = lastScrobble;
-		await container.db.sql(`UPDATE "UserLastFM" SET "lastScrobbleUpdate" = '${toPrismaDate(lastScrobble)}' WHERE "userid" = '${user.userid}'`);
+		await PrismaDatabase.sql(`UPDATE "UserLastFM" SET "lastScrobbleUpdate" = '${toPrismaDate(lastScrobble)}' WHERE "userid" = '${user.userid}'`);
 	}
 
 	private static async SetUserUpdateTime(user: UserLastFM, updateTime: Date = new Date()) {
 		user.lastUpdated = updateTime;
-		await container.db.sql(`UPDATE "UserLastFM" SET "lastUpdated" = '${toPrismaDate(updateTime)}' WHERE "userid" = '${user.userid}'`);
+		await PrismaDatabase.sql(`UPDATE "UserLastFM" SET "lastUpdated" = '${toPrismaDate(updateTime)}' WHERE "userid" = '${user.userid}'`);
 	}
 }

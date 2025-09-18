@@ -1,0 +1,5 @@
+{
+	"validationChooseKey": "You cannot configure a group, please pick one of the following keys: {{keys, list(conjunction)}}.",
+	"validationMissingValue": "The value ``{{value}}`` was not set in the key **{{path}}**.",
+	"validationDuplicatedValue": "The value for the key `{{path}}` was already set to ``{{value}}``!"
+}

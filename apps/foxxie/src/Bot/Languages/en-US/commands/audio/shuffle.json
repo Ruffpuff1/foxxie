@@ -1,0 +1,8 @@
+{
+    "description": "Shuffle the queue's songs.",
+    "detailedDescription": {
+        "extendedHelp": "This command will shuffle the currently playing music queue in place."
+    },
+    "success": "{{SUCCESS}} Successfully shuffled {{count, number, bold}} song, although it did nothing... {{MUSIC}}",
+    "success_other": "{{SUCCESS}} Successfully shuffled {{count, number, bold}} songs {{MUSIC}}"
+}

@@ -7,6 +7,5 @@ export * from './TaskBuilder.js';
 export * from './TaskDecorators.js';
 export * from './TaskStore.js';
 export * from './TextCommand.js';
-export * from './TextCommand.js';
 export * from './TextCommandDecorators.js';
 export * from './TextCommandStore.js';

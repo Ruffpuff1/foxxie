@@ -5,9 +5,9 @@ export interface TopArtist {
 	artistUrl: string;
 	firstPlay?: Date;
 	genres?: string[];
-	mbid?: number;
+	mbid?: null | string;
 	rank?: number;
-	timeListened: TopTimeListened;
+	timeListened?: TopTimeListened;
 	userPlaycount: number;
 }
 

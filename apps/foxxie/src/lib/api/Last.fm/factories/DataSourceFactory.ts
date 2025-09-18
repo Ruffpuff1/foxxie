@@ -86,14 +86,15 @@ export class DataSourceFactory {
 		lastFmUserName: string,
 		count = 2,
 		useCache = false,
-		sessionKey = null,
+		sessionKey: null | string = null,
 		fromUnixTimestamp: null | number = null,
 		amountOfPages = 1
 	) {
+		console.log(count, amountOfPages);
 		const recentTracks = await LastFmRepository.GetRecentTracks(lastFmUserName, count, useCache, sessionKey, fromUnixTimestamp, amountOfPages);
-
+		console.log(recentTracks);
 		const importUser = await DataSourceFactory.GetImportUserForLastFmUserName(lastFmUserName);
-
+		console.log(importUser);
 		if (importUser !== null && recentTracks.success && recentTracks.content !== null) {
 			const total = await PlayDataSourceRepository.GetScrobbleCountFromDate(importUser, fromUnixTimestamp);
 
@@ -109,16 +110,15 @@ export class DataSourceFactory {
 		const importUser = await DataSourceFactory.GetImportUserForLastFmUserName(lastFmUserName);
 
 		let topArtists: Response<TopArtistList>;
-		if (importUser && timeSettings.startDateTime! <= importUser.lastImportPlay!) {
+		if (importUser && timeSettings.startDateTime! < importUser.lastImportPlay!) {
 			topArtists = await PlayDataSourceRepository.GetTopArtists(importUser, timeSettings, count * amountOfPages);
 
 			return topArtists;
 		}
 
-		return new Response<TopArtistList>({
-			message: 'No import User',
-			success: false
-		});
+		topArtists = await LastFmRepository.GetTopArtists(lastFmUserName, timeSettings, count, amountOfPages);
+
+		return topArtists;
 	}
 
 	public static async GetUser(usernameLastFM: string): Promise<null | UserLastFM> {

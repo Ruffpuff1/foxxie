@@ -12,7 +12,6 @@ import { FoxxieSubcommand } from '#lib/Structures/commands/FoxxieSubcommand';
 import { GuildMessage, PermissionLevels } from '#lib/types';
 import { PlayCommands } from '#root/Last.FM/message-commands/PlayCommands';
 import { UserCommands } from '#root/Last.FM/message-commands/UserCommands';
-import { minutes } from '#utils/common';
 import { Emojis } from '#utils/constants';
 import { GuildOnlyCommand, MessageSubcommand, RegisterSubcommand, RequiresLastFMUsername, RequiresMemberPermissions } from '#utils/decorators';
 import { resolveClientColor, sendLoadingMessage, sendMessage } from '#utils/functions';
@@ -142,9 +141,9 @@ export class LastFMCommand extends FoxxieSubcommand {
 			return sendMessage(message, args.t(LanguageKeys.Commands.Websearch.LastFm.UpdateIndexStarted));
 		}
 
-		if (contextUser.lastIndexed && contextUser.lastIndexed.getTime() > Date.now() - minutes(30)) {
-			return sendMessage(message, args.t(LanguageKeys.Commands.Websearch.LastFm.UpdateIndexFrequent));
-		}
+		// if (contextUser.lastIndexed && contextUser.lastIndexed.getTime() > Date.now() - minutes(30)) {
+		// 	return sendMessage(message, args.t(LanguageKeys.Commands.Websearch.LastFm.UpdateIndexFrequent));
+		// }
 
 		await sendMessage(
 			message,

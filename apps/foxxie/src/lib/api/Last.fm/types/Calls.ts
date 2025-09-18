@@ -19,7 +19,8 @@ export const enum Call {
 	TrackSearch = 'track.search',
 	TrackUnLove = 'track.unlove',
 	TrackUpdateNowPlaying = 'track.updateNowPlaying',
-	UserInfo = 'user.getInfo'
+	UserInfo = 'user.getInfo',
+	UserTopArtists = 'user.getTopArtists'
 }
 
 export interface ArtistSearchArtistNoExistResult {
@@ -276,6 +277,15 @@ export interface GetRecentTracksUserTrack {
 	url: string;
 }
 
+export interface GetTopArtistResultArtist {
+	image: LastFmImage[];
+	mbid: string;
+	name: string;
+	playcount: `${number}`;
+	streamable: '0' | '1';
+	url: string;
+}
+
 export interface GetTrackInfoResult {
 	track: BaseTrack;
 }
@@ -319,7 +329,7 @@ export interface GetUserTopArtistsResult {
 			totalPages: `${number}`;
 			user: string;
 		};
-		artist: GetArtistInfoResult['artist'][];
+		artist: GetTopArtistResultArtist[];
 	};
 }
 
@@ -361,7 +371,9 @@ export type LastFmApiReturnType<M extends Call> = M extends Call.TrackInfo
 					? GetUserWeeklyArtistChartResult
 					: M extends Call.TrackSearch
 						? TrackSearchResponseLfm
-						: never;
+						: M extends Call.UserTopArtists
+							? GetUserTopArtistsResult
+							: never;
 
 export interface LastFmImage {
 	'#text': string;

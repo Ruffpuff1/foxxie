@@ -140,9 +140,9 @@ export class IndexService {
 	private static async GetPlaysForUserFromLastFm(user: UserLastFM): Promise<UserPlay[]> {
 		container.logger.debug(`[${blue('Last.fm')} ${white('Index')}]: ${user.userid} / ${user?.usernameLastFM} - Getting plays`);
 
-		const pages = IndexService.UserHasHigherIndexLimit(user) ? 750 : 25;
+		const pages = IndexService.UserHasHigherIndexLimit(user) ? 1000 : 15;
 
-		const recentPlays = await DataSourceFactory.GetRecentTracks(user.usernameLastFM, 1000, false, null, null, pages);
+		const recentPlays = await DataSourceFactory.GetRecentTracks(user.usernameLastFM, 1000, false, user.sessionKeyLastFM || null, null, pages);
 		console.log(recentPlays);
 
 		if (!recentPlays.success || isNullish(recentPlays.content.recentTracks) || !recentPlays.content.recentTracks.length) {
@@ -177,6 +177,8 @@ export class IndexService {
 			1000,
 			indexLimit
 		);
+
+		console.log(topArtists);
 
 		if (!topArtists.success || topArtists.content.topArtists === null || !topArtists.content.topArtists.length) {
 			return [] as UserArtist[];

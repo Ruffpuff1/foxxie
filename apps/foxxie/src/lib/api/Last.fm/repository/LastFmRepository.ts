@@ -1,14 +1,17 @@
 import { resolveToNull } from '@ruffpuff/utilities';
 import { container } from '@sapphire/pieces';
-import { isNullish, isNullishOrEmpty } from '@sapphire/utilities';
+import { cast, isNullish, isNullishOrEmpty, sleep } from '@sapphire/utilities';
 import { RedisKeyLastFmRecentTracks } from '#lib/types';
 import { first, seconds } from '#utils/common';
 import { blue } from 'colorette';
 
 import { LastfmApi } from '../api/LastfmApi.js';
-import { Call, GetRecentTracksUserResult } from '../types/Calls.js';
+import { Call, GetRecentTracksUserResult, GetTopArtistResultArtist, GetUserTopArtistsResult } from '../types/Calls.js';
+import { TimePeriod } from '../types/enums/TimePeriod.js';
 import { DataSourceUser } from '../types/models/domain/DataSourceUser.js';
+import { TimeSettingsModel } from '../types/models/domain/OptionModels.js';
 import { RecentTrack, RecentTrackList } from '../types/models/domain/RecentTrack.js';
+import { TopArtist, TopArtistList } from '../types/models/domain/TopArtist.js';
 import { RecentTrackLfm } from '../types/models/RecentTrackLfm.js';
 import { ResponseStatus } from '../types/ResponseStatus.js';
 import { parseRecentTrackListResponse } from '../util/cacheParsers.js';
@@ -110,6 +113,89 @@ export class LastFmRepository {
 		});
 	}
 
+	public static async FetchTopArtists(lastFmUserName: string, timePeriod: TimePeriod, count = 2, amountOfPages = 2) {
+		// let lastStatsTimeSpan = LastFmRepository.TimePeriodToLastStatsTimeSpan(timePeriod);
+
+		const artists: GetTopArtistResultArtist[] = [];
+		let topArtists: Response<GetUserTopArtistsResult>;
+
+		if (amountOfPages === 1) {
+			topArtists = await this._lastFmApi.callApi(
+				{
+					limit: count.toString(),
+					page: '1',
+					period: 'overall',
+					user: lastFmUserName
+				},
+				Call.UserTopArtists
+			);
+
+			if (topArtists.success && topArtists.content?.topartists?.artist.length) {
+				artists.push(...topArtists.content.topartists.artist);
+			}
+		} else {
+			topArtists = await this._lastFmApi.callApi(
+				{
+					limit: count.toString(),
+					page: '1',
+					period: 'overall',
+					user: lastFmUserName
+				},
+				Call.UserTopArtists
+			);
+			if (topArtists.success) {
+				artists.push(...topArtists.content.topartists.artist);
+
+				if (topArtists.content.topartists.artist.length > 998) {
+					for (let i = 2; i <= amountOfPages; i++) {
+						topArtists = await this._lastFmApi.callApi(
+							{
+								limit: count.toString(),
+								page: i.toString(),
+								period: 'overall',
+								user: lastFmUserName
+							},
+							Call.UserTopArtists
+						);
+
+						if (!topArtists.success) break;
+
+						if (topArtists.content.topartists.artist.length) {
+							artists.push(...topArtists.content.topartists.artist);
+
+							if (topArtists.content.topartists.artist.length < 1000) break;
+						}
+					}
+				}
+			}
+		}
+
+		console.log(timePeriod);
+
+		if (isNullish(topArtists.content) || !topArtists.content?.topartists?.artist?.length) {
+			return new Response<TopArtistList>({
+				content: cast<TopArtistList>([]),
+				success: true
+			});
+		}
+
+		return new Response<TopArtistList>({
+			content: {
+				topArtists: artists.map(
+					(s) =>
+						({
+							artistName: s.name,
+							artistUrl: s.url,
+							mbid: isNullishOrEmpty(s.mbid) ? s.mbid : null,
+							userPlaycount: parseInt(s.playcount, 10)
+						}) as TopArtist
+				),
+				totalAmount: artists.length
+			},
+			success: true
+		});
+	}
+
 	public static async GetLfmUserInfo(lastFmUserName: string): Promise<DataSourceUser | null> {
 		const queryParams: Record<string, string> = {
 			user: lastFmUserName
@@ -150,6 +236,7 @@ export class LastFmRepository {
 	): Promise<Response<RecentTrackList>> {
 		const cacheKey = `${lastFmUserName}-lastfm-recent-tracks` as RedisKeyLastFmRecentTracks;
 		const queryParams: Record<string, string> = { extended: '1', limit: count.toString(), user: lastFmUserName };
+		const errorRetries = 3;
 
 		if (!isNullishOrEmpty(sessionKey)) {
 			queryParams.sk = sessionKey;
@@ -170,33 +257,46 @@ export class LastFmRepository {
 		}
 
 		try {
-			let recentTracksCall: Response<GetRecentTracksUserResult>;
-			if (amountOfPages === 1) {
-				recentTracksCall = await LastFmRepository._lastFmApi.callApi(queryParams, Call.RecentTracks);
-			} else {
-				recentTracksCall = await LastFmRepository._lastFmApi.callApi(queryParams, Call.RecentTracks);
+			const recentTracksCall = await LastFmRepository._lastFmApi.callApi(queryParams, Call.RecentTracks, sessionKey ? true : false);
+			console.log(recentTracksCall);
 
-				if (
-					recentTracksCall.success &&
-					recentTracksCall.content.recenttracks &&
-					recentTracksCall.content.recenttracks.track.length >= count - 2 &&
-					count >= 400
-				) {
-					for (let i = 1; i < amountOfPages; i++) {
-						queryParams.page = (i + 1).toString();
-						let pageResponse = await LastFmRepository._lastFmApi.callApi(queryParams, Call.RecentTracks);
+			if (
+				amountOfPages > 1 &&
+				recentTracksCall.success &&
+				recentTracksCall.content.recenttracks &&
+				recentTracksCall.content.recenttracks.track.length >= count - 2 &&
+				count >= 400
+			) {
+				const failureDelay = [500, 2500, 5000, 10000, 25000];
 
-						if (pageResponse.success && pageResponse.content?.recenttracks?.track) {
-							recentTracksCall.content.recenttracks.track.push(...pageResponse.content.recenttracks.track);
-							if (pageResponse.content.recenttracks.track.length < 1000) break;
-						} else if (pageResponse.error === ResponseStatus.Failure) {
-							pageResponse = await LastFmRepository._lastFmApi.callApi(queryParams, Call.RecentTracks);
+				for (let i = 1; i < amountOfPages; i++) {
+					queryParams.page = (i + 1).toString();
+					console.log(i);
 
-							if (pageResponse.success) {
-								recentTracksCall.content.recenttracks.track.push(...pageResponse.content.recenttracks.track);
-								if (pageResponse.content.recenttracks.track.length < 1000) break;
-							} else break;
-						} else break;
+					let pageResponse: null | Response<GetRecentTracksUserResult> = null;
+					let pageFetchedSuccessfully = false;
+					let attempts = 0;
+
+					while (attempts < errorRetries && !pageFetchedSuccessfully) {
+						if (attempts > 0) {
+							await sleep(failureDelay[attempts - 1]);
+						}
+
+						pageResponse = await LastFmRepository._lastFmApi.callApi(queryParams, Call.RecentTracks, sessionKey ? true : false);
+
+						attempts++;
+
+						if (pageResponse.success && pageResponse.content.recenttracks) {
+							pageFetchedSuccessfully = true;
+						}
+					}
+
+					if (pageFetchedSuccessfully) {
+						recentTracksCall.content.recenttracks.track.push(...pageResponse!.content.recenttracks.track);
+
+						if (pageResponse!.content.recenttracks.track.length < count - 2) break;
+					} else {
+						container.logger.warn(`Failed to fetch page ${i + 1} for ${lastFmUserName} after ${attempts} attemps. Stopping pagination.`);
 					}
 				}
 			}
@@ -224,6 +324,40 @@ export class LastFmRepository {
 		} catch (e) {
 			container.logger.error(`[${blue('LastFmRepository')}] Error in getRecentTracksAsync for ${lastFmUserName}`, e);
 			throw e;
+		}
+	}
+
+	public static async GetTopArtists(lastFmUserName: string, timeSettings: TimeSettingsModel, count = 2, amountOfPages = 1) {
+		try {
+			let response: Response<TopArtistList> = new Response({
+				success: false
+			});
+
+			if (
+				!timeSettings.useCustomTimePeriod ||
+				!timeSettings.startDateTime ||
+				!timeSettings.endDateTime ||
+				timeSettings.timePeriod === TimePeriod.AllTime
+			) {
+				response = await LastFmRepository.FetchTopArtists(lastFmUserName, timeSettings.timePeriod!, count, amountOfPages);
+			}
+			// else {
+			// 	response = await LastFmRepository.GetTopArtistsForCustomTimePeriod(
+			// 		lastFmUserName,
+			// 		timeSettings.startDateTime,
+			// 		timeSettings.endDateTime,
+			// 		count
+			// 	);
+			// }
+
+			return response;
+		} catch (e) {
+			container.logger.error(`LastFmRepository: Error in GetTopArtistsAsync for ${lastFmUserName}`, e);
+			return new Response<TopArtistList>({
+				error: ResponseStatus.Unknown,
+				message: 'error while deserializing Last.fm response',
+				success: false
+			});
 		}
 	}
 

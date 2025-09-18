@@ -1,0 +1,12 @@
+{
+    "description": "Provides some details about me and my stats.",
+    "menu": [
+        "**My current statistics!**",
+        "• {{memoryPercent}}% of RAM ({{memoryUsed}} / {{totalmemory}} MB)",
+        "**•** Reading {{messages, number}} messages, from {{servers, number}} servers, and {{users}} users.",
+        "**I've been running**",
+        "• As of {{uptime, duration}} on {{process}} (shard {{shard}} / {{shardTotal}})",
+        "• Using {{deps, and}}."
+    ],
+    "name": "stats"
+}

@@ -3,5 +3,5 @@ commit_message: 'chore(i18n-crowdin): new translations for %original_file_name% 
 append_commit_message: false
 
 files:
-  - source: /apps/foxxie/src/languages/en-US/**/*.json
-    translation: /apps/foxxie/src/languages/%locale%/**/%original_file_name%
+  - source: /apps/foxxie/src/Core/languages/en-US/**/*.json
+    translation: /apps/foxxie/src/Core/languages/%locale%/**/%original_file_name%

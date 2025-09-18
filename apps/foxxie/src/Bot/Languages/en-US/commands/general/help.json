@@ -1,0 +1,38 @@
+{
+    "aliases": "Aliases: {{aliases, and}}",
+    "categories": {
+		"admin": ":mouse_three_button: Admin",
+		"audio": ":violin: Audio",
+		"configuration": ":wrench: Configuration",
+		"games": ":video_game: Games",
+		"general": ":books: General",
+		"misc": ":books: Misc",
+		"moderation": ":shield: Moderation",
+		"social": ":medal: Social",
+		"util": ":nut_and_bolt: Util",
+		"websearch": ":mag: Websearch"
+	},
+    "data": {
+		"footer": "Command help for {{footerName}}",
+		"title": "{{titleDescription}}"
+	},
+    "dataAlias": {
+		"footer": "Command help for {{footerName}}\nAliases: {{aliases, and}}",
+		"title": "{{titleDescription}}"
+	},
+    "description": "View information on all my commands.",
+    "menu": "{{name}}'s commands",
+    "titles": {
+		"aliases": "🖇️ | Aliases",
+		"usages": "📝 | Command Usage",
+		"extendedHelp": "🔍 | Extended Help",
+		"explainedUsage": ":gear: | Explained usage",
+        "permissionNode": ":closed_lock_with_key: | Permission Node",
+		"possibleFormats": "🔢 | Possible formats",
+		"examples": "🔗 | Examples",
+		"reminders": "⏰ | Reminder",
+        "subcommands": ":books: | Subcommands",
+        "support": "Support",
+        "terms": "Terms"
+	}
+}

@@ -2,6 +2,7 @@ import { UserPlay } from '@prisma/client';
 import { container } from '@sapphire/pieces';
 import { isNullish } from '@sapphire/utilities';
 import { toPrismaDate } from '#lib/database';
+import { PrismaDatabase } from '#lib/Setup/prisma';
 import { firstOrNull } from '#utils/common';
 import { blue, white } from 'colorette';
 import _ from 'lodash';
@@ -20,12 +21,12 @@ export class PlayRepository {
 		const sql =
 			`SELECT * FROM "UserPlay" WHERE "userId" = '${userId}' ` + //
 			`ORDER BY "timePlayed" DESC LIMIT ${limit}`;
-		return container.db.sql<UserPlay[]>(sql);
+		return PrismaDatabase.sql<UserPlay[]>(sql);
 	}
 
 	public static async GetUserPlayCount(userId: string, dataSource: DataSource, start: Date | null, end: Date | null = null) {
 		const sql = PlayRepository.GetUserPlaysString('SELECT COUNT(*)', dataSource, start, end, userId);
-		const count = await container.db.sql<{ count: bigint }[]>(sql);
+		const count = await PrismaDatabase.sql<{ count: bigint }[]>(sql);
 		const first = firstOrNull(count);
 
 		return first ? Number(first.count) : null;
@@ -34,7 +35,7 @@ export class PlayRepository {
 	public static async getUserPlays(userId: string, dataSource: DataSource, limit = 9999999, start: Date | null = null, end: Date | null = null) {
 		const sql = PlayRepository.GetUserPlaysString('SELECT * ', dataSource, start, end, userId, limit);
 
-		return container.db.sql<UserPlay[]>(sql);
+		return PrismaDatabase.sql<UserPlay[]>(sql);
 	}
 
 	public static async InsertLatestPlays(recentTracks: RecentTrack[], userId: string): Promise<PlayUpdate> {
@@ -158,7 +159,7 @@ export class PlayRepository {
 	private static async RemoveAllCurrentLastFmPlays(userId: string) {
 		const deletePlays = `DELETE FROM "UserPlay" WHERE "userId" = '${userId}' AND ("playSource" IS NULL OR "playSource" = 0);`;
 
-		await container.db.sql(deletePlays);
+		await PrismaDatabase.sql(deletePlays);
 	}
 
 	private static async RemoveSpecificPlays(playsToRemove: UserPlay[]) {
@@ -168,7 +169,7 @@ export class PlayRepository {
 				`WHERE "userId" = '${playToRemove.userId}' AND "timePlayed" = '${toPrismaDate(playToRemove.timePlayed)}' ` +
 				`AND "playSource" != 1 AND "playSource" != 2`;
 
-			await container.db.sql(deletePlays);
+			await PrismaDatabase.sql(deletePlays);
 		}
 	}
 }

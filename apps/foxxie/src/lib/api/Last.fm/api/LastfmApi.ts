@@ -54,14 +54,18 @@ export class LastfmApi {
 			url.searchParams.append(k, (queryParams as Record<string, string>)[k]);
 		});
 
-		const httpResponse = await request(url, { body: null, headers, method: 'POST' });
+		try {
+			const httpResponse = await request(url, { body: null, headers, method: 'POST' });
 
-		if (httpResponse.statusCode === 404) {
-			return new Response({ error: ResponseStatus.MissingParameters, message: 'Not found', success: false });
+			if (httpResponse.statusCode === 404) {
+				return new Response({ error: ResponseStatus.MissingParameters, message: 'Not found', success: false });
+			}
+
+			const content = (await httpResponse.body.json()) as LastFmApiReturnType<M>;
+
+			return new Response<LastFmApiReturnType<M>>({ content, success: true });
+		} catch (err) {
+			return new Response({ error: ResponseStatus.Failure, success: false });
 		}
-
-		const content = (await httpResponse.body.json()) as LastFmApiReturnType<M>;
-
-		return new Response<LastFmApiReturnType<M>>({ content, success: true });
 	}
 }

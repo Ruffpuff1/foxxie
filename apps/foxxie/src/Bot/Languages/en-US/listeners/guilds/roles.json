@@ -1,0 +1,12 @@
+{
+    "updated": "Role Updated",
+    "updatedColor": "**Color**: {{previous}} → {{next}}",
+    "updatedHoist": "**Hoist**: {{previous}} → {{next}}",
+    "updatedMentionable": "**Mentionable**: {{previous}} → {{next}}",
+    "updatedName": "**Name**: {{previous}} → {{next}}",
+    "updatedPermissionsAdded_one": "**Added Permission**: {{values}}",
+    "updatedPermissionsAdded_other": "**Added Permissions**: {{values, and}}",
+    "updatedPermissionsRemoved_one": "**Removed Permission**: {{values}}",
+    "updatedPermissionsRemoved_other": "**Removed Permissions**: {{values, and}}",
+    "updatedPosition": "**Position**: {{previous, ordinal}} → {{next, ordinal}}"
+}

@@ -3,11 +3,11 @@ import { container, LogLevel } from '@sapphire/framework';
 import { I18nextFormatter, InternationalizationOptions } from '@sapphire/plugin-i18next';
 import { cast } from '@sapphire/utilities';
 import { envParseArray, envParseInteger, envParseString, setup } from '@skyra/env-utilities';
-import { getHandler } from '#languages';
 import { SettingsKeys } from '#lib/database';
 import { readSettings } from '#lib/database/settings/functions';
 import { LanguageKeys, SupportedLanguages } from '#lib/i18n';
 import { CustomGet, EnvKeys } from '#lib/types';
+import { getHandler } from '#root/Core/languages/index';
 import { BotIds, Emojis, emojis, LanguageFormatters, rootFolder, Urls } from '#utils/constants';
 import { FoxxiePaginatedMessageEmbedFields } from '#utils/external/FoxxiePaginatedMessageEmbedFields';
 import {
@@ -307,7 +307,7 @@ function permissionStringToKey(permission: PermissionsString) {
 }
 
 export const PROJECT_ROOT = join(rootFolder, process.env.OVERRIDE_ROOT_PATH ?? 'dist');
-export const LANGUAGE_ROOT = join(PROJECT_ROOT, 'languages');
+export const LANGUAGE_ROOT = join(PROJECT_ROOT, 'Core', 'languages');
 
 function parseI18nOptions(): InternationalizationOptions {
 	return {

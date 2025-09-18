@@ -1,6 +1,7 @@
 import { UserLastFM, UserPlay } from '@prisma/client';
 import { container } from '@sapphire/pieces';
 import { toPrismaDate } from '#lib/database';
+import { PrismaDatabase } from '#lib/Setup/prisma';
 import { firstOrNull } from '#utils/common';
 import { blue, white } from 'colorette';
 import _ from 'lodash';
@@ -19,7 +20,7 @@ export class UserRepository {
 			` AND "dataSource" != 1` +
 			` ORDER BY "lastUsed" DESC`;
 
-		const user = await container.db.sql<({ userid: string } & Omit<ImportUser, 'userId'>)[]>(getUserQuery);
+		const user = await PrismaDatabase.sql<({ userid: string } & Omit<ImportUser, 'userId'>)[]>(getUserQuery);
 		return firstOrNull(user);
 	}
 
@@ -30,12 +31,12 @@ export class UserRepository {
 		const lastScrobble = _.maxBy(plays, (o) => o.timePlayed)?.timePlayed;
 
 		if (lastScrobble) {
-			await container.db.sql(
+			await PrismaDatabase.sql(
 				() =>
 					`UPDATE "UserLastFM" SET "lastIndexed"='${toPrismaDate(now)}', "lastUpdated"='${toPrismaDate(now)}', "lastScrobbleUpdate"='${toPrismaDate(now)}' WHERE "userid" = '${userId}';`
 			);
 		} else {
-			await container.db.sql(
+			await PrismaDatabase.sql(
 				() =>
 					`UPDATE "UserLastFM" SET "lastIndexed"='${toPrismaDate(now)}', "lastUpdated"='${toPrismaDate(now)}' WHERE "userid" = '${userId}';`
 			);
@@ -49,7 +50,7 @@ export class UserRepository {
 			`UPDATE "UserLastFM" SET "registeredLastFM"='${toPrismaDate(dataSourceUser.registered)}', "lastFmPro" = '${dataSourceUser.subscriber}', "totalPlaycount" = ${dataSourceUser.playcount} ` +
 			`WHERE "userid" = '${user.userid}';`;
 
-		await container.db.sql(setIndexTime);
+		await PrismaDatabase.sql(setIndexTime);
 
 		return dataSourceUser.registered;
 	}

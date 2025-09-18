@@ -1,0 +1,12 @@
+{
+	"moderationDmFooter": "To disable moderation DMs, write `toggleModerationDM`.",
+	"moderationDmDescription": "**❯ Server**: {{guild}}\n**❯ Type**: {{title}}\n**❯ Reason**: None specified",
+	"moderationDmDescriptionWithReason": "**❯ Server**: {{guild}}\n**❯ Type**: {{title}}\n**❯ Reason**: {{reason}}",
+	"moderationDmDescriptionWithDuration": "**❯ Server**: {{guild}}\n**❯ Type**: {{title}}\n**❯ Duration**: {{duration, duration}}\n**❯ Reason**: None specified",
+	"moderationDmDescriptionWithReasonWithDuration": "**❯ Server**: {{guild}}\n**❯ Type**: {{title}}\n**❯ Duration**: {{duration, duration}}\n**❯ Reason**: {{reason}}",
+	"moderationOutput_one": "{{SUCCESS}} Created case {{range}} | {{users, list(conjunction)}}.",
+	"moderationOutput_other": "{{SUCCESS}} Created cases {{range}} | {{users, list(conjunction)}}.",
+	"moderationOutputWithReason_one": "{{SUCCESS}} Created case {{range}} | {{users, list(conjunction)}}.\nWith the reason of: {{reason}}",
+	"moderationOutputWithReason_other": "{{SUCCESS}} Created cases {{range}} | {{users, list(conjunction)}}.\nWith the reason of: {{reason}}",
+	"success": "{{SUCCESS}} Successfully executed the command."
+}

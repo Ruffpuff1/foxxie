@@ -1,0 +1,4 @@
+{
+    "songPlayNotify": "{{MUSIC}} Playing {{title, bold}} as requested by {{requester, bold}}.",
+    "songResumeNotify": "{{SUCCESS}} Resumed playing {{title, bold}} {{MUSIC}}"
+}

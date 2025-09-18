@@ -1,0 +1,19 @@
+{
+    "alreadyPlaying": "{{ERROR}} I'm already playing music in this channel.",
+    "description": "Play music for you and your friends while in vc.",
+    "detailedDescription": {
+        "usages": [
+            "Song",
+            "YoutubeLink",
+            "SpotifyPlaylist"
+        ],
+        "extendedHelp": "Play songs and add them to the queue. I can search for a song by name, or you can give me a youtube link of the song to play. I also support spotify playlist links. In addition, if I am currently paused this command will resume the music.",
+        "examples": [
+            "What does the fox say?",
+            "https://www.youtube.com/watch?v=2xx_2XNxxfA",
+            "https://open.spotify.com/playlist/3bevTxSrGdh3qShUcODtxE"
+        ]
+    },
+    "noSongs": "{{ERROR}} I couldn't find any results for the given song.",
+    "queueEmpty": "{{ERROR}} The queue is currently empty, try adding some songs first."
+}

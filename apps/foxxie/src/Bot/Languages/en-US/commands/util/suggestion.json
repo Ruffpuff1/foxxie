@@ -1,0 +1,13 @@
+{
+    "componentsAccept": "Accept",
+	"componentsArchive": "Archive",
+	"componentsConsider": "Consider",
+	"componentsCreateThread": "Create Thread",
+	"componentsDeny": "Deny",
+    "newFailedToSend": "{{ERROR}} I'm sorry, I wasn't able to post a message in {{channel}}. Please report this to an administrator.",
+    "newMessageEmbedTitle": "#{{id}} - {{user.tag}} ({{user.id}})",
+    "newNotConfigured": "{{ERROR}} It seems there is no configured suggestions channel in this server.",
+    "newSuccess": "{{SUCCESS}} Successfully sent your suggestion {{id}}.",
+    "threadChannelCreationFailure": "{{ERROR}} I was unable to create the thread, you should contact an administrator to give me permission, or a moderator to create it for me.",
+    "threadMemberAddFailure": "Also sorry, I was unable to add you to the thread, so you may need to join manually."
+}

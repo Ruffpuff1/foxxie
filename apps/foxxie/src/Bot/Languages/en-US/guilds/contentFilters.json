@@ -1,0 +1,5 @@
+{
+	"disabled": "Don't scan any messages",
+	"membersWithoutRoles": "Scan messages from members without a role",
+	"allMembers": "Scan messages by all members"
+}

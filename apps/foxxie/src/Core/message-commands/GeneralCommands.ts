@@ -1,6 +1,3 @@
-import { CommandOptionsRunTypeEnum } from '@sapphire/framework';
-import { container } from '@sapphire/pieces';
-import { Stopwatch } from '@sapphire/stopwatch';
 import { LanguageKeys } from '#lib/i18n';
 import { FoxxieCommand } from '#lib/structures';
 import { ResponseBuilder, UserBuilder } from '#utils/builders';
@@ -42,29 +39,6 @@ export class GeneralCommands {
 		// Else send the full help menu.
 		const embed = await ResponseBuilder.Help(args);
 		return sendMessage(message, embed);
-	}
-
-	@Command((command) =>
-		command
-			.setAliases('pong')
-			.setCategory('general')
-			.setDescription(LanguageKeys.Commands.General.Ping.Description)
-			.setRunIn([CommandOptionsRunTypeEnum.Dm, CommandOptionsRunTypeEnum.GuildAny])
-	)
-	public static async Ping(...[message, args]: FoxxieCommand.MessageRunArgs) {
-		const loading = await sendMessage(message, args.t(LanguageKeys.Commands.General.Ping.Ping));
-
-		const stopwatch = new Stopwatch().start();
-		await container.prisma.$connect();
-		stopwatch.stop();
-
-		const content = args.t(LanguageKeys.Commands.General.Ping.Pong, {
-			dbPing: Math.round(stopwatch.duration),
-			roundTrip: (loading.editedTimestamp || loading.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp),
-			wsPing: Math.round(container.client.ws.ping)
-		});
-
-		return sendMessage(message, content);
 	}
 
 	@Command((command) =>

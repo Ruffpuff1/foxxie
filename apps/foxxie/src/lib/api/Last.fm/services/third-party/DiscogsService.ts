@@ -3,6 +3,7 @@ import { seconds } from '@ruffpuff/utilities';
 import { container } from '@sapphire/pieces';
 import { isNullish, sleep } from '@sapphire/utilities';
 import { DiscogsApi } from '#apis/last.fm/api/DiscogsApi';
+import { PrismaDatabase } from '#lib/Setup/prisma';
 import { months } from '#utils/common';
 import { blue } from 'colorette';
 
@@ -61,7 +62,7 @@ export class DiscogsService {
 			}
 		});
 
-		await container.db.sql(() => `DELETE FROM "UserDiscogsReleases" WHERE "userId" = '${user.userid}'`);
+		await PrismaDatabase.sql(() => `DELETE FROM "UserDiscogsReleases" WHERE "userId" = '${user.userid}'`);
 		const releasesToAdd: UserDiscogsReleases[] = [];
 
 		for (const release of releases.releases) {

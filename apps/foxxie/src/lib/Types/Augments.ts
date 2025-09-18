@@ -11,7 +11,6 @@ import { HighlightData } from '#lib/database/Models/highlight';
 import { SerializerStore } from '#lib/database/settings/structures/SerializerStore';
 import { LevelingRole, PermissionsNode, ReadonlyGuildData, StickyRole, Tag } from '#lib/database/settings/types';
 import { ModerationEntry } from '#lib/moderation';
-import { PrismaDatabase } from '#lib/Setup/prisma';
 import { FoxxieCommand } from '#lib/structures';
 import { InviteManager } from '#lib/Structures/managers/InviteManager';
 import { RedisManager } from '#lib/Structures/managers/RedisManager';
@@ -103,7 +102,6 @@ declare module '@sapphire/pieces' {
 	interface Container {
 		api?: API;
 		apis: ApiService;
-		db: PrismaDatabase;
 		redis: null | RedisManager;
 		schedule: ScheduleManager;
 		settings: SettingsService;

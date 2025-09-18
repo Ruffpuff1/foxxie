@@ -54,7 +54,9 @@ export const enum EnvKeys {
 	LogLevel = 'LOG_LEVEL',
 	PokemonUrl = 'POKEMON_URL',
 	SentryEnabled = 'SENTRY_ENABLED',
+	SentryToken = 'SENTRY_TOKEN',
 	SpotifyClientId = 'SPOTIFY_CLIENT_ID',
 	SpotifyClientSecret = 'SPOTIFY_CLIENT_SECRET',
-	Timezone = 'TIMEZONE'
+	Timezone = 'TIMEZONE',
+	VersionNum = 'VERSION_NUM'
 }

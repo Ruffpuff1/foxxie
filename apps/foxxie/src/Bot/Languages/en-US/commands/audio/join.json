@@ -1,0 +1,13 @@
+{
+    "description": "Joins the voice channel you're in.",
+    "detailedDescription": {
+        "extendedHelp": "This command can be used when you want me to join the voice channel you're in, but not play music just yet."
+    },
+    "failed": "{{ERROR}} Something went wrong when I tried joining.",
+    "success": "{{SUCCESS}} Successfully joined {{channel}}.",
+    "voiceChannelFull": "{{ERROR}} It seems the voice channel you're in is full (maybe clear some of them out).",
+    "voiceChannelNoConnect": "{{ERROR}} I'm not allowed to connect to the voice channel you're in.",
+    "voiceChannelNoSpeak": "{{ERROR}} I am unable to speak in the voice channel you're in, thus I wouldn't be able to play music.",
+    "voiceDifferent": "{{ERROR}} Sorry I'm in a different voice channel right now.",
+    "voiceSame": "{{ERROR}} I'm already in the voice channel you're in."
+}
