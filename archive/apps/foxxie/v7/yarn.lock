@@ -424,12 +424,12 @@
     chokidar "^3.5.3"
     i18next "^23.7.6"
 
-"@sapphire/plugin-logger@^3.0.7":
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/@sapphire/plugin-logger/-/plugin-logger-3.0.7.tgz#9213b9dd2ecb7de6156503380318da707d06e91a"
-  integrity sha512-QNQRHMgvyxhBNdYBktIfAQvNdsvzYd6vVWCvnggrcN56mvXJyolZaPkDcUNh3PdtjcB7XTChpynbLlTby2vsyQ==
+"@sapphire/plugin-logger@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-logger/-/plugin-logger-4.1.0.tgz#dfb250a9b0674d458f5df5f56ad99cc3b00f8787"
+  integrity sha512-+vLTITQw3DI8+kfDPNJ0yhIK/LrfM/Gro/UFcxgYWLLm+lwNmSpLZxdWe9v7ESXprody7rTp8JXPNBK7UWyE8w==
   dependencies:
-    "@sapphire/timestamp" "^1.0.1"
+    "@sapphire/timestamp" "^1.0.5"
     colorette "^2.0.20"
 
 "@sapphire/plugin-subcommands@4.3.0":
@@ -490,7 +490,7 @@
   resolved "https://registry.yarnpkg.com/@sapphire/timer-manager/-/timer-manager-1.0.4.tgz#b8200bebc4acde74bd25e85773cce4ab654ee95f"
   integrity sha512-gc1JW8oui86f2l0T/1Iwd7hZTgus8b46slitTR2y0+wiMAEYxdp6vVTHvMAEHOqX8drkxK70aGfZmQKbAcgFqQ==
 
-"@sapphire/timestamp@^1.0.1", "@sapphire/timestamp@^1.0.5":
+"@sapphire/timestamp@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@sapphire/timestamp/-/timestamp-1.0.5.tgz#398540f84d149ba0d6535c73d86c28f801411a3e"
   integrity sha512-oNwWyNdbt5wm4aYZvlHl1+64U3g0xrFmRIHsnER7RgMxNnp/wmAE4yTK2oUHeadg3t4V9iYctPAQCF+aINke4g==
