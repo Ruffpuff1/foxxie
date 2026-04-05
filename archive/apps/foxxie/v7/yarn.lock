@@ -432,13 +432,12 @@
     "@sapphire/timestamp" "^1.0.1"
     colorette "^2.0.20"
 
-"@sapphire/plugin-subcommands@4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@sapphire/plugin-subcommands/-/plugin-subcommands-4.3.0.tgz#4e4bfdd1645983c0e4949b3cb660fde83919a0b1"
-  integrity sha512-+oivum6cGvI6E7mMcjLd6FYwW8Rpqpw4NNlyPz9c1dUEM5puU+H1rJbWJeHpsZqr4QBdVlC6tmbch/igT1ORzQ==
+"@sapphire/plugin-subcommands@7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-subcommands/-/plugin-subcommands-7.0.1.tgz#1a3f63c67b8136458ae1b40424c27b878164a57d"
+  integrity sha512-3ngUpfKfcMX4zIlJ4SHLe10N79XU72H+Wdfcnd9ueMf6FOSMJFvVUfqDIp1rb7/iXi7C5dfx0pQqSwqu3UG0KQ==
   dependencies:
-    "@sapphire/utilities" "^3.13.0"
-    tslib "^2.6.2"
+    "@sapphire/utilities" "^3.18.0"
 
 "@sapphire/ratelimits@^2.4.11", "@sapphire/ratelimits@^2.4.7":
   version "2.4.11"
@@ -504,7 +503,7 @@
     nan "^2.22.0"
     tslib "^2.8.1"
 
-"@sapphire/utilities@^3.13.0", "@sapphire/utilities@^3.18.1", "@sapphire/utilities@^3.18.2":
+"@sapphire/utilities@^3.13.0", "@sapphire/utilities@^3.18.0", "@sapphire/utilities@^3.18.1", "@sapphire/utilities@^3.18.2":
   version "3.18.2"
   resolved "https://registry.yarnpkg.com/@sapphire/utilities/-/utilities-3.18.2.tgz#42f1cec0b9bc5fac411b21f40893bed5770d4a0b"
   integrity sha512-QGLdC9+pT74Zd7aaObqn0EUfq40c4dyTL65pFnkM6WO1QYN7Yg/s4CdH+CXmx0Zcu6wcfCWILSftXPMosJHP5A==
