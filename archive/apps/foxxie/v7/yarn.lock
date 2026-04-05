@@ -20,7 +20,7 @@
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.4.tgz#a70226016fabe25c5783b2f22d3e1c9bc5ca3326"
   integrity sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==
 
-"@discordjs/builders@^1.14.0", "@discordjs/builders@^1.7.0":
+"@discordjs/builders@^1.13.0", "@discordjs/builders@^1.14.0":
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/@discordjs/builders/-/builders-1.14.1.tgz#c0ec04f3ae7a584296bfd1dccdda59bf580a0c89"
   integrity sha512-gSKkhXLqs96TCzk66VZuHHl8z2bQMJFGwrXC0f33ngK+FLNau4hU1PYny3DNJfNdSH+gVMzE85/d5FQ2BpcNwQ==
@@ -33,7 +33,7 @@
     ts-mixer "^6.0.4"
     tslib "^2.6.3"
 
-"@discordjs/collection@1.5.3", "@discordjs/collection@^1.5.3":
+"@discordjs/collection@1.5.3":
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/@discordjs/collection/-/collection-1.5.3.tgz#5a1250159ebfff9efa4f963cfa7e97f1b291be18"
   integrity sha512-SVb428OMd3WO1paV3rm6tSjM4wC+Kecaa1EUGX7vc6/fddvw/6lg90z4QtCqm21zvVe92vMMDt9+DkIvjXImQQ==
@@ -354,14 +354,21 @@
   dependencies:
     tslib "^2.8.1"
 
-"@sapphire/discord-utilities@^3.2.0", "@sapphire/discord-utilities@^3.5.0":
+"@sapphire/discord-utilities@^3.5.0":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@sapphire/discord-utilities/-/discord-utilities-3.5.0.tgz#cbfb2e9d2f10daa0c499058c7eeb70d5a1e160cb"
   integrity sha512-H4SY5KTVDZrqA5QG7ob6etwqhdOb3TRSY2wv56f0tiobUdIr0irlrYvdmr8Kg/FRxWU+aiHDIISWGG5vBuxOGw==
   dependencies:
     discord-api-types "^0.38.1"
 
-"@sapphire/discord.js-utilities@^7.1.2", "@sapphire/discord.js-utilities@^7.3.3":
+"@sapphire/discord-utilities@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/discord-utilities/-/discord-utilities-4.0.0.tgz#dea2e9edb292e09ab568c72fde1770c38f8b5b78"
+  integrity sha512-QAvrKNHgswz+ZX48WqSYpRiRzQcugNXXB1C3fR1qbpTJGd7Ckr2OWyFK88TyOksi3U2isrk8sMriTcAgaIe7Qg==
+  dependencies:
+    discord-api-types "^0.38.30"
+
+"@sapphire/discord.js-utilities@^7.3.3":
   version "7.3.3"
   resolved "https://registry.yarnpkg.com/@sapphire/discord.js-utilities/-/discord.js-utilities-7.3.3.tgz#77f5d438f2bc0f87e8bd883fc6b6d4c690c714ff"
   integrity sha512-WDj+zjWgNCUSvzYDD0wY3TVeTUseHq0Nhk0wVWxSDjY8z2gFEVcpY7wF8/fbTDWP44LUG5sUQ4haIrIj2OjmkQ==
@@ -376,36 +383,36 @@
   resolved "https://registry.yarnpkg.com/@sapphire/duration/-/duration-1.2.0.tgz#e0174279b4a1a8e15d6daebd8536b5bec656dbf7"
   integrity sha512-LxjOAFXz81WmrI8XX9YaVcAZDjQj/1p78lZCvkAWZB1nphOwz/D0dU3CBejmhOWx5dO5CszTkLJMNR0xuCK+Zg==
 
-"@sapphire/framework@^4.8.5":
-  version "4.8.5"
-  resolved "https://registry.yarnpkg.com/@sapphire/framework/-/framework-4.8.5.tgz#db8c3c9fa568978ba693bc4f00a0eb173d35241b"
-  integrity sha512-RvXh3/Mn11D9ZCATG9LxC8LmgDp2zS/ML7rk1vcBKmv57p/X4UaAry4ZRG/CPq23yja/AWNMVn/osZzMtIKGbw==
+"@sapphire/framework@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/framework/-/framework-5.5.0.tgz#650d2b76c83d7007c67bf8f2b5a938db36921a3c"
+  integrity sha512-jC+zS8yR/MtJaTFEQutBBWj7Scuvny4d0adtQ3s0OCFWe3rUqNfENomBG3P4tsQ/kRF7L3WCqucyLV8ywG24hw==
   dependencies:
-    "@discordjs/builders" "^1.7.0"
-    "@sapphire/discord-utilities" "^3.2.0"
-    "@sapphire/discord.js-utilities" "^7.1.2"
-    "@sapphire/lexure" "^1.1.5"
-    "@sapphire/pieces" "^3.10.0"
-    "@sapphire/ratelimits" "^2.4.7"
-    "@sapphire/result" "^2.6.4"
-    "@sapphire/stopwatch" "^1.5.0"
-    "@sapphire/utilities" "^3.13.0"
+    "@discordjs/builders" "^1.13.0"
+    "@sapphire/discord-utilities" "^4.0.0"
+    "@sapphire/discord.js-utilities" "^7.3.3"
+    "@sapphire/lexure" "^1.1.12"
+    "@sapphire/pieces" "^4.4.1"
+    "@sapphire/ratelimits" "^2.4.11"
+    "@sapphire/result" "^2.8.0"
+    "@sapphire/stopwatch" "^1.5.4"
+    "@sapphire/utilities" "^3.18.2"
 
-"@sapphire/lexure@^1.1.12", "@sapphire/lexure@^1.1.5":
+"@sapphire/lexure@^1.1.12":
   version "1.1.12"
   resolved "https://registry.yarnpkg.com/@sapphire/lexure/-/lexure-1.1.12.tgz#0a35d661d4362191f8690f196973b1db5c25dc0c"
   integrity sha512-F7Z3QzRnAZGunRl24/qQMhzRogZU/foumu2EBBunRnQi/o/DLTCwdAbLgJATyPlvJa8N6FrJq0JJwvzM/vXoXg==
   dependencies:
     "@sapphire/result" "^2.8.0"
 
-"@sapphire/pieces@^3.10.0":
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/@sapphire/pieces/-/pieces-3.10.0.tgz#27e8c122bcd81bf46b5a9dceee5306b57f406504"
-  integrity sha512-iBaux50dA+VYjtBqmaceWcskdmw7ua51ojEPkyaSJyg2t9ln/Wc9NqYoQheRCWltZeDTERCUBIYYMqDuCs1Okw==
+"@sapphire/pieces@^4.4.1":
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/@sapphire/pieces/-/pieces-4.4.1.tgz#0ed9b3a515c2f16f5ad26deda7a148709eeeb56f"
+  integrity sha512-2v49P++RzHGb23bdjSa9u7flkdvhrq94IUO9PneY538TILN5QiMxfaXVK+pDR2YR7jpQYBy9APwtFDes2Svykg==
   dependencies:
-    "@discordjs/collection" "^1.5.3"
-    "@sapphire/utilities" "^3.13.0"
-    tslib "^2.6.2"
+    "@discordjs/collection" "^2.1.1"
+    "@sapphire/utilities" "^3.18.2"
+    tslib "^2.8.1"
 
 "@sapphire/plugin-editable-commands@^3.1.0":
   version "3.1.0"
@@ -440,12 +447,12 @@
     "@sapphire/utilities" "^3.13.0"
     tslib "^2.6.2"
 
-"@sapphire/ratelimits@^2.4.11", "@sapphire/ratelimits@^2.4.7":
+"@sapphire/ratelimits@^2.4.11":
   version "2.4.11"
   resolved "https://registry.yarnpkg.com/@sapphire/ratelimits/-/ratelimits-2.4.11.tgz#4c7229e0e716adf414af2bf2b9d406676ee4d8e5"
   integrity sha512-O6FNA/P0wxU4Ve9gxL948CoZw7+sSpujyUR2CLyLLCNuNvuFGFxPCJVl5crFVLXMIyBIrc2qk+/H9bsqsyQK1Q==
 
-"@sapphire/result@^2.6.4", "@sapphire/result@^2.8.0":
+"@sapphire/result@^2.8.0":
   version "2.8.0"
   resolved "https://registry.yarnpkg.com/@sapphire/result/-/result-2.8.0.tgz#545c92d1e539b1e17164c44ed93f719aee55c057"
   integrity sha512-693yWouX+hR9uJm1Jgq0uSSjbSD3UrblMaxiuGbHPjSwzLCSZTcm0h3kvdVhq3o/yl4+oeAWW3hiaJ0TELuRJQ==
@@ -468,7 +475,7 @@
   resolved "https://registry.yarnpkg.com/@sapphire/snowflake/-/snowflake-3.5.5.tgz#33a60ab4231e3cab29e8a0077f342125f2c8d1bd"
   integrity sha512-xzvBr1Q1c4lCe7i6sRnrofxeO1QTP/LKQ6A6qy0iB4x5yfiSfARMEQEghojzTNALDTcv8En04qYNIco9/K9eZQ==
 
-"@sapphire/stopwatch@^1.5.0", "@sapphire/stopwatch@^1.5.4":
+"@sapphire/stopwatch@^1.5.4":
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/@sapphire/stopwatch/-/stopwatch-1.5.4.tgz#a8853907f8f899ddcf71df511e4adabd29579efa"
   integrity sha512-IVI48D2yAz411bSttXyTkBH0p2vhrXoqWLn5loDDSAAEUGkM1r5KNCX2027ifQ8svdoMkUfIGjFueR+satLeWw==
@@ -1227,10 +1234,10 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-discord-api-types@^0.38.1, discord-api-types@^0.38.33, discord-api-types@^0.38.40:
-  version "0.38.43"
-  resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.38.43.tgz#e8eece797e6fc6d4dcfefe9d222cfd61ca8e9d4f"
-  integrity sha512-sSoBf/nK6m7BGtw65mi+QBuvEWaHE8MMziFLqWL+gT6ME/BLg34dRSVKS3Husx40uU06bvxUc3/X+D9Y6/zAbw==
+discord-api-types@^0.38.1, discord-api-types@^0.38.30, discord-api-types@^0.38.33, discord-api-types@^0.38.40:
+  version "0.38.44"
+  resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.38.44.tgz#f674afe32c7ae4b3eecc6a9c1210ab3beed9f165"
+  integrity sha512-q91MgBzP/gRaCLIbQTaOrOhbD8uVIaPKxpgX2sfFB2nZ9nSiTYM9P3NFQ7cbO6NCxctI6ODttc67MI+YhIfILg==
 
 discord.js@^14.26.0:
   version "14.26.0"
