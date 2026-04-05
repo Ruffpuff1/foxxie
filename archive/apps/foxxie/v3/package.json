@@ -17,7 +17,7 @@
     "@aero/tags": "^3.0.14",
     "@foxxie/md-tags": "^1.0.1",
     "@foxxie/tails": "^0.0.4",
-    "discord.js": "^12.5.3",
+    "discord.js": "^14.26.2",
     "dotenv": "^8.6.0",
     "foxxie": "^0.0.7-2",
     "lodash": "^4.17.23",
