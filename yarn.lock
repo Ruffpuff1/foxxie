@@ -1947,6 +1947,11 @@
     "@sapphire/stopwatch" "^1.5.3"
     "@sapphire/utilities" "^3.18.0"
 
+"@sapphire/iana-mime-types@*":
+  version "1.32.0"
+  resolved "https://registry.yarnpkg.com/@sapphire/iana-mime-types/-/iana-mime-types-1.32.0.tgz#dda5c7524fbf39452c696736e408110a7d3cdfab"
+  integrity sha512-IsE67KwQTqv+XY0ScRXFueZ/kc5+vWCu42+JZM+PN/Bbsmu5874MHvjVqGI8ya95AbiMbU9c1CdeAR7/XXoKZw==
+
 "@sapphire/iterator-utilities@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@sapphire/iterator-utilities/-/iterator-utilities-2.0.1.tgz#0a60e93f9e4e55d5f74f43bac7d85e14d14918a9"
@@ -1973,16 +1978,17 @@
     "@sapphire/utilities" "^3.16.2"
     tslib "^2.6.3"
 
-"@sapphire/plugin-api@^7.0.3":
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/@sapphire/plugin-api/-/plugin-api-7.0.3.tgz#3e5bd2ae77ceb589e8b566c390c67dbee42b06a1"
-  integrity sha512-1BgQ2ewR9f4Gq060K8hcy/kSvrUTw8Txnp4bviBA+G/CHdBrFCDkZA00JnxZAb8Q9OWfWjzjKaF7J7Nzz7z0rA==
+"@sapphire/plugin-api@^8.3.1":
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/@sapphire/plugin-api/-/plugin-api-8.3.1.tgz#fcd6626ca827db9ff8b9cceb77160dced11e047b"
+  integrity sha512-hDOT/o6UZYhHePFQ9yVNtXqwuW81sxObxEp47w0plqTgRPaAP0mqygG5+DRIaY36WRrSD8YGeLJWxA40rifLmQ==
   dependencies:
-    "@types/ws" "^8.5.13"
+    "@sapphire/iana-mime-types" "*"
+    "@types/ws" "^8.18.1"
     "@vladfrangu/async_event_emitter" "2.4.6"
     cookie-es "^1.2.2"
-    tldts "^6.1.58"
-    undici "^6.20.1"
+    tldts "^7.0.9"
+    undici "^7.11.0"
 
 "@sapphire/plugin-editable-commands@^4.0.3":
   version "4.0.3"
@@ -2525,7 +2531,7 @@
   dependencies:
     "@types/webidl-conversions" "*"
 
-"@types/ws@^8.18.1", "@types/ws@^8.5.10", "@types/ws@^8.5.12", "@types/ws@^8.5.13":
+"@types/ws@^8.18.1", "@types/ws@^8.5.10", "@types/ws@^8.5.12":
   version "8.18.1"
   resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.18.1.tgz#48464e4bf2ddfd17db13d845467f6070ffea4aa9"
   integrity sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==
@@ -8665,17 +8671,17 @@ tinyglobby@^0.2.9:
     fdir "^6.4.2"
     picomatch "^4.0.2"
 
-tldts-core@^6.1.70:
-  version "6.1.70"
-  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-6.1.70.tgz#a954e93237ece2e1705b438600793c86a25f8c00"
-  integrity sha512-RNnIXDB1FD4T9cpQRErEqw6ZpjLlGdMOitdV+0xtbsnwr4YFka1zpc7D4KD+aAn8oSG5JyFrdasZTE04qDE9Yg==
+tldts-core@^7.4.12:
+  version "7.4.12"
+  resolved "https://registry.yarnpkg.com/tldts-core/-/tldts-core-7.4.12.tgz#db2ed323e525394f9b65380ef47a0076aa105d36"
+  integrity sha512-nYNzS2WRf4QJmjzFFgAxLOBjyBxAGRbCy9PVBPaglcYyYajh40VBn+v5Ngr96ZMc7oM0+aCJdtQnNejvdBnXMQ==
 
-tldts@^6.1.58:
-  version "6.1.70"
-  resolved "https://registry.yarnpkg.com/tldts/-/tldts-6.1.70.tgz#b571e5645ab9dc6f289453115d52602b8a384cfe"
-  integrity sha512-/W1YVgYVJd9ZDjey5NXadNh0mJXkiUMUue9Zebd0vpdo1sU+H4zFFTaJ1RKD4N6KFoHfcXy6l+Vu7bh+bdWCzA==
+tldts@^7.0.9:
+  version "7.4.12"
+  resolved "https://registry.yarnpkg.com/tldts/-/tldts-7.4.12.tgz#b764e7e3d2cc0ad66ca1a75504a702f3e90a91e2"
+  integrity sha512-WylhSDKVeYnWXL3a+vKTaOxjnOeEGw938hImY8zoRWJjRRK/Jp1K+IihBzIONpUmW4e3WmXT6q5FW6vlESVZCA==
   dependencies:
-    tldts-core "^6.1.70"
+    tldts-core "^7.4.12"
 
 tmp@^0.0.33:
   version "0.0.33"
@@ -9073,10 +9079,10 @@ undici@6.19.8:
   resolved "https://registry.yarnpkg.com/undici/-/undici-6.19.8.tgz#002d7c8a28f8cc3a44ff33c3d4be4d85e15d40e1"
   integrity sha512-U8uCCl2x9TK3WANvmBavymRzxbfFYG+tAu+fgx3zxQy3qdagQqBLwJVrdyO1TBfUXvfKveMKJZhpvUYoOjM+4g==
 
-undici@^6.20.1:
-  version "6.21.0"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-6.21.0.tgz#4b3d3afaef984e07b48e7620c34ed8a285ed4cd4"
-  integrity sha512-BUgJXc752Kou3oOIuU1i+yZZypyZRqNPW0vqoMPl8VaoalSfeR0D8/t4iAS3yirs79SSMTxTag+ZC86uswv+Cw==
+undici@^7.11.0:
+  version "7.29.1"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-7.29.1.tgz#7741c6fc8b3e1a48e30323833642bfbe841443ad"
+  integrity sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q==
 
 unidecode@^0.1.8:
   version "0.1.8"
