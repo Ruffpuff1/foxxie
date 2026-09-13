@@ -44,8 +44,8 @@
 				"ws": "^8.21.3"
 		},
 		"devDependencies": {
-				"@commitlint/cli": "^16.3.0",
-				"@commitlint/config-conventional": "^16.2.4",
+				"@commitlint/cli": "^21.2.2",
+				"@commitlint/config-conventional": "^21.2.2",
 				"@sapphire/eslint-config": "^4.4.3",
 				"@sapphire/prettier-config": "^1.4.5",
 				"@sapphire/ts-config": "^3.3.4",
