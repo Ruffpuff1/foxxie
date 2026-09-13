@@ -4614,7 +4614,7 @@ eslint-plugin-perfectionist@^4.15.1, eslint-plugin-perfectionist@^4.6.0:
     "@typescript-eslint/utils" "^8.38.0"
     natural-orderby "^5.0.0"
 
-eslint-plugin-prettier@^4.2.1, eslint-plugin-prettier@^4.2.5:
+eslint-plugin-prettier@^4.2.1:
   version "4.2.5"
   resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-4.2.5.tgz#91ca3f2f01a84f1272cce04e9717550494c0fe06"
   integrity sha512-9Ni+xgemM2IWLq6aXEpP2+V/V30GeA/46Ar629vcMqVPodFFWC9skHu/D1phvuqtS8bJCFnNf01/qcmqYEwNfg==
